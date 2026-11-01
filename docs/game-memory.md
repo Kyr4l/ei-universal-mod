@@ -119,6 +119,8 @@ Checked on z3xq1 with the game paused through its flags (below):
 The strings are rewritten in place when the map changes. um.dll's file-open tracking got this wrong after
 going back to a map the game already had in memory (it does not open the files again).
 
+> 2026-10-31: the camera addresses below are `CCamera +0x1C / +0x34 / +0xE0 / +0xF4..+0x100` and the console +0x2C is the selection anchor, not the input length: see [game-exe/ui-framework.md](game-exe/ui-framework.md).
+
 ## Camera
 
 The game camera is a global in game.exe's .data section.
@@ -199,14 +201,14 @@ the cheats switch, which the console command `thingamabob` turns on ("Activated!
 sub_57F440 on the object at 0x7AFE20 to return 0 (not known yet; it passed in single player).
 
 Checked live (basecamp, cheats on), by typing into the game window (WM_CHAR, then Enter):
-- `#Sin(0)` prints 0; `#GetWorldTime()` 6.21778 (hours); `#IsNight()` 0.439722; `#GetMoney(0)`
+- `#Sin(0)` printed 0 only as an error (there is no `Sin` in the command table: script-vm.md); `#GetWorldTime()` 6.21778 (hours); `#IsNight()` 0.439722; `#GetMoney(0)`
   1.1992e+008; `#GetDiplomacy(0,2)` and `(2,0)` 0; `#GetMercsNumber(0)` 0.
 - `#HP(GetObject(927062))` 22 and `#GetX(GetObject(927062))` 56.7006: the same as the unit's record.
   `GetObject(id)` takes the .mob ID; a player's character's ID is too large for a script number, but
   `GetLeader()` and `GetUnitOfPlayer(0,0)` return it.
 - `@MoveToPoint(GetLeader(),59,60)`: the character walked to (59, 60). The same order to a villager
   (AI class 3) did nothing.
-- `@SetCameraPosition(57,65,20)` did nothing. Writing the camera's aim point (0x0079B388, x and y)
+- `@SetCameraPosition(57,65,20)` did nothing (expected: SetCameraPosition is one of ten table commands with no Run case, a no-op: game-exe/script-vm.md). Writing the camera's aim point (0x0079B388, x and y)
   moves the camera: its position follows, keeping its distance and angle.
 - `help` is answered "Unknown command".
 With them, the console can call the script functions: `SetCameraPosition`, `SetCameraOrientation`,

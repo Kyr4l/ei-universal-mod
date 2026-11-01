@@ -375,7 +375,7 @@ under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithP
 * `CInventory` (typeId 0x17): no creator found; its hash set is never filled.
 * The exact `"%s_%.2d.%s.%d"` arguments of the model names (which string is the material part) and `Weapon_GetAttachBones`
   were not re-read (they are named in functions.tsv from the 2026-10-18 pass).
-* `CWorldServer::CreateItem`'s `desc[10] / desc[11]` (mana / max of the source) and the update list `+0x12e44`: who ticks it
+* `CWorldServer::CreateItem`'s `desc[10] / desc[11]` (mana / max of the source) and the update list `+0x12e44`: ticked by `CWorldServer::TickActiveObjects` (world-server.md 4.3)
   (`TickActiveObjects` 0x58D670 is the likely consumer) [?].
 * UnitProto `+0x50` as "natural skill" vs the 7-float read in `GetAttackParams` (combat.md open point) is unchanged.
 

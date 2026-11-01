@@ -11,6 +11,8 @@ Status mark in the last column of every table:
 
 Nothing here was run in the game (the work was static); statements about "what the user sees" repeat earlier live checks from `docs/game-memory.md`.
 
+> **2026-11-01:** the VM / compiler side is now [script-vm.md](script-vm.md) (lexer quirks: identifiers are cut at the longest command-name prefix, number literals are floats; GSWorld error state is +0x1EC text / +0x1F0 code / +0x1F4 line; group iteration order; the ten commands with no Run case; GetBSZValue of section 5 resolved: a stale vtable slot). Where this page disagrees, that one is right.
+
 ## 1. How a script runs
 
 ### 1.1 Source, tokens, commands
@@ -110,7 +112,7 @@ Areas (`AddRoundToArea`, `AddRectToArea`) are records of the VM (GSWorld+0x198) 
 | id | name | kind | params | handler | behaviour | st |
 |---|---|---|---|---|---|---|
 | 0x79 | KillScript | command |  | Run 0x4B6932 | KillScript(): `*(SSCScript+0x10) = 1`. That pointer is the kill flag of the ACTIVE script instance the body belongs to (set by RunProgram); GSWorld::Tick removes the instance after the pair loop. The rest of the current body still runs. FatalError "KillScript command not allowed here" when the pointer is 0: in a WorldScript() body, in the console, and in a body that has already slept (RunProgram clears the pointer before it stores the suspended copy). Inside a For / ForIf body it works (the body shares the pointer). | V |
-| 0x7 | Sleep | command | f | Run 0x4B68A8 | Sleep(n): waits n GSWorld ticks (server world ticks, 1/15 s per the docs). First visit stores the run counter in SSCScript+0xC; while `counter - start < round(n)` the command stays current (pc not advanced); afterwards +0xC = -1 and the script goes on. Each Run call is one tick, so the arguments are re-evaluated every tick. | V |
+| 0x7 | Sleep | command | f | Run 0x4B68A8 | Sleep(n): waits n GSWorld ticks (= server world ticks of 55 ms, ~18/s: world-server.md 1; the vendor docs' 1/15 s is wrong). First visit stores the run counter in SSCScript+0xC; while `counter - start < round(n)` the command stays current (pc not advanced); afterwards +0xC = -1 and the script goes on. Each Run call is one tick, so the arguments are re-evaluated every tick. | V |
 | 0x9 | WaitSegment | command | f | Run 0x4B6874 | WaitSegment(n): waits until the script's own run counter (SSCScript+8, counts Run calls since it started) has reached n: an ABSOLUTE wait ("until segment n"), unlike Sleep which is relative to the call. | V |
 | 0xDE | SleepUntil | command | f | Run 0x4B6C58 | SleepUntil(cond): the command is re-executed every tick (its nested condition is evaluated again) and stays current while the value is 0. | V |
 | 0xB9 | SleepUntilIdle | command | o | Run 0x4B6C19 | SleepUntilIdle(unit): stays current while the object is a unit whose brain order kind (CUnitServer+0x980+4) is not 0, i.e. until its order queue is empty. A null / non-unit argument does not wait. | V |
@@ -521,7 +523,7 @@ Honest list of what the code read here does not settle:
 - **The hit record** built by `KillUnit` / `InflictDamage` (15 floats): only fields [8] (skill), [9] (damage), [11] (location), [12], [13], [14] are known from `TakeHit`; the others ([0..7], [10]) were set to the values the code uses without a meaning.
 - **SendStringEvent / SendEvent receivers** (clients) were not traced; only the sender side is described.
 - The use of the console VM (world +0x12A6C) by anything besides the console and `World_ScriptSpawnFlash` was not identified; the exact meaning of `CWorldServer+0x160` is only known as "set by PlayerIn".
-- **Tick rate**: "1 tick = 1/15 s" is the vendor statement; `CWorldServer::Update` was not timed.
+- **Tick rate**: resolved: one `GSWorld::Tick` per `CWorldServer::Update`, 55 ms slices (world-server.md 1, script-vm.md 1); the vendor's "1/15 s" is wrong.
 
 ## 6. Where the code differs from the vendor reference (scripting.md)
 

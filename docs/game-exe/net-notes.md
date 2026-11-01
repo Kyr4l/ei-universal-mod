@@ -1,5 +1,7 @@
 # Net / players / party class notes (game.exe, Russian build) — 2026-10-17
 
+> **2026-11-01:** superseded for the transport / lobby layouts by [net-transport.md](net-transport.md) (NetPeer field meanings, in / out buffers were swapped here, the crypto and Huffman code is dead, LobbyClient +0x2604 / +0x2614 / +0x2620 / +0x2690).
+
 > **2026-10-27:** CPlayer / CPlayerClient / CPlayerServer layouts are corrected in [world-client-players.md](world-client-players.md) (CPlayerClient is 0x50F8 and has no DeltaCodec member; CPlayerServer +0x50F8 known objects, +0x510C visible units, +0x5120 party status mode; CPlayer +0x118 synced item ids).
 
 

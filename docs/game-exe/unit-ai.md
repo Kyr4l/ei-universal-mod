@@ -43,7 +43,7 @@ The range 0x470000-0x474000 named in the brief holds no AI code (it is the 3DS s
 | Thing | Value |
 |---|---|
 | unit record | `CUnit` (+0x1c/+0x20/+0x24 position, +0x34 quaternion, +0x250 side = .mob player number, +0x24c owning CPlayer or 0 = AI, +0x240 the `CUnitServer`) |
-| server part | `CUnitServer` (`CUnit +0x240`): +0x1e0 `UnitStats`, +0x164 state (0 walking .. 5 strike 6 idle), +0x190 current order / +0x1b4 queued order, **+0x980 Brain (0x190 bytes, embedded)**, +0xa50 AiMemory (= brain +0xd0), +0xb10 AiAcknowledge |
+| server part | `CUnitServer` (`CUnit +0x240`): +0x1e0 `UnitStats`, +0x164 state (0 walking 1 turning 2 standing 3 one-shot anim 4 loop anim 5 action wind-up 6 idle: combat.md 2.1), +0x190 current order / +0x1b4 queued order, **+0x980 Brain (0x190 bytes, embedded)**, +0xa50 AiMemory (= brain +0xd0), +0xb10 AiAcknowledge |
 | brain pointer arithmetic | the decompiles use `brain[1].field_x` = brain +0xc4 + x and `brain[2].field_x` = brain +0x188 + x (Ghidra sized `Brain` at 0xc4) |
 | "enemy" | `CUnit::IsPlayerInMask(me, other)` 0x530150 = `(1 << other.side) & me.alarmMask & me.attackableMask` [V] |
 | "friend" | `g_0x7C2BC4.friends[me.side] & (1 << other.side)` (`PlayerRelations`, loaded from the .mob diplomacy; `CWorldServer +0x12c64` is a second instance of the same class used by the server-side combat code) [V] |
@@ -82,7 +82,7 @@ vicinity is the obvious candidate: not read).
 2  +0x4c idleSpeedFactor = (30 f + 1) / 31                                                             (towards 1.0)
 3  AiMemory::Tick 0x5CB700  -> ignore pairs ttl--, heard sounds, StimulusMap::UpdateVision, interest += decay   (section 4)
 4  +0x18c enemySeen = some unit of the SEEN list is IsPlayerInMask-enemy and alive
-5  return while the unit is in state 5 (strike / dying)
+5  return while the unit is in state 5 (an action: attack / cast / use wind-up, combat.md 2.1)
 6  enemySeen && !alarmFlag && alarmCondition +0x3c in {0, 2} -> alarmFlag = 1
 7  MOTIVATION: best = current ? current->Evaluate(brain) + 100 : none (must be > 1);
      for every other logic: p = logic->Evaluate(brain); p > best -> best
@@ -223,7 +223,7 @@ Base classes: 0x73D15C "stationary" (kinds 0, 1, 2, 10: Evaluate 50, Update = `C
 "reactive" (3..8: Begin 0x5D0A50 = target released + order kind 0, IsStationary false). `Brain::AddLogic` 0x5D5F60 replaces a logic of the same kind,
 and any stationary one by a new stationary one: a unit has at most one post.
 
-### 3.6 The `.mob` logic slot (`MobLogicSlot`, 0x4c bytes, 5 per unit; chunk 0xBBBC read by `UnitLogic_OnChunk` 0x46CBC0, copied by `Brain::SetMobLogics` 0x5D6D20) [V]
+### 3.6 The `.mob` logic slot (`MobLogicSlot`, 0x4c bytes, 5 per unit; chunk 0xBBBB read by `UnitLogic_OnChunk` 0x46CBC0, copied by `Brain::SetMobLogics` 0x5D6D20) [V]
 
 | off | chunk | field |
 |---|---|---|
@@ -557,10 +557,10 @@ flag / slot, the 5 mob slots (`UnitLogic::Write` 0x45D760), wait, active, both s
 ## 10. What is not known
 * Readers of `brain +0x44 / +0x48` (near / far range) and of `+0x4c idleSpeedFactor` outside the brain, of `AiSpellInfos +0x28 maxLevel`, of `FollowLimit`,
   of `normal.dat` (`g_0x7C43C4`) and of `AiMemory +0x20` beyond the scan countdown [?].
-* The exact activation rule for sleeping units other than damage / AlwaysActive / alarm (`TickActiveObjects` mode and who calls `ActivateObject`).
+* The exact activation rule for sleeping units other than damage / AlwaysActive / alarm: answered in world-server.md 4.3 (`ActivateObjectsAround` around every tracked unit, radius sight x 2 + 20 m, in playable zones only).
 * `MobLogicSlot +0x30` (chunk 0xBBBC000A) and which chunk fills `+0x44 Wait` (the switch read has no case for it; `UnitLogic::Read` loads it from saves).
 * `HeardSounds_AppendAlarm` writes an uninitialised stack position into the record (harmless: flagged records never use it).
-* The player mode `CPlayerServer +0x5120` values 1 / 2 beyond "a hero is hurt / fighting" (`docs/monster-ai.md`), and the UMAg preset table of gs-functions.md
+* The player mode `CPlayerServer +0x5120`: answered in world-client-players.md 7 (0 calm, 1 a party unit has a body-part stat <= 2.0, 2 a visible unit fights the party; computed in `SendMsg60_PartyStatus`). Still open: the UMAg preset table of gs-functions.md
   (Fear(1) for preset 0) against the .mob AggrMode mapping (Fear(1) only for mode 3): both read as written, not re-verified here.
 
 ## 11. Corrections to earlier notes

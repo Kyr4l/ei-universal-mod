@@ -148,6 +148,8 @@ Recovered commands (name, then its help text where available):
 | `give [Nplayer] money [amount]` | Grants money - **the same effect the earlier removed money-overlay feature was reading via raw memory address; this console command is the game's own supported way to do it.** |
 | `give [Nplayer] exp [amount]` | Grants XP, same note as above. |
 | `give items` / `give quests` | Give items/quests (parameters not fully recovered). |
+> 2026-10-31, [game-exe/ui-framework.md](game-exe/ui-framework.md): GodMode, KillUnit, Teleport, KillScript and the give-items / quests entries are **script** functions reachable from the console through `@expr`, not console commands; the real command tables (always available vs cheat mode) with handler addresses are in that page.
+
 | `GodMode` | Toggle invulnerability. |
 | `KillUnit` | Kill a unit. |
 | `Teleport` | Teleport (parameters not recovered). |

@@ -225,7 +225,7 @@ through), `World_InitWorkDir` 0x55EA10 = `g_0x7AF454`.
 |---|---|---|
 | +0x84 / +0x88 | nightFactor / weatherSight | `UpdateEnvironment`: 0.9 while it rains |
 | +0x8c | alarmSlots[5] | `{byte active, int tick, float x, float y}`; `ActivateLogicSlot` 0x593FC0 (script InvokeAlarm) |
-| +0xdc / +0xe0 | weatherMode / restrictFlag | from the zone record; saved; `+0xe0` also in the zone state blob |
+| +0xdc / +0xe0 | weatherMode / caveFlag | from the zone record (`+0x30` = the map.txt `#sky cave` flag, not `#restrict`: MapInfo_Load 0x45EA20; `#restrict` fills ZoneRecord +0x34 byte + floats +0x38..+0x40); saved; `+0xe0` also in the zone state blob |
 | +0xe4 / +0xe8 | rainKind / rainStrength | `SetRain` 0x58EE00 (script), msg 0x70 (byte, short) |
 | +0xec .. +0xfc | zone exits | CArray of `ZoneExit` (0x3c) from `SetZoneExits` 0x5915E0; `GetZoneExit` 0x58E4C0; sent in the zone state blob (`CEffectKey::Write` 0x4E58A0 is really `ZoneExit::Write`) |
 | +0x100 / +0x172 | aiMapReady / navGridOn | 0 while loading (`BeginAIMapBatch` 0x595A70 / `EndAIMapBatch` 0x595A90) |
@@ -241,7 +241,7 @@ through), `World_InitWorkDir` 0x55EA10 = `g_0x7AF454`.
 | +0x15c / +0x160 | mapLoaded / worldScriptRunning | |
 | +0x164 | startPosition | copied into joining players |
 | +0x170 | aiMap | `CAIMap` (0x12704; CollisionMap `+0x294`, NavGrid `+0x2468`, terrain rows `+0x280c`, StimulusMap `+0x2838`) |
-| +0x12874 / +0x12a6c | worldScript / systemScript | two `GSWorld` VMs (0x1f8): the zone script (saved) and a second one ticked unconditionally (one-shot `WorldScript(...)` texts from `SpawnPartyHeroes` / `OnNamedEvent` 0x592090 / `World_ScriptSpawnFlash`) [I] |
+| +0x12874 / +0x12a6c | worldScript / systemScript | (script-vm.md 2026-11-01: SpawnPartyHeroes, OnNamedEvent, CTrapObject::Update, MobFile_Load and LoadWorldScript all compile into the ZONE VM +0x12874; only the console WorldScript_Execute and World_ScriptSpawnFlash use +0x12A6C) two `GSWorld` VMs (0x1f8): the zone script (saved) and a second one ticked unconditionally (one-shot `WorldScript(...)` texts from `SpawnPartyHeroes` / `OnNamedEvent` 0x592090 / `World_ScriptSpawnFlash`) [I] |
 | +0x12c64 | relations | `PlayerRelations` (0x100) |
 | +0x12d64 | zoneKind | = `g_0x7C2CC4` (2.3); the branch selector of the tick set, the replication set, the random weather, the hero spawn and the camp behaviour |
 | +0x12d68 / +0x12d6c | mapName (.mob) / terrainName (.mpr) | |
@@ -290,7 +290,7 @@ branches. For the bot: a unit far from every hero is frozen until a hero's sight
 ### 4.4 From descriptors to objects (`CreateObjectFromDesc` 0x5927C0, 10 callers) [V]
 
 Descriptors are the parsed `.mob` nodes (`MobFile_ParseChunks` 0x481F00: `OBJECTSECTION` 0xB000 with 0xAA01 objects (0x68 bytes
-bound), 0xBBAB0000 levers (0xd0), 0xBBAC0000 traps (0xa4), 0xBBBB0000 units (0x324), 0xCC01, 0xDD01; the diplomacy matrix
+bound), 0xBBAB0000 magic traps (0xd0), 0xBBAC0000 levers (0xa4), 0xBBBB0000 units (0x324) (names fixed 2026-11-01: CMagicTrapDesc vt 0x73C650 kind 7, CLeverDesc vt 0x73C6B0 kind 8; ids verified on real .mob files, data-sound.md), 0xCC01, 0xDD01; the diplomacy matrix
 0xDDDDDDD1 into `g_0x7C2BC4`; the scripts 0xACCEECCA / CB). `CObjectDesc` (0x8c; ctor 0x46A5C0, chunks 0x46AB20): `+0x18` id
 (NID, -1 = allocate), `+0x1c` object, `+0x20` pos, `+0x2c` quaternion, `+0x3c` name, `+0x48` kind, `+0x4c` object name,
 `+0x50` type (the 0x3xxx creation key), `+0x54` model, `+0x58` prototype, `+0x60` morph x3, `+0x6c` flag 0x20000, `+0x6d` dynamic,
@@ -397,7 +397,7 @@ the container version (`g_0x790260` = 0x74 today).
 | 10 | effect ids | the `+0x12de8` ids, -1 (`LoadSave` re-adds them with `MarkDirty`) |
 | 11 | spell casts | `{1, CSpellEffect::Write}`*, 0 |
 | 12 | StimulusMap, GSWorld (+0x12874), PlayerRelations | `StimulusMap::Write` 0x5CAFA0, `GSWorld::Write` 0x4C0F90, `PlayerRelations::Write` 0x4557F0 |
-| 13 | weatherMode, restrictFlag, water levels | `+0xdc`, `+0xe0`, count + 16-byte records (version > 0x4d) |
+| 13 | weatherMode, caveFlag, water levels | `+0xdc`, `+0xe0`, count + 16-byte records (version > 0x4d) |
 | 14 | item update ids | -1 |
 | 15 | per player (manager order) | `+0xfc`, the party (`CParty::Write` 0x661C10 = the `.mp` body), tracked item ids -1, byte `+0x108`, (`+0x120`), id list `+0x118` (count + ids, version > 0x54); `LoadSave` then `SendMsg80_Party` |
 | 16 | paused byte | `+0x6c` |

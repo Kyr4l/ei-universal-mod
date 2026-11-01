@@ -49,6 +49,8 @@ struct SentPacket {
 };
 
 // ---- NetConnection (vtable 0x73BF5C, servers 0x73BB70/0x73BBB4, clients 0x73BDEC/0x73BE30) ----
+// RE 2026-11-01 (docs/game-exe/net-transport.md): the engine class with this layout is the per-link NetPeer (one per remote
+// peer, 220-byte update budget at +0x50); "NetConnection" in game.exe is the socket owner. The struct name here is kept for the callers.
 // Only the fields the re-implemented functions touch are named; the rest stays opaque padding.
 struct NetConnection {
     void** vtable;              // +0x0000

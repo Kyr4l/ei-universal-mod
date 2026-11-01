@@ -386,7 +386,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 - The exact meaning of pipeline slots 5 (`SetFog`?) and 35 (the `+0x158` post-process) and the precise clipping algorithm live inside
   `3DfpFPU.dll`; only the call shapes were read. [?]
 - `CFigureClientSpecific +0x30..+0x38` (three 1.0 floats) and `CI3DFigure +0x27C` (lighting params) are set but their readers were not found. [?]
-- `CStateBlockSet::CaptureEffect` 0x4FDBC0 / `ApplyDefaultEffect` 0x4FDD80 were named from their shape, not from a reader of their callers
+- `CStateBlockSet::GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 (were CaptureEffect / ApplyDefaultEffect): slot 6 copies the records OUT of the registry, a getter, resolved by the guess sweep 2026-11-01
   (the material manager, other page). [?]
 - `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 and `LoadFigFile2` 0x4F9E50 (the "second path" with `GetNamedValue`) were not read.
 - Which objects use the alternate node tracks `+0x54 / +0x58` (`SetTrackAnimationB / C`) was not found.
@@ -433,7 +433,7 @@ SetFogColor; 0x504A40 GetFogRGB; 0x500740 SetAmbientColor; 0x500800 SetSunLight;
 SetAlphaBlendModes; 0x501BB0 DrawIndexedTriangles; 0x501D00 DrawFigure; 0x501D40 DrawFigureLit; 0x501D90 DrawTexturedPolyline; 0x502CA0
 DrawParticleQuads; 0x503A40 DrawArrow3D; 0x5041F0 DrawRect2D; 0x5045D0 DrawPolyline2D; 0x504860 DrawSprite; 0x504A60 SetGamma; 0x504780
 RestoreSurfaces; 0x5019D0 GetStackTop; 0x4FCA60 CStateBlockSet ctor; 0x4FCE90 BuildDefaultEffect; 0x4FD2A0 RegisterEffect; 0x4FD9D0
-DeleteEffects; 0x4FDB00 EraseEffect; 0x4FDB50 FindEffect; 0x4FDBA0 GetDefaultEffectHandle; 0x4FDBC0 CaptureEffect; 0x4FDD80 ApplyDefaultEffect.
+DeleteEffects; 0x4FDB00 EraseEffect; 0x4FDB50 FindEffect; 0x4FDBA0 GetDefaultEffectHandle; 0x4FDBC0 GetEffectRecords; 0x4FDD80 GetDefaultEffectRecords.
 
 **Render manager / scene** — 0x4F68C0 CRenderManager ctor; 0x4F6D30 OpenResourceFile; 0x4FAB00 GetModel; 0x4F7B10 CreateScene; 0x4F77C0
 CreateSceneFromLink; 0x4F7150 FindOrCreateScene; 0x4F75E0 GetOrCreateFigure; 0x4F7480 LoadFigure; 0x4F7D20 LoadFigFile; 0x4F7370 MakeFigureName;

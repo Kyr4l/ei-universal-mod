@@ -60,7 +60,7 @@ A `.mob` file starts with the root container node `OBJECTDBFILE` (`40960` / `0x0
 
 ## Script Decryption (`SS_TEXT` Node)
 
-The mission script in Evil Islands (`SS_TEXT`, magic `2899242187` / `0xACD33E2B`) is encrypted using MSVC's Linear Congruential Generator (LCG) XOR cipher:
+The mission script in Evil Islands (`SS_TEXT`, magic `2899242187` / `0xACCEECCB` (hex corrected 2026-11-01; the decimal was right)) is encrypted using MSVC's Linear Congruential Generator (LCG) XOR cipher:
 
 ```cpp
 std::string DecryptScript(const uint8_t* payload, size_t payloadLen) {
@@ -86,16 +86,18 @@ std::string DecryptScript(const uint8_t* payload, size_t payloadLen) {
 
 ## Key Node Magic Dictionary Reference
 
+(Hex column of the UNIT_* magics corrected 2026-11-01: 3149594624 is 0xBBBB0000; UNIT_LOGIC is 0xBBBC0000, GUARD_PT 0xBBBD0000, ACTION_PT 0xBBBE0000, MAGIC_TRAP 0xBBAB0000, LEVER 0xBBAC0000.)
+
 - `OBJECTDBFILE`: `40960` (`0x0000A000`)
 - `OBJECTSECTION`: `45056` (`0x0000B000`)
-- `UNIT`: `3149594624` (`0xBBBC0000`)
+- `UNIT`: `3149594624` (`0xBBBB0000`)
 - `NID`: `45058` (`0x0000B002`)
 - `OBJNAME`: `45060` (`0x0000B004`)
 - `OBJPOSITION`: `45065` (`0x0000B009`)
-- `UNIT_WEAPONS`: `3149594632` (`0xBBBC0008`)
-- `UNIT_ARMORS`: `3149594633` (`0xBBBC0009`)
-- `UNIT_SPELLS`: `3149594631` (`0xBBBC0007`)
-- `UNIT_QUEST_ITEMS`: `3149594629` (`0xBBBC0005`)
-- `UNIT_QUICK_ITEMS`: `3149594630` (`0xBBBC0006`)
+- `UNIT_WEAPONS`: `3149594632` (`0xBBBB0008`)
+- `UNIT_ARMORS`: `3149594633` (`0xBBBB0009`)
+- `UNIT_SPELLS`: `3149594631` (`0xBBBB0007`)
+- `UNIT_QUEST_ITEMS`: `3149594629` (`0xBBBB0005`)
+- `UNIT_QUICK_ITEMS`: `3149594630` (`0xBBBB0006`)
 - `SS_TEXT`: `2899242187` (`0xACD33E2B`)
 - `AIGRAPH`: `826366246` (`0x31415926`)

@@ -71,18 +71,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0040FB30 | 3103 | CCamera::Update | (dt): main camera step: audio listener update (g_0x7AF784 from position and orientation), follows the carrier unit (+0x11c) smoothly or snaps (flag 8), applies scroll / rotate / pitch inputs (+0xa4.., +0xb4.., +0xc0..), edge scrol... |
-| 0x0040DB50 | 2162 | CCamera::SampleSmoothHeight | (pos xy, cell w, cell h): terrain height at the position smoothed with a 4x4 cubic B-spline over a grid of cells (CubicBSpline_SetCoeffs / Eval3), cached when the grid cell is unchanged (+0x2d8/+0x2dc) |
-| 0x0040E4C0 | 814 | CCamera::AvoidObstacles | (): collects objects within 16 units (CWorldClient::CollectObjectsNear) and pushes the camera position out of their bounding extents (+0x144/+0x148/+0x14c), plus terrain height clamping |
-| 0x0040ECD0 | 730 | CCamera::LoadCamFile | (index, flag): reads ".\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x0040F8B0 | 619 | CCamera::UpdateFromTarget | (): quaternion +0x34 = pitch rotation of the stored one (+0xf4), position = target (+0xe0..) - forward * distance (+0xf0); AvoidObstacles; when pushed up, recomputes the pitch with atan2 so the view still looks at the target |
-| 0x0040C8B0 | 582 | CCamera::ctor | CObject3D base (0x40CB20 / 0x40CB00 quaternions), vt 0x73BA38 then CCamera: lists +0x108 (0x18-byte nodes) and +0x1e0 deque, 8 view presets at +0x120 (0x18 each: distance 30.0, identity quaternion, 45 degree pitch) |
-| 0x0040E910 | 581 | CCamera::OpenNewCamFile | (mode): in ".\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x0040D470 | 562 | CCamera::TurnTowardsCarrier | (immediate): rotates the view quaternion (+0x34) towards the direction to the carrier unit +0x11c (CBaseManager::FindById on g_0x7AF5F8) in small angle steps |
-| 0x0040D710 | 555 | CCamera::ClampPitch | (): derives the pitch from the view quaternion, enforces minimum /pitch/ 1 degree by re-rotating, then AvoidObstacles |
+| 0x0040FB30 | 3103 | CCamera::Update | (dt in ticks, 1.0 = 55 ms): listener for CSoundManager (position = target or camera when recording/playing (flags 0x60), up axis); flags 0x60 -> return (fly path / recording own the transform); follow: carrier unit (FindById +0x11... |
+| 0x0040DB50 | 2162 | CCamera::SampleSmoothHeight | (xy*, cellW, cellH): terrain height under a point smoothed with a bicubic uniform B-spline over a 4x4 grid of CWorldClient::GetHeight samples spaced cell/3 apart (clamped to the terrain size g_0x7AF738 +0x10C/+0x110); the 12 cubic... |
+| 0x0040E4C0 | 814 | CCamera::AvoidObstacles | (): Terrain_SampleHeightBox at the camera position (step 1, +-2 m) -> max terrain height; CWorldClient::CollectObjectsNear within 16 m: for every object with bounds <= 100 the 'top' z + bounds max z (+0x14C) + radius (+0x130) weig... |
+| 0x0040ECD0 | 730 | CCamera::LoadCamFile | (name, cutIndex): reads <resources>\camera\<name>: size / 0x24 keyframes {float time, pos xyz, quaternion} into +0x2F0 (count +0x2F4); when cutIndex > 1 the first keyframe whose next key is > 500 time units later ends the prefix a... |
+| 0x0040F8B0 | 619 | CCamera::UpdateFromTarget | view quaternion +0x34 = yaw quaternion +0xF4 rotated by -(90 deg + pitch +0x104) about its right axis; position +0x1C = target +0xE0 - up axis * distance +0xF0 (z = target height - up.z * distance); AvoidObstacles; when it pushed ... |
+| 0x0040C8B0 | 582 | CCamera::CCamera | (0x308 bytes, vt_CCamera, CObject3D transform at +0x1C/+0x34): shake list +0x108 (0x18 nodes), 8 view presets +0x120 (0x18 each: distance 30, identity yaw quaternion, pitch 45 deg), keyframe deque +0x1E0, .cam path +0x2EC, keyfram... |
+| 0x0040E910 | 581 | CCamera::StartRecording | (index): in <work>\camera\: renames camera.cam to camera%.4d.cam (next free number) and opens a fresh camera\<index>.cam for recording: path +0x2EC, flags /= 0x10 (main then calls RecordKeyframe every frame), g_0x7AF5C0 /= 0x10. W... |
+| 0x0040D470 | 562 | CCamera::TurnTowardsCarrier | (immediate): rotates the view quaternion +0x34 towards the carrier unit (CBaseManager::FindById g_0x7AF5F8, +0x11C) in 10% steps (full step when immediate) then LevelRoll; no callers in this build |
+| 0x0040D710 | 555 | CCamera::LevelRoll | derives the roll of the view quaternion +0x34 (angle between the right axis and the horizontal of -up); when >= 1 deg rotates 10% of it back about the cross axis, then AvoidObstacles. Was ClampPitch (it does not clamp the pitch: U... |
 | 0x0040C060 | 515 | DwordVector_ctorN8 | vector<dword>(n) with inline chunk allocator |
-| 0x0040EFB0 | 506 | CCamera::UpdateFlyPath | (time): keyframe playback (flag 0x20): finds the segment of the 0x24-byte keys at +0x2f0 (count +0x2f4, current +0x304, time offset +0x300), lerps the position and Quat_Slerp's the orientation |
-| 0x0040D9B0 | 404 | Terrain_SampleHeightBox | (centre xy, ., ., step, halfW, halfH, out avg, out min, out max): samples the world height grid (CWorldClient::GetHeight) in a box around the centre, clamped to the terrain size g_0x7AF738 +0x10c/+0x110 |
+| 0x0040EFB0 | 506 | CCamera::PlayCamFile | (time): flag 0x20 playback of the keyframes +0x2F0: finds the segment (current index +0x304, time offset +0x300), lerps the position +0x1C and slerps the quaternion +0x34; past the last key copies it and clears flag 0x20; main cal... |
+| 0x0040D9B0 | 404 | Terrain_SampleHeightBox | (centre xy*, unused, unused, step, halfW, halfH, out avg, out min, out max): CWorldClient::GetHeight on a grid of points centre +- half extents at the given step (inside the terrain g_0x7AF738 +0x10C/+0x110), returns the average /... |
 | 0x0040CC30 | 387 | CObject3D::UpdateWorldTransform | CObject3D slot 15: calls slot 14 (world rot) then world pos (+0x28) = parent pos + local pos (+0x1c) rotated by the parent quat (arg = parent's 7 floats: pos? no: arg[0..3] quat, used as rotation); helpers 0x401DE0 vec3 set, 0x40C... |
 | 0x0040C2A0 | 374 | StlString_AssignRange | std::string::assign(first, last) with length_error "basic_string" on overflow (20 callers) |
 
@@ -92,8 +92,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00412D80 | 1225 | LobbyServer::ctor | (this 0x2600 bytes, param): NetConnection::ctor, ServerInfo-like block +0x2568 (0x41FD30), vtable NetServer 0x73BBB4 -> LobbyServer 0x73BB70; opens the UDP socket on the port g_0x783E30 (NetSocket::Open); lobby hash tables / lists... |
-| 0x004110D0 | 645 | CCamera::SetDirection | (dx, dy, dz): normalizes the direction, yaw = atan2 (0x6FD026), pitch = asin; builds the quaternion +0xf4 (0x49ECC0 from axis / angle, identity g_0x79B5B8 when looking straight) and the view orientation +0x34 = +0xf4 rotated by -(... |
+| 0x00412D80 | 1225 | LobbyServer::ctor | (this 0x2600, gameKind): NetConnection::ctor, pending-accept list +0x2568 (0x28 nodes {addr 16, linkId, rate, age}), vt 0x73BBB4 then 0x73BB70, NetSocket::Open(8888 = g_0x783E30), lists +0x2590..+0x25c4, strings +0x25c8 name / +0x... |
+| 0x004110D0 | 645 | CCamera::SetDirection | (dx, dy, dz): yaw quaternion +0xF4 from atan2 of the horizontal direction (identity when straight down), pitch = asin(dz / len), view quaternion +0x34 = yaw rotated by -(90 deg + pitch) about x; false for a zero vector |
 | 0x00412370 | 521 | ServerInfo::ctor | 0x48-byte ServerInfo (vtable 0x73BB40 base NetPeerInfo -> 0x73BB28): NetPeerInfo::Ctor, name +0x28 and map +0x38 = default string g_0x783D6C, +0x34 = 4, bytes +0x44..+0x46 = 0 |
 | 0x00411660 | 432 | List18_CtorE | list constructor with 0x18-byte nodes (STLport chunk allocator) |
 | 0x00411850 | 426 | List10_CtorB | list constructor with 0x10-byte nodes (STLport chunk allocator) |
@@ -105,7 +105,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00413D20 | 285 | NamedEventMessage::Clone | slot 3 of 0x73BC40: allocates a 0x1c-byte copy (dword +0xc, name) |
 | 0x00413930 | 279 | ChatMessage::Clone | slot 3 of 0x73BC28: allocates a 0x18-byte copy with the text |
 | 0x00411C00 | 278 | Deque24_InitializeMap | (n): allocates the map (max(8, n / 14 + 3) pointers) and the n / 14 + 1 buffers (0x411EE0), sets start / finish iterators |
-| 0x00412B70 | 259 | ObjListMessage::Read | slot 5 of 0x73BDD0 (cursor*): reads the count, resizes the ref vector +0xc (0x4200C0) and resolves every ref through NetPeer::ReadObjectRef, then +0x18, +0x1c, +0x20, +0x24 and the refs +0x28 / +0x2c |
+| 0x00412B70 | 259 | ObjListMessage::Read | slot 5 of 0x73BDD0 (cursor*): count, RefVector_Resize +0xc, every ref via NetPeer::ReadObjectRef(g_0x79B924), +0x18, u8 +0x1c, +0x20, +0x24, refs +0x28 / +0x2c |
 
 ## 0x414000 - 0x41A000: net message classes (NetMessage subclasses: strings / refs / blobs), LobbyServer map list, variables, file transfers, player events
 
@@ -113,12 +113,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004186F0 | 1262 | LobbyServer::SetMap | (name string*): clears the map list +0x25ac and variables +0x25b0, appends a StringMessage "<name><suffix 0x783D80>", creates the current-map StringMessage2 +0x25a8 with the name (also copied to +0x25d4), loads it (0x5810A0, 0x57E... |
-| 0x00417EB0 | 1062 | LobbyServer::v13_GatherReplicated | slot 13 of 0x73BB70 (out vector of {object, flag}): collects everything the current peer g_0x79B924 must see: map list +0x2590, variables +0x25b0, its own player record of +0x25a4 (+0x10 == peer), chat lines +0x2594 newer than the... |
-| 0x00418ED0 | 748 | LobbyServer::OnMapRecord | (name string*): prints chat line 7; looks the map record up in g_0x7C87D4 by "<name><suffix 0x783D84>"; for every peer posts two player events (kinds 0 and 1 with the record's +0xc / +0x10 divided by the peer count) and the map ev... |
+| 0x004186F0 | 1262 | LobbyServer::SetMap | (quest name): called by OnNamedEvent kind 1 "<quest>_1"; clears the map list +0x25ac and variables +0x25b0, appends the quest state StringMessage "<quest>_2" (kind 8) to +0x25ac, creates the current-map StringMessage2 +0x25a8 (kin... |
+| 0x00417EB0 | 1062 | LobbyServer::v13_GatherReplicated | slot 13 of 0x73BB70 (out vector of {object, group byte}): what the peer g_0x79B924 must see, group 2 unless noted: all player records +0x2590, variables +0x25b0, its own peer record of +0x25a4 (+0x10 == peer), chat lines +0x2594 w... |
+| 0x00418ED0 | 748 | LobbyServer::OnMapRecord | called by OnNamedEvent kind 1 "<quest>_3" (quest completed): chat line 7; record g_0x7C87D4["<quest>_3"]: for every peer posts player events kind 0 (record +0xc / peers: experience) and kind 1 (+0x10 / peers: money) and the map ev... |
 | 0x00419A00 | 699 | LobbyServer::AddFileTransfer | (name string*, GameBuffer): unless a transfer with that name exists in the list +0x2598: creates a ListStringMessage {chunk count +0xc, size +0x10, name +0x14} and splits the buffer into 64-byte RefBlobMessage chunks (0x54: owner ... |
 | 0x00417BC0 | 551 | LobbyServer::dtor | destructor body: strings +0x25d4 / +0x25c8, hash tables / lists +0x25c4..+0x2590, refs +0x25a8 / +0x25a0, the list +0x2568, then NetConnection::dtor |
-| 0x00418CC0 | 520 | LobbyServer::UnloadMap | prints the chat line 6 of the current map (0x41A310), re-posts the map record events (PostMapEvents withStart = 1), releases the current map +0x25a8, clears the lists +0x25ac / +0x25b0 / +0x2598, RefreshMapList and 0x57ED60(g_0x7A... |
+| 0x00418CC0 | 520 | LobbyServer::UnloadMap | called by OnNamedEvent kind 1 "<quest>_2": chat line 6, PostMapEvents(record "<quest>_1", withStart 1), releases the current map +0x25a8, clears +0x25ac / +0x25b0 / +0x2598, RefreshMapList, Session_SetMapName(g_0x7AFE20, 0) |
 | 0x004191C0 | 498 | LobbyServer::PostMapEvents | (mapRecord, withStart): for the first loaded player (list +0x25a4, +0x28 set): posts a kind-2 player event (0x419D90) for every string of the record's vector +0x14 and, when withStart, a kind-4 event with the string g_0x79B298 |
 | 0x00419D90 | 435 | LobbyServer::PostPlayerEvent | (player, kind, value, strBegin, strEnd): creates a RefDwordsStringMessage {player ref, kind, value, string} and appends it to the timed list +0x25b4 with a 60 s timeout |
 | 0x00418530 | 428 | LobbyServer::RefreshMapList | 0x580F10(); enumerates the maps (0x57F850 with +0x25e4 and the current name +0x25d4) and appends a StringMessage "<map><suffix 0x783D70>" per map to the list +0x25ac (0x5809D0 per map name) |
@@ -134,18 +134,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0041BC40 | 2004 | LobbyClient::ctor | (this 0x2740+ bytes): NetConnection::ctor, NetClient members (+0x2568.., GameBuffer +0x2578, lists +0x25a8 / +0x25bc, NetSocket::Open(any port)), vtable 0x73BE30 -> 0x73BDEC; lists +0x25d8 players (TwoStringMessage), +0x25dc chat ... |
-| 0x0041B2A0 | 974 | LobbyServer::OnNamedEvent |  |
-| 0x0041D600 | 813 | LobbyClient::OnServerInfoPacket | (decompile failed) parses a master / server reply: LzDecompress of the payload, NetPeerInfo::Ctor and NetClient::AddServerInfo |
-| 0x0041ADB0 | 777 | LobbyServer::OnJoin |  |
-| 0x0041DA50 | 757 | LobbyClient::FillParty |  |
-| 0x0041DDC0 | 723 | LobbyClient::LoadPartyFromMirror | rebuilds the party block +0x2690 from the mirror record's BlobMessage vector (+0xc..): each blob holds a serialized unit {kind, ...} created through the party factories (vt[0x58] / vt[0x48] -> vt[0x5c] create, vt[0x24] read) and a... |
-| 0x0041CD80 | 695 | LobbyClient::ApplyPlayerEvents | applies every RefDwordsStringMessage of the list +0x2608 to the local hero (0x594180(g_0x7AFF60, 0)): kind 0 -> 0x5911C0(0, string), 1 -> money +0xc0 += value, 2 -> give the item named +0x18 (0x6AC970 lookup, 0x665470), 3 -> take ... |
+| 0x0041BC40 | 2004 | LobbyClient::ctor | (this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port),... |
+| 0x0041B2A0 | 974 | LobbyServer::OnNamedEvent | created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must b... |
+| 0x0041D600 | 813 | LobbyClient::OnServerInfoPacket | (GameBuffer from the master TCP stream, CConnectProgressWin::Update): u32 raw length must equal the buffer length, LzDecompress (fresh LzCompressor) then records until exhausted: sockaddr[16] + NetPlayerInfo::Read (0x401170: u32 +... |
+| 0x0041ADB0 | 777 | LobbyServer::OnJoin | created-handler for JoinMessage (kind 5, this = LobbyServer, edx = message): new TwoStringMessage player record appended to +0x2590 {name +0xc, unit +0x18 from the join, +0x24 = join +0x28, +0x2c = join +0x2c, +0x30 = g_0x79B60C++... |
+| 0x0041DA50 | 757 | LobbyClient::FillParty | rebuilds the local exchange record +0x260c (CExchangeScreen::Update / OnLButtonDown when the party changed): +0x18 = party version, one BlobMessage (kind 16) per hero of +0x2660 (count +0x2664): {u32 model +0xc, u32 +0x10, u32 +0x... |
+| 0x0041DDC0 | 723 | LobbyClient::LoadPartnerParty | rebuilds the partner's offer party +0x2690 from its record's BlobMessages (+0xc..): each blob = one serialized offered item (kind 16); the exchange screen shows it as the other counter. Was LoadPartyFromMirror |
+| 0x0041CD80 | 695 | LobbyClient::ApplyPlayerEvents | applies the RefDwordsStringMessages of +0x2608 (kind 14 {player ref, u32 kind +0x10, u32 value +0x14, string +0x18}) to the local CPlayer (CWorldServer::FindPlayerById(0)): 0 experience (GiveExperience(0, string)), 1 money += valu... |
 | 0x0041CA10 | 690 | LobbyClient::dtor | destructor body of the LobbyClient (vtable 0x73BDEC, 0x26f0+ bytes): party blocks +0x2690 / +0x2620, ref +0x2618, party list +0x2614, lists +0x2610..+0x25d8, local record +0x260c, join message +0x2600, then NetClient members (+0x2... |
-| 0x0041ECC0 | 590 | LobbyClient::OnChunkReceived | (table 0 handler for RefBlobMessage): appends the chunk to +0x25e4 (unless its transfer's name is the placeholder g_0x79B298); when every chunk of the transfer (+0xc count) is present: sorts them by index, concatenates the 64-byte... |
+| 0x0041ECC0 | 590 | LobbyClient::OnChunkReceived | created-handler for RefBlobMessage (kind 12 {ref +0xc transfer, u16 index +0x10, 64 bytes +0x12}): appends to +0x25e4 (ignored when the transfer name is empty); when all +0xc chunks of the transfer are present: sorts by index, con... |
 | 0x00426CB0 | 587 | ObjRefVector_InsertN | (pos, n, ref*): vector<ObjRef>::_M_fill_insert (external ref protocol copies; reallocating path 0x429B70) |
-| 0x0041A7E0 | 559 | LobbyServer::v15_FillServerInfo | slot 15 of 0x73BB70 (out ref): builds a ServerInfo {name +0x25c8, +0x34 = +0x25e4, map = current map name (or the placeholder), player count +0x44, max players +0x45 = +0x25e0, password flag +0x46} and stores it in the ref |
-| 0x0041AA10 | 533 | LobbyServer::SendMasterHeartbeat | serializes {server name +0x25c8, hasPassword, request id +0x25fc, byte +0x25e4, current map name, player count, max players +0x25e0, public address +0x2578, magic 0xdec0ad07} (0x401000) into a GameBuffer and sends it to the master... |
+| 0x0041A7E0 | 559 | LobbyServer::v15_FillServerInfo | slot 15 of 0x73BB70 (out ref): new ServerInfo {name +0x25c8, +0x34 = +0x25e4, map = Game_GetQuestName of the current map +0x25a8 (empty when none), +0x44 = peer count, +0x45 = +0x25e0, +0x46 = password set}; serialized by NetServe... |
+| 0x0041AA10 | 533 | LobbyServer::SendMasterHeartbeat | builds a NetPlayerInfo-style record {name +0x25c8, map (current quest or empty), u8 players, u8 max +0x25e0, u8 kind +0x25e4, u8 hasPassword, u32 request id +0x25fc, u32 public address +0x2578, u32 magic 0xDEC0AD07} with NetPlayer... |
 | 0x00421F60 | 515 | ObjRefVector_CtorN | (n): allocates a vector of n ObjRef slots (STLport chunk allocator) |
 | 0x0042AC70 | 515 | PtrVector_CtorN2 | (n): allocates a vector of n dword slots (STLport chunk allocator) |
 
@@ -163,12 +163,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0042D370 | 357 | Bytes_InsertN | vector<byte>::_M_fill_insert (pos, n, value*) |
 | 0x0042D4E0 | 287 | Bytes_InsertNRealloc | vector<byte>::_M_fill_insert reallocating path |
 | 0x0042DA80 | 229 | ClipPolygon | (verts, idx[], &vertCount, &count, xMax, yMax): clips a polygon against the six view planes (no outcodes) and re-triangulates it as a fan |
-| 0x0042D1C0 | 146 | ChunkFile::ctor | (name CString): vtable 0x73BE94 -> 0x73BE9C, tag / consumed / length / start = 0, parent +0x14 = 0, CFile at +0x18, opens the file |
-| 0x0042D060 | 120 | ChunkFile::ReadVec4 | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and stores {0x10, ?, x, y} into the out record |
+| 0x0042D1C0 | 146 | ChunkFile::ctor | (name CString): vtable 0x73BE94 -> 0x73BE9C, tag / consumed / length / start = 0, parent +0x14 = 0, CFile at +0x18, opens the file; NO CALLERS (the chunk reader is only used through sub-chunk objects created by the owning serializ... |
+| 0x0042D060 | 120 | ChunkFile::ReadVec4B | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and stores {0x10, ?, x, y}; second function named ReadVec4 (the other is 0x42CEC0) |
 | 0x0042D0E0 | 115 | ChunkFile::WriteDwordPair | (value): CFile::Write (vt[14]) of the dword twice plus 16 more bytes; consumed bytes accounted on the parent |
 | 0x0042D160 | 96 | ChunkFile::Open | (name, mode): CFile::Open (CFile +0x18 vt[8]) with mode & 0xffff |
 | 0x0042D270 | 73 | ChunkFile::dtor | destroys the CFile and restores the base vtable 0x73BE94 |
-| 0x0042D020 | 52 | ChunkFile::Read | (buf, n): CFile::Read (GetFile() vt[13]) then Consume(n) on the parent chunk +0x14; consumed +8 += n |
+| 0x0042D020 | 52 | ChunkFile::Read | (buf, n): CFile::Read (vt[1] GetFile -> CFile vt[13]) then Consume(n) on the parent and +8 += n |
 
 ## 0x42E000 - 0x433000: GameBuffer; Vertex32_Lerp, OBB tests, Mat3_Solve, LZ compressor (LzCompress / LzDecompress), BigNum_ModExp + RIPEMD-128 key hash, NetPeer::ctor
 
@@ -178,15 +178,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x004319E0 | 4787 | Ripemd128_Compress | (state[4], block[64]): RIPEMD-128 compression function (two parallel lines, constants 0x5a827999 / 0x6ed9eba1 / 0x8f1bbcdc and 0x50a28be6 / 0x5c4dd124 / 0x6d703ef3) |
 | 0x0042E700 | 3436 | OBB_Intersects | (boxA, boxB, posA xyz, posB xyz, quatA, quatB): separating-axis test of two oriented boxes (half extents at +0x20 / +0x24 / +0x28, axes from the quaternions, Mat3_Solve for the relative axes): 15 axis tests, 1 when they overlap |
-| 0x00430960 | 1523 | LzDecompress |  |
-| 0x00430450 | 1243 | LzCompress | (this = LzCompressor, GameBuffer in): LZ77 over a 1 KB ring window with hashed chains (hash = last byte << 2 ^ byte): literals as a 0 bit + byte, matches (>= 2, <= 0xe1, offset < 0x31e) through EmitMatch; output written through th... |
-| 0x0042FD10 | 1222 | LzCompressor::EmitMatch | (matchPos): encodes the match length +0x2820 (< 35: table code; < 99: prefix 0x17/5 bits + 6 bits; < 227: 0x3f/6 bits + 7 bits) and the ring offset (< 34: table; else bucket prefixes 2/3 bits + 6/8/10/12-bit offsets) with LzBitWri... |
+| 0x00430960 | 1523 | LzDecompress | (this = LzCompressor, in GameBuffer view, out GameBuffer): u32 raw length then tokens until it is produced: bit 0 = literal byte (next stream byte); bit 1 = match: length prefix tree (0 0 -> 2, 0 1 -> 4, 1 0 0 0 -> 3, 1 0 0 1 + 3 ... |
+| 0x00430450 | 1243 | LzCompress | (this = LzCompressor, GameBuffer in/out): rewrites the buffer in place: u32 raw length, then LZ77 tokens over a 1 KB ring window (+0 window, +0x400 window copy, +0x800 per-position chain distance, +0x1800 hash heads [1024], hash =... |
+| 0x0042FD10 | 1222 | LzCompressor::EmitMatch | (this, matchPos): writes the match length +0x2820 (< 35 table code; 35..98 prefix 0x17 in 5 bits + 6 bits of len-35; 99..226 prefix 0x3f in 6 bits + 7 bits of len-99) then the distance d = (pos - len - matchPos - 1) & 0x3ff (d < 3... |
 | 0x004315B0 | 1068 | BigNum_DivMod | (a (2n ushorts), b (n), n bytes, q out): multi-precision division of a by b (Knuth D on 16-bit limbs): remainder left in a, quotient in q |
 | 0x0042F4C0 | 976 | OBB_IntersectsSegment | (box, quat, boxPos xyz, segStart xyz, segDir xyz): separating-axis test of an oriented box against a line segment (direction normalized, half length); 1 when they intersect |
-| 0x00432DA0 | 666 | NetPeer::ctor | (this 0x1168 bytes, flag): refcounted base 0x73BB58 -> vtable 0x73BF38: dword vector +0x14, 0x100 x vector<short> +0x54 (ctor 0x433040), list +0x1054, trees +0x105c / +0x1068, 11 per-kind trees +0x1074, lists +0x10f8 / +0x10fc, Sc... |
-| 0x00431370 | 562 | BigNum_ModExp | (base, exponentBits, modulus, nBytes, out): modular exponentiation (square-and-multiply, 32-bit limb products, BigNum_DivMod reductions) of nBytes-wide numbers: out = base ^ exponent mod modulus (Diffie-Hellman / RSA style key exc... |
+| 0x00432DA0 | 666 | NetPeer::ctor | (this 0x1168, linkId): refcounted base -> vtable 0x73BF38; +8 next send seq = GetTickCount() & 0xffff, +0xc last received seq = 0, +0x10 wrap base = 0x10000, receive window vector +0x14, +0x20 linkId, +0x24 rtt mean = NetConnectio... |
+| 0x00431370 | 562 | BigNum_ModExp | (base, exponent bits, modulus, nBytes, out): square-and-multiply modular exponentiation on 16-bit limbs (BigNum_DivMod); NO CALLERS: a leftover key-exchange routine, never used by the game |
 | 0x0042E4D0 | 465 | Vertex32_Lerp | (a, b, t, out): interpolates a 0x20-byte vertex: position +0..+0xc, two packed ARGB colours +0x10 / +0x14 (per channel), uv +0x18 / +0x1c |
-| 0x0042FAE0 | 444 | LzCodec_InitTables | static initializer of the LZ length code tables g_0x79B848 (code) / g_0x79B7C0 (bits) for lengths 1..34 and the offset tables g_0x79B738 / g_0x79B6B0 (offset buckets 6..10 bits) |
+| 0x0042FAE0 | 444 | LzCodec_InitTables | static initializer of the LZ match-length code tables g_0x79B848 (code) / g_0x79B7C0 (bits): lengths 1..6 fixed codes (1,3,5,3,5,5 bits), 7..10 = 6-bit code, 11..18 = 8-bit, 19..34 = 10-bit; offset tables g_0x79B738 / g_0x79B6B0 f... |
 | 0x0042E020 | 397 | ClipPoly_YMin | (...): polygon clip against y > plane |
 | 0x0042E1B0 | 397 | ClipPoly_ZMax | (...): polygon clip against z <= plane |
 | 0x0042E340 | 397 | ClipPoly_ZMin | (...): polygon clip against z > plane |
@@ -197,16 +197,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00435A00 | 1295 | NetConnection::SendUpdate |  |
-| 0x00435F30 | 1268 | NetConnection::ReadMessage |  |
-| 0x00443080 | 1131 | NetServer::OnLogin |  |
+| 0x00435A00 | 1295 | NetPeer::SendUpdate | (this = NetPeer, budget = NetPeer +0x50 = 220 bytes; from Tick): SyncObjectSet; builds in g_0x79B900 (reserve budget + 0x400): u8 0, u16 seq (+8 ++), WriteAcks, TakeStreamChunk(budget - 16 = 204 max) + the chunk {u16 offset, u8 le... |
+| 0x00435F30 | 1268 | NetPeer::ReadMessage | (this = NetPeer, cursor*, packet seq): flag bit (LSB-first from the byte read before each group of 8), u8 kind, u16 id, key = kind << 16 / id in the received-object tree +0x1100 (node +0x14 ObjRef, +0x18 version = seq of the last ... |
+| 0x00443080 | 1131 | NetServer::v5_OnLogin | slot 5 (addr*, cursor*): u32 magic (must equal +8 else ignored), u32 linkId, u32 rate (clamped to GetRateFor(addr)); a known peer at that address -> "ERROR: Ignoring login request for active session"; a pending accept record (+0x2... |
 | 0x0043D830 | 933 | RbTree_RebalanceForErase | (node, &root, &leftmost, &rightmost): STLport _Rb_tree_rebalance_for_erase (8 callers) |
-| 0x00441D40 | 918 | NetClient::OnInfo |  |
-| 0x00433BD0 | 826 | NetConnection::CheckTimeout |  |
-| 0x00437370 | 823 | NetConnection::Receive |  |
-| 0x00433060 | 698 | NetPeer::Clone | slot 3: allocates a new 0x1168-byte NetPeer and copy-constructs every member from this (vectors, lists, trees, GameBuffers, shorts +0x1118/+0x111a/+0x1128) |
-| 0x00434110 | 685 | NetPeer::RegisterObject | (objref*): for a live object looks its kind index up in the factory registry (0x42A810), allocates a 0x14-byte NetPendingEntry (vtable 0x73BF4C) holding the object, inserts it into the object-keyed tree +0x1068 and into the per-ki... |
-| 0x004346D0 | 673 | NetConnection::ResendSweep |  |
+| 0x00441D40 | 918 | NetClient::v7_OnInfo | slot 7 (addr*, cursor*): f32 echo, u32 magic (must match +8 ignoring the low byte = protocol version); vt[16] NewServerInfo makes a ServerInfo, vt[5] Read fills it, addr -> +8, +0x20 = version mismatch flag (low byte differs), +0x... |
+| 0x00433BD0 | 826 | NetPeer::Tick | (this = NetPeer link, dt double): +0x44 += dt (silence timer), +0x48 += dt (clock); resend timeout = clamp(rttMean + 3 * sqrt(/mean^2 - var/), 0.1, NetConnection +0x10); sent packets +0x10f8 older than it -> PacketLost and moved t... |
+| 0x00437370 | 823 | NetConnection::Receive | (dt double): g_0x79B920 = this, clock +0x20 += dt; for every datagram (NetSocket::ReceiveFrom into g_0x79B8E0, 2048 max; "ZERO length packet received from" when empty): u8 type -> slot 3 OnUpdate (0), 6 OnDisconnect (1), 4 OnGetIn... |
+| 0x00433060 | 698 | NetPeer::Clone | slot 3: new 0x1168-byte NetPeer copy-constructed from this (all trees / lists / buffers) |
+| 0x00434110 | 685 | NetPeer::RegisterObject | (this = NetPeer, {object, group}): kind = registry +0x2c lookup of the object's vtable; new 0x14-byte NetPendingEntry (vtable 0x73BF4C: +8 version sent, +0xc u16 id, +0xe u8 kind, +0xf bit 0 ack-mode (from the connection byte tabl... |
+| 0x004346D0 | 673 | NetPeer::SyncObjectSet | (this = NetPeer): calls NetConnection vt[13] GatherReplicated of g_0x79B920 into the global vector g_0x79B8D0 of {object, group}, sorts it by object pointer, merges with the object tree +0x1068: new objects -> RegisterObject, gone... |
 | 0x0043BBC0 | 666 | ObjRefTree_InsertWithHint | (out node, hint, pair*): STLport insert_unique(hint, value) for the int-keyed {key, obj ref} tree |
 | 0x0043C100 | 666 | ObjRefTree_InsertWithHint2 | (out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree |
 | 0x0043C650 | 666 | ObjRefTree_InsertWithHint3 | (out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree |
@@ -323,20 +323,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0045B210 | 4934 | AppSettings::ReadFromRegistry | reads ShadowQuality, HeroShadow, UnitShadow, BuildingShadow, FloraShadow, OtherShadow, LightingFreq... (global instance g_0x79BC70) |
-| 0x00456440 | 4832 | main |  |
-| 0x00459100 | 4734 | AppSettings::ReadFromIni | (ini path): reads every setting (Work path, Resources path, CD-ROM Path, DrawingTarget, VideoResolution, VideoColorDepthInBits, VideoZBufferDepthInBits, VideoRefreshRate, FullScreen, Joystick, Audio*, Camera*, shadow, fog, brightn... |
-| 0x0045EA20 | 4124 | MapInfo_Load | parses the map description text (CTextManager::OpenText / SeekSection / ReadLines) with the sections _allod, brief, _cage, _camera, _deploy, _deployangle, _exit, _figure, _maps, _passtime, _remove, _restrict, tornado, _view, _weat... |
-| 0x0045A380 | 3722 | AppSettings::WriteToIni | (ini path): writes all settings back to the ini file |
-| 0x0045C560 | 3650 | AppSettings::WriteToRegistry | (subkey): writes all settings to HKEY_CURRENT_USER |
-| 0x00458870 | 1318 | AppSettings::ctor | initialises all CStrings to empty (section names +0..+0x18, paths +0x20.., keys +0x218..) |
-| 0x00457970 | 917 | App_HandleInputMessage | (msg, wParam, lParam): window messages 0x100..0x20a / 0xcc54 are fed to the UI manager g_0x7C7D50 (mouse move/buttons 0x200..0x206, wheel 0x20a, key down/up/char 0x100..0x102, Alt+F4 quit on 0x104 VK_F4), everything else goes to A... |
-| 0x00458DA0 | 857 | AppSettings::SetDefaults | section names ("Statistics Output Settings", "Game Specific Settings", "Terrain Settings", "General Settings", "Camera Settings", "Shadow Settings", "Path Settings") and default values (640x480, 16-bit colour/z, window mode, camer... |
-| 0x0045E310 | 853 | DDraw_ProbeDevice | LoadLibrary("DDRAW.DLL") + DirectDrawCreate (OutputDebugString "Couldn't LoadLibrary DDraw"): probes whether a DirectDraw device can be created / queried |
-| 0x00457D40 | 705 | App_WndProc | (hwnd, msg, wParam, lParam): WM_PAINT validate, WM_DESTROY PostQuitMessage, WM_ACTIVATEAPP-style 6: deactivate (pause sound/D3D, minimize) / activate (restore, UI refresh), WM_SETCURSOR hides the cursor, WM_SYSCOMMAND (Alt+Tab "sw... |
-| 0x00458270 | 613 | Movies_PlayIniList | (name, flags...): reads config\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00456140 | 537 | App_LoadMapAndScript | loads the selected map into the world server (g_0x7AFF60 via 0x595480; FatalError "Can't load map ""%s"".\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00458010 | 527 | App_RenderFrame | (present, drawUI): when the window is active and the device ready: UI frame setup (g_0x7C7D50), D3D present (0x4EF610; FatalError "Can't flip render surface"), movie-capture mode writes "%sshot%.4d.bmp" frames (FatalError "Can't o... |
+| 0x0045B210 | 4934 | AppSettings::ReadFromRegistry | (subkey 'Software\Nival Interactive\EvilIslands'): HKEY_CURRENT_USER; every value with the current field as default: strings Work path +0x20, Resources path +0x24, CD-ROM Path +0x28, VideoResolution 'WxH' -> +0x30/+0x34, DWORDs Dr... |
+| 0x00456440 | 4832 | main | WinMain: reads res\sysmsg.txt (3 lines: DX7 / disk space / CD2 prompts, fallback English), App_ProbeDirectX < 0x700 -> MessageBox CRITICAL ERROR; registers the GSPlayer/NamedParty factories (IdMap_AddObject 1/2); parses the comman... |
+| 0x00459100 | 4734 | AppSettings::ReadFromIni | (ini path): reads every setting from an ini file (CIniFile) with the section names +0..+0x1C ('Path Settings' Work path / Resources path / CD-ROM Path, 'General Settings' video / audio / graphics / shadows, 'Terrain Settings' fog,... |
+| 0x0045EA20 | 4124 | MapInfo_Load | (this = MapInfo, file): parses <resources>\map.txt (CTextManager::OpenText / ReadLines): '#allod <n>' -> n 0x2C-byte allod records (+4 array, +8 count: 6 CStrings + a CObject-derived member), each with 5 lines; '#zone <n>' -> n 0x... |
+| 0x0045A380 | 3722 | AppSettings::WriteToIni | (ini path): writes every setting back to an ini file (counterpart of ReadFromIni; no callers) |
+| 0x0045C560 | 3650 | AppSettings::WriteToRegistry | (subkey): writes the same value set back to HKCU\Software\Nival Interactive\EvilIslands (called at exit from main) |
+| 0x00458870 | 1318 | AppSettings::AppSettings | constructor of the settings object (global g_0x79BC70, 0x26C bytes): ini section names +0..+0x1C ('Statistics Output Settings', 'Game Specific Settings', 'Terrain Settings', 'General Settings', 'Camera Settings', 'Shadow Settings'... |
+| 0x00457970 | 917 | App_HandleInputMessage | (msg, wParam, lParam): CInterface::FlushCloseRequest before and after; 0x200 WM_MOUSEMOVE -> CInterface::OnMouseMove(wParam, x, y), 0x201/0x202 L down/up, 0x203 L dblclk, 0x204/0x205 R down/up, 0x206 R dblclk, 0x20A wheel (delta =... |
+| 0x00458DA0 | 857 | AppSettings::SetDefaults | re-applies a second (older) default set: 640x480x16, audio off, antialiasing 1, texture quality 3, shadows off, LightingFreq 1, fog 33/66/2, camera height -100..1000, distance -100..100 limits -50..80, pitch 0..90, border scroll 2... |
+| 0x0045E310 | 853 | App_ProbeDirectX | returns the DirectX level found: LoadLibrary DDRAW.DLL + DirectDrawCreate (0 on failure), QI IDirectDraw2 (0x100 fail), DINPUT.DLL DirectInputCreateA (0x200), SetCooperativeLevel / CreateSurface (0), QI IDirectDraw4 (0x300), IDire... |
+| 0x00457D40 | 705 | App_WndProc | WM_PAINT (0xF): BeginPaint/EndPaint only when GetUpdateRect; WM_DESTROY (2): PostQuitMessage when g_0x784751 (quit allowed); WM_ACTIVATE (6): minimized (HIWORD) -> g_0x79BC5D = 1 / g_0x79BC5C = 0 (inactive); WA_INACTIVE -> inactiv... |
+| 0x00458270 | 613 | Movies_PlayIniList | (section, restoreBefore, restoreAfter, flag, arg): reads config\movie.ini key 'movies' of the given section (comma separated names) and plays Movies\<name> with Movie_PlayFile; before / after each file optionally clears the back b... |
+| 0x00456140 | 537 | App_LoadMapAndScript | startup map: zone name = -mpr argument g_0x79BA10 or AppSettings DefaultMapName (g_0x79BEC8); when the .mob argument g_0x79BA14 is empty -> no map (LobbySession_ReleaseActive2 + Game_SessionTick: the game starts in the menu flow);... |
+| 0x00458010 | 527 | App_RenderFrame | (present, drawUI): only when the window is active (g_0x79BC5C) and a screen is open (g_0x784750, else Sleep 50); I3DFigureImpl::BeginFrame -> CInterface::Render3D (top screen slot 20 inside the scene + ScreenFade) -> EndFrame; dra... |
 
 ## 0x461000 - 0x463000: CHoover + CInventory + keyboard.ini
 
@@ -347,11 +347,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00461CB0 | 1256 | CHoover::CollectUnitLoot | (world, unit, out items CList, out proto-drop CList, unused, out money): 0 when flag 0x100000 (looted); creates the unit proto's drop names (+0xe8 vector, CItemManager::CreateItemByName) into both lists; money = rand(proto +0xd0..... |
 | 0x004626E0 | 560 | HashSetBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
 | 0x00461980 | 515 | StringIntMapBuckets_ctorN | bucket vector(n) with inline chunk allocator |
-| 0x00462C10 | 465 | KeyBindings_Load | reads "config\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
+| 0x00462C10 | 465 | KeyBindings_Load | fills the 88 key records g_0x7857B0 (0x48 each: +0 scancode, +4 static name '1'..'KP_STAR'..'DEL', +8 GetKeyNameText text for the options screen), zeroes the scancode -> action table g_0x79BF70[0x200] and reads <saves root>\config... |
 | 0x00461750 | 382 | StringIntMap_Rehash | (this, minBuckets): next prime from 0x73B914, re-links the nodes with hash*5 on the key |
-| 0x00462DF0 | 373 | KeyBindings_Save | writes "config\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
+| 0x00462DF0 | 373 | KeyBindings_Save | writes <saves root>\config\keyboard.ini: one '%s %s\n' line (key name, action name) for every scancode of g_0x79BF70 with a non-zero action that has a key record |
 | 0x00462960 | 334 | DwordVector_InsertRealloc7 | vector<dword>::insert with reallocation |
-| 0x00461260 | 255 | StringIntMap_Write | (this, stream): writes every {name string with length, int value} pair of the map |
+| 0x00461260 | 255 | NamedIntMap_Write | (map, stream): writes count + {name, int} pairs (CParty::Write). Was StringIntMap_Write |
 | 0x00462420 | 241 | CInventory::dtorBody | vt_CInventory: frees the bucket map +0x50 nodes (0xc each) and the bucket vector, then CItem::dtor body (0x69FD70) |
 | 0x004613C0 | 233 | StringIntMap_GetOrInsert | (this, CString key*): rehash, find the key (hash*5, strcmp) or insert a new node; returns &value (node +8) |
 | 0x004615B0 | 202 | StringIntMapNode_Create | (pair {CString, int}*): allocates a 0x10 node from pool g_0x79B228, copy-constructs the key and stores the value at +8 |
@@ -365,16 +365,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00463390 | 841 | LeversDb::Load | (this, res path): CMappedResource (database.res / databases.res), reads "Levers.ldb" into a CMemStream, tagged archive tag 1 = LeverRecord table (+0); fills the name map +0xc; FatalError "Can't open Levers database" |
+| 0x00463390 | 841 | LeversDb::Load | (this = g_0x79C1A0, res dir): opens <dir>database.res (CMappedResource; "databases.res" only in the error text), reads "Levers.ldb" into a CMemStream, tagged archive (Archive_Open version 1): tag 1 = the LeverPrototypes block (Lev... |
 | 0x00465520 | 690 | LeverRecordVector_InsertN | vector<LeverRecord>::insert(pos, n, value) |
 | 0x00463E80 | 580 | DwordVector_Reserve | vector<dword>::reserve(n) |
 | 0x00464210 | 580 | DwordVector_Reserve2 | vector<dword>::reserve(n) (variant) |
 | 0x00465310 | 515 | DwordVector_ctorN2 | vector<dword>(n) with inline chunk allocator |
-| 0x00465800 | 480 | LeverRecordVector_InsertRealloc | vector<LeverRecord>::insert with reallocation |
+| 0x00465800 | 480 | LeverRecordVector_InsertRealloc | vector<LeverRecord>::insert with reallocation (grow by max(n, size)) |
 | 0x004637C0 | 432 | StlList18_ctor | STLport list ctor: allocates the sentinel node (0x18 nodes from the pool) and links it to itself |
 | 0x00463AA0 | 426 | StlList10_ctor | STLport list ctor: allocates the sentinel node (0x10 nodes from the pool) and links it to itself |
 | 0x00465EE0 | 385 | LightningNoise_AddBand | (table of 400 floats, i0, i1, amp0, amp1): for harmonics i0..i1 adds random-phase sin/cos terms with amplitude interpolated from amp0 to amp1 (ISAAC rng g_0x7A9D40) |
-| 0x00463120 | 376 | LeversDb::dtor | frees the name map nodes (0x14) + buckets and the vector<LeverRecord> |
+| 0x00463120 | 376 | LeversDb::dtor | frees the name map nodes (0x14: next, std::string key, LeverRecord*) + buckets and the vector<LeverRecord 0x2c> |
 | 0x00464F30 | 348 | HashMapStrDword_Rehash3 | (this, minBuckets): grow buckets to the next prime and re-link the nodes by String_Hash (variant) |
 | 0x00464910 | 334 | DwordVector_InsertRealloc | vector<dword>::insert with reallocation |
 | 0x00464B70 | 334 | DwordVector_InsertRealloc2 | vector<dword>::insert with reallocation (variant) |
@@ -407,20 +407,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, scene*, out): huge converter: queries the scene (vt slot 0x34), (re)allocates CFigure arrays (0x1c0 each, CFigure_ConstructN) and 3DS node records (0x120, Nodes3ds_ConstructN), aligned vertex / normal / uv vectors, dword ma... |
-| 0x0046AB20 | 824 | CObjectDesc::OnChunk | vt 0x73C5F0 slot 0 (ChunkFile reader): 0xB002 id +0x18, B003 +0x50, B004 name +0x3c, B006 +0x54, B007 +0x70, B008 +0x74, B009 vec3 +0x20, B00A quaternion +0x2c, B00C scale +0x60, B00D string list +0x78, B00E +0x58, B00F +0x40, B01... |
-| 0x0046CBC0 | 792 | UnitLogic_OnChunk | (.mob UNIT_LOGIC 0xBBBC chunk into the 0x4c-byte MobLogicSlot): 0xBBBD0000 appends a point record (0x20: pos + guard-point/action records 0x14); 0001 byte (legacy: AggrMode -> 0 when > 0), 0002 byte +0x24 cyclic, 0003 dword +0 mod... |
-| 0x0046B7D0 | 774 | CLeverDesc::OnChunk | slot 0: 0xBBAB0001 +0x8c, 0002 string +0x90, 0003 count + 12-byte entries -> CArray +0xa0, 0004 count + 8-byte entries -> +0xb4, 0005 +0xc8, 0xBBAC0005 byte +0xcc; else CObjectDesc::OnChunk |
-| 0x0046C900 | 677 | UnitLogic_Write | (ChunkFile, logic +0x18): chunk 0xBBBC000B / 000C / 0002 / 000E / 000D / 0003 / 0004 / 000A / 0005 / 0007 / 0006 fields, then one 0xBBBD record chunk per entry of the record array (+8, 0x20 each) |
-| 0x0046E680 | 623 | UnitLogicRecords_Copy | (this = CArray of 0x20 records, src): destroys the current records, SetSize to the source count (0x45E180 ctor) and copies them (0x46EFA0) |
-| 0x0046A710 | 519 | CObjectDesc::CopyFrom | (src 0x4c? record): copies +4..+0x48 of the source (two CStrings +0x3c / +0x40) into the matching descriptor fields |
-| 0x0046D080 | 513 | CUnitDesc::OnChunk | slot 0: 0xBBBC0000 reads the next 0x4c unit-logic record (+0x90 + n * 0x4c, UnitLogic_OnChunk); 0xBBBB0002 +0x20c, 0004 0xac bytes +0x210, 0005.. string lists; else CObjectDesc::OnChunk |
-| 0x0046A940 | 465 | CObjectDesc::WriteFields | (ChunkFile) slot 11 (shared by object / torch / lever / trap / unit descriptors): chunk 0xB00D string list +0x78, B011 byte, B002 id +0x18, B003 +0x50, B004 name +0x3c, B006 +0x54, B00E +0x70, B007 +0x74, B008 +0x58, B00F +0x40, B... |
+| 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, 3DS scene*, out): editor leftover: converts a parsed .3ds scene into CFigure arrays (0x1c0 each); not reached by the game |
+| 0x0046AB20 | 824 | CObjectDesc::OnChunk | slot 0 (ChunkFile reader, OBJECT 0xB001 children): 0xB002 NID -> +0x18, B003 OBJTYPE -> +0x50, B004 OBJNAME -> +0x3C, B006 OBJMODEL -> +0x54, B007 -> +0x70, B008 -> +0x74, B009 OBJPOSITION -> +0x20, B00A OBJROTATION quaternion -> ... |
+| 0x0046CBC0 | 792 | MobLogicSlot_OnChunk | (children of UNIT_LOGIC 0xBBBC0000 into the 0x4c MobLogicSlot): 0xBBBD0000 appends a 0x20 point {pos, CArray of 0x14 look-at records} and reads it (MobLogicPoint_OnChunk); 0001 byte (legacy aggressive: AggrMode -> 0), 0002 byte +0... |
+| 0x0046B7D0 | 774 | CMagicTrapDesc::OnChunk | slot 0 (MAGIC_TRAP 0xBBAB0000 children, as the explicit compares in MobFile_ParseChunks 0x481F00 and this switch read them): 0xBBAB0001 diplomacy dword -> +0x8C, 0002 spell string -> +0x90, 0003 count + N x 12 bytes area circles {... |
+| 0x0046C900 | 677 | MobLogicSlot_Write | (ChunkFile, slot +0x18): UNIT_LOGIC chunk: 0xBBBC000B alarm condition, 000C help radius, 0002 cyclic, 000E aggression mode, 000D always active, 0003 model, 0004 guard radius, 000A wait, 0005 guard point, 0007 use, 0006 num alarm; ... |
+| 0x0046E680 | 623 | MobLogicPoints_Copy | (this = CArray of 0x20 point records, src): destroys the current points, SetSize to the source count, copy-constructs each (pos + look-at CArray). Was UnitLogicRecords_Copy |
+| 0x0046A710 | 519 | CObjectDesc::CopyFrom | (src DescRecordB-like record): copies model / prototype / complection / name strings (+4..+0x48 of the source, CStrings +0x3c / +0x40) into the matching descriptor fields (editor path) |
+| 0x0046D080 | 513 | CUnitDesc::OnChunk | slot 0 (UNIT 0xBBBB0000 children): 0xBBBC0000 UNIT_LOGIC -> the next 0x4c slot (+0x90 + (+0x8c)++ * 0x4c; +0x28 = 0, +0x48 = 4 before MobLogicSlot_OnChunk, 4 -> 0 after); 0xBBBB0002 UNIT_PROTONAME -> +0x20c; 0004 UNIT_STATS -> 0xa... |
+| 0x0046A940 | 465 | CObjectDesc::WriteFields | slot 11 (shared by object / torch / lever / trap / unit): writes 0xB00D parts +0x78, B011 byte +0x6c, B002 id, B003 type +0x50, B004 name +0x3c, B006 model +0x54, B00E prototype +0x58, B007 +0x70, B008 +0x74, B00F comment +0x40, B... |
 | 0x004696D0 | 454 | DescRecordA::operator_assign | copy-assign the 0x74 record: 4 CStrings, ints +0x10..+0x20, string arrays +0x24 / +0x38 / +0x60 (sized by the source counts) |
-| 0x0046E190 | 441 | CSoundDesc::OnChunk | slot 0: 0xCC02 id, CC03 pos, CC04 +0x68, CC05 name, CC06 +0x74, CC07 +0x78, CC08 +0x40, CC0A string list +0x54, CC0B +0x6c, CC0D / CC0E bytes |
-| 0x0046EC10 | 393 | Vec3CArray_Serialize | vt 0x73C68C / 0x73C698 slot 2 (CArchive): count + 12-byte elements |
-| 0x0046EDA0 | 383 | Pairs8CArray_Serialize | vt 0x73C680 / 0x73C6A4 slot 2 (CArchive): count + 8-byte elements |
-| 0x0046DBF0 | 352 | CLightDesc::OnChunk | slot 0: 0xAA02 radius +0x64, AA03 name, AA04 pos, AA05 id, AA06 byte +0x60, AA07 colour +0x54, AA08 +0x40 |
+| 0x0046E190 | 441 | CSoundDesc::OnChunk | slot 0 (children of SOUND 0xCC01): 0xCC02 id -> +0x18, CC03 pos -> +0x20, CC04 range -> +0x68, CC05 name -> +0x3c, CC06 min -> +0x74, CC07 max -> +0x78, CC08 comment -> +0x40, CC0A wave file list -> CStringArray +0x54 (cleared fir... |
+| 0x0046EC10 | 393 | Vec3CArray_Serialize | vt 0x73C68C / 0x73C698 slot 2 (CArchive): count + 12-byte elements (magic trap areas) |
+| 0x0046EDA0 | 383 | Pairs8CArray_Serialize | vt 0x73C680 / 0x73C6A4 slot 2 (CArchive): count + 8-byte elements (magic trap targets) |
+| 0x0046DBF0 | 352 | CLightDesc::OnChunk | slot 0 (children of LIGHT 0xAA01): 0xAA02 range -> +0x64, AA03 name -> +0x3c, AA04 pos -> +0x20, AA05 id -> +0x18, AA06 shadow byte -> +0x60, AA07 colour rgb floats -> +0x54, AA08 comment -> +0x40 |
 
 ## 0x470000 - 0x474000: AI state names + DirectX error text
 
@@ -443,13 +443,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0047B1F0 | 1064 | PtrArray_Diff | (old, new, outAdded, outRemoved, outKept): sorts new, then merges the two sorted pointer arrays: pointers only in new go to outAdded (refcount +4 ++), only in old to outRemoved (vt[4] called), common ones to outKept |
 | 0x00477B00 | 829 | UnitProto::ApplyTo | (this = unit prototype record, unit): empty prototype -> only adds the named spells (+0xc4 list, 0x531180) and perks (+0xb0, 0x531220); otherwise resets the unit stats (0x5315B0) and copies hp / mana / stats (+0..+0x50) into the u... |
 | 0x0047ADF0 | 809 | PtrArray_SortUnique | (array): radix-sorts the pointer array by all four key bytes (scratch array g_0x7A9738) and removes consecutive duplicates |
-| 0x0047DCA0 | 785 | NetSection_WriteBytes | net-state section writer: appends n bytes (ptr, n) |
-| 0x0047C680 | 607 | TcpConnectThread | (task): thread body of ConnectAsync: creates a TcpSocketRef (vtable 0x73CA00) with a new TCP socket, splits the host string at ':' (port default 8000, atoi), inet_addr / gethostbyname, bind + connect, sets SO_RCVBUF / SO_SNDBUF 50... |
+| 0x0047DCA0 | 785 | DeltaWriter::WriteBytes | (this = DeltaCodec, data, n): writes n bytes against both base snapshots: base A (+0 stream, bits to +0x50) and base B (+0x28, bits to +0x78): no snapshot at the base position -> a 0 bit then per dword 0 bit + 4 raw bytes, rest ra... |
+| 0x0047C680 | 607 | TcpConnectThread_dead | thread body of ConnectAsync (socket, split host:port, connect); NO CALLERS (dead) |
 | 0x00476430 | 513 | CMapArray_Serialize | slot 2 of 0x73C80C: MFC CArray<CMap>::Serialize (constructs / destroys 0x1c-byte CMap elements on resize) |
 | 0x004761C0 | 501 | CMap_Serialize | slot 2 of 0x73C818: MFC CMap<DWORD, DWORD>::Serialize (count, then key / value pairs; loading inserts through the hash table) |
-| 0x00479E30 | 499 | CTcpNetDriver::SyncPeers | (server): for every peer of the server's list +0x28 without a PeerMsgStream in the list +8: when the peer's pending buffer +0x1148 has data and the net manager g_0x79B5DC accepts it (0x417E40), creates a PeerMsgStream (0x54) over ... |
+| 0x00479E30 | 499 | CTcpNetDriver::SyncPeers | (this = RefListPair CWorld +0x60, LobbyServer g_0x79B5DC): for every NetPeer of the server's peer list +0x28 without a PeerMsgStream in +8: when the peer's IN stream +0x1148 holds bytes (GameBuffer::CommitCursor first) AND LobbySe... |
 | 0x00475310 | 488 | CArray1C_Serialize | slot 2 of 0x73C848: MFC CArray::Serialize, 0x1c-byte elements |
-| 0x0047CFA0 | 453 | CTcpNetDriver::AcceptNewClient | accept() on the listening socket (error -> 0x44C470 log "CTcpNetDriver::AcceptNewClient() Unable..."), sets SO_RCVBUF/SO_SNDBUF 50000, creates a TcpMsgStream (0x54, vtable 0x73CA10) over a new TcpSocketRef (0xc: vtable 0x73CA00, s... |
+| 0x0047CFA0 | 453 | CTcpNetDriver::AcceptNewClient_dead | accept() on a listening socket + TcpMsgStream; NO CALLERS (no listening socket is ever created): dead TCP server path |
 | 0x00475130 | 435 | CArray0C_Serialize2 | slot 2 of 0x73C854: MFC CArray::Serialize, 0xc-byte elements |
 | 0x004756A0 | 435 | CArray14_Serialize | slot 2 of 0x73C83C: MFC CArray::Serialize, 0x14-byte elements |
 | 0x00475A00 | 435 | CArray18_Serialize | slot 2 of 0x73C830: MFC CArray::Serialize, 0x18-byte elements |
@@ -468,13 +468,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0047E3A0 | 571 | DeltaWriter_WritePos3D | (this = DeltaCodec, float[3]): quantizes x, y as (v + 16) * 120.46875 and z as (v + 32) * 341.32812 to 16 bits and delta-writes them against both base streams (13 callers) |
 | 0x0047EBF0 | 518 | DeltaWriter_WriteVec2Q64 | (this = DeltaCodec, float[2]): quantizes both as (v + 32) * 60.234375 to 16 bits and delta-writes them |
 | 0x0047E740 | 488 | DeltaWriter_WriteBytes | (base CMemStream, data, n, updateBase, bitstream): when the base stream has no snapshot at its position: raw-writes and appends to the base; else delta-writes against the snapshot bytes, overwrites them with data when updateBase, ... |
-| 0x0047F1E0 | 488 | DeltaWriter_WriteFloat16 | (this = DeltaCodec, float): packs the float into a 16-bit half (sign, 7-bit exponent, 8-bit mantissa, rounded) and delta-writes it against both base streams (16 callers) |
+| 0x0047F1E0 | 488 | DeltaWriter_WriteFloat16 | (this = DeltaCodec, float): 16-bit half {sign, 7-bit exponent (biased 0xc0ff trick), 8-bit mantissa rounded}; written against base A (+0 / +0x50) and base B (+0x28 / +0x78): no snapshot -> 0 bit + 2 raw bytes and appended to the b... |
 | 0x0047E930 | 429 | DeltaReader_ReadPos3D | (out float[3]): reads x, y as delta-coded 16-bit values * 0.008300908 - 16 (range -16..16) and z via DeltaReader_ReadBytes as v * 0.0029297322 - 32 (range -32..32) |
 | 0x0047EF80 | 391 | DeltaWriter_WriteFloatRange | (this = DeltaCodec, value, min, max): quantizes (value - min) * 65535 / (max - min) to 16 bits and delta-writes it against both base streams (+0 with bit stream +0x50, +0x28 with +0x78): unchanged -> bit 1, changed -> bit 0 + 2 by... |
-| 0x0047FE90 | 388 | DeltaCodecSet::Pack | (set): in delta state (+0x20 == 1): mask +0x14 /= changed mask +0x18, +0x16 = changed mask; writes the 16-bit mask into the packed stream +0x24 followed by the delta stream +0x50 of every slot whose bit is set, and likewise +0x4c ... |
+| 0x0047FE90 | 388 | DeltaCodecSet::Pack | (this): state 1: mask +0x14 /= changed +0x18, +0x16 = changed; packed stream A +0x24 = u16 mask +0x14 + the +0x50 delta of every slot in it; packed stream B +0x4c = u16 +0x16 + the +0x78 delta of every slot in it; state 0 clears e... |
 | 0x0047EE00 | 376 | DeltaReader_ReadVec2Q64 | (out float[2]): reads two delta-coded 16-bit values from the active base stream g_0x7A9794 / bit stream g_0x7A9798 (unchanged bit -> value from the base stream +0x18 buffer, else 2 bytes from the bit stream, stored back into this ... |
-| 0x0047FBF0 | 323 | StreamReader::SetMode01 |  |
-| 0x0047E000 | 308 | DeltaReader::Read |  |
+| 0x0047FBF0 | 323 | DeltaCodecSet::BeginSlot | (this = DeltaCodecSet, slot): returns 0 when bit slot of the mask +0x18 is clear (field not sent); codec = +4 + slot * 0xa0; mode +0x20: 0 (writer, full) -> rewind bases, empty deltas, g_0x7A9784 = g_0x7A9780 = 1; 1 (writer, delta... |
+| 0x0047E000 | 308 | DeltaReader::Read | (dst, n): reads n bytes against the active base g_0x7A9794 with bits from g_0x7A9798 (CMemStream bit reader +0x10 mask / +0xc byte): 1 bit = copy n bytes from the base; 0 bit = per dword 1 bit copy / 0 bit 4 raw bytes, rest raw, a... |
 
 ## 0x481000 - 0x484000: mission/zone file loader (MobFile) + std::map<string,list> instantiations
 
@@ -503,20 +503,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00485540 | 12920 | CParticle::Init | slot 2 Init() -> bool (root layout) |
+| 0x00485540 | 12920 | CParticle::Init | slot 2 (type +0x10 = 0x2000 + k): Reset, bounds = empty, columns +0xe0 = 4, probability +0xcc = 100, max live +0xd8 = 500, frames +0xdc = 16, flag 1 set; then the per-type constant table (texture name, spawn box +0xf0..+0x104, siz... |
 | 0x00490130 | 2051 | ParticleEmit_Modifier | (this, particle, arg): colour -1, +0x50 = +0xec, +0x4c = +0xe4; "Particle effect Modifier without carrier" (FatalError without +0x94); record array +0x154 sized by the carrier extent; particles orbiting the carrier (0x40F560 rotat... |
-| 0x00496EB0 | 2045 | CParticle::v6 | slot 6 (root layout; default returns 0) |
-| 0x004923B0 | 1986 | ParticleEmit_Weather | (this, particle): 10 records in +0x154 (grown like a CArray, 0x38 each) describing wind bands; particles spawned above the terrain (CWorldClient::GetHeight) with random drift (Isaac_RandRange) |
+| 0x00496EB0 | 2045 | CParticle::Update | slot 6 -> bool (alive): copies g_0x7AF5DC..+0xc (world wind / time block) into +0x140, resets the bounds, Attach(0) when the carrier has flag 1 (dying); +0xa4 = world pos delta since the last tick, +0x98 = world pos, +0xc8 = /delt... |
+| 0x004923B0 | 1986 | ParticleEmit_Weather | (this, particle): invoke-lightning / storm (0x2030): 10 records in +0x154 (grown like a CArray, 0x38 each) describing wind bands {height, direction, speed}; particles spawn in the band and drift with it; the texture TendriLight |
 | 0x0048E070 | 1871 | ParticleEmit_Link | (this, particle, t): "Particle effect Link without carrier"; 2 records in +0x154 (carrier extent * 1.2), particles along the link between the two endpoints (0x410770 lerp, Isaac_RandRange) |
-| 0x00484C00 | 1600 | CParticle::GetCarrierOffset | (out xyz, carrier): without flag 0x10: carrier pos; units (type 0x50) by attach mode +0x13c: 0 CUnit::GetAttachPoint2, else named parts ("body00" / "body01" / "body02" ...) via FindPartByNameStart + TransformSpecificPoint; other o... |
-| 0x004976B0 | 1575 | CParticle::Render | (this, renderer): nothing when the live list +0x1c0 is empty; texture +0x17c looked up with 0x4F16A0 (skip when 2); static vertex / colour CArrays g_0x7A9BE0 / g_0x7A9BD0 (CArray16 / FloatPair) sized to the particle count; interpo... |
+| 0x00484C00 | 1600 | CParticle::GetCarrierOffset | (out xyz, carrier): without flag 0x10: the carrier position; units (type 0x50) by attach mode +0x13C: 0 CUnit::GetAttachPoint2 (the default attach point); 1..7 = FindPartByNameStart with one of six short part-name prefixes (1..6: ... |
+| 0x004976B0 | 1575 | CParticle::Render | (this, I3DFigureImpl): nothing when the live count +0x1c0 is 0 or the bounds box +0x17c is frustum-culled (CViewFrustum::CullBox == 2); static buffers g_0x7A9BD0 (aligned {x,y,z,size} x 0x1000) / g_0x7A9BE0 ({colour, uv rect*} pai... |
 | 0x0048B630 | 1456 | ParticleEmit_Healing | (this, particle): "Particle effect Healing without carrier" (FatalError 0x44C470 without +0x94); record array +0x154 sized round(+0x10c * 6 + 2) (0x497EB0), ring of particles around the carrier (GetCarrierExtent) rising upward |
-| 0x0048B080 | 1262 | ParticleEmit_GridFill | (this): when the live list +0x1b8 is empty fills it with records on a (-n..n)^2 grid of spacing 1 (jittered 0.5) around the emitter at terrain height (CWorldClient::GetHeight), n = round(+0x10c) |
-| 0x0048EEA0 | 1113 | ParticleEmit_Streams | (this, particle): +0xe4 = max(1, round(x)), count +0xd0 = +0xe4 * 10, record array +0x154 of +0xe4 entries with random directions (0x488940 / Isaac_RandRange) |
+| 0x0048B080 | 1262 | ParticleEmit_GridFill | (this): poison cloud / acid fog (0x2007 / 0x2008): when the live list +0x1b8 is empty fills it with records on a (-n..n)^2 grid of spacing 1 (jittered 0.3) around the emitter at the terrain height, n from the radius +0x11c; each r... |
+| 0x0048EEA0 | 1113 | ParticleEmit_Streams | (this, particle): rain / snow streams (0x200f, 0x2031..0x2033): +0xe4 = max(1, round(intensity)), count +0xd0 = +0xe4 * 10, the +0x154 array holds +0xe4 stream records (0x38: origin, velocity, phase) re-seeded around the camera; a... |
 | 0x00489F70 | 914 | ParticleEmit_Sparks | (this, particle): random variant +0x54 (0..2), life +0x58 = +0xe4, pos = emitter + carrier z, +0x50 = 100 + rand % 9, interpolates between the +0x154 records (0x38 each) |
 | 0x0048BD50 | 694 | ParticleEmit_Burst | (this, particle): 60% chance of a short-lived (+0x54 = 8, life +0x50 = +0xec * 8) spark at the emitter with random spread +0xf4, else a different variant |
 | 0x0048FDB0 | 676 | ParticleEmit_Ring | (this, particle): colour -1, +0x44 = 0, life = +0xec, +0x4c = +0xe4, random radius (/+0x10c/ scaled by rand^2 / 2) and angle around the emitter |
-| 0x00496C50 | 597 | CParticle::SpawnParticle | (arg): AllocParticle from the manager +0x14, calls the emit callback +0x1e0 (record, arg) (released again when it returns 0), InitParticleRecord (prev = current, bounds), appends to the live list +0x1b8 |
+| 0x00496C50 | 597 | CParticle::SpawnParticle | (arg): AllocParticle from the manager +0x14, emit callback +0x1e0 (record, arg) (released again when it returns 0), then the same init / list append as InitParticleRecord |
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
@@ -524,8 +524,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004B6760 | 13477 | SSCScript::Run | (this = {+0 script {commands 0x94 bytes each at +4, count +8}, +4 pc, +8 run counter, +0x14 SSCVars}, ctx) -> bool: +8 ++; false when the pc is past the command count; SSCVars::PurgeDeadObjects; for each command from the pc: the p... |
-| 0x004B41E0 | 4822 | SSCCmd::EvalFloat | (this = command, ctx, vars, out float*): the parameters bound (SSCCmd::SetParameters) and the nested commands calculated; by the function id +0 (0x45..0xe6): 0x45 IsEqual, 0x46 IsLess, 0x47 IsGreater, 0x48 string equality, 0x49 Ad... |
+| 0x004B6760 | 13477 | SSCScript::Run | (this = SSCScript {+0 program, +4 pc, +8 run counter, +0xc sleep start, +0x10 kill flag*, +0x14 SSCVars}, vm GSWorld*) -> 0 when pc was already past the last command (the script is finished), else 1: counter ++; SSCVars::PurgeDead... |
+| 0x004B41E0 | 4822 | SSCCmd::EvalFloat | (this, vm GSWorld*, vars SSCVars* (local), out float*): SetParameters (local +0x54, global +0x68 from vm +0xa0), CalcParameters for every nested binding, then by id (0x45..0xe6, else FatalError "Function does not return float at S... |
 | 0x004A7630 | 2147 | GSPlayers_CreateDefaults | (this = vector of CGSPlayer refs, fourPlayers): the vector is emptied; CGSPlayer objects (0x28c, CGSPlayer::ctor) are created with the index +8 = 1..5 (indices 1, 3, 4, 5 when fourPlayers), flags +0xc / +0xd, the float table +0x10... |
 | 0x004A3CA0 | 1715 | Deque16_InsertMiddle | (this = deque of 16-byte elements, position iterator, range iterators by value, n): STL deque insert of a range in the middle: the shorter side (front or back) is shifted by n (Deque16_ReserveFront / Back, copies) and the range co... |
 | 0x004A0BA0 | 1589 | Chunk3ds_ReadMaterial | (this = {stream}, chunk, out materials CArray): a temporary 0x9c material (0x68DBC0 / 0x68DE30): 0xA000 MAT_NAME, 0xA010 ambient / 0xA020 diffuse / 0xA030 specular (colour sub-chunk 0x10 floats or 0x11 bytes, DebugPrint "WARNING :... |
@@ -534,9 +534,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004A7080 | 1009 | CGSPlayer::InitAllowedLists | (this): shop stock +0x11c: every weapon / armor / quick proto whose shop mask +0x64 (items.idb "Shop 1..5" bits) has bit (player index +8 - 1), materials (mask +0x4c) with range 20..50; spells (mask +0x80) and perks (mask +0x20) i... |
 | 0x004A1220 | 996 | Chunk3ds_ReadKeyframer | (this = {stream, +4 short}, chunk, out nodes CArray): sub-chunks until the chunk end: 0xB002 OBJECT_NODE_TAG: a temporary 3DS node (CStrings, identity quat, CArrays) filled from its sub-chunks 0xB010 NODE_HDR (Chunk3ds_ReadNodeHdr... |
 | 0x0049F150 | 863 | Isaac_Init | (ctx {+0 initialised flag, +4 counter, +8 results[256], +0x408 mm[256], +0x808 a, +0x80c b, +0x810 c}): when not initialised: the seed buffer prepared (0x49F660), the golden ratio 0x9e3779b9 mixing (4 rounds), the mm table built i... |
-| 0x004B5B00 | 856 | SSCCmd::EvalGroup | (this = command, ctx, vars, out group**): the parameters bound and the nested commands calculated; the result group allocated from the ctx pool +0x1b0 (0x4C8D80); by the function id +0: 0x59 union, 0x5a difference, 0x5b intersecti... |
+| 0x004B5B00 | 856 | SSCCmd::EvalGroup | (this, vm, vars, out ObjRefCArray**): parameters bound and nested bindings evaluated; the result = a new group node appended to the temp pool +0x1b0 (GroupCList_AddTail); 0x59 GroupAdd = ObjRefCArray_Union, 0x5a GroupSub = Differe... |
 | 0x0049A220 | 842 | OctaveNoise_FillBand | slot 1 of 0x7420D4 (this, out bytes, mode): modes 1..4 call vt[0] on the octave tables +0x18 + 0 / 0x400 / 0x800 / 0xc00 (regenerate); modes 7..14 fill rows (mode - 7) * 32 .. +32 of a 256 x 256 byte noise texture by bilinearly sa... |
-| 0x004B5FE0 | 837 | SSCCmd::Read | (this, stream): the counterpart of SSCCmd::Write: +0 dword, the numbers +8 (count), the CStrings +0x1c (Stream_ReadCStringTo), the object ref slots +0x30 (count, zeroed, 0x4CCA10 ctor), the slots +0x44 (count, zeroed), the 0xc-byt... |
+| 0x004B5FE0 | 837 | SSCCmd::Read | (this, stream): function id +0, float slots (count then values), string slots (Stream_ReadCStringTo), object slot count (slots zeroed: refs are re-bound at run time), group slot count (zeroed), local bindings +0x58 and global bind... |
 | 0x004A2C80 | 825 | Deque16_EraseRange | (this = deque of 16-byte elements, out iterator, first (by value), last (by value)): STL deque erase(first, last): everything when the whole range (blocks freed), else the shorter side is shifted over the gap (Deque16_CopyBackward... |
 
 ## 0x4B7000 - 0x4BB000: script API (cont.)
@@ -545,14 +545,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004BAAB0 | 825 | TriggerTable_GenerateScript | (compiler): builds a WorldScript source from the trigger table g_0x7AA608 (0xc records {type, CString, value}, count g_0x7AA610): "DeclareScript Su%i()" per entry, then "Script Su%i(if(" + the condition by type (0xd7 IsInArea / 0x... |
+| 0x004BAAB0 | 825 | QuestObjectives_GenerateScript | (vm GSWorld*): script QFinish(): builds the source "DeclareScript Su%i()\n" per objective, then per objective i "Script Su%i(if(\n<cond>\n)then(\nKillScript()\nSu%i+1()\nGSSetVar(0,\"q.%s.%s.%i\",2)\nGSSetVar(0,\"q.%s.%s.%i+1\",1)... |
 | 0x004BAEC0 | 307 | ScriptParty_Resolve | (obj, name CString*) -> party record: the name is split at the separator g_0x78BB18 (0x6FDBD9 Find / 0x6FD9D7 Left-Mid) into the store name and the rest (written back to name); when the store name equals the current one g_0x7AA5D4... |
-| 0x004BAE10 | 159 | TriggerTable_Add | (id, name CString*, value): appends {id, name, value} to the global table g_0x7AA608 (0x4CDF40 SetSize + 1) |
+| 0x004BAE10 | 159 | QuestObjectives_Add | (kind = the QObj* command id 0xd7..0xdd, text CString*, value): appends {kind, text, value} to g_0x7AA608 (Run cases 0xd7 QObjArea(f), 0xd8 QObjSeeObject(s), 0xd9 QObjSeeUnit(s), 0xda QObjKillUnit(s), 0xdb QObjKillGroup(s), 0xdc Q... |
 | 0x004BA730 | 130 | ObjHolder73D260::Clone | slot 3 of 0x73D260 -> new 0x18-byte copy: the object +8 (refcount ++), the byte +0xc, +0x10, +0x14 |
 | 0x004BA4A0 | 112 | ObjHolder73D1C4::Clone | slot 3 of 0x73D1C4 -> new 0xc-byte copy holding the object +8 (refcount +4 ++) |
 | 0x004BA7C0 | 106 | ObjHolder73D260::dtor | slot 2 of 0x73D260: the object +8 released; vt -> 0x73BB68; then the fields are re-initialised (+8 = 0, +0xc byte = 0, +0x10 = -1, +0x14 = 0) with vt 0x73D260 (odd Ghidra merge of dtor + ctor) |
 | 0x004BA510 | 101 | ObjHolder73D1C4::dtor | slot 2 of 0x73D1C4: the object +8 released (vt[4]); vt -> 0x73BB68 base |
-| 0x004BAA40 | 99 | TriggerTable_Reset | (name): the global table g_0x7AA608 (CArray g_0x7AA60C of 0xc records {id, CString, value}, count g_0x7AA610) destroyed (0x4BAEB0 per record) and cleared; g_0x7AA614 = 0; the CString g_0x7AA61C = name |
+| 0x004BAA40 | 99 | QuestObjectives_Reset | (quest name): script QStart(name): the global objective table g_0x7AA608 (CArray vt 0x73D46C of 0xc {kind, CString text, float value}, data g_0x7AA60C, count g_0x7AA610) emptied and the name stored for QFinish. Was TriggerTable_Re... |
 | 0x004BA120 | 96 | ColorObj_SetRGB | (this, r, g, b): +0x14 = 0xff000000 / (r, g, b rounded * 255); vt[0](colour) |
 | 0x004BA1C0 | 85 | AiLogicGuard::Ctor | (this, pos[3], radius, stayTime): vt 0x73D128 then GuardPoint_Init; kind 0. Script UMGuard / UMGuardEx. Was Class73D128::ctor |
 | 0x004BA250 | 84 | Class73D128::Clone | slot 3 of 0x73D128 -> new 0x20-byte copy with +8 .. +0x1c (guard point pos, radius, stay time, +0x1c) copied |
@@ -566,16 +566,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004D23A0 | 3951 | Compiler_CompileText | (this = compiler / GSWorld, text CString*, qualify) -> 1 / 0 / error code: +0x1ec = "No errors found"; the "#define name value" lines collected (DefineList_InsertByLength) and applied (Compiler_ApplyDefines); the text tokenized (C... |
-| 0x004CFBC0 | 3575 | Compiler_ParseCommand | (out SSCCmd, cursor (token node**), tokens, expected return type char, vars, signature or 0, nesting, compiler) -> 1 / 0 / error: the function name token (GSLexer_ClassifyToken -> function id, "Unknown command"), "(" (error 4 "Exp... |
-| 0x004D41C0 | 3156 | Decompiler_WriteCommand | (this = GSWorld, out CString, cmd (SSCCmd by value), ...): writes one command as source text: the function name from the table (GSFunctions_FindRecord, "Unknown command"), "(" and its parameters: numbers, quoted strings, object / ... |
-| 0x004D1330 | 2553 | Compiler_ParseCommands | (this = compiler, program, cursor (token node**), tokens, vars) -> 1 / 0 / error: parses comma separated statements into the program's commands: function calls (Compiler_ParseCommand), assignments "var = expr" (SSCVars::HasVariabl... |
-| 0x004D39D0 | 1986 | Decompiler_WriteVars | (mode, out CString, SSCVars block, signature or 0, header flag): the variables of the four tables written as "name : float" / "string" / "object" / "group" declarations (comma separated, names with a foreign module prefix skipped ... |
-| 0x004BF000 | 1340 | GSWorld::Tick | (this = GSWorld): when running (+0x1a8): every running script of +0x160 is executed (SSCScript::Run; removed with SSCScriptCList_RemoveNode when it returns 0); every declaration of +0x144: its vars purged (SSCVars::PurgeDeadObject... |
-| 0x004D0BF0 | 1080 | Compiler_ParseConditions | (this = compiler, program, cursor (token node**), tokens, vars) -> 1 / 0 / error: parses comma separated function calls into the program's commands (Compiler_ParseCommand 0x4CFBC0 with the return type 'F'); each must return a floa... |
-| 0x004D53C0 | 1015 | GSWorld::Decompile | (this = GSWorld, out CString): the source text rebuilt: "GlobalVars" + the global vars (Decompiler_WriteVars 0x4D39D0 on +0xa0), "DeclareScript <name>(<params>)" for every declaration of +0x90 with if-then pairs (names with a modu... |
-| 0x004CF7A0 | 968 | Compiler_Tokenize | (this = compiler, text CString*, out token CList (nodes {next, prev, CString text, int line})) -> 1 / 0: splits the text into tokens (whitespace / separators 0x6E9180 / 0x6E93CE, quoted strings kept whole up to the closing delimit... |
-| 0x004D1FE0 | 956 | Compiler_ParseVarDecls | (this = compiler, decl (SSCScriptDecl), cursor (token node**), tokens, qualify) -> 1 / 0 / error: parses "name : type" pairs separated by "," until ")" (g_0x78D71C): the name token, ":" (token 0x73, error 2 "Wrong lexeme %s"), the... |
+| 0x004D23A0 | 3951 | Compiler_CompileText | (this = GSWorld, text CString* (rewritten: "#define name value" lines removed, later lines get their plain-text replacement), startWorldScript) -> 1 / 0 (error text +0x1ec, code +0x1f0, line +0x1f4; "No errors found" first): Compi... |
+| 0x004CFBC0 | 3575 | Compiler_ParseCommand | (this = GSWorld in ECX, out SSCCmd, cursor (token node**), tokens, function id -> out +0, local SSCVars* (0 = none), param letters "f s o g" (capital 'O' = output object: GlobalVars object only), singleExpr, scriptCall) -> 1 / 0: ... |
+| 0x004D41C0 | 3156 | Decompiler_WriteCommand | (this = GSWorld, out CString, cmd (by value), decl, ...): "<name>(" from GSFunctions_NameById, then the arguments in signature order: float slots as numbers, string slots quoted, object / group slots as the variable name found thr... |
+| 0x004D1330 | 2553 | Compiler_ParseCommands | (this = GSWorld, program SSCProgram*, cursor, tokens, local SSCVars* or 0) -> 1 / 0: statements until ')' (optional ',' between: ',' is a token the next statement skips... no: a ',' statement name fails with error 3): a table COMM... |
+| 0x004D39D0 | 1986 | Decompiler_WriteVars | (mode, out CString, SSCVars, signature or 0, header flag): "name : float / string / object / group" declarations comma separated (in signature letter order when a signature is given, so parameters keep their declared order); names... |
+| 0x004BF000 | 1340 | GSWorld::Tick | (this = GSWorld) when +0x1a8: 1. every running SSCScript of +0x15c from the head (newest first): SSCScript::Run, removed when it returns 0 (finished one tick earlier); 2. every active instance of +0x140 from the head: SSCVars::Pur... |
+| 0x004D0BF0 | 1080 | Compiler_ParseConditions | (this = GSWorld, program, cursor, tokens, local vars) -> 1 / 0: comma separated calls until ')': the name's token id must have an 'F' signature (GSFunctions_FindSignature(id, 1), error 9 "Function returning float expected"), each ... |
+| 0x004D53C0 | 1015 | GSWorld::Decompile | (this = GSWorld, out CString): rebuilds source text: "GlobalVars" + Decompiler_WriteVars on +0xa0, "DeclareScript <name>(<params>)" per declaration of +0x90 (foreign-module names skipped), "Script <name>(" with "  if" / "  then" b... |
+| 0x004CF7A0 | 968 | Compiler_Tokenize | (this = GSWorld, text CString*, out token CList (vt 0x73D424, 0x10 nodes {next, prev, CString text, int line})) -> 1 / 0 (error 1 "End of file before '*/'"): whitespace (CRT isspace, miscalled _isdigit_like) skipped counting '\n';... |
+| 0x004D1FE0 | 956 | Compiler_ParseVarDecls | (this = GSWorld, decl SSCScriptDecl*, cursor, tokens, qualify) -> 1 / 0: "name : type" pairs separated by "," until ")" (error 4 "Expected ',' or ')' after variable"); ':' = token 0x73 (error 2 "Wrong lexeme %s"); type word (case-... |
 | 0x004C01A0 | 891 | Compiler_DeclareScript | (this = compiler / GSWorld, text "name(params)") -> 1 / 0 / error: the module-qualified name must not exist yet (GSWorld::FindDeclIndexByName; error 0xf "Duplicate script %s"); the text is tokenized (Compiler_Tokenize 0x4CF7A0 int... |
 | 0x004BFCC0 | 860 | Compiler_CompileGlobalVars | (this = compiler / GSWorld, text (stack CString)) -> 1 / 0 / error: the text tokenized (Compiler_Tokenize), the declarations parsed (Compiler_ParseVarDecls into a temporary SSCScriptDecl) and appended to the global SSCVars +0xa0 (... |
 | 0x004C3DC0 | 782 | SSCVars::AppendGroups | (this = {CArray of 0x14 groups, names +0x14}, src block): the source groups (each ref copied, refcount ++) and names appended after the existing ones |
@@ -588,19 +588,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004D6E90 | 652 | Triangle_ClipByPlane5 | (tri float[15], extraTri, d0, d1, d2) -> 0 / 1 / 2 triangles: Sutherland-Hodgman of one triangle of 5-float vertices against a plane given by the three signed distances (inside = sign bit clear); the second result goes to extraTri... |
-| 0x004D65E0 | 562 | SSCCmdArray_SetAtGrow | CArray of 0x94-byte SSCCmd entries: grow to index+1 (ctor 0x4CE920 range, dtor 0x4BF640), then assign element param_2 |
-| 0x004D6100 | 521 | SSCScriptDeclArray_Add | CArray<SSCScriptDecl,0xC0>::Add: grow by one element (dtor 0x4BE9D0 / ctor 0x4CEB80), assign element, returns index |
-| 0x004D63E0 | 406 | StringPairList::Serialize | vtable 0x73D4C0 slot 2: CArchive load/store of a list of (CString,CString) pairs, nodes of 0x10 bytes from CList free list |
+| 0x004D65E0 | 562 | SSCCmdCArray_SetAtGrow | (this = CArray of SSCCmd, index, cmd*): grown to index + 1 (SSCCmd_ConstructN) and the command assigned (Compiler_ParseConditions). Was SSCCmdArray_SetAtGrow |
+| 0x004D6100 | 521 | SSCScriptDeclCArray_Add | (this = declarations CArray +0x8c, decl*) -> index: grown by one (SSCScriptDecl_ConstructN) and the declaration copied (Compiler_CompileText DeclareScript / undeclared Script). Was SSCScriptDeclArray_Add |
+| 0x004D63E0 | 406 | DefineList::Serialize | slot 2 of 0x73D4C0 (CArchive): {CString name, CString value} nodes (unused). Was StringPairList::Serialize |
 | 0x004D6970 | 406 | CServerSpecificManager::CreateByKind | slot 14 factory (kind): 0x46 CObject3DServer (0x20 bytes, ctor 0x51F240), 0x47 CMapObjectServer (0x94, 0x515610), 0x48 CUnitServer (0xb20, 0x545580), 0x49 CPlayerServer (0x5128, 0x66C540), 0x4b CTorchObjectSpecific (0x58, inline c... |
 | 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clips a triangle against the plane 1 - v >= 0 (Triangle_ClipByPlane5) and adds the 0 / 1 / 2 results; no callers |
-| 0x004D6340 | 153 | StringPairList_Clear | vtable 0x73D4C0 destructor/clear: walks bucket chain, releases two CStrings per node (+8,+0xc), frees node block +0x14 |
+| 0x004D6340 | 153 | DefineList_Clear | (this = define CList vt 0x73D4C0): every node's two CStrings destroyed, the blocks freed. Was StringPairList_Clear |
 | 0x004D6C50 | 148 | ClipBuf::AddVertex | (float[5] x y z u v) -> index: x / y / z into the SoA xyz array (descriptor +0: blocks of 16 floats = x[4] y[4] z[4] pad[4]; vertex n at block n >> 2 lane n & 3), (u, v) into the uv array (+4, 8 bytes each); count +0x74++; no vert... |
 | 0x004D6CF0 | 105 | ClipBuf::AddTriangle | (v0, v1, v2 float[5]): 3 x AddVertex + 3 ushort indices into the index array +8 (count +0x78) |
 | 0x004D6BA0 | 92 | CTorchObjectSpecific::~CTorchObjectSpecific | vt_CTorchObjectSpecific; Done, releases CString +0x24, base dtor 0x455930 |
-| 0x004D6840 | 79 | StringPairArray_Construct | default-constructs N elements of two CStrings (8 bytes each: both = empty string g_0x796E48) |
+| 0x004D6840 | 79 | DefinePair_ConstructN | (pairs of 8 {CString name, CString value}, n): both = the empty string g_0x796E48. Was StringPairArray_Construct |
 | 0x004D68B0 | 41 | Quat_StaticInit_Identity3 | sets global quaternion g_0x7AA670 to (1,0,0,0) |
-| 0x004D65B0 | 40 | Record0C_Get | copies the 0xC-byte element n into *dst |
-| 0x004D6310 | 35 | CArray_Ctor_73D4C0 | empty MFC CArray, vtable 0x73D4C0 |
+| 0x004D65B0 | 40 | SSCCmdBinding_GetAt | (this = binding CArray, index, out {type, slot, varIndex}): the record copied out. Was Record0C_Get |
+| 0x004D6310 | 35 | DefineList_ctor | (this, grow) -> this: empty CList vt 0x73D4C0 of 0x10 nodes {next, prev, CString name, CString value} (the "#define" table of one compile). Was CArray_Ctor_73D4C0 |
 
 ## 0x4D7000 - 0x4DA000: CSkyObject
 
@@ -633,10 +633,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004DA200 | 381 | GameBuffer::ReadLength | (this, out string range, max): reads the 1/4-byte variable-length prefix and then the string bytes (assigns a std::string) |
 | 0x004DA380 | 196 | GameBuffer::WriteLength | (this, range{begin,end}*): writes the range length as a 1-byte (n*2) or 4-byte (n*2+1) variable-length prefix, then flags dirty bit 1 |
 | 0x004DABC0 | 188 | GameBuffer::InitWithSize | (this, valid size, capacity): allocates `capacity` bytes, cursor +8 = start, +0x10 = start + size, +0x14 = 0 |
-| 0x004DA740 | 161 | GameBuffer::Write |  |
+| 0x004DA740 | 161 | GameBuffer::v4_WriteGrow | slot 4 (data, n): reallocates to (length + n) * 2 + 0x40, rebases +8 / +0x10 / +0xc, copies n bytes at the cursor +8 and advances it (the overflow path of the inline write). Was GameBuffer::Write |
 | 0x004DA9E0 | 156 | GameBuffer::CopyCtor | (this, src): allocates and copies the source buffer, copies cursor and limits (7 callers) |
 | 0x004DACE0 | 149 | BufferedFile_SeekAbs | (this, offset): flushes the dirty window, reads a new window at the absolute file offset (vt slot 7) and fixes the cursor |
-| 0x004DA860 | 139 | GameBuffer::Seek |  |
+| 0x004DA860 | 139 | GameBuffer::v6_Seek | slot 6 (pos): valid end +0x10 = max(valid end, cursor); cursor +8 = data + pos, growing the buffer (x2 + 0x40) when pos is past the capacity |
 | 0x004DA170 | 138 | GameBuffer::Read | (this, dest, n): zero-fills dest, copies n bytes from the buffer (via refill through vt slot 3 on underrun); sets error flag 8 on short reads (14 callers) |
 | 0x004DAFC0 | 125 | BufferedFile_GrowWindow | vt 0x73F8A4/0x73F8C8 slot 1 (this, n): grows the window buffer to n + 0x400 bytes and rebases the cursors |
 | 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): reallocates the buffer for pending data + n * 2 + 0x40 |
@@ -807,8 +807,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | same for the attribute skill bytes +0x6c8[kind] |
 | 0x00524CD0 | 712 | UnitStats_Recompute | (stats, carriedWeight): older/simpler recompute (camp / client side): attributes + perk bytes +0x6ea..+0x6ec, +0x44 = -2, part max HP rescale with the health perk, +0x50 = arg, +0x54 carry max, +0x58/+0x5c limb factors, +0x28, +0x... |
 | 0x00520FA0 | 631 | vector18_InsertN | STLport vector<Record18>::insert(pos, n, value) |
-| 0x005254B0 | 618 | UnitStats_ApplyHit | (stats, unit, placement, hit[15], weapon): location > 6 -> 0; sets statFlags +0x6f8 bit 1 (head hit, location 0) / bit 2 (hit[5] electrical?); per damage type i: eff_i = max(0, hit[9]*hit[i] - hit[10]*placementArmor[i] (+0x24+8i) ... |
-| 0x005239B0 | 614 | UnitStats_TickExperienceAndMaxima | (stats, unit, dt): server units only: experience accumulator +0x700 += dt * rate (flushed into +4 when positive), max HP / max mana recomputed from the (new) experience, parts rescaled, HP derived (level growth over time?) |
+| 0x005254B0 | 618 | UnitStats_ApplyHit | (stats, unit, placement, hit[15], weapon): location > 6 -> 0; sets statFlags +0x6F8 bit 1 (head hit, location 0) / bit 2 (hit[5] > 0: damage type 5 present; the damage-type order is the items.idb one); per damage type i: eff_i = m... |
+| 0x005239B0 | 614 | UnitStats_TickExperienceAndMaxima | (stats, unit, dt): only when the unit's specific +0x170 is the server kind (GetTypeId 0x39): the fractional accumulator +0x700 += dt * pow(..) (a timed experience trickle; the pow base is on the FPU stack and not recoverable from ... |
 | 0x00521220 | 607 | vector44_InsertN | STLport vector<Record44>::insert(pos, n, value) (grows through 0x5218E0) |
 | 0x00528050 | 544 | Perk_ComputeCost | (stats, record): base = trunc(50*(1.61^(c/5) - 1.61^(c'/5))) * 1.95^N (N = owned ability levels), rounded to 1 significant digit (2 when the leading digit < 4) (see docs/game-memory.md) |
 
@@ -819,12 +819,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0052B7A0 | 805 | CLeverObject::SwitchState | (stateIndex or -1 = next, duration or < 0 = the levers database value (+0x1c of the record by model name; 10 when none)): +0x238 = the new state (cyclic +0x240 wraps, else clamped to the count - 1); on the server: the units within... |
-| 0x0052D740 | 798 | UnitProto::SerializeFields | (this = 0x120-byte unit prototype record, db stream): tags 0 / 1 strings (+0 name, +4), 2..7 ints +8..+0x1c, 8 string +0x34, 9..0x18 ints (+0x48 HP, +0x4c MP, +0x58..+0x98), 0x19 / 0x1a: 0x18 bytes +0x98 / +0xb0 (6 resistances), 0... |
+| 0x0052D740 | 798 | UnitProto::SerializeFields | (this = Monsters record 0x120, archive): tag 0 name +0, 1 base race +4 (-> +8 race index at load), 2 int +8, 3 skin index +0xc, 4 hair +0x10, 5/6/7 complection x y z +0x14/+0x18/+0x1c, 8 string +0x34 (Unk8), 9 health +0x48, 0xa ma... |
 | 0x0052A680 | 618 | CMagicTrapObject::UpdateTargets | (server): every listed target (+0x26c) that left all the areas (+0x244 circles) or died (vt[55]) is dropped; when armed (0x80000): the units inside the areas (MagicTrap_CollectUnitsInAreas) not yet listed are added to +0x26c and t... |
-| 0x0052DC70 | 616 | UnitDbEntry::SerializeFields | (this = 0x168-byte units.udb entry, db stream): tag 0 name, 1..6 ints +4..+0x18 (+0x18 view angle), 7: 16 bytes +0x1c, 8..0xa ints +0x44.., 0xb: 0x1c bytes +0x50 (7 dwords), 0xc..0x11: six EquipSlotRecords +0x88.. (0x10 each), 0x1... |
+| 0x0052DC70 | 616 | UdbRaceModel::SerializeFields | (this = RaceModels record 0x168, archive): tag 0 name +0, 1 type id +4, 2 regen health +8, 3 regen mana +0xc, 4 secondary language +0x10, 5 locomotion +0x14, 6 vision arc +0x18, 7 speeds run / walk / sneak / crawl +0x1c, 8 attack ... |
 | 0x00529400 | 578 | UnitStats_BoostMaxStamina | (stats, delta, unit) -> 1 (server specific 0x39): max stamina +0x1c += delta; the specific +0x2c / +0x38 recomputed with the skill-based perk bonuses (skill bytes +0x6e3 / +0x6e4 -> perks table g_0x7AF274 entries 0x2f + / 0x32 +, ... |
 | 0x0052A920 | 519 | MagicTrap_CollectUnitsInAreas | (world, areas CArray {x, y, r}, factionMask, out CList): CollisionMap::FindUnitsNear (world +0x294) around every area circle; the alive units (vt[55]() == 0) whose faction (+0x250) bit is in the mask are appended to the list |
-| 0x0052DA60 | 519 | HeroRecord::SerializeFields | (this = 0x60-byte hero / NPC override record, db stream): tag 0 name, 1..5 ints (+4, +8 level, +0xc HP, +0x10 MP, +0x14 stamina), 6: 3 skill bytes +0x18, 7: 8 skill bytes +0x1b, 8: CString vector +0x24 (perks), 9 / 0xa / 0xb: CStr... |
+| 0x0052DA60 | 519 | UdbNpcRecord::SerializeFields | (this = NPC record 0x60, archive): tag 0 name +0, 1 int +4 (Unk1), 2 exp +8, 3 strength +0xc, 4 dexterity +0x10, 5 intelligence +0x14, 6 three bytes +0x18 science / stealing / tame, 7 eight bytes +0x1b melee / archery / backstab /... |
 | 0x0052BBE0 | 490 | CLeverObject::v44_AttachPoints | slot 44 (out array, f): from the lever figure data 0x52CB40(name +0xa4): points = pos + forward (0x40D940 of quat) * .. + right (0x40F560) * .. scaled by (1 - +0xcc) + +0xcc * data[6] (70 lines) |
 | 0x00529220 | 472 | UnitStats_BoostMaxMP | (stats, delta, unit) -> 1 (server specific 0x39): max MP +0x14 += delta; the specific +0x2c as UnitStats_BoostMaxHP (perk bonus 0x10 via UnitStats_PerkBonus, Unit_BuffSpeedRatio), +0x38 = stamina formula (+0x18 / g_0x7C5468 ^ ... ... |
 | 0x0052A4B0 | 452 | CMagicTrapObject::CastAtTargets | (target list): needs a spell +0x23c; world vt[28](x, y); an area spell (flags +0x3c & 0x10000000 clear) with cast points (+0x254 count +0x25c) casts at every cast point (CWorldServer::CastSpellMulti(g_0x7AFF60, spell, 0, trap pos,... |
@@ -844,7 +844,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005321C0 | 1160 | CFakeUnit::Write | slot 10: writes a unit to the stream (CMapObject::Write, specific write, name, placement, stats, mover) 1.2 KB |
 | 0x0052EC70 | 798 | CUnit::WriteNetState | CUnit slot 50: CMapObject::WriteNetState, then sections 4 = +0x330 (0x523720), 5 = 0x52EC10 stats (4 dwords, 1 dword (-1 if flags&0x40000000), 6 dwords), then if server (specific typeId 0x3e) specific->vt[29](); 6 = +0x264,+0x268,... |
 | 0x0052FDF0 | 723 | CUnit::GetAttachPoint | CUnit slot 53 (out): if !vt[55]() -> local pos. Else anim/figure state = 0x518F80(this, +0x254 byte); by its +0x14/+0x18 bit fields picks forward (0x40D940 of quat +0x34) * +0x144 or right (0x40F560) * +0x148 etc.; if world->vt[26... |
-| 0x00530CD0 | 706 | CUnit::HitChanceVs | client estimate for the HUD (target unit, hitLocation): backstab path for player units behind the target (facing dot < -0.5, melee only); chance = own AttackParams[6] - (ranged ? 2*dist/10) + (no backstab ? own[2]/(target[2]*20)),... |
+| 0x00530CD0 | 706 | CUnit::HitChanceVs | client estimate for the HUD (target unit, hitLocation): backstab path for player units behind the target (facing dot < -0.5, melee only); chance = own AttackParams[6], minus 2*dist/10 for a ranged weapon, plus own[2]/(target[2]*20... |
 | 0x00532AC0 | 639 | CUnit::DropBrokenItems | armor +0x480[] and weapons +0x440[] with durability (+0x20) < 1 are unequipped (specific vt[27] / weapon slot shift, +0x44c = 0, net 5 / 6 / 4, specific->vt[25](-1)) and handed to the player's inventory (0x665470(player, list, 1))... |
 | 0x00530570 | 442 | CUnit::UpdateMoveParams | specific vt[45] (UpdateSpeedFactors); server: +0x324 move class = server +0x24c (crawl) / +0x24e (sneak) / +0x248 (walk/run) by stance, +0x32c radius = max(+0x144,+0x148) * 0.9 (+0.2 player units, max 2.0; 0.01 for big protos with... |
 | 0x00532860 | 435 | CUnit::GetAttachPoint2 | (out pos[3]): kind-0x32 units: the bone named at 0x78F95C (0x516A80 / 0x5188B0); others: the specific's point (0x535770) or local pos + offset +0x128..+0x130; with an anim state: pos + forward * a + right * b (0x401DE0 / 0x40CDC0) |
@@ -881,20 +881,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0053A200 | 1448 | UnitsDb::Load | (this = UnitsDb 0x80, path): opens the CMappedResource, reads "units.udb" into a CMemStream, tagged archive: tag 1 Record44 table (+0x60), 2 UnitDbEntry table (+0x40), 3 UnitProto table (+0), 4 HeroRecord table (+0x20); fills the ... |
-| 0x00542FC0 | 1351 | UnitDbEntry::operator_assign | copy-assign UnitDbEntry (0x168): name +0, ints +4..+0x18, 4 dwords +0x1c, 6 dwords +0x2c, +0x44..+0x4c, 7 dwords +0x50, 7 dwords +0x6c, 6 slot records +0x88 {CString, 3 ints}, +0xe8 CString, string vectors +0xec/+0xf8, +0x104..+0x... |
-| 0x00542830 | 1313 | UnitProto::operator_assign | copy-assign UnitProto (0x120): CStrings +0/+4/+0x34/+0x118/+0x11c, ints +8..+0x30, +0x38..+0x94, 6 dwords +0x98, 6 dwords +0xb0, +0xc8..+0xe4, string vectors +0xe8/+0x100/+0x10c, +0xf4..+0xfc |
-| 0x0053A8E0 | 1104 | UnitsDb::CountSoundVariants | (this, dir): lists dir/*.wav (lowercased) and for every UnitDbEntry sound name (+0x138 vector<CString>) stores in +0x144 how many wav files start with that name |
-| 0x00541960 | 1098 | UnitDbEntry::CopyCtor | copy-construct UnitDbEntry (0x168) |
+| 0x0053A200 | 1448 | UnitsDb::Load | (this = UnitsDb 0x80 at g_0x7AF358, res dir, res name "database.res" / "databaseLMP.res"): opens <dir><name> (CMappedResource), reads "units.udb" into a CMemStream, four tagged archives (Archive_Open version 1): tag 1 HitLocations... |
+| 0x00542FC0 | 1351 | UdbRaceModel::operator_assign | copy-assign UdbRaceModel (0x168): name +0, ints +4..+0x18, speeds +0x1c, anim speeds +0x2c, +0x44..+0x4c, attack +0x50, defence +0x6c, 6 HL slots +0x88 {CString, 3 ints}, +0xe8 mask, textures +0xec / +0xf8, +0x104..+0x124, +0x128.... |
+| 0x00542830 | 1313 | UnitProto::operator_assign | copy-assign UnitProto (0x120): CStrings +0/+4/+0x34/+0x118/+0x11c, ints +8..+0x30, +0x38..+0x94, 6 floats +0x98 senses, 6 floats +0xb0 detections, loot +0xc8..+0xe4, string vectors +0xe8/+0x100/+0x10c, 3 floats +0xf4 |
+| 0x0053A8E0 | 1104 | UnitsDb::CountSoundVariants | (this, CSoundManager): ListSoundFiles("*.wav") of every sound archive, upper-cased; for every RaceModel the step-sound names +0x138 (vector<CString>) are upper-cased and +0x144[i] = the number of wav files whose name starts with n... |
+| 0x00541960 | 1098 | UdbRaceModel::CopyCtor | copy-construct UdbRaceModel (0x168). Was UnitDbEntry::CopyCtor |
 | 0x0053F530 | 1050 | UnitProtoVector_InsertN | vector<UnitProto>::insert(pos, n, value) (copies value to a 0x120 local, shifts, assigns) |
-| 0x0053FCC0 | 1038 | UnitDbEntryVector_InsertN | vector<UnitDbEntry>::insert(pos, n, value) |
+| 0x0053FCC0 | 1038 | UdbRaceModelVector_InsertN | vector<UdbRaceModel>::insert(pos, n, value). Was UnitDbEntryVector_InsertN |
 | 0x00540B80 | 960 | UnitProto::CopyCtor | copy-construct UnitProto (0x120) |
-| 0x0053F950 | 873 | HeroRecordVector_InsertN | vector<HeroRecord>::insert(pos, n, value) |
-| 0x00543760 | 653 | UnitDbEntry_CopyRangeBackward | copy-assign a range of UnitDbEntry (0x168) records backward |
-| 0x00540510 | 651 | UnitDbEntry_CopyRange | copy-assign a range of UnitDbEntry (0x168) records forward |
-| 0x00541680 | 640 | UnitDbEntryVector_InsertRealloc | vector<UnitDbEntry>::insert with reallocation |
+| 0x0053F950 | 873 | UdbNpcRecordVector_InsertN | vector<UdbNpcRecord>::insert(pos, n, value). Was HeroRecordVector_InsertN |
+| 0x00543760 | 653 | UdbRaceModel_CopyRangeBackward | copy-assign a range of UdbRaceModel (0x168) records backward. Was UnitDbEntry_CopyRangeBackward |
+| 0x00540510 | 651 | UdbRaceModel_CopyRange | copy-assign a range of UdbRaceModel (0x168) records forward. Was UnitDbEntry_CopyRange |
+| 0x00541680 | 640 | UdbRaceModelVector_InsertRealloc | vector<UdbRaceModel>::insert with reallocation. Was UnitDbEntryVector_InsertRealloc |
 | 0x0053E2A0 | 634 | UnitProtoVector_Resize | vector<UnitProto>::resize(n): erase tail or insert default records |
-| 0x00542530 | 631 | UnitDbEntry_CopyRange2 | copy-assign a range of UnitDbEntry (0x168) records forward (variant) |
+| 0x00542530 | 631 | UdbRaceModel_CopyRange2 | copy-assign a range of UdbRaceModel (0x168) records forward (variant). Was UnitDbEntry_CopyRange2 |
 
 ## 0x545000 - 0x557000: CUnitServer (update, combat, skills, orders)
 
@@ -913,7 +913,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00555D10 | 1198 | CUnitServer::Read | slot 9 Read(stream) (root layout: save stream, vt[1] read) |
 | 0x0054A150 | 1104 | CUnitServer::ApplyPendingStance | when +0x170/+0x174 (wanted stance / combat mode) differ from +0x168/+0x16c: tests the new stance on the passability map (refused -> restore, message 0xd, 0); accepted: walking units are stopped (state 6), the transition animation ... |
 | 0x00553F40 | 1097 | CUnitServer::TakeHit | slot 20 (hit[15], attacker CUnit or 0, attacker object): unresolved hits (/hit[8]/ finite, spells) are rolled here (ResolveHitChance); alive: ActivateObject + combat log; damage is skipped for player units when their player +0x108... |
-| 0x0054F000 | 1092 | CUnitServer::ExecuteInteraction | (target) at the action end of kind 6: talk (0x18a95): world dialog start + noise; param 0/1/2 skills (science / stealing / ?): log own vs target AttrSkillWithWeapons(kind 0); failure -> AggroTable_Add(owner, target); science on an... |
+| 0x0054F000 | 1092 | CUnitServer::ExecuteInteraction | (target) at the action end of kind 6: talk (0x18A95): world dialog start + noise; param 0/1/2 = the attribute skills science / stealing / tame (log line ' is using skill <name> his_skill = .. target_skill = ..': own vs target Attr... |
 | 0x00550620 | 1075 | CUnitServer::BuildSpellAnimQueue | (queue, out duration, kind, castTime): casting key = attack kind mask / 0xc0000 (variants per stance, random side); pads with a hold entry (0xff, castTime - anim) when the animation is shorter than the cast time (spell +0x4c * 15 ... |
 | 0x0054D960 | 1033 | CUnitServer::ExecuteCombatOrder | runs a combat/interaction order (kinds 3..6) once the target is in reach: weapon switch; PlanActionApproach(order, +0xc4) fails -> ApproachTarget (chase); talk on an aggro target -> drop; spells of kind-0x32 units in crawl -> want... |
 
@@ -992,12 +992,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00579E60 | 323 | Session_ReadMissionSave | (CFileStream): CSoundManager::StopAll; MpFile::ReadContainer (max 2e9 bytes, flags 0x80); version < 0x52: CCamera::Read; < 0x47: CInterface::ReadFlags + the embedded UI stream g_0x7AFDF8 (version g_0x7AFE00); then CWorldServer::Lo... |
 | 0x005790E0 | 210 | World_SetStatScramble | (active): main calls it with 1 while the window is active and 0 when not; acts only when the flag g_0x79026C changes: on 1 -> 0 (deactivation) a fresh key is drawn from the ISAAC pool g_0x7A9D40[g_0x7A9D44] into g_0x7AFECC and Wor... |
 | 0x00579FB0 | 168 | Session_WriteMissionSave | (CFileStream, a): CWorldServer::WriteSave into a CMemStream then MpFile::WriteContainer (version g_0x790260, flags 0x80). Writes mission.sav. Was Game_WriteSaveFile |
-| 0x005794B0 | 155 | CUIWindow_73F7F8::Create | new 0x184-byte CUIWindow subclass vt 0x73F7F8 (CString +0x164, list +0x170) |
-| 0x00579730 | 155 | CUIWindow_73F7F8::Create2 | identical factory (second copy) |
+| 0x005794B0 | 155 | CDemoScreen::Create | (CInterface): new 0x184-byte CDemoScreen (vt 0x73F7F8: the attract-mode demo / intro screen, not a base class; CString +0x164, demo names +0x170) handed to CInterface::SetPendingScreen. Was CUIWindow_73F7F8::Create |
+| 0x00579730 | 155 | CDemoScreen::Create2 | identical second copy. Was CUIWindow_73F7F8::Create2 |
 | 0x00579420 | 126 | Session_LeaveGameToMenu | (this, a, CParty): same as request kind 5: CPlayer::SetPartyBlock(client connection owner, party), UnloadZone, CWorldClient::ConnectToLobbyHost; without a lobby server Game_EnterZone("MainMenu", 2) else Lobby_ResetMpGameState; con... |
-| 0x005796B0 | 95 | CUIWindow_73F7F8::~body | destroys CString (+0x164) and list then CUIWindow::~CUIWindow_body |
+| 0x005796B0 | 95 | CDemoScreen::~body | destroys the CString +0x164 and the demo list, then CUIWindow::~body. Was CUIWindow_73F7F8::~body |
 | 0x005793E0 | 62 | Session_PlayRecordedStream | (file): UnloadZone, CWorldClient::AttachDualFileStream (recorded packet playback), connection +0x84 = 1, +0x85 = 0. Caller CUIScreen73F7F8::PlayIntroMovie. Was Game_AttachClientStream |
-| 0x00579690 | 30 | CUIWindowBase::DeletingDtor_579690 | scalar deleting destructor: runs CUIWindow_73F7F8::~body then operator delete when flag&1 |
+| 0x00579690 | 30 | CDemoScreen::DeletingDtor | scalar deleting destructor (vt 0x73F7F8). Was CUIWindowBase::DeletingDtor_579690 |
 | 0x00579810 | 27 | Game_IsNotBusy | true when vt[6] of the client connection's player object returns 0 |
 | 0x00579350 | 20 | RefPtr_DetachDec | decrement refcount (+4) of *ptr and clear the pointer (15 callers) |
 
@@ -1013,7 +1013,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0057A060 | 1816 | Session_EnterZoneFromParty | (CParty): the zone record (Records5C_FindByName g_0x79BF00) of the party's zone name +0x68; party variable "movie" == 1 and zone g_0x790590 -> plays Movies\dcity.bik; record +0xc (.mpr base) empty -> only SetZoneExits; party varia... |
 | 0x0057BDF0 | 1641 | Session_HostMpZone | (zone name) (request kind 6): zone record kind +0x28 must be 0; UnloadZone; saves\current\<zone>.sav exists -> MpFile::ReadContainer + CWorldServer::LoadSave, else LoadZone(+0xc + ".mpr", +8 + ".mob", zone) + SetTime(4.0); SetWeat... |
 | 0x0057C700 | 1068 | Session_ProcessRequest | (SessionRequest g_0x7AFE20) called once per frame from main (0x456440) after the tick loop and from App_LoadMapAndScript: returns at once when the request kind +0 is 0 (NOT a per-frame tick). Else: when the server mode g_0x7B0098 ... |
-| 0x005809D0 | 1015 | Lobby_SendMapFiles | read a file into a GameBuffer and queue it as a file transfer (LobbyServer::AddFileTransfer); 1 KB |
+| 0x005809D0 | 1015 | Lobby_QueueMapFileTransfer | (quest name): looks for maps\<name>.mq (CFileFind, suffix string 0x790774); when found and a LobbyServer is alive reads it into a GameBuffer and LobbyServer::AddFileTransfer("<name>.mq", buffer); on both sides registers the name i... |
 | 0x0057F850 | 769 | Campaign_ShuffleNames | build a string vector from the lobby list and shuffle it with Isaac_NextWord; 769 bytes |
 | 0x0057A780 | 760 | Session_SaveZoneToCurrent | (CParty): CCamera::SaveView(7 for zone kind g_0x7C2CC4 1, 6 for kind 3); writes saves\current\<zone +0x12d6c>.sav: CWorldServer::ResetUnitEffects, WriteSave into a CMemStream, MpFile::WriteContainer (head 0x102); party variables "... |
 | 0x0057EE10 | 721 | SessionRequest::RequestMpMapChange | (this = SessionRequest g_0x7AFE20): pending (+0x80 set): lobby client state record (+0x2600) +0x28 = 1 (++ version), sends CPlayerClient::SendMsg06_String(skirmish map name) and on the host LobbyServer::SendToUnreadyPlayers(9, map... |
@@ -1154,7 +1154,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005DC620 | 4571 | Console_RegisterCommands | registers the console commands into the string map g_0x7C7B38: help, debuginfo, console, history, filter, lastfps, listvar, loadvar, execute, fadeout, server, lootall, memusage, disconnect, generateacks, partyresend, localrate, ..... |
+| 0x005DC620 | 4571 | Console_ExecuteLine | (line): registers the console commands on first use (string maps: g_0x7C7B28 = always: console, lastfps, exec, execute, kick, ban, rate, localrate, net; g_0x7C7B38 = cheats only (g_0x7C7B64, never in a lobby): help, debuginfo, his... |
 | 0x005E18E0 | 2959 | CFlyingHitPoints::Draw | (renderer): draws the floating damage numbers (list +4 of entries {.., pos, time +0x14, text}; entries older than 3000 ms removed with 0x5E25B0); sets the digits texture (+0 via renderer vt[11], "CFlyingHitPoints::Draw. SetTexture... |
 | 0x005D6630 | 1589 | Brain::BuildFromLogicSlot | (MobLogicSlot (0x4c), index): LogicList_Clear, +0x44 / +0x48 = 100000, +0x4c = 1; +0x38 callForHelpRadius = slot +0x3c (CallForHelpRadiusDefault 7 -> CallForHelpRadius); +0x3c alarmCondition = slot +0x40; Model +0: 1 = AiLogicGuar... |
 | 0x005D30A0 | 1450 | AiLogicFear::Update | slot 5 (brain): flee origin = the nearest seen enemy when +0x18c (and Brain::CallForHelp(its pos)), else the unit position when inside a spell area, else the remembered spot +0x10 when that is in an area (otherwise the noticed pos... |
@@ -1175,20 +1175,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005E2A30 | 2045 | CUIMessageLog::AddMessage | word-wrap a text (DBCS aware, '^' colour escapes, width 0x30F px, line height 0x11) into line widgets appended to the list +0x148; each line stamped with timeGetTime; drops oldest lines when too many |
-| 0x005E26F0 | 265 | CUIMessageLog::CUIMessageLog | widget vt 0x7400DC (+0x148 list of lines, +0x150 CString): creates the background widget at (10,0x23D,0x316,0x24E) |
+| 0x005E2A30 | 2045 | CUIMessageLog::AddMessage | (text, colour): word-wraps the text at 0x30C px (CInterface::MeasureText font 1; DBCS aware; a '^' followed by a digit 0..7 is a colour escape: bit0 blue, bit1 green, bit2 red -> ^7 white, ^4 red, ^2 green, ^1 blue, ^6 yellow) int... |
+| 0x005E26F0 | 265 | CUIMessageLog::CUIMessageLog | (CInterface): CUIWidget base with vt 0x7400DC (sub-object 0x7400A8 at +0x94): line list +0x148 (0x18 nodes: +8 text, +0xC colour codes, +0x10 time, +0x14 CUIBlitSurface), chat input text +0x150, caret +0x154, input mode +0x14C = 0... |
 | 0x005E28E0 | 172 | CUIMessageLog::~body | releases CString +0x150, destroys every line, frees the list, base widget dtor 0x5FE930 |
 | 0x005E2520 | 139 | NodeAlloc24_5E2520 | allocate 0x18-byte node from pool |
 | 0x005E2670 | 113 | UIMessageLine::Destroy | destroy one line: delete its sub-widget (+0xC), release two CStrings (+0,+4) |
-| 0x005E2990 | 79 | CUIMessageLog::Update | vt[24]: removes lines older than 20000 ms (timeGetTime vs line+0x10) |
-| 0x005E29E0 | 69 | CUIMessageLog::Layout | vt[22]: places each line widget at y=10+16*i, UpdateElements and call its vt[0], then base update |
+| 0x005E2990 | 79 | CUIMessageLog::Tick | slot 24 (called every frame by CInterface::ProcessPendingScreens on +0x1C): erases the lines older than 20000 ms (node +0x10 vs timeGetTime) |
+| 0x005E29E0 | 69 | CUIMessageLog::BlitSurfaces | slot 22: places each line surface at (10, 10 + 16 * i), blits it (surface vt[0]) and then the base CUIWidget::BlitSurfaces (the input line). Was Layout |
 | 0x005E2480 | 67 | List24_Clear_5E2480 | std::list clear into 0x18-byte pool |
 | 0x005E24E0 | 41 | List24_InsertBefore_5E24E0 | allocate and link a 0x18-byte node |
 | 0x005E2620 | 41 | Quat_StaticInit_Identity4 | sets global quaternion g_0x7C7B98 to (1,0,0,0) |
 | 0x005E25B0 | 40 | List24_EraseNode_5E25B0 | unlink node to 0x18-byte pool |
 | 0x005E25E0 | 32 | StaticInit_Guarded_5E25E0 | static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code |
 | 0x005E2600 | 31 | StaticInit_Consts3_5E2600 | static initializer: sets 3 globals (0, 0, 0) |
-| 0x005E28C0 | 30 | vt_7400DC::DeletingDtor_5E28C0 | scalar deleting destructor: runs CUIMessageLog::~body_ then operator delete when flag&1 |
+| 0x005E28C0 | 30 | CUIMessageLog::DeletingDtor | scalar deleting destructor of vt 0x7400DC |
 
 ## 0x5E3000 - 0x5E7000: chat/console panels (CUIMessageLog edit, CUIConsole), software cursor (CSoftCursor), ScreenFade, CI3DFigure
 
@@ -1196,20 +1196,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005E5690 | 1453 | CSoftCursor::ThreadProc | cursor thread loop at ~41 ms: update animation/position, erase old cursor from the primary surface, redraw at the new position until stop flag (+0x9C) |
-| 0x005E5C40 | 1125 | CSoftCursor::CopyWithLock | lock source and destination DirectDraw surfaces ("Can't lock surface." / "Can't unlock surface."), copy/blend pixel rows of the cursor |
-| 0x005E4A10 | 789 | CUIConsole::RedrawInput | draw the console input line at the bottom (dark 0x282828 band), measure text extents for caret (+0x28) and selection (+0x2C) |
-| 0x005E44A0 | 777 | CUIConsole::OnChar | console edit keys: backspace (delete char/selection at caret +0x28/+0x2C), enter executes the command (Console_RegisterCommands table) and logs via AddText, history keys |
-| 0x005E3230 | 709 | CUIMessageLog::EditOnKeyDown | secondary base (vt 0x7400A8 at +0x94) slot 9: edit-field keys of the chat line (8 backspace: trims +0xBC, enter sends via 0x57F440, esc cancels), then RedrawInput |
-| 0x005E4180 | 709 | CUIConsole::OnKeyDown | handles shift (0x10)/ctrl (0x11) flags, PgUp (0x21)/PgDn (0x22) scroll by 1 or a page, other keys |
-| 0x005E4EB0 | 677 | CSoftCursor::CreateFrameFromMmp | create a cursor frame surface (0x4EFC60) and fill pixels from a decoded .mmp image: lock/unlock ("Can't get surface description.", "Can't lock surface.") |
-| 0x005E4800 | 524 | CUIConsole::RenderHistory | redraw the history area: dark background 0x282828, font colour 0xB4B4B4, visible lines from the end offset by scroll (+0x74), measures width using "+-987654321" |
+| 0x005E5690 | 1453 | CSoftCursor::ThreadProc | thread body (AfxBeginThread from Start when kind != 1): saves the background once, then every 41 ms (Sleep to 0x29) while the window is active and until the stop flag +0x9C: UpdateState; when drawn (+0xC) and changed: if the old (... |
+| 0x005E5C40 | 1125 | CSoftCursor::ComposeFrame | (frame, dstRect, srcRect): locks the frame surface and the 32x32 scratch (+0x60), for each row: scratch = (scratch & AND mask row from frame +0x1C) / frame pixels (16 or 32 bpp), unlocks ('Can't lock surface.' / 'Can't unlock surf... |
+| 0x005E4A10 | 789 | CUIConsole::RedrawInput | draws the input band (0x282828, 31 px at the bottom): '> ' + text in white, selection in 0x505050, caret as a 1 px line |
+| 0x005E44A0 | 777 | CUIConsole::OnChar | (char): backspace deletes the char / selection, Esc clears the line, Enter: pushes the line into the history (30 max), echoes it ('> ' prefix g_0x792DE0) via AddText and runs Console_ExecuteLine; printable chars are inserted at th... |
+| 0x005E3230 | 709 | CUIMessageLog::OnKeyDown | sub-object slot 9 (chat edit, only in input mode +0x14C): backspace, Delete, Home/End, Left/Right move the caret +0x154, Enter sends the text +0x150 as a lobby chat message (LobbyClient::AddKeyedRef2604 with a 0x18-byte string mes... |
+| 0x005E4180 | 709 | CUIConsole::OnKeyDown | (vk): 0x10 shift / 0x11 ctrl flags; PgUp/PgDn scroll by 1 (Ctrl: a page +0x70); End/Home: caret to end/start (Ctrl: scroll to newest / oldest); Left/Right move the caret (+0x2C follows unless shift = selection); Up/Down walk the c... |
+| 0x005E4EB0 | 677 | CSoftCursorFrame::CreateFromMmp | (this 0x20-byte frame, '<name>.mmp' CString buffer, hotX, hotY, image data): creates a DirectDraw surface from the decoded .mmp picture (CDXDirectDrawSurface::CreateFromPicture; texture manager vt[19]/[20] decode), +8 = 0x7C, +0xC... |
+| 0x005E4800 | 524 | CUIConsole::RenderHistory | clamps the scroll offset, fills the history area with 0x282828, draws the visible output lines bottom-up (grey 0xB4B4B4, 15 px apart) and scroll markers; the surface is only drawn when visible |
 | 0x005E6D90 | 517 | CI3DFigure::Draw | (renderer I3DFigureImpl) -> 1: when visible (+0x220): renderer vt[11] SetTexture(0, texture +0x280) (FatalError "CI3DFigure::Draw: SetTexture failed"); the model matrix (Quat_ToMatrix4 of +0x34 into +0x54, position +0x1C in column... |
-| 0x005E63F0 | 506 | CSoftCursor::AddFrame | append a cursor frame loaded from an ".mmp" image path (49 callers) |
-| 0x005E3700 | 481 | CUIMessageLog::RedrawInput | draw the chat input line (+0x150 text) into the widget DC with caret, clamp width 0x30C, shown only while input mode (+0x14C) is on |
-| 0x005E69C0 | 444 | ScreenFade::Draw | draws letterbox bars and a fade overlay using FadeTimer (value ramps 0..255 by elapsed ms), via surface vt[19] fill-rect calls |
-| 0x005E52E0 | 438 | CSoftCursor::UpdateState | advance frame every 125 ms (0x7D), accumulate mouse delta (+0x88), GetCursorPos or fixed position (+0x80), clamp to screen (+0x58/+0x5C), compute source/dest rects (+0x30,+0x40); returns whether anything changed |
-| 0x005E60B0 | 426 | CSoftCursor::Init | cursor size 32 (or 16) in g_0x7C7C90/94, create event (+0x1C), attach surface (refcount +4), screen size from surface, allocate 0x20-byte cursor helper (0x4EF7B0) |
+| 0x005E63F0 | 506 | CSoftCursor::AddFrame | (name, hotX, hotY, data): loads '<name>.mmp' through the texture manager into a new 0x20-byte CSoftCursorFrame (CreateFromMmp) and appends it to +0x68 (count +0x6C); Cursors_Register adds the 25 'cursor_*' (or 'sm_cursor_*' for th... |
+| 0x005E3700 | 481 | CUIMessageLog::RedrawInput | shows / hides the input blit surface (+0x118[0]) with the input mode and draws the text +0x150 (white, DT 0x800) and a caret line at the measured width |
+| 0x005E69C0 | 444 | ScreenFade::Draw | (renderer): with the letterbox flag +0x10 draws two black bars (renderer vt[19] fill rect with render state 7 off) at the top and bottom; when active (+8): value += (now - +0xC) * rate, clamped to 255 (stops below 0) and fills the... |
+| 0x005E52E0 | 438 | CSoftCursor::UpdateState | advances the animation frame every 125 ms (frame +0x10 index += elapsed / 125 mod count), accumulates the DirectInput delta into +0x88/+0x8C, cursor position from GetCursorPos (or the stored software position +0x80/+0x84 when +0x9... |
+| 0x005E60B0 | 426 | CSoftCursor::Init | (device CDXDirectDraw, kind 1 = compose in App_RenderFrame only / 2 = also the 41 ms thread on the front buffer, DInputMouse, small): cursor size g_0x7C7C90/94 = 32 (or 16 when small = software device), event +0x1C, device +4 (ref... |
 
 ## 0x5E7000 - 0x5EE000: UI: camera input handlers, UIQuadMesh, unit preview/portraits, camp screen widgets
 
@@ -1217,20 +1217,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005ECA10 | 3316 | UIUnitPreview::GetOrCreatePortrait | cache of portrait figures keyed by unit name (map at +0x170): creates the default UIFigureWin, stamps timeGetTime, random variant via Isaac_NextWord, draws CI3DFigure |
-| 0x005E8450 | 2050 | UIQuadMesh::InitFrame8 | build an 8-vertex frame (border rectangle) scaled by param_7 |
-| 0x005E91F0 | 2009 | UIQuadMesh::InitStrip | build mesh with param_6*4 vertices (strip of quads) |
-| 0x005E7D60 | 1772 | UIQuadMesh::InitFrame16 | build a 16-vertex frame (3x3 nine-slice) with uv, 28 callers |
-| 0x005EC300 | 1768 | UIUnitPreview::Render | render a unit figure preview inside a rectangle of the UI: clears the DirectDraw surface, sets camera/rotation (Quat_FromAxisAngle, Vec3_Cross) from the passed unit and draws via vt calls; two layouts depending on width (200..600 ... |
-| 0x005E7680 | 1758 | UIQuadMesh::InitGrid | build a (w+1)*(h+1) vertex grid with uv, triangle indices for each cell |
-| 0x005ED7B0 | 1475 | UIUnitPreview::PickFaceFigure | from the unit's prototype name pick the face figure: names containing "unhuma"/"unhufe" and format "infa%sme%dface" (infantry face by sex and index) via UnitsDb entry map |
-| 0x005E70E0 | 1431 | UIQuadMesh::InitRect | reset arrays (+0x1D0 vertices 0x40 each, +0x138/+0x148, +0x1E0 triangle indices, +0x210) and build a rectangle of 4 vertices / 2 triangles at (x,y,x2,y2) with uv rect; 202 callers |
-| 0x005E8C60 | 1412 | UIQuadMesh::InitN | build mesh with param_6 vertices (screen positions via SetScreenPos2D) |
-| 0x005E99D0 | 1368 | UIQuadMesh::InitQuadUV | build a 4-vertex quad from 14 float parameters (positions and separate uv corners) |
-| 0x005EB210 | 812 | CamCtlFree::OnMouseMove | vt 0x740208 slot 4: screen-edge scrolling (margin g_0x79BDAC) or drag-look; chooses 8 directions, sets software cursor frame per direction |
-| 0x005EC020 | 717 | TextureDecode1 |  |
-| 0x005EDD80 | 652 | CampScreen::BuildWidgets | creates the 0x148-byte widget (vt 0x740444) and registers layout groups "modifiers2" and "campslots" (CUIWidget list), clears timers and trims the oldest entries to keep 30 |
-| 0x005EADD0 | 650 | CamCtlFree::OnKeyDown | vt 0x740208 slot 9: bound keys (table g_0x79BF70 by scancode) set move axes +0x20/+0x24/+0x28, 0xD saves/loads camera views (CCamera::SaveView/LoadView) |
+| 0x005ECA10 | 3316 | UIUnitPreview::GetOrCreatePortrait | (this = camp screen, unit name, ...): portrait cache (std::map name -> {time, CI3DFigure}) at screen +0x170: creates the quad (GetDefaultQuad), positions it with CObject3D::SetScreenPos2D / SetUniformScale, picks a random variant ... |
+| 0x005E8450 | 2050 | UIQuadMesh::InitBorderRing | (z, scale, l, t, r, b, border, u0, v0, u1, v1): 8 vertices (4 outer corners +-w/2 and 4 inner corners inset by border), 24 indices = 8 triangles forming the ring; the inner uv is the uv rect inset by border * (u1 - u0) / (r - l) (... |
+| 0x005E91F0 | 2009 | UIQuadMesh::InitRing | (z, scale, cx, cy, radius, n, thickness, u0, v0, u1, v1): n quads (4n vertex->uv entries, 6n indices) around a circle between radius and radius - thickness (vertex pairs i / i+1 outer and inner), every quad with the whole uv rect;... |
+| 0x005E7D60 | 1772 | UIQuadMesh::InitBorderStrips | (z, scale, l, t, r, b, border, u0, v0, u1, v1): 16 vertices = 4 strips (bottom, top, left, right [I]) between the outer rect (+-w/2, +-h/2) and the inner rect inset by border UI units, each strip textured with the whole uv rect (6... |
+| 0x005EC300 | 1768 | UIUnitPreview::Render | (this = camp screen, unit, x, y, z): renders a 3D unit figure preview inside the camp screens: clears the render-target surface, orients the figure (Quat_FromAxisAngle / Vec3_Cross from the unit's facing), draws it with the render... |
+| 0x005E7680 | 1758 | UIQuadMesh::InitGrid | (z, scale, x, y, x2, y2, u0, v0, u1, v1, cols, rows): (cols+1)*(rows+1) own vertices (SoA blocks of 4 at +0x1C0) spaced (w/scale)/cols, (h/scale)/rows from the TOP-LEFT corner (position = SetScreenPos2D of (x, y), not of the centr... |
+| 0x005ED7B0 | 1475 | UIUnitPreview::PickFaceFigure | (unit prototype name): face figure name: prototypes containing 'unhuma'/'unhufe' -> 'infa%sme%dface' (sex, index) else 'face%s%02d' from the UnitsDb entry; CCampBar2::DrawFace |
+| 0x005E70E0 | 1431 | UIQuadMesh::InitRect | (z, scale, x, y, x2, y2, u, v, texW, texH): builds a CI3DFigure quad: 4 vertices (structure of arrays at +0x1C0: x[4] then y[4]) at +-(w/2)/scale, uv rect (+0x210, inset by 1/512), 2 triangles (+0x1E0), one 0x40 draw record (+0x1D... |
+| 0x005E8C60 | 1412 | UIQuadMesh::InitDisc | (z, scale, cx, cy, radius, n, u0, v0, u1, v1): n vertices on a circle (cos / sin of 2*pi*i/n times radius / scale) around (cx, cy) (SetScreenPos2D) drawn as a fan (0, i+1, i) with one uv rect; the round gauges of the battle HUD (C... |
+| 0x005E99D0 | 1368 | UIQuadMesh::InitQuadUV | (z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2): one quad from three corner points with their own uv (u/256, 1 - v/256; the fourth corner is derived) so the texture can be mirrored / rotated per corner; CHudClockStrip::... |
+| 0x005EB210 | 812 | CamCtlFree::OnMouseMove | slot 4: not dragging: edge scrolling when CameraBorderScrollArea (g_0x79BDAC) > 0: x < margin / >= width - margin and y likewise give a direction mask (1 left, 0x10 right, 0x100 up, 0x1000 down) -> scroll velocity (-1/+1 per axis,... |
+| 0x005EC020 | 717 | UIUnitPreview::LoadPictureTo256Target | (name): CTextureManager::CreateRenderTarget 256x256x32 (refcount++), decodes '<name>.mmp' through the texture manager vt[19] (width +4, height +8, pixels +0x4C, 'PNT3' = DXT flag) into ARGB and writes it row by row into the target... |
+| 0x005EDD80 | 652 | CampScreen::CreateFrameWidget | (screen): creates the 0x148-byte UIFrameWidget (vt 0x740444, slot 18 BuildFrameMesh) and registers the layout groups 'modifiers2' and 'campslots' (tutorial-registered widget names); used by CCampScreen2::Build, CUIScreen740D18::Bu... |
+| 0x005EADD0 | 650 | CamCtlFree::OnKeyDown | slot 9: keyboard.ini action of the scancode (g_0x79BF70[flags & 0x1FF]): 5/6 camera_up/down -> forward +0x20 = +1/-1, 7/8 camera_left/right -> side +0x24, 9/10 zoom_in/out -> zoom +0x28, 0xD..0x10 camera1..4 -> CCamera::LoadView(0... |
 
 ## 0x5EE000 - 0x5FD000: UI: CInterface screen manager, item/spell/perk info panels, CUIBlitSurface, string-pair arrays, STL leaves
 
@@ -1238,19 +1238,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005F1590 | 4904 | UIItemInfoWin::DrawPerkDetail | perk/skill detail panel (4.9 KB): PerksDb_FindIndexByName, texts "perk " + name, "_desc", "%s %d%%", per-kind switch on *param_1 |
-| 0x005EE760 | 2968 | UIItemInfoWin::Refresh | dispatcher: redraw the info panel for the selected item by kind (0x3007 cat1 -> material, cat2 sub0-2 -> weapon/armor tooltip, spells, perks); texts "none" / "Unknown" |
-| 0x005F0370 | 2070 | UIItemInfoWin::DrawWeaponArmorInfo | tooltip for weapons (WeaponProto stride 0xB4, g_0x7C86F8) and armor (ArmorProto stride 200, g_0x7C8718): lines "%s %s", "mattype_", "%s %s x %d", damage list |
-| 0x005EF5D0 | 1979 | UIItemInfoWin::DrawSpellItemInfo | tooltip for spell containers / spell items: texts "spell " + name, "item_spell", lines "%s %s" |
-| 0x005F4990 | 1521 | CInterface::Init | create the 0x2EE-high "Times New Roman" font ("CInterface3D::Create. Cannot create font"), screen size, DebugText::Init, KeyBindings_Load, console and message log, read config\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x005EFD90 | 1494 | UIItemInfoWin::DrawMaterialInfo | tooltip for loot category 1 (materials): material record (g_0x7C86D8 stride 0x50) and "mattype_" texts, FormatDamageList? lines |
-| 0x005F0B90 | 1431 | UIItemInfoWin::DrawSpellInfo | spell tooltip: SpellProto (g_0x7C8510 stride 0x84) via Array84_GetAt, lines "%s %s", "%s %d", school name "school_%d" |
-| 0x005F5320 | 991 | CInterface::Draw | per-frame draw: debug lines "surface stored/alloc" (%.1f), top screen vt+0x58/+0x5C, fade, background widget (800x600), cursor, tutorial/briefing overlays |
-| 0x005F2A90 | 876 | UIFrameWidget::BuildFrameMesh | vt 0x740444 slot 18: builds the frame art with UIQuadMesh::InitGrid? (8x4 border) and repeated InitRect? quads (uv 0xFE,0x4C..0xE9,0xB0 etc.) |
-| 0x005F5BA0 | 860 | CInterface::CreateScreenById | switch(id) constructs the interface screen objects (CUIWindow subclasses, e.g. 0x230-byte window for id 1, credits "Crdt") and activates them |
+| 0x005F1590 | 4904 | UIItemInfoWin::DrawPerkDetail | (perk record*: +0 kind, +0xC item, +0x14 name): the skills window detail panel (4.9 KB): kinds 0..3 read the 'perk <name>' text section (ReadLineValue x2), kinds 4..7 the '<name>_desc' text; PerksDb_FindIndexByName(g_0x7AF268) the... |
+| 0x005EE760 | 2968 | UIItemInfoWin::Refresh | redraws the item info surface (+0x194 selected item): kind 0x3007 loot: category 1 -> DrawMaterialInfo, category 2 subtype 0..2 -> DrawWeaponArmorInfo, 3 -> DrawSpellInfo, 4 -> DrawPerkInfo; 0x3006 quick item subtype 8 -> DrawItem... |
+| 0x005F0370 | 2070 | UIItemInfoWin::DrawWeaponArmorInfo | loot category 2 subtype 0 weapon (WeaponProto g_0x7C86F8, 0xB4 each) / 1 armor (ArmorProto g_0x7C8718, 200 each) / 2 (g_0x7C8738, 0x8C each) by +0x50 and +0x54: name, '%s %s' 'mattype_' text of +0x10, '%s %s x %d', '%s %d' price /... |
+| 0x005EF5D0 | 1979 | UIItemInfoWin::DrawSpellItemInfo | spell container / spell item panel (kind 0x3008, or Ctrl held on a spell): texts 'spell <code>' section (CTextManager::OpenText / ReadLineValue / SkipToSectionEnd) and 'item_spell', 'school_%d', 'modifier' rune lines from the perk... |
+| 0x005F4990 | 1521 | CInterface::Init | (device CDXDirectDraw g_0x7AF080): +0x8 = device, screen size +0/+4 from the primary surface description (used by UiScale); fonts +0x70..+0x78: 'Times New Roman' 75 pt measured to get the pixel scale then 3 fonts of size * 0x68 / ... |
+| 0x005EFD90 | 1494 | UIItemInfoWin::DrawMaterialInfo | loot category 1 (materials): record = g_0x7C86D8[+0x54] (0x50 each): name, '%s %s' with the 'mattype_<NAME>' text (+4 upper-cased), labels +0x1CC[17] ('%s %d' price / weight / ...), '%s %.1f', then FormatResistLists over the 7 flo... |
+| 0x005F0B90 | 1431 | UIItemInfoWin::DrawSpellInfo | loot category 2 subtype 3 (spell scrolls): SpellProto = SpellProtoTable_GetAt(g_0x7C8510, +0x54): name white, 'school_%d' line (labels [18]), '%s %d' / '%s %s' for mana, range (+0x20 speed >= 1), area (+0x28 >= 1), duration (+0x38... |
+| 0x005F5320 | 991 | CInterface::Draw2D | (after EndFrame): debug lines 'surface stored' / 'surface alloc' (g_0x7C7E74 / g_0x7C7E78 bytes); top screen vt[22] BlitSurfaces and vt[23] UpdateHoverAndButtons; message bar +0x64; transition +0x50: 1 -> grabs the back buffer int... |
+| 0x005F2A90 | 876 | UIFrameWidget::BuildFrameMesh | vt 0x740444 slot 18: the camp screens' full-screen frame art: one InitGrid 8x4 tile (z 8, uv 14..114) over (0, 100)-(800, 500), then per 200 px column two InitGrid 1x4 side strips (z 7.9, uv 254,76-233,176 mirrored) and 4 InitRect... |
+| 0x005F5BA0 | 860 | CInterface::CreateScreenById | (id from CPlayerClient::OnMsg07_GameMode): 1 battle HUD CUIScreen740764 (0x230, vt 0x740764 / sub 0x740730), 2 CMainMenu (0x17C, 0x740688 / 0x740654), 3 DialogScreen (0x2A4, 0x7405AC / 0x740578), 4 CUIScreen740B3C (0x294, main men... |
 | 0x005FAB80 | 771 | RbMap_InsertHint_005FAB80 | std::map insert with hint position (begin/end special cases, string compare) |
-| 0x005F57C0 | 748 | CInterface::ProcessPendingScreens | loop while the pending flag (+0x4C) is set: pop the top screen, run the transition (mode +0x50: 4 disconnect, ...), handles strings "disconnect_msg" / "disconnect" (shows the network disconnect message and returns to the main menu... |
-| 0x005EF300 | 711 | UIItemInfoWin::DrawItemOrSpellInfo | draw the info text for the selected item: name via CTextManager::GetItemTextKeys, stats lines "%s %s", "%s %d", "%s %.1f%s", spell data via CSpell::GetProto |
+| 0x005F57C0 | 748 | CInterface::ProcessPendingScreens | once per frame from main: while the pop request +0x4C is set: cursor wait (frame 3), modifiers cleared, top screen Deactivate (sub vt[1]) + OnClose (vt[26]) + delete, App_PumpMessages, transition 4 -> restore the parked screenshot... |
+| 0x005EF300 | 711 | UIItemInfoWin::DrawItemOrSpellInfo | quick item (kind 0x3006 subtype 8) panel: CTextManager::GetItemTextKeys (name, description, shape keys) of the selected item (+0x190 list head, +0x194 count); on the 200x300 surface (+0x118[0]) rect (15, 10)-(185, 25): name white ... |
 | 0x005F3470 | 703 | RbMap_InsertHint_005F3470 | std::map insert with hint position (begin/end special cases, string compare) |
 
 ## 0x5FD000 - 0x602000: UI: CUIWindow (element/quad/button/blit-surface arrays, event dispatch), CUIBlitSurface (DirectDraw backing surface)
@@ -1259,20 +1259,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005FDFA0 | 838 | CUIBlitSurface::DrawWrappedText | draw a text with word wrap into a rect (scaled), line height param_6, alignment/colour params; splits on spaces/newlines using CInterface::MeasureText; returns the used height (34 callers) |
-| 0x005FD440 | 792 | CUIBlitSurface::StretchTo | create a new CUIBlitSurface of the given size and stretch-blit this surface into it (flag 0x1000000), copying the backup buffer when present ("Can't stretch blit from surface.") |
-| 0x005FD7A0 | 734 | CUIBlitSurface::StoreBackupBuffer | flag 0: lock the surface and copy its pixels into a malloc buffer (+0x1C, size +0x20, counted in g_0x7C7E74); flag 1: restore them ("surface stored") |
-| 0x005FE440 | 699 | CUIBlitSurface::ToGrayscale | lock the surface and convert every pixel to luminance for 16 bit (565 or 555) and 32 bit formats, then unlock |
-| 0x005FFFB0 | 697 | TextureDecode2 |  |
-| 0x005FF460 | 660 | CUIWindow::CloneQuadMesh | duplicate quad mesh param_1 of the array +0x108 into a new figure (position/rotation copied from fields +0x1C..+0x24), 1 caller |
-| 0x005FE930 | 599 | CUIWindow::~body | vt 0x740F60 (+0x94 sub-object vt 0x740F2C): release the three owned figures (+0xEC..), all element/quad/surface/button/figure arrays, children, then the CObject base dtor (0x455930); 48 callers |
-| 0x005FE700 | 498 | CUIWidget::CUIWidget | ctor (parent arg -> +0x98): CObject3D init (0x40CB20, 0x40CB00 quats +0x34 / +0x44); secondary interface vtable at +0x94 (0x7401D0 then 0x740F2C); +0xa0..+0xd4 = 0; +0xd8..+0xe4 = 0; colour +0x34..+0x40 = g_0x7C7E58..; two materia... |
-| 0x005FFD80 | 438 | CUIWindow::AddFigureHolder | create a CI3DFigureHolder (0x5FC1C0) and append it to the array +0x138 (count +0x13C), returns it or 0 |
-| 0x005FEF20 | 392 | CUIWindow::AddSurfaceFigureByName | create a figure from the device by name (0x691D00) with a texture set (0x6922A0 or 0x6926F0) and append it to the element array (+0xF8); 50 callers |
-| 0x005FF830 | 391 | CUIWindow::AddButton | allocate a 0x34-byte button (UIButtonAnim) owned by this window and append it to the array +0x128 (158 callers) |
-| 0x005FDA80 | 384 | UiCompositor::Blt |  |
-| 0x00601ED0 | 384 | CUIWindowDemoList::Scan | vt 0x73F7F8 slot 25: enumerate "demo%d.apl" files, strip the extension, store the names in the vector +0x170 and build the list UI |
-| 0x005FDE20 | 378 | CUIBlitSurface::DrawText | DrawText the string into a rect (scaled from 800x600) of the surface DC with alignment flags/colour (253 callers) |
+| 0x005FDFA0 | 838 | CUIBlitSurface::DrawWrappedText | (text, rect*, maxLines, format, colour, lineHeight, shadow): word-wraps with CInterface::MeasureText (spaces / newlines) into at most maxLines lines drawn with DrawText lineHeight apart; returns the height used; 34 callers |
+| 0x005FD440 | 792 | CUIBlitSurface::StretchTo | (w, h): new CUIBlitSurface of that size with this surface stretch-blitted into it (and the backup buffer copied); the 256x192 transition thumbnail |
+| 0x005FD7A0 | 734 | CUIBlitSurface::SuspendOrRestore | (0: lock the surface, copy its pixels into a heap backup +0x1C (size +0x20, counted in g_0x7C7E74) and release the DirectDraw surface; 1: recreate the surface and copy the backup back) - screens below the top one park their surfac... |
+| 0x005FE440 | 699 | CUIBlitSurface::ToGrayscale | converts every pixel to luminance (16-bit 565 / 555 and 32-bit) - the frozen background behind message boxes |
+| 0x005FFFB0 | 697 | CUIWidget::BlitPictureIntoTexture | (texture, name, x, y): decodes '<name>.mmp' the same way (device decoder via CInterface +8 +0x4C) and writes it as A1R5G5B5 into the texture's own surface (+0x5C) at pixel offset x + y * 256 (a 256-wide texture page); returns true... |
+| 0x005FF460 | 660 | CUIWidget::CloneQuadMesh | (figure): replaces a quad figure of +0x108 by a fresh copy (position, scale, texture copied). Was CUIWindow::CloneQuadMesh |
+| 0x005FE930 | 599 | CUIWidget::~body | releases the materials +0xEC/+0xF0/+0xF4, the quad figures (vt[4]), the blit surfaces, the buttons (UIButton::Destroy), the textures (vt[4]), the figure holders, frees the arrays and runs the CObject3D base dtor; 48 callers. Was C... |
+| 0x005FE700 | 498 | CUIWidget::CUIWidget | (CInterface): base of every UI window (0x148 bytes, vt 0x740F60 25 slots, IUIEvents sub-object vt 0x740F2C at +0x94): CObject3D transform (+0x1C pos, +0x34 / +0x44 quaternions), +0x98 CInterface, +0x9C handled, +0xA0..+0xD4 zero, ... |
+| 0x005FFD80 | 438 | CUIWidget::AddFigureHolder | new CI3DFigureHolder appended to +0x138 (count +0x13C); returns it. Was CUIWindow::AddFigureHolder |
+| 0x005FEF20 | 392 | CUIWidget::AddTextureByName | (name, kind, flags): CTextureManager::FindOrCreateNamed + LoadTexture, appends to +0xF8; the first texture is bound to every quad (AddQuadMesh); 50 callers. Was AddSurfaceFigureByName |
+| 0x005FF830 | 391 | CUIWidget::AddButton | allocates a 0x34-byte UIButton (+0 CInterface, polygon +4.., rect +0x14, flags +0x24/+0x25, origin +0x28/+0x2C, tooltip +0x30) and appends it to +0x128 (count +0x12C); 158 callers. Was CUIWindow::AddButton |
+| 0x005FDA80 | 384 | CUIBlitSurface::Blt | vt slot 0: when visible (flag 4) blits the surface to the back buffer at its rect clipped to the screen (DDBLT_WAIT, or DDBLT_KEYSRCOVERRIDE 0x1010200 with the colour key +0x34 when flag 1); called from CUIWidget::BlitSurfaces. Wa... |
+| 0x00601ED0 | 384 | CDemoScreen::OnOpen | vt 0x73F7F8 slot 25 of the attract-mode demo screen (0x184 bytes, CUIWindow_73F7F8::Create): once (+0x16C): enumerates 'demo%d.apl' recorded sessions into the CStringArray +0x170; adds a CamCtlFree handler, clears the camera free ... |
+| 0x005FDE20 | 378 | CUIBlitSurface::DrawText | (text, rect in 800x600 (empty = whole surface; +2 px inset), DT format flags, colour BGR, shadow, font id): ::DrawText with the CInterface font, transparent background, a black shadow offset (1, 1) first when shadow; returns the f... |
 
 ## 0x602000 - 0x60E000: UI: dialog screen (speakers, topics, briefing), status-lamp screen, STL leaves
 
@@ -1280,20 +1280,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0060C870 | 6549 | CUIScreen_60C870::Init | big screen init (6.5 KB): reads "constr.current", entries "i.noconstr", "i.offspellconstr", "i.onspellconstr" and builds the spell constructor / item sub-view widgets |
-| 0x00604C50 | 4482 | DialogScreen::ParseDialogScript | parse the dialog text section line by line: markers "#nolips", "#show", "#hide", "weapon", voice/anim directives and speaker names; fills the speaker list +0x278 (4.4 KB) |
-| 0x00604130 | 2827 | DialogScreen::Update | per-frame update (2.8 KB): advance the animation phase +0x290, reset layers, update speakers, subtitles and camera shot, play queued lines |
-| 0x006064E0 | 2645 | DialogScreen::SelectAnswer | player selected an answer: "goodbye" closes the dialog, "constr" opens the constructor/briefing action (0x4A74F0 lookup, 0x578560), otherwise advances to the next line/briefing; 2.6 KB |
-| 0x006024B0 | 1742 | DialogScreen::OnOpen | vt 0x7405AC slot 25: init dialog screen: find the player's party (saveload/"gipat"), load personalities, build the frame (quad meshes InitRect/InitFrame16 at (20,200)-(600,570)), set camera carrier/target, buttons and the topic li... |
-| 0x006034A0 | 1610 | CUIScreen740578::OnKeyDown | vt 0x740578 slot 9: dispatch to elements, then keys: Esc closes, bound keys (table g_0x79BF70) switch camera/units; plays buttons\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00608450 | 1405 | DialogScreen::StartDialogLine | stop previous voice (+0x250), advance the speaker list (+0x278): show/hide speakers (CUnit::SetVisibleToAll?, CUnitClientSpecific::SetMouthClosed), parse the line text by '/' parts (String_SplitByChar), start voice and camera shot... |
-| 0x00605DE0 | 1231 | DialogScreen::AddSpeaker | by unit name: find/create the unit (0x578980), remove an old speaker with the same name, set model/animation, build the portrait figure and widgets; texts "initqu%ditem" / "quitem%04d"; 1.2 KB |
-| 0x00603D00 | 1058 | CUIScreen740578::OnMouseMove | vt 0x740578 slot 4: cursor frame by context (0xD busy), dispatch to elements; topic hover (mode 1: row index +page offset) redraws the list; world mode: unit/zone-exit under cursor selects cursor shape |
-| 0x006091C0 | 977 | CUIScreen741478::RebuildUnitButtons | clear figures/buttons/elements and rebuild the hero/unit portrait buttons from the player's units; face figure names "unhuma"/"unhufe" with format "infa%s%s%dface" |
-| 0x00607360 | 952 | DialogScreen::LoadSpeakersFor | for a given unit id scan the text table entries (0x461520 iterator, value 1.0, key split by '.' into 3 parts) and collect that unit's dialog entries ("constr" prefixed ones handled separately) |
-| 0x00602C90 | 896 | DialogScreen::SetParty | vt 0x7405AC slot 29: take the party records (0x578BA0), build the unit portrait button list (+0x194), find carrier object (CCamera::SetCarrierObject / Records5C_FindByName), 0.9 KB |
-| 0x00607EC0 | 798 | DialogCamera::SetShot | switch(shot) 1..: neutral shot, left/right speaker close-ups (+-0.5236 rad = 30 degrees) using DialogCamera::FocusOn and World_SetUnitHeight (-100) |
-| 0x00607BB0 | 782 | DialogCamera::FocusOn | place the dialog camera relative to a unit (or the pair of speakers +0x1B4/+0x1C0 when null): position from unit pos +0x1C and its facing quaternion, rotated by the given angle (cos/sin), 13 callers |
+| 0x0060C870 | 6549 | CCampScreen::Build | vt 0x74091C slot 25 (Build, screen id 5 = the camp / shop): pauses the server (Game_SetWorldServerField6C(1)); +0x198 = the merchant CGSPlayer (g_0x7AA5D8 by id from the variable "constr.current"; missing -> Session_LeaveGame), +0... |
+| 0x00604C50 | 4482 | DialogScreen::ParseDialogScript | (skipToEnd) reads the current text section line by line (CTextManager::SeekSection/ReadLines): "#nolips" (no lip sync), "#show <unit> [idx] [weapon]" AddSpeaker, "#hide <unit> [x]" RemoveSpeakerByName, "#animation <n>", "#camera <... |
+| 0x00604130 | 2827 | DialogScreen::Update | vt 0x7405AC slot 24: +0x290 += dt (wraps at 1.0); v24_Children; hides meshes/surfaces/children 0,1; walks the placement list +0x240 (0x30-byte nodes: +8 target pos, +0x14 dir, +0x20 state 1 walking / 2 turning / 0 done, +0x24 unit... |
+| 0x006064E0 | 2645 | DialogScreen::SelectAnswer | (isBriefing, flag): +0x27C = isBriefing; "goodbye" -> mode 0; "constr*" topic -> World_SetConstrCurrent(id from chars 0..6) + Game_SendLeave(5) (enter the camp / constructor); opens the text "briefing <topic>" (+0x184): its "#show... |
+| 0x006024B0 | 1742 | DialogScreen::Build | vt 0x7405AC slot 25 (Build, screen id 3 = the zone / talk mode): +0x27E = 1 unless the client connection's player mode (+0x1C +0x104) is 5 or the UI stream g_0x7AFDF8 is empty; LoadPersonalities; "saveload" background figure; four... |
+| 0x006034A0 | 1610 | DialogScreen::OnKeyDown | vt 0x740578 slot 9: DispatchSlot9; Backspace in a lobby = ClearChatLines; Enter: lobby = EnableChatInput, mode 3 = ParseDialogScript(1) until mode != 3 (skip the line), mode 4 = StartDialogLine; Esc: mode 0 pushes CEscMenu (0x168,... |
+| 0x00608450 | 1405 | DialogScreen::StartDialogLine | end of a briefing: stop the voice, Music_FadeIn, remove the speaker widgets +0x278; every speaker +0x294: SendMsg19(unit, 2), mouth closed, SetVisibleToAll(1), height 0, Stop; third / second speaker PlaceUnit back to +0x210 / +0x2... |
+| 0x00605DE0 | 1231 | DialogScreen::AddSpeaker | (unit name, portrait index, flag): a live unit (Game_FindUnitById(String_HashCI)) is appended to the speaker vector +0x294 (Record12: unit, CString name, byte) after removing a duplicate, SendMsg19(unit, 1), hidden when it is the ... |
+| 0x00603D00 | 1058 | DialogScreen::OnMouseMove | vt 0x740578 slot 4: +0x20C set -> cursor frame 0xD (busy) and forward to +0x1EC; cursor frame 0; DispatchSlot4; mode 1: hovered topic row (button 0..4 + page) -> +0xF4 (window +0x188) and DrawTopicList; mode 3 -> cursor 0xE, 4 -> ... |
+| 0x006091C0 | 977 | CLobbyStatusBar::RebuildPlayerButtons | clears quads/buttons/elements; +0x150 = the lobby players (g_LobbyClient +0x25D8 list, +0x25F0 = the local player first), +0x148 = count; for each: unit prototype of its hero (UnitsDb), face "infa%s%s%dface" (race "unhuma"/"unhufe... |
+| 0x00607360 | 952 | DialogScreen::LoadSpeakersFor | (unit id hash) [static, writes the dialog screen's topic array +0x170/+0x178]: every "b.<unit>.<topic>" variable == 1 (World_ApplyVariableTable "b.") whose unit hash matches: "constr*" topics kept last, the others sorted (IntroSor... |
+| 0x00602C90 | 896 | DialogScreen::OnPartyChanged | vt 0x7405AC slot 29 (unit record): inserts the unit into the portrait array +0x190/+0x194/+0x198 at its party index (party records 0x784 bytes, +0x1C id); when it is the host player's own unit (party +0x2C [1] +0x1C): +0x1A4 = uni... |
+| 0x00607EC0 | 798 | DialogCamera::SetShot | (shot 1..12): 1 both from 3 x the speaker distance at height 1.5; 2 player close-up (-30 deg, 4 m, 1.5; the other sunk to -100 by World_SetUnitHeight); 3 second speaker (+30 deg); 4 third (0 deg); 5 both 2.7 x d, 15 deg, height 3;... |
+| 0x00607BB0 | 782 | DialogCamera::FocusOn | (unit or 0, yaw rad, distance, height): target = unit pos (the stored pose +0x1B0/+0x1BC/+0x1C8 for the three speakers, forward dir +0x1D4/+0x1E0/+0x1EC) + dir * proto radius (+0x28), height + proto +0x2C; eye = target + rotate(di... |
 
 ## 0x60E000 - 0x645000: UI: camp/inventory/trade/spell+item constructor, hero stats, main menu, save/load, lobby, battle HUD, credits
 
@@ -1301,20 +1301,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0062D350 | 6721 | CSaveScreen::Build | vt 0x740B3C slot 25: main-menu/save list build (6.7 KB): "saveload" art, game time texts "gtime", "save_day", "%s  %d,  %d:%02d", slot list per saved game, FlameNoise::ctor, "i.nocamp" |
-| 0x00613EA0 | 6425 | CCampScreen2::Build | vt 0x74214C slot 25: build the party screen (6.4 KB): textures "campinfo", "MainMenu00labels", "MainMenu00", "but03", "button03_multiplayer", camp bar, quads (Quat_FromAxisAngle), texts via GetString |
-| 0x00643DC0 | 4142 | CUIScreen742A18::DrawMinimapUnits | 4 KB: minimap marker update: for each unit/zone exit compute positions (Quat_GetForwardAxis, CWorldClient::GetZoneExitCenter), ids "gz20g"/"none", quads |
-| 0x0061B2C0 | 4110 | CUIScreen741CD0::Build | vt 0x741CD0 slot 25: multiplayer lobby window (4.1 KB): "saveload", "scrollbar", "MainMenu00labels", "MainMenu00", "but03" art; address book (Archive tags), server list (NetServerRecords_Serialize, NetClient::SetServerList) |
-| 0x0063A560 | 3961 | CUIScreen740730::OnKeyDown | vt 0x740730 slot 9: battle key handling (4 KB): Esc, hotkeys (buttons\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00642E80 | 3897 | CUIScreen_642E80::Init | 3.9 KB: layout of the in-game HUD/minimap from the globals (g_0x79B388/0x79B38C, unit g_0x7AF7C8): Quat_GetUpAxis, quad arrays (Aligned8_SetSize2, UIFigureWin::CopyDefaults?) |
-| 0x00638EF0 | 3651 | CUIScreen740730::IssueCommandAt | left-click command (3.6 KB): ground target ("Terrain Coords"), unit target, spell/quick-item use, formation moves for the selected units, camera carrier set (CCamera::SetCarrierObject); plays buttons\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00641080 | 3162 | CUIScreen742A18::Update | vt 0x742A18 slot 24: 3 KB HUD update: timers, random flicker (Isaac_NextWord, Isaac_Generate), slerped markers (Quat_Slerp), SetScreenPos2D of the unit icons, minimap |
-| 0x0061D780 | 2911 | CUIScreen741CD0::LayoutLobby | 2.9 KB: lay out the multiplayer lobby list: SetScreenPos2D/InitRect? quads, tooltips, texts "%s %s", "%d/%d", "%s %d" (server name, players, ping) |
-| 0x00623880 | 2645 | CCampScreen::DrawHeroPanel | draw the hero info panel: name, HP/mana (UnitStats_MaxHP / MaxMana), level, skull icon ("infoitem_25", "skull") and digits ("+-987654321" sample width), 2.6 KB |
-| 0x00635250 | 2596 | CUIScreen740764::Build | vt 0x740764 slot 25: build the battle HUD (2.6 KB): "battle00" frame, personality texts "pers *" per hero, portraits, buttons; reads names (Stream_ReadCString) |
-| 0x00641F20 | 2562 | CUIScreen742A18::Build | build the battle HUD frame (texture "battle00", arrows "in25arrow"): quads InitRect/InitFrame16, zone name (Records5C_FindByName, World_GetClientMapName), hit regions; 2.5 KB |
-| 0x00611930 | 2361 | CCampScreen::EnterMode | set up the camp for the mode (+0x190): money text "camp_current_money", "camp_repair_all", "camp_level_up", build lists and layouts; 2.4 KB |
-| 0x00628F80 | 2349 | CCampTradeWin::Draw | vt 0x7415D4 slot 20: draw the trade item grid, prices and portraits (CI3DFigure::Draw, SetScreenPos2D); 2.3 KB |
+| 0x0062D350 | 6721 | CWorldMapScreen::Build | vt 0x740B3C slot 25 (screen id 4, 0x294 bytes): the global map: current zone record (Records5C_FindByName g_0x79BF00) -> allod record (Records2C) -> figures "Map<allod>" / "MapG<allod>" and the zone's map.txt "#zone" position (+0x... |
+| 0x00613EA0 | 6425 | CCampScreen2::Build | vt 0x74214C slot 25 (Build): the multiplayer party / hero-creation screen (0x220 bytes, pushed by CMainMenu button 5): Databases_Reload; figures "campinfo", "MainMenu00"/"MainMenu00labels" (holder +0x138[0] at (400,350) depth 8, p... |
+| 0x00643DC0 | 4142 | CHudMinimap::DrawMinimapUnits | 4 KB: unit / zone-exit markers (CWorldClient::GetZoneExitCenter, "gz20g" exits, "none"), colours by relation, written into the marker arrays. Was CUIScreen742A18::DrawMinimapUnits |
+| 0x0061B2C0 | 4110 | CLobbyScreen::Build | vt 0x741CD0 slot 25: the multiplayer lobby (0x260 bytes, pushed by CCampScreen2::OnStart): figures "saveload", "scrollbar", "MainMenu00" (+ "unmoco2", parts), buttons 0 join (0xA3,0x20E)-(0xED,0x23E) tip 0x9E98, 1 back (0x233..0x2... |
+| 0x0063A560 | 3961 | CBattleHud::OnKeyDown | vt 0x740730 slot 9 (key, char, scancode): lobby: Enter = EnableChatInput, Backspace = ClearChatLines; Esc = cancel the command mode (+0x17C/+0x180/+0x184, highlights) or push CEscMenu; then by keyboard.ini action g_0x79BF70[scanco... |
+| 0x00642E80 | 3897 | CHudMinimap::Init | 3.9 KB: builds the minimap mesh from the terrain globals (g_0x79B388/38C size, camera unit g_0x7AF7C8): aligned vertex / index arrays, Quat_GetUpAxis orientation, UIFigureWin::CopyDefaults. Was CUIScreen_642E80::Init |
+| 0x00638EF0 | 3651 | CBattleHud::IssueCommandAt | (this = the window; target object or 0, x, y): the left click -> order: no selected unit (+0x16C flag 0x10) = nothing; alt held (CInterface +0x7E) = SendMoveOrder(point or target pos, formation 0, shift) (attack-move); a called-sh... |
+| 0x00641080 | 3162 | CHudMainPanel::Update | vt 0x742A18 slot 24: 3.2 KB: portrait flash animation (+0x38/+0x3C records, Quat_Slerp tilt), HP / mana bars of the units, face swap ("me"/"fa"/"th" by state), minimap refresh timer; paused check (Nop_578D50) |
+| 0x0061D780 | 2911 | CLobbyScreen::LayoutLobby | 2.9 KB: draws the server table on the surfaces (columns "%s %s" name / "%d/%d" players / "%s %d" ping, a question mark when unknown, "%s %d / %d"), column separators (CDC::LineTo), tooltips, the detail text (DrawWrappedText) of th... |
+| 0x00623880 | 2645 | CUnitInfoWin::Redraw | draws the hero panel: name, HP / mana (UnitStats_MaxHP / MaxMana), weight (HeroRecord::TotalWeight), level, "infoitem_25", damage "damage_%d" / "%d-%d", the six stats with DrawStatValue and the perk lines; mode-dependent rows. Was... |
+| 0x00635250 | 2596 | CBattleHud::Build | vt 0x740764 slot 25 (screen id 1, 0x230 bytes): hero ids +0x1DC.. from the party or, on a load, from the UI stream g_0x7AFDF8 (ids, pause flag, version > 0x46 zone name, > 0x61 zone exit +0x188); "battle00" figure + 2 surface figu... |
+| 0x00641F20 | 2562 | CHudMainPanel::Build | vt 0x742A18 slot 18: the HUD frame "battle00" (quads, InitFrame16, InitN / InitStrip arrows "in25arrow"), the zone name (Records5C_FindByName), the minimap surface (SetPixel), CHudMinimap::Init, DrawMinimapUnits, Layout; 2.5 KB. W... |
+| 0x00611930 | 2361 | CCampScreen::EnterMode | recomputes the confirm state for tab +0x190: +0x20C = price total, +0x210 = confirm allowed, +0x211 = cancel allowed, +0x212 = deconstruct flag, title key: 0 "camp_repair_all" (sum of GetItemPrice(.., 8) over the hero's items, ite... |
+| 0x00628F80 | 2349 | CCampItemConstrWin::Draw | vt 0x7415D4 slot 20: the components (blueprint / materials / usable item) and the result preview with an animated figure. Was CCampTradeWin::Draw |
 
 ## 0x645000 - 0x65F000: UI: battle HUD strips, scroll bars, edit/list controls, save/load, options, tutorial, key config; DirectInput mouse; RichEdit
 
@@ -1322,20 +1322,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00659420 | 4310 | CTutorialWin::Rebuild | rebuild the tutorial window from the script ("tutorial ", "#screen", "#position"): clear the list at +0x188, parse and create items with key bindings; 4.3 KB |
-| 0x0064BE80 | 3459 | CQuestLogWin::OnOpen | vt 0x7411BC slot 25: build the quest/diary window ("obj_%d", "saveload", "cross" elements); 3.4 KB |
-| 0x0064CC10 | 3412 | CQuestLogWin::Rebuild | rebuild the quest log for a given map ("z.%s", "q.%s" keys, quaternion rotation of map icons); 3.4 KB |
-| 0x00655D40 | 2301 | CSaveLoadWin::ScanSaves | enumerate "saves\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x006462A0 | 2205 | CUIWindow7426F8::Draw | vt 0x7426F8 slot 20: draw the lower battle strip (2.2 KB): unit figures with part flags (CObject3D::SetPartsFlags/ClearPartsFlags), animated quads, texts |
-| 0x006456E0 | 2201 | CUIWindow_6456E0::Build | build the unit info side strip (2.2 KB): "in25arrow", "#iFF" colour markers, "infounit_%d" texts, quads and hit regions |
-| 0x00647040 | 1949 | CUnitStatsWin::DrawStats | 1.9 KB: unit stats panel text: "%s %d/%d", "move_%d", "%s %.1f %s" (UnitStats_WeightedSkills7, PerkEntry_Scale, CUnit::GetAttackModeSpeed); hero check IsHeroId? |
-| 0x006548A0 | 1835 | CSaveLoadWin::OnKeyDown | vt 0x741354 slot 9: dispatch; Esc = cancel, Enter = load/save (OnSave), arrows/PgUp/PgDn select slots (save\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x0064DC60 | 1742 | CQuestLogWin::FillObjectives | fill the objectives text ("obj_completed", "obj_failed", "obj_cost_exp") from the quest text sections; 1.7 KB |
-| 0x006567A0 | 1635 | CSaveLoadWin::RefreshSaveList | redraw the save list: clamp the scroll, render each save row (names "saveq"/"savea"/"saveb" slots) into the blit surface, measure text, place elements; 1.6 KB |
-| 0x00653DD0 | 1629 | CSaveLoadWin::Build | vt 0x741388 slot 25: build the save/load screen (1.6 KB): "saveload" art, "escMenu00labels", "escMenu00", "savelabel", scroll bars, buttons and the slot list |
-| 0x006503C0 | 1291 | COptionsScreen::Build | vt 0x741FAC slot 25: options screen (1.3 KB): "saveload" art, "video" group, tooltips "tip option_group_%s", "option_group_*" tabs, sliders and lists |
-| 0x006570E0 | 1228 | CSaveLoadWin::QuickSave | write saves\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00650E40 | 1221 | COptionsScreen::OnKeyDown | vt 0x741F78 slot 9: unless locked, dispatch; Esc = cancel (messbox\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
+| 0x00659420 | 4310 | CTutorialScreen::BuildPage | rebuilds the window for page +0x184: clears the lists / surfaces / buttons / quads; seeks the page's "#screen" section of "tutorial <key>"; "#position x y w [lines]" -> the panel rect (default (200,50)-(600,0x230); width >= 300, h... |
+| 0x0064BE80 | 3459 | CQuestLogWin::Build | vt 0x7411BC slot 25: render state 0x18 saved into +0x1EC and set to 1; texts "obj_%d" 0..2 into +0x1D8; owned CTextListWin (0x3C,0xBE)-(0x180,0x1FE) line height 10 = the objective text; +0x1BC CScrollBar (0x3C,0x1E)-(0x180,0x96) s... |
+| 0x0064CC10 | 3412 | CQuestLogWin::ShowMap | (map name) rebuilds the window for one zone: +0x184 = name; removes the elements / quads / buttons beyond the fixed ones (2 / 0x15 / 9); zone record +0x14 = the map picture figure added as element 2, drawn as quad 3 centred at (58... |
+| 0x00655D40 | 2301 | CSaveLoadWin::ScanSaves | rebuilds the slot vector +0x164 (0x44-byte SaveSlotRecord): every directory "<root>saves\save*": folder name -> +4; its "info.sav" (CFileFind; missing -> error flag +0x40 = 1, label "Error Save") read with Stream_CheckHeader4(0x11... |
+| 0x006462A0 | 2205 | CHudUnitInfoPanel::Draw | vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo... |
+| 0x006456E0 | 2201 | CHudUnitInfoPanel::Build | 2.2 KB: the sliding unit info panel: tab buttons (w_info1-4 tooltips), "in25arrow" art, body-part colour markers ("#iFF" codes), "infounit_%d" texts, "hl_skull" / "hl_torso" / "hl_leg" / "hl_arm" labels into +0x1B8.., InitGrid / I... |
+| 0x00647040 | 1949 | CHudUnitInfoPanel::DrawStats | 1.9 KB: "%s %d/%d" HP / mana, "move_%d" stance speeds (CUnit::GetStanceSpeed, GetAttackModeSpeed), "dmg_%d", damage list (UIItemInfoWin::FormatDamageList), skills (UnitStats_WeightedSkills7), level, "consider_more%d" / "consider_l... |
+| 0x006548A0 | 1835 | CSaveLoadWin::OnKeyDown | vt 0x741354 slot 9: ignored while sliding; DispatchSlot9; Enter = OnConfirm, Esc = cancel (close 0x100001), PgUp / PgDn +-16 slots, Up / Down +-1 (select.wav, ClampSelection); unhandled keys in save mode (+0x178): editing of the s... |
+| 0x0064DC60 | 1742 | CQuestLogWin::FillObjectives | when the selected quest +0x1A0 changed (+0x1A4): g_0x7C8178 = id; builds the objective text for the CTextListWin: the quest text "quest <id>": after the title the description (ReadUntilHash) in colour "\aC..." + "\n \n", the rewar... |
+| 0x006567A0 | 1635 | CSaveLoadWin::RefreshSaveList | redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime "%d/%m, %... |
+| 0x00653DD0 | 1629 | CSaveLoadWin::Build | vt 0x741388 slot 25: rect (0,0)-(800,600) (+0xE4 written as the bytes 0x58 0x02 0x00 0x00); art "saveload" + 256x256 scratch figure; quads 0 / 1 / 2 = load-or-save / cancel / delete button art (163..237 / 563..637 / 363..437 x 526... |
+| 0x006503C0 | 1291 | COptionsScreen::Build | vt 0x741FAC slot 25: full-screen (0,0)-(800,600); art "saveload" + a 256x256 scratch surface figure; quads 0 / 1 = OK / cancel button art (213..287 / 513..587 x 526..574), buttons 0 OK (0xD5,0x20E)-(0x11F,0x23E) tip 0x111D4, 1 can... |
+| 0x006570E0 | 1228 | CSaveLoadWin::QuickSave | static (ecx = slot folder name "saveq" / "savea" / "saveb", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMess... |
+| 0x00650E40 | 1221 | COptionsScreen::OnKeyDown | vt 0x741F78 slot 9 (vk, char, scancode): ignored while sliding; DispatchSlot9; waiting for a key (+0x3F4): Esc cancels; the scancode & 0x1FF looked up in the key-name table g_0x7857B0 (88 x 0x48: +0 scancode, +4 name, +8 CString) ... |
 
 ## 0x65F000 - 0x664000: CParty (hero records 0x784 bytes with four item arrays: equipped / B / inventory / spells, party items, named variables, map name), HeroRecord save reader, PartyStore (*.mp folder), PartySlot::SaveToFile, RichEdit credits scroller
 
@@ -1419,7 +1419,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0067B1C0 | 463 | CEffectArrow::dtor | destroys the sound name, the three embedded sub-effects and the delta streams |
 | 0x006795C0 | 456 | CEffectParticle::Update | slot 6: +0x17C = -1; moving (+0xA4): advances toward the target point +0x16C by /velocity/ (not past it), z follows the terrain delta; the one-shot types (0x2002, 0x2006, 0x200B..0x200F, 0x2018, 0x201B..0x2026, 0x2030..0x2033, 0x2... |
 | 0x0067AAB0 | 439 | CEffectArrow::ComputeFlightVector | -> 0 when arrived: velocity +0x98 = target unit (+0x150, world vt[40] FindObjectById) centre (pos + offset +0x130 + half height +0x14C) - pos, normalised to 0.667 m/tick (1.333 for the CEffectArrowFigure kind 0x5B); shorter than o... |
-| 0x006797E0 | 435 | CEffectWall::ctor | CEffectParticle fields + vt_CEffectWall (0x18C, kind 0x5A): +0x180 wall direction vec3 (half extent), +0x18C? ; used for the fire wall (0x2010), the lightning wall and the link beam (0x2014) |
+| 0x006797E0 | 435 | CEffectWall::ctor | CEffectParticle fields + vt_CEffectWall (size 0x18C, kind 0x5A): scale / intensity / radius = 1, +0x16C / +0x170 / +0x158 = 0, attach unit id -1, source unit id -1, +0x174 = 0, wall direction vec3 +0x180 = 0 (half extent); used fo... |
 
 ## 0x683000 - 0x68C000: CSpell / CSpellContainer / CSpellConstructor / CSpellManager
 
@@ -1450,7 +1450,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x0068E640 | 681 | CMaterialManager::Init | slot 2: CBaseManager::Init; opens '<data>materials.res' (vt[16]); for every (kind, file name) pair of the table 0x743BF8..0x743C37: the material file (vt[19]: u16 name length + name + 17 dwords: diffuse rgb, alpha, ambient rgb, sp... |
 | 0x0068EC20 | 580 | DwordVector_Reserve_68EC20 | vector<uint>::reserve(n) |
-| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | (atten, in rgb, normal, L unit, d, out): k = 1 - d^2 * (+0x104); k < 0 -> out = in; w = N.L <= 0 ? N.L + 1 : 1 ('wrap'); out_c = min(1, in_c + w * k * atten * colour_c); the terrain point-light term (TerrainSector_LightVertexDynam... |
+| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | (atten, in rgb, normal, L unit, d, out): k = 1 - d^2 * (+0x104); k < 0 -> out = in; w = N.L + 1 when N.L <= 0 else 1 ('wrap'); out_c = min(1, in_c + w * k * atten * colour_c); the terrain point-light term (TerrainSector_LightVerte... |
 | 0x0068C680 | 362 | StlString_Reserve_68C680 | basic_string grow/reserve with length_error check ("basic_string") |
 | 0x0068DE30 | 347 | CMaterial::~CMaterial_body | vt_CMaterial: pops all deque elements, frees nodes and map, CStrings released, CObject base dtor 0x455930 |
 | 0x0068CB90 | 327 | PartialSort_Bytes | std::partial_sort for chars (heap select) |
@@ -1502,7 +1502,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006A8C50 | 715 | WeaponProtoVector_InsertN | vector<WeaponProto>::insert(pos, n, value) |
 | 0x006A9830 | 713 | QuestProtoVector_InsertN | vector<QuestProto>::insert(pos, n, value) |
 | 0x006A90B0 | 693 | ArmorProtoVector_InsertN | vector<ArmorProto>::insert(pos, n, value) |
-| 0x006AD900 | 674 | Briefing::SerializeFields | (this = Briefing 0x6c, archive): tag 0 string +0, 1/2 +0xc/+0x10, 3 string list +0x14, 4 string +0x5c, 5..9 tagged CString lists +0x20/+0x2c/+0x38/+0x44/+0x50, 10 +0x68 |
+| 0x006AD900 | 674 | Briefing::SerializeFields | (this = quests.qdb briefing record 0x6c, archive): tag 0 name +0, 1 exp +0xc, 2 money +0x10, 3 give items +0x14, 4 string +0x5c, 5 remove items +0x20, 6 give quests +0x2c, 7 complete quests +0x38, 8 available zones +0x44, 9 comple... |
 | 0x006A9B00 | 663 | LootProtoVector_InsertN | vector<LootProto>::insert(pos, n, value) |
 
 ## 0x6AE000 - 0x6B4000: quests database (quests.qdb)
@@ -1511,16 +1511,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006AE8E0 | 3042 | QuestsDb_ParseIni | (path): builds a QuestsDb from an ini: [quest] name, exp, money, zone_index, order, questplaces "{x;y}" list (float pairs); [briefing_receive]/[briefing_reject]/[briefing_complete] name, exp, money, give_items, remove_items, give_... |
+| 0x006AE8E0 | 3042 | QuestsDb::ParseQuestReg | (this = QuestsDb (ECX), text) -> 1: parses a zone's quest.reg (CFileRegistry::Attach on the CTextManager buffer): [quest] name, exp, money, zone index, order, questplaces "{x;y}" pairs -> a Quest appended to +0 (name map rebuilt);... |
 | 0x006B27E0 | 958 | BriefingVector_InsertN | vector<Briefing>::insert(pos, n, value) |
-| 0x006AE3A0 | 923 | QuestsDb::Load | (this, res path): CMappedResource ("database.res"/"databases.res"), reads "quests.qdb" into a CMemStream, tagged archive: tag 1 Quest table (+0), tag 2 Briefing table (+0x20); fills both name maps; FatalError "Can't open quests da... |
+| 0x006AE3A0 | 923 | QuestsDb::Load | (this = g_0x7C87A8, res dir): opens <dir>database.res (always; "databases.res" only in the error text), reads "quests.qdb" into a CMemStream, tagged archive version 1: tag 1 = the quest block -> vector +0 (Quest::SerializeFields 0... |
 | 0x006B39E0 | 727 | Briefing_CopyRange | copy-assign a range of Briefing (0x6c) records forward |
 | 0x006B2450 | 679 | QuestVector_InsertN | vector<Quest>::insert(pos, n, value) |
 | 0x006B3E60 | 662 | Briefing::operator_assign | copy-assign Briefing (0x6c) |
 | 0x006B02B0 | 609 | CStringVector_Reserve | vector<CString>::reserve(n) (8 callers) |
 | 0x006B2BA0 | 569 | Briefing_CopyRange2 | copy-assign a range of Briefing (0x6c) records forward (variant) |
-| 0x006AFCF0 | 560 | QuestMap_Rehash | (this = quest name map, minBuckets): grow buckets to the next prime and re-link the nodes |
-| 0x006AFFC0 | 560 | BriefingMap_Rehash | (this = briefing name map, minBuckets): grow buckets to the next prime and re-link the nodes |
+| 0x006AFCF0 | 560 | QuestMap_Rehash | (this = quest name map g_0x7C87B4, minBuckets): grow buckets to the next prime and re-link the nodes |
+| 0x006AFFC0 | 560 | BriefingMap_Rehash | (this = briefing name map g_0x7C87D4, minBuckets): grow buckets to the next prime and re-link the nodes |
 | 0x006B1CB0 | 553 | Briefing::CopyCtor | copy-construct Briefing (0x6c) |
 | 0x006B1480 | 524 | BriefingVector_InsertRealloc | vector<Briefing>::insert with reallocation |
 | 0x006B0EF0 | 523 | QuestVector_InsertRealloc | vector<Quest>::insert with reallocation |
@@ -1535,16 +1535,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer, 0x882 with water) from the packed vertices +0x18: normal +0x2B/+0x2F/+0x33 from the packed dword d (nx = ((d >> 11 & 0x7FF) - 1000) / 1000, ny = ((d & 0x7FF) - 1000)... |
 | 0x006BFF40 | 5051 | TerrainSector_Draw | (sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertice... |
 | 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTextureSq, mapStem, terrain) -> bool: reads '<stem>%3.3i%3.3i.sec' (reader vt[5]); header dword magic 0xCF4BF774 + byte flags (bit 0 water layer -> +0x10, bits 0-1 -> +0x14); payload ... |
-| 0x006B89F0 | 1737 | CSoundManager::LoadSoundGroup | 1.7 KB: build the list of ".mp3" files for a sound group (std::string ops, resource lookups) and register it in the hash tables |
-| 0x006B4710 | 1584 | CMusicSystem::Init | slot 2 Init() -> bool (root layout) |
-| 0x006B9B10 | 1501 | CSoundManager::Update | per-frame sound update (1.5 KB): end finished channels (SoundChannel::End), update 3D voices, random ambience (Isaac_Generate), counters in the sound record table |
-| 0x006BB3A0 | 1266 | CMusicSystem::StartStream | 1.3 KB: open the music resource (CResourceBase::OpenFile), read its "Markers1"/"Markers2" float arrays, set volume and fade, start playback |
-| 0x006B8250 | 938 | CSoundManager::PlaySound3D | play a sound with 3D parameters (938 bytes): channel pick (FindChannelSlot), group load (LoadSoundGroup), random variant (Isaac_Generate), id map insert (IdHashMap_FindOrInsert) |
-| 0x006B5350 | 875 | CMusicSystem::v6 | slot 6 (root layout; default returns 0) |
-| 0x006B8600 | 849 | CSoundManager::PlaySound | play a sound by name/id: look up the group (0x6B7D10), random variant (Isaac_Generate), find a free channel, set volume/3D (UpdateChannel3D) and start the AIL sample; returns the channel id or -1; 19 callers |
-| 0x006B6D80 | 722 | CSoundManager::Done | slot 3 Done() (root layout) |
+| 0x006B89F0 | 1737 | CSoundManager::LoadSample | (channel, index, name, decompressMp3) -> bool: the sample cache: map +0x870 (name -> cache node) hit: the node moves to the list head +0x858 (LRU list +0x854, tail +0x85c), tick = GetTickCount, refcount ++, AIL_set_named_sample_fi... |
+| 0x006B4710 | 1584 | CMusicSystem::Init | slot 2: reads "<g_0x7AF45C>music.reg" (CFileRegistry; FatalError "CMusicSystem::Create(): Unable to..."): [Common] Credits -> +0x30, MainMenu -> +0x34; every other section = a zone: two 0x38 MusicZoneRecords appended to the CArray... |
+| 0x006B9B10 | 1501 | CSoundManager::Update | per frame (CWorldClient::Update): (1) channels flagged done by the EOS callback (+0x30) and loaded: cache refcount--, AIL_end_sample, id -1; (2) for every unloaded channel the pending record with the highest priority (+0x18 of the... |
+| 0x006BB3A0 | 1266 | CSoundManager::MusicFillBuffer | (block +0x100): the stream feeder called by MusicThreadProc for every AIL buffer: state 2 (switching) at the switch position -> opens the pending track +0x164 through CResourceBase::OpenFile(+0x24, path +0x58 + name) (size +0x1a4)... |
+| 0x006B8250 | 938 | CSoundManager::Play2D | (name, priority, volume percent, pan -100..100, loop, heightAttenuate, category (0 effects / 1 voice), variant) -> sound id or -1: FindChannelSlot(priority) (no channel and loop -> a pending record in +0x884 keyed by a new id +0x2... |
+| 0x006B5350 | 875 | CMusicSystem::Update | slot 6: zone mode logic: current = MusicGetCurrentTrack; a forced track (+0x50) ends -> +0x50 = 0, +0x40 = 0, next calm time +0x54 = now + 120 s + rand 60 s; combat = (g_0x7AFC9C == 2): entering combat picks a random Combat track ... |
+| 0x006B8600 | 849 | CSoundManager::Play3D | (name, priority, float[3] pos, min range, max range, loop, category) -> sound id or -1: FindChannelSlot(priority) (none and loop -> pending record); channel pos +0x3c.., ranges +0x48 / +0x4c, +0x34 is2D = 0, +0x38 = 0, UpdateChann... |
+| 0x006B6D80 | 722 | CSoundManager::Done | slot 3: stops the music / sequence threads (+0x248 flag, WaitForSingleObject), releases the AIL samples, frees the sample cache, clears the pending map and the sound archive list, AIL_waveOutClose, +0x898 = 0 |
 | 0x006BFC80 | 695 | TerrainSector_TransformVertices | (sector, ctx) -> +0x60: for every quarter with +0x144[q] != 2: its 17 x 17 vertices (step 1 / 2 / 4 at LOD 0 / 1 / 2 (+0x170); the water layer (+0x441) too when +0x10) are copied from +0x180 into g_0x7C88F8 (16 bytes each) and pro... |
-| 0x006B7D10 | 682 | CSoundManager::FindChannelSlot | choose a channel entry for a new sound (0x54-byte entries at +0x24C): first free entry or the lowest-priority/most distant one to steal (min key 0x7FFFFFFF); registers the group in the hash maps |
+| 0x006B7D10 | 682 | CSoundManager::FindChannelSlot | (priority) -> channel index or -1: picks the channel with the lowest priority +0x1c (free ones have priority 0 / none); -1 when the new priority <= that; a stolen looping channel (+0x24) is saved as a 0x48 pending record {name, +0... |
 | 0x006BF5F0 | 674 | TerrainSector_ctor | (sector 0x394 bytes): bounds +0x28 (flags, centre +0x2C, min +0x38, max +0x44) and the 4 quarter bounds +0x64 (0x38 each) zeroed, water material list +0x15C (CByteArray), vertex positions +0x180, vertex records +0x194 (CArray vt 0... |
 
 ## 0x6C3000 - 0x6CC000: CTerrain: Load (.mp header, materials, tile types, textures + lightmap pages, UV tables), sector LRU cache (GetSector), per-vertex sun / dynamic lighting with shadow ray tracing, water waves + animated tiles, rendering passes, lights link lists, height / material queries, ray to ground, ambient sounds, modified-sector writer

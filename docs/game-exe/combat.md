@@ -247,7 +247,7 @@ spells), `UnitStats_ApplyHit` with the attacker's equipped weapon:
 
 ```
 for each type i:  eff_i = max(0, dmg * f_i - hit[10] * placementArmor_i (+0x24 + 8i) * diff)   # diff = 0x7C54A0[difficulty] for monsters, 1 for player units
-                  absorbed (dmg*f_i - eff_i) wears the attacker's weapon: Placement_Damage(weapon, 0x24 low / 0x26 broken)
+                  absorbed (dmg*f_i - eff_i) wears the attacker's weapon: Placement_Damage(weapon, msgBroken 0x24, msgLow 0x26; armor uses 0x23 / 0x25)
                   f_i := eff_i / dmg
 total <= 0 -> absorbed, nothing happens.  location != 6 -> ApplyDamage(part)   location 6 -> split over the live parts by rate/maxHP
 ApplyDamage(part = +0x110 + loc*0xF4):   state < 2 -> nothing

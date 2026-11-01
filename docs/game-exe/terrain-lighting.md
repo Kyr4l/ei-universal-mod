@@ -520,7 +520,7 @@ highest vertex of the covered box (1-cell margin, clamped to the map), `ReserveF
 (`Triangle_ClipByPlane5` 0x4D6E90 Sutherland-Hodgman on `x y z u v`, `ClipVertex_Interpolate5` 0x4D7140); `ClipBuf::AddVertex`
 0x4D6C50 stores x / y / z in SoA blocks of 4 (`x[4] y[4] z[4] pad[4]`), `(u, v)` in the second array, indices as a running counter
 (no sharing); `Finish` trims the counts and detaches the arrays. The same functions build the unit / object shadow receivers
-(`CObject3DClientSpecific::Render` 0x51CE60); the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code.
+(`CObject3DClientSpecific::RenderShadow` 0x51CE60, renderer.md); the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code.
 `CBitmapDib` (0x48, vt 0x744288) is the BMP / DIB helper of the BMP texture path and the screenshot code (`LoadFile` 0x6D4D40 maps a
 `.bmp`, `LoadStream` 0x6D5910, `LoadMmpMipLevel` 0x6D5BF0 decodes one DXT1..5 mip of an MMP into a 16-bit 565 DIB, `FromSurface` 0x6D6D40,
 `WriteBmp` 0x6D5AC0).

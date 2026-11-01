@@ -213,6 +213,8 @@
 
 ---
 
+> **2026-11-01, from the engine ([game-exe/script-vm.md](game-exe/script-vm.md)):** there is no `else`; an undeclared name in an object / group position is compile error 7 (no implicit groups or named-object lookup); wrong script-call argument counts are compile errors 5 / 6; identifiers must not begin with any command or keyword name (`Sleepy` is cut into `Sleep` `y`); `/* */` comments and `#define` exist; number literals keep fractions. um.dll's MOB_VALIDATION should follow these rules.
+
 ## Script validation (`MOB_VALIDATION` in um.dll)
 
 With `MOB_VALIDATION=true`, `um.dll` checks each `.mob` file's mission script (the encrypted `SS_TEXT` node, dumped as `.eis` by `um-multitool mobdump`) when the game opens the file, and writes the findings to `um.log` as `[MOBCHECK]` lines. Line numbers count lines of the script text, so they match the dumped `.eis` file. Only maps inside the folder of the mod that contains `um.dll` are checked; other mods' maps and the base game's, which the game also opens, are left alone.

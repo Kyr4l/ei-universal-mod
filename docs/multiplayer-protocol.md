@@ -1,5 +1,7 @@
 # Evil Islands multiplayer protocol (game.exe, Russian 1.06 build)
 
+> **2026-11-01:** the transport and lobby below the in-game protocol (packet header, handshake, reliability, the 220-byte update budget, the 17 lobby message kinds, file transfer, ChunkFile / LZ / delta codec) are in [game-exe/net-transport.md](game-exe/net-transport.md); its section 7 lists where this page is wrong (type 3 = get-info, kinds 4 / 11-14 / 16 / 17, resend timing, the re-accept rule).
+
 > **2026-10-27:** the in-game protocol (every opcode in both directions, payloads, sender and handler addresses) is now in [game-exe/world-client-players.md](game-exe/world-client-players.md); where this page disagrees (0x00 / 0x04 / 0x05 / 0x0B / 0x42 / 0x43 meanings, 0x34 / 0x35 targets, 0x10 = pause), that page is right.
 
 
