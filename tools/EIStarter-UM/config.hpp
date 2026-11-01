@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// The launcher's settings, kept in EIStarter-UM.cfg beside the program (no registry): the chosen mod, the language, the starter options of
-// EIStarter (ModSkins, UsingINIconfigs, ExeName), the addon.dll options of its Options dialog, and the game's own settings
-// ([Game: ...] sections, gamesettings.hpp). A first start imports what EIStarter left: starter.config and the registry.
+// The launcher's settings, kept in EIStarter-UM.cfg beside the program: the chosen mod, the language, the starter options of EIStarter
+// (ModSkins, UsingINIconfigs, ExeName) and the addon.dll options of its Options dialog. The game's own settings (gamesettings.hpp) are read
+// from the registry, where the game keeps them; EIStarter-UM-reg.cfg is their backup. A first start imports what EIStarter left.
 #pragma once
 
 #include <filesystem>
@@ -41,6 +41,7 @@ struct LauncherConfig {
     bool borderlessScale = false;  // with borderless: the window covers the monitor and the game picture is scaled up to it (black bars keep the aspect ratio)
     AddonOptions addon;
     GameSettings game;
+    GameSettings gameBase;         // not saved: the game settings as last read from / written to the registry (Play writes what differs)
     bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
     bool cameraCheck = true;       // at start: offer the original camera when the camera values differ from the CD release's ("Don't show again" turns it off)
     bool cameraRestored = false;   // not saved: the Options window restored the original camera (the launcher then writes it to the registry and keeps a backup)
@@ -51,6 +52,7 @@ struct LauncherConfig {
 };
 
 inline std::string ConfigPath(const fs::path& dir) { return (dir / "EIStarter-UM.cfg").string(); }
+inline std::string RegBackupPath(const fs::path& dir) { return (dir / "EIStarter-UM-reg.cfg").string(); }
 
 inline AddonOptions ReadAddonRegistry() {
     AddonOptions a;
@@ -68,6 +70,7 @@ inline AddonOptions ReadAddonRegistry() {
 inline LauncherConfig LoadConfig(const fs::path& dir) {
     LauncherConfig c;
     IniFile ini;
+    GameSettings legacy;   // the [Game: ...] sections EIStarter-UM.cfg had before 0.2.9
     if (ini.Load(ConfigPath(dir))) {
         c.mod = ini.Get("Launcher", "Mod");
         c.language = ini.Get("Launcher", "Language", "en");
@@ -93,7 +96,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         a.mpConsole = ini.GetBool("Addon", "MPConsole", true);
         a.logLevel = ini.GetInt("Addon", "LogLevel", 1);
         a.consoleLogLevel = ini.GetInt("Addon", "ConsoleLogLevel", 1);
-        c.game.Load(ini);
+        legacy.Load(ini);
     } else {
         c.firstRun = true;
         IniFile old; // EIStarter's starter.config: ModSel=Mods\<mod>\config.reg
@@ -109,10 +112,12 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         }
         c.addon = ReadAddonRegistry();
     }
-    if (c.game.Empty()) { // first run (or an empty file): the clone EIStarter made, else Nival's key, else a fresh installation's values
-        c.game.ImportRegistry(kNivalKey);   // Nival's values first, the clone's (EIStarter's own settings) on top
-        c.game.ImportRegistry(kCloneKey);
-    }
+    std::error_code ec;
+    if (!legacy.Empty() && !fs::exists(RegBackupPath(dir), ec)) legacy.SaveFile(RegBackupPath(dir)); // moved out of EIStarter-UM.cfg: kept as the backup
+    // The game settings: the clone (what the game saved at its last exit) over Nival's key; no clone (a new Wine prefix): the backup, the old
+    // [Game: ...] sections, Nival's key; then a fresh installation's values for anything missing. Play writes what differs from the clone.
+    if (c.gameBase.ImportRegistry(kCloneKey)) { c.game.ImportRegistry(kNivalKey); c.game.Overlay(c.gameBase); }
+    else if (!c.game.LoadFile(RegBackupPath(dir))) { if (!legacy.Empty()) c.game = legacy; else c.game.ImportRegistry(kNivalKey); }
     c.game.FillDefaults();
     if (c.firstRun) {
         c.game.SetBool("general settings", "FPSIndependentCursor", false); // flickers with D7VK: off unless chosen
@@ -153,8 +158,7 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Addon", "MPConsole", a.mpConsole);
     ini.SetInt("Addon", "LogLevel", a.logLevel);
     ini.SetInt("Addon", "ConsoleLogLevel", a.consoleLogLevel);
-    c.game.Save(ini);
-    return ini.Save(ConfigPath(dir), {"EIStarter-UM settings. The [Game: ...] sections are the game's own options (written to the registry when the game starts)."});
+    return ini.Save(ConfigPath(dir), {"EIStarter-UM settings. The game's own options live in the registry; EIStarter-UM-reg.cfg is their backup (Options > Utils)."});
 }
 
 } // namespace launcher

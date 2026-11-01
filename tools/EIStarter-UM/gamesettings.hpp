@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // The game's own settings (what the original Options dialog of EIStarter edited): graphics, shadows, terrain, camera, paths. The game reads
-// them from the registry (HKCU\Software\Gipat.Ru\EI_Starter\EvilIslands, a clone of Nival's key that addon.dll points game.exe at); the
-// launcher keeps them in its config file instead and writes them to the registry when the game starts (regsync.hpp).
-// In the config file each registry sub key is a section "[Game: <key>]" with lines `name=dword:N`, `name=float:X`, `name=string:TEXT` or
+// them from the registry (HKCU\Software\Gipat.Ru\EI_Starter\EvilIslands, a clone of Nival's key that addon.dll points game.exe at) and write
+// them back there at their exit (the game's own Options menu). The registry is where they live: the launcher reads them at start, writes
+// what it changed at Play (regsync.hpp), and keeps a backup in EIStarter-UM-reg.cfg only when asked (Options > Utils: Pull / Push).
+// In the backup file each registry sub key is a section "[Game: <key>]" with lines `name=dword:N`, `name=float:X`, `name=string:TEXT` or
 // `name=hex:aa,bb,...`.
 #pragma once
 
@@ -142,7 +143,25 @@ public:
         }
     }
 
-    // [Game: <key>] sections of the config file.
+    // The values that differ from `base` or are missing there (what the launcher changed since it read the registry).
+    GameSettings ChangedFrom(const GameSettings& base) const {
+        GameSettings out;
+        for (const Item& i : items_) { const winreg::Value* b = base.Find(i.key, i.name); if (!b || !SameValue(*b, i.value)) out.items_.push_back(i); }
+        return out;
+    }
+    void Overlay(const GameSettings& o) { for (const Item& i : o.items_) Set(i.key, i.name, i.value); }
+
+    // The backup file (EIStarter-UM-reg.cfg): only [Game: <key>] sections.
+    bool SaveFile(const std::string& path) const {
+        IniFile ini; Save(ini);
+        return ini.Save(path, {"EIStarter-UM: a backup of the game's settings (HKCU\\Software\\Gipat.Ru\\EI_Starter\\EvilIslands). Options > Utils: Pull writes it, Push reads it."});
+    }
+    bool LoadFile(const std::string& path) {
+        IniFile ini; if (!ini.Load(path)) return false;
+        Load(ini); return !Empty();
+    }
+
+    // [Game: <key>] sections of a config file.
     void Save(IniFile& ini) const {
         for (const Item& i : items_) ini.Set("Game: " + i.key, i.name, Encode(i.value));
     }

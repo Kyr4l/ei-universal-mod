@@ -35,7 +35,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.8";
+static constexpr const char* kVersion = "0.2.9";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -204,7 +204,7 @@ struct App {
         std::ofstream f((dir / "EIStarter-UM-camera-backup.txt").string(), std::ios::app);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         char t[32]; std::strftime(t, sizeof t, "%Y-%m-%d %H:%M:%S", std::localtime(&now));
-        f << "; " << t << ": the camera values the launcher replaced by the original CD release's. To go back, put these lines under [Game: Camera Settings] in EIStarter-UM.cfg.\n";
+        f << "; " << t << ": the camera values the launcher replaced by the original CD release's. To go back, put these lines under [Game: Camera Settings] in EIStarter-UM-reg.cfg, then Options > Utils > Push to registry.\n";
         for (const std::string& l : g.CameraLines()) f << l << "\n";
         f << "\n";
     }
@@ -280,6 +280,7 @@ struct App {
         if (!platform::Running(proc, code)) {
             failure = "The game exited (code " + std::to_string(code) + "). See addon.log.";
             Log(failure);
+            if (RefreshGameSettings(cfg)) Log("game settings read back from the registry (the game saves them at its exit)");
             phase = phase == Phase::Starting ? Phase::Failed : Phase::Idle;
             return;
         }
@@ -522,6 +523,17 @@ static void DrawMain(App& app, GLFWwindow* window) {
             if (reloadMods) app.ReloadMods();
             if (reskin || reloadMods) app.ApplySkin();
             app.Save();
+        }
+        // Utils > Pull / Push: the registry's game settings to / from EIStarter-UM-reg.cfg.
+        const OptionsWindow::Request req = app.options.TakeRequest();
+        if (req != OptionsWindow::Request::None) {
+            const bool pull = req == OptionsWindow::Request::Pull;
+            const std::string file = RegBackupPath(app.dir);
+            const int n = pull ? PullGameSettings(app.cfg, file) : PushGameSettings(app.cfg, file);
+            const std::string note = n < 0 ? (pull ? "Pull failed." : "Push failed: the file is missing or empty.")
+                                           : (pull ? "Pulled " : "Pushed ") + std::to_string(n) + " values.";
+            app.Log(std::string(pull ? "pull: registry -> " : "push: registry <- ") + file + ": " + (n < 0 ? std::string("failed") : std::to_string(n) + " values"));
+            app.options.Done(app.cfg, note, n >= 0);
         }
     }
 
@@ -853,6 +865,7 @@ int main(int argc, char** argv) {
 
     app.Log("loading the settings");
     app.cfg = LoadConfig(app.dir);
+    app.options.SetBackupFile(RegBackupPath(app.dir));
     if (!app.cfg.displayFix.empty()) app.Log("imported display settings fixed: " + app.cfg.displayFix);
     app.languages = EnumerateLanguages(app.dir);
     if (!app.languages.empty() && std::find(app.languages.begin(), app.languages.end(), app.cfg.language) == app.languages.end()) app.cfg.language = app.languages[0];

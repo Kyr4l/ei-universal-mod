@@ -56,7 +56,8 @@ Play = start `Engine\<ExeName>` (`game.exe`) with `Engine\` as the working direc
   `Engine\*.asi` files, and points game.exe's registry root from `Software\Nival Interactive\EvilIslands` to `Software\Gipat.Ru\EI_Starter\EvilIslands`.
   It only READS the registry. Its patches (MP console, second speed, MQ client, draw radii, pause on minimize) are switched by values of `EI_Starter\settings`.
 - Without the `EvilIslands` clone game.exe stops right after choosing the renderer.
-- game.exe does not write the registry while it runs.
+- game.exe does not write the registry while it runs, but at its exit it writes its settings back (`AppSettings::WriteToRegistry` 0x45C560 on `WM_QUIT`,
+  through the same root string `g_0x7AF450` it read them from, so into the clone): what its own Options menu changed.
 
 Registry written by the launcher at Play from `EIStarter-UM.cfg` (HKCU, `regsync.hpp`):
 
@@ -64,11 +65,14 @@ Registry written by the launcher at Play from `EIStarter-UM.cfg` (HKCU, `regsync
 | --- | --- |
 | `Software\Gipat.Ru\EI_Starter` | `path` = the launcher's folder |
 | `...\EI_Starter\settings` | `AddonPath`, `LandscapeDrawRadius`, `ObjectsDrawRadius` (only when set), `PauseOnMinimize`, `MP Speed-control`, `MQ client`, `MP console`, `LogLevel`, `ConsoleLogLevel`, `Xoptions Active=1`, `ModesFiltration=0` |
-| `...\EI_Starter\EvilIslands\*` | the game's own settings: made from Nival's key (`Software\Nival Interactive\EvilIslands`) when missing, else from the built-in defaults of a fresh installation (`game_defaults.hpp`), then every value of the `[Game: ...]` sections of `EIStarter-UM.cfg` |
+| `...\EI_Starter\EvilIslands\*` | the game's own settings: only the values the launcher changed (Options, path repairs, values a fresh installation has that are missing); a missing key is made from Nival's key (`Software\Nival Interactive\EvilIslands`) and gets every value |
 | `Software\Wine\DllOverrides` | only under Wine: `dinput` (and `ddraw` when `Engine\ddraw.dll` exists) = `native,builtin` (current Wine prefers a DLL beside the exe anyway; older versions do not) |
 
-`EIStarter-UM.cfg` is the source of truth: the registry is rewritten from it at every Play, so a deleted Wine prefix loses nothing. The first start fills
-it from what EIStarter left (the clone, then Nival's key). The `[Game: <key>]` sections hold `name=dword:N`, `name=float:X`, `name=string:TEXT` or `name=hex:..`.
+The game's settings live in the registry (the clone), where the game keeps them: the launcher reads them at start and after the game exits, and Play writes
+only what the launcher changed, so what the game's Options menu changed stays (#92). `EIStarter-UM-reg.cfg` is a backup the user controls, in Options > Utils:
+**Pull from registry** (registry -> file) and **Push to registry** (file -> registry, with a Replace? Yes / No step). Without a clone (a new Wine prefix) the
+launcher starts from that file, else from Nival's key, else from a fresh installation's values. Its `[Game: <key>]` sections hold `name=dword:N`,
+`name=float:X`, `name=string:TEXT` or `name=hex:..`.
 
 ## Borderless window
 
@@ -143,9 +147,9 @@ New window mode **Borderless scaled** in Options > Video (see "Borderless scaled
 
 The GOG release of the game writes camera settings (`HKCU\Software\Nival Interactive\EvilIslands\Camera Settings`) that make a bad camera. The launcher knows the 62 camera values of the original CD release (`game_defaults.hpp`, read from a CD installation's registry):
 
-* **At start** it compares the camera values it will give the game (its `[Game: Camera Settings]` section, imported from the registry at the first start) with them. When any differ, a window lists them (the value's name, yours and the original) and offers to replace them with the original ones (**Replace** / **Keep mine**, and a **Don't show again** checkbox that sets `CameraCheck=false` in `EIStarter-UM.cfg`). The old EIStarter changes some as well: its own `Gipat.Ru\EI_Starter\EvilIslands` key has the keyboard camera powers at 0.44 (original 0.46), the four camera shortcuts' axes turned (AxisX 1 / AxisZ 0 instead of 0 / 1) and `FarClipDistance` 200 (original 100), 13 values in all, which the launcher imports at its first start. The log (`EIStarter-UM.log`) lists the differing values too; in Options > Camera, hover "N values differ" for the same list.
+* **At start** it compares the camera values it will give the game (read from the registry) with them. When any differ, a window lists them (the value's name, yours and the original) and offers to replace them with the original ones (**Replace** / **Keep mine**, and a **Don't show again** checkbox that sets `CameraCheck=false` in `EIStarter-UM.cfg`). The old EIStarter changes some as well: its own `Gipat.Ru\EI_Starter\EvilIslands` key has the keyboard camera powers at 0.44 (original 0.46), the four camera shortcuts' axes turned (AxisX 1 / AxisZ 0 instead of 0 / 1) and `FarClipDistance` 200 (original 100), 13 values in all, which the launcher imports at its first start. The log (`EIStarter-UM.log`) lists the differing values too; in Options > Camera, hover "N values differ" for the same list.
 * **Options > Camera > Original camera** does the same on demand (applied with OK; Cancel changes nothing); the tab says how many values differ.
-* Replacing writes the original values into the launcher's settings and into the registry: Nival's key (what the game reads without the launcher) and the clone `HKCU\Software\Gipat.Ru\EI_Starter\EvilIslands` (what addon.dll points the game at). The values it replaced are appended to `EIStarter-UM-camera-backup.txt` (one block per replacement, `name=value` lines in the cfg's format, to paste back under `[Game: Camera Settings]`).
+* Replacing writes the original values into the launcher's settings and into the registry: Nival's key (what the game reads without the launcher) and the clone `HKCU\Software\Gipat.Ru\EI_Starter\EvilIslands` (what addon.dll points the game at). The values it replaced are appended to `EIStarter-UM-camera-backup.txt` (one block per replacement, `name=value` lines in the cfg's format, to paste back under `[Game: Camera Settings]` of `EIStarter-UM-reg.cfg`, then Push).
 * Only the "Camera Settings" key is touched (including the clip distances `FarClipDistance` / `NearClipDistance`, 100 / 2 in the CD release); graphics and the other settings stay as they are.
 
 Russian texts of the new window and button are built in (`lang.hpp`, used when the language is `ru` and the language's `lang.ini` has no such key). Tested in the launcher rig (a Wine prefix with GOG-like values in Nival's key): popup with the right count, Replace (registry, cfg and backup written), no second popup, Keep + Don't show again, the Options button with OK and with Cancel.
@@ -162,3 +166,16 @@ message. 1920x1080 fixed it.
   says so (`imported display settings fixed: ...`).
 * Later, a stored size the screen does not offer (a hand-made one for a window, say) is kept but marked in Options > Video: "(not offered by this screen)" and a red (!) with a
   tooltip.
+
+## 0.2.9 (2026-11-01): the game's settings stay in the registry (#92)
+
+Options changed in the game were lost at the next Play: the game saves its settings into the clone at its exit, and the launcher rewrote the whole clone
+from `EIStarter-UM.cfg` at every Play.
+
+* The game settings are read from the registry at start and when the game exits (the launcher left open); Play writes only what the launcher changed.
+* `EIStarter-UM.cfg` holds the launcher's own settings only. Its `[Game: ...]` sections (0.2.8 and older) move to `EIStarter-UM-reg.cfg` at the first start;
+  the clone's values win when it exists.
+* Options > Utils > **Pull from registry** / **Push to registry**: the backup, by hand.
+
+Tested: `make test` (registry stand-in: the game's change survives start and Play, a change made in the launcher while the game ran stays on top, Pull / Push,
+a new prefix, the move of the old sections) and the launcher rig (Utils tab, Pull 148 values, Push with its confirm step).

@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     CHECK(fr.Get("options", "CBBTEXTURES__1") == "normale");
     // config round trip + registry sync (the stand-in registry on Linux)
     fs::path tmp = fs::temp_directory_path() / "EIStarter-UM-test"; fs::create_directories(tmp);
-    fs::remove(tmp / "EIStarter-UM.cfg");
+    fs::remove(tmp / "EIStarter-UM.cfg"); fs::remove(tmp / "EIStarter-UM-reg.cfg");
     {
         std::ofstream(tmp / "starter.config") << "[Settings]\nModSel=Mods\\Universal-Mod\\config.reg\nlanguage=fr\nModSkins=True\nUsingINIconfigs=False\nExeName=game.exe\n";
         LauncherConfig c = LoadConfig(tmp);
@@ -45,7 +45,9 @@ int main(int argc, char** argv) {
         c.game.SetString("Path Settings", "Work Path", "C:\\Evil Islands\\");
         c.addon.landscapeDrawRadius = 250; c.addon.mpConsole = true; c.addon.mpSpeedControl = false;
         CHECK(SaveConfig(tmp, c));
-        LauncherConfig d = LoadConfig(tmp);
+        CHECK(ReadTextFile(ConfigPath(tmp)).find("[Game: ") == std::string::npos);    // the game settings are not in EIStarter-UM.cfg any more
+        CHECK(SyncRegistry(c, "/x/EIStarter", "Universal-Mod").ok);                   // no clone yet: made, every value written
+        LauncherConfig d = LoadConfig(tmp);                                            // read back from the registry
         CHECK(!d.firstRun); CHECK(d.mod == "Universal-Mod"); CHECK(d.addon.landscapeDrawRadius == 250 && d.addon.mpConsole && !d.addon.mpSpeedControl);   // a saved choice is kept
         CHECK(d.game.GetBool("general settings", "fullscreen"));
         CHECK(d.game.GetFloat("terrain settings", "LOD1") == 90.f);
@@ -57,6 +59,41 @@ int main(int argc, char** argv) {
         CHECK(winreg::GetString(kAddonKey, "AddonPath", p) && p.find("Universal-Mod") != std::string::npos);
         winreg::Value v; CHECK(winreg::Get(kAddonKey, "LandscapeDrawRadius", v) && v.dword == 250);
         CHECK(winreg::Get(std::string(kCloneKey) + "\\terrain settings", "LOD1", v) && v.bytes.size() == 4);
+        // #92: what the game saves at its exit (its own Options menu) survives the next start and Play
+        winreg::Set(std::string(kCloneKey) + "\\general settings", "VideoResolution", winreg::Value::String("1024x768"));
+        LauncherConfig e = LoadConfig(tmp);
+        CHECK(e.game.GetString("general settings", "videoresolution") == "1024x768");
+        e.game.SetBool("general settings", "dithering", false);                       // changed in the launcher's Options
+        CHECK(CommitGameSettings(e) == 1);                                             // Play writes only that
+        CHECK(winreg::Get(std::string(kCloneKey) + "\\general settings", "Dithering", v) && v.dword == 0);
+        CHECK(winreg::GetString(std::string(kCloneKey) + "\\general settings", "VideoResolution", p) && p == "1024x768");
+        // the launcher stays open: the game exits with a new value, an Options change not written yet stays on top
+        e.game.SetInt("general settings", "filtering", 1);
+        winreg::Set(std::string(kCloneKey) + "\\general settings", "TextureQuality", winreg::Value::Dword(2));
+        CHECK(RefreshGameSettings(e));
+        CHECK(e.game.GetInt("general settings", "texturequality") == 2 && e.game.GetInt("general settings", "filtering") == 1);
+        CHECK(CommitGameSettings(e) == 1);
+        // Pull / Push
+        const std::string bak = RegBackupPath(tmp);
+        const int pulled = PullGameSettings(e, bak);
+        CHECK(pulled > 100 && pulled == static_cast<int>(e.game.Items().size()));
+        winreg::Set(std::string(kCloneKey) + "\\general settings", "TextureQuality", winreg::Value::Dword(1));
+        CHECK(PushGameSettings(e, bak) == pulled);
+        CHECK(winreg::Get(std::string(kCloneKey) + "\\general settings", "TextureQuality", v) && v.dword == 2 && e.game.GetInt("general settings", "texturequality") == 2);
+        CHECK(e.game.ChangedFrom(e.gameBase).Empty());
+        CHECK(PushGameSettings(e, (tmp / "none.cfg").string()) == -1);
+        // a new Wine prefix (no clone): the backup is used, Play makes the clone again
+        winreg::DeleteTree(kCloneKey);
+        LauncherConfig f = LoadConfig(tmp);
+        CHECK(f.game.GetInt("general settings", "texturequality") == 2 && f.gameBase.Empty());
+        CHECK(CommitGameSettings(f) == f.game.Items().size());
+        // a cfg of 0.2.8 and older: its [Game: ...] sections move to EIStarter-UM-reg.cfg (the clone, when there is one, wins)
+        fs::remove(bak);
+        std::ofstream(ConfigPath(tmp), std::ios::app) << "\n[Game: general settings]\nTextureQuality=dword:1\n";
+        LauncherConfig g = LoadConfig(tmp);
+        CHECK(fs::exists(bak) && g.game.GetInt("general settings", "texturequality") == 2);
+        GameSettings moved; CHECK(moved.LoadFile(bak) && moved.GetInt("general settings", "texturequality") == 1);
+        CHECK(SaveConfig(tmp, g) && ReadTextFile(ConfigPath(tmp)).find("[Game: ") == std::string::npos);
     }
     // path settings: a path without its closing backslash gets one (the game appends "3DfpFPU.dll" to it), usable paths are kept, a relative GOG path is replaced
     {
@@ -99,7 +136,6 @@ int main(int argc, char** argv) {
         CHECK(SaveConfig(tmp, c));
         LauncherConfig d = LoadConfig(tmp);
         CHECK(!d.cameraCheck); CHECK(!d.cameraRestored);                              // cameraRestored is not saved
-        CHECK(d.game.CameraDifferences().empty());
     }
     // SetCfgLine
     {

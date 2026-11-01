@@ -4,7 +4,8 @@
 // run "Init Starter Registry.bat" or add the `path` value by hand:
 //   EI_Starter\path            the launcher's folder (Engine\dinput.dll looks for addon.dll there)
 //   EI_Starter\settings        AddonPath (the chosen mod's folder) and the addon.dll options
-//   EI_Starter\EvilIslands     the game's settings (the clone of Nival's key that addon.dll points game.exe at)
+//   EI_Starter\EvilIslands     the game's settings (the clone of Nival's key that addon.dll points game.exe at): only what the launcher changed,
+//                              because the game writes them back at its exit; Pull / Push copy them to and from EIStarter-UM-reg.cfg
 #pragma once
 
 #include <filesystem>
@@ -76,7 +77,49 @@ inline bool NormalizePaths(GameSettings& g) {
 
 struct SyncResult { bool ok = true; std::string error; };
 
-inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launcherDir, const std::string& modFolder, void (*log)(const std::string&) = nullptr) {
+// Writes the game settings the launcher changed since it read the clone (Options, path repairs, values a fresh installation has); a missing
+// clone is made from Nival's key and gets every value. Returns how many values were written.
+inline size_t CommitGameSettings(LauncherConfig& cfg, void (*log)(const std::string&) = nullptr) {
+    if (!winreg::KeyExists(kCloneKey)) {
+        if (winreg::KeyExists(kNivalKey)) winreg::CopyTree(kNivalKey, kCloneKey);
+        cfg.gameBase = GameSettings();
+    }
+    const GameSettings changed = cfg.game.ChangedFrom(cfg.gameBase);
+    changed.ApplyToRegistry(kCloneKey, log);
+    cfg.gameBase = cfg.game;
+    return changed.Items().size();
+}
+
+// After the game exits: what it saved (its own Options menu) replaces the values in memory; changes the launcher has not written yet stay on top.
+inline bool RefreshGameSettings(LauncherConfig& cfg) {
+    GameSettings fresh;
+    if (!fresh.ImportRegistry(kCloneKey)) return false;
+    const GameSettings pending = cfg.game.ChangedFrom(cfg.gameBase);
+    cfg.game = fresh; cfg.game.Overlay(pending);
+    cfg.gameBase = fresh;
+    return true;
+}
+
+// Pull: the game settings of the registry (with the launcher's unwritten changes written first) into the backup file. Returns the count, -1 on failure.
+inline int PullGameSettings(LauncherConfig& cfg, const std::string& file) {
+    CommitGameSettings(cfg);
+    GameSettings reg;
+    if (!reg.ImportRegistry(kCloneKey) || !reg.SaveFile(file)) return -1;
+    return static_cast<int>(reg.Items().size());
+}
+// Push: the backup file's values into the registry; the settings in memory become the registry's. Returns the count, -1 when the file is missing or empty.
+inline int PushGameSettings(LauncherConfig& cfg, const std::string& file) {
+    GameSettings f;
+    if (!f.LoadFile(file)) return -1;
+    if (!winreg::KeyExists(kCloneKey) && winreg::KeyExists(kNivalKey)) winreg::CopyTree(kNivalKey, kCloneKey);
+    f.ApplyToRegistry(kCloneKey);
+    GameSettings reg; reg.ImportRegistry(kCloneKey);
+    cfg.game = reg; cfg.game.FillDefaults();
+    cfg.gameBase = reg;
+    return static_cast<int>(f.Items().size());
+}
+
+inline SyncResult SyncRegistry(LauncherConfig& cfg, const fs::path& launcherDir, const std::string& modFolder, void (*log)(const std::string&) = nullptr) {
     SyncResult r;
     const std::string dir = WinPath(launcherDir.string());
     if (!winreg::Set(kStarterKey, "path", winreg::Value::String(dir))) { r.ok = false; r.error = "cannot write the registry (HKCU\\" + std::string(kStarterKey) + ")"; return r; }
@@ -109,9 +152,9 @@ inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launch
         if (fs::exists(launcherDir / "Engine" / "ddraw.dll", ec)) winreg::Set("Software\\Wine\\DllOverrides", "ddraw", winreg::Value::String("native,builtin"));
     }
 
-    // The game's own settings, over the clone (created from Nival's key when it does not exist yet).
-    if (!winreg::KeyExists(kCloneKey) && winreg::KeyExists(kNivalKey)) winreg::CopyTree(kNivalKey, kCloneKey);
-    cfg.game.ApplyToRegistry(kCloneKey, log);
+    // The game's own settings: what the launcher changed (the clone is created from Nival's key when it does not exist yet).
+    const size_t n = CommitGameSettings(cfg, log);
+    if (log) log("HKCU\\" + std::string(kCloneKey) + ": " + std::to_string(n) + " values written");
     return r;
 }
 

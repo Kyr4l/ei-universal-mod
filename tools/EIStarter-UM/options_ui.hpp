@@ -24,6 +24,7 @@ public:
         modMsaa_ = !modCfg.empty() && LowerAscii(GetCfgLine(modCfg, "MSAA")) == "true";
         modBorderless_ = !modCfg.empty() && !GetCfgLine(modCfg, "BORDERLESS").empty();
         open_ = true; requestTab_ = pathsTab ? 4 : 0; hint_ = hint;
+        note_.clear(); pushArmed_ = false;
         adapters_ = platform::Adapters();
         resolutions_ = offered_ = platform::Resolutions();
         const std::string cur = edit_.game.GetString("general settings", "videoresolution");
@@ -32,6 +33,16 @@ public:
         if (!have) resolutions_.insert(resolutions_.begin(), cur);
     }
     bool IsOpen() const { return open_; }
+    void SetBackupFile(const std::string& path) { backupFile_ = path; }
+
+    // Utils > Pull / Push: done by the caller (main.cpp, regsync.hpp), which then calls Done.
+    enum class Request { None, Pull, Push };
+    Request TakeRequest() { const Request r = request_; request_ = Request::None; return r; }
+    // After a pull or a push: the game settings now in memory (a push replaces them) and the line shown under the buttons.
+    void Done(const LauncherConfig& cfg, const std::string& note, bool ok) {
+        edit_.game = cfg.game; edit_.gameBase = cfg.gameBase;
+        note_ = note; noteOk_ = ok;
+    }
 
     enum class Result { None, Ok, Cancel };
     // Draws the window (inside an ImGui frame); on OK `out` receives the edited configuration.
@@ -308,6 +319,26 @@ private:
         ImGui::Checkbox("Close when the game is up", &edit_.closeOnStart);
         ImGui::Checkbox("Debug log", &edit_.debugLog);
         ImGui::Checkbox("Check for mod updates at start", &edit_.checkUpdatesAtStart);
+        // The game's settings live in the registry (the game saves its Options menu there at its exit); EIStarter-UM-reg.cfg is a backup.
+        ImGui::Separator();
+        ImGui::TextDisabled("Game settings backup");
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("The game keeps its settings in the registry.\nEIStarter-UM-reg.cfg holds a copy.");
+        if (ImGui::Button("Pull from registry")) { request_ = Request::Pull; pushArmed_ = false; }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Registry -> EIStarter-UM-reg.cfg");
+        ImGui::SameLine();
+        std::error_code ec;
+        const bool haveFile = !backupFile_.empty() && fs::exists(backupFile_, ec);
+        if (!pushArmed_) {
+            ImGui::BeginDisabled(!haveFile);
+            if (ImGui::Button("Push to registry")) { pushArmed_ = true; note_.clear(); }
+            ImGui::EndDisabled();
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip(haveFile ? "EIStarter-UM-reg.cfg -> registry\nReplaces the game's current settings." : "No EIStarter-UM-reg.cfg yet: Pull first.");
+        } else {
+            ImGui::AlignTextToFramePadding(); ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "Replace?");
+            ImGui::SameLine(); if (ImGui::Button("Yes##push")) { request_ = Request::Push; pushArmed_ = false; }
+            ImGui::SameLine(); if (ImGui::Button("No##push")) pushArmed_ = false;
+        }
+        if (!note_.empty()) ImGui::TextColored(noteOk_ ? ImVec4(0.5f, 0.85f, 0.5f, 1) : ImVec4(1, 0.5f, 0.4f, 1), "%s", note_.c_str());
     }
 
     bool modMsaa_ = false, modBorderless_ = false;
@@ -316,6 +347,9 @@ private:
     bool open_ = false;
     int requestTab_ = -1;
     std::string hint_;
+    std::string backupFile_, note_;
+    bool noteOk_ = true, pushArmed_ = false;
+    Request request_ = Request::None;
     std::vector<std::string> adapters_, resolutions_, offered_;   // offered_: the screen's 32-bit modes (resolutions_ may add the stored one)
 };
 
