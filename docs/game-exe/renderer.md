@@ -388,7 +388,13 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 - ~~CStateBlockSet slot 6~~ settled [V]: `GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 copy the records OUT of the registry (getters; guess sweep 2026-11-01).
 - `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3); their bodies are left for the deep-read step (FINISH-PLAN T5).
 - The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.
-- `CMapObject +0x178` (1.0) and `+0x1A8` (a CString) are guesses. [?]
+- ~~CMapObject +0x178 / +0x1A8~~ settled [V]: `+0x178` is the **animation playback rate** (`animRate`):
+  `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
+  `CUnitClientSpecific::ReplayMove` 0x535850 sets it from the distance moved this frame divided by the clip's stride (clip
+  `+0x24`, scaled by the height complection), so the walk cycle matches the ground speed (`CUnit::AnimDurationFor` when the clip
+  has no stride, 1.0 otherwise). `+0x1A8` is the object's **prototype / object name** CString: `Read` / `Write` serialise it,
+  `CreateObjectFromDesc` and `Unit_ApplyPrototype` look the prototype up by it, `CWorldClient::SetNamedObjectState` 0x565380
+  matches script object names against it.
 
 ## 7. Corrections to earlier notes
 
