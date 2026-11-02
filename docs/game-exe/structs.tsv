@@ -4019,3 +4019,8 @@ CCampScreen2			0x210	pointer	currentVoices	&+0x1f8 or &+0x204 by the hero's gend
 CCampScreen2			0x214	int	voiceScroll	first visible voice row (11-row window)
 CCampScreen2			0x218	int	voiceSelected	selected voice row (OnLButtonDown rows 9..0x13 of mode 10; Up / Down keys); StartGame copies that set's '%s*.mp3' files
 CCampScreen2			0x21c	int	voiceChannel	UI_PlaySound handle of the voice sample LoadSlotSounds plays (a random sample of the hero's voice set from the sound registry g_0x7AF364); stopped and set to -1 before the next
+EffectRecord		0x1c	0x0	pointer	vtable	vt 0x73D880 (base EffectRecord_Base 0x73D888); refcounted render effect built by CStateBlockSet::RegisterEffect (generic sweep A 2026-11-01)
+EffectRecord			0x4	int	refcount	
+EffectRecord			0x8	pointer[3]	passes	std::vector<EffectPassRecord 0x28> begin / end / capacity
+EffectRecord			0x14	int	passCount	
+EffectRecord			0x18	int	effectId	returned by slot 1 GetEffectId
