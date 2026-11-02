@@ -163,7 +163,7 @@ order cleared and `CancelAction(0)`; otherwise `ExecuteCombatOrder` 0x54D960:
    0x54D140 (chase; pathfinding.md 5.5) and return.
 2. stance: spells of humanoids while crawling -> wanted 1, any other order -> wanted 2; `ApplyPendingStance` running -> `+0x18E = 1`, return.
 3. big living target (size >= 1.5) in melee -> message 0xC, order dropped.
-4. attack period: an attack whose strike tick `+0xDC` would be before `+0x184` (next-attack tick) chases instead; otherwise
+4. attack period: an attack whose start tick `+0xDC` would be before `+0x184` (next-attack tick) chases instead; otherwise
    `+0x184 = max(+0x184, now + AttackAnimDuration)` with `AttackAnimDuration` 0x54B9C0 = `round(weaponProto +0x6C * 15 / actionSpeed +0x210)` ticks.
 5. spells: `CanAffordSpell` 0x54BF80 (mana `placement +0x34 >= cost +0x40 * 25/int`; quick items of subtype 5: charge `+0x28 >= cost`) else
    messages 0xF / 0x11.
@@ -175,12 +175,17 @@ order cleared and `CancelAction(0)`; otherwise `ExecuteCombatOrder` 0x54D960:
 
 ### 3.3 The action record (`CUnitServer +0xC4 .. +0x104`) and the strike
 
-`PlanActionApproach` builds it: an anim queue (the action clips with their durations, `+0xD8` start tick), `+0xDC strike tick`,
-`+0xE0 end tick = start + duration`, `+0xE4 face target id`, `+0xE8 reach^2` (default 1e38), `+0xEC` hit effect flag, `+0xF0` hit location,
-`+0xF4` called shot, `+0xF8` damage kind, `+0xFC` direction. It tries ticks `t = 0 .. round(pi / turnRate) + 3`: the target's predicted position
-`vt[52](now + D + t)` must be within reach (moving targets: `(reach + 0.5)^2`, or `(0.5 * targetSpeed * (window/2 + D) + reach + 0.5)^2`
-when it approaches), the bearing within 0.01 rad of our facing (else one tick per radian), and `CanCastAt` 0x54C2F0 (spells: line of sight,
-monsters' max cast range). Reach = `OrderReachDistance` 0x54C070: attacks on a unit = own radius + target radius + max(weapon range / natural
+`PlanActionApproach` 0x54CA40 builds it [V, deep-read 2026-11-03]: `+0xC4..+0xDB` the action clips as an AnimQueue (`+0xD8` = that queue's own
+start-tick field, copied from the clip builder), **`+0xDC` the tick the action starts** (in reach and facing; corrected: not the strike),
+`+0xE0 end tick = start + duration D` (the hit is applied at the end, section 4), `+0xE4 face target id` (-1 for points and for point-cast
+spells), `+0xE8 reach^2` (default 1e38), `+0xEC` spell flag (1 for kinds 4 / 5), `+0xF0` hit location, `+0xF4` called shot (order location
+!= 6), `+0xF8` damage kind (8 none; spell 0x28 -> 1, 0x29 -> 0, else proto +0x14), `+0xFC` direction. D: attacks `ChooseAttackAnim`, spells
+`round(castActions x 15 / actionSpeed)` (`CSpell +0x4C`), others `BuildActionAnimQueue`; at least 1. An exact-position order (`+0x18`) out of
+reach fails at once. It tries ticks `t = 0 .. round(pi / turnRate) + 3`: the target's predicted position `vt[52](now + D + t + lead)` must be
+within reach (moving targets: `(reach + 0.5)^2`, or `(0.5 * targetSpeed * (window/2 + D) + reach + 0.5)^2` when it approaches); **lead** = the
+flight time of a point-cast spell (flag 0x20000000) with a projectile speed (`+0x30`), so casts at a moving unit aim ahead; the bearing within
+0.01 rad of our facing (else wait the turn time) unless the target is ourselves; and `CanCastAt` 0x54C2F0 at `now + t + D` (spells: line of
+sight, monsters' max cast range). The search stops early once the target moves away beyond the loose reach. Reach = `OrderReachDistance` 0x54C070: attacks on a unit = own radius + target radius + max(weapon range / natural
 range, 0.6 (0.2 between party members)); spells = the spell's range `+0x34` (10 without); talk = own radius + 0.3 * target radius.
 
 `TickAction` 0x549160 (state 5): at `+0xDC` the record's clips become the current animation and, when `+0xEC` and `proto +0x114`, a
@@ -188,7 +193,7 @@ range, 0.6 (0.2 between party members)); spells = the spell's range `+0x34` (10 
 facing the target; at `+0xE0`: `CompleteOrder(+0xF0)` 0x549EC0, record reset, state 5 -> 3 (the recovery plays out), mover settled.
 `CompleteOrder`: 3 -> `FireAttack(target, +0x108)`; the order stays unless the part is dead (then location 6) — the next swing is planned at the
 next Think; 4/5 -> `CastOrderSpell` 0x54EE10; 6 -> `ExecuteInteraction` 0x54F000; 10 -> consume the quick item; 4..6/10 clear the order.
-`CancelAction` 0x549690 (was FinishDying): before the strike tick -> state 6; after it -> the recovery is spliced and state 3; called by
+`CancelAction` 0x549690 (was FinishDying): before the action start tick `+0xDC` -> state 6; after it -> the recovery is spliced and state 3; called by
 `TickState` (target out of reach: `TargetInRange` tests `|target - us|^2 < +0xE8` at the end tick), `TickCombatOrder` (order failed) and
 `Update` (a move order arrived while acting).
 

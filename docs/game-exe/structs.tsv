@@ -508,7 +508,7 @@ Order			0x18	byte	exact	position-locked: reach 0.2 / 1e10, no path validation
 Order			0x1c	int	extra	kind 1: 1 = report the result (message 1 / 0xe); 2: turn speed; 7/8: anim index
 Order			0x20	byte	run	stand up (stance 2) and run: UpdateStanceFlags sets the run flag
 ActionRecord		0x40	0x0	pointer	vtable	the current action (CUnitServer +0xc4): an anim queue {+4 entries, +8 count, +0xc cap, +0x10 grow, +0x14 start tick} plus the fields below
-ActionRecord			0x18	int	strikeTick	CUnitServer +0xdc: the strike animation starts here
+ActionRecord			0x18	int	startTick	CUnitServer +0xdc: the action (its clips) starts here: in reach and facing; CORRECTION: was strikeTick (the hit is applied at endTick +0xe0)
 ActionRecord			0x1c	int	endTick	+0xe0: CompleteOrder (hit / cast / interaction) happens here
 ActionRecord			0x20	int	faceTargetId	+0xe4: object id to face during the action (-1 = face +0xfc)
 ActionRecord			0x24	float	reachSq	+0xe8: the target must be within sqrt of this at the end (TargetInRange); 1e38 = no test

@@ -71,7 +71,7 @@ hearing with a 26-tick delay), every motivation's `Evaluate` (Guard / Patrol / S
 Fear 15000 / 3000, Player 10, Tamed 1e8), the winner's `Update`, then the order machine. Orders are a two-slot queue
 (queued +0x1B4 -> current +0x190, `DispatchQueuedOrder` 0x54A900) over seven states; a combat order plans the swing
 (`PlanActionApproach` 0x54CA40), rolls the hit at the swing start (`ComputeHitChance` 0x555BD0 on the defender) and applies it at
-the strike tick (`TakeHit` 0x553F40 -> `UnitStats_ApplyHit` 0x5254B0: seven damage types, per body part, armor tiers; the unit HP is
+the action end tick `+0xE0` (`TakeHit` 0x553F40 -> `UnitStats_ApplyHit` 0x5254B0: seven damage types, per body part, armor tiers; the unit HP is
 derived from the parts). Movement: `CAIMap::FindPath` 0x5BB350 is Dijkstra on 0.5 m tiles in a 32 x 32 window, with the `.mob`
 AIGRAPH for long hauls; units are stamped into byte grids, not looked up; the result is a `MoveRequest` turned into a Hermite
 `MoveCurve` that both sides evaluate per tick (`TickMovement` 0x547890 on the server, `ReplayMove` 0x535850 on the client). Stats
