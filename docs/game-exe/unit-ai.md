@@ -459,10 +459,13 @@ Evaluate 10 (Tamed 100000000: a tamed unit keeps this logic over any reaction). 
   within `FollowMaxDist x 1.4 + 1 = 6.6 m` (`Brain::AreFollowersClose(0)`) or the mode is 2; while walking it is cancelled with `NotifyPlayer(0x21)` when they fall
   behind 9 m again; arrival -> state 0. State 2 also runs `Regroup`.
 * **`Regroup`** (only when `+0x438 battleButton == 1`): keeps attacking `keptTarget +8` while `Brain::TryAttackTarget(direct)` allows (kind 3, `QueueOrderAttack(target,
-  6, 0, run)`); else candidates = `AiMemory::CollectAttackers` (seen enemies that are attacking, within `SwarmRadius` 10 of the move target in state 2, unlimited
-  otherwise) minus those farther than `1.1 x max(their sight range, their sense-life)`, plus `Brain::CollectCallers` (targets of same-player units attacking within
-  `PlayerCallForHelp` 16 m); `ChooseTarget(candidates, own pos, 0, 0)`; a target: unless mode 2, every follower of the party chain that is not attacking / casting is
-  stopped (its state 0, brain order cleared), then kind 3 + `QueueOrderAttack(target, 6, 0, run)`.
+  6, 0, msg)`); else candidates = `AiMemory::CollectAttackers` (seen enemies that are attacking, within `SwarmRadius` 10 of the move target in state 2, unlimited
+  otherwise) minus those farther than `1.1 x max(their sightMult x sight (+0x904 x +0x294), their sense-life +0x2A4)`, plus `Brain::CollectCallers` (targets of
+  same-player units attacking within `PlayerCallForHelp` 16 m); `ChooseTarget(candidates, own pos, 0, 0)` with the unit flag 0x4000000 set during the choice; a
+  target: unless mode 2, every follower of the party chain that is not attacking / casting is stopped (its state 0, brain order cleared), then, only when the
+  pair differs from the current order, kind 3 + `QueueOrderAttack(target, 6, 0, msg)`; the kept target is dropped.
+  [V, deep-read 2026-11-03] The kept target is used only while alive (`vt[55] == 0`); `msg` (4th argument) = -1 when the unit has a player and
+  `CanReachOrderTarget` accepts, else 0x1C (the "cannot reach" message the order reports if it fails).
 * `MoveTo`, `MoveToNow` 0x5D39E0, `AttackTarget` 0x5D3C30, `CastOn`, `CastAt`, `Interact`, `SetLeader` 0x5D3DE0 (no leader cycles) are the entry points of the
   player messages (`CPlayerServer::OnMsg_*`, `WorldServer::On*Order`); AI-owned units may only be ordered to attack units passing `IsFriendOrSeen`.
 Taming: `CUnitServer::OnProvoked` 0x551AE0 escalates `+0x908` per big hit from another player's unit: 1 = the tamer's side removed from `attackableMask` (stops
@@ -522,7 +525,7 @@ with the seen enemies; `Regroup` filter 0 with the attackers; `Fear` filter 1 di
 | `QueueOrderMoveTo(pos, flag, run, maxLen)` 0x554740 | every position move (brain kind 1 / 2); `TickFollow` uses `maxLen = 3 d + 10`, 10 or 20 | flag 0, run 0, 1e6 |
 | `QueueOrderTurnTo(dir[3], speed)` 0x5546B0 | `TickMoveOrder` (idle action turns), script `RotateTo` | queued order kind 2 |
 | `QueueOrderKindB()` 0x555200 | `TickMoveOrder` when the action's `playAnim` byte is set | order 0xb (idle animation) |
-| `QueueOrderAttack(target, 6, 0, run)` 0x554B30 | `Brain::OrderAttack` (Aggression, ApplyCastOrder), `Regroup`, `CastSupportSpell`; `run = -1` when `CanReachOrderTarget` (player units) else 0x1c; `AttackTarget` / `OrderAttackChecked` pass 2 | hit location 6 = any |
+| `QueueOrderAttack(target, 6, 0, msg)` 0x554B30 | `Brain::OrderAttack` (Aggression, ApplyCastOrder), `Regroup`, `CastSupportSpell`; `run = -1` when `CanReachOrderTarget` (player units) else 0x1c; `AttackTarget` / `OrderAttackChecked` pass 2 | hit location 6 = any |
 | `QueueCastOn(slot, target, 0)` 0x554F50 / `QueueCastAt(slot, pos, run)` 0x554D00 | Aggression, ApplyCastOrder, CastSupportSpell, the player casts | brain kind 4 unless `IsQuickItemId` |
 | `QueueOrderUseOn / Interact / Interact2 / Talk` | `Brain::OrderInteract` (player messages) | brain kind 5 |
 | `ClearQueuedOrder()` 0x555180 | brain kind 0, `TickFollow` when close | |
