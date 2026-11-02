@@ -29,8 +29,8 @@ mouse delta of the drag-look. The cursor is drawn in software (`CSoftCursor`).
 bytes: nine managers, clock, wind, water levels): `CWorldServer` g_0x7AFF60 simulates, `CWorldClient` g_0x7AF5B8 renders. In
 single player they talk through an in-memory `FileMsgStream` (`CWorldClient::AttachFileStream` 0x566CE0); the server treats it
 like a TCP peer. Each player is a `CPlayer` (0x134) plus a connection object: `CPlayerServer` (0x5128) on the server,
-`CPlayerClient` (0x50F8) on the client. Per server tick `ReplicateToPlayer` 0x58B750 sends every dynamic object within 100 m of the
-player's view point (msg 0x40 create / 0x41 delta / 0x42 remove), the effects (0x50 / 0x51 / 0x52) and the world state (0x70 rain,
+`CPlayerClient` (0x50F8) on the client. Per server tick `ReplicateToPlayer` 0x58B750 sends the non-unit objects within 100 m of the
+player's view point and the units the party can sense (msg 0x40 create / 0x41 delta / 0x42 remove), the effects (0x50 / 0x51 / 0x52) and the world state (0x70 rain,
 0x71 time, 0x72 wind, 0x73 water levels); orders go the other way as plain sub-messages (0x30 move, 0x31 attack, 0x32 / 0x33 cast,
 0x36 interact). The protocol is two LZ streams of sub-messages (25 client -> server and 41 server -> client opcodes); the lobby and the UDP / TCP
 transport under them are net-transport.md.
