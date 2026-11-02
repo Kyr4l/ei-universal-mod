@@ -295,7 +295,7 @@ state from the unit's creation (0x40) to decode absolute values; um-bot decodes 
 
 | field | size | meaning |
 |---|---|---|
-| 0 | 24 B (12 x i16) | [2] / [3] = health current / max for monsters (the host's values differ: **to map**) |
+| 0 | 24 B (12 x i16) | [1] HP, [2] max HP, [3] mana, [4] max mana, [5..11] armor per damage type (see the section table below) |
 | 1 | 12 B | the complexion (3 floats -> SetMorphParams); the old capture note "position while walking" is contradicted by the code (`CMapObject::ReadNetState` 0x50EC30) |
 | 2 | 1, 12, 16 | u8 flag, position vec3, rotation quaternion (the position is the one that changes while walking) |
 | 3 | 1 (n) + n x 5 | the buffs on the unit (kind, level, duration per entry) |
@@ -364,7 +364,7 @@ The sections (CMapObject::ReadNetState 0x50EC30, CUnit::ReadNetState 0x52EF90; t
 
 | section | size / content |
 |---|---|
-| 0 | 24 bytes: u16 ?, u16 hp max?, **i16 HP**, **i16 mana**, i16 mana max ... (hero HP 1569 / mana 1255 at creation; monsters send zeros here: their HP is not in the stream) |
+| 0 | 24 bytes = 12 x i16 (`Placement_FloatsToInt16` 0x522C50, the placement floats rounded): [0] not written, **[1] HP**, [2] max HP, **[3] mana**, [4] max mana, [5..11] the armor value of each of the 7 damage types (the old capture reading "u16 ?, hp max?, HP, mana" was shifted by one; hero HP 1569 / mana 1255 seen at creation) |
 | 1 | 12 bytes: the complexion again |
 | 2 | u8 flag, **f32 x, y, z** (z is not sent: 0 means "on the ground"), 16 bytes rotation quaternion |
 | 3 | u8 n, then n x 5 raw bytes: the effects (spells) on the unit |
