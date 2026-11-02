@@ -544,7 +544,7 @@ order is 1 / 2), `actionTimer -10000`: next action -> `QueueOrderTurnTo(cos/sin 
 `tick + duration`; wait; -10000 again; no action left -> order kind 0. A move that ended more than 1 m from the goal (blocked, `CUnitServer +0x18c`) drops the order.
 
 ### 8.3 Follow (`Brain::TickFollow` 0x5D6F90, brain kind 6; `AiLogicPlayer` leaders and `UMFollow`) [V]
-Every 8 ticks. Target moving (its order kind 1): predicted position 5 ticks ahead (vt[52] `GetPosAt`); when the unit is beyond `FollowMinDist` 2 of it and of its own
+Every 8 ticks (`+0x6C followTick`; after a move order toward a MOVING target the counter is set to 6, so the next check comes 2 ticks later [V, deep-read 2026-11-03]). Target moving (its order kind 1): predicted position 5 ticks ahead (vt[52] `GetPosAt`); when the unit is beyond `FollowMinDist` 2 of it and of its own
 goal: `QueueOrderMoveTo(predicted, 3 d + 10)` if the predicted point is more than `FollowMaxDist` 4 from the own goal; when near: the first tick 6..99 ahead at
 which the target passes within `sqrt(1.3)` m, then a spot 1.365 m beside the target's position 40 ticks ahead (perpendicular, on the unit's side),
 `CAIMap::FindPath(10)`: walk there (10) or to the predicted position (20). Target standing: walk to it (`3 d + 10`) when farther than `FollowMinDist` and it is
