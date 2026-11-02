@@ -256,6 +256,20 @@ sets the reverb); `CreateZoneExitEffects` 0x567500 (one particle 0x2038 per name
 re-queued (`CPlayerClient::AppendStream`); `PrebuildUnitSkinsAndModels` 0x568800 composes the heroes' skin textures ("<prefix>skin_NN.mmp" +
 armor / spell overlays -> "prot.dp" / "mo.dp" 256 and "prot.ds" / "mo.ds" 128) and assembles the figures; wind; `SendMsg09_Ready`.
 
+Skin composition in detail (`PrebuildUnitSkinsAndModels` 0x568800, deep read 2026-11-03 [V]). For every look record of the zone state
+(prototype index -> 0x120 `UnitProto` -> units-database row; the row's `+0xE8` is the texture prefix) with a non-empty armor id list,
+two layered textures are composed with `CTextureManager::ComposeAndSaveLayers` 0x693180 (format code 0x5551) and registered with
+`FindOrCreateByName`. Every layer name is `<prefix><Armor_FormatModelName(id >> 16, id & 0xFFFF)>.mmp`. The armor ids are
+`proto << 16 | material`, and -1 means an empty slot.
+- **primary** (`prot%dp`, or `mo%dp` when the record's `+0x1C` is not -1; 256 x 256, texture kind 1): the base skin
+  `<prefix>skin_00.mmp` (`skin_%.2d` when the record has a skin index), then armor slots 3..6 of the list, then slots 1 and 2. When
+  both of these are worn, the one whose armor row (200-byte table `g_0x7C8718`) has the smaller `+0xB8` is drawn first, so the other
+  one covers it.
+- **secondary** (`prot%ds` / `mo%ds`; 128 x 128, kind 2): armor slot 0, then the active weapon (record byte `+0x18` indexes the
+  weapon id list `+0xC`; `WeaponProto_FormatModelName` from the 0xB4 table `g_0x7C86F8` + material).
+`ComposeAndSaveLayers` also writes the result to `textures\<name>.mmp` (the skin cache). The second loop assembles the figures:
+`CUnitClientSpecific::BuildArmorModelNames` and the render manager's `vt[3]`.
+
 **Update** 0x5641F0 (slot 6, every frame) [V]: frame counter `+0x6ec` (10 = "autosave" command + volumes), terrain / music / sound / vis fog
 `vt[6]`, net pumps (`+0x5c`, `+0x1c8`, `CTcpNetDriver::SyncPeers(+0x60)`), the player: `PurgeSyncedItems`, connection `vt[23] Update` (0 ->
 `FatalError` "Disconnected"), `vt[6] SendClientState`; unpaused (`+0x6c == 0`): `+0x64 ++`, every visible object `vt[6]` (dropped when it
