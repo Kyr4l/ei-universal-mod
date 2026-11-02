@@ -8842,7 +8842,7 @@ addr	size	name	status	purpose
 0x005FDE20	378	CUIBlitSurface::DrawText	named	(text, rect in 800x600 (empty = whole surface; +2 px inset), DT format flags, colour BGR, shadow, font id): ::DrawText with the CInterface font, transparent background, a black shadow offset (1, 1) first when shadow; returns the format flags; 253 callers
 0x005FDFA0	838	CUIBlitSurface::DrawWrappedText	named	(text, rect*, maxLines, format, colour, lineHeight, shadow): word-wraps with CInterface::MeasureText (spaces / newlines) into at most maxLines lines drawn with DrawText lineHeight apart; returns the height used; 34 callers
 0x005FE2F0	128	CUIBlitSurface::FillBackground	named	fills the surface with the background colour +0x34 (CDC::FillSolidRect)
-0x005FE370	134	CUIBlitSurface::FillColor	guess	(colour): with a surface +0x? allocated: the DC +hdc wrapped (AfxInitHandleMaps_Dc) and CDC::FillSolidRect of the rect +rect moved to (0, 0); CTooltipControl::Redraw clears the tooltip background with it
+0x005FE370	134	CUIBlitSurface::FillColor	named	(colour): when the surface +0x10 exists: the DC of +0x8 (AfxInitHandleMaps_Dc) and CDC::FillSolidRect of the rect +0x24 moved to (0, 0): the whole surface filled with one colour
 0x005FE400	64	CUIBlitSurface::MoveTo	named	(x, y in 800x600): moves the rect keeping its size
 0x005FE440	699	CUIBlitSurface::ToGrayscale	named	converts every pixel to luminance (16-bit 565 / 555 and 32-bit) - the frozen background behind message boxes
 0x005FE700	498	CUIWidget::CUIWidget	named	(CInterface): base of every UI window (0x148 bytes, vt 0x740F60 25 slots, IUIEvents sub-object vt 0x740F2C at +0x94): CObject3D transform (+0x1C pos, +0x34 / +0x44 quaternions), +0x98 CInterface, +0x9C handled, +0xA0..+0xD4 zero, +0xD8 rect (800x600), +0xE8 enabled = 1, colour +0x34.. from g_0x7C7E58, +0xEC black and +0xF0 white materials of kind 0x16 (CMaterialManager g_0x7AF740; the quads use +0xEC), empty arrays: +0xF8 textures, +0x108 quad figures, +0x118 blit surfaces, +0x128 buttons, +0x138 figure holders; vt[19] Activate(1)
@@ -9125,7 +9125,7 @@ addr	size	name	status	purpose
 0x006129C0	810	CCampScreen::DeconstructItem	named	"item constructor confirm with a usable item in +0x1C0 (+0x212): clone it (+0x214), remove it, give the party +0x1C0 an ""Instruction Weapon"" / ""Instruction Armor"" / ""Instruction Quick Item"" loot item with +0x54 = item +0x18 >> 16 (proto row), one ""material.<name>"" loot item per proto Components +0x4C (material row = +0x18 & 0xFFFF into g_0x7C86D8, name +4) and, when the item has a spell +0x44, a ""spell container"" (0x3008, quick proto of g_0x7C8744) with a copy of it; releases +0x214. Was CCampItemConstr::Deconstruct"
 0x00612CF0	1776	CCampScreen::FillConstructorStock	named	"vt 0x74091C slot 39: fills the item-constructor merchant's stock parties (+0x1B4 items: every ""Instruction Weapon/Armor/Quick Item"" blueprint of ItemsDb_ListWeaponNames / Armor / Quick with +0x54 = row, ""Material"" items, and sample prototypes built through CItemConstructor; +0x1C8 spells: ""Prototype"" / ""Rune"" containers from SpellsDb_ListSpellNames / ListPerkNames, ""wand""); the cheat / editor stock, used when the merchant has no generated stock. Was CCampItemConstr::OnOpen"
 0x006133E0	24	InitFields4_6133E0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x00613400	213	CStringTripleVector_Destroy_613400	guess	STL: destroy N 12-byte {CString,CString,CString?} elements and free (12 callers)
+0x00613400	213	Records18_Destroy3CStrings	named	STL: destroys N 0x18-byte records (CStrings at +0, +4, +8) and frees the buffer (12 callers). Was CStringTripleVector_Destroy_613400
 0x006134F0	24	InitFields4_6134F0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
 0x00613510	89	PoolFreeVector_00613510	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
 0x00613580	77	PoolFreeVector_00613580	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
@@ -10855,9 +10855,9 @@ addr	size	name	status	purpose
 0x006896B0	18	SetFields2_4_6896B0	named	STL: hashtable iterator constructor {node, table}: stores the two arguments at +0 / +4
 0x006896D0	148	HashTable0C_Destroy2	named	hash table of 0xc nodes: free every node chain and the bucket vector
 0x00689770	148	HashTable0C_Destroy3	named	hash table of 0xc nodes: free every node chain and the bucket vector (variant)
-0x00689810	8	ClearField_8_689810	guess	STL?: zeroes the dword at +8 of the object; its only callers lie in the STLport tail at 0x7326xx (unread)
+0x00689810	8	Unwind_ClearField8_689810	named	local-object cleanup: zeroes the dword at +8 of the object; reached only from exception-unwind funclets (0x7326BB, 0x732783, 0x7327D3: jmp with ecx = a stack local) of the spell-manager functions around 0x6896D0. Was ClearField_8_689810
 0x00689820	81	HashIterator_Next	named	(iterator {node, table}): advances to the next node (following buckets); returns the node value +8 or 0
-0x00689880	8	ClearField_8_689880	guess	STL?: zeroes the dword at +8 of the object; its only callers lie in the STLport tail at 0x7326xx (unread)
+0x00689880	8	Unwind_ClearField8_689880	named	the same cleanup (zeroes +8), a second copy used by other unwind funclets of the same 0x7326xx region. Was ClearField_8_689880
 0x00689890	148	HashTable0C_Destroy4	named	hash table of 0xc nodes: free every node chain and the bucket vector (variant)
 0x00689950	277	StringValuePair_ctor3	named	"(this, string range*, value*): constructs {std::string key (throws ""basic_string""), value +0xc}"
 0x00689A70	57	DwordVector_FreeStorage4	named	vector<dword>: return the buffer to the size pool (variant)
@@ -11982,8 +11982,8 @@ addr	size	name	status	purpose
 0x006D0360	360	DatabaseSet_Destroy5	named	free the name tables with std::string nodes (PoolFree_N14, 0x6D1FC0) and hash buckets; 360 bytes
 0x006D04D0	337	CPrintsDb::ClearTables	named	frees the name tables (strings and records) and the hash buckets
 0x006D0630	1106	CPrintsDb::Load	named	(dataDir) -> bool: opens '<dir>database.res' (CMappedResource; FatalError 'Can't open database file' naming databases.res) and its 'prints.db' ('Can't open terrain prints database'); the Archive tags 1 / 2 / 3 (database-format.md blocks BloodPrints / FootPrints / FirePrints) fill the vectors +0 (0x28 records) / +0x20 (0x34) / +0x40 (0x28) and the name hash maps (+0xC, +0x2C, +0x4C: name -> record); called once from main 0x45707D; the records are looked up by terrain tile type name in CWorldClient::AddTerrainPrint 1 / 2 / 3
-0x006D0A90	202	StringVector_Destroy_6D0A90	guess	STL: destroy std::string elements (+4 stride 4?) of a vector and free
-0x006D0B70	193	RecordVector_Destroy_6D0B70	guess	STL: destroy elements of 0x14? records via 0x51E830 and free
+0x006D0A90	202	Records24_DestroyStrings	named	STL: destroys a vector of 0x24-byte records (a std::string at +4 each) and frees it. Was StringVector_Destroy_6D0A90
+0x006D0B70	193	Records34_DestroyStrings	named	STL: destroys a vector of 0x34-byte records (a std::string at +4 each; 0x51E830 is a no-op) and frees it. Was RecordVector_Destroy_6D0B70
 0x006D0C70	77	PoolFreeVector_006D0C70	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
 0x006D0CC0	303	HashTable_Ctor_006D0CC0	named	STLport hashtable constructor with initial bucket count (NextPrime, bucket vector)
 0x006D0DF0	57	PoolFreeVector_006D0DF0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
