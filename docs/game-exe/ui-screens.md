@@ -421,12 +421,15 @@ Backspace clears it.
 
 ## 14. What is not known
 
-- The tooltip text indices passed to `UIButton::SetTooltipById` (0x4E84.., 0x9CA4.., 0xEAC4.., 0x111D4.., 0x138E4.., 0x7594..)
-  are resolved by the framework; the mapping index -> text key is not read here [?].
+- ~~Tooltip id mapping~~ settled [V]: `UIButton::SetTooltipById` 0x5FC730 formats the id as the text key `tip %d` (decimal),
+  reads it with `CTextManager::OpenText` + `ReadUntilHash`, and stores a new `CTooltipControl` in button +0x30 (id 0 = empty
+  tooltip). So 0x4E84.. = `tip 20100`.., 0x7594.. = `tip 30100`.., 0x9CA4.. = `tip 40100`.., 0xEAC4.. = `tip 60100`..,
+  0x111D4.. = `tip 70100`.., 0x138E4.. = `tip 80100`...
 - ~~GetMagicTotals second output~~ settled [V] from the machine code (0x610020: `call UnitStats_MaxMana`, `fstps`, `call
   UnitStats_ManaCostFactor`, `fdivrs`, `_ftol`): `trunc(MaxMana / ManaCostFactor)` = max mana x intelligence / 25, a QUOTIENT (the
   earlier "product" inference was wrong).
-- `CTooltipControl` size (0x184 assumed), `CEditWin` size (0x17C assumed): their `operator new` sites are in the framework.
+- `CTooltipControl` size 0x184 confirmed [V] (`operator new(0x184)` in `UIButton::SetTooltipById`); `CEditWin` size 0x17C
+  confirmed [V] (`operator new(0x17c)` in `CCampScreen2::Build`, `CLobbyScreen::Build`, `CExchangeScreen::Build`).
 - Where the option globals are persisted (keyboard.ini is written by the framework's key-table code; the options ini writer was not found
   in these ranges).
 - `CSaveLoadWin::ScanSaves`: the number parsed from the folder names (the next "save<n>") and the info.sav version share one decompiler
