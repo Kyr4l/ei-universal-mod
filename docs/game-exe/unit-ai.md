@@ -28,11 +28,11 @@ The range 0x470000-0x474000 named in the brief holds no AI code (it is the 3DS s
    Tamed 1e8); the current one gets +100; the best becomes current (`End` on the old, `Begin` on the new) and its `Update` runs. The motivation set comes
    from the unit's `.mob` logic slot (`Brain::BuildFromLogicSlot` 0x5D6630: Model + AggrMode) or from script commands.
 4. **Targets**: `AiSpellInfos::ChooseTarget` 0x5D0030 scores every (spell or weapon) x (candidate) pair with `AiSpellInfo_Score` 0x5CF9A0 (damage minus the
-   target's absorption, minus 25 per metre out of range, minus 2 x the hits needed to kill) and keeps the best that is reachable
+   target's absorption, minus 25 per metre of distance for attacks (250 per metre beyond range for support spells), minus 2 x the hits needed to kill) and keeps the best that is reachable
    (`Brain::TryAttackTarget` = a path + `CanReachOrderTargetFrom`). Candidates: the seen enemies (`AiMemory::CollectHostiles`) for monsters, the
    units attacking the party for heroes (`CollectAttackers` + `CollectCallers`).
-5. **Outputs** are queued unit orders: `QueueOrderMoveTo(pos, 0, 0, 1e6)`, `QueueOrderTurnTo`, `QueueOrderAttack(target, 6, 0, run)`,
-   `QueueCastOn(slot, target, 0)`, `QueueOrderKindB` (idle animation), plus `CallForHelp` (a heard-sound record in every friend within the Help radius)
+5. **Outputs** are queued unit orders: `QueueOrderMoveTo(pos, 0, 0, 1e6)`, `QueueOrderTurnTo`, `QueueOrderAttack(target, 6, 0, msg)`,
+   `QueueCastOn(slot, target, 0)`, `QueueOrderSit` 0x555200 (sit; was QueueOrderKindB), plus `CallForHelp` (a heard-sound record in every friend within the Help radius)
    and the **alarm** (`CWorldServer::ActivateLogicSlot`: every AI unit switches to another `.mob` logic slot).
 6. **Relations** are two 32-bit masks per unit: `CUnit +0x244 alarmMask` (sides that are enemies: initial = the `.mob` diplomacy's forced row, grows
    when attacked / alarmed / `SetEnemy`) and `+0x248 attackableMask` (default all; taming clears bits); `IsPlayerInMask(me, other) = bit(other.side) & both`.
@@ -242,7 +242,7 @@ and any stationary one by a new stationary one: a unit has at most one post.
 | +0x44 | (none) | the alarm wait the brain uses (`+0x40 = max(1, this)`): 75 from `UnitLogic::ctor`, no chunk writes it, only saves restore it [V] |
 | +0x48 | 000E byte (0001 / 0008 / 0009 legacy bytes clamp it to 0 / 1 / 2) | AgressionMode: 0 standard, 1 revenge, 2 fearful, 3 player-fear |
 
-`Brain::BuildFromLogicSlot` (slot, index): Model 1 -> `AiLogicGuard(point, radius, -1)`; 2 -> `AiLogicPatrol` with every point snapped to a tile centre and
+`Brain::BuildFromLogicSlot` 0x5D6630 (slot, index) [V, verified 2026-11-03]: Model 1 -> `AiLogicGuard(point, radius, -1)`; 2 -> `AiLogicPatrol` with every point snapped to a tile centre and
 its look-at records turned into actions `{atan2(record - point), record+0x10, record+0xc, record+0x12}` (non-cyclic: the points appended again in reverse);
 3 -> `AiLogicSentry(point)`; 4 -> `AiLogicPlayer`; 5 -> `AiLogicGuard` at the alarm slot position `g_0x7AFFF4[index]` (`CWorldServer +0x94 + 0x10 index`).
 Models 0 and 4 get **no reaction logics**; otherwise AggrMode 0 -> Aggression(0) + Suspection + CorpseWatcher + Fear(0); 1 -> Aggression(revenge) +
