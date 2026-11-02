@@ -369,7 +369,9 @@ under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithP
 `(item, out name, out description, out category)`: builds a section key, finds it in the loaded text archives
 (`FindInArchives`), takes the section's line value as the **name** and the text up to `#` as the **description**; the
 **category** is the text of a fixed key (`GetString`). Every proto / material name in a key has its spaces replaced by `_` and is
-UPPERCASED. By item kind (`+0x10`):
+uppercased by the code; the section lookup ignores case, since the shipped texts are written `WEAPON Axe Adamantium`,
+`QITEM Large_Potion_1`, `ARMOR ...` (texts.res: 172 WEAPON, 548 armor, 41 QITEM, 200 INSTR, 105 LITEM, 33 MATERIAL, 24 MODIFIER,
+71 QUESTITEM, 31 SPELL sections). By item kind (`+0x10`):
 
 | kind | section key | category key |
 |---|---|---|
