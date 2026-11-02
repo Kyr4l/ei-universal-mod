@@ -485,7 +485,10 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 
 ## 6. What is not known
 
-- `UIQuadMesh::InitQuadUV` (0x5E99D0): the order of its 4 corner arguments and which uv pair the 4th corner reuses [?].
+- ~~InitQuadUV argument order~~ settled [V] (0x5E99D0): `(z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2)`: corner 0 is
+  the origin, corners 1 and 2 give the two edge vectors (`(x1 - x0) / scale`, `(x2 - x0) / scale`, stored at the mesh +0x1C0); the
+  uv table (+0x210) gets `u / 256, 1 - v / 256` for corners 0..2 in the same order, and the 4th corner's uv is set to (0, 0), not
+  derived; then every uv gets the half-texel inset (+1/512, -1/512).
 - `InitBorderStrips`: the 3rd / 4th strips are read as left / right by symmetry (only the first two vertex blocks were
   decoded) [I].
 - The console handler bodies (0x5DD920..0x5E0A10) are undefined code in this listing; their argument syntax is from strings.
