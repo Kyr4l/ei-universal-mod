@@ -396,9 +396,10 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
   `CUnitClientSpecific::ReplayMove` 0x535850 sets it from the distance moved this frame divided by the clip's stride (clip
   `+0x24`, scaled by the height complection), so the walk cycle matches the ground speed (`CUnit::AnimDurationFor` when the clip
-  has no stride, 1.0 otherwise). `+0x1A8` is the object's **prototype / object name** CString: `Read` / `Write` serialise it,
-  `CreateObjectFromDesc` and `Unit_ApplyPrototype` look the prototype up by it, `CWorldClient::SetNamedObjectState` 0x565380
-  matches script object names against it.
+  has no stride, 1.0 otherwise). `+0x1A8` is the object's **.mob name** CString (`objectName`; the
+  prototype comes separately from the descriptor): `CreateObjectFromDesc` sets it from `CObjectDesc +0x4c` through
+  `CMapObject_SetName` 0x50F150, a non-empty name registers the object in the named hash `+0x12dd0`, `Read` / `Write` serialise
+  it, `CWorldClient::SetNamedObjectState` 0x565380 matches script object names against it.
 
 ## 7. Corrections to earlier notes
 

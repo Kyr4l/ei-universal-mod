@@ -50,7 +50,7 @@ CMapObject			0x1dc	uint	netDirtyMask	bit 1 section 1 (morph), bit 3 section 3 (b
 CMapObject			0x178	float	animRate	animation playback rate: the client multiplies the animation dt by it in move mode (+0x25C == 2, CUnitClientSpecific::AdvanceTime 0x535B30); CUnitClientSpecific::ReplayMove 0x535850 sets it to 15 x moved distance x rate / (2 x clip +0x24 stride x the height-complection factor of the clip) so the walk cycle matches the ground speed, else CUnit::AnimDurationFor; 1.0 otherwise
 CMapObject			0x17c	byte[24]	placement	packed placement block +0x17C..+0x193 (net section 0): +0x17E HP short, +0x180 max HP, +0x182 mana (CUnit rows describe the unit view)
 CMapObject			0x1a4	int	buffGrow	CArray grow step of +0x198
-CMapObject			0x1a8	pointer	protoName	CString: the prototype / object name; Read / Write serialise it, CreateObjectFromDesc and Unit_ApplyPrototype look the prototype up by it, CWorldClient::SetNamedObjectState matches script names against it
+CMapObject			0x1a8	pointer	objectName	CString: the object's .mob name (CObjectDesc +0x4c, set by CMapObject_SetName 0x50F150 from CreateObjectFromDesc and the client OnMsg40_UnitCreate); non-empty = registered in the named hash CWorldServer +0x12dd0 and flag 0x20000; Read / Write serialise it; CWorldClient::SetNamedObjectState matches script names against it. CORRECTION: was protoName (the prototype comes from the descriptor, not this field)
 CMapObject			0x1ac	float[3]	baseMorphParams	the complection at spawn (ResetMorphParams restores +0xC4 from it)
 CMapObject			0x1c0	int	dirtyTime	world time of the last MarkNetDirty
 CMapObject			0x1c4	byte[24]	netSections	DeltaCodecSet (vt 0x73DB94): the NetSection array (0xA0 each: 4 CMemStreams) + mode; sections 0..3 here, 4..13 CUnit
