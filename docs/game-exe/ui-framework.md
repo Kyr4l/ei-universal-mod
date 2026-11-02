@@ -489,15 +489,17 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 - `InitBorderStrips`: the 3rd / 4th strips are read as left / right by symmetry (only the first two vertex blocks were
   decoded) [I].
 - The console handler bodies (0x5DD920..0x5E0A10) are undefined code in this listing; their argument syntax is from strings.
-- `CamCtlClassic` and `CamCtlSimple` have no creator (their vtables are referenced by nothing but their own methods): the live
-  game uses only `CamCtlFree`; what the old scheme was for is unknown.
+  Settling it needs Ghidra to define them as functions (next Ghidra chain, `gh.sh define`), not a re-read.
+- `CamCtlClassic` and `CamCtlSimple`: no creator, their vtables are referenced only by their own methods [V]: dead code, the
+  live game uses only `CamCtlFree` [untestable: no path reaches them].
 - `GetGroundPoint` / `ShowPart` / `ItemLink::Clone`: the decompiles show fall-through stores after the conditional branch
-  (likely dropped returns); the behaviour described is the sensible one, not verified in assembly [?].
-- Which globals the static initialisers 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0 (g_0x7C7CF8 (answered by the generic sweep: 0x7C7CF8 / 7C7D28 / 7C7E00 / 7C7E28 / 7C7E50 = 1.0f, 0x7C7D20 = 2 pi, 0x7C7D24 = pi/2: per-TU math-header constants, unreferenced), g_0x7C7D20..28,
-  g_0x7C7E00, g_0x7C7E28, g_0x7C7E50) hold; `g_0x7C7E58` is the default widget colour.
+  (likely dropped returns); to be checked in the machine code (a narrow disassembly each) [asm-check pending].
+- ~~Static initialiser globals~~ settled [V] (generic sweep 2026-11-01): 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0
+  fill per-TU math-header constants (g_0x7C7CF8 / 7C7D28 / 7C7E00 / 7C7E28 / 7C7E50 = 1.0f, g_0x7C7D20 = 2 pi, g_0x7C7D24 = pi/2),
+  unreferenced; `g_0x7C7E58` is the default widget colour.
 - The `MapZoneRecord` (0x5C) string fields beyond `+0x20 / +0x24` and the allod record's embedded `CObject` at `+0x18` [?].
-- `CSoftCursorFrame::CreateFromMmp`: the per-pixel copy loops were eliminated by the compiler's optimiser in the decompile; the
-  surface comes from `CDXDirectDrawSurface::CreateFromPicture` [I].
+- `CSoftCursorFrame::CreateFromMmp`: settled as far as needed [I]: the per-pixel copy loops are compiler-eliminated in the
+  decompile; the surface comes from `CDXDirectDrawSurface::CreateFromPicture`.
 
 ## 7. Corrections to earlier notes
 
