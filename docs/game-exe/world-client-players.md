@@ -181,9 +181,28 @@ error during parsing command"). [V]
 structs batch) are flushed first (`02`, `70`, `71`, `72`, `73`), then `PtrArray_Diff(+0x50d8, candidates)` -> `42` / `40` / `41`, the effects
 (`+0x50e8`) -> `52` / `50` / `51`, the party resend countdown `+0x5124` -> `ResendParty` 0x66F450 (`StorePartyFromUnits` + `80` +
 `ClearPartyItems`), `60` in states 1 / 2, `07` with bit 0x10, `FlushSendStream`. The candidates are the units within 100 units of the view point
-`+0x38`, the party units, the named objects and the units near every party unit; `UpdateVisibleSet` 0x66E130 keeps the *known* (`+0x50f8`)
+`+0x38` (non-units only, in a playable zone), the visible units, the named objects and the units near every party unit (world-server.md 4.7); `UpdateVisibleSet` 0x66E130 keeps the *known* (`+0x50f8`)
 and *visible* (`+0x510c`) arrays from the party units' `AiMemory` seen lists (`+0xa90` / `+0xaac` of the unit server object); `IsUnitVisible`
 0x66E110 gates attack orders and the `43` death message. [V]
+
+**Creating an object from a `40` record** (`CPlayerClient::OnMsg40_UnitCreate` 0x667EC0, deep read 2026-11-03 [V]; wire layout in
+`docs/multiplayer-protocol.md` "Unit creation"): after the fixed fields and the morph, the first CString is the object's **.mob name**
+(`CMapObject_SetName` -> `+0x1A8`; empty for unnamed monsters), then the model, the two texture-set names and the part list, the display
+name and a u32. The object comes from the world's map object manager `vt[23](kind, id)`; then:
+- units (type 0x50): the u32 prototype index selects the 0x120 `UnitProto` record (`g_0x7AF358`); its units-database row gives the
+  six animation speeds (`+0x4B0..`) and the model height offset (`modelOffset[1]` = row `+0x104`), `CUnit::SetProtoIndex`;
+- record flag 8 -> static flag 8; models `unmoco1` / `unmoco2` get flag 0x10000000;
+- heroes (kind 0x32) whose model is neither `unhuma` nor `unhufe` (the transformed / monster heroes): the part list's `hr` part is
+  dropped when the prototype's `+0x10` is -1, else renamed `hr.NN`;
+- `CObject3D::LoadModel(model, parts)` (failure = message rejected); model `unmogo` loses the parts `rh3.axeth00`, `rh3.sword00` and
+  `sling` (or `rh3.pike00` when the prototype's weapon kind `+0x78` is 5); model `unmowi` gets particle system 0x204D attached
+  (scale 0.05); non-units get parts flag 8 and object flag 0x200;
+- materials registered, the model's own animation set, texture names: heroes `mo%dp` / `mo%ds`, others the record's two names (the
+  second dropped when it is `none`); units `vt[61]`;
+- registered in `CPlayer +0x28` (id hash), `vt[34](prototype)` (units: `CUnit::GetProto`, others the model name),
+  `PackFullNetState`, then `UnpackNetState(0)` reads the length-prefixed full state; on success `CWorldClient::AddObject`, a named
+  object takes its saved named value (`World_BuildObjectVarName` + the player's named floats `+0xC4` -> `SetNamedState`), and in a
+  world of kind 3 a unit loads its mouth texture.
 
 What the client keeps: `CPlayer +0x28` every replicated unit, `+0x40` the party units (`CUnit::SetPlayer` -> `TrackUnit`), `+0x58` the effects,
 `+0xe0` the loose items of the last `06` batch, `+0xc4` the named values, `+0x114` the synced item ids, `CPlayerClient +0x50d8` the party
