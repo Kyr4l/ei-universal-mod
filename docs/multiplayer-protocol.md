@@ -344,7 +344,7 @@ u32 kind          0x32 a player's hero, 0x33 / 0x34 monsters and animals (units;
 u32 prototype     the unit's row in the units DB (97 = a human hero, 146 = boar, 267 = hare)
 u32 flags         the object record's flags: 0x8000 resting, 0x2 active, 0x80000 a BODY (dead), 0x20000000 / 0x8000 other
 f32 x3            the complexion (morph): 0.5 0.5 0.2
-CString           empty
+CString           the .mob object name (empty unless the object is named; CMapObject +0x1A8, game-exe/world-client-players.md 6)
 CString figure    "unhuma", "unanwibo"
 CString texture   "", "boar02"
 CString label     "", "mainMenu00labels", "default0"
