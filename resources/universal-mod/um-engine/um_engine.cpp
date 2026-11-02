@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.14.1";
+static const char* const kEngineVersion = "0.14.2";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -47,7 +47,7 @@ extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, un
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
-extern "C" void UmWorldEarlyInit(int shadowsInstalled); // world_shadow.cpp: the hooks of CWorldClient::Render (guard band, frame recorder, rig commands)
+extern "C" void UmWorldEarlyInit(int shadowsInstalled); // world_shadow.cpp: the hooks of CWorldClient::Render (guard band, rig commands)
 static bool g_sunShadowsInstalled = false;
 extern "C" void __attribute__((thiscall)) UmWorldBeginStub(); // world_shadow.cpp (sun shadows: the call sites bracketing the world pass)
 extern "C" void __attribute__((thiscall)) UmWorldEndStub();
@@ -268,15 +268,6 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
     { "SunShadows::Guard",     "0.3",   "SunShadows: 0..0.6, at most this much of the screen's size is also drawn beyond an edge, on the sides the sun's shadows come from, so casters just off screen shadow too (0 = off; needs a restart)" },
     { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the guard band's problems, 2 also every change of its pads / the shadowed area and a frame count every 5 s (research)" },
-    { "Recorder::Enabled",     "1",      "Recorder: 0 switches the frame recorder and its hotkey off (needs a restart)" },
-    { "Recorder::Key",         "19",      "Recorder: this key (a virtual-key code: 19 = Pause, 119 = F8, 0 = none) writes the last seconds as a report + picture into um-reports\\ beside the DLL" },
-    { "Recorder::Ctrl",        "0",      "Recorder: 1 needs Ctrl held with the key" },
-    { "Recorder::Burst",       "0",      "Recorder: 1 keeps the last frames of the world as pictures and writes them with each report (a flicker of one or two frames; costs a few FPS)" },
-    { "Recorder::BurstFrames", "240",    "Recorder: frames kept by the burst (30..1200; 240 is 1.5 s at 160 FPS, about 0.4 MB each)" },
-    { "Recorder::BurstScale",  "4",      "Recorder: the burst pictures are 1/this of the screen in each direction (1..8)" },
-    { "Recorder::Frames",      "600",    "Recorder: how many world frames the report holds (60..7200; about ten seconds at 60 FPS)" },
-    { "Recorder::Screenshot",  "1",      "Recorder: 1 also saves a PNG of the world (no interface) with each report, 2 at half the size (a quarter of the bytes), 0 none" },
-    { "Recorder::MaxReports",  "20",     "Recorder: at most this many reports are kept in um-reports\\ (the oldest goes first)" },
     { "SunShadows::Debug",     "0",      "SunShadows: research views (1 shadow term only, 2 lit fraction / sun angle, 4 normals, 5 world position)" },
 };
 
@@ -396,17 +387,6 @@ extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, i
     return true;
 }
 
-// The folder of um-engine.dll (with a trailing backslash): the recorder's reports go beside it
-extern "C" bool UmEngineDirectory(char* out, int size) {
-    char path[MAX_PATH] = "";
-    if (!GetModuleFileNameA(g_module, path, sizeof(path))) return false;
-    char* slash = std::strrchr(path, '\\');
-    if (!slash) return false;
-    slash[1] = 0;
-    if (static_cast<int>(std::strlen(path)) >= size) return false;
-    std::strcpy(out, path);
-    return true;
-}
 
 extern "C" __declspec(dllexport) unsigned UmEngineAbi() { return UM_ENGINE_ABI; }
 

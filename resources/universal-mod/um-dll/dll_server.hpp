@@ -306,7 +306,6 @@ inline void Server::Help(Client& c) {
         "CONSOLE lines [from] [max]            the in-game console's lines (from index from, default 0), and its input line",
         "CONSOLE send text                     types the text in the game window and presses Enter; refused while the console is closed  [debug]",
         "ENGINE STATE                          um-engine's last world frame: shadow state, pads, D7VK result, frame time, camera, hour",
-        "ENGINE REC                            writes the frame recorder's report + picture (um-reports\\ beside um-engine.dll)  [debug]",
         "ENGINE SHOT file.png [half]           saves the world as drawn at the end of the next world frame (no interface) as a PNG  [debug]",
         "ENGINE CAM x y [dist [yaw]]           the camera over a map point, not following a unit (yaw in degrees)  [debug]",
         "ENGINE PAUSE 0|1 / HOUR h             pauses the game clock / sets the world clock to hour h  [debug]",
@@ -1050,7 +1049,7 @@ inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w)
 }
 
 inline void Server::EngineCommand(Client& c, const std::vector<std::string>& w) {
-    if (w.size() < 2) return Err(c, "ENGINE", "usage: ENGINE STATE | REC | SHOT file.png | CAM x y [dist [yaw]] | PAUSE 0|1 | HOUR h | SCRIPT text");
+    if (w.size() < 2) return Err(c, "ENGINE", "usage: ENGINE STATE | SHOT file.png | CAM x y [dist [yaw]] | PAUSE 0|1 | HOUR h | SCRIPT text");
     if (!host_.engineCommand) return Err(c, "ENGINE", "um-engine is not loaded (UM_ENGINE=false) or has no rig commands");
     std::string verb = w[1];
     for (char& ch : verb) ch = static_cast<char>(toupper(static_cast<unsigned char>(ch)));

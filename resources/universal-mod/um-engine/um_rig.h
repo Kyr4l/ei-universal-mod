@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// The frame recorder and the rig commands of um-engine (um_rig.cpp): what world_shadow.cpp reports about each world frame.
+// The rig commands of um-engine (um_rig.cpp): what world_shadow.cpp reports about each world frame (ENGINE STATE).
 #pragma once
 #include <cstdint>
 
-// One world frame (CWorldClient::Render) as the sun shadows saw it. world_shadow.cpp fills g_umFrame during the frame; UmRigFrameEnd stores it in the ring.
+// One world frame (CWorldClient::Render) as the sun shadows saw it. world_shadow.cpp fills g_umFrame during the frame; UmRigFrameEnd keeps it for ENGINE STATE.
 struct UmFrameRec {
-    uint32_t tick = 0;        // GetTickCount at the start of the frame
     uint32_t frame = 0;       // world frames since the game started
     float dtMs = 0;           // time since the previous frame started
     float renderMs = 0;       // the world pass itself
@@ -17,10 +16,8 @@ struct UmFrameRec {
     int16_t pad[4] = {};      // guard band: left, top, right, bottom (pixels)
     float cam[3] = {};        // camera position
     float target[2] = {};     // camera target
-    float center[3] = {};     // centre of the shadowed area
     float radius = 0, height = 0;
     uint32_t mapSize = 0;
-    float light[3] = {};      // direction the light travels
     uint32_t dvk[3] = {};     // D7VK: shadow frames closed so far, caster draws of the last one, its result (0 drawn)
 };
 

@@ -20,7 +20,6 @@
 
 extern "C" void UmEngineLog(const char* format, ...);
 extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, int count);
-extern "C" double UmEngineConfigNumber(const char* key, double fallback); // um_engine.cpp
 
 namespace {
 
@@ -615,10 +614,11 @@ bool Gather(Params& p) {
 
 } // namespace
 
-// Called once from um_engine.cpp when the call sites are installed (the camera is set up before the first world frame)
+// Called once from um_engine.cpp when the call sites are installed (the camera is set up before the first world frame).
+// The Render wrapper is always installed: the rig commands (um_rig.cpp) run in it too; the guard band checks SunShadows::Guard itself.
 extern "C" void UmWorldEarlyInit(int shadowsInstalled) {
     g_shadowsInstalled = shadowsInstalled != 0;
-    if (C().guard > 0.0 || C().guardLog > 0.5 || UmEngineConfigNumber("Recorder::Enabled", 1) >= 0.5) InstallSetupHook();
+    InstallSetupHook();
 }
 
 static unsigned g_dbgFrames = 0, g_dbgClosed = 0, g_dbgGatherFail = 0; static DWORD g_dbgAt = 0;
@@ -653,11 +653,7 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmWorldEnd() {
     Params now;
     if (Gather(now)) { last = now; haveLast = true; g_end(&last); g_umFrame.mode = kModeDrawn; }
     else { ++g_dbgGatherFail; if (haveLast) { g_end(&last); g_umFrame.mode = kModeKept; } else { g_end(nullptr); g_umFrame.mode = kModeNone; } }
-    if (haveLast) {
-        UmFrameRec& r = g_umFrame;
-        for (int i = 0; i < 3; ++i) { r.center[i] = last.center[i]; r.light[i] = last.lightDir[i]; }
-        r.radius = last.radius; r.height = last.height; r.mapSize = last.mapSize;
-    }
+    if (haveLast) { g_umFrame.radius = last.radius; g_umFrame.height = last.height; g_umFrame.mapSize = last.mapSize; }
 }
 
 // The stubs: begin = the call of CTerrain::RenderOpaque (thiscall, one stack argument), end = the call of CWorldClient::RenderObjects (fastcall).
