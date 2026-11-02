@@ -423,15 +423,17 @@ Backspace clears it.
 
 - The tooltip text indices passed to `UIButton::SetTooltipById` (0x4E84.., 0x9CA4.., 0xEAC4.., 0x111D4.., 0x138E4.., 0x7594..)
   are resolved by the framework; the mapping index -> text key is not read here [?].
-- `GetMagicTotals` 0x610020 second output: `UnitStats_MaxMana * UnitStats_GetSpeedFactor` is read from x87 code the decompiler drops; the
-  product (vs a quotient) is [I] from `CCampScreen2::GetSpellCost`.
+- `GetMagicTotals` 0x610020 second output: `UnitStats_MaxMana * UnitStats_ManaCostFactor` 0x523CD0 (renamed by the combat round;
+  was `GetSpeedFactor`) is read from x87 code the decompiler drops; the product (vs a quotient) is [I] from `CCampScreen2::GetSpellCost`
+  [asm-check pending].
 - `CTooltipControl` size (0x184 assumed), `CEditWin` size (0x17C assumed): their `operator new` sites are in the framework.
 - Where the option globals are persisted (keyboard.ini is written by the framework's key-table code; the options ini writer was not found
   in these ranges).
 - `CSaveLoadWin::ScanSaves`: the number parsed from the folder names (the next "save<n>") and the info.sav version share one decompiler
   variable; the version gates (time at v >= 2, label at v >= 3) are [I].
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.
-- The 0x168..0x18F region of `CCampScreen` (the `CUIWindowWith2Lists28` base lists) and `CCampScreen2 +0x1A0..+0x220` are not mapped.
+- ~~CCampScreen2 +0x1A0..+0x220~~ settled [V]: the full CCampScreen2 layout (+0x164..+0x21C, 33 fields) is in structs.tsv (struct
+  completion 2026-11-02). The 0x168..0x18F region of `CCampScreen` (the `CUIWindowWith2Lists28` base lists) is still not mapped.
 
 ## 15. Corrections to earlier notes
 
