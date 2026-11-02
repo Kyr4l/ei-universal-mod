@@ -316,7 +316,7 @@ does not re-trigger aggro every 4 ticks), `ApplyHitArea` 0x683600 (every hittabl
 | 10 prot_electro | same | `+0x4C` (electrical) `+= max(power 10, power 0x1A)` |
 | 11 prot_acid | same | `+0x44` (chemical) `+= max(power 11, power 0x1A)` |
 | 12 / 13 / 14 eagle sight / infravision / detect life | same | `stats +0xB4 / +0xBC / +0xC4` (sight / night sight / third sense) `+= power` |
-| 15 / 16 / 17 invisibility / silence / lichdom | same | `stats +0xE4 / +0xFC / +0xF4` (visibility / noise radius / detectability) `-= power`; 15 also sets the client flag 0x10000 (`UpdateBuffEffects`) |
+| 15 / 16 / 17 invisibility / silence / lichdom | same | `stats +0xE4` visibility `-= power x 0.01` (a percentage), `+0xFC` noise radius / `+0xF4` life signature `-= power`, each clamped at 0 [V, deep-read 2026-11-03]; 15 also sets the client flag 0x10000 (`UpdateBuffEffects`) |
 | 0x13 stench | same | `stats +0x104 += power` |
 | 0x19 stun / 0x1C teleport | `AddBuff` / `TickBuffs` | unit flag 0x1000000 (frozen) while present; client flag 0x40000 for stun |
 | 0x1D strengthen / 0x1E weaken | `UnitStats_ApplyRangeBuffs` 0x523D30, `Unit_BuffHPRatio` 0x523DB0, `Unit_BuffSpeedRatio003` 0x5285D0, `ApplyBuffKinds` | damage rolls and ranges x `(1 + 0.003 s) / (1 + 0.003 w)` (capped at 1 for the fraction forms), max HP / max mana x `(1 + 0.005 s) / (1 + 0.005 w)`, morph scale `+-0.4` |
