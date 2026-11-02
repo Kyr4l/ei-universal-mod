@@ -237,7 +237,7 @@ from text by `QuestsDb::ParseQuestReg` 0x6AE8E0 (was QuestsDb_ParseIni; `this` =
 | 7 | complete quests | +0x38 | vector<CString> | quest ids completed (= 2, "brief_complete_quest") |
 | 8 | available zones | +0x44 | vector<CString> | zones made reachable (`z.<zone>` = 2) |
 | 9 | complete zones | +0x50 | vector<CString> | zones completed |
-| 10 | - | +0x68 | int | ("brief_get_specials_%d" [?]) |
+| 10 | - | +0x68 | int | specials text: when > 0 the briefing dialog (`DialogScreen` 0x604C50, at 0x605862) prints the text key `brief_get_specials_<N>` [V]; display only, the server never reads it [I] |
 
 ParseQuestReg appends a quest / briefing only when its name is new (`BriefingTable_AddUnique` 0x6B0600; quests: map lookup first), so
 quests.qdb entries win over quest.reg duplicates [V]. Readers: the quest log rewards (`CQuestLogWin::FillObjectives` 0x64DC60:

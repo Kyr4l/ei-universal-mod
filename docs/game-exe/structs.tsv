@@ -3307,7 +3307,7 @@ Briefing			0x38	pointer[3]	completeQuests	tag 7: vector<CString> quest ids set t
 Briefing			0x44	pointer[3]	availableZones	tag 8: vector<CString> zone ids made reachable (z.<zone> = 2)
 Briefing			0x50	pointer[3]	completeZones	tag 9: vector<CString> zones completed
 Briefing			0x5c	byte[12]	field_5c	std::string, tag 4
-Briefing			0x68	int	field_68	tag 0xa (brief_get_specials_%d [?])
+Briefing			0x68	int	specialsText	tag 0xa: when > 0 the briefing dialog (DialogScreen 0x604C50) prints the text key "brief_get_specials_<N>"; display only, CWorldServer::OnNamedEvent does not read it (no gameplay effect)
 QuestsDb		0x40	0x0	pointer[3]	quests	vector<Quest 0x38> (quests.qdb tag 1 + quest.reg); g_0x7C87A8
 QuestsDb			0xc	StrHash	questMap	std::string -> Quest* (0x14 nodes); g_0x7C87B4 (CQuestLogWin::FillObjectives)
 QuestsDb			0x20	pointer[3]	briefings	vector<Briefing 0x6c> (tag 2 + quest.reg)
