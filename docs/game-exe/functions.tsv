@@ -1002,8 +1002,8 @@ addr	size	name	status	purpose
 0x004291E0	62	ObjRef_ReleaseExt20	named	releases an ObjRef with the external ref protocol
 0x00429220	62	ObjRef_ReleaseExt21	named	releases an ObjRef with the external ref protocol
 0x00429260	62	ObjRef_ReleaseExt22	named	releases an ObjRef with the external ref protocol
-0x004292A0	30	Ref_Release15_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Ref_Release15, then operator delete when flag&1 (3 sites: LobbyClient::FillParty, ObjListMessage::Reset, RefVector_Resize)
-0x004292C0	30	ObjRef_ReleaseExt13_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt13, then operator delete when flag&1 (2 sites: LobbyServer::SetMap, LobbyServer::UnloadMap)
+0x004292A0	30	Ref_Release15_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Ref_Release15, then operator delete when flag&1 (3 sites: LobbyClient::FillParty, ObjListMessage::Reset, RefVector_Resize)
+0x004292C0	30	ObjRef_ReleaseExt13_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt13, then operator delete when flag&1 (2 sites: LobbyServer::SetMap, LobbyServer::UnloadMap)
 0x004292E0	13	InitFields1_4292E0	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 2 sites: RefList_FindByFieldWrap
 0x004292F0	81	ObjRef_Init	named	(slot, obj): initializes an ObjRef slot from an object pointer (vt[3] clone when flag bit 0 is set, count ++, flag |= 1; null when dead)
 0x00429350	81	ObjRef_Init2	named	(slot, obj): initializes an ObjRef slot from an object pointer
@@ -1052,8 +1052,8 @@ addr	size	name	status	purpose
 0x0042A4F0	103	String_AssignRange2	named	(std::string*, first, last): assigns a character range (46 callers)
 0x0042A560	80	RefVector_CopyAssign2	named	(first, last, dst): assigns the refs of [first, last) to dst.. forward
 0x0042A5B0	32	StaticInit_atexit_4013D0e	named	static initializer: flag g_0x7CAEE4 bit 0, atexit(0x4013D0)
-0x0042A5D0	30	ObjRef_ReleaseExt23_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt23, then operator delete when flag&1 (1 site: NetClient::dtor)
-0x0042A5F0	30	ObjRef_ReleaseExt12_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt12, then operator delete when flag&1 (3 sites: LobbyServer::OnMapRecord, LobbyServer::SetMap, LobbyServer::UnloadMap)
+0x0042A5D0	30	ObjRef_ReleaseExt23_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt23, then operator delete when flag&1 (1 site: NetClient::dtor)
+0x0042A5F0	30	ObjRef_ReleaseExt12_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt12, then operator delete when flag&1 (3 sites: LobbyServer::OnMapRecord, LobbyServer::SetMap, LobbyServer::UnloadMap)
 0x0042A610	62	ObjRef_ReleaseExt23	named	releases an ObjRef with the external ref protocol
 0x0042A650	250	StringHashNode_Create	named	(src {string, value}): allocates a 0x18-byte hash node {next, std::string key +4, value +0x10} from the pool g_0x79B22C
 0x0042A770	158	ObjRef_Set	named	(slot, ref*): when different: releases the old ObjRef (external ref protocol) and copies the new one (clone when flag bit 0)
@@ -1085,7 +1085,7 @@ addr	size	name	status	purpose
 0x0042B6C0	31	Dwords_UninitCopy	named	(first, last, dst): copies dwords into raw storage
 0x0042B6E0	29	Dwords_UninitFillN	named	(dst, n, value*): fills n dwords
 0x0042B700	360	String_Append	named	"(std::string*, first, last): appends a character range (grows the buffer, throws length_error ""basic_string"") (37 callers)"
-0x0042B880	30	ObjRef_ReleaseExt8_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt8, then operator delete when flag&1 (1 site: ListStringMessage::Reset)
+0x0042B880	30	ObjRef_ReleaseExt8_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseExt8, then operator delete when flag&1 (1 site: ListStringMessage::Reset)
 0x0042B8A0	133	IdHashNode_Create2	named	(pair*): allocates a 0x10-byte hash node {next = 0, key, value}
 0x0042B930	141	Ptrs_AdjustHeapByIndex	named	(first, last, ?, value): STLport __adjust_heap for object pointers ordered by the ushort +0x10
 0x0042B9C0	362	IdHash_Rehash2	named	(this, minBuckets): grows the bucket vector to the next prime and re-links the nodes by key +4
@@ -1459,9 +1459,9 @@ addr	size	name	status	purpose
 0x0043DC20	42	List_InsertRangeIter2	named	(pos, first, last): iterator wrapper around List_InsertRange2
 0x0043DC50	42	List10C_InsertRange	named	list insert range wrapper (0x10c-byte nodes)
 0x0043DC80	31	Dwords_Copy	named	(first, last, dst): copies dwords
-0x0043DCA0	30	ScriptObjRef_Release4_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_Release4, then operator delete when flag&1 (1 site: NetConnection::dtor)
-0x0043DCC0	30	ObjRefTreeNode4c_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4c, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor2, ObjRefTree_EraseRange2)
-0x0043DCE0	30	ObjRefTreeNode4d_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4d, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor3, ObjRefTree_EraseRange3)
+0x0043DCA0	30	ScriptObjRef_Release4_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_Release4, then operator delete when flag&1 (1 site: NetConnection::dtor)
+0x0043DCC0	30	ObjRefTreeNode4c_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4c, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor2, ObjRefTree_EraseRange2)
+0x0043DCE0	30	ObjRefTreeNode4d_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4d, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor3, ObjRefTree_EraseRange3)
 0x0043DD00	22	GetFieldOut_8_43DD00	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: VecList18_CreateNode
 0x0043DD20	13	DerefOut_43DD20	named	STL: iterator dereference into the out param (**this); 1 site: List120_CreateNode
 0x0043DD30	21	CopyField_0_43DD30	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: List120_CreateNode
@@ -1511,8 +1511,8 @@ addr	size	name	status	purpose
 0x0043FC70	58	List_InsertRange3	named	(pos, first, last): inserts copies of a node range before pos (0x4387C0 payload copy, 0x10c-byte nodes)
 0x0043FCB0	42	ObjRefList18_InsertRange2	named	list insert range wrapper (0x18-byte nodes)
 0x0043FCE0	32	Net_StaticInit51	named	static init slot 51: registers the atexit handler 0x4013D0 once (flag g_0x7CAEE4 bit 0)
-0x0043FD00	30	ObjRefTreeNode4b_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4b, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor, ObjRefTree_EraseRange)
-0x0043FD20	30	ScriptRefTreeNode_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_ReleaseAt4, then operator delete when flag&1 (2 sites: ScriptRefTree_Dtor, ScriptRefTree_Dtor2)
+0x0043FD00	30	ObjRefTreeNode4b_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4b, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor, ObjRefTree_EraseRange)
+0x0043FD20	30	ScriptRefTreeNode_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_ReleaseAt4, then operator delete when flag&1 (2 sites: ScriptRefTree_Dtor, ScriptRefTree_Dtor2)
 0x0043FD40	14	Iter_DerefNode8_D	named	iterator deref, instance D
 0x0043FD50	65	ObjRefTree_Erase3	named	(node): erase of a tree node holding an object ref at +0x14
 0x0043FDA0	14	Iter_DerefNode8_E	named	iterator deref, instance E
@@ -1607,7 +1607,7 @@ addr	size	name	status	purpose
 0x00443BF0	560	NetServerRecords_Assign	named	STL: vector<NetServerRecord 0x2c {NetAddress, GameBuffer +0x10}>::operator= (realloc with AllocCopy, or in-place GameBuffer::Assign / UninitCopy with the surplus destroyed); NetClient::SetServerList installs the address book +0x25ac
 0x00443E20	15	StoreFirstDword_443E20	named	STL: iterator ctor from a node pointer (this in ecx); 4 sites: NetClient::AddServerAndPing, NetClient::AddServerInfo, NetClient::SetServerList ...
 0x00443E30	82	NetServerRecord::ctor	named	(this 0x2c) in-place ctor of a lobby address-book record: the NetAddress +0 zeroed (4 dwords) and GameBuffer::ctor at +0x10 (the ServerInfo bytes); NetClient::AddServerAndPing builds the record it pushes. Was NetPacket::Ctor
-0x00443E90	30	NetItem_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs NetItem_Dtor, then operator delete when flag&1 (2 sites: NetClient::RemoveServer, NetServerRecordVector_Resize)
+0x00443E90	30	NetItem_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs NetItem_Dtor, then operator delete when flag&1 (2 sites: NetClient::RemoveServer, NetServerRecordVector_Resize)
 0x00443EB0	243	NetServerRecords_AllocCopy	named	(n, first, last): allocates n 0x2c-byte records from the node allocator and copy-constructs the range
 0x00443FF0	117	Records2C_Copy	named	(first, last, dst): copies 0x2c-byte records (16 raw bytes + 0x4DAA80 copy of the rest); returns the end
 0x00444070	32	StaticInit_Guarded_444070	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
@@ -1655,7 +1655,7 @@ addr	size	name	status	purpose
 0x00445620	191	StringMap_LowerBound	named	(this, out iterator, key*): lower bound of the key in the tree using StringRange_Compare
 0x004456E0	148	StringMap_FindInsertPos	named	(this = std::map<string,...>, out iterator, key*): lower_bound walk of the red-black tree comparing byte ranges with memcmp
 0x00445780	99	StringRange_Less	named	(a, b): std::string range operator< (memcmp on the common prefix, then length) (65 callers)
-0x004457F0	30	MapValue_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs MapValue_Free, then operator delete when flag&1 (1 site: StringMap_Clear)
+0x004457F0	30	MapValue_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs MapValue_Free, then operator delete when flag&1 (1 site: StringMap_Clear)
 0x00445810	83	StringRange_Compare	named	(first1, last1, first2, last2): three-way memcmp compare of byte ranges, -1 / 0 / 1 (30 callers)
 0x00445870	389	StringMap_InsertNode	named	(this, out iterator, force-left, parent, value*): red-black tree insertion with rotations (RbTree_RotateLeft / Right)
 0x00445A00	420	StringMap_InsertUnique	named	(this, out {iterator, bool}, value*): descends the tree comparing keys, handles the duplicate case, inserts via StringMap_InsertNode
@@ -1845,8 +1845,8 @@ addr	size	name	status	purpose
 0x00454280	91	CList_NewNode10	named	MFC CList NewNode (0x10-byte nodes, value +8 / +0xc = 0)
 0x004542E0	54	IdHash_FindNode11	named	(this, key*, out bucket) -> node whose key +8 matches, or 0
 0x00454320	32	StaticInit_Guarded_454320	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x00454340	30	Node3ds_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Node3ds_Destroy, then operator delete when flag&1 (2 sites: CFakeUnit::LoadModelFromScene)
-0x00454360	30	StringAtOffset04_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringAtOffset04_Free, then operator delete when flag&1 (4 sites: CFakeUnit::LoadModelFromScene, Scene3ds_CorrectMappings)
+0x00454340	30	Node3ds_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Node3ds_Destroy, then operator delete when flag&1 (2 sites: CFakeUnit::LoadModelFromScene)
+0x00454360	30	StringAtOffset04_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringAtOffset04_Free, then operator delete when flag&1 (4 sites: CFakeUnit::LoadModelFromScene, Scene3ds_CorrectMappings)
 0x00454380	18	Record18_Destroy	named	(record): frees the aligned buffer +8
 0x004543A0	30	CFigure::~CFigure	named	slot 0: deleting destructor (root layout)
 0x004543C0	18	Record14_Destroy	named	(record): frees the aligned buffer +4
@@ -1872,7 +1872,7 @@ addr	size	name	status	purpose
 0x00454C50	103	StrRec18_Destroy	named	(record {CString, CArray}): CArray +4 emptied (0x6FF29A), CString freed
 0x00454CC0	30	StrRecs18Array::DeletingDtor	named	scalar deleting destructor of StrRecs18Array: runs StrRecs18Array::dtor then operator delete when flag&1 (0 sites)
 0x00454CE0	163	StrRecs18Array::dtor	named	vt 0x73C2BC: StrRec18_Destroy on every 0x18-byte record and frees the array
-0x00454D90	30	StrRec18_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StrRec18_Destroy, then operator delete when flag&1 (1 site: CFakeFigure::dtor)
+0x00454D90	30	StrRec18_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StrRec18_Destroy, then operator delete when flag&1 (1 site: CFakeFigure::dtor)
 0x00454DB0	142	StrRecs18_ConstructN	named	"(records, n): n 0x18-byte records {CString +0 = """", +4.. constructed by 0x6FF23A}"
 0x00454E40	134	Materials9C_ConstructN	named	(materials, n): zeroes n 0x9c-byte material records and constructs each (0x68DBC0 = CMaterial ctor)
 0x00454ED0	35	ZeroFill_Elem20_A	named	MFC: ConstructElements memset(0) of n elements (Elem20) for a CArray SetSize / Serialize / SetAt (15 sites: Array_73C1AC::Serialize, Chunk3ds_ReadPosTrack, Records14_SetSize ...)
@@ -2015,7 +2015,7 @@ addr	size	name	status	purpose
 0x004607B0	38	Record5C_DestroyN	named	(first, n): destroys n 0x5c records
 0x004607E0	163	MapZoneRecord_ConstructN	named	(array, n): constructs n 0x5C-byte zone records (8 empty CStrings at +0x8.., ints +0x4C..+0x58 = 0). Was Record5C_ConstructN
 0x00460890	32	StaticInit_Guarded_460890	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x004608B0	30	StringAtOffset28_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringAtOffset28_Free, then operator delete when flag&1 (2 sites: CWorldServer::SetZoneExits, MapInfo_Load)
+0x004608B0	30	StringAtOffset28_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringAtOffset28_Free, then operator delete when flag&1 (2 sites: CWorldServer::SetZoneExits, MapInfo_Load)
 0x004608D0	151	MapAllodRecord_dtor	named	destructor of the 0x2C map.txt '#allod' record (MapInfo +4 array): the dword CArray at +0x18 (vt 0x73C3D0, buffer +0x1c deleted) then the six CStrings +0x14 .. +0; MapAllodRecordArray_Serialize (x2) and Record2C_DestroyN
 0x00460970	234	MapZoneRecord_dtor	named	destructor of a 0x5C-byte zone record (frees its exit array and 8 CStrings). Was Record5C_dtor
 0x00460A60	30	Record3CArray2::DeletingDtor	named	MFC: scalar deleting destructor of the CArray / CList instantiation with vtable 0x73C400 (slot 1: GetRuntimeClass, ~, Serialize); body = the Record3CArray2 dtor, then operator delete when flag&1
@@ -2041,7 +2041,7 @@ addr	size	name	status	purpose
 0x00461710	50	Record0C_BufferFree7	named	(buffer, n 0xc records): return to the size pool (variant)
 0x00461750	382	StringIntMap_Rehash	named	(this, minBuckets): next prime from 0x73B914, re-links the nodes with hash*5 on the key
 0x004618D0	32	StaticInit_Guarded_4618D0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x004618F0	30	CString_DeletingDtor_A	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringRep_Release, then operator delete when flag&1 (4 sites: DialogScreen::LoadSpeakersFor, DialogScreen::OnPartyChanged, NamedFloatMap_Set ...)
+0x004618F0	30	CString_DeletingDtor_A	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringRep_Release, then operator delete when flag&1 (4 sites: DialogScreen::LoadSpeakersFor, DialogScreen::OnPartyChanged, NamedFloatMap_Set ...)
 0x00461910	22	GetFieldOut_8_461910	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: StringIntMap_Rehash
 0x00461930	57	DwordVector_FreeStorage6	named	vector<dword>: return the buffer to the size pool (26 callers)
 0x00461980	515	StringIntMapBuckets_ctorN	named	STL: vector<node*>(n) bucket vector ctor (pool refill inlined); StringIntMap_Rehash = the NamedFloatMap / string -> int maps (NamedFloatMap_Set / Read, StringIntMap_GetOrInsert)
@@ -2120,7 +2120,7 @@ addr	size	name	status	purpose
 0x00464B70	334	DwordVector_InsertRealloc2	named	STL: vector<node*>::insert(pos, n, value) reallocating path behind DwordVector_InsertN2 = the 101-bucket fill of LeversDb leverMap +0xc in LeversDb::ctor
 0x00464D00	201	DwordBuffer_AllocCopy9	named	allocate n dwords from the size pool and copy a range in (variant)
 0x00464DD0	32	StaticInit_Guarded_464DD0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x00464DF0	30	ByteVector_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ByteVector_FreeStorage, then operator delete when flag&1 (1 site: LeversDb::dtor)
+0x00464DF0	30	ByteVector_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ByteVector_FreeStorage, then operator delete when flag&1 (1 site: LeversDb::dtor)
 0x00464E10	250	HashMapStrDword_NewNode3	named	allocate a 0x18 hash node {next, string key, dword value} from pool g_0x79B22C
 0x00464F30	348	HashMapStrDword_Rehash3	named	(this, minBuckets): grow buckets to the next prime and re-link the nodes by String_Hash (variant)
 0x00465090	233	LeverRecordVector_Serialize	named	(archive, tag, vector<LeverRecord 0x2c>): BeginTag(tag); loading: clear, resize to CountTag(1), every record under tag 1 through LeverRecord::SerializeFields; storing: the same order
@@ -2299,7 +2299,7 @@ addr	size	name	status	purpose
 0x0046F0E0	35	ZeroFill_Vec3_B	named	MFC: ConstructElements memset(0) of n elements (Vec3) for a CArray SetSize / Serialize / SetAt (6 sites: Vec3CArray_Serialize, Vec3CArray_SetSize)
 0x0046F110	36	ZeroFill_Elem8_B	named	MFC: ConstructElements memset(0) of n elements (Elem8) for a CArray SetSize / Serialize / SetAt (8 sites: CMagicTrapDesc::OnChunk, Pairs8Array_SetSize, Pairs8CArray_Serialize)
 0x0046F140	32	StaticInit_Guarded_46F140	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x0046F160	30	UnitLogicRecord_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs UnitLogicRecord_dtor, then operator delete when flag&1 (1 site: MobLogicPoints_Copy)
+0x0046F160	30	UnitLogicRecord_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs UnitLogicRecord_dtor, then operator delete when flag&1 (1 site: MobLogicPoints_Copy)
 0x0046F180	31	StaticInit_Vec3Zero_g7A96D8	named	CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x7A96D8
 0x0046F1A0	41	Quat7A96C8_StaticInit	named	static init of g_0x7A96C8 = (1,0,0,0)
 0x0046F1D0	19	StaticInit_One_g7A96C0	named	CRT: per-translation-unit copy of the header float constant 1.0f (0x3f800000) at g_0x7A96C0
@@ -2486,7 +2486,7 @@ addr	size	name	status	purpose
 0x0047A690	15	StoreFirstDword_47A690	named	STL: iterator ctor from a node pointer (this in ecx); 2 sites: CTcpNetDriver::ConnectBlocking, CTcpNetDriver::SyncPeers
 0x0047A6A0	15	StoreFirstDword_47A6A0	named	STL: iterator ctor from a node pointer (this in ecx); 1 site: CTcpNetDriver::SyncPeers
 0x0047A6B0	32	StaticInit_Guarded_47A6B0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x0047A6D0	30	ObjRef_Release3_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_Release3, then operator delete when flag&1 (2 sites: CTcpNetDriver::ConnectBlocking, RefListPair::dtor)
+0x0047A6D0	30	ObjRef_Release3_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_Release3, then operator delete when flag&1 (2 sites: CTcpNetDriver::ConnectBlocking, RefListPair::dtor)
 0x0047A710	118	HuffmanCoder::dtor	named	frees the tree +0xc04, decrements g_0x7A9730, the last coder frees the node pool g_0x7A972C; NO CALLERS. The whole HuffmanCoder (0xc08 bytes: codes +0, lengths +0x400, frequencies +0x800, root +0xc04) is DEAD CODE: no constructor, BuildCodes / RebuildCodes / dtor have no callers, BuildTree is called only by RebuildCodes; the LZ stream uses fixed prefix tables (LzCodec_InitTables), not Huffman
 0x0047A800	114	HuffmanCoder::RebuildCodes	named	BuildTree then the prefix-code assignment of BuildCodes; NO CALLERS (dead, see HuffmanCoder::dtor)
 0x0047A8B0	202	HuffmanCoder::BuildTree	named	qsorts the 256 {symbol, frequency +0x800} pairs and rebuilds the weight-balanced tree under +0xc04; only caller RebuildCodes (dead)
@@ -2665,7 +2665,7 @@ addr	size	name	status	purpose
 0x00483BA0	314	DwordVector_InsertN_483BA0	named	STL: vector<uint>::insert(pos,n,value), grow path 0x484180
 0x00483CE0	54	HashIter_NextBucketNode_483CE0	named	STL: first node of the next non-empty bucket
 0x00483D20	32	StaticInit_Guarded_483D20	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x00483D40	30	ListHolder_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ListHolder_Destroy_4824B0, then operator delete when flag&1 (1 site: RbMap_Destroy_481E60)
+0x00483D40	30	ListHolder_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ListHolder_Destroy_4824B0, then operator delete when flag&1 (1 site: RbMap_Destroy_481E60)
 0x00483D60	133	NodeAlloc16_483D60	named	STL: allocate 0x10-byte node from pool g_0x79B228
 0x00483DF0	235	RbNode_New_483DF0	named	STL: allocate a 0x20-byte tree node (pool g_0x79B230) and copy-construct key (String_CtorRange) and value list (0x483F00)
 0x00483F00	163	List24_CtorFromRange	named	construct std::list from a range (sentinel from pool g_0x79B22C then insert)
@@ -2921,7 +2921,7 @@ addr	size	name	status	purpose
 0x0049DCB0	362	HashTable_Resize2	named	(this = hash table, n): as HashTable_Resize (second instantiation, PtrVector_ctorN2)
 0x0049DE20	45	ListIter_Advance	named	(iterator*, n): n steps forward (next +0) or, for negative n, backward (prev +4)
 0x0049DE50	32	StaticInit_Guarded_49DE50	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x0049DE70	30	Vec4Vector_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Vec4Vector_FreeStorage, then operator delete when flag&1 (1 site: PointSet_ClusterCentroids)
+0x0049DE70	30	Vec4Vector_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Vec4Vector_FreeStorage, then operator delete when flag&1 (1 site: PointSet_ClusterCentroids)
 0x0049DE90	22	GetFieldOut_8_49DE90	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: HashTable_Resize2
 0x0049DEB0	515	PtrVector_ctorN2	named	(this = vector {begin, end, cap}, n, allocator): as PtrVector_ctorN (second instantiation)
 0x0049E0D0	577	Vec4Vector_InsertRange	named	(this = vector of 16-byte records {begin, end, cap}, position, first, last): STL insert of a range (reallocating when the capacity is short)
@@ -3151,7 +3151,7 @@ addr	size	name	status	purpose
 0x004AB720	249	StrHashTable_LookupId	named	(table (register), name char*) -> id: a temporary STL string of the name (String_Alloc, 0x4193D0 copy) is wrapped (0x4A8930) and inserted with StrHashTable_InsertUnique into the table at +0xc; the node's data +0xc is returned (the id of a name in a string table)
 0x004AB820	240	StrHashTable_LookupId2	named	(table, name char*) -> id: as StrHashTable_LookupId (StrHashTable_InsertUnique2)
 0x004AB910	78	RcPtrShort_AssignRange	named	(first, last, dst) -> dst end: assigns 16-bit-refcounted pointers (new ++, old released with vt[0](1) at 0)
-0x004AB960	30	RcPtrShort_DeletingDtor_A	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs RcPtrShort_Release, then operator delete when flag&1 (2 sites: PartyStore::ResetToDefault, RcPtrShortVector_Resize)
+0x004AB960	30	RcPtrShort_DeletingDtor_A	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs RcPtrShort_Release, then operator delete when flag&1 (2 sites: PartyStore::ResetToDefault, RcPtrShortVector_Resize)
 0x004AB980	204	PartyHashNode_Create	named	(value {id, CParty}) -> node: a 0x78 node from the pool g_0x79B25C (20 per chunk) with the id at +4 and CParty::CopyCtor at +8
 0x004ABA70	34	PartyHashNode_Free	named	(node): the CParty value +4 destroyed (0x4A9460) and the 0x78 node returned to the pool g_0x79B25C
 0x004ABAA0	302	StrHashTable_FindOrAdd	named	(this = string-keyed hash table, value {string begin, end, .., data +0xc}) -> &node.data (+0x10): a temporary copy of the string (String_CtorRange2); the table resized (StrHashTable_Resize) for size + 1; the bucket by String_Hash; an equal string's node or a new node (StrHashNode_Create) at the bucket head
@@ -3191,7 +3191,7 @@ addr	size	name	status	purpose
 0x004AD390	324	Records20_CopyRange	named	(first, last, dst) -> dst end: copies 0x14-byte records {CString, CString, dword vector} (CString assign, vector assign with reallocation)
 0x004AD4E0	32	StaticInit_Guarded_4AD4E0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
 0x004AD500	280	Records20_CopyCtor	named	(this, src) -> this: copies a 0x14-byte record {CString, CString, dword vector}
-0x004AD620	30	PartyHolder_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs PartyHolder_Dtor, then operator delete when flag&1 (0 sites)
+0x004AD620	30	PartyHolder_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs PartyHolder_Dtor, then operator delete when flag&1 (0 sites)
 0x004AD640	120	VecList_Destroy	named	(this = {vector +0 / +4 / +8, list sentinel +0xc}): the 0xc-byte list nodes and the sentinel deleted (0x404D70), the vector storage freed (node pool g_0x79B224 up to 0x80 bytes)
 0x004AD6C0	52	BufferVector_FreeStorage7	named	(this = byte vector): as BufferVector_FreeStorage
 0x004AD700	424	RcPtrShortVector_Resize	named	(this = vector of 16-bit-refcounted pointers, n): the tail erased (released with 0x4AB960) when shrinking, else n - size null pointers inserted (RcPtrShortVector_InsertN_Realloc when the capacity is short)
@@ -3264,8 +3264,8 @@ addr	size	name	status	purpose
 0x004B1320	3	ReturnZero_B	named	returns 0; Records20 vector helpers (Archive_SerializeRecords20Vector, Destroy, InsertN_Realloc)
 0x004B1330	3	Nop_4B1330	named	STL/MFC: empty element destructor / destroy no-op (6 sites: Archive_SerializeRecords20Vector, Records20Vector_Destroy, Records20Vector_InsertN_Realloc)
 0x004B1340	38	CopyDwordsN	named	(first, last, dst) -> dst end: copies dwords
-0x004B1370	30	RcPtrShort_DeletingDtor_B	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs RcPtrShort_Release2, then operator delete when flag&1 (1 site: RcPtrShortVector_Resize2)
-0x004B1390	30	Records20_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Records20_Destroy, then operator delete when flag&1 (1 site: Records20Vector_Resize)
+0x004B1370	30	RcPtrShort_DeletingDtor_B	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs RcPtrShort_Release2, then operator delete when flag&1 (1 site: RcPtrShortVector_Resize2)
+0x004B1390	30	Records20_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs Records20_Destroy, then operator delete when flag&1 (1 site: Records20Vector_Resize)
 0x004B13B0	31	CopyDwordsChecked	named	(first, last, dst): copies dwords (dst checked for null)
 0x004B13D0	31	CopyDwordsChecked2	named	(first, last, dst): copies dwords (dst checked for null, second instantiation)
 0x004B13F0	29	FillDwordsN	named	(dst, n, value*): fills n dwords (dst checked for null)
@@ -3796,7 +3796,7 @@ addr	size	name	status	purpose
 0x004CEE80	73	QuestObjective_ConstructN	named	(records of 0xc {kind, CString text, value}, n): zeroed with an empty CString. Was Records12Str_ConstructN
 0x004CEED0	38	DefinePair_DestructN	named	(pairs of 8 {CString, CString}, n): the first CString of each destroyed (the second is handled by the caller). Was CStringPairs_DestructN
 0x004CEF00	367	StrHashTable_Resize7	named	(this = string-keyed hash table, n): as StrHashTable_Resize (PtrVector_ctorN11; the nodes rehashed with String_Hash)
-0x004CF0D0	30	CString_DeletingDtor_B	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringRep_Release_B, then operator delete when flag&1 (1 site: Compiler_CompileConditions)
+0x004CF0D0	30	CString_DeletingDtor_B	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StringRep_Release_B, then operator delete when flag&1 (1 site: Compiler_CompileConditions)
 0x004CF0F0	22	GetFieldOut_8_4CF0F0	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: StrHashTable_Resize7
 0x004CF110	57	PtrVector_FreeStorage24	named	(this = vector): as PtrVector_FreeStorage
 0x004CF160	515	PtrVector_ctorN11	named	(this = vector, n, allocator): as PtrVector_ctorN (eleventh instantiation)
@@ -4002,7 +4002,7 @@ addr	size	name	status	purpose
 0x004DD8A0	515	CharSetBuckets_ctorN	named	STL: vector<node*>(n) bucket vector ctor (pool refill inlined); CharSetBuckets_Rehash of the global char set g_0x7AB8D8
 0x004DDAC0	171	StringRange_UninitCopy	named	placement-copy std::string [first, last) to dest (11 callers)
 0x004DDBA0	173	StringRange_UninitCopy2	named	STL: uninitialized_copy of n std::strings (src, n, dst): each dst string allocated (String_Alloc length + 1), bytes copied (Bytes_Copy), 0-terminated; StringVector_InsertRealloc / InsertN and CObject3D::LoadModel (variant of 0x4DDAC0)
-0x004DDC90	30	StlString_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StlString_dtor, then operator delete when flag&1 (14 sites: CWorldClient::PrebuildUnitSkinsAndModels, SpellSetRecord::operator_assign, SpellSetRecordVector_InsertN ...)
+0x004DDC90	30	StlString_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs StlString_dtor, then operator delete when flag&1 (14 sites: CWorldClient::PrebuildUnitSkinsAndModels, SpellSetRecord::operator_assign, SpellSetRecordVector_InsertN ...)
 0x004DDCB0	10	StaticInit_SysInfoGlobals_A	named	static init of a global (0x7AB8F0)
 0x004DDCBA	19	StaticInit_TwoPi_g7AB8F0	named	CRT: per-translation-unit copy of the header float constant 2*pi (0x40c90fdb) at g_0x7AB8F0
 0x004DDCCD	10	StaticInit_SysInfoGlobals_B	named	static init of a global (0x7ABA00)
@@ -4275,7 +4275,7 @@ addr	size	name	status	purpose
 0x004F0A60	45	List_FreeNodes_4F0A60	named	STL: free every node of an std::list (operator delete)
 0x004F0A90	38	List_EraseNode_4F0A90	named	STL: unlink a node and free it
 0x004F0AC0	32	StaticInit_Guarded_4F0AC0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x004F0AE0	30	PoolVector_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs PoolFreeVector_4EDA30, then operator delete when flag&1 (1 site: CDXDirectDraw::EnumDriverModes)
+0x004F0AE0	30	PoolVector_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs PoolFreeVector_4EDA30, then operator delete when flag&1 (1 site: CDXDirectDraw::EnumDriverModes)
 0x004F0B00	1	Trace_Stub_B	named	empty function (no args) at 5 sites in CDXDirectDraw::EnumDriverModes and CUIBlitSurface::Blt / BlitToBack / StretchTo: a trace compiled to nothing
 0x004F0B10	23	StaticInit_g7AEE78_CriticalSection	named	CRT: InitializeCriticalSection(g_0x7AEE78) and atexit DeleteCriticalSection
 0x004F0B40	31	StaticInit_Vec3Zero_g7AEEA8	named	CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x7AEEA8
@@ -4437,7 +4437,7 @@ addr	size	name	status	purpose
 0x004FC3CF	192	HashTable_RehashLoop_4FC3CF	named	STL: tail of a hashtable resize: move nodes of each old bucket into the new bucket vector by String_Hash
 0x004FC4F0	389	RbMap_InsertAt_004FC4F0	named	std::map _M_insert at a parent: create node, link, rebalance (rotate left/right)
 0x004FC680	32	StaticInit_Guarded_4FC680	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x004FC6A0	30	MapNode_DeletingDtor	guess	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs MapNode_Destroy_4F7A80, then operator delete when flag&1 (1 site: RbMap_Destroy_004F6B30)
+0x004FC6A0	30	MapNode_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs MapNode_Destroy_4F7A80, then operator delete when flag&1 (1 site: RbMap_Destroy_004F6B30)
 0x004FC6C0	22	GetFieldOut_8_4FC6C0	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: HashTable_Resize_4FC320
 0x004FC6E0	232	NodeAlloc32_StringCtor_4FC6E0	named	STL: allocate a 0x20-byte node from pool g_0x79B230 and construct a string
 0x004FC7F0	515	DwordVector_ctorN_4FC7F0	named	STL: vector<node*>(n) bucket vector ctor (pool refill inlined), not a list; HashTable_Resize_4FC320 = rehash of the model-name string set (StrHashSet_Insert_4FBBD0: CRenderManager::GetModel / CFigureManager::GetModel)
