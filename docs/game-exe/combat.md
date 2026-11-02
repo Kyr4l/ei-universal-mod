@@ -140,12 +140,18 @@ Entry points (all write the queued slot, then `ValidateQueuedOrder` 0x54E600 for
 | `ClearQueuedOrder` 0x555180 | everywhere an order ends | 0 (stand) unless a script animation is queued |
 | `RequestWeapon` 0x5552E0 (was SetOwnerField270) | `CPlayerServer::OnMsg34_SelectWeapon` 0x670960 | `CUnit +0x270`; TickState switches via vt[25] `SelectWeapon` 0x553610 (needs durability `+0x20` > 0; `CUnitServer::RebuildEquipmentLists` 0x5528F0 unlinks the other weapon items) |
 
-`DispatchQueuedOrder` 0x54A900 [V]: nothing queued -> 0. Sitting (stance 4) and not kind 11 -> stand up first. The run byte with a
-non-walking stance and no reachable combat target -> wanted stance 2. Then by kind: **0** `RebuildMoveAnims` idle set, `StopMove`, state 2;
-**1** move (arrival pre-test `|d|^2 < 0.02`, `CollectPartyFollowers`, `+0x43C = IsCellWater`, `BeginMoveTo(pos, z)`, `ReportMoveResult`
-when `+0x1AC`); **2** `CMover::ResetWithTarget` + state 1; **3..6** `+0x145 = 0`, `ExecuteCombatOrder`; **7** one clip
-(`AnimFrames`) via `PlayOneShotAnim`; **8** via `PlayLoopAnim`; **10** `BuildActionAnimQueue(kind 6)` into the action record and
-`StartAction(1, 0)`; **11** wanted stance 4 (refused -> message 0x1B); `+0x93C = tick`.
+`DispatchQueuedOrder` 0x54A900 [V, deep-read 2026-11-03]: queued kind **9 is the "empty" marker** -> return 0 (also any unknown kind).
+Sitting (stance 4) and not kind 11 -> wanted stance 2; if that starts the stand-up animation, return 1 (the order stays queued). Every kind
+then moves the queued order into the current one, clears the queue and, when the run byte is set with a non-walking stance and the order is
+not a reachable combat order, sets wanted stance 2; `+0x93C lastOrderTick = tick`. By kind: **0** stand: unless already standing (state 2),
+`RebuildMoveAnims` idle set (when the queue was empty its start tick = now - rand % 51, so idle units are out of phase), `StopMove`, state 2;
+**1** move: `ApplyPendingStance` first; arrival pre-test `|d|^2 < 0.02` (3D) -> clear and dispatch the next; `CollectPartyFollowers` lifts the
+party followers off the collision map so the leader's path ignores them (re-stamped after), `+0x43C = IsCellWater`, `BeginMoveTo(pos, z)`;
+with `+0x1AC` set, `ReportMoveResult` when moving or not yet arrived (2D >= 0.001); a refused move sets `moveDone` and dispatches the next;
+**2** turn toward a point: `CMover::ResetAndTurnTo(tick, unit, pos, +0x1AC)`, `RebuildMoveCurve`, move anim set, state 1;
+**3..6** `+0x145 = 0`, `ExecuteCombatOrder`; **7** one clip (`AnimFrames(+0x1AC anim id)`) via `PlayOneShotAnim`; **8** via
+`PlayLoopAnim`; **10** `BuildActionAnimQueue(kind 6)` into the action record and `StartAction(1, 0)`; **11** sit: not sitting -> wanted
+stance 4, refused -> message 0x1B to the owner and the order is dropped (return 0); already sitting -> idles like kind 0.
 
 ### 3.2 Combat orders per Think
 
