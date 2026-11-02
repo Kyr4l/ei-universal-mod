@@ -71,10 +71,10 @@ Dead: sinks, once `OnUnitDied`, `Brain::Reset` (AI units) / the player's vt[20],
 **Which units are updated**: `CWorldServer::TickActiveObjects` 0x58D670 calls vt[6] on every object of the *active* hash `+0x104` (mode 1) or of all
 objects; a unit's countdown `CMapObject +0x174` (set by `CWorldServer::ActivateObject` 0x58D5D0 to `(ptr >> 5 & 0xf) + 0x80` ticks) deactivates it unless
 `CUnitServer +0x174 fighting`, `brain +0x37 alwaysActive` or `brain +0x18c enemySeen` is set [V]. Units are (re)activated by damage (`TakeHit`),
-by their `.mob` AlwaysActive bit (`BuildFromLogicSlot`) and by `ActivateLogicSlot` (alarm). [?] what else activates sleeping units (the player's
-vicinity is the obvious candidate: not read).
+by their `.mob` AlwaysActive bit (`BuildFromLogicSlot`), by `ActivateLogicSlot` (alarm) and by the players' vicinity: `ActivateObjectsAround`
+around every tracked unit, radius sight x 2 + 20 m, in playable zones (world-server.md 4.3) [V].
 
-### 2.2 `Brain::Tick` 0x5D53B0, order of operations [V]
+### 2.2 `Brain::Tick` 0x5D53B0, order of operations [V, deep-read 2026-11-03]
 
 ```
 1  alarm countdown: +0x34 alarmFlag && +0x40 wait > 0 -> wait--; at 0 and +0x35 alarmSlot != 0:
@@ -95,7 +95,8 @@ vicinity is the obvious candidate: not read).
      1 (move) -> kind 0 once the unit's current / queued order is neither 1 nor 2
      2 (move + idle actions) -> Brain::TickMoveOrder 0x5D7520                                           (section 8.2)
      3 (attack) -> Brain::CheckOrderTarget 0x5D76A0
-     4 (cast) -> kind 0 once no cast order (4 / 5) remains; the target goes to the ignore pairs for 15 ticks when enemySeen
+     4 (cast) -> kind 0 once no cast order (4 / 5) remains; the target goes to the ignore pairs for 15 ticks when the unit's
+               CUnitServer +0x18C moveDone is set (the cast was dropped unreached; corrected: not enemySeen)
      5 (interact) -> kind 0 once no interact order (6) remains
      6 (follow) -> Brain::TickFollow 0x5D6F90                                                           (section 8.3)
 ```
