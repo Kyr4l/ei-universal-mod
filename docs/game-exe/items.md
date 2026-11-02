@@ -365,19 +365,15 @@ under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithP
 
 ## 8. What is not known
 
-* `CItemWeapon +0x4c`: saved and compared, never set by `InitFromProto` (stays -1 from the ctor; 0 in 1.mp) [?]. `ItemMaterial
+* `CItemWeapon +0x4c`: saved and compared, never written after the ctor (-1; 0 in 1.mp files written by older code) [V]: a dead field. `ItemMaterial
   +0x24` Skill and the proto bytes `+0x78`, `+0x7d..`, `+0xbc..`, `+0x83..`: no reader found in this round.
 * The runtime `CStringArray +0x20 / +0x50` of every proto (slot 18 `GetProtoText0`): who fills them (probably
   `CTextManager::GetItemTextKeys` or the camp screens) was not traced.
-* `ShopStock +8` vs `+0x14` (armor / weapon protos) rests on which name map `StrHashTable_LookupId` uses (the weapon map by
-  the helper it shares with `ItemsDb::Load`) [I]; the old names `AddUnique_Weapon` (+8) / `AddUnique_Armor` (+0x14) said the
-  opposite. The S_* table assignment (S_Armors 0x7C855C for kind 1, S_Weapons 0x7C8568 for kinds 0 / 3) follows from it.
-* `CInventory` (typeId 0x17): no creator found; its hash set is never filled.
-* The exact `"%s_%.2d.%s.%d"` arguments of the model names (which string is the material part) and `Weapon_GetAttachBones`
-  were not re-read (they are named in functions.tsv from the 2026-10-18 pass).
-* `CWorldServer::CreateItem`'s `desc[10] / desc[11]` (mana / max of the source) and the update list `+0x12e44`: ticked by `CWorldServer::TickActiveObjects` (world-server.md 4.3)
-  (`TickActiveObjects` 0x58D670 is the likely consumer) [?].
-* UnitProto `+0x50` as "natural skill" vs the 7-float read in `GetAttackParams` (combat.md open point) is unchanged.
+* ~~ShopStock +8 / +0x14~~ settled [V] (guess sweep 2026-11-01): `ItemsDb_ListArmorNames` feeds `+8` -> `GenerateArmors`, the weapon list feeds `+0x14`; `ShopStock::AddArmorProto` 0x699080 / `AddWeaponProto` 0x6990E0. The S_* table assignment above stands.
+* `CInventory` (typeId 0x17): no creator and its hash set is never filled: dead class in this build [V] (no `new` site of its vtable). [untestable]
+* ~~Model name arguments~~ settled [V]: `"%s_%.2d.%s.%d"` (`WeaponProto_FormatModelName` 0x6A0BF0, `Armor_FormatModelName` 0x6A3480) = model + type prefix (`unhufe` + `ax`), proto variant (`01`), material code (`co`), texture index (`0`): real file `redress.res/unhufeax_01.co.0.mmp`. `Weapon_GetAttachBones` not re-read.
+* `CWorldServer::CloneItem`'s `desc[10] / desc[11]` (mana / max of the source) [I]; the update list `+0x12e44` is ticked by `CWorldServer::TickActiveObjects` 0x58D670 [V] (world-server.md 4.3).
+* ~~UnitProto +0x50~~ settled [V] (data-sound.md 3): `+0x50` is the Base Level (FLD41), not a natural skill.
 
 ## 9. Corrections to earlier notes
 
