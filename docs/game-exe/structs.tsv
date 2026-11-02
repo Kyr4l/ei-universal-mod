@@ -28,17 +28,27 @@ CObject3D			0x138	float[3]	boundsMin
 CObject3D			0x144	float[3]	boundsMax	
 CObject3D			0x15c	pointer	partRecordsVt	CArray vtable 0x73DE40
 CObject3D			0x160	pointer	partRecords	BoundsRecord[] one per node (count +0x164, cap +0x168, grow +0x16C): BuildFromAnimation; the walkable BASE parts (0x400) feed the bridge manager
-CMapObject	CObject3D	0x4dc	0x170	pointer	specific	CMapObjectServer / ClientSpecific
+CObject3D	CObject	0x170	0x9c	int	unk_0x9c	zeroed by InitFields and DoneFields next to animSystem +0x98 / animDb +0xa0; no other reader or writer in the typed decompiles
+CObject3D			0xc4	float[3]	morphParams	CORRECTION: the CMapObject +0xc4 morphParams row belongs here (the field lies inside CObject3D's 0x170 bytes): the three complection coefficients (str, dex, height) of SetMorphParams; the ctor and InitFields zero them, LoadModel hands them to the animation system / figure builders, CMapObject::ApplyBuffKinds adds 0.4 per strengthen / weaken buff and ResetMorphParams restores them from CMapObject +0x1ac
+CObject3D			0xd4	int	partCount	number of drawn parts in +0xd0 (AddPart appends after a duplicate check, RemovePart compacts, Assign copies, DoneFields frees)
+CObject3D			0xd8	int	partCapacity	
+CObject3D			0xdc	int	partGrow	CArray grow step of +0xd0 (0 = auto)
+CObject3D			0xe4	int	pendingPartCount	number of parts named but not yet created in +0xe0 (Activate creates them; RemovePart / DoneFields drop them)
+CObject3D			0xe8	int	pendingPartCapacity	
+CObject3D			0xec	int	pendingPartGrow	
+CObject3D			0x164	int	partRecordCount	number of 0x38-byte BoundsRecords in +0x160, one per node (BuildFromAnimation sizes it to the node count with Recs38_ConstructN; InitFields frees the array and zeroes count / capacity)
+CObject3D			0x168	int	partRecordCapacity	
+CObject3D			0x16c	int	partRecordGrow	grow step (0 = auto: count / 8 + ..., BuildFromAnimation)
+CMapObject	CObject3D	0x238	0x170	pointer	specific	CMapObjectServer / ClientSpecific; size 0x238 (CreateByKind allocates CTree / CBuilding / CStone / CStuffObject with it; 0x4dc is CUnit)
 CMapObject			0x198	pointer	buffs	CORRECTION: was 0x14-byte buff records: Buff[] (0x14 each): kind byte = spell proto index, level, duration ticks, power, radius; no stacking check (AddBuff appends; readers take the max per kind); ticked by CMapObjectServer::TickBuffs; replicated in net section 3
 CMapObject			0x1b8	int	cellX	position * 2 on the AI grid
 CMapObject			0x1bc	int	cellY	
 CMapObject			0x194	pointer	buffArrayVt	CArray vtable of the buff array (0x50FE70 grow); the array proper is +0x198
 CMapObject			0x19c	int	buffCount	
 CMapObject			0x1a0	int	buffCapacity	
-CMapObject			0xc4	float[3]	morphParams	CORRECTION: was morphScale "x / height / y scale factors": the three complection coefficients (str s, dex d, height h) of CObject3D::SetMorphParams (the field belongs to CObject3D); the buffs add 0.4 to them (ApplyBuffKinds); replicated as net section 1; the figure is rebuilt from the .fig corners (FindOrCreateScene), nothing is scaled
 CMapObject			0x1dc	uint	netDirtyMask	bit 1 section 1 (morph), bit 3 section 3 (buffs) ... (MarkNetDirty)
 CMapObject			0x178	float	sizeFactor	1.0 after the ctor [?]
-CMapObject			0x17c	short	placement0	packed placement block +0x17C..+0x193 (24 bytes, net section 0): +0x17E HP, +0x180 max HP, +0x182 mana (CUnit rows) ...
+CMapObject			0x17c	byte[24]	placement	packed placement block +0x17C..+0x193 (net section 0): +0x17E HP short, +0x180 max HP, +0x182 mana (CUnit rows describe the unit view)
 CMapObject			0x1a4	int	buffGrow	CArray grow step of +0x198
 CMapObject			0x1a8	pointer	protoName	CString [?]
 CMapObject			0x1ac	float[3]	baseMorphParams	the complection at spawn (ResetMorphParams restores +0xC4 from it)
@@ -46,6 +56,7 @@ CMapObject			0x1c0	int	dirtyTime	world time of the last MarkNetDirty
 CMapObject			0x1c4	byte[24]	netSections	DeltaCodecSet (vt 0x73DB94): the NetSection array (0xA0 each: 4 CMemStreams) + mode; sections 0..3 here, 4..13 CUnit
 CMapObject			0x1e8	byte[40]	netStreamFull	CMemStream (vt 0x73C960) the packed full state
 CMapObject			0x210	byte[40]	netStreamDelta	CMemStream the packed delta
+CMapObject	CObject3D	0x238	0x174	int	activeTicksLeft	ticks of activity left before the object falls asleep: 5 after Init; 0x80 + (this >> 5 & 0xf) (a pointer-derived stagger 128..143) when CreateObjectFromDesc / ReadSaveObjects put a kind-8 / 9 active object into the active hash +0x104; CWorldServer::TickActiveObjects decrements it for units (typeId 0x50) and at 0 removes them from the hash unless the brain is busy (CUnitServer +0x174 / +0x9b7 / +0xb0c), then re-arms it; only ticked in zone kind 1 (dead in this build); world-server.md (active objects); size 0x238 (CreateByKind allocates CTree / CBuilding / CStone / CStuffObject with it; 0x4dc is CUnit)
 CUnit	CMapObject	0x4dc	0x238	char[4]	playerName	CString of a player's character
 CUnit			0x23c	int	protoIndex	index into the units db
 CUnit			0x240	pointer	senses	CUnitServer* (server) / CUnitClientSpecific* (client)
@@ -60,12 +71,10 @@ CUnit			0x258	uint	animStart	world time the clip started
 CUnit			0x264	int	stance	applied: 0 crawl 1 sneak 2 walk 3 run 4 sit
 CUnit			0x268	int	stanceWanted	the stance the player asked for (0 crawl 1 sneak 2 walk 3 run 4 sit); CUnitServer::RequestStance
 CUnit			0x26c	int	weaponSlot	0-3, -1 none
-CUnit			0x2b8	float	stanceSpeed	
-CUnit			0x2e4	float[2]	walkDir	unit vector
 CUnit			0x324	int	animSpeedClass	
 CUnit			0x328	float	moveRadius2	
 CUnit			0x32c	float	radius	collision radius (footprint stamps)
-CUnit			0x49c	int	animSetType	0x19 axe/spear, 0x10 dagger, 0xF bow/none
+CUnit			0x49c	pointer	quickItemsVt	CORRECTION: was int animSetType '0x19 axe/spear, 0x10 dagger, 0xF bow/none': the ctor and the dtor write the CArray vtable 0x73EB84 here; the extra item array is +0x4a0 data, +0x4a4 count, +0x4a8 cap, +0x4ac grow (AddObject4A0, Clear releases the entries)
 CUnit			0x4a0	pointer	quickItems	
 CUnit			0x4b0	float	animSpeedAttack	AnimDurationFor class 0x80000
 CUnit			0x4b4	float	animSpeedCast	
@@ -73,9 +82,6 @@ CUnit			0x4b8	float	animSpeedHit
 CUnit			0x4bc	float	animSpeedDeath	
 CUnit			0x4c0	float	animSpeedTransition	class 0x240000 (1.0 for kind 0x32 units); CORRECTION: was animSpeedCross
 CUnit			0x4c4	float	animSpeedSpecial	
-CUnit	CMapObject	0x4dc	0x17e	short	hpDisplayed	packed placement: HP after part penalties
-CUnit			0x180	short	hpMaxDisplayed	
-CUnit			0x182	short	manaDisplayed	
 CUnit			0x270	int	weaponWanted	weapon slot asked for; TickState switches to it (SelectWeapon)
 CUnit			0x274	int	dead	SetDead: 1 = corpse (sinks); vt[55] returns it
 CUnit			0x278	int	walking	1 while the unit moves (collision grid class); net 7
@@ -88,6 +94,12 @@ CUnit			0x438	int	battleButton	1 = Regroup may pick fights for this party member
 CUnit			0x4c8	float[5]	detectionFactors	player units: sight, smell, hearing, (unused), senseLife; 3 = undetected, < 1 detected (replicated 0xc)
 CUnit			0x4a4	int	quickItemCount	count of the +0x4a0 extra item array (quest items given to the unit, PopRandomQuickItem pops it first)
 CUnit			0x4a8	int	quickItemMax	
+CUnit	CMapObject	0x4dc	0x25c	int	animLoop	SetAnimLoop(v): 1 = the clip loops: the client advances the clip start +0x258 itself (CUnitClientSpecific::Update); net section 7 when changed; 0 after ResetFields
+CUnit			0x260	int	animPaused	SetAnimPaused(v): 1 = the animation is frozen (the client shifts the move request ticks instead of advancing); net section 7 when changed
+CUnit			0x27c	MoveCurve	moveCurve	CORRECTION: the embedded 0xa4-byte MoveCurve (+0x27c..+0x31f) replaces the rows +0x2b8 stanceSpeed (= MoveCurve +0x3c baseSpeed, 0.1 in the ctor) and +0x2e4 walkDir (= +0x68 segDx1/segDy1, the cached segment's end direction): segment CArray vt 0x73EB9C +0x27c (data +0x280, count +0x284), run points +0x290 (vt 0x73EB90), cell speeds +0x2a4 (vt 0x73D490), turnRate +0x2bc (0.1), curveX/Y +0x2f4/+0x304, segT0/segT1 +0x314/+0x318, segIndex +0x31c (-1 = none); built by RebuildMoveCurve / ResetMover(WithSpeeds), evaluated by MoveCurve::Predict for the server tick and the client replay (pathfinding.md 5.3); the dtor frees the three buffers
+CUnit			0x320	float	flyHeight	height above the terrain of a flying unit (packed moveType +0x33f == 2): SnapZToTerrain(h) stores it and sets z = world vt[30](x, y) + it on the client (the server, GetTypeId 0x3e, keeps its own z); TerrainZAt and the client ReplayMove add it; 0 for walkers and after ResetFields; saved by CFakeUnit::Read / Write
+CUnit			0x43c	int	pathCostUniform	FindPath cost-table selector for this unit: 0 = the move-class table, != 0 = the uniform table (CAIMap::InitStepQueryForUnit +0x54, pathfinding.md 6); the order dispatcher and MoveGroup set it to IsCellWater(pos) before BeginMoveTo, ApproachTarget / 0x54E600 set 1 (chase), CUnitServer::FindPath temporarily = its mode argument, BeginMoveTo saves and restores it; 0 after ResetFields
+CUnit			0x4ac	int	quickItemGrow	CArray grow step of the +0x4a0 extra item array (0 = auto: count / 8 clamped to 4..0x400, AddObject4A0); 0 in the ctor; read by CFakeUnit::Read
 UnitStats		0x704	0x4	float	experience	total experience; level = round(log(exp/200)/log(1.61)); MaxHP/MaxMana use log(exp/50)/log(1.61)
 UnitStats			0x8	float	expSpent	spent on skills + abilities
 UnitStats			0xc	int	strengthBase	
@@ -133,8 +145,7 @@ UnitStats			0xac	int	naturalAttackKind	proto +0x78 (8 = none, 0x10 = ?); the ani
 UnitStats			0xb0	float[12]	senses	6 base/current pairs: Sight, Infra, SenseLife, Hearing, Smell, Tracking (current = base + buffs); base / current (= stats +0xb0/+0xb4)
 UnitStats			0xe0	float[12]	detections	6 base/current pairs: Sight (visibility), Infra, SenseLife, Hearing (noise), Smell (scent), Tracking; [7] = noise radius (footstep / attack loudness, CUnitServer +0x2dc)
 UnitStats			0x110	BodyPart[6]	bodyParts	0xf4 each: 0 head, 1 torso, 2/3 arms, 4/5 legs (pairs in PickHitLocation; crippling messages 0x1e arms kind 2 / 0x1f legs kind 3); part 1 +0xec = torso fraction: part max HP = maxHP / it * part fraction (was a separate row +0x2f0)
-CUnitServer		0xb20	0x1c	CUnit*	owner	
-CUnitServer			0x3c	int	moveState	slot 16 returns it; 2 = moving
+CUnitServer	CUnitSpecific	0xb20	0x3c	CMover	mover	CORRECTION: was int moveState: the embedded CMover (0x88 bytes +0x3c..+0xc3: MoveRequest kind +0x3c = the old moveState, start +0x40.., request cell list +0x5c (vt 0x73EDB0), pending cells +0x78, goal +0x94/+0x98, request goal +0x9c/+0xa0, maxLength +0xa4, flag bytes +0xa8..+0xab, blocked cells +0xac (vt 0x73F07C), +0xc0 field_84); CMover::Reset in the ctor / ResetFields, CMover::~CMover (0x546100) in the dtor; slot 16 returns mover.kind
 CUnitServer			0x164	int	state	0 walking 1 turning 2 standing 3 one-shot animation 4 looping animation 5 action (attack/cast/use windup) 6 idle; CORRECTION: was '3 attacking 4 casting 5 strike'
 CUnitServer			0x168	int	stance	0 crawl 1 sneak 2 walk 3 run 4 sit (mirrors CUnit +0x264)
 CUnitServer			0x16c	byte	combatMode	weapon drawn / attack-ready (set for attack orders)
@@ -151,7 +162,7 @@ CUnitServer			0x1b4	byte[0x24]	queuedOrder	DispatchQueuedOrder moves it to +0x19
 CUnitServer			0x1e0	UnitStats	stats	
 CUnitServer			0x940	uint	stanceAnimKey	GetStanceAnimSet
 CUnitServer			0x95c	uint	moveAnimKey	attack kind mask | move mode flag
-CUnitServer			0x960	pointer	moveAnimSet	CArray
+CUnitServer			0x960	AnimQueue	moveAnimSet	CORRECTION: was pointer 'CArray': the embedded 0x18-byte move animation queue +0x960..+0x977 for the key +0x95c (RebuildMoveAnims / ApplyMoveAnimSet: anim 0xfe when walking unarmed, else the idle record of attack kind | move mode | 0x80580000): entries +0x964, count +0x968, start tick +0x974 (-1 after every rebuild = world time when applied; ResetOrdersAndStance sets now - rand % 0x33 so idle clips desynchronise; ApplyMoveAnimSet / StartTurnTo copy it into +0x38); AnimQueue_Dtor in the dtor
 CUnitServer			0x980	Brain	brain	CORRECTION: was pointer: embedded, 0x190 bytes
 CUnitServer		0xb20	0x20	byte	paused	TickAnimation: time stands still (frozen)
 CUnitServer			0x21	byte	frozenAnim	set by RestartIdleAnim (hit reaction playing)
@@ -191,6 +202,16 @@ CUnitServer			0x978	pointer	animDoneCallback	called when a state-3 animation end
 CUnitServer			0x97c	uint	propagatedAlarmMask	enemy bits already exchanged with the neighbours
 CUnitServer			0xb10	AiAcknowledge	acknowledge	voice reaction object
 CUnitServer			0x924	pointer	passiveSpellTail	
+CUnitServer			0x147	byte	standAnimApplied	TickMovement: 1 once the standing (stance) anim set +0x944 was switched into +0x24 after MoveCurve::Predict reported the curve ended (unit waiting at the end of its chunk); BeginMoveTo re-applies the stance set when it is set and clears it when the path fails; saved right after +0x146 (Write)
+CUnitServer			0x188	int	approachRepathTick	ApproachTarget: world tick of the last re-path toward the intercept point; the chase re-paths only when now - this >= 16 ticks (pathfinding.md 5.5); reset 0; saved after +0x184
+CUnitServer			0x1d8	byte	chainLinked	1 while +0x1dc holds a follow-chain link: TickMovement found the cell blocked by a unit chasing the same target (same side, orders 3..5, same orderTarget, same move class) and waits behind it (pathfinding.md 5.4 step 2); cleared when the chain loops back to this unit (re-path), by ApproachTarget when the link no longer chases our target or is dying (state 5), by ForgetObject and ResetFields; saved as a byte before the link id
+CUnitServer			0x1dc	pointer	chainLink	CUnit* (refcounted) the chase blocker this unit waits behind (follow-chain); saved / restored as its object id (-1 none, CBaseManager::FindById on Read); released by ResetFields / ForgetObject / the dtor
+CUnitServer			0x91c	pointer	passiveSpellListVt	MFC CList vtable 0x73F010: the passive spell node list is the 0x1c-byte list +0x91c..+0x937 (vt, head +0x920, tail +0x924, count +0x928, free +0x92c, plex +0x930, block size +0x934); HitList_Clear in the dtor, ObjRefList_ReadSave in Read
+CUnitServer			0x928	int	passiveSpellCount	node count of the passive spell list (0 after ResetFields)
+CUnitServer			0x92c	pointer	passiveSpellFree	free node list of the passive spell CList
+CUnitServer			0x930	pointer	passiveSpellPlex	node blocks (List_FreeChain in ResetFields)
+CUnitServer			0x934	int	passiveSpellBlockSize	10: nodes per block of the passive spell CList
+CUnitServer			0x944	AnimQueue	stanceAnimSet	the standing / idle animation set for the key +0x940 (0x666dead = none): GetStanceAnimSet rebuilds it when the key changes (kind-0x32 units merge two BuildStanceAnimQueue results entry by entry) and returns its address; entries +0x948, count +0x94c, start tick +0x958 (-1 = take the world time when it is copied into +0x24; TickMovement / BeginMoveTo / ApplyMoveAnimSet2); AnimQueue_Dtor in the dtor
 CAIMap		0x12704	0x0	byte	loaded	size 0x12704: the StimulusMap is embedded at +0x26c8
 CAIMap			0x2	byte	navGridOn	NavGrid rebuilt on passability changes
 CAIMap			0x14	byte[64]	walkCostTable	16 terrain material classes, 0x400 = 1.0, -1 impassable
@@ -422,6 +443,17 @@ CAIMap			0x2614	byte[0x80]	pathFinderBwd	tile PathFinder, backward (flag 1)
 CAIMap			0x26a8	pointer	flagsGridData	flags grid data; rows at +0x26AC
 CAIMap			0x26b8	pointer	occupancyGridData	scratch / direction-code grid data; rows at +0x26BC
 CAIMap			0x26c8	StimulusMap	stimulusMap	CORRECTION: was unnamed/size unknown: 0x1003c bytes, g_0x7B2798
+CAIMap		0x12704	0x208	pointer	erodeList5Data	data of the MFC CArray +0x204 (vt 0x73F9E0 at +0x204, so the curated "pointer erodeList5" row is the vtable): {dx, dy} int pairs copied by InitStepTables from the table at 0x7912DC until the 100 terminator (the erosion footprint of move classes 0-4); pathfinding.md (passability erosion)
+CAIMap			0x20c	int	erodeList5Count	(+0x210 capacity, +0x214 grow)
+CAIMap			0x21c	pointer	erodeList13Data	data of +0x218: pairs from 0x79130C (classes 5-6)
+CAIMap			0x220	int	erodeList13Count	
+CAIMap			0x230	pointer	erodeList29Data	data of +0x22c: pairs from 0x79137C (class 7)
+CAIMap			0x234	int	erodeList29Count	
+CAIMap			0x244	pointer	steepList5Data	data of +0x240: pairs from 0x79146C (MarkSteepCells neighbour clears)
+CAIMap			0x248	int	steepList5Count	
+CAIMap			0x258	pointer	steepList13Data	data of +0x254: pairs from 0x7914BC
+CAIMap			0x25c	int	steepList13Count	(steepList29 +0x268 is filled from 0x79156C the same way: data +0x26c, count +0x270)
+CAIMap			0x2694	int	lastPlacedObjectId	the object id of the last PlaceObjectVolumes(id, records) call (stored after the cell object records are added and the dirty rectangle grown); 0 in CAIMap::Ctor and CWorldServer::NewZone; no reader in the typed decompiles
 AnimQueue		0x18	0x0	pointer	vtable	
 AnimQueue			0x4	pointer	entries	12-byte entries {anim, sub, flags, duration, loop}
 AnimQueue			0x8	int	count	
@@ -430,7 +462,7 @@ AnimQueue			0x10	int	growBy
 AnimQueue			0x14	int	startTick	
 UnitRecord		0x108	0x0	int	field_0	packed net/save form of UnitStats (combat.md section 4); the rows below were read from CUnit
 UnitRecord			0xf	byte	moveType	2 = flying (stats +0x60) (CUnit +0x33f)
-UnitRecord			0x10	byte	speedStat0	GetSpeeds inputs (CUnit +0x340)
+UnitRecord			0x10	byte[4]	stanceSpeedPacked	CORRECTION: was byte speedStat0 (one byte): [0] run (stance 3), [1] walk / sit (stances 2, 4), [2] sneak (1), [3] crawl (0) = UnitStats +0x34 stanceSpeedMult * 127.5; CUnit::GetSpeeds: speed = byte * (speedBase +0x14 * 10 / 255) * 2 / 255, turn rate = run speed (stances 2 / 4) or speed, * RotateSpeedMult (CUnit +0x340..+0x343)
 UnitRecord			0x14	byte	speedBase	stats +0x28 * 25.5 (CUnit +0x344)
 UnitRecord			0x15	byte	actionSpeed	stats +0x30 (CUnit +0x345)
 UnitRecord			0x16	short	carryWeight	stats +0x54 (CUnit +0x346)
@@ -494,14 +526,31 @@ AttackParams			0x14	float	spread	accuracy spread: roll = 2*rand(0..spread) - spr
 AttackParams			0x18	float	attack	attack skill
 AttackParams			0x1c	float	defence	parry skill; 0 for bows/crossbows
 CUnitClientSpecific	CUnitSpecific	0xdc	0x2c	float	lastAnimTime	SetAnimation
-CUnitClientSpecific			0x34	float	replayTime	client move replay clock
-CUnitClientSpecific			0x38	int	moveState	client MoveRequest copy (slot 16)
-CUnitClientSpecific			0x78	float	fadeAlpha	+1/15 per frame onto the figure parts
-CUnitClientSpecific			0x7c	int	fadeTicks	
-CUnitClientSpecific			0x9c	pointer	voiceQueue	list of 0x20-byte nodes {next, prev, entry, kind, countdown, sound, flag}
-CUnitClientSpecific			0xa0	int[7]	armorIds	equipped item ids (-1 none)
-CUnitClientSpecific			0xbc	int[4]	weaponIds	weapon slot item ids (-1 none)
-CUnitClientSpecific			0xcc	pointer	mouthTexture	
+CUnitClientSpecific	CUnitSpecific		0x34	float	replayTime	client move replay clock
+CUnitClientSpecific	CUnitSpecific		0x38	MoveRequest	moveRequest	CORRECTION: was int moveState: the client copy of the server move request (0x3c bytes +0x38..+0x73: kind +0x38 = the old moveState, start +0x3c.., args +0x4c.., cell list vt 0x73EDB0 +0x58, head/tail/count/free/plex +0x5c..+0x6c, block size +0x70 = 0x80); MoveRequest::Clear in Init; ReplayMove feeds it to MoveCurve::Predict (CUnit +0x27c); message 0x0E fills it
+CUnitClientSpecific	CUnitSpecific		0x78	float	fadeAlpha	+1/15 per frame onto the figure parts
+CUnitClientSpecific	CUnitSpecific		0x7c	int	fadeTicks	
+CUnitClientSpecific	CUnitSpecific		0x9c	pointer	voiceQueue	list of 0x20-byte nodes {next, prev, entry, kind, countdown, sound, flag}
+CUnitClientSpecific	CUnitSpecific		0xa0	int[7]	armorIds	equipped item ids (-1 none)
+CUnitClientSpecific	CUnitSpecific		0xbc	int[4]	weaponIds	weapon slot item ids (-1 none)
+CUnitClientSpecific	CUnitSpecific		0xcc	pointer	mouthTexture	
+CUnitClientSpecific	CUnitSpecific	0xdc	0x20	pointer	particle	CParticle* effect owned by the client unit (DestroyParticle: CParticle::Clear + Release; Done / Dtor: DetachClearFlags + Release); 0 in Init; the writer is outside the typed CUnitClientSpecific methods [?]
+CUnitClientSpecific	CUnitSpecific		0x24	pointer	figureA	refcounted figure / particle object set by SetFigures2428(a, b) (CParticle::Clear + Release of the old one, refcount +1); Done / Dtor detach and release it; purpose [?]
+CUnitClientSpecific	CUnitSpecific		0x28	pointer	figureB	second object of SetFigures2428
+CUnitClientSpecific	CUnitSpecific		0x30	pointer	soundAnimEntry	the .adb entry being played (animSystem +0x40) whose sound events UpdateAnimSounds tracks: when it changes lastAnimTime +0x2c restarts at 0; SetAnimation stores it with +0x2c = animSystem +0x60
+CUnitClientSpecific	CUnitSpecific		0x74	byte	weaponPartsVisible	SetWeaponPartsVisible(v): the figure parts of the weapon record are shown (flag 0x80 on each part); SetWeaponFigure clears it when the weapon changes; Update hides them while the current anim has no weapon bits
+CUnitClientSpecific	CUnitSpecific		0x75	byte	arrowPartVisible	the 'rh3.arrow00' part of a bow is shown: SetWeaponFigure sets 1 when the part exists, UpdateArrowVisibility toggles it by the attack animation phase (heroes), SetWeaponPartsVisible copies +0x74 into it
+CUnitClientSpecific	CUnitSpecific		0x76	byte	needInitialAlign	1 after Init: the first ReplayMove aligns the figure to the move direction (AlignToDirectionInv) and clears it
+CUnitClientSpecific	CUnitSpecific		0x80	int	lastFootprintId	terrain print id of the last footstep decal; UpdateAnimSounds passes it to CWorldClient::AddTerrainPrint2 (chained / alternating prints); -1 none (Init, and when +0x84 runs out)
+CUnitClientSpecific	CUnitSpecific		0x84	int	footprintChainLeft	footsteps left in the current print chain: 4 + rand(0..3) after a new print, -1 per footstep event; at 0 the id +0x80 resets to -1
+CUnitClientSpecific	CUnitSpecific		0x88	int	loopSoundHandle	CSoundManager handle of the animation's looping sound (anim class 0x180000); stopped with +0x90 when a class-0x1c0000 anim starts; -1 in Init
+CUnitClientSpecific	CUnitSpecific		0x8c	int	unk_0x8c	-1 in Init; no reader found in the typed CUnitClientSpecific decompiles (sits between the loop sound +0x88 and the voice handle +0x90: a third sound handle by position)
+CUnitClientSpecific	CUnitSpecific		0x90	uint	voiceSoundHandle	handle of the playing voice / class-0x80000 anim sound: PlaySound (kinds 2 / 0x1c), Update (voice queue) and UpdateAnimSounds play a new one only when it is -1 or its channel is free (FindFreeChannel / HasSoundId); stopped with +0x88
+CUnitClientSpecific	CUnitSpecific		0x94	int	lastVoiceId	PlayVoice: the voice id played last; the same id is refused within 5000 ms of +0x98
+CUnitClientSpecific	CUnitSpecific		0x98	uint	lastVoiceTime	timeGetTime() ms of the last PlayVoice
+CUnitClientSpecific	CUnitSpecific		0xd0	byte	mouthAnimActive	1 while the mouth texture +0xcc animates (talking: Update toggles SetMouthOpen / SetMouthClosed every +0xd4 frames); LoadMouthTexture clears it when the texture has no flag 8; ClearTargetCC / Done / Dtor clear it
+CUnitClientSpecific	CUnitSpecific		0xd4	int	mouthTimer	frames until the next mouth toggle: 2 + rand(0..7) (Update)
+CUnitClientSpecific	CUnitSpecific		0xd8	int	mouthOpen	1 after SetMouthOpen, 0 after SetMouthClosed (both skip when already in that state unless forced)
 Placement		0x58	0x4	int	regenTick	counts to 15 (Placement_Regenerate)
 Placement			0x8	float	hp	DERIVED each change: maxHP - body-part penalties
 Placement			0xc	float	hpMax	hero formula or proto +0x48, * strengthen/weaken ratio capped at 1.0 [?]
@@ -723,7 +772,7 @@ MobLogicSlot		0x4c	0x44	int	wait	ticks before the alarm
 MobLogicSlot		0x4c	0x48	int	aggrMode	0 standard 1 revenge 2 fearful 3 player-fear
 PlayerRelations		0x100	0x0	uint[32]	friends	row[a] bit b = a treats b as FRIEND (self bit set by Reset); g_0x7C2BC4 (.mob diplomacy) and CWorldServer +0x12c64
 PlayerRelations		0x100	0x80	uint[32]	enemies	forced enemy bits = initial alarmMask of a side
-CWorldServer			0x84	float	nightFactor	CWorld::NightFactor 0..1: sight x (1 - n + n x infra / 100)
+CWorldServer	CWorld	0x12e7c	0x84	float	nightFactor	CWorld::NightFactor 0..1: sight x (1 - n + n x infra / 100)
 CWorldServer			0x88	float	weatherSight	1.0, 0.9 while it rains
 CWorldServer			0x8c	byte[80]	alarmSlots	5 x {byte active, int tick, float x, float y} (0x10 each): InvokeAlarm / ActivateLogicSlot; g_0x7AFFF4 = +0x94 of slot 0
 CWorldServer			0x12c64	PlayerRelations	relations	CORRECTION: was AggroTable: same class as g_0x7C2BC4 (Read / Write with PlayerRelations::Read / Write)
@@ -891,7 +940,7 @@ CSpellEffect			0x98	pointer	lightEffect	CEffectPointLight ref
 CSpellEffect			0x9c	int	volumesPlaced	1 while the wall / fog / campfire cells block the passability map (UpdateVolumes)
 CSpellEffect			0xa0	int	countdown	ticks left in the phase (flight time, wall lifetime = duration, 0x23 after an impact)
 CSpellEffect			0xa4	byte	quiet	1 for passive item casts (no heal sound when HP is full); passed to AddBuff as the applyScale flag
-CEffect	CObject	0x14c	0x1c	float[3]	pos	CObject3D transform block (+0x1C pos, +0x28 world pos, +0x34 / +0x44 quaternions) without the figure fields of the CMapObject-style CObject3D
+CEffect	CObject	0x14c	0x1c	float[3]	pos	CObject3D transform block (+0x1C pos, +0x28 world pos, +0x34 / +0x44 quaternions) without the figure fields of the CMapObject-style CObject3D; CEffectBase2 = the 24-slot intermediate subclass (ctor 0x67B050, size 0x14c, no own fields); derived effects start at +0x14C
 CEffect			0x28	float[3]	worldPos	
 CEffect			0x34	float[4]	localRot	identity
 CEffect			0x44	float[4]	worldRot	identity
@@ -1055,7 +1104,6 @@ ItemsDb			0x80	pointer	questItems	vector<QuestProto 0x7c> (g_0x7C8758 / 0x7C875C
 ItemsDb			0x8c	pointer	questMap	name map
 ItemsDb			0xa0	pointer	lootItems	vector<LootProto 0x78> (g_0x7C8778 / 0x7C877C)
 ItemsDb			0xac	pointer	lootMap	name map (ItemsDb_FindLootProtoByName)
-CItemManager	CObjectManager	0xbc	0xac	pointer	world	the owning CWorld / CParty (vt[16] item constructor, vt[18] item manager, vt[22] spell manager) [V: CreateItemByName / CreateItem]
 CItemConstructor	CObject	0x34	0x1c	pointer	manager	CItemManager* set by SetManager around every build (refcount only)
 CItemConstructor			0x20	pointer	material	ItemMaterial* or 0
 CItemConstructor			0x24	pointer	proto	items.idb record (any of the five tables)
@@ -1149,6 +1197,16 @@ CPlayer			0x10c	int	netLogFlag	logs "client to server / server to client, size =
 CPlayer		0x0	0x110	int	gtimeTick	the world tick at which "gtime" was last updated (BroadcastGameTime); = tick after PlayerIn / LoadSave
 CPlayer			0x114	pointer	syncedItemsVt	MFC CList<DWORD> vtable 0x743138; +0x118 head (existing row trackedIds), +0x11c tail, +0x120 count, +0x124 free, +0x128 CPlex, +0x12c block 10: ids of party items whose float +0x28 (durability) is synced with message 0x14 (CPlayer::TrackItemId / PurgeSyncedItems / CPlayerServer::ResendItemValues)
 CPlayer		0x0	0x130	uint	replicationFlags	bits set by CWorldServer::FlagAllPlayers: 1 zone state, 2 weather, 4 time, 8 wind, 0x10 msg 0x07, 0x20 water levels; -1 after NewZone / LoadSave / AcceptPlayers; cleared by the CPlayerServer::SendMsg7x senders
+CPlayer	CObject	0x134	0xe8	pointer	itemListTail	tail node of the loose item CList +0xe0 / +0xe4 (MFC layout: vt, head, tail, count, free, plex, block)
+CPlayer			0xec	int	itemListCount	number of loose items (AddItems appends; ClearAll / the dtor empty the list)
+CPlayer			0xf0	pointer	itemListFree	free node chain of the loose item list
+CPlayer			0xf4	pointer	itemListPlex	CPlex block chain of the loose item list (List_FreeChain in ClearAll / the dtor)
+CPlayer			0xf8	int	itemListBlock	10 nodes per block
+CPlayer			0x11c	pointer	syncedItemsTail	tail node of the synced item id CList +0x114 / +0x118
+CPlayer			0x120	int	syncedItemsCount	number of party item ids whose durability is resent with message 0x14 (Init empties the list)
+CPlayer			0x124	pointer	syncedItemsFree	free node chain
+CPlayer			0x128	pointer	syncedItemsPlex	CPlex block chain (List_FreeChain in the ctor / dtor / Init)
+CPlayer			0x12c	int	syncedItemsBlock	10 nodes per block
 CGSPlayer			0x3c	CParty	itemShop	the item trade stock (GenerateItemShop)
 CGSPlayer			0xac	CParty	spellShop	the spell trade stock (GenerateSpellShop)
 CGSPlayer			0x11c	ShopStock	itemStock	allowed protos / materials for the item shop
@@ -1171,6 +1229,15 @@ CPlayerClient			0x88	LzCompressor	sendCodec	0x2828 bytes: the LZ window of the c
 CPlayerClient			0x28b0	LzCompressor	recvCodec	CORRECTION: was "+0x2898 DeltaCodec" (that offset is inside the send codec's bit writer); 0x2828 bytes: the LZ window of the server -> client stream
 CPlayerClient			0x50d8	pointer	partyUnitIds	aligned DWORD array of the party unit ids of the last message 0x60 (units flagged 0x400000); +0x50dc count, +0x50e0 capacity, +0x50e4 grow
 CPlayerClient			0x50e8	pointer	lootUnitIds	aligned DWORD array (4) of the unit ids whose loot belongs to the player (message 0x60 tail); +0x50ec count, +0x50f0 capacity, +0x50f4 grow
+CPlayerClient	CObject	0x50f8	0x28	int	handlerCount	0x100 after Init (the aligned handler array +0x24 is {data, count, capacity, grow}); DispatchPackets checks the server opcode against it
+CPlayerClient			0x2c	int	handlerCapacity	
+CPlayerClient			0x30	int	handlerGrow	
+CPlayerClient			0x50dc	int	partyUnitIdCount	number of party unit ids of the last message 0x60 (partyUnitIds +0x50d8; AlignedDwords_SetSize in the ctor, Done / ResetStreams empty it)
+CPlayerClient			0x50e0	int	partyUnitIdCapacity	
+CPlayerClient			0x50e4	int	partyUnitIdGrow	
+CPlayerClient			0x50ec	int	lootUnitIdCount	number of unit ids whose loot belongs to the player (lootUnitIds +0x50e8, message 0x60 tail)
+CPlayerClient			0x50f0	int	lootUnitIdCapacity	
+CPlayerClient			0x50f4	int	lootUnitIdGrow	
 CPlayerServer	CObject	0x5128	0x1c	pointer	player	the owning CPlayer
 CPlayerServer			0x20	int	state	0 new (identity awaited), 1 in game, 2 left the world (between zones, after 0x04), 3 disconnected / version refused, 4 hero uploaded (awaiting 0x09)
 CPlayerServer			0x24	int	syncMarker	-1 = UpdateVisibleSet rebuilds the known / visible arrays from the party units' AiMemory; else the previous known array is copied; sent in message 0x60
@@ -1188,6 +1255,19 @@ CPlayerServer			0x50f8	ObjRefCArray	knownObjects	CORRECTION: was "+0x50f8 / +0x5
 CPlayerServer			0x510c	ObjRefCArray	visibleUnits	CORRECTION: was "+0x5110 / +0x5114 party unit array"; CArray of object refs: +0x5110 data, +0x5114 count, +0x5118 capacity: the units the player may act on (IsUnitVisible; attack / combat checks) and the id list of message 0x60
 CPlayerServer			0x5120	int	partyMode	0 calm, 1 a party unit is hurt (a body-part stat +0x4c8..+0x4d8 <= 2.0), 2 a visible unit fights the party (offensive spell or a hostile brain targets a party unit); computed in SendMsg60_PartyStatus every replication, sent in 0x60, read by the follow AI (unit-ai.md)
 CPlayerServer			0x5124	int	partyResendTicks	countdown (random 900..1800) until ResendParty sends 0x80 again
+CPlayerServer	CObject	0x5128	0x2c	int	handlerCount	0x100 after Init (the aligned handler array +0x28 is {data, count, capacity, grow}); the client opcode is checked against it before the dispatch
+CPlayerServer			0x30	int	handlerCapacity	
+CPlayerServer			0x34	int	handlerGrow	
+CPlayerServer			0x78	pointer	spawnRecords	data of the MFC CArray +0x74 (vt 0x73D2C8): 0x28-byte spawn records (quaternion +0x10 identity) filled by World::PlayerOut and consumed by PlayerIn after message 05; world-client-players.md (zone change)
+CPlayerServer			0x7c	int	spawnRecordCount	
+CPlayerServer			0x80	int	spawnRecordCapacity	
+CPlayerServer			0x84	int	spawnRecordGrow	
+CPlayerServer			0x50dc	int	trackedUnitCount	number of unit objects currently replicated to the client (trackedUnits +0x50d8; UntrackObject decrements, PtrArray_ReleaseAll in the ctor / dtor)
+CPlayerServer			0x50e0	int	trackedUnitCapacity	
+CPlayerServer			0x50e4	int	trackedUnitGrow	
+CPlayerServer			0x50ec	int	trackedEffectCount	number of effect objects currently replicated (trackedEffects +0x50e8)
+CPlayerServer			0x50f0	int	trackedEffectCapacity	
+CPlayerServer			0x50f4	int	trackedEffectGrow	
 ObjRefCArray		0x14	0x0	pointer	vtable	0x73D110 / 0x73D11C: MFC CArray of refcounted object pointers
 ObjRefCArray			0x4	pointer	data	
 ObjRefCArray			0x8	int	count	
@@ -1274,6 +1354,22 @@ CWorldClient			0x7d4	CString	windowTitle	"EvilIslands"
 CWorldClient			0x7d8	CString	windowClass	"EvilIslandsClass"
 CWorldClient			0x7dc	CString	windowTitle2	"EvilIslands"
 CWorldClient			0x7e0	CString	pausedTitle	"EvilIslands Paused"
+CWorldClient	CWorld	0x7e4	0x84	int	localObjectIdCounter	= g_0x7AF63C: id counter of the client-only figure objects (kind 0x38): -100000 (0xfffe7960) after Init, post-decremented by every CEffectArrowFigure::Activate / CEffectMoshka::CreateBird before map object manager vt[23] RegisterInstant(0x38, id), so local objects get -100000, -100001 ... and never collide with the server's ids; renderer.md (client effects)
+CWorldClient			0x88	uint	debugOverlayFlags	0xb after the ctor: bit 0 SetStateFlag1 / ClearStateFlag1 (the debug text buffer slot 1 on g_0x78EEF0), bit 1 render stats ("triangles / vertices submitted" watches, HideRenderStats), bit 2 manager stats (HideManagerStats), bit 3 time stats ("Last Event" / "World Time", HideTimeStats); the Set*/Hide* slots only toggle them, no reader in the typed decompiles
+CWorldClient			0x90	pointer	zoneExits	data of the MFC CArray +0x8c: 0x3c-byte zone exit records (rect +0x14..+0x20, rotation +0x24, name +0x28, entrance +0x2c); FindZoneExitAt / GetZoneExitCenter / CreateZoneExitEffects index it
+CWorldClient			0x94	int	zoneExitCount	(+0x98 capacity, +0x9c grow)
+CWorldClient			0xa4	pointer	zoneExitEffects	data of the RefArray +0xa0: one kind-0x2038 particle effect per zone exit (CreateZoneExitEffects; UpdateZoneExitEffectStates shows / hides them; the dtor releases them)
+CWorldClient			0xa8	int	zoneExitEffectCount	
+CWorldClient			0xac	int	zoneExitEffectCapacity	
+CWorldClient			0xc0	pointer	visibleListHead	head node of the MFC CList +0xbc of the objects ticked by Update (AddVisibleObject appends, RemoveObject unlinks through visibleHash +0xd8, ClearAll empties)
+CWorldClient			0xc4	pointer	visibleListTail	
+CWorldClient			0xc8	int	visibleListCount	
+CWorldClient			0xcc	pointer	visibleListFree	free node chain
+CWorldClient			0xd0	pointer	visibleListPlex	CPlex block chain (+0xd4 block size 10)
+CWorldClient			0xf8	pointer	pickRecordsEnd	end of the used pick records of +0xf4 (STL vector end; PickObjectsAt / PickObjectsAt2 reset and refill it)
+CWorldClient			0xfc	pointer	pickRecordsCapEnd	end of the reserved storage (400 x 0x18 bytes allocated by Init)
+CWorldClient			0x194	int	unk_0x194	0 in the ctor, returned by slot 37 (Get194); never written elsewhere in the typed decompiles (a null manager slot between lightManager +0x190 and particleManager +0x19c)
+CWorldClient			0x198	int	unk_0x198	0 in the ctor, returned by slot 38 (Get198); never written elsewhere
 CBridgeManager	CObject	0x38	0x1c	pointer	quadListVt	MFC CList (vt 0x73F548) of walkable quads: 0x54-byte nodes {next, prev, BridgeQuad}
 CBridgeManager			0x20	pointer	quadHead	first quad node (CWorldClient +0x1f4)
 CBridgeManager			0x24	pointer	quadTail	
@@ -1550,6 +1646,22 @@ CRenderDevice			0x16c	int	statVertices	per frame (BeginFrame resets)
 CRenderDevice			0x170	int	statTriangles	
 CRenderDevice			0x174	int	statDrawCalls	
 CRenderDevice			0x178	int	statTextureChanges	
+CRenderDevice	CDXDirectDraw	0x17c	0xdc	int	unk_0xdc	zeroed with vbVertexCount +0xE0 by CreateVertexBuffer and after the unlock in FlushVertexBuffer; never read (the whole vertex-buffer batching path is dead, CreateVertexBuffer has no callers) [?] (renderer.md)
+CRenderDevice			0xe8	int	batchIndexCount	ushorts in +0xE4: FlushVertexBuffer draws count / 3 triangles with DrawIndexedPrimitiveVB then resets it to 0 (dead path)
+CRenderDevice			0xec	int	batchIndexCapacity	
+CRenderDevice			0xf0	int	batchIndexGrow	
+CRenderDevice			0xfc	int	unk_0xfc	second batching set: the counterpart of +0xDC for the vbList2 / currentVb2 buffers (zeroed by CreateVertexBuffer and FlushVertexBuffer2, never read) [?]
+CRenderDevice			0x100	int	vbVertexCount2	vertex count of the second (never filled) vertex buffer +0xF8 (FlushVertexBuffer2: DrawIndexedPrimitiveVB vertex count, added to statVertices)
+CRenderDevice			0x104	pointer	batchIndices2	aligned ushort array of the second batching set (AlignedWords_SetSize in CreateVertexBuffer; the dtor frees it through the raw pointer at -4)
+CRenderDevice			0x108	int	batchIndexCount2	FlushVertexBuffer2 draws count / 3 triangles then resets it
+CRenderDevice			0x10c	int	batchIndexCapacity2	
+CRenderDevice			0x110	int	batchIndexGrow2	
+CRenderDevice			0x114	pointer	vbList3	sentinel of a third std::list of RcPtr<CVertexBuffer> (0xC nodes {next, prev, RcPtr}; ctor PairCtor_4EC590 + PoolAlloc(0xC), dtor walks and ListClear10); never filled
+CRenderDevice			0x118	pointer	currentVb3	third current vertex buffer (RefCount_Release in the dtor); always 0
+CRenderDevice			0x11c	pointer	batchIndices3	third aligned ushort index array (AlignedWords_SetSize / WordArray_SetSize in CreateVertexBuffer; freed by the dtor)
+CRenderDevice			0x120	int	batchIndexCount3	
+CRenderDevice			0x124	int	batchIndexCapacity3	
+CRenderDevice			0x128	int	batchIndexGrow3	ctor zeroes +0x118..+0x128
 RenderMaterial		0x24	0x8	byte	alphaBlend	the device-side material (TextureBlend, vt 0x73DF68; CObject3DClientSpecific +0xDC): ALPHABLENDENABLE when set
 RenderMaterial			0xc	uint	srcBlend	D3DBLEND
 RenderMaterial			0x10	uint	destBlend	
@@ -1581,6 +1693,7 @@ CRenderManager			0xc	pointer	archives	std::list of opened resource files (0x18 n
 CRenderManager			0x10	byte[20]	modelHash	name -> {.., +0x10 FigureModel*} (GetModel)
 CRenderManager			0x24	pointer	renderer	I3DFigureImpl (refcounted)
 CRenderManager			0x28	pointer	scenes	rb multimap name -> CRenderScene* (node +0x1C): one scene per (model, complection) = the mesh cache
+CRenderManager		0x38	0x2c	int	sceneCount	node count of the scenes rb map +0x28: ClearNamedMap (slot 5) erases the tree only when it is non-zero and zeroes it after; slot 1 (0x4F6A20, Get2C) returns it
 FigureModel		0x20	0x0	pointer	modRes	CMappedResource2 of "<name>.mod" (inner RES: link table + one FIG8 per part)
 FigureModel			0x4	pointer	bonRes	"<name>.bon" (one 96-byte entry per part)
 FigureModel			0x8	pointer	anmRes	"<name>.anm" (one RES per clip)
@@ -1588,7 +1701,7 @@ FigureModel			0xc	byte[20]	clipHash	clip name -> CMappedResource2 of the opened 
 CRenderScene		0xb0	0x0	pointer	vtable	0x73D790; the "0xB0 figure instance": the meshes of one model at one complection
 CRenderScene			0x4	int	refcount	
 CRenderScene			0x8	pointer	nameBegin	std::string {begin, end, cap}: the model name
-CRenderScene			0x14	byte[28]	entries	rb map part name -> SceneEntry (node + 0x1C) (FindOrCreateEntry)
+CRenderScene		0xb0	0x14	byte[12]	entries	CORRECTION of the byte[28] row: the rb map part name -> SceneEntry is the 12-byte header {sentinel / root, node count +0x18, flags} (NodeAlloc112 in the ctor, 0x70 nodes with the entry at +0x1C); +0x20 is a separate RECT
 CRenderScene			0x30	float[3]	morphParams	s, d, h the meshes were blended at (FindOrCreateScene matches within 1e-5)
 CRenderScene			0x3c	pointer	vertices	VertexSoABlock[] (32-byte aligned; count +0x40 blocks, cap +0x44, grow +0x48)
 CRenderScene			0x4c	pointer	normals	VertexSoABlock[] (count +0x50, cap +0x54, grow +0x58)
@@ -1599,6 +1712,27 @@ CRenderScene			0x8c	pointer	indices	ushort[] (count +0x90, cap +0x94, grow +0x98
 CRenderScene			0x9c	byte[12]	ranges	rb map part name -> SceneRange (node + 0x1C) (AddMesh / DrawMesh)
 CRenderScene			0xa8	pointer	manager	CRenderManager
 CRenderScene			0xac	pointer	pipeline	ITLPipeline
+CRenderScene			0x20	int[4]	screenRect	RECT left top right bottom: the union of the non-empty entry rects (+0x40 of each SceneEntry), rebuilt by slot 1 RecomputeScreenRect (SetRect(2e9, 2e9, -2e9, -2e9) first): the figure's screen rectangle for picking (renderer.md)
+CRenderScene			0x40	int	vertexBlocks	VertexSoABlocks in +0x3C (AddMesh appends, RemoveMesh compacts; EstimateTriangles weighs it x8)
+CRenderScene			0x44	int	vertexCapacity	
+CRenderScene			0x48	int	vertexGrow	
+CRenderScene			0x50	int	normalBlocks	SoA normal blocks in +0x4C
+CRenderScene			0x54	int	normalCapacity	
+CRenderScene			0x58	int	normalGrow	
+CRenderScene			0x60	int	uvCount	float[2] pairs in +0x5C
+CRenderScene			0x64	int	uvCapacity	
+CRenderScene			0x68	int	uvGrow	
+CRenderScene			0x70	int	componentCount	FigComponents in +0x6C
+CRenderScene			0x74	int	componentCapacity	
+CRenderScene			0x78	int	componentGrow	
+CRenderScene			0x80	int	morphComponentCount	uints in +0x7C
+CRenderScene			0x84	int	morphComponentCapacity	
+CRenderScene			0x88	int	morphComponentGrow	
+CRenderScene			0x90	int	indexCount	ushorts in +0x8C
+CRenderScene			0x94	int	indexCapacity	
+CRenderScene			0x98	int	indexGrow	the ctor zeroes all six {pointer, count, capacity, grow} quads
+CRenderScene			0xc	pointer	nameEnd	STL string {begin +0x8, end, cap}: end of the model name (StlString_CtorCopy in the ctor)
+CRenderScene			0x10	pointer	nameCap	end of the name's storage; ~body / Clear free (cap - begin) bytes through PoolFree / NodeAlloc_FreeBytes
 SceneEntry		0x50	0x0	int	textureNumber	the .fig header word +0x24 (texture kind 0..0x10) -> CObject3DClientSpecific texture set
 SceneEntry			0x4	int	materialKind	the .fig header word +0x20 (17..25) -> CWorldClient::FindMaterial(kind)
 SceneEntry			0x8	BoundsRecord	bounds	filled by the pipeline's ComputeBounds from the blended vertices
@@ -1657,11 +1791,40 @@ CFigure			0x1e0	pointer	ownComponents	(count +0x1E4 ...)
 CFigure			0x1f0	pointer	ownMorphComps	(count +0x1F4 ...)
 CFigure			0x200	pointer	ownIndices	(count +0x204 ...)
 CFigure			0x210	pointer	ownUvs	(count +0x214 ...)
+CFigure	CObject	0x220	0xdc	int	unk_0xdc	zeroed by both CFigure::Init bodies (0x59F210 / 0x5A6C70) next to the draw pointers and copied by CFigure::CopyFrom (slot 18); never read by figure code (the +0xDC readers of the camp windows are other classes) [?]
+CFigure			0x12c	int	morphDeltaCount	number of Vec3 morph deltas in +0x128 (SetMorphDeltas; SubmitMorphedVertices adds them to the SoA vertices); CFigure::CFigure zeroes +0x12C..+0x134
+CFigure			0x130	int	morphDeltaCapacity	
+CFigure			0x134	int	morphDeltaGrow	CArray grow step (0 = auto)
+CFigure			0x13c	int	diffuseColorCount	uints in +0x138 (4 * normal blocks: one per normal; sized by ParseFIG / BuildMorphed / LoadFig8)
+CFigure			0x140	int	diffuseColorCapacity	
+CFigure			0x144	int	diffuseColorGrow	
+CFigure			0x14c	int	specularColorCount	uints in +0x148 (same size as the diffuse array; Done frees both)
+CFigure			0x150	int	specularColorCapacity	
+CFigure			0x154	int	specularColorGrow	
+CFigure			0x1c4	int	ownVertexBlocks	VertexSoABlocks in +0x1C0 (4 vertices each): LoadFig8 / ReadParts / ParseFIG output; the derived Done (0x5A6E10) frees the array and zeroes count / capacity
+CFigure			0x1c8	int	ownVertexCapacity	
+CFigure			0x1cc	int	ownVertexGrow	
+CFigure			0x1d4	int	ownNormalBlocks	SoA normal blocks in +0x1D0
+CFigure			0x1d8	int	ownNormalCapacity	
+CFigure			0x1dc	int	ownNormalGrow	
+CFigure			0x1e4	int	ownComponentCount	FigComponents in +0x1E0 (BindRawBuffers copies the count into drawCompCount +0xB8)
+CFigure			0x1e8	int	ownComponentCapacity	
+CFigure			0x1ec	int	ownComponentGrow	
+CFigure			0x1f4	int	ownMorphCompCount	uints in +0x1F0 (the .fig trailer); Done frees it
+CFigure			0x1f8	int	ownMorphCompCapacity	
+CFigure			0x1fc	int	ownMorphCompGrow	
+CFigure			0x204	int	ownIndexCount	ushorts in +0x200 (v22_NegateRot walks them); Done frees it
+CFigure			0x208	int	ownIndexCapacity	
+CFigure			0x20c	int	ownIndexGrow	
+CFigure			0x214	int	ownUvCount	float[2] pairs in +0x210 (ReadParts / ParseFIG / BuildMorphed)
+CFigure			0x218	int	ownUvCapacity	
+CFigure			0x21c	int	ownUvGrow	
 CI3DFigure	CFigure	0x284	0x220	int	visible	Draw skips when 0
 CI3DFigure			0x224	float[3]	ambientRGB	the renderer's ambient during the draw (0..1)
 CI3DFigure			0x23c	float[16]	scaleMatrix	pushed on top of the model matrix (identity in Init)
 CI3DFigure			0x27c	pointer	lightParams	passed to DrawFigure (0 in Init) [?]
 CI3DFigure			0x280	pointer	texture	CTexture bound to stage 0 by Draw
+CI3DFigure	CFigure	0x284	0x230	int[3]	unk_0x230	zeroed by CI3DFigure::Init together with the ambient +0x224..+0x22C; no reader in the typed decompiles (Draw passes only +0x224..+0x22C to the renderer's ambient): three unused floats between the ambient and the scale matrix [?] (renderer.md)
 CFigureClientSpecific	CObject	0x3c	0x1c	pointer	figure	CFigure (CFigure::BindClientSpecific)
 CFigureClientSpecific			0x20	int[4]	screenRect	RECT of the last draw (picking: HitTestPointParts / HitTestRect)
 CFigureClientSpecific			0x30	float[3]	colorScale	1.0 each (Init) [?]
@@ -1735,7 +1898,7 @@ CTerrain			0x34	float[4]	rot	quaternion w,x,y,z (identity from g_0x7C8978)
 CTerrain			0x44	float[4]	worldRot	slot 14 SetRotation
 CTerrain			0x54	float[16]	matrix	row-major 4x4 built by RenderOpaque / RenderWater (Quat_ToMatrix4 + pos in 3,7,11); pushed on the ctx world and view stacks
 CTerrain			0x94	uint	flags	1 water waves (LoadZone clears when EnableWaterWaves=0), 2 animated tiles, 4 map-border fade, 8 ambient sounds, 0x10 terrain sun shadows (cleared when EnableSelfShadowing=0); Load sets |= 0xFFFF
-CTerrain			0x98	float[12]	rotMatrix3	3x3 from SetRotationQuat (unused in play)
+CTerrain			0x98	float[16]	rotMatrix	CORRECTION of the rotMatrix3 float[12] row: SetRotationQuat (0x6C5F50) and slot 14 SetRotation (0x6C6070) zero 16 floats, set [0] [5] [10] [15] = 1, write the quaternion's 3x3 into [0..10] and copy worldPos +0x28 into [12..14] (+0xC8..+0xD0): a full row-major 4x4 with the translation in the last row (+0xD4 = 1.0), not a 3x3; unused in play (identity terrain)
 CTerrain			0xd8	pointer	textures	32-byte aligned array of CTexture* (kind 0xB): textureCount ground textures then the lightmap pages that exist
 CTerrain			0xdc	int	textureEntries	
 CTerrain			0xe0	int	textureCapacity	
@@ -1822,6 +1985,13 @@ CTerrain			0xae4	int	lightmapPages	pages found by LoadTextures (0 in retail maps
 CTerrain			0xaec	pointer	sectorHeightDeltas	per sector (0x14-byte record: vt?, float* +4 (one per material), count +8, cap +0xC, grow +0x10): pending height change of each water material (SetMaterialHeight), applied by TerrainSector_ApplyMaterialHeightDeltas
 CTerrain			0xaf0	int	sectorHeightDeltaCount	sectorsX * sectorsY
 CTerrain			0xaf4	int	sectorHeightDeltaCapacity	
+CTerrain	CObject	0xaf8	0x28	float[3]	worldPos	CObject3D-layout world position (CObject3D::UpdateWorldTransform / CopyTransform); SetRotationQuat / SetRotation copy it into the translation row +0xC8..+0xD0 of the rotation matrix (terrain-lighting.md)
+CTerrain			0xab0	int	visibleColMinCapacity	allocated ints of visibleColMin +0xAA8 (SetVisibleQuad / SetVisibleArea grow it to the row count +0xAAC)
+CTerrain			0xab4	int	visibleColMinGrow	CArray grow step
+CTerrain			0xabc	int	visibleColMaxCount	ints in visibleColMax +0xAB8 (= the visible row count)
+CTerrain			0xac0	int	visibleColMaxCapacity	
+CTerrain			0xac4	int	visibleColMaxGrow	
+CTerrain			0xae8	pointer	sectorHeightDeltasVt	CArray vtable of the per-sector height-delta array +0xAEC..+0xAF4 (the dtor resets it to the base vtable 0x73F730 before destroying the 0x14-byte records with Record14_73D3E8::DeletingDtor); same CArray-with-vtable pattern as sectorListVt +0x1FC
 TerrainMaterial		0x38	0x0	int	type	.mp word 0: 4 = flat water (no wave offset, vertices snap to the ground x/y), others wave; 0xFFFF in a record = none
 TerrainMaterial			0x4	float[3]	rgb	.mp words 1..3 (marsh 0.19 0.54 0.36, river 0.19 0.32 0.65, lava red)
 TerrainMaterial			0x10	float	alpha	.mp word 4
@@ -1948,7 +2118,7 @@ CMaterial			0x30	float[3]	ambient	0.7
 CMaterial			0x40	float[3]	specular	0.2
 CMaterial			0x50	float[3]	emissive	0
 CMaterial			0x60	float	power	5.0
-CMaterial			0x64	pointer	frameDeque	std::deque of texture frames (0x200-byte nodes; +0x74 / +0x78 / +0x7C / +0x80 iterators) for animated materials
+CMaterial	CObject	0x9c	0x64	byte[40]	frameDeque	CORRECTION of the pointer row: an embedded std::deque (0x28 bytes, +0x64..+0x8C; Deque_Ctor_68E0B0 in the ctor) of texture frames in 0x200-byte blocks: +0x74 begin cursor, +0x78 begin block, +0x7C block end (= block + 0x200), +0x80 map position, +0x88 size; FreeAnimDeque and the dtor body are called on &this->frameDeque and pop every element (16-byte elements, 0x1F0 = the last slot of a block)
 CMaterial			0x8c	CString	textureName	
 CMaterial			0x90	int	field_90	0
 CMaterial			0x94	CString	textureName2	
@@ -1974,16 +2144,15 @@ CLight			0x114	float[3]	diffuseTerm	intensity * material diffuse * colour (Preco
 CLight			0x120	float	materialAlpha	
 CLight			0x124	float[3]	specularTerm	intensity * material specular * colour
 CLight			0x130	float	field_130	1.0
+CLight	CObject	0x134	0x44	float[4]	worldRot	CObject3D-layout world quaternion (CObject3D::UpdateWorldRot / CopyTransform); identity for lights
+CLight			0xec	int	unk_0xec	zeroed by CLight::CLight with +0xF0 and +0xFC (between field_e8 and radiusSq); no other accessor in the typed decompiles: the lighting kernels never read +0xEC..+0xFC [?] (terrain-lighting.md)
+CLight			0xf0	int	unk_0xf0	zeroed by the ctor only [?]
+CLight			0xfc	int	unk_0xfc	zeroed by the ctor only [?]
 CSky		0x10	0x0	pointer	figure	CSkyObject* (the dome CFigure)
 CSky			0x4	int	field_4	0
 CSky			0x8	pointer	texture	CTextureHolder: kind 0x3D "sky00"
 CSky			0xc	int	rotate	1: spin about Z by GetTimeSum / 3000 rad
-CSkyObject		0x230	0x138	pointer	diffuseColours	D3DCOLOR per vertex: sky colour, alpha 0 on the horizon ring (Recolour)
-CSkyObject			0x148	pointer	specularColours	D3DCOLOR per vertex: the second colour, 0 on the horizon ring
-CSkyObject			0x13c	int	vertexCount	
-CSkyObject			0x1c0	pointer	positions	SoA float blocks (x[4] y[4] z[4] w[4]), 32-byte aligned, raw pointer at -4
-CSkyObject			0x1d0	pointer	normals	SoA
-CSkyObject			0x220	pointer	horizonTable	float per vertex: sqrt(-normal z) for vertices with z >= 1, 0 on the horizon ring
+CSkyObject	CFigure	0x230	0x220	pointer	horizonTable	float per vertex: sqrt(-normal z) for vertices with z >= 1, 0 on the horizon ring
 CSkyObject			0x224	int	horizonCount	
 CSkyObject			0x228	int	horizonCapacity	
 CSkyObject			0x22c	int	horizonGrow	
@@ -2108,6 +2277,19 @@ CAcksDb			0x4c	pointer	othersByName
 AcksAnswer		0x1c4	0x0	pointer	name	std::string (the NPC / actor key)
 AcksAnswer			0xc	pointer	listsById	hash map sound kind id (0..0x18) -> list; filled by CAcksDb::Load
 AcksAnswer			0x20	byte[264]	lists	0x16 lists of 0xC bytes {begin, end, cap} of 0x28-byte voice-line records {wav path, weight, subtitle, text id} for ids 0..0x15 (database-format.md fields 10..44)
+AcksAnswer			0x128	pointer[3]	linesBored	Answers field 32 Bored (the one AcksUniqueType(21) list: lines carry the extra cooldown subfield 10): vector {begin, end, cap} of voice-line records like +0x20 (ctor InitFields4_6DD550, dtor PoolFreeVector_006DD570); the 0x16-list note of +0x20 stops at field 31: fields 32..44 continue here at +0x20 + (field - 10) * 0xc (database-format.md acks)
+AcksAnswer			0x134	pointer[3]	linesUnknown33	field 33 Unknown
+AcksAnswer			0x140	pointer[3]	linesOverload	field 34 Overload
+AcksAnswer			0x14c	pointer[3]	linesInjured	field 35 Injured
+AcksAnswer			0x158	pointer[3]	linesBigAtt	field 36 BigAtt
+AcksAnswer			0x164	pointer[3]	linesArmorCrip	field 37 ArmorCrip (the ctor zeroes begin / end and PairCtor_6DD620 builds the cap word of these last 8 vectors)
+AcksAnswer			0x170	pointer[3]	linesWearCrip	field 38 WearCrip
+AcksAnswer			0x17c	pointer[3]	linesAttInDef	field 39 AttInDef
+AcksAnswer			0x188	pointer[3]	linesWaitFoll	field 40 WaitFoll
+AcksAnswer			0x194	pointer[3]	linesScenario	field 41 Scenario
+AcksAnswer			0x1a0	pointer[3]	linesStealEmp	field 42 StealEmp
+AcksAnswer			0x1ac	pointer[3]	linesShopYes	field 43 ShopYes (the dtor frees it with PoolFreeVector_006DD5C0, a different element pool than the others) [?]
+AcksAnswer			0x1b8	pointer[3]	linesShopNo	field 44 ShopNo; the record ends at +0x1c4
 WaterLevelRecord		0x10	0x0	int	materialId	terrain material index
 WaterLevelRecord			0x4	int	stepsLeft	
 WaterLevelRecord			0x8	float	level	current height; WaterLevels::Read applies it with CTerrain::SetMaterialHeight
@@ -2613,6 +2795,9 @@ CCampScreen	CUIWindow	0x260	0x240	CStringArray	modeNames	mode_weapons .. mode_it
 CCampScreen	CUIWindow	0x260	0x254	byte	noConstr	variable i.noconstr: the constructor tabs disabled
 CCampScreen	CUIWindow	0x260	0x258	float	heroChangeTimer	auto-repeat of the held hero arrow (0.5 s)
 CCampScreen	CUIWindow	0x260	0x25C	int	heroChangePending	1 prev / 2 next while the arrow button is held (Update)
+CCampScreen	CUIWindow	0x260	0x1a4	int	campUnitCount	number of CUnit* in campUnits +0x1a0 (= the party hero count after Game_CreateHeroUnits in Build; 0 and the array freed in OnOpen / an empty party)
+CCampScreen			0x1a8	int	campUnitCap	allocated entries of +0x1a0 (Build grows it CArray-style when the count exceeds it)
+CCampScreen			0x1ac	int	campUnitGrow	grow step (0 = auto: count / 8, min 4)
 CQuestLogWin	CUIWindow	0x1F0	0x164	pointer	mapsBegin	std::vector<CString> of the zones the window can show (Build: the z.* variables of the current allod)
 CQuestLogWin	CUIWindow	0x1F0	0x168	pointer	mapsEnd	
 CQuestLogWin	CUIWindow	0x1F0	0x16C	pointer	mapsCap	
@@ -2809,6 +2994,12 @@ CBattleHud	CUIWindow	0x230	0x1E0	pointer	idsEnd
 CBattleHud	CUIWindow	0x230	0x1E4	pointer	idsCap	
 CBattleHud	CUIWindow	0x230	0x1F0	pointer	personalities	std::map<int, CString>: first 5 chars of the proto name -> label of the pers texts (UnitLabel)
 CBattleHud	CUIWindow	0x230	0x22C	int	modal	1 = events forwarded to the main panel only (lobby portrait exchange)
+CBattleHud	CUIWindow	0x230	0x164	int	unk_0x164	zeroed by Build after the hero id loop; no reader in the typed decompiles (the +0x164 reads of other screens are their own fields)
+CBattleHud			0x1fc	int	questSoundPending	set by ShowQuestMessage: 1 new quest (buttons\quest.wav), 2 sub-objective complete (subcomplete.wav), 3 quest complete (complete.wav; the max of the pending value and 3 so a completion wins); Update plays the sound and clears it; 0 in Build
+CBattleHud			0x200	byte	firstZoneEnter	1 when Build created the id list from the client party (a live start, not a load from the UI stream): OnZoneEnter (slot 35) then follows the first unit with the camera, autosaves 'savea' (option g_0x79BE7C) and shows the tutorial, and clears it
+CBattleHud			0x204	pointer[3]	sortedIdsBegin	std::vector<int> (DwordVector_Assign_64AF30 in Update): the sorted controlled unit ids compared with the party each tick (IntArray_Equals) to detect a party change
+CBattleHud			0x210	int	cameraUnitId	id of the unit the camera follows: -1 in Build; Update: when the hero id differs CCamera::FollowUnitId(id) + RefreshPanels
+CBattleHud			0x214	pointer[3]	sortedIdsSpare	std::vector<int> second id list assigned by Update next to +0x204 (the unsorted / previous order) [?]
 DialogScreen	CUIWindow	0x2A4	0x164	int	zoneExitIndex	exit the party stands in (Session_RequestMapChange when the z.<target> allows)
 DialogScreen	CUIWindow	0x2A4	0x168	int	exitCheckEnabled	
 DialogScreen	CUIWindow	0x2A4	0x16C	int	mode	0 world (walk / talk), 1 topic list, 2 walking into place, 3 briefing text, 4 end of line
@@ -2852,6 +3043,8 @@ DialogScreen	CUIWindow	0x2A4	0x294	pointer	speakersBegin	std::vector<Record12 {C
 DialogScreen	CUIWindow	0x2A4	0x298	pointer	speakersEnd	
 DialogScreen	CUIWindow	0x2A4	0x29C	pointer	speakersCap	
 DialogScreen	CUIWindow	0x2A4	0x2A0	byte	modalLobby	1 while a lobby exchange box is up: mouse events go to +0x1EC
+DialogScreen	CUIWindow	0x2A4	0x190	IdArray	partyUnits	CArray (vt +0x190, data +0x194, count +0x198, cap +0x19c, grow +0x1a0) of CUnit* indexed by party record: OnPartyChanged (slot 29) inserts the unit at its party index (IdArray::SetSize / DwordArray_SetAtGrow_60AD50); RemoveSpeakerByName / StartDialogLine look speakers up in it (the portrait order of the talk mode)
+DialogScreen			0x254	pointer	speakingUnit	CUnit* whose phrase is playing (ParseDialogScript '#phrase': the speaker record's unit; 0 after Build / StartDialogLine / end of the section): Update closes its mouth (unit +0x240 client specific) when the voice timer runs out
 CWorldMapScreen	CUIWindow	0x294	0x164	int	visitedCount	entries of visited zones (z.<zone> == 1)
 CWorldMapScreen	CUIWindow	0x294	0x168	int	questCount	entries of quests (q.<zone>.<quest> == 1)
 CWorldMapScreen	CUIWindow	0x294	0x16C	int	reachableCount	entries of reachable zones (z. value 2 and record +0x28 == 2) with click buttons
@@ -2865,10 +3058,39 @@ CWorldMapScreen	CUIWindow	0x294	0x1D0	int	dragDelta	right-button drag of the map
 CWorldMapScreen	CUIWindow	0x294	0x1DC	byte	canTravel	a zone click sends the travel order
 CWorldMapScreen	CUIWindow	0x294	0x1E0	pointer	zonePoints	std::map built by LoadZonePoints (given to CQuestLogWin::SetCaption as the travel-time map)
 CWorldMapScreen	CUIWindow	0x294	0x210	pointer	pickSurface	800x600 picking surface: entry id in pixel bits 4..7
-CWorldMapScreen	CUIWindow	0x294	0x214	int	fadeMode	
-CWorldMapScreen	CUIWindow	0x294	0x218	float[3]	fadeColor	
+CWorldMapScreen	CUIWindow	0x294	0x214	pointer	flameNoise	CORRECTION: was int fadeMode: FlameNoise* (0x34 bytes, vt 0x7420D4, FlameNoise::ctor(0x100) in Build; Obj_ResetTwoTables16): the animated flame rendered into the locked render-target texture [4] every Update (FlameNoise::Render) and whose alpha palette ApplyFadeColor rebuilds (stages 16 / 17)
+CWorldMapScreen	CUIWindow	0x294	0x218	int[3]	fadeRgb	CORRECTION: was float[3] fadeColor: the app fade colour as integer r / g / b 0..255 (0, 0, 10 in Build) packed by ApplyFadeColor stages 0..3 with the alpha +0x224 into the render globals +0x14 (a << 24 | r << 16 | g << 8 | b)
 CWorldMapScreen	CUIWindow	0x294	0x27C	byte	noCamp	variable i.nocamp: camp button hidden
 CWorldMapScreen	CUIWindow	0x294	0x290	int	windChannel	buttons\globalmap\wind.wav loop
+CWorldMapScreen	CUIWindow	0x294	0x18c	pointer	entriesVt	CStringArray-style CArray header of the entry array: vt +0x18c, data +0x190 (the curated entries), count +0x194, cap +0x198, grow +0x19c (StringArray_SetAtGrow_631CC0(&+0x18c, +0x194, ..) in Build)
+CWorldMapScreen			0x194	int	entriesCount	number of 0x10-byte entries in +0x190 (visited zones + quests + reachable zones; the curated per-kind counters +0x164..+0x170 index into it)
+CWorldMapScreen			0x198	int	entriesCap	
+CWorldMapScreen			0x19c	int	entriesGrow	
+CWorldMapScreen			0x1a0	pointer	zoneTableVt	CArray header of the zone table: vt +0x1a0, data +0x1a4 (curated zoneTable, 0x18-byte rows), count +0x1a8, cap +0x1ac, grow +0x1b0 (CStrPairArray_SetSize_631E70 in Build)
+CWorldMapScreen			0x1a8	int	zoneTableCount	number of reachable-zone rows (Build grows it by one per zone with z. == 2 and record +0x28 == 2; row +0 = the entry figure, +4 = the entry index (SelectEntry links entry <-> zone), +0x10 name, +0x14 travel time)
+CWorldMapScreen			0x1ac	int	zoneTableCap	
+CWorldMapScreen			0x1b0	int	zoneTableGrow	
+CWorldMapScreen			0x1b4	pointer	questsVt	CArray header of the quest marker table (CStrPairArray_SetSize_631FF0): vt +0x1b4, data +0x1b8, count +0x1bc, cap +0x1c0, grow +0x1c4
+CWorldMapScreen			0x1b8	pointer	quests	0x18-byte quest rows: +0 UIQuadMesh* marker figure, +4 float[3] map position (MapTxt_LoadQuestPosition '#quest <id>'), +0x10 CString quest id (q.<zone>.<quest> == 1), +0x14 CString title (TextKeyReader_Quest); Update re-projects the markers from +4 with the map rotation
+CWorldMapScreen			0x1bc	int	questsCount	= the curated questCount +0x168 while Build runs (Build indexes +0x1b8 with +0x168)
+CWorldMapScreen			0x1c0	int	questsCap	
+CWorldMapScreen			0x1c4	int	questsGrow	
+CWorldMapScreen			0x1ec	float[4]	mapRot	quaternion (w, x, y, z) of the map figures: Quat_FromAxisAngle((1,0,0), 2.513 rad = 144 deg) in Build, multiplied by the rotation of the held rotate button / right drag in Update (w kept positive); copied into the entry figures' localRot (+0x38..) and used by Quat_RotateVec3 to project entry positions
+CWorldMapScreen			0x1fc	float	rotateAngle	accumulated rotation in radians: += rotateDir * pi / 4 * seconds (Update), fmod 2 pi; 0 in Build
+CWorldMapScreen			0x200	float	mapScale	10.0: the entry projection is ((cx * 0.0025 - 1) * 0.4816 * scale, (cy * 0.0025 - 0.75) * 0.4816 * scale) with the centre +0x204 / +0x208; also the z passed to AddQuadMesh / InitRect
+CWorldMapScreen			0x204	float	centreX	400.0 (screen centre of the map in 800x600 units)
+CWorldMapScreen			0x208	float	centreY	280.0
+CWorldMapScreen			0x20c	int	needsRedraw	1 after Build / OnCommand: the next Update calls Redraw (re-layout of the entries / buttons) and clears it
+CWorldMapScreen			0x224	int	fadeAlpha	0xff in Build: alpha of the app fade colour +0x218
+CWorldMapScreen			0x228	int[4]	layerColor1	r, g, b, a (0x9b, 0, 0xe1, 100 in Build) packed into quads[entryCount + 3] +0xd4 (the first map layer quad colour) by ApplyFadeColor stages 4..7
+CWorldMapScreen			0x238	int[4]	layerColor2	(0x9b, 0, 0x7d, 0x6e): quads[entryCount + 4] +0xd4, stages 8..11
+CWorldMapScreen			0x248	int[4]	layerColor3	(0x69, 10, 0xc3, 0xb9): quads[entryCount + 5] +0xd4, stages 12..15
+CWorldMapScreen			0x258	int[2]	flamePalette	(0x77, 0xf8): the two colour arguments of FlameNoise::BuildAlphaPalette(flame, a, b, 0x40000000) (stages 16 / 17)
+CWorldMapScreen			0x260	int	colorStage	the stage index ApplyFadeColor dispatches on (0..17: 0..3 app fade, 4..7 / 8..11 / 12..15 the three layer quads, 16+ the flame palette); Build loops it 0..0x11 to apply every colour once; no other writer in the typed decompiles (a colour-tweak hook)
+CWorldMapScreen			0x264	byte	dragging	right-button map drag in progress: 0 after Build / OnCommand; Update then feeds the cursor position to the sub-object slot 4 (mouse move) and shows cursor frame 0x16 instead of 0; set by the sub-object mouse handlers (this-relative +0x1d0 there)
+CWorldMapScreen			0x278	byte	isGipat	1 when the current allod is 'gipat': SelectEntry links an entry to its zone row only on gipat (the one allod whose reachable zones are drawn as entries)
+CWorldMapScreen			0x280	float[3]	highlightAmbient	r, g, b ambient of the selected entry figure (+0x224.. of the figure, half for the linked zone): ingos (0.371, 0.508, 0.625), suslanger (0.39, 0.195, 0.086), otherwise (0, 1, 0); an unselected entry gets (1, 1, 1) (SelectEntry 0x630860)
+CWorldMapScreen			0x28c	byte	autosaveOnOpen	1 when the screen is built live (not from the UI stream g_0x7AFDF8) and the client player mode (connection +0x1c +0x104) != 5: after the build, with the autosave option g_0x79BE7C on, CSaveLoadWin::QuickSave('saveb'); cleared afterwards
 CMessageBox	CUIWindow	0x180	0x164	CString	title	text key resolved by CTextManager::GetString
 CMessageBox	CUIWindow	0x180	0x168	CString	text	
 CMessageBox	CUIWindow	0x180	0x16C	int	resultBase	the parent gets resultBase | 1 (OK) or | 2 (Cancel) in vt slot 27
@@ -3219,6 +3441,8 @@ CParticle			0x1e0	pointer	emitCallback	(CParticle*, ParticleRecord*, arg) -> boo
 CParticle			0x1e4	pointer	stepCallback	(CParticle*, ParticleRecord*) -> bool alive: per-tick physics of one particle (ParticleStep_*); 0 = dies
 CParticle			0x1e8	pointer	tickCallback	(CParticle*, record 0x38) per emitter record each Update (ParticleTick_*), may be 0
 CParticle			0x1ec	pointer	texture	CTextureHolder (SetTextureByName(name, 6)): FireSmoke, TendriSmoke, Explosion, Vulkan, Healing, PoisonCloud, Fireworks, Tornado, AcidRay, Banshee, ChangeHero, RainSnow, RikArrowSmoke, FireArrowSmoke, Stench, Protection*, AntiMagic, ClayRing, Teleport, Casting1..8, TendriLight, ShapeChange, VisionFog, ZoneExit
+CParticle		0x1f0	0x18	uint	objectId	the CObject +0x18 object id: CParticle keeps the CObject header layout (vtable, refcount, flags, id, kind, manager, objectId) and CObject::CopyBase (root slot 1) copies it; unused by the particle code (data-sound.md particles)
+CParticle			0x28	float[3]	worldPos3D	the CObject3D-layout world position (+0x28) that the shared CObject3D::UpdateWorldTransform / CopyTransform write; the particle code itself keeps its world position in worldPos +0x98
 ParticleRecord		0x64	0x0	float[3]	position	current position (world)
 ParticleRecord			0xc	float	size	current quad half size
 ParticleRecord			0x10	float[3]	prevPosition	position at the previous tick (Render interpolates by the frame fraction)
@@ -3389,6 +3613,20 @@ CSoundManager			0x8a8	float[3]	reverbParams
 CSoundManager			0x8b4	int	effectsVolume	percent, category 0 (SetEffectsVolume)
 CSoundManager			0x8b8	int	voiceVolume	percent, category 1 (SetVoiceVolume)
 CSoundManager			0x8bc	int	randomStartMs	when > 0 every sample starts at a random ms position below it
+CSoundManager			0x20	pointer	midiDriver	AIL HMDIDRIVER: 0 after InitFields; Done calls AIL_midiOutClose on it when set; no AIL_midiOutOpen in the typed decompiles (the XMIDI sequences +0x1cc.. play through it) [?]; data-sound.md
+CSoundManager			0xec	pointer	archivesTail	last node of the sound archive CList +0xe4 (AddSoundArchive appends; ClearSoundArchives pops from the head)
+CSoundManager			0xf0	int	archivesCount	node count of the archive list (Done waits until it is 0)
+CSoundManager			0xf4	pointer	archivesFree	free node chain of the archive list
+CSoundManager			0xf8	pointer	archivesPlex	CPlex block chain (CPlex_Create(.., +0xfc, 0xc) in AddSoundArchive; List_FreeChain in Clear / dtor)
+CSoundManager			0xfc	int	archivesBlock	10 nodes per block
+CSoundManager			0x174	int	unk_0x174	zeroed by the ctor between the musicMarkers1 vector (+0x168..+0x173) and musicMarkers2 (+0x178); no other reader or writer in the typed decompiles (a 4th vector word or padding)
+CSoundManager			0x1f0	int	unk_0x1f0	zeroed by the ctor between sequenceMarkers1 (+0x1e4..+0x1ef) and sequenceMarkers2 (+0x1f4); no other reader or writer (same shape as +0x174)
+CSoundManager			0x244	pointer	sequenceThread	CWinThread of SequenceThreadProc: 0 after InitFields; Done waits on its handle (+0x28) after setting +0x248 stopThreads; the start (AfxBeginThread) is not in the typed decompiles (Open only starts the music thread +0x1c8) [?]
+CSoundManager			0x860	int	cacheCount	node count of the sample cache CList +0x854 (dtor / Done free it to 0)
+CSoundManager			0x864	pointer	cacheFree	free node chain of the cache list
+CSoundManager			0x868	pointer	cachePlex	CPlex block chain (List_FreeChain in the dtor)
+CSoundManager			0x86c	int	cacheBlock	10 nodes per block
+CSoundManager			0x89c	int	unk_0x89c	zeroed by InitFields between initialised +0x898 and reverbEnabled +0x8a0; no other reader or writer in the typed decompiles
 
 StrHash		0x14	0x0	pointer	vtable	name -> record hash (0x14: the hash tables of the data managers; IdHash is the 0x18 variant)
 StrHash			0x4	pointer	buckets	
@@ -3555,6 +3793,9 @@ DeltaCodecSet			0x20	int	state	0 full write, 1 delta write, 2 read vs A, 3 read 
 DeltaCodecSet			0x1c	pointer	inStream	IStream being read (BeginRead stores it at state - 4; Reset / Pack clear it); was listed at +0x22
 DeltaCodecSet			0x24	CMemStream	packedA	u16 mask + delta A of every set slot (Pack)
 DeltaCodecSet			0x4c	CMemStream	packedB	u16 mask + delta B of every set slot
+DeltaCodecSet			0x0	pointer	vtable	CArray-like vtable (CMapObject +0x1c4 netSections)
+DeltaCodecSet			0xc	int	codecCapacity	allocated DeltaCodec slots (CUnit::Init: at least 14 for a unit, grown in place from CMapObject's 4 with NetSections_ConstructN; CUnit +0x1d0)
+DeltaCodecSet			0x10	int	codecGrow	CArray grow step (0 = auto: count / 8 clamped to 4..0x400; CUnit +0x1d4)
 NetClient	NetConnection	0x25d8	0x2568	NetAddress	serverAddr	the server being connected to (BeginConnect); handshake replies from other addresses are logged and ignored
 NetClient			0x2578	GameBuffer	loginPayload	bytes appended to the type 4 login (the lobby's 20-byte password or empty)
 NetClient			0x2594	uint	linkId	rand() << 16 | GetTickCount() & 0xffff at BeginConnect; echoed by the server in accept / reject / disconnect
@@ -3681,3 +3922,100 @@ LzInputAdapter			0xc	pointer	end
 LzInputAdapter			0x10	pointer	end2	
 LzInputAdapter			0x14	int	zero	
 LzInputAdapter			0x18	int	mode	2
+CUnitSpecific	CObject	0x20	0x1c	pointer	owner	CUnit*; the common base (vt 0x73EDBC, set first by both ctors) of CUnitServer (kind 0x48, 0xb20) and CUnitClientSpecific (0xdc); +0x0..+0x18 are the CObject fields (refcount +4, flags +8, id +0xc = -1, kind +0x10, manager +0x14, objectId +0x18)
+CFakeUnit	CUnit	0x580	0x4e0	byte[0x50]	animSystemOld	CAnimationSystemOld (ctor 0x508870 / Init 0x508930(this) / Detach / dtor): the old animation system that animates the camp preview unit (CFakeUnit kind 0x39, 63 slots; the CUnit fields +0x17e..+0x4a8 are serialized by CFakeUnit::Read / Write)
+CFakeUnit			0x530	pointer	figuresVt	CArray vtable 0x73C108 (CFiguresArray::Serialize): CFigure objects by value (0x220 each)
+CFakeUnit			0x534	pointer	figures	CFigure[] (Load registers a CFigureClientSpecific per entry; Done / the dtor call vt[0](0) on each after decrementing +4 and free the buffer)
+CFakeUnit			0x538	int	figureCount	
+CFakeUnit			0x53c	int	figureCap	
+CFakeUnit			0x540	int	figureGrow	
+CFakeUnit			0x544	pointer	fakeFiguresVt	CArray vtable 0x73C0FC (CFakeFiguresArray::Serialize): 0x18c-byte CFakeFigure objects by value (dtor vt[0](0) each)
+CFakeUnit			0x548	pointer	fakeFigures	
+CFakeUnit			0x54c	int	fakeFigureCount	
+CFakeUnit			0x550	int	fakeFigureCap	
+CFakeUnit			0x554	int	fakeFigureGrow	
+CFakeUnit			0x558	pointer	vectorsVt	CArray vtable 0x73C0F0 (Vectors14Array2::Serialize): 0x14-byte aligned-vector objects (dtor calls their vt[1](0))
+CFakeUnit			0x55c	pointer	vectors	
+CFakeUnit			0x560	int	vectorCount	
+CFakeUnit			0x564	int	vectorCap	
+CFakeUnit			0x568	int	vectorGrow	
+CFakeUnit			0x56c	pointer	materialsVt	CArray vtable 0x73C0E4 (Materials9CArray::Serialize): 0x9c-byte CMaterial objects by value (dtor vt[0](0) each)
+CFakeUnit			0x570	pointer	materials	
+CFakeUnit			0x574	int	materialCount	
+CFakeUnit			0x578	int	materialCap	
+CFakeUnit			0x57c	int	materialGrow	
+CBaseManager	CObject	0xb0	0x1c	IdHash	idMap	id -> CObject* of every registered object (STLport hashtable {functors +0x1c, buckets +0x20 / +0x24 / +0x28, count +0x2c}; 100 buckets in the ctor, 0x400 after Init; FindById: bucket = id % bucketCount, node {next, id, object}); RegisterInstant / RegisterWithNewId insert, PoolObject / DestroyObject remove, DoneObjects / Done clear; its maxId +0x30 = the highest id registered (RegisterWithNewId hands out +0x30 + 1 while it lies in [idMin, idMax)); world-server.md (object ids)
+CBaseManager			0x34	pointer	objectListVt	vtable 0x73B8D4 (3 slots) of the registration-order list of the live objects: nodes {next, prev, CObject* +8} (CList12_AllocNode); the ctor / DestroyBody / Done reset it
+CBaseManager			0x38	pointer	objectListHead	first node (RegisterInstant / RegisterWithNewId append; PoolObject removes through the node map +0x50; Done / DoneObjects walk it to Done + Release every object)
+CBaseManager			0x3c	pointer	objectListTail	
+CBaseManager			0x40	int	objectListCount	
+CBaseManager			0x44	pointer	objectListFree	free node chain
+CBaseManager			0x48	pointer	objectListPlex	CPlex block chain (List_FreeChain in DestroyBody / Done)
+CBaseManager			0x4c	int	objectListBlock	10 nodes per block
+CBaseManager			0x50	IdHash	nodeMap	id -> node of +0x38 (so PoolObject / DestroyObject unlink in O(1)); 0x400 buckets after Init; +0x64 = the highest id inserted (RegisterWithNewId / RegisterInstant keep it, Init / Done / DoneObjects zero it)
+CBaseManager			0x68	IdHash	poolsByKind	kind -> MFC-style CList (0x1c bytes, vt 0x73B8D4) of the released objects of that kind kept for reuse (PoolObject appends, id +0xc = -1); RegisterInstant pops one (PopPooled, whose this is that list) before creating; FreeTypeGroups deletes the objects and the lists; 0x100 buckets after Init; +0x7c = the highest kind pooled
+CBaseManager			0x80	IdHash	poolCountByKind	kind -> number of objects pooled for that kind (PoolObject: find-or-insert then +1); 0x100 buckets after Init; +0x94 = the highest kind seen; FreeTypeGroups / Init clear it
+CBaseManager			0x98	int	idMin	lower bound of the ids RegisterWithNewId allocates: 0 after Init (the ctor leaves it 0); RegisterInstant uses the same range for id == -1
+CBaseManager			0x9c	int	idMax	upper bound (exclusive) of the allocated ids: 2000000000 after the ctor and Init; when maxId +0x30 is outside [idMin, idMax) a random id in the range is tried up to 100000 times, then FatalError "CBaseManager::RegisterInstant"
+CBaseManager			0xa0	int	unk_0xa0	-1 in the ctor, 0 after Init; no reader in the typed decompiles (derived managers may use it)
+CBaseManager			0xa4	int	unk_0xa4	-1 in the ctor, 300 after Init; no reader in the typed decompiles
+CBaseManager			0xa8	int	lastRegisteredId	the id handed out by the last RegisterInstant / RegisterWithNewId (-1 after the ctor; not reset by Init)
+CBaseManager			0xac	pointer	world	the CWorld set by slot 13 SetWorld (0 when the argument is 0; Done clears it); the managers reach the specific managers and the map through it
+CMagicTrapObject	CMapObject	0x290	0x238	uint	diplomacyMask	MT_DIPLOMACY of the descriptor (CMagicTrapDesc +0x8c): the faction mask handed to MagicTrap_CollectUnitsInAreas (which units in the areas count as targets); -1 (everyone) after the ctor / Init; saved as the last dword of Read / Write; spells.md traps
+CMagicTrapObject			0x23c	pointer	spell	CSpell* (refcounted, released by Init / Done / the dtor): the spell cast by the trap (MT_SPELL); Read restores it by object id through the world's spell manager (vt[22], FindById; -1 = none), Write stores +0xc of it; Update does nothing while it is 0; CastAtTargets casts it with CWorldServer::CastSpellMulti (area spell: flags +0x3c & 0x10000000 clear)
+CMagicTrapObject			0x240	CArray	areas	MT_AREAS: CArray (vt 0x73C68C, data +0x244, count +0x248, cap +0x24c, grow +0x250) of 12-byte Vec3 {x, y, radius} trigger circles; UpdateTargets drops listed targets that left every circle, CollectUnitsInAreas lists the units inside; saved as count + 12 bytes each
+CMagicTrapObject			0x254	CArray	castPoints	MT_TARGETS: CArray (vt 0x73C680, data +0x258, count +0x25c, cap +0x260, grow +0x264) of 8-byte {x, y} cast points; an area spell with cast points is cast once at every point (CastAtTargets) instead of at the units; saved as count + 8 bytes each
+CMagicTrapObject			0x268	pointer	targetsVt	MFC CList (vt 0x73E730) of the units currently inside the areas: head +0x26c, tail +0x270, count +0x274, free +0x278, plex +0x27c, block +0x280 = 10; nodes {next, prev, CObject* ref +8} (ObjRefCList_NewNode / FreeNode, refs released by Init / Done); UpdateTargets adds newcomers and drops leavers / the dead (vt[55]); Read / Write stream the refs (ObjRefCList_ReadFromStream / ObjRef_WriteToStream)
+CMagicTrapObject			0x26c	pointer	targetsHead	
+CMagicTrapObject			0x270	pointer	targetsTail	
+CMagicTrapObject			0x274	int	targetsCount	
+CMagicTrapObject			0x278	pointer	targetsFree	free node chain
+CMagicTrapObject			0x27c	pointer	targetsPlex	CPlex block chain (List_FreeChain in Init / Done / dtor)
+CMagicTrapObject			0x280	int	targetsBlock	10 nodes per block
+CMagicTrapObject			0x284	int	castInterval	MT_CAST_INTERVAL in ticks (10 after Init; the descriptor default is 15): CastAtTargets reloads +0x288 from it; < 1 = continuous mode: Update calls UpdateTargets every tick instead of counting down; saved / read with +0x288 / +0x28c
+CMagicTrapObject			0x288	int	reloadTicks	ticks left before the next cast: Update (server, spell set, interval >= 1) decrements it and calls CheckAndCast at 0 (armed = flags +8 bit 19 0x80000, set with 0x40 by Init); CastAtTargets sets it back to +0x284
+CMagicTrapObject			0x28c	int	singleTarget	MT_CAST_ONCE-style flag (0 after Init): when set and the spell is not an area spell with cast points, CastAtTargets keeps only one unit of the collected list (the last one within 1e30, i.e. any) and casts at it alone; 0 = the spell is cast at every unit in the areas; saved with +0x284 / +0x288
+CLeverObject	CMapObject	0x264	0x238	int	stateIndex	the current lever state (LEVER_CUR_STATE, CLeverDesc +0x98 through SetParams rec +0xc): 0 after the ctor / Init; SwitchState advances it (cyclic wraps modulo +0x23c, else clamped to count - 1); the animation phase +0xc8 (the dexterity morph axis reused as the lever phase) = index / (count - 1); first dword of the save Read / Write after CMapObject; pathfinding.md levers
+CLeverObject			0x23c	int	stateCount	LEVER_TOTAL_STATE (rec +0x10): 1 after the ctor / Init; < 2 = no animation (phase 0)
+CLeverObject			0x240	int	isCycled	LEVER_IS_CYCLED (rec byte +0x16 != 0): SwitchState(-1) wraps the state index instead of clamping
+CLeverObject			0x244	int[3]	keyReq	LEVER_SCIENCE_STATS (CLeverDesc +0x8c; rec +0..+8) {flags, keyId, minValue} = {1, 0, 0} after the ctor: the use requirement checked by Use / Check (0x522A80(user, &keyReq)); IsActive (slot 38) = flags != 0, slot 40 returns keyId when flags & 8; KeyReq_Read / Write in the save stream; 12 bytes of net section 5
+CLeverObject			0x250	float	phaseFrom	client animation: the morph phase at the start of the switch (= +0xc8 then); WriteNetState / ReadNetState section 5 (a change of +0x254 vs +0xc8 resets +0x25c to 0 before the write; the client plays the lever sound when +0x250 != +0x254 in delta mode)
+CLeverObject			0x254	float	phaseTo	the target phase = new state index / (count - 1); Update (client) interpolates +0xc8 from phaseTo back towards phaseFrom by (endTime - now) * speed, then SetMorphParams + ActivateObjectBridges
+CLeverObject			0x258	int	switchEndTime	world time (g_0x7AF61C units; world +0x64 + duration + 1) at which the switch animation ends; 0 for an instant switch
+CLeverObject			0x25c	int	switchSpeed	1 / duration (stored as the integer the x87 code converts; 0 = instant); Update: t = (endTime - now) * speed
+CLeverObject			0x260	byte	isDoor	LEVER_IS_DOOR (rec byte +0x14; CLeverDesc +0xa0): vtable slot 39 Get260; saved after keyReq
+CLeverObject			0x261	byte	recalcGraph	LEVER_RECALC_GRAPH (rec byte +0x15; CLeverDesc +0xa1): slot 43 Get261; SwitchState copies it into the world's AI-map blocking byte (+0x172) while it re-marks the cells around the lever (DirtyRect) so gates / bridges block or open the nav grid (pathfinding.md)
+CTorchObject	CMapObject	0x23c	0x238	pointer	torchSpecific	CTorchObjectSpecific (server, vt 0x73D558) / CTorchObjectClientSpecific (0x64 bytes, kind 0x4b) ref: 0 in the ctor, released by Init / the dtor, set by SetSpecific (slot 19, kind 0x4b: refcount++, specific +0x1c = this); its +0x20 / +0x28 / +0x2c / +0x30 / +0x40 / +0x4c / name +0x24 are net section 4 (WriteNetState / ReadNetSection 0x52C390): the flame effect, light and looping sound of the torch (CTorchDesc strength / pointLink / sound)
+CCampScreen2	CUIWindow	0x220	0x164	pointer	itemInfoWin	UIItemInfoWin created at (0x258, 100) by Build: the hovered item detail (UIInventoryWin::SetItem(+0x168)), the perk detail (DrawPerkDetail) in level-up mode and the help text (UICampHelp::Draw); cleared on close; ui-screens.md 5
+CCampScreen2			0x168	pointer	hoveredItem	CItem* under the cursor from the hero slot bar / quick bar hit test (slot 25 of +0x1b4 / +0x1b8) in Draw, 0 none; handed to the item info window
+CCampScreen2			0x16c	pointer	frameWidget	UIFrameWidget (0x148 bytes, vt 0x740444) from CampScreen::CreateFrameWidget: the 'campslots' frame; Layout enables it in modes 10 / 11 and lays it out at y = 300 (new hero) / 400 (equip)
+CCampScreen2			0x170	byte[16]	portraitMapA	std::map (rb-tree) of cached portrait figures (UIPortraitMap_ReleaseAll_634500 + RbMap_Destroy in DtorBody); the male set [?]
+CCampScreen2			0x180	byte[16]	portraitMapB	second portrait std::map (UIPortraitMap_ReleaseAll_634560); the female set [?]
+CCampScreen2			0x190	int	mode	Layout argument: 9 slot list, 10 new-hero edit (name, voice, stats), 11 equip and start; 0xb = level-up view in Draw
+CCampScreen2			0x194	int	selectedSlot	index into the party slot list g_0x7C82A4 (0x74-byte PartySlot), -1 none: SelectSlot / DeleteSlot / OnCommand 0x20001 (CParty::Assign) / StartGame; ClampSlotSelection keeps it inside the list
+CCampScreen2			0x198	pointer	slotScrollBar	CScrollBar of the slot list (range = slots - 10; GetChanged -> +0x19c in Update)
+CCampScreen2			0x19c	int	slotScroll	first visible slot row (10-row window; DrawSlotRows)
+CCampScreen2			0x1a0	pointer	previewUnit	CUnit* of the preview hero (InitHero: Game_CreateHeroUnits of the slot party, random idle animation); drawn by UIUnitPreview::Render at x = 555 (mode 9) / 400 (mode 10) with the spin +0x1e0; CommitUnit re-applies the morph / packed stats; removed and zeroed by OnClose (Game_RemoveRecordObjects)
+CCampScreen2			0x1a4	int	weaponSlot	selected weapon slot of the hero record (SetEquipped slot 42 kind 0x3004 -> CCampBar::SelectWeaponSlotOf; RebuildHeroSlots; StoreWeaponSlots writes it back)
+CCampScreen2			0x1a8	int	armorSlot	selected armour slot (kind 0x3006 -> SelectArmorSlotOf); the SetEquipped purpose line swapped quick / armour
+CCampScreen2			0x1ac	int	quickSlot	selected quick-bar slot (kind 0x3008 -> CCampQuickBar::SelectQuickSlotOf)
+CCampScreen2			0x1b0	pointer	unitInfoWin	CUnitInfoWin (hero stats / name; SetMode(mode) in Layout, SetHeroName, TooltipAtPoint)
+CCampScreen2			0x1b4	pointer	heroSlots	CCampBar (weapon / armour slots, CCampBar::Build; textures[2]); enabled in mode 11
+CCampScreen2			0x1b8	pointer	quickBar	CCampQuickBar (the 8 quick slots); mode 11
+CCampScreen2			0x1bc	pointer	faceBarMale	CCampFaceBar set up with the male name list +0x1c8 (Setup(.., 1, 0)); +0x17c of the bar = selected face index; mode 10
+CCampScreen2			0x1c0	pointer	faceBarFemale	CCampFaceBar over the female list +0x1d4 (Setup(.., 0, 0))
+CCampScreen2			0x1c4	pointer	skillsWin	CCampSkillsWin (stats / perks of the new hero: ResetEdit, SelectPerk, GetPointsLeft, SelectNextAvailable); mode 11
+CCampScreen2			0x1c8	pointer[3]	maleNamesBegin	std::vector<CString> of the hero prototype names (g_0x7AF378 0x60-byte records) whose udb mask (+0xe8) is 'unhuma' (male): the male face list (CStrings_InsertRealloc in Build)
+CCampScreen2			0x1d4	pointer[3]	femaleNamesBegin	std::vector<CString> of the prototypes with the female mask: the female face list
+CCampScreen2			0x1e0	float	previewSpin	rotation phase of the preview unit (Time_GetSeconds fmod while a hero arrow is held, +0x1e4 1 / 2); 0 in Build; also the 0.5 s auto-repeat reference of the arrows
+CCampScreen2			0x1e4	int	heroArrowHeld	1 prev / 2 next while a hero arrow button is pressed (OnLButtonDown captures, OnLButtonUp clears); 0 in Build
+CCampScreen2			0x1e8	pointer	slotNameEdit	CEditWin (10 chars, colours 0xa7d7e4 / 0x31b3ff) for renaming a slot (ShowSlotDetails fills it; +0x179 of it = active)
+CCampScreen2			0x1ec	pointer	heroNameEdit	CEditWin (10 chars, white) for the new hero's name (mode 10; its text +0x170 is copied each Update); Layout / OnCancel deactivate it
+CCampScreen2			0x1f0	pointer	voiceScrollBar	CScrollBar of the voice list (mode 10; GetChanged redraws DrawVoiceList)
+CCampScreen2			0x1f4	CString	heroProtoName	the prototype name of the hero being built (RebuildHeroSlots argument): picks the male / female voice list for +0x210
+CCampScreen2			0x1f8	pointer[3]	maleVoicesBegin	std::vector of 8-byte {CString protoName, CString label} (StringPair) voice sets of the male prototypes that have a voice (record byte +0x5c): label = lmp_male_voice + ' %d'; freed by DtorBody (PoolFree_N8)
+CCampScreen2			0x204	pointer[3]	femaleVoicesBegin	the female voice-set pairs (lmp_female_voice labels)
+CCampScreen2			0x210	pointer	currentVoices	&+0x1f8 or &+0x204 by the hero's gender (RebuildHeroSlots): DrawVoiceList shows the labels (+4 of each pair), ClampVoiceSelection / OnLButtonDown index it
+CCampScreen2			0x214	int	voiceScroll	first visible voice row (11-row window)
+CCampScreen2			0x218	int	voiceSelected	selected voice row (OnLButtonDown rows 9..0x13 of mode 10; Up / Down keys); StartGame copies that set's '%s*.mp3' files
+CCampScreen2			0x21c	int	voiceChannel	UI_PlaySound handle of the voice sample LoadSlotSounds plays (a random sample of the hero's voice set from the sound registry g_0x7AF364); stopped and set to -1 before the next
