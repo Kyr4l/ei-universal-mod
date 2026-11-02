@@ -354,7 +354,7 @@ wrap the CWorld versions and flag 4 (msg 0x71). The client renders the day-light
 
 Join: `AcceptPlayers` creates the player with `+0x130 = -1`; the first `ReplicateToPlayer` sends `SendZoneState` 0x58C890 =
 msg 0x02 blob `{u32 tick - 1, mpr name\0, mob name\0, u32, ZoneExit records (count +0xf4), u32 +0xe0, the unit equipment hashes
-(CUnit::BuildEquipmentTables per unit, UnitHashes_WriteSave)}`, then `ResendTrackedObjects` (every id of `CPlayer +0x118`
+(CUnit::BuildEquipmentTables per unit, UnitHashes_WriteSave: one record per distinct look = prototype + complection (3 x 10 bits) + the 7 worn and 4 weapon-slot item ids + active weapon slot, or the texture names of non-humanoids, with the unit ids sharing it)}`, then `ResendTrackedObjects` (every id of `CPlayer +0x118`
 through `vt[22]`) and `FlushSendStream`; when `+0x11c`: `SendMsg04_Position` of the first tracked unit. Per tick afterwards:
 
 | flag / set | message | content |
