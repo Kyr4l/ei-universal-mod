@@ -453,7 +453,7 @@ CAIMap			0x244	pointer	steepList5Data	data of +0x240: pairs from 0x79146C (MarkS
 CAIMap			0x248	int	steepList5Count	
 CAIMap			0x258	pointer	steepList13Data	data of +0x254: pairs from 0x7914BC
 CAIMap			0x25c	int	steepList13Count	(steepList29 +0x268 is filled from 0x79156C the same way: data +0x26c, count +0x270)
-CAIMap			0x2694	int	lastPlacedObjectId	the object id of the last PlaceObjectVolumes(id, records) call (stored after the cell object records are added and the dirty rectangle grown); 0 in CAIMap::Ctor and CWorldServer::NewZone; no reader in the typed decompiles
+CAIMap			0x2694	int	volumesChangedTick	the world tick of the last PlaceObjectVolumes call (the spell volumes pass world +0x64); walkers whose move started earlier and stand on an object tile re-path (TickMovement step 3); CORRECTION: was lastPlacedObjectId
 AnimQueue		0x18	0x0	pointer	vtable	
 AnimQueue			0x4	pointer	entries	12-byte entries {anim, sub, flags, duration, loop}
 AnimQueue			0x8	int	count	

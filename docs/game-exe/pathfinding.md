@@ -308,7 +308,10 @@ start and end tick, or the bearing; position fixed) and clamps `t` to `startTick
      if it leads back to us the chain is cut and we **re-path** (neighbours stamped static); else we record B as our chain link and **wait**;
    * anything else: keep the `level` (1 = blocked by a standing unit -> re-path, 2 = blocked by a walking unit -> wait), except that when we are faster than B (`vt[59]` speed) and `level == 2` we **re-path** (`level = 1`, walking neighbours stamped as static).
    No blocker found (the stamps overlap but no unit is within the radii sum) -> move anyway.
-3. `state == 0`, standing on a type-3 tile (`HasObjectType3AtPos`, e.g. in a spell zone), not in attack mode and a counter `+0x4C < world +0x2804` [? meaning] -> re-path.
+3. `state == 0`, standing on a type-3 tile (`HasObjectType3AtPos`, e.g. in a spell zone), not fighting (`+0x174`), and the move started
+   (`mover +0x4C startTick`) before the last object-volume change (`CAIMap +0x2694` = the world tick passed by `PlaceObjectVolumes` from the
+   spell volumes `CSpellEffect::UpdateVolumes` 0x67EFC0) -> re-path [V, deep-read 2026-11-03]: a wall / acid fog / campfire placed after
+   the route was planned makes walkers inside it re-plan.
 4. Moved: `CollisionMap::MoveUnit` (restamp), yaw from `dir`, `CUnit +0x278 = (state == 0)` (re-registers the unit when it changes, `MarkNetDirty(7)`).
 5. **Re-path** (level 1): clear the pending cells, `CAIMap::FindPath(self, goal +0x9C, moveState, maxLen +0xA4)` (after `CAIMap::PromoteWalkersToStanding` 0x5B7EF0 copies the obstacle grid 15 x 15 around us into the terrain level for the walking neighbours, removed again afterwards); failure -> `StopMove`, state 6 (`+0x145 = (partial flag == 1)`); success -> `CUnit::ResetMover` (new curve, replicated).
 6. **Wait** (level 2): pause flag `+0x20` (`+0x21` for move type 2), the unit is re-registered as standing (`+0x278 = 0`, `MarkNetDirty(7)`). The next `TickAnimation` 0x546F30 sees the flag and calls `MoveRequest::ShiftTimes(+1)` (start tick and the kind-3 end ticks), the animation start ticks and `CUnit +0x258` + 1: time stands still for the unit, so the curve does **not** run ahead; `TickState` clears the flag at the start of the next tick [V].
