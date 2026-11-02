@@ -325,8 +325,8 @@ Per page, the open items that matter most for the mod work:
 
 - world-server.md: `+0x12E00 staticObjectStream` is filled and never read. (Settled: zone kind 3 = the 16 `bz*` allod bases,
   the hour formula, the save header dwords +120 / +124, `CWorld +0x5C` / `+0x60`.)
-- world-client-players.md: no sender found for opcodes 0x0C, 0x12, 0x19. (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40
-  record read in full 2026-11-03, the 0x73 records are the water levels.)
+- world-client-players.md: nothing open: 0x0C's sender is dead code, 0x12 / 0x19 have senders (script SendEvent, the dialog
+  screen). (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40 record read in full 2026-11-03, the 0x73 water levels.)
 - combat.md: nothing open for the mod work: order kind 10 is dead code (no reference), the player `+0x108` cheat level only
   replaces the hit record. (Settled: the full 0x0B unit event code list, the max HP floor `max(1, x)`.)
 - unit-ai.md: brain +0x44 / +0x48 / +0x4C and `FollowLimit` / `normal.dat` are written, saved and loaded only (no reader); the
