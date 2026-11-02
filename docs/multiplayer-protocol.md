@@ -363,15 +363,15 @@ The sections (CMapObject::ReadNetState 0x50EC30, CUnit::ReadNetState 0x52EF90; t
 | 2 | u8 flag, **f32 x, y, z** (z is not sent: 0 means "on the ground"), 16 bytes rotation quaternion |
 | 3 | u8 n, then n x 5 raw bytes: the effects (spells) on the unit |
 | 4 | 264 bytes: the large stats block (exp total at +4 as an integer: 500 for the test bot; level at +8; attributes at +0xC) |
-| 5 | 11 x u32: equipment / item ids |
-| 6 | 3 x u32 (+0x264, +0x268, +0x26C) |
-| 7 | 1 byte: four packed fields (stance, ...) |
-| 8 | u8, **u8 action code (0xFE idle, 0x07 fighting, 0xFF dead)**, u32 tick, u8 |
-| 9 | a CString |
+| 5 | 11 x u32: the 4 weapon ids then the 7 armor ids (proto << 16 + material, -1 empty); the client drops all items and re-equips (game-exe: `CUnit::ReadNetState` 0x52EF90) |
+| 6 | 3 x u32: stance (+0x264), wanted stance (+0x268), active weapon slot (+0x26C, a float; a change swaps the weapon figure) |
+| 7 | 1 byte: bits 0-2 animation loop (+0x25C), bits 3-5 animation paused (+0x260, 1 = frozen), bit 6 dead (+0x274), bit 7 walking (+0x278) |
+| 8 | u8 current animation, **u8 queued animation = the action code (0xFE idle, 0x07 fighting, 0xFF dead)**, u32 start tick (-1 when looping), u8 animation flags |
+| 9 | a CString: the owning player's name (+0x238) |
 | 10 | the order / walk (ReadUnitOrder 0x5C7FC0): u8 mode (0 none, 1 move, 2 move to a point, 3 attack), u8 hi, u8 lo (steps = hi * 256 + lo), Vec2Q64 (2 x u16), a float range (u16), 4 x u32 (in mode 3 the 2nd is the target's id), then the steps: u16 codes (bits 0-1 / 2-3 = x / y -1, 0, +1 from the last cell, 3 = an absolute u16 follows; bits 4-5, 6-15 a speed class and a value) |
 | 11 | **u32 mask of the sides this unit is hostile to**, **u8 side**, u32 owner id (-1 none). Monsters: mask 0x01 (hostile to side 0 = the players), side 7; hares: mask 0 (they do not attack), side 14; heroes: mask 0x3FFE, side 0 |
-| 12 | 20 bytes |
-| 13 | 4 bytes |
+| 12 | 5 x f32: the detection factors (+0x4C8: sight, smell, hearing, unused, life sense; 3 = undetected, < 1 detected) |
+| 13 | u32: the battle button (+0x438; 1 = Regroup may pick fights for this party member) |
 
 Delta coding (`DeltaReader::Read` 0x47E000): every value is read from the byte stream with its bits taken from the same stream: a bit byte is fetched when the 8 bits of the last one are used (low bit first); a 1 bit = unchanged against the previous state, else per dword a 1 bit (unchanged) or 0 + 4 raw bytes, the remainder raw. The bits restart with a new byte at each section (checked: 99 of 99 creation records end exactly at the next sub-message with that rule, 5 of 64 without).
 The order section of some stationary monsters is shaped differently than the walking ones (a creation of a boar in mode 0 did not decode with the section's own rules); um-bot then takes the position, the hostility mask and the side from the record's start and tail (the next record's header marks the end).
