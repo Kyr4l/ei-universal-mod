@@ -395,7 +395,13 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
 
 * ~~Sequence numbers~~ settled [V]: `CSpellManager` never generates them. `CreateSpellById` 0x688EC0 only tracks maxima (`maxHighId` +0xD0 and the sub-table +0x14 are written there and reset by the ctor / Done / ClearRegistry, read nowhere); a copy made by `CSpell::FillFromId` 0x68B410 carries the source's id and is filled from the registered container. The low 16 bits come with the container's id from its creator (item data / save / net) [I].
 * ~~SpellProto +0x48 / +0x54 / +0x60~~ settled [V]: the typed readers are only `SpellProto::SerializeFields` 0x683B80, `CopyCtor` 0x686BF0, `operator_assign` 0x6875D0 and the dtor; `+0x54` (special mods) is also read by the camp spell-constructor preview `CCampScreen::RefreshSpellComponents` 0x612290; `+0x48` (build-in mods) and `+0x60` (TTI) have no gameplay reader: table data for the editors.
-* The exact `CEffectSoundSeq::Activate` modes (count 1..5 select different `PlayOnSlot` variants) and the ambient sound parameters.
+* ~~The exact `CEffectSoundSeq::Activate` modes~~ settled 2026-11-03 from the machine code [V]: the "modes" are the next-index
+  callbacks handed to `StartStreamSlot` 0x6BA2D0 (the stream slot asks for the next file index each time the current file ends; a
+  loop flag passes 1000, else 0). File list = the record's names, preceded by the folder name when `+0x14C` is not empty. Without
+  a folder: count 1 -> `0x40000000` (index 0 with bit 30, [I] the "last file" flag: play once); 2..5 -> a uniform random index
+  (`r & 1`, `r % 3`, `r & 3`, `r % 5`, `r` from the shared 256-entry random table `g_0x7A9D40`). With a folder: the first call
+  (previous index 0) plays entry 0 (the folder item), later calls pick `1 + random` among the named files (count 1:
+  `0x40000001`, the single file once). Counts above 5 fall back to the count-1 callback.
 * ~~CEffectArrow vtable size~~ settled [V]: one 25-slot vtable at 0x7436F0; classes.tsv had split it into 18 slots + a 7-slot "vtable" at 0x743738 (= 0x7436F0 + 18 x 4), which holds ReadDelta 0x67B690 (slot 21) and Activate 0x67B4E0 (slot 23), same 25 slots as the projectile base.
 * Shapechange (0x16) and comprehend (0x23): no server script and no literal `GetBuffValue` reader (only kinds 0x1D / 0x1E are read through it) [V]; whether any other code reacts to them is a [live] check (cast each, watch the target's buff list and the client).
 * The buff `+0x10` flag byte: its only typed access is a copy (0x5ED710) besides the replication; never tested [I] (no reader found).
