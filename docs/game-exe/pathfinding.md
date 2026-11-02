@@ -110,7 +110,7 @@ tables (`rows[y] -> first cell of row y`); each grid object is `{+0 data, +4 row
 |---|---|
 | +0 u32 | 8 nibbles; nibble k (bits 4k..4k+3) = passability of unit class k: **0 blocked, 1..15 usable** (15 best). 7..15 are "walkable" (cost factor < 12000), 1..6 are swamp-like (factor 12000..36000); `IsUnitPositionWalkable` 0x5BA5A0 accepts only a step cost 1..11999 |
 | +4 u16 | ground height in steps of `maxZ/511` (`CAIMap +0x120 = 511/maxZ` is the scale; `GetTerrainHeight` 0x5B77F0 divides by it). Bridge cells hold the bridge top (`SetBridgeCells`) |
-| +6 u16 | bits 0-5 water depth (0x3F = very deep), **bit 6 (0x40) cell is a bridge / platform** (original data saved in the bridge hash), bit 7 (0x80) water. The high byte is preserved by `TerrainGrid_Alloc` [?] |
+| +6 u16 | bits 0-5 water depth (0x3F = very deep), **bit 6 (0x40) cell is a bridge / platform** (original data saved in the bridge hash), bit 7 (0x80) water. The high byte (+7) is unused [I]: `TerrainGrid_Alloc` 0x5BD030 masks the word with 0xFF00 on fresh `operator new` memory (so it stays uninitialised), every writer keeps it (`& 0xFFC0` in 0x5B30B0, `& 0xFF40` / `& 0xFF3F` in 0x5B6740) and no 16-bit read of the cell tests bits 8-15 (all readers mask 0x3F / 0x40 / 0x80) |
 | +8 u8 | **standing-unit level** (see 3.3). 0 on a freshly loaded map |
 
 The border: `UpdatePassability` forces the 3 outermost rows / columns to nibble 0 (units can't leave the map); `PathFinder::Init`'s 34 x 34 window is closed on its edge.
