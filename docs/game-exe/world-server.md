@@ -324,6 +324,11 @@ bound), 0xBBAB0000 magic traps (0xd0), 0xBBAC0000 levers (0xa4), 0xBBBB0000 unit
 | 6 fire / campfire | like 1 plus a "campfire" spell cast (`CastSpellMulti`) at `+0x90` when the normal is upright, light emitter `vt[16..18]`, flags 2 / 4 | all, dynamic, non-units, active, CollisionMap |
 | 7 magic trap | like 1 (static flag 8) + `CMagicTrapObject::SetParams(+0x8c)` | all, dynamic, non-units, active |
 
+Object kind 0x39 is `CFakeUnit` (0x580, a `CUnit` with an old-style animation system at `+0x4E0`): its model comes from a 3ds
+scene file through `CFakeUnit::LoadModelFromScene` 0x446C10 (path under `scenes\`, "Can't open file", "Scene %s have more then one
+top ..."), one client figure per scene part; it is the only live user of the 3ds importer (`Scene3ds_*`). Whether a shipped map
+or the menu places one is open [?] (no `.mob` type scan yet).
+
 The same function spawns heroes (`SpawnPartyHeroes` 0x58EF20, `SpawnSingleHero` 0x5910A0) and the console unit
 (`CWorldServer::SpawnConsumableUnit` 0x58ECE0: proto `st.tr.130`, model `unhuma`, type 0x3010). `CObjectDesc::Spawn` 0x46AFB0 / `CUnitDesc::Spawn`
 0x46C4D0 (the editor / script path) call it when `+0x1c` is 0.
