@@ -435,7 +435,7 @@ Never current (-1000, no Update). Each tick it pops the first corpse of a friend
 * `Evaluate` 0x5D2960: jitter `+0xc = (2 j + 3) / 3`; an attacker `+0x30` -> `SetNoticed(its pos, 1000, -2)` and `radius = max(radius, 1.5 x distance)`.
   **Kiting** (ranged units: `CUnitServer::IsRangedAttacker` (no weapon: natural range > 1; weapon kind 5 / 6), animSpeedClass < 6, no spell in slot 0,
   `UnitStats_EffectLevel == 0`, `+0x238 > 0.6`): the nearest seen enemy within `RangedAttackDist` 7 (`RangedRunDist` 4 while Aggression is current):
-  already moving -> **15000**; else a retreat point 5 m further away from the enemy (+-3 m jitter) with a path <= 2 x its distance and from which the enemy can be
+  already moving -> **15000**; else a retreat point 5 m further away from the enemy (+-3 m jitter) whose `FindPath(budget 3 d + 10, slope 3)` cost is <= 2 x 5000 x d [V, deep-read 2026-11-03] and from which the enemy can be
   attacked (`CanReachOrderTargetFrom`) and within 1 m of the path end -> stored in `+0x1c` -> **15000**. Else `enemySeen` -> **3000**. Else standing in a spell
   area (`CAIMap::HasObjectType3AtPos`, moving or a non-idle prototype) -> remembers the spot -> **350**; the remembered spot still in an area -> 350. `playerFear`:
   the nearest *player-owned seen* unit within the radius -> `SetNoticed(its pos, 1000, -2)`. Then: interest > 50 and (Fear is current or the unit is within the
