@@ -1825,8 +1825,7 @@ CI3DFigure			0x23c	float[16]	scaleMatrix	pushed on top of the model matrix (iden
 CI3DFigure			0x27c	pointer	lightParams	passed to DrawFigure (0 in Init) [?]
 CI3DFigure			0x280	pointer	texture	CTexture bound to stage 0 by Draw
 CI3DFigure	CFigure	0x284	0x230	int[3]	unk_0x230	zeroed by CI3DFigure::Init together with the ambient +0x224..+0x22C; no reader in the typed decompiles (Draw passes only +0x224..+0x22C to the renderer's ambient): three unused floats between the ambient and the scale matrix [?] (renderer.md)
-CFigureClientSpecific	CObject	0x3c	0x1c	pointer	figure	CFigure (CFigure::BindClientSpecific)
-CFigureClientSpecific			0x20	int[4]	screenRect	RECT of the last draw (picking: HitTestPointParts / HitTestRect)
+CFigureClientSpecific	CFigureSpecific	0x3c	0x20	int[4]	screenRect	RECT of the last draw (picking: HitTestPointParts / HitTestRect)
 CFigureClientSpecific			0x30	float[3]	colorScale	1.0 each (Init) [?]
 CAnimationTrack	CObject	0x78	0x1c	pointer	entry	the .adb record (0x58) this clip belongs to (UpdateTransform reads the header floats through it)
 CAnimationTrack			0x20	pointer	node	owner CAnimationNode
@@ -3862,7 +3861,6 @@ SentPacket		0x120	0x8	double	time	NetPeer clock +0x48 when sent (RTT on ack)
 SentPacket			0x10	ushort	seq	the 16-bit sequence of the update
 SentPacket			0x14	pointer	messages	STLport list of {channel (0 update / 1 ack-mode update / 2 removal / 3), version, NetPendingEntry*}: what the packet carried
 SentPacket			0x18	byte[260]	chunkCopy	copy of the 0x104-byte stream-chunk node tail {u16 offset, u8 len, data[257]} (rep movsd 0x41 dwords at 0x435B2B), +0x18..+0x11b; re-queued by PacketLost. CORRECTION: was byte[252]
-SentPacket			0x114	byte	lostFlag	CORRECTION: REMOVE this row: +0x114 is inside chunkCopy; the lost flag is +0x11c (PacketLost receives the record at node + 8, its +0x114 = node +0x11c)
 SentPacket			0x11c	byte	lostFlag	set to 1 by PacketLost (0x433F8A, record-relative +0x114); PacketLost runs once per record
 StreamChunk		0x10c	0x8	ushort	offset	byte offset of the chunk in the stream (wraps at 0x10000)
 StreamChunk			0xa	byte	len	1..204 bytes (budget 220 - 16; the hard cap in TakeStreamChunk is 255)
@@ -4025,3 +4023,4 @@ EffectRecord			0x8	pointer[3]	passes	std::vector<EffectPassRecord 0x28> begin / 
 EffectRecord			0x14	int	passCount	
 EffectRecord			0x18	int	effectId	returned by slot 1 GetEffectId
 CTextManager			0x1c	pointer	archiveListHead	the .res archive list (TextArchiveList: head pointer at +0 of the embedded list; entries {next, prev, name std::string, CResourceBase*}); texts.res / textsLmp.res
+CFigureSpecific	CObject	0x20	0x1c	pointer	figure	owner figure (abstract base of CFigureClientSpecific, vt 0x73FB44: pure slots 2, 3, 11, 12); CFigure (CFigure::BindClientSpecific)

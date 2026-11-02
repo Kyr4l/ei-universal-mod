@@ -7443,9 +7443,9 @@ addr	size	name	status	purpose
 0x005A7040	6	CFigureClientSpecific::ClassName	named	CFigureClientSpecific
 0x005A7050	6	CFigureClientSpecific::GetTypeId	named	slot 12: 0x36
 0x005A7060	30	CFigureClientSpecific::~CFigureClientSpecific	named	slot 0: deleting destructor (root layout)
-0x005A7080	19	CSpecificVt73FB44::Ctor	named	vtable 0x73FB44, +8 = 0, +0x1C = 0
-0x005A70A0	30	CSpecificVt73FB44::DeletingDtor	named	slot 0 of the 13-slot CObject vtable 0x73FB44 (CFigure TU; the small CObject subclass whose dtor body 0x5A70C0 only resets vtable / +0x1c): then operator delete when flag & 1
-0x005A70C0	18	CSpecificVt73FB44::Ctor2	named	vtable 0x73FB44, +0x1C = 0
+0x005A7080	19	CFigureSpecific::dtor_body	named	resets the vtable to 0x73FB44 (the abstract CFigureSpecific base), +8 = 0, +0x1C owner = 0, then CObject::dtor_base; called by CFigureClientSpecific deleting dtor 0x5A7060
+0x005A70A0	30	CFigureSpecific::DeletingDtor	named	slot 0 of vt 0x73FB44: CFigureSpecific::dtor_body2 then operator delete when flag & 1
+0x005A70C0	18	CFigureSpecific::dtor_body2	named	resets the vtable to 0x73FB44 and +0x1C owner = 0 (the deleting-dtor path)
 0x005A70E0	66	CFigureClientSpecific::Init	named	slot 2 -> 1: flags +8 = 0; colourScale +0x4C..+0x54 = (1, 1, 1) (the per-part colour multiplier the Render / RenderLit steps read)
 0x005A7130	9	CFigureClientSpecific::Done	named	slot 3 Done() (root layout)
 0x005A7160	304	CFigureClientSpecific::AnimateTextureFrame	named	([stack] time): textureNumber +0x15C 0xD: 8 frames in a 4 x 2 grid (u = (t & 3) / 4, v = 0 or 0.5), 0xE: 16 frames 4 x 4 (v = 1 - row / 4), 0x10: 32 frames 8 x 4 (u = (t & 7) / 8, v = 1 - row / 4): the figure's uv offsets +0xCC / +0xD0 from the integer time (water, fire props)
