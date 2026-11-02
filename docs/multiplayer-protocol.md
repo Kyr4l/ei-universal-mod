@@ -356,7 +356,7 @@ CString texture   "", "boar02"
 CString label     "", "mainMenu00labels", "default0"
 u16 n, n x CString  the figure's part names (hd bd hp lh1 ...)
 CString name      a hero's name, empty for monsters
-u32               the prototype row again (monsters) / a small number (heroes)
+u32               CUnit +0x23C protoIndex: the unit's row in the units database (stored by CUnit::SetProtoIndex on the client; captures: the prototype row again for monsters, a small number for heroes)
 then CMapObject::UnpackNetState / CUnit::ReadNetState: u16 mask of the sections present, each section delta coded against the empty state
 ```
 
