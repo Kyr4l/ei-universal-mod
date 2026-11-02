@@ -106,7 +106,7 @@
 | **WaitSegment** (Wait: float) | Pauses the called procedure for `Wait` segments (15 per second); map script modules only. |
 | **SetCP** (Object: object, x: float, y: float, z: float) | Moves any map object (not only a unit) to (x,y). Units lose their orders, and the passability graph is recalculated (slower than `SetCPFast`). |
 | **SetCPFast** (Object: object, x: float, y: float, z: float) | Like `SetCP`, but the AI passability graph is not recalculated. |
-| **HideObject** (Unit: object, Hide: float) | Hides (`Hide ≠ 0`) or shows (`0`) a map object. Meant for briefing zones. |
+| **HideObject** (Unit: object, Hide: float) | Hides (`Hide ≠ 0`) or shows (`0`) a map object. Meant for briefing zones: per the code it only has a visible effect there (in quest zones the players keep seeing the object; read from the code, not yet checked in game). |
 | **RemoveObjectFromServer** (Object: object) | Removes the object from the server (same as `RemoveUnitFromServer`). |
 | **RemoveUnitFromServer** (Unit: object) | Removes the object from the server (same as `RemoveObjectFromServer`). |
 | **RemoveObject** (grp: group, Unit: object) | Removes the unit from a game group (the group variable of the map script; not usable from the console). |
@@ -191,7 +191,7 @@
 | **SetParticleSourceSize** (id: float, rad: float) | Changes the radius of the particle source. |
 | **MovePointLight** (id: float, x: float, y: float, z: float, Time: float, Remove: float) | Moves the point light to (x,y,z) over `Time` (1/15 s); when `Remove` is set the light is deleted on arrival. |
 | **CreateFX** (x: float, y: float, z: float, Volume: float, rad: float, NameWav: string) | Plays a WAV once at (x,y,z), audible within `rad`. |
-| **CreateRandomizedFXSource** (id: float, x1: float, x2: float, y1: float, y2: float, z1: float, z2: float, Volume: float, rad: float, NameWav: string) | A looped sound source `id` placed (randomized) inside the box x1..x2, y1..y2, z1..z2; remove it with `DeleteFXSource`. |
+| **CreateRandomizedFXSource** (id: float, x1: float, x2: float, y1: float, y2: float, z1: float, z2: float, Volume: float, rad: float, NameWav: string) | A looped sound source `id` placed (randomized) inside the box x1..x2, y1..y2, z1..z2; remove it with `DeleteFXSource`. In the real code the arguments are (id, x, y, z, volume, radius, minDelay, maxDelay, scatter, wav), and a bug in the game makes these sources never play (docs/game-exe/gs-functions.md). |
 | **PlayFX** (x: float, y: float, z: float, rad: float, NameWav: string) | Not implemented in game.exe (does nothing). |
 | **PlayCamera** (PlayName: string) | Starts the automatic camera path in `CAMERA\<PlayName>`. |
 | **PlayMovie** (PlayName: string) | Plays the video `MOVIES\<PlayName>` (with its extension). |
