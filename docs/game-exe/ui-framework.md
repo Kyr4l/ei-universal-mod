@@ -506,7 +506,14 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 - ~~Static initialiser globals~~ settled [V] (generic sweep 2026-11-01): 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0
   fill per-TU math-header constants (g_0x7C7CF8 / 7C7D28 / 7C7E00 / 7C7E28 / 7C7E50 = 1.0f, g_0x7C7D20 = 2 pi, g_0x7C7D24 = pi/2),
   unreferenced; `g_0x7C7E58` is the default widget colour.
-- The `MapZoneRecord` (0x5C) string fields beyond `+0x20 / +0x24` and the allod record's embedded `CObject` at `+0x18` [?].
+- ~~MapZoneRecord fields / allod +0x18~~ settled [V] from `MapInfo_Load` 0x45EA20 and a real `map.txt`: `#zone <name> <allod>
+  <game|edge|brief>` -> +0 / +4 / +0x28 (0 / 1 / 2); `#res` next line `<mpr> <mob>` -> +0xC / +8; `#figure` -> +0x10; `#camera` ->
+  +0x1C; `#maps` two lines: two ints -> +0x20 / +0x24 (`8 6` for zone1), then `<map picture> <quest picture>` -> +0x18 / +0x14 (the
+  ints at +0x20 / +0x24 are NOT strings, the old rows were wrong); `#weather` -> +0x2C (none 0, snow 2, tornado 3, other 1); `#sky
+  cave` -> +0x30; `#restrict a b c` -> +0x34 byte + +0x38..+0x40; `#cage` -> +0x44; `#exit n` / `#deploy` / `#remove` / `#passtime` /
+  `#view` / `#deployangle` fill the 0x3C exit records. The allod record's "CObject" at +0x18 is a **CDWordArray of zone indices**:
+  each `#zone` line appends its index to the allod named by its second word. `#position` is not read by this loader. Full rows:
+  `structs.tsv` MapZoneRecord / ZoneRecord (same record).
 - `CSoftCursorFrame::CreateFromMmp`: settled as far as needed [I]: the per-pixel copy loops are compiler-eliminated in the
   decompile; the surface comes from `CDXDirectDrawSurface::CreateFromPicture`.
 

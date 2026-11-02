@@ -1460,7 +1460,7 @@ ZoneRecord		0x5c	0x4	CString	allod	_allod ("gipat", "ingos", "suslanger": the lo
 ZoneRecord		0x5c	0x8	CString	mobBase	+ ".mob" = the map object file
 ZoneRecord		0x5c	0xc	CString	mprBase	+ ".mpr" = the terrain / AI map file; empty = no world (camp)
 ZoneRecord		0x5c	0x28	int	kind	0 playable zone (has mission.sav / <zone>.sav), 1 camp or map screen (zone kind 4), 2 scripted zone (world script from the .mob, zone kind 3)
-ZoneRecord		0x5c	0x2c	int	weatherMode	_weather: none 0, 1 rain, 2 (DAT_00785714), 3 tornado
+ZoneRecord		0x5c	0x2c	int	weatherMode	_weather: none 0, snow 2, tornado 3, any other word (rain) 1 = the default
 ZoneRecord		0x5c	0x30	int	caveFlag	"#sky cave" 1 / 0 (CWorldServer +0xe0); "#restrict" fills +0x34 byte + floats +0x38..+0x40. CORRECTION: was restrictFlag
 ZoneRecord		0x5c	0x44	byte	cage	_cage
 ZoneRecord		0x5c	0x48	pointer	exitsVt	MFC CArray of ZoneExit
@@ -2747,9 +2747,21 @@ MapInfo		0x28	0x18	pointer	zones	MapZoneRecord[] (0x5C each)
 MapInfo		0x28	0x1c	int	zoneCount	
 MapInfo		0x28	0x20	int	zoneCap	
 MapInfo		0x28	0x24	int	zoneGrow	
-MapZoneRecord		0x5c	0x20	pointer	mapName1	'#maps' line 1 (CString) [?]
-MapZoneRecord		0x5c	0x24	pointer	mapName2	'#maps' line 2 (CString) [?]
-MapZoneRecord		0x5c	0x2c	int	exitIndex	'#exit' trailing number - 1 [?]
+MapZoneRecord		0x5c	0x0	CString	name	'#zone' line word 1 (the zone name, gz1g; MapZoneRecords_FindByName); the same 0x5C record as ZoneRecord (rows there name the game-side meanings: +8 .mob base, +0xC .mpr base, +0x28 kind, +0x30 cave flag)
+MapZoneRecord		0x5c	0x4	CString	allodName	'#zone' line word 2 (gipat); the allod record of that name gets the zone index in its CDWordArray +0x18
+MapZoneRecord		0x5c	0x8	CString	res2	'#res' next line, word 2 = the .mob base name (ZoneRecord mobBase)
+MapZoneRecord		0x5c	0xc	CString	res1	'#res' next line, word 1 = the .mpr base name (ZoneRecord mprBase; FindZoneByName2 compares this one)
+MapZoneRecord		0x5c	0x10	CString	figure	'#figure' next line: the world-map figure of the zone (ingm101)
+MapZoneRecord		0x5c	0x14	CString	maps2b	'#maps' second line, word 2: the quest-log map picture (zone1quest)
+MapZoneRecord		0x5c	0x18	CString	maps2a	'#maps' second line, word 1: the zone map picture (zone1map)
+MapZoneRecord		0x5c	0x1c	CString	camera	'#camera' next line (the camera file name, bz1g)
+MapZoneRecord		0x5c	0x20	int	mapsA	'#maps' first line, int 1 (8 for zone1)
+MapZoneRecord		0x5c	0x24	int	mapsB	'#maps' first line, int 2 (6 for zone1)
+MapZoneRecord		0x5c	0x28	int	kind	'#zone' line word 3: game 0, edge 1, brief 2
+MapZoneRecord		0x5c	0x2c	int	weather	'#weather': none 0, any other word (rain) 1 = the default, snow 2, tornado 3
+MapZoneRecord		0x5c	0x34	byte	hasRestrict	'#restrict' present
+MapZoneRecord		0x5c	0x44	byte	cage	'#cage' present
+MapZoneRecord		0x5c	0x30	int	caveFlag	'#sky' followed by 'cave' 1, other sky 0 (CWorldServer::SetCaveFlag)
 MapZoneRecord		0x5c	0x38	float[3]	restrict	'#restrict' three ints
 MapZoneRecord		0x5c	0x4c	pointer	exits	MapExitRecord[] (0x3C each; '#exit <n>')
 MapZoneRecord		0x5c	0x50	int	exitCount	
