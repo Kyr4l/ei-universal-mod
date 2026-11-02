@@ -327,8 +327,19 @@ into the client unit's request (and, with the debug flag `0x79BE70`, rebuilds th
 * **Party cohesion** (`AiLogicPlayer`, brain kind 6): a hero's move order is held back while any unit that follows it is farther than 9 m (`Brain::IsNearLeader(run = 1)`, `FollowMaxDist * 2 + 1`); `AiLogicPlayer::Update` 0x5D4A90 (state 2)
   queues the order when the followers are within 6.6 m (`IsNearLeader(0)`, factor 1.4) and cancels it again with player message 0x21 when they fall behind during the walk (`IsNearLeader(1)` false). Followers
   (`Regroup` 0x5D4170, `Brain::TickFollow`) simply walk to the leader / its predicted position. [V from the two functions; the mode-2 exception: `CPlayerServer +0x5120 == 2` skips the check, meaning unknown]
-* **Chase / attack approach** `CUnitServer::ApproachTarget` 0x54D140 (every tick of combat orders): uniform-cost table (`CUnit +0x43C = 1`); target out of reach -> predict its position with `vt[52]` at the end of our attack window, if it will come into reach at our speed
-  just wait (state 2), else (every 16 ticks, or when idle) re-path to the interception point `distance - reach / (our speed + target's radial speed)` clamped to 2..64 ticks, with the target temporarily removed from the map; `BeginMoveTo(point*0.999 + own*0.001, FollowDistance + 5)`.
+* **Chase / attack approach** `CUnitServer::ApproachTarget` 0x54D140 [V, deep-read 2026-11-03] (every tick of combat orders): uniform-cost table (`CUnit +0x43C = 1`).
+  *Unit target* (`+0x1A8 orderExact == 0`): when the target is still, in reach (`OrderReachDistance`) and `CanCastAt` accepts, just stand (state 2, idle anims).
+  Otherwise: a moving target is predicted (`vt[52]` position at tick) at `nextAttackTick + 16`; if we would close the remaining `distance - reach` at half our
+  speed (`vt[59]`) before then, wait standing. Else, when idle / standing or within 16 ticks of `approachRepathTick`: the chased object is the **chain partner**
+  (`+0x1DC`) while it still attacks the same target with an order 3..5 and is not in state 5 (else the link is dropped); closing speed = our speed + the
+  target's speed along its forward axis towards us (min 0.1); interception time `round((distance - reach) / closing)` clamped to 2..64 ticks; predicted
+  point P at that tick. While walking (state 0) and P lies within `(distance + 1) x 0.1` of the current goal, only the path budget is refreshed
+  (`maxLength = FollowDistance + 5`); else, with the chased object lifted off the collision map, `BeginMoveTo(P x 0.999 + own x 0.001, FollowDistance + 5)`
+  (failure -> `+0x145 pathBlocked`); if the path's goal ends farther than `reach` from P the unit gives up for now: mover reset, stand facing forward, state 6,
+  hit effect dropped, `pathBlocked`. `approachRepathTick` = the interception tick.
+  *Point target* (`orderExact`): walk to `orderPos` (re-path unless already walking to a goal within 0.3 m), `BeginMoveTo(pos, 1e6)`; arrival within 0.3 m
+  -> done; else the order is still kept when `CanReachTarget` and, with the unit placed at the path goal, `IsOrderTargetReachable`; otherwise message 0xB
+  (attack) / 0xE (others), order cleared, `moveDone`.
 * **Follow** `Brain::TickFollow` 0x5D6F90: every 8 ticks; moving target -> predicted position 5 ticks ahead, beyond `FollowMinDist`(2) walk to it, near it find a spot 1.365 m beside its predicted path; standing target -> move when farther than `FollowMaxDist`(4).
 * **Flee / flank / random spot**: `AiLogicFear`, `Brain::FindRandomReachableSpot` 0x5D7F80 (path length <= 3 x distance + 10, slope <= 0.3), `Brain::TryAttackTarget` 0x5CF3C0 — all call `FindPath` for feasibility with the unit moved in the collision map.
 
