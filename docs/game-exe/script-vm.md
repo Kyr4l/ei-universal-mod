@@ -567,13 +567,12 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 
 ## 9. What is not known
 
-- Whether `MobFile_Load` / `LoadWorldScript` report a failed compile anywhere (they do not read `+0x1EC`; the map simply has a partial or no
-  script). The user-visible symptom of a script error in a shipped map was not traced [I].
-- `+0x6C` (second auto-id counter, -2 after Reset, saved) has no reader among the handlers read here [?].
+- Whether `MobFile_Load` / `LoadWorldScript` report a failed compile anywhere: they do not read `+0x1EC` [V]; the visible symptom is a [live] check (load a map with a deliberately broken script and watch the console / log).
+- ~~`+0x6C`~~ settled [V]: `nextAutoId2` is the id of script sound sources created without one: `GSWorld::CreateSoundSource` 0x4BD310 (CreateFXSource / CreateRandomizedFXSource) takes it when the given id is < 0 and decrements it (-2, -3, ...); reset by `GSWorld::Reset` 0x4BE6E0, saved.
 - The MFC `Serialize` slots of all script containers (vt slot 2) are present but no `CArchive` path into them was found; the save uses the explicit
   `Write` / `Read` pairs. Taken as dead code.
-- `GSWorld::Decompile` and the five `Compiler_*` one-list entry points have no callers: editor leftovers, not re-verified beyond their headers.
-- The sound-source respawn inversion (gs-functions.md section 5) is unchanged: `Tick` serves records with `randomized == 0`.
+- `GSWorld::Decompile` and the five `Compiler_*` one-list entry points have no callers: editor leftovers [untestable].
+- The sound-source respawn inversion (gs-functions.md section 5): `Tick` serves records with `randomized == 0` [V]; whether randomized sources ever play is a [live] check.
 - `GSPlayerLayer::dtor` (0x4A6840, was `CompiledScript_Destroy`, then `Destroy?`): the member destructor called from the `CGSPlayer` ctor / dtor EH funclets (guess sweep 2026-11-01); `CGSPlayer` / `GSPlayers_*`
   (0x4A6580..0x4A7630) are the session's player / shop records and have nothing to do with the script VM despite the "GS" prefix.
 
