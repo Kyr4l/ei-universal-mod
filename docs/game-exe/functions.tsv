@@ -594,7 +594,7 @@ addr	size	name	status	purpose
 0x0041ADB0	777	LobbyServer::OnJoin	named	"created-handler for JoinMessage (kind 5, this = LobbyServer, edx = message): new TwoStringMessage player record appended to +0x2590 {name +0xc, unit +0x18 from the join, +0x24 = join +0x28, +0x2c = join +0x2c, +0x30 = g_0x79B60C++ player id, +0x34 = first free slot index from 1, +0x38 = chat counter +0x258c}, new TwoRefMessage2 peer record {+0xc player record, +0x10 = g_0x79B924 (the NetPeer)} appended to +0x25a4 and stored in join +0x30; host byte +0x28 = 1 when no local LobbyClient exists and this is the only peer record, or when the join's +0x24 byte is set; posts chat line 0 ""lmp_player_connected"""
 0x0041B0C0	242	LobbyServer::OnLeave	named	removed-handler for JoinMessage: via join +0x30 (peer record) erases the player record from +0x2590; when it was the host (+0x28) the first remaining player becomes host (+0x28 = 1, version ++); erases the peer record from +0x25a4
 0x0041B1C0	218	LobbyServer::OnChat	named	"created-handler for ChatMessage (kind 6): finds the peer record of g_0x79B924 in +0x25a4 and posts ""^%i%s^7: %s"" (slot index colour, player name, text) through PostChat (an IdStringMessage, kind 2, to everyone)"
-0x0041B2A0	974	LobbyServer::OnNamedEvent	named	"created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must be a map-list entry +0x25ac: suffix ""_1"" -> SetMap(base), ""_2"" -> UnloadMap, ""_3"" -> OnMapRecord(base); 2 kick by player name; 3 ban by player name; 4 kick by player id (atoi); 5 ban by player id"
+0x0041B2A0	645	LobbyServer::OnNamedEvent	named	"created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must be a map-list entry +0x25ac: suffix ""_1"" -> SetMap(base), ""_2"" -> UnloadMap, ""_3"" -> OnMapRecord(base); 2 kick by player name; 3 ban by player name; 4 kick by player id (atoi); 5 ban by player id"
 0x0041B525	101	EHBlock_41B525	named	CRT: C++ EH unwind funclet inside LobbyServer::OnNamedEvent (not a function of its own; name kept)
 0x0041B58A	39	EHBlock_41B58A	named	CRT: C++ EH unwind funclet inside LobbyServer::OnNamedEvent (not a function of its own; name kept)
 0x0041B5B1	25	EHBlock_41B5B1	named	CRT: C++ EH unwind funclet inside LobbyServer::OnNamedEvent (not a function of its own; name kept)
@@ -608,7 +608,7 @@ addr	size	name	status	purpose
 0x0041B970	166	LobbyServer::ConfirmPlayerPair	named	updated-handler for ObjListMessage: bumps the version +8; finds the partner record and the ObjPairMessage of both; when both records are alive, flagged +0x1c and their +0x20 == the other's +0x24 (both confirmed the same upload counters) marks the pair confirmed (+0x1c = 1, +0x20 / +0x24 = the counters, version ++) -> the clients open the exchange screen
 0x0041BA30	494	LobbyServer::OnPairRecordRemoved	named	removed-handler for ObjListMessage: erases the record from +0x25b8, chat line 11 unless +0x30, and when the pair message exists: if confirmed queues it into the timed list +0x25c0 for 60 s and removes it from +0x25bc
 0x0041BC20	28	Ref_Release11	named	releases the short-refcounted object at *p
-0x0041BC40	2004	LobbyClient::ctor	named	(this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port), lists +0x25d8 players / +0x25dc chat / +0x25e0 transfers / +0x25e4 chunks / +0x25e8 chunk requests / +0x25f8 quest states / +0x25fc variables / +0x2604 timed sent events / +0x2608 player events / +0x2610 exchange records / +0x2614 party list (0x160 nodes), refs +0x25ec quest host / +0x25f0 own peer record / +0x25f4 current map / +0x2600 own JoinMessage (new, state 4, hero -1) / +0x260c local exchange record / +0x2618 exchange pair, CParty +0x2620 and +0x2690, magic +8 = 0xDEC0AD07, RegisterMessageFactory, handlers: kind 4 created SetRef25F0 / removed 0x41E460 clear; 1 created AddToList25D8 / updated 0x41E510 (UI refresh) / removed RemoveFromList25D8; 2 created OnChatLine / removed RemoveFromList25DC; 3 created 0x41E730 (+0x25ec = record) / removed 0x41E760 (clear); 8 created AddToList25F8 / removed RemoveFromList25F8; 9 created 0x41E900 (+0x25f4; without a local server Lobby_SendMapFiles(name) + QuestFiles_Scan) / removed 0x41E960; 10 created AddToList25FC / updated 0x41EA10 (Campaign_AdvanceMission) / removed RemoveFromList25FC; 11 created OnFileTransferAdded / removed RemoveById; 12 created OnChunkReceived / removed RemoveFromList25E4; 14 created AddToList2608; 15 created AddToList2610 / updated 0x41F090 / removed RemoveFromList2610; 16 created/updated/removed 0x41F150/0x41F180/0x41F1B0 (clear local dirty + LoadPartyFromMirror); 17 created SetRef2618 / updated 0x41F270 (confirmed pair -> CInterface::OnLobbyRef opens the exchange screen, clears +0x2618 / +0x260c / +0x2614) / removed 0x41F3A0 (same clear)
+0x0041BC40	611	LobbyClient::ctor	named	(this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port), lists +0x25d8 players / +0x25dc chat / +0x25e0 transfers / +0x25e4 chunks / +0x25e8 chunk requests / +0x25f8 quest states / +0x25fc variables / +0x2604 timed sent events / +0x2608 player events / +0x2610 exchange records / +0x2614 party list (0x160 nodes), refs +0x25ec quest host / +0x25f0 own peer record / +0x25f4 current map / +0x2600 own JoinMessage (new, state 4, hero -1) / +0x260c local exchange record / +0x2618 exchange pair, CParty +0x2620 and +0x2690, magic +8 = 0xDEC0AD07, RegisterMessageFactory, handlers: kind 4 created SetRef25F0 / removed 0x41E460 clear; 1 created AddToList25D8 / updated 0x41E510 (UI refresh) / removed RemoveFromList25D8; 2 created OnChatLine / removed RemoveFromList25DC; 3 created 0x41E730 (+0x25ec = record) / removed 0x41E760 (clear); 8 created AddToList25F8 / removed RemoveFromList25F8; 9 created 0x41E900 (+0x25f4; without a local server Lobby_SendMapFiles(name) + QuestFiles_Scan) / removed 0x41E960; 10 created AddToList25FC / updated 0x41EA10 (Campaign_AdvanceMission) / removed RemoveFromList25FC; 11 created OnFileTransferAdded / removed RemoveById; 12 created OnChunkReceived / removed RemoveFromList25E4; 14 created AddToList2608; 15 created AddToList2610 / updated 0x41F090 / removed RemoveFromList2610; 16 created/updated/removed 0x41F150/0x41F180/0x41F1B0 (clear local dirty + LoadPartyFromMirror); 17 created SetRef2618 / updated 0x41F270 (confirmed pair -> CInterface::OnLobbyRef opens the exchange screen, clears +0x2618 / +0x260c / +0x2614) / removed 0x41F3A0 (same clear)
 0x0041BEA3	75	EHBlock_41BEA3	named	CRT: C++ EH unwind funclet inside LobbyClient::ctor (not a function of its own; name kept)
 0x0041BEEE	97	EHBlock_41BEEE	named	CRT: C++ EH unwind funclet inside LobbyClient::ctor (not a function of its own; name kept)
 0x0041BF4F	95	EHBlock_41BF4F	named	CRT: C++ EH unwind funclet inside LobbyClient::ctor (not a function of its own; name kept)
@@ -1913,6 +1913,7 @@ addr	size	name	status	purpose
 0x00455B50	79	Protection_RandomCheck	named	rolls rand (~1 in 100 per call); when it hits finds an entry flagged in the global list g_0x79BC2C (byte +8 == 0) and calls Protection_Penalty
 0x00455BA0	220	Protection_Penalty	named	resets the application settings to defaults (AppSettings::SetDefaults on g_0x79BC70) and randomises the flags of every object of the world manager (CMapObject::SetSpecificRaw / CObject3D::SetSpecific46Raw with random 12-bit values)
 0x00455C80	20	RefCount4_Release2	named	(ref*): refcount at +4 --, pointer cleared (34 callers)
+0x00455CD0	1	EmptyStub_455CD0	named	a lone ret (1 byte) between functions; no call and no data reference found (alignment leftover or an unused empty function)
 0x00455CE0	22	StaticInit_CString_g79BA1C	named	CRT: CString global g_0x79BA1C constructed empty (m_pchData = afxPchNil 0x796E48) and its atexit destructor registered
 0x00455D10	22	StaticInit_CString_g79BA18	named	CRT: CString global g_0x79BA18 constructed empty (m_pchData = afxPchNil 0x796E48) and its atexit destructor registered
 0x00455D40	22	StaticInit_CString_g79BA14	named	CRT: CString global g_0x79BA14 constructed empty (m_pchData = afxPchNil 0x796E48) and its atexit destructor registered
@@ -2696,38 +2697,98 @@ addr	size	name	status	purpose
 0x00485540	12920	CParticle::Init	named	"slot 2 (type +0x10 = 0x2000 + k): Reset, bounds = empty, columns +0xe0 = 4, probability +0xcc = 100, max live +0xd8 = 500, frames +0xdc = 16, flag 1 set; then the per-type constant table (texture name, spawn box +0xf0..+0x104, size +0x10c, +0x110 / +0x114 growth, counts +0xd0 / +0xd8, interval +0xe4, life +0xec, callbacks emit +0x1e0 / step +0x1e4 / tick +0x1e8, record array +0x154 of 0x38 entries, blend +0x150) - see data-sound.md section 6; unknown types FatalError ""CParticle::Create(): Unknown EType""; then CTextureHolder::SetTextureByName(+0x1ec, 6, name) and the +0x1d0 array of +0xdc UV rects (u0 v0 u1 v1, atlas +0xe0 x +0xe0, half-texel inset 1/512); returns 1"
 0x00488940	33	Vec3_Div	named	out = in / s for float[3]
 0x00488970	83	Isaac_RandRange	named	(isaac state, lo, hi): lo + rand * (hi - lo) (30 callers, particle emitters)
+0x004889D0	981	ParticleEmit_200EChangeHero	named	particle types 0x200E change hero / 0x2052 explosion: emit callback
+0x00488DB0	323	ParticleStep_200EChangeHero	named	particle types 0x200E / 0x2052: step callback (tick ParticleTick_Explosion shakes the camera)
 0x00488F00	140	ParticleTick_Explosion	named	(this, particle): type 0x200e: camera shake on the first particle, size = ln(n+2) * +0x10c * 0.2, z += +0x10c * 0.12, finished after 30 steps (flag 1 cleared)
+0x00488F90	501	ParticleEmit_200CAcidColumn	named	particle type 0x200C acid column: emit callback
 0x00489190	323	ParticleStep_Bounce	named	(this, particle): +0x50 countdown; phase 0: z velocity +0x40 *= 0.85 - 0.055, alpha from the height, on hitting the emitter level (+0xa0 + +0x10c * 0.5) -> phase 1 with velocity damped; phase 1: +0x44 ++ up to 14
 0x004892E0	54	ParticleTick_Decay	named	(this, particle): particle +0x34 counter ++, halves +0xd0 while > 8, stops the system after 13
+0x00489320	1827	ParticleEmit_200B	named	particle type 0x200B (FireSmoke): emit callback
+0x00489A50	238	ParticleStep_200B	named	particle type 0x200B: step callback
+0x00489BE0	784	ParticleEmit_200DBanshee	named	particle type 0x200D banshee: emit callback
+0x00489EF0	49	ParticleStep_200DBanshee	named	particle type 0x200D banshee: step callback
 0x00489F70	914	ParticleEmit_Sparks	named	(this, particle): random variant +0x54 (0..2), life +0x58 = +0xe4, pos = emitter + carrier z, +0x50 = 100 + rand % 9, interpolates between the +0x154 records (0x38 each)
 0x0048A310	577	ParticleStep_Trail	named	(this, particle): +0x50 countdown; +0x2c += +0x40 (accelerating 0.0001) until 1.0; interpolates position / colour between the +0x154 records (0x38 each) by +0x2c
+0x0048A8F0	1192	ParticleEmit_2009Fireworks	named	particle type 0x2009 fireworks: emit callback
+0x0048ADA0	282	ParticleStep_2009Fireworks	named	particle type 0x2009 fireworks: step callback
 0x0048B080	1262	ParticleEmit_GridFill	named	(this): poison cloud / acid fog (0x2007 / 0x2008): when the live list +0x1b8 is empty fills it with records on a (-n..n)^2 grid of spacing 1 (jittered 0.3) around the emitter at the terrain height, n from the radius +0x11c; each record: life +0x50 = +0xec (3236), +0x44 = 8, colour from +0x118 intensity
 0x0048B570	187	ParticleStep_FadeColour	named	(this, particle): +0x4c countdown reset from +0xe4 and +0x44 ++ until +0xdc; while flag 1 is clear fades the alpha of +0x58 (type 0x2008 keeps colour 0xffaf7f)
 0x0048B630	1456	ParticleEmit_Healing	named	"(this, particle): ""Particle effect Healing without carrier"" (FatalError 0x44C470 without +0x94); record array +0x154 sized round(+0x10c * 6 + 2) (0x497EB0), ring of particles around the carrier (GetCarrierExtent) rising upward"
+0x0048BBE0	242	ParticleStep_2006Healing	named	particle type 0x2006 healing: step callback
 0x0048BD50	694	ParticleEmit_Burst	named	(this, particle): 60% chance of a short-lived (+0x54 = 8, life +0x50 = +0xec * 8) spark at the emitter with random spread +0xf4, else a different variant
+0x0048C010	124	ParticleStep_2005Volcano	named	particle type 0x2005 volcano (Vulkan): step callback
+0x0048C090	1278	ParticleEmit_2002Blast	named	particle type 0x2002 blast (Explosion): emit callback
 0x0048C590	456	ParticleStep_Grow	named	(this, particle): phase +0x54 < 0: moves by +0x20 velocity, size +0xc grows (1.01 / 1.03) with +0x30 / +0x34 accelerating 1.02 per step for 14 steps
+0x0048C800	712	ParticleEmit_2000Fireball	named	particle type 0x2000 fireball (FireSmoke texture): emit callback (data-sound.md particle table)
+0x0048CAD0	194	ParticleStep_2000Fireball	named	particle type 0x2000 fireball: per-particle step callback
+0x0048CBA0	809	ParticleEmit_2011FireArrow	named	particle types 0x2011 fire arrow / 0x204E: emit callback
 0x0048CED0	379	ParticleStep_Respawn	named	(this, particle): phase +0x54 == 1: re-places the particle at emitter + offset +0xa4 with random variant; else counts down +0x50 / +0x4c
+0x0048D050	729	ParticleEmit_2012AcidRay	named	particle type 0x2012 acid ray: emit callback
+0x0048D330	226	ParticleStep_2012AcidRay	named	particle type 0x2012 acid ray: step callback
+0x0048D420	967	ParticleEmit_2013Stench	named	particle type 0x2013 stench: emit callback
+0x0048D7F0	220	ParticleStep_2013Stench	named	particle type 0x2013 stench: step callback
+0x0048D8D0	1368	ParticleEmit_2014Link	named	particle type 0x2014 link: emit callback
 0x0048DE30	519	ParticleStep_Vortex	named	(this, particle): +0x38 += +0x3c (progress), +0x44 cycles mod +0xdc; dead past the carrier record's +0x18; rotates (+0x20, +0x24) by the record's +0xc0 / +0xc4, positions on the +0x130 axis scaled by the record (+0x50 / +0x54, +0x88..)
 0x0048E070	1871	ParticleEmit_Link	named	"(this, particle, t): ""Particle effect Link without carrier""; 2 records in +0x154 (carrier extent * 1.2), particles along the link between the two endpoints (0x410770 lerp, Isaac_RandRange)"
 0x0048E7C0	544	ParticleStep_Orbit	named	(this, particle): +0x50 countdown, +0x44 cycles mod +0xdc, rotates the velocity +0x20 by the record's (+0x50, +0x54) and projects it onto the record plane (+0x38..+0x40) when the record's +0x20 is small
 0x0048E9E0	563	ParticleEmit_Cloud	named	(this, particle): colour -1, life +0x50 = +0xec, +0x44 = 8 unless type 0x2004, +0x4c = +0xe4, size = +0x10c (40% chance half size), random position within +0xf0..+0xfc
 0x0048EC20	320	ParticleStep_Pulse	named	(this, particle): counts +0x50 down; every +0xe4 steps advances +0x44 up to +0xdc (after 7 steps types 0x2003 / 0x2010 end, others quadruple the interval and jitter)
+0x0048ED60	179	ParticleEmit_2010FireWall	named	particle type 0x2010 fire wall: emit callback (with ParticleTick_SetCount)
 0x0048EE20	119	ParticleTick_SetCount	named	(this): count +0xd0 = max(6, round(x)) clamped to +0xd8 / 16
 0x0048EEA0	1113	ParticleEmit_Streams	named	(this, particle): rain / snow streams (0x200f, 0x2031..0x2033): +0xe4 = max(1, round(intensity)), count +0xd0 = +0xe4 * 10, the +0x154 array holds +0xe4 stream records (0x38: origin, velocity, phase) re-seeded around the camera; a particle starts at a random stream origin above the camera with the stream velocity, life +0x50 = +0xec
+0x0048F300	122	ParticleStep_200FRainStreams	named	particle types 0x200F rain streams, 0x2031..0x2033: step callback
+0x0048F3B0	699	ParticleEmit_2034RainSnowFall	named	particle types 0x2034..0x2037 rain / snow fall: emit callback
 0x0048F670	128	ParticleStep_Fall	named	(particle): dead when z < 0; pos += +0x38 velocity, size *= +0x20, velocity z clamped to +0x24 (gravity +0x28)
 0x0048F6F0	245	ParticleTick_RandomDrift	named	(this, record): record +0x30 == 0: +0xc = rand * 0.1 + 0.1, random drift; detaches when done (Attach(0))
+0x0048F7F0	692	ParticleEmit_2018ClayRing	named	particle type 0x2018 clay ring: emit callback
+0x0048FAB0	294	ParticleStep_2018ClayRing	named	particle type 0x2018 clay ring: step callback
 0x0048FDB0	676	ParticleEmit_Ring	named	(this, particle): colour -1, +0x44 = 0, life = +0xec, +0x4c = +0xe4, random radius (|+0x10c| scaled by rand^2 / 2) and angle around the emitter
+0x00490060	161	ParticleStep_2019Teleport	named	particle type 0x2019 teleport: step callback
 0x00490130	2051	ParticleEmit_Modifier	named	"(this, particle, arg): colour -1, +0x50 = +0xec, +0x4c = +0xe4; ""Particle effect Modifier without carrier"" (FatalError without +0x94); record array +0x154 sized by the carrier extent; particles orbiting the carrier (0x40F560 rotation)"
+0x00490990	363	ParticleStep_Modifier	named	particle types 0x201B..0x2026 (the 12 modifiers): step callback
+0x00490C10	1540	ParticleEmit_202BCasting	named	particle types 0x202B..0x202E casting 1 / 2 / 3 / 6: emit callback
+0x00491230	350	ParticleStep_202BCasting	named	particle types 0x202B..0x202E: step callback
+0x00491420	1027	ParticleEmit_202FTeleport	named	particle type 0x202F (Teleport texture): emit callback
+0x00491830	152	ParticleStep_202FTeleport	named	particle type 0x202F: step callback
+0x004918E0	1864	ParticleEmit_2027Casting	named	particle types 0x2027..0x202A casting 4 / 7 / fire / 8: emit callback
+0x00492030	412	ParticleStep_2027Casting	named	particle types 0x2027..0x202A: step callback
 0x004923B0	1986	ParticleEmit_Weather	named	(this, particle): invoke-lightning / storm (0x2030): 10 records in +0x154 (grown like a CArray, 0x38 each) describing wind bands {height, direction, speed}; particles spawn in the band and drift with it; the texture TendriLight
+0x00492B80	317	ParticleStep_2030Storm	named	particle type 0x2030 invoke lightning / storm: step callback
 0x00492D30	519	ParticleEmit_Rain	named	(this, particle): 0x2038 rain: count +0xd0 = min(40, +0x118 * +0x11c), colour by +0x130 (rain / snow), +0x50 = 15, random velocity down, spawned above the camera in a +0x118 x +0x11c box
+0x00492F40	105	ParticleStep_2038Rain	named	particle type 0x2038 rain: step callback
+0x00492FC0	704	ParticleEmit_2039ShapeChange	named	particle type 0x2039 (ShapeChange): emit callback
 0x00493280	104	ParticleStep_RampAlpha	named	(this, particle): +0x50 == -10 -> +0x50 = (+0x4c * 8) / +0x1c0 + 7; alpha from the ramp table g_0x78AA78[+0x50]; dead when it reaches 0
+0x00493300	240	ParticleEmit_203AShapeChange	named	particle types 0x203A / 0x203B (ShapeChange): emit callback
 0x004933F0	255	ParticleStep_Ground	named	(this, particle): +0x50 countdown, alpha from g_0x78AAD8, pos += velocity, z = max(terrain height + 0.1, plane of the carrier record +0x154 (+0xc, +0x18..+0x20)) + 0.1
 0x004934F0	108	ParticleTick_SurfaceNormal	named	(this, record): on the first call stores the bridge / terrain normal at the emitter (CBridgeManager::GetNormalAt g_0x7AF78C) into +0x18 / +0xc (1 / nz); stops the system after 2 ticks
+0x00493560	525	ParticleEmit_203C	named	particle type 0x203C: emit callback
+0x00493770	335	ParticleStep_203C	named	particle type 0x203C: step callback
+0x00493D10	62	ParticleEmit_203DCasting6	named	particle type 0x203D (Casting6): emit callback
+0x00493D50	127	ParticleStep_203DCasting6	named	particle type 0x203D: step callback
+0x00493DE0	903	ParticleEmit_203FCasting	named	particle types 0x203F / 0x2040 (Casting1 / Casting2): emit callback
+0x00494170	450	ParticleStep_203FCasting	named	particle types 0x203F / 0x2040: step callback
+0x00494470	768	ParticleEmit_203ETeleport	named	particle type 0x203E (Teleport): emit callback
 0x00494770	439	ParticleStep_Spiral	named	(this, particle): phase 0: rotates (+0x2c, +0x30) by the (+0x20, +0x24) rotation, z += +0x10c * +0x28 (growing 1.03), every +0x4c steps advances the variant +0x44 (0..3)
 0x00494930	30	CObject3D::SetIntFromFloat	named	+0x340 = (int)float (via _ftol)
+0x00494950	85	ParticleEmit_2041	named	particle types 0x2041 / 0x2042 (AcidRay / FireArrowSmoke): emit callback
+0x004949B0	67	ParticleStep_2041	named	particle types 0x2041 / 0x2042: step callback
+0x00494A10	704	ParticleEmit_2043Casting6	named	particle type 0x2043 (Casting6): emit callback
 0x00494CD0	285	ParticleStep_Smoke	named	(this, particle): phase 0: +0x50 countdown with alpha from g_0x78AB98, pos += +0x38 velocity (damped 0.6), size *= 0.9, +0x44 ++; phase 1 with size 0: random re-init
+0x00494E00	283	ParticleEmit_2044	named	particle types 0x2044..0x2046, 0x204C: emit callback
+0x00494F30	368	ParticleStep_2044	named	particle types 0x2044..0x2046, 0x204C: step callback
+0x004950B0	98	ParticleEmit_2047	named	particle type 0x2047: emit callback
+0x00495120	481	ParticleStep_2047	named	particle type 0x2047: step callback
+0x00495320	682	ParticleEmit_2048	named	particle type 0x2048: emit callback
+0x004955D0	503	ParticleStep_2048	named	particle type 0x2048: step callback
 0x004957E0	354	ParticleEmit_Fountain	named	(this, particle): count +0xd0 = 2 * +0x10c, colour, random variant & 0xf, pos = emitter, size 0, +0x50 = 20, random velocity
+0x00495950	197	ParticleStep_2049Fountain	named	particle type 0x2049 fountain: step callback
 0x00495A30	583	ParticleEmit_Beam	named	(this, particle): count +0xd0, colour 0xffffff, random variant & 0xf, picks one of the two +0x154 records (0x38) as the start, direction towards the other
+0x00495C80	370	ParticleStep_204AVisionFog	named	particle types 0x204A / 0x204B vision fog: step callback
+0x00495FB0	509	ParticleEmit_204D	named	particle type 0x204D: emit callback
+0x004961B0	176	ParticleStep_204D	named	particle type 0x204D: step callback
+0x00496270	565	ParticleEmit_204FHealing	named	particle type 0x204F (Healing texture): emit callback
+0x004964B0	278	ParticleStep_204FHealing	named	particle type 0x204F: step callback
+0x00496840	322	ParticleStep_2051ZoneExit	named	particle type 0x2051 zone exit: step callback (tick ParticleTick_Shrink)
 0x00496990	129	ParticleTick_Shrink	named	(this, record): record +0x34 countdown; below 0 clears flags 1 | 4 and detaches (Attach(0)); +0x18 += +0x10c * 0.02; the +0x154 record's +0x1c += 0.4 -> count +0xd0 = min(8, round)
 0x00496A20	549	CParticle::InitParticleRecord	named	(record 0x64): +0x60 dead = 0, prev pos / size / colour / frame = current, extends the bounds min +0x164 / max +0x170, appends a {next, prev, record} node (0xc, CPlex blocks of +0x1cc = 10) to the live list +0x1b8 / tail +0x1bc, count +0x1c0 ++
 0x00496C50	597	CParticle::SpawnParticle	named	(arg): AllocParticle from the manager +0x14, emit callback +0x1e0 (record, arg) (released again when it returns 0), then the same init / list append as InitParticleRecord
@@ -4515,7 +4576,7 @@ addr	size	name	status	purpose
 0x00504780	220	I3DFigureImpl::RestoreSurfaces	named	slot 24 -> bool: for a fullscreen device the cooperative level and display mode are set again (0x4EECF0 / 0x4EEBC0 with the back buffer +0x18 size) and the surfaces restored (device +0xC vt[27] RestoreAllSurfaces); called after a lost device / ALT-TAB
 0x00504860	480	I3DFigureImpl::DrawSprite	named	slot 21 (texture, x, y, scale) -> 1: SetTexture(0, texture); a transformed quad of the texture size (+0x20 / +0x24 * scale) with uv 0.9 / 1.0 drawn as a TRIANGLESTRIP (type 5, FVF 0x1C4, 4 vertices); the UI blit path for .mmp sprites that are textures
 0x00504A40	30	I3DFigureImpl::GetFogRGB	named	slot 23 (out float[3]): +0x28..+0x30 (SetFogColor stores them with the FOGCOLOR render state)
-0x00504A60	924	I3DFigureImpl::SetGamma	named	"slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast (""Brightness"" setting)"
+0x00504A60	923	I3DFigureImpl::SetGamma	named	"slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast (""Brightness"" setting)"
 0x00504D4C	6	I3DFigureImpl::SetGamma_EH	named	exception-handling funclet inside I3DFigureImpl::SetGamma 0x504A60; not a real function
 0x00504E00	26	RcObj_Release3	named	(slot): refcount +4 --; at 0 vt[0](1)
 0x00504E20	39	RcObj_Assign4	named	(slot, obj): refcount ++ on the new object; the old one released (vt[0](1) at 0)
@@ -4538,7 +4599,7 @@ addr	size	name	status	purpose
 0x00505580	104	AnimKey28_ReadFromData	named	(this = 0x28 key, cursor*): copies start / end, the quaternion, the axis and the angle from the data and advances the cursor
 0x005055F0	83	MorphFrame18_Write	named	(this = 0x18 record {start, end, Vec3 vector +8, count +0xc}, stream): writes start, end, count and the vertex array
 0x00505650	350	MorphFrame18_Read	named	(this = 0x18 record, stream): stream vt[13] reads start, end, the vertex count and the Vec3 array (+8, 32-byte aligned)
-0x005057B0	338	MorphFrame18_ReadFromData	named	(this = 0x18 record, cursor*): copies start, end, the count and the vertices from the data; the cursor advances
+0x005057B0	337	MorphFrame18_ReadFromData	named	(this = 0x18 record, cursor*): copies start, end, the count and the vertices from the data; the cursor advances
 0x00505820	6	MorphFrame18_ReadFromData_EH	named	exception-handling funclet (jump) inside MorphFrame18_ReadFromData 0x5057B0; not a real function
 0x00505CB0	1078	AnimNodeOld_ReadFromData	named	(node, cursor*): +0xe4 / +0xec (two doubles rounded to int64), the pivot +0xf4 (Vec3), the base vertices +0x100 (count +0x104) and their working copy +0xd4, the frame count +0x40, the rotation keys +0x44 (0x28 each: start, end, quat, axis, angle), the position keys +0x58 (0x20 each: start, end, pos, delta), the morph frames +0x84 (0x18 each, MorphFrame18_ReadFromData)
 0x005060F0	101	AnimNodeOld_MakeRecursive	named	(node, name, scale, a, b): CFigureManager::MakeAnimationNode(node, name, scale, a, b) then recursively on the children +0x20
@@ -5535,8 +5596,8 @@ addr	size	name	status	purpose
 0x005344E0	49	CUnitClientSpecific::ApplyAlphaToParts	named	slot 13: every figure part of the owner's +0x94 (0x51B6D0 first / 0x51B6F0 next) gets +0x2c = +0x78 (the unit's alpha / fade); returns 1
 0x00534590	451	CUnitClientSpecific::GetStepSoundName	named	(kind, out): footstep sound from the units db / sounds table (+0x144[kind]), water variants below the water line
 0x00534760	953	CUnitClientSpecific::GetAnimSoundName	named	"(anim record, t0, t1, out, miss): the sound of an animation event (weapon swing / hit / miss sounds ""weapons\\.."")"
-0x00534B60	1724	CUnitClientSpecific::UpdateAnimSounds	named	per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound
-0x00534E49	6	CUnitClientSpecific::UpdateAnimSounds_EH	named	exception-handling funclet inside CUnitClientSpecific::UpdateAnimSounds 0x534B60; not a real function
+0x00534B60	745	CUnitClientSpecific::UpdateAnimSounds	named	per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound
+0x00534E49	941	CUnitClientSpecific::UpdateAnimSounds_EH	named	exception-handling funclet inside CUnitClientSpecific::UpdateAnimSounds 0x534B60; not a real function
 0x00535220	32	CUnitClientSpecific::DestroyParticle	named	if the particle at +0x20 exists: CParticle::Clear, release, null
 0x00535240	97	CUnitClientSpecific::SetFigures2428	named	(a, b): replaces the two figure objects +0x24 / +0x28 (0x485380 detach, Release; refcount++)
 0x005352B0	309	CUnitClientSpecific::SetAnimation	named	slot 14 (time): from the replicated +0x254/+0x255 (adb indices): CAnimationSystem2::SetAnimation / QueueAnimation; -2 = the weapon-dependent idle set (ApplyWeaponAnimMask); seeks to time + 1 - +0x258 (the clip start tick); +0x2c/+0x30 remember the anim for the sound events
@@ -9105,7 +9166,7 @@ addr	size	name	status	purpose
 0x00615850	227	CCampScreen2::OnClose	named	vt 0x74214C slot 26 (OnClose): PartyStore::SaveAll, remove the preview hero units (Game_RemoveRecordObjects), free +0x1A0, UIInventoryWin::SetItem(0). Was OnOpen
 0x00615940	155	CCampScreen2::OnCommand	named	"vt 0x74214C slot 27: 0x10001 (yes of ""lmp_deletepers"") = DeleteSlot; 0x20001 = CParty::Assign(party, slot +0x194 of g_0x7C82A4) + PartySlot::SaveToFile + Layout"
 0x006159E0	834	CCampScreen2::Draw	named	"vt 0x74214C slot 20: mode 0xB (level-up) draws ""camp_level_up"" / ""%+d"" points (CCampSkillsWin::GetPointsLeft) / ""camp_current_exp""; mode 0xA ""lmp_select_voice""; hovered perk -> UIItemInfoWin::DrawPerkDetail, hovered item -> UIInventoryWin::SetItem; UIUnitPreview::Render of the hero; CUIWindow::Draw"
-0x00615D30	2092	CCampScreen2::Layout	named	(mode 9 slot list / 10 new-hero edit / 11 equip-and-start): disables every pane, then: 9 = slot list +0x198, buttons start (0x233,0x20E)-(0x27D,0x23E) / back (0xA3..0xED) / arrows (0x1C7,0x1D6)-(0x1E5,500) and (0x271..0x28F), tips 0x9CA4/0x9CA5, row buttons, StoreWeaponSlots(+0x194); 10 = face bar +0x1F0, portrait, unit info +0x1B0, skills +0x1BC/+0x1C0, hero arrows (0x26C,0x1AE)-(0x294,0x1D6) / (0x2E4..0x30C), confirm/cancel, tips 0x9D6C..0x9D6E, voice rows; 11 = unit info + hero bars +0x1B4/+0x1B8/+0x1C4, tips 0x9E34..0x9E36; +0x190 = mode
+0x00615D30	2091	CCampScreen2::Layout	named	(mode 9 slot list / 10 new-hero edit / 11 equip-and-start): disables every pane, then: 9 = slot list +0x198, buttons start (0x233,0x20E)-(0x27D,0x23E) / back (0xA3..0xED) / arrows (0x1C7,0x1D6)-(0x1E5,500) and (0x271..0x28F), tips 0x9CA4/0x9CA5, row buttons, StoreWeaponSlots(+0x194); 10 = face bar +0x1F0, portrait, unit info +0x1B0, skills +0x1BC/+0x1C0, hero arrows (0x26C,0x1AE)-(0x294,0x1D6) / (0x2E4..0x30C), confirm/cancel, tips 0x9D6C..0x9D6E, voice rows; 11 = unit info + hero bars +0x1B4/+0x1B8/+0x1C4, tips 0x9E34..0x9E36; +0x190 = mode
 0x00616369	6	EHBlock_616369	named	EH: exception-handling block (funclet) inside of CCampScreen2::Layout (0x00615D30)
 0x00616560	416	CCampScreen2::DrawVoiceList	named	"draws the voice list surface: header ""lmp_voices"" at (10,5)-(190,20), rows of the current gender list (+0x210 / +0x214 / +0x218 selection), hides the marker meshes. Was CCampList::DrawVoiceLamp"
 0x006167C0	312	CCampScreen2::DrawSlotRows	named	draws the party slot rows (0x74-byte PartySlot records g_0x7C82A4: the text is the party's string at +0x30) at (12,13)-(0x109,0x21) per row stepping 0x18 from scroll +0x19C, the selected +0x194 gets the preview figure (+0x108) placed at (240, row y, 3). Was CCampList::DrawRows
@@ -9113,7 +9174,7 @@ addr	size	name	status	purpose
 0x00616910	424	CCampScreen2::SelectSlot	named	(slot index): +0x194 = slot; removes the preview units, CParty::Assign the slot's party (MpMember::Assign), InitHero, writes the weapon slots into the preview unit (ClearWeaponSlot / AddWeaponSlotItem / SendNetStats), DrawSlotRows. Was StoreWeaponSlots
 0x00616AC0	853	CCampScreen2::RebuildHeroSlots	named	"vt 0x74214C slot 52 (name): new party with one ""Hero"" (CParty::AddHero / ApplyHeroKit), select the weapon / armor / quick slots of the record in the bars, InitHero, CUnitInfoWin::SetHeroName, CCampSkillsWin::ResetEdit / SelectPerk, voice list reset"
 0x00616E20	546	CCampScreen2::InitHero	named	"creates the preview unit of the new party (""Human Hero"" / ""Hero"", Game_CreateHeroUnits), random idle model entry (CUnit::SetAnim), UpdatePackedStats; unit at +0x1A0"
-0x00617050	1855	CCampScreen2::OnLButtonDown	named	"vt 0x742118 slot 2 (sub-object): mode 9: 0 back (ShowMessageBar ""reserved_04"", LobbySession_ReleaseActiveAndReset, close), 1 OnStart, 2 / 3 hero arrows (capture, +0x1E4 = 1 / 2), 5 new (vt+0xD0 create, Layout(10)), 6 rename (ShowSlotDetails), 7 delete (CMessageBox ""lmp_deletepers"" 0x10000), 8 redress (pushes a CCampScreen 0x260 for the slot), 9..0x12 slot rows (SelectSlot, buttons\save\select.wav); mode 10: 0 cancel (Layout 9), 1 OnConfirm, 2..4 = new random hero (stats 25 each at record +0x2C..+0x40, +0x72C = 0.7, empty name), 9..0x13 voice rows (+0x218, LoadSlotSounds plays it); mode 11: 0 cancel, 1 StartGame, 4 = reset equipment then StartGame. Was OnSlotMouseDown"
+0x00617050	1854	CCampScreen2::OnLButtonDown	named	"vt 0x742118 slot 2 (sub-object): mode 9: 0 back (ShowMessageBar ""reserved_04"", LobbySession_ReleaseActiveAndReset, close), 1 OnStart, 2 / 3 hero arrows (capture, +0x1E4 = 1 / 2), 5 new (vt+0xD0 create, Layout(10)), 6 rename (ShowSlotDetails), 7 delete (CMessageBox ""lmp_deletepers"" 0x10000), 8 redress (pushes a CCampScreen 0x260 for the slot), 9..0x12 slot rows (SelectSlot, buttons\save\select.wav); mode 10: 0 cancel (Layout 9), 1 OnConfirm, 2..4 = new random hero (stats 25 each at record +0x2C..+0x40, +0x72C = 0.7, empty name), 9..0x13 voice rows (+0x218, LoadSlotSounds plays it); mode 11: 0 cancel, 1 StartGame, 4 = reset equipment then StartGame. Was OnSlotMouseDown"
 0x00617375	6	EHBlock_617375	named	EH: exception-handling block (funclet) inside of CCampScreen2::OnSlotMouseDown (0x00617050)
 0x006177D0	76	CCampScreen2::OnLButtonUp	named	vt 0x742118 slot 3: DispatchSlot3, clears the hero-arrow capture +0x1E4. Was OnLButtonDown
 0x00617820	423	CCampScreen2::Update	named	vt 0x74214C slot 24: v24_Children; the held hero arrow (+0x1E4) repeats after 0.5 s (+0x1E0 timer); scrollbar +0x198 / voice scrollbar changes redraw the rows / voice list
@@ -9286,8 +9347,8 @@ addr	size	name	status	purpose
 0x00625860	32	CCampSkillsWin::SelectPerk	named	(hero index): +0x150 = hero, resets +0x154/+0x158, RefreshPerks
 0x00625880	2059	CCampSkillsWin::RefreshPerks	named	"recomputes the lists: UnitStats_Recompute, skill rows (""perk <name>"", ""perk_level""), available perks (Perk_ComputeCost, UnitStats_CanLearnPerk) ""%s (%s%d)"", learned perks (Record24 vectors +0x15C.. / +0x168..), ClampScroll, RebuildRows"
 0x00626090	271	FormatNumberKM	named	"formats a point / price number: < 1000 ""%d"", < 10000 ""%.1fk"", < 1e6 ""%dk"", else ""%.1fm""; experience costs of the perk rows. Was FormatWeightString"
-0x006261A0	1913	CCampSkillsWin::RebuildRows	named	redraws the three lists (skills +0x154 scroll, available +0x158 scroll, learned) on the surface with costs (FormatNumberKM) and the selection quads. Was CCampTradeWin::RebuildRows
-0x00626546	6	EHBlock_626546	named	EH: exception-handling block (funclet) inside of CCampTradeWin::RebuildRows (0x006261A0)
+0x006261A0	934	CCampSkillsWin::RebuildRows	named	redraws the three lists (skills +0x154 scroll, available +0x158 scroll, learned) on the surface with costs (FormatNumberKM) and the selection quads. Was CCampTradeWin::RebuildRows
+0x00626546	979	EHBlock_626546	named	EH: exception-handling block (funclet) inside of CCampTradeWin::RebuildRows (0x006261A0)
 0x00626920	754	CCampSkillsWin::OnLButtonDown	named	vt 0x741774 slot 2: 0/1 = available-perk list scroll (+0xC4), 2/3 = skill list scroll (+0xC0), 4..9 = skill rows (+1 to the hero's skill byte stats +0x6C7+i when affordable, exp +0x28 += cost), 10 = the 11th row, 11..0x21 = available perks (PerksDb_FindByName + UnitStats_LearnPerk), 0x22.. = learned perks; buttons\camp\perk.wav; marks the edit record dirty (+0x38 = 1), RefreshPerks. Was OnLButtonUp
 0x00626C30	27	CCampSkillsWin::OnLButtonUp	named	vt 0x741774 slot 3: releases the capture (+0x108 = -1, +0x10C = 0). Was UIWin741774::Reset
 0x00626C50	285	CCampSkillsWin::Update	named	vt 0x7417A8 slot 24: 0.25 s blink (+0x1A0) of the selected row (+0x19C), held arrows repeat, RefreshPerks. Was CCampTradeWin::Update
@@ -9295,7 +9356,7 @@ addr	size	name	status	purpose
 0x00626F10	129	CCampSkillsWin::SaveStatsBytes	named	copies the six skill bytes (unit stats +0x6C7..) of the selected party record into its edit record
 0x00626FA0	251	CCampSkillsWin::RecalcDerived	named	UnitStats_MaxHP / UnitStats_ApplyBodyPartPenalties for the selected hero record
 0x006270A0	744	CCampTradeWin::Build	named	"(basket A +0x150 (buy), basket B +0x154 (sell), isSpells, flag +0x160): rect (200,100)-(600,500); figures ""trade1""..""trade4"" (the 2x2 background), two item grids with +0x158 / +0x15C = 4 rows x 5 columns for items, 0 / 1 for spells, with buttons and a text surface; the trade tab windows of the camp (+0x1F8 spells, +0x200 items)"
-0x00627390	1421	CCampTradeWin::Draw	named	"vt 0x74170C slot 20: draws both baskets (item portraits, ""%d"" counts / prices) on the surface. Was CUIWidget74170C::Draw"
+0x00627390	1420	CCampTradeWin::Draw	named	"vt 0x74170C slot 20: draws both baskets (item portraits, ""%d"" counts / prices) on the surface. Was CUIWidget74170C::Draw"
 0x00627553	6	EHBlock_627553	named	EH: exception-handling block (funclet) inside of CUIWidget74170C::Draw (0x00627390)
 0x00627920	188	CCampTradeWin::ItemAtPoint	named	slot 25: buttons 0..7 -> basket A item (kind 0x11) or basket B item (kind 0x1C)
 0x006279E0	682	CCampRepairWin::Build	named	"(repair basket +0x150): rect (200,100)-(600,500), figures ""repair1""..""repair4"", 16 slot buttons, surface"
@@ -9602,7 +9663,7 @@ addr	size	name	status	purpose
 0x00641CE0	308	CHudMainPanel::OnLButtonDown	named	"vt 0x7429E4 slot 2: a portrait button press (top screen mode +0x22C), in a lobby game LobbyClient::SendNamedEvent(""%d"")"
 0x00641E20	118	CHudMainPanel::OnLButtonUp	named	vt 0x7429E4 slot 3: release -> the portrait's unit as click target (IssueCommandAt of the hud)
 0x00641EA0	122	CHudMainPanel::OnMouseMove	named	vt 0x7429E4 slot 4: hover portrait -> SetCursorTarget / cursor frame
-0x00641F20	2562	CHudMainPanel::Build	named	"vt 0x742A18 slot 18: the HUD frame ""battle00"" (quads, InitFrame16, InitN / InitStrip arrows ""in25arrow""), the zone name (Records5C_FindByName), the minimap surface (SetPixel), CHudMinimap::Init, DrawMinimapUnits, Layout; 2.5 KB. Was CUIScreen742A18::Build"
+0x00641F20	2561	CHudMainPanel::Build	named	"vt 0x742A18 slot 18: the HUD frame ""battle00"" (quads, InitFrame16, InitN / InitStrip arrows ""in25arrow""), the zone name (Records5C_FindByName), the minimap surface (SetPixel), CHudMinimap::Init, DrawMinimapUnits, Layout; 2.5 KB. Was CUIScreen742A18::Build"
 0x0064255F	6	EHBlock_64255F	named	EH: exception-handling block (funclet) inside of CUIScreen742A18::Build (0x00641F20)
 0x00642930	526	CHudMainPanel::Layout	named	places six quads at x = +0x19C + 700 / 790 (depths 18, 14, 12, 20 ..) and the surfaces (the slide offset). Was CUIWindow_642930::Layout
 0x00642B40	826	CHudMinimap::Update	named	vt 0x742660 slot 24: mode +0x1AC == 1 animates the scale +0x16C, re-inits the minimap mesh (Init), DrawMinimapUnits, Layout. Was CUIScreen742660::Update
@@ -9616,10 +9677,10 @@ addr	size	name	status	purpose
 0x00645640	159	CHudMinimap::OnWheel	named	vt 0x74262C slot 12: wheel over the map scales the zoom (+0xD8) clamped to +0xDC. Was CBattleBar::OnWheel
 0x006456E0	2201	CHudUnitInfoPanel::Build	named	"2.2 KB: the sliding unit info panel: tab buttons (w_info1-4 tooltips), ""in25arrow"" art, body-part colour markers (""#iFF"" codes), ""infounit_%d"" texts, ""hl_skull"" / ""hl_torso"" / ""hl_leg"" / ""hl_arm"" labels into +0x1B8.., InitGrid / InitFrame16 quads, surfaces, Layout. Was CUIWindow_6456E0::Build"
 0x00645F80	794	CHudUnitInfoPanel::Layout	named	positions the panel quads / surfaces by the slide offset +0x170. Was CUIWindow_645F80::Layout
-0x006462A0	2205	CHudUnitInfoPanel::Draw	named	vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo) by tab +0x180. Was CUIWindow7426F8::Draw
+0x006462A0	2203	CHudUnitInfoPanel::Draw	named	vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo) by tab +0x180. Was CUIWindow7426F8::Draw
 0x00646441	6	EHBlock_646441	named	EH: exception-handling block (funclet) inside of CUIWindow7426F8::Draw (0x006462A0)
 0x00646557	6	EHBlock_646557	named	EH: exception-handling block (funclet) inside of CUIWindow7426F8::Draw (0x006462A0)
-0x00646B90	1167	CHudUnitInfoPanel::DrawSpellInfo	named	"spell <id> / ""spell%04d"" icon (TextureDecode2) + name / description lines"
+0x00646B90	1166	CHudUnitInfoPanel::DrawSpellInfo	named	"spell <id> / ""spell%04d"" icon (TextureDecode2) + name / description lines"
 0x00646C25	6	EHBlock_646C25	named	EH: exception-handling block (funclet) inside of CUIWindow_646B90::DrawSpellInfo (0x00646B90)
 0x00647040	1949	CHudUnitInfoPanel::DrawStats	named	"1.9 KB: ""%s %d/%d"" HP / mana, ""move_%d"" stance speeds (CUnit::GetStanceSpeed, GetAttackModeSpeed), ""dmg_%d"", damage list (UIItemInfoWin::FormatDamageList), skills (UnitStats_WeightedSkills7), level, ""consider_more%d"" / ""consider_less%d"" (relative strength), ""camp_current_exp"" for heroes. Was CUnitStatsWin::DrawStats"
 0x006477E0	907	CHudUnitInfoPanel::DrawBar	named	"a progress bar (+0x17E / +0x180 shorts ratio) with ""%d"" percent. Was CProgressWin::DrawBar"
@@ -9808,10 +9869,10 @@ addr	size	name	status	purpose
 0x00655D40	2301	CSaveLoadWin::ScanSaves	named	"rebuilds the slot vector +0x164 (0x44-byte SaveSlotRecord): every directory ""<root>saves\save*"": folder name -> +4; its ""info.sav"" (CFileFind; missing -> error flag +0x40 = 1, label ""Error Save"") read with Stream_CheckHeader4(0x111, version 3): +0xC game time, +0x10 zone title, +0x14 map name, +8 CTime when version > 1, +0 label when version > 2; empty label -> MakeLabel; the number after ""save"" of the folder name tracked for the next slot number; sorted by CTime descending (IntroSort / SortSmall, Int_LessThan on +8); save mode: a new record inserted first with folder ""save<n+1>"", +0xC = ""gtime"" variable, +0x14 = World_GetClientMapName, +0x10 = zone record +4, label by MakeLabel, and the current screenshot (CInterface thumbnail +0x5C, 0x6000 dwords) copied into a 256x256 surface figure +0x184; scrollbar max = slots - 16, +0x174 = 0"
 0x00656640	220	SaveSlotRecord_CopyCtor	named	copy-construct a 0x44-byte save slot record (CStrings at +0,+4,+0x10,+0x14 and vectors at +0x18..)
 0x00656720	128	SaveSlotRecord_Destroy	named	destroy a 0x44-byte save slot record (4 CStrings and two strings lists), 13 callers
-0x006567A0	1635	CSaveLoadWin::RefreshSaveList	named	"redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime ""%d/%m, %H:%M"" at (0xBE..0x109) (not for the new slot), cursor quad 4 at (239, 0x78 + 0x18 r) on the selected row; the detail panel of a valid selected slot: allod name (TextKeyReader_AllodName), zone title, ""save_day"" ""%s  %d,  %d:%02d"" of the game time +0xC (days / hours / minutes of 1440-minute days) at (0x154,0x104..), the folder name at (0x154,0x168)"
+0x006567A0	1634	CSaveLoadWin::RefreshSaveList	named	"redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime ""%d/%m, %H:%M"" at (0xBE..0x109) (not for the new slot), cursor quad 4 at (239, 0x78 + 0x18 r) on the selected row; the detail panel of a valid selected slot: allod name (TextKeyReader_AllodName), zone title, ""save_day"" ""%s  %d,  %d:%02d"" of the game time +0xC (days / hours / minutes of 1440-minute days) at (0x154,0x104..), the folder name at (0x154,0x168)"
 0x00656D69	6	EHBlock_656D69	named	EH: exception-handling block (funclet) inside of CSaveLoadWin::RefreshSaveList (0x006567A0)
 0x00656E10	708	CSaveLoadWin::UpdateSaveScreenshot	named	"quad 3 (the shot) hidden; for a valid selected slot: save mode slot 0 -> quad 3 shows the live figure +0x184; else ""<root>saves\<folder>\shot.sav"" exists -> read 0x18000 bytes into the scratch figure (element 1, surface +0x5C locked under g_0x7AEE78) and quad 3 shows it (+0x280 = figure)"
-0x006570E0	1228	CSaveLoadWin::QuickSave	named	"static (ecx = slot folder name ""saveq"" / ""savea"" / ""saveb"", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMessageBar(""notify_saving""), Game_SaveToSlot_Wrap(name); writes ""<root>saves\<name>\info.sav"" (version 3: ""gtime"", zone title of the client map, map name, CTime now, empty label) and ""shot.sav"" = the frame StretchTo 256x192 (0x18000 bytes); cursor 0. Callers: quicksave key (saveq), CBattleHud::OnZoneEnter (savea when autosave g_0x79BE7C), CWorldMapScreen::Build (saveb)"
+0x006570E0	1226	CSaveLoadWin::QuickSave	named	"static (ecx = slot folder name ""saveq"" / ""savea"" / ""saveb"", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMessageBar(""notify_saving""), Game_SaveToSlot_Wrap(name); writes ""<root>saves\<name>\info.sav"" (version 3: ""gtime"", zone title of the client map, map name, CTime now, empty label) and ""shot.sav"" = the frame StretchTo 256x192 (0x18000 bytes); cursor 0. Callers: quicksave key (saveq), CBattleHud::OnZoneEnter (savea when autosave g_0x79BE7C), CWorldMapScreen::Build (saveb)"
 0x00657365	6	EHBlock_657365	named	EH: exception-handling block (funclet) inside of CSaveLoadWin::QuickSave (0x006570E0)
 0x00657554	6	EHBlock_657554	named	EH: exception-handling block (funclet) inside of CSaveLoadWin::QuickSave (0x006570E0)
 0x006575B0	240	SaveGame_BeginLoad	named	"(slot folder name): not in a lobby and ""<root>saves\<name>\"" exists (_access): ShowMessageBar(""notify_loading""), Game_StopAllSounds(1), SessionRequest::SetLoadSave(g_0x7AFE20, name, 0) = queue the load; the quickload key (saveq) and the console"
@@ -10141,7 +10202,7 @@ addr	size	name	status	purpose
 0x00666FB0	30	CPlayerClient::~CPlayerClient	named	slot 0: deleting destructor (root layout)
 0x00666FD0	459	CPlayerClient::dtor	named	frees the aligned arrays +0x50d8 / +0x50e8, both LZ compressors (their bit writers at +0x2888 and +0x50b0), the streams +0x5c / +0x34, the handler table +0x24, then CObject
 0x006671A0	129	LzCompressor::EndAndReset	named	(state): flushes the bit writer, closes its GameReader +0x2810 and resets the compressor (19 callers)
-0x00667230	734	CPlayerClient::Init	named	slot 2: resets the streams / codecs / arrays and fills the 256-entry handler table +0x24 (index = server opcode): 00 OnMsg00_PlayerId 01 OnMsg01_ClearNetStream(0x667DE0) 02 OnMsg02_ZoneState 03 OnMsg03_SpellsAndItems 04 OnMsg04_CameraAt 05 OnMsg05_ItemObjects 06 OnMsg06_AddItems 07 OnMsg07_GameMode 08 OnMsg08_ChangeMap 09 OnMsg09_TopScreenVt7C(0x669F30) 0A OnMsg0A_RemoveItem 0B OnMsg0B_UnitEvent 0C OnMsg0C_ItemValues(0x6696A0) 0D OnMsg0D_MusicTrack 0E OnMsg0E_MovePath 0F OnMsg0F_CameraFromTo 12 OnMsg12_WorldByte 13 OnMsg13_ScreenCommand 14 OnMsg14_ItemValue(0x66A420) 15 OnMsg15_PartyExperience 16 OnMsg16_WeaponBroken(0x669400) 17 OnMsg17_ClearItems 18 OnMsg18_UnitExperience 19 OnMsg19_UnitVisibility(0x66A620) 40 OnMsg40_UnitCreate 41 OnMsg41_UnitUpdate 42 OnMsg42_UnitRemove 43 OnMsg43_UnitDied(0x66A3B0) 50/51/52 effects 60 OnMsg60_PartyStatus 70 OnMsg70_Weather 71 OnMsg71_GameTime(0x6697B0) 72 OnMsg72_Wind(0x669800) 73 OnMsg73_DbArray(0x66A400) 80 OnMsg80_Party 81 OnMsg81_NamedValue 82 OnMsg82_RemoveNamedValue 83 OnMsg83_PartyFinal
+0x00667230	279	CPlayerClient::Init	named	slot 2: resets the streams / codecs / arrays and fills the 256-entry handler table +0x24 (index = server opcode): 00 OnMsg00_PlayerId 01 OnMsg01_ClearNetStream(0x667DE0) 02 OnMsg02_ZoneState 03 OnMsg03_SpellsAndItems 04 OnMsg04_CameraAt 05 OnMsg05_ItemObjects 06 OnMsg06_AddItems 07 OnMsg07_GameMode 08 OnMsg08_ChangeMap 09 OnMsg09_TopScreenVt7C(0x669F30) 0A OnMsg0A_RemoveItem 0B OnMsg0B_UnitEvent 0C OnMsg0C_ItemValues(0x6696A0) 0D OnMsg0D_MusicTrack 0E OnMsg0E_MovePath 0F OnMsg0F_CameraFromTo 12 OnMsg12_WorldByte 13 OnMsg13_ScreenCommand 14 OnMsg14_ItemValue(0x66A420) 15 OnMsg15_PartyExperience 16 OnMsg16_WeaponBroken(0x669400) 17 OnMsg17_ClearItems 18 OnMsg18_UnitExperience 19 OnMsg19_UnitVisibility(0x66A620) 40 OnMsg40_UnitCreate 41 OnMsg41_UnitUpdate 42 OnMsg42_UnitRemove 43 OnMsg43_UnitDied(0x66A3B0) 50/51/52 effects 60 OnMsg60_PartyStatus 70 OnMsg70_Weather 71 OnMsg71_GameTime(0x6697B0) 72 OnMsg72_Wind(0x669800) 73 OnMsg73_DbArray(0x66A400) 80 OnMsg80_Party 81 OnMsg81_NamedValue 82 OnMsg82_RemoveNamedValue 83 OnMsg83_PartyFinal
 0x00667347	455	EHBlock_667347	named	EH: exception-handling block (funclet) inside of CPlayerClient::Init (0x00667230)
 0x00667510	104	CPlayerClient::Done	named	slot 3 = ResetStreams (state 0, arrays freed, streams emptied, codecs reset)
 0x00667580	104	CPlayerClient::ResetStreams	named	state +0x20 = 0, frees the party unit id array +0x50d8, empties the receive / send streams, +0x84 / +0x85 = 0, resets both LZ compressors
@@ -10263,7 +10324,7 @@ addr	size	name	status	purpose
 0x0066C740	6	CPlayerServer::GetTypeId	named	slot 12 GetTypeId() (root layout)
 0x0066C750	30	CPlayerServer::~CPlayerServer	named	slot 0: deleting destructor (root layout)
 0x0066C770	545	CPlayerServer::dtor	named	Reset, frees the two ObjRefCArrays, the aligned arrays +0x50e8 / +0x50d8, the LZ bit writers, the spawn CArray +0x74, the send stream +0x48, the handler table, then CObject
-0x0066C9A0	687	CPlayerServer::Init	named	slot 2: resets the streams / arrays, +0x5124 = random 900..1800, and fills the 256-entry handler table +0x28 (index = client opcode): 00 OnMsg00_Identity 01 OnMsg01_Disconnect 02 OnMsg02_RequestParty 03 OnMsg03_ChangeZoneById 04 OnMsg04_Leave(0x670CE0) 05 OnMsg05_EnterWorld 06 OnMsg06_ChangeMapByName 07 OnMsg07_NamedEvent 08 OnMsg08_HeroUpload 09 OnMsg09_Ready 10 OnMsg10_Pause 30 OnMsg30_Move 31 OnMsg31_Attack 32 OnMsg32_CastAt 33 OnMsg33_CastOn 34 OnMsg34_SelectWeapon 35 OnMsg35_SetStance 36 OnMsg36_Interact 37 OnMsg37_Nop 38 OnMsg38_Unused 39 OnMsg39_SetLeader 3A OnMsg3A_MoveFormation 3B OnMsg3B_SetField438(0x66FB70) 40 OnMsg40_ViewPoint 50 OnMsg50_PartyUpload
+0x0066C9A0	388	CPlayerServer::Init	named	slot 2: resets the streams / arrays, +0x5124 = random 900..1800, and fills the 256-entry handler table +0x28 (index = client opcode): 00 OnMsg00_Identity 01 OnMsg01_Disconnect 02 OnMsg02_RequestParty 03 OnMsg03_ChangeZoneById 04 OnMsg04_Leave(0x670CE0) 05 OnMsg05_EnterWorld 06 OnMsg06_ChangeMapByName 07 OnMsg07_NamedEvent 08 OnMsg08_HeroUpload 09 OnMsg09_Ready 10 OnMsg10_Pause 30 OnMsg30_Move 31 OnMsg31_Attack 32 OnMsg32_CastAt 33 OnMsg33_CastOn 34 OnMsg34_SelectWeapon 35 OnMsg35_SetStance 36 OnMsg36_Interact 37 OnMsg37_Nop 38 OnMsg38_Unused 39 OnMsg39_SetLeader 3A OnMsg3A_MoveFormation 3B OnMsg3B_SetField438(0x66FB70) 40 OnMsg40_ViewPoint 50 OnMsg50_PartyUpload
 0x0066CB24	299	EHBlock_66CB24	named	EH: exception-handling block (funclet) inside of CPlayerServer::Init (0x0066C9A0)
 0x0066CC50	254	CPlayerServer::Done	named	slot 3: empties the send stream, releases tracked units / effects, zeroes the view point, state 0, +0x44 -1, known objects and visible units 0, syncMarker -1, partyMode / inWorld 0, spawn records 0, resets both LZ codecs, then draws an ISAAC random r (pool g_0x7A9D40): partyResendTicks = r % 901 + 900, returns r / 901
 0x0066CE50	121	CPlayerServer::ClearLists	named	slot 13 (OnTrackedCleared): releases the tracked unit / effect arrays +0x50d8 / +0x50e8, the known objects +0x50f8 and the visible units +0x510c
@@ -10480,8 +10541,8 @@ addr	size	name	status	purpose
 0x006762F0	164	CEffectSound::Update	named	slot 6: moving (+0xA4): pos += velocity and CSoundManager::SetChannelPosition(handle +0x25C, pos, volume, radius); returns 0 (removed) once the one-shot flag +0x254 is clear and the per-tick byte +0x260 was 0. Was v6
 0x006763A0	142	CEffectSound::Play	named	slot 23 (update flag): start: +0x25C = CSoundManager::Play3D(name +0x14C, 1000 when looping (+0x258) else 0, pos, volume +0x24C, radius +0x250, +0x254, 0); update: SetChannelPosition
 0x00676430	274	CEffectSound::ReadNet	named	CEffect slot 21 (stream, reader): decodes the effect from a net message: 0x47E930(reader); DeltaReader::Read(+0x254, 4); string +0x14c (0x47E340, max 0xff); 0x47F3D0 x2, 0x47F7F0 (floats: +0x24c, +0x250, pos); DeltaReader::Read(+0x258, 1); +0xa4 = (+0x98..+0xa0 velocity != 0); position from the camera/world g_0x7A9794 vt[5]/vt[4] -> +0x1c..
-0x00676550	151	CEffectSound::WriteNet	named	CEffect slot 22 (writer): 0x47E3A0(writer, pos +0x1c); 0x47DCA0(+0x254, 4); string +0x14c (0x47E2D0); 0x47F1E0(+0x24c), 0x47F1E0(+0x250); 0x47F4D0(+0x98 velocity); 0x47DCA0(+0x258, 1)
-0x0067656C	6	EHBlock_67656C	named	EH: exception-handling block (funclet) inside of CEffectSound::WriteNet (0x00676550)
+0x00676550	28	CEffectSound::WriteNet	named	CEffect slot 22 (writer): 0x47E3A0(writer, pos +0x1c); 0x47DCA0(+0x254, 4); string +0x14c (0x47E2D0); 0x47F1E0(+0x24c), 0x47F1E0(+0x250); 0x47F4D0(+0x98 velocity); 0x47DCA0(+0x258, 1)
+0x0067656C	123	EHBlock_67656C	named	EH: exception-handling block (funclet) inside of CEffectSound::WriteNet (0x00676550)
 0x006765F0	209	CEffectSound::Read	named	slot 9 (save stream): pos, the 256-byte wav path +0x14C, volume +0x24C, radius +0x250, velocity (moving = velocity != 0) and by the stream version (+8): > 0x5B oneShot +0x254, > 0x6C loop +0x258 (1 byte); the handle +0x25C is not saved
 0x006766D0	141	CEffectSound::Write	named	slot 10 Write(stream) (root layout: save stream, vt[2] write)
 0x00676760	394	CEffectSoundSeq::ctor	named	CObject base, vt CEffect, DeltaCodec, vt 0x7434AC, CString +0x14c, CStringArray +0x150, vt_CEffectSoundSeq, handle +0x170 = -1 (0x6BA7C0 stop), +0x164 / +0x168 = 0, +0x16c byte
@@ -10501,7 +10562,7 @@ addr	size	name	status	purpose
 0x006772D0	195	CEffectSoundSeq::Read	named	slot 9 (save stream): pos, velocity, the folder CString (CEffectKey::ReadString), the file name CStringArray +0x150 (CStringArray_ReadFromStream 0x6773A0), volume, radius, moving = velocity != 0 and, for stream versions (+8) > 0x6C, the loop byte
 0x006773A0	131	CStringArray_ReadFromStream	named	(array, stream): count (4 bytes) then that many CStrings (Stream_ReadCString) appended
 0x00677430	218	CEffectSoundSeq::Write	named	slot 10 Write(stream) (root layout: save stream, vt[2] write)
-0x00677510	384	CEffectAmbientSound::ctor	named	CObject base, vt CEffect, four CMemStreams, vt 0x7434AC, CStringArray +0x14c, vt_CEffectAmbientSound, sound handle +0x170 = -1 (stopped via 0x6B9AA0 on g_0x7AF784), +0x160..+0x16c = 0
+0x00677510	383	CEffectAmbientSound::ctor	named	CObject base, vt CEffect, four CMemStreams, vt 0x7434AC, CStringArray +0x14c, vt_CEffectAmbientSound, sound handle +0x170 = -1 (stopped via 0x6B9AA0 on g_0x7AF784), +0x160..+0x16c = 0
 0x00677541	6	EHBlock_677541	named	EH: exception-handling block (funclet) inside of CEffectAmbientSound::ctor (0x00677510)
 0x00677690	7	CEffectAmbientSound::GetVolume	named	slot 19: returns +0x160
 0x006776A0	6	CEffectAmbientSound::ClassName	named	
@@ -10742,8 +10803,8 @@ addr	size	name	status	purpose
 0x006861D0	495	SpellSetRecord::CopyCtor	named	copy-constructs a SpellSetRecord 0x34 (prototype / power std::strings, required / optional rune string vectors, shopBits); used by SpellSetRecordVector_InsertRealloc
 0x006863C0	599	SpellSetRecord_CopyRange	named	STL: copy [first, last) of SpellSetRecord 0x34 forward onto dest (operator_assign per record); the loading reset of SpellSetRecordVector_Serialize
 0x00686620	129	PerkProto::CopyCtor	named	copy-constructs a PerkProto 0x24 (std::string code + values); used by PerkProtoVector_Resize and PerkProtoVector_InsertRealloc
-0x006866B0	538	SpellSetRecord::operator_assign	named	copy-assign the 0x34 record (string +0, string vectors +0xc / +0x18, string +0x24, +0x30)
-0x00686863	6	EHBlock_686863	named	EH: exception-handling block (funclet) inside of SpellSetRecord::operator= (0x006866B0)
+0x006866B0	435	SpellSetRecord::operator_assign	named	copy-assign the 0x34 record (string +0, string vectors +0xc / +0x18, string +0x24, +0x30)
+0x00686863	103	EHBlock_686863	named	EH: exception-handling block (funclet) inside of SpellSetRecord::operator= (0x006866B0)
 0x006868D0	30	SpellProto::DeletingDtor	named	scalar deleting destructor of SpellProto
 0x006868F0	30	PerkProto::DeletingDtor	named	scalar deleting destructor of PerkProto
 0x00686910	543	SpellProtoVector_InsertRealloc	named	STL: vector<SpellProto 0x84>::_M_insert_overflow (grow path of insert); used by SpellProtoVector_InsertN
@@ -11056,8 +11117,8 @@ addr	size	name	status	purpose
 0x006961D0	540	CIniFile::GetIntArray	named	(section, key, out AlignedDwordArray {data, count, cap, grow}): GetStringTokens split by ',' then atol of every token into a temporary array, then copied into the 32-byte-aligned out array (grown by +0xC or count/8 clamped 4..0x400); returns 0 and empties the array when the key is missing, 1 otherwise
 0x006963F0	537	CIniFile::GetIntArray2	named	read a comma separated int list into an aligned dword array (variant)
 0x00696610	541	CIniFile::GetIntArray3	named	read a comma separated int list into an aligned dword array (variant)
-0x00696830	440	CIniFile::GetFloatArray	named	(section, key, out AlignedDwordArray): GetStringTokens split by ',' and every token converted with the atol wrapper 0x6E80D8 (not a float parse) straight into the 32-byte-aligned out array (operator_new +0x24, grow +0xC or count/8 clamped 4..0x400); returns 0 and empties the array when the key is missing; 3 callers in 0x563A7A..0x563DF3 (CWorldClient zone settings)
-0x00696863	6	EHBlock_696863	named	EH: exception-handling block (funclet) inside of CIniFile::GetFloatArray (0x00696830)
+0x00696830	51	CIniFile::GetFloatArray	named	(section, key, out AlignedDwordArray): GetStringTokens split by ',' and every token converted with the atol wrapper 0x6E80D8 (not a float parse) straight into the 32-byte-aligned out array (operator_new +0x24, grow +0xC or count/8 clamped 4..0x400); returns 0 and empties the array when the key is missing; 3 callers in 0x563A7A..0x563DF3 (CWorldClient zone settings)
+0x00696863	389	EHBlock_696863	named	EH: exception-handling block (funclet) inside of CIniFile::GetFloatArray (0x00696830)
 0x006969F0	302	CIniFile::GetVec3	named	read three comma separated numbers (CString split 0x6FF933...) into a vector type A
 0x00696B20	304	CIniFile::GetWordArray	named	(section, key, out MFC CWordArray): GetStringTokens split by ',' and atol of every token, then CArray::SetSize and the low 16 bits of each value copied into the out array; returns 0 when the key is missing. Was GetVec3b (not a 3-vector, any length)
 0x00696C50	302	CIniFile::GetDwordArray	named	(section, key, out MFC CDWordArray): GetStringTokens split by ',' and atol of every token, then CArray::SetSize and the values copied into the out array; returns 0 when the key is missing. Was GetVec3c (not a 3-vector, any length)
@@ -11744,7 +11805,7 @@ addr	size	name	status	purpose
 0x006BFB20	95	TerrainSector_CullFrustum	named	(sector, ctx): +0x60 = CViewFrustum::CullBox(ctx +8, sector bounds +0x28) (-1 -> 2 = culled); when not culled the four quarter bounds +0x64 + q*0x38 are tested into +0x144[q]
 0x006BFB80	252	TerrainSector_UpdateLodSeams	named	(sector): +0x174 / +0x178 (seam with the previous / next neighbour) = 1 when a visible neighbour (GetSector flags 4) is one LOD coarser: LOD 0 checks the y-1 / y+1 sectors for LOD 1, LOD 1 checks x-1 / x+1 for LOD 2
 0x006BFC80	695	TerrainSector_TransformVertices	named	(sector, ctx) -> +0x60: for every quarter with +0x144[q] != 2: its 17 x 17 vertices (step 1 / 2 / 4 at LOD 0 / 1 / 2 (+0x170); the water layer (+0x441) too when +0x10) are copied from +0x180 into g_0x7C88F8 (16 bytes each) and projected by 0x4F29F0 (ctx, in, out g_0x7C88E8, clip bytes g_0x7C88D4, count, quarter bounds) = the 3DfpFPU transform; +0x144[q] = result (1 = needs clipping); screen x, y, z, rhw -> record +0x00..+0x0F, clip byte -> record +0x10 (0 when the quarter is fully inside)
-0x006BFF40	5051	TerrainSector_Draw	named	(sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertices go to the static buffer g_0x7C8890 (0x20 bytes: record +0..+0xF x y z rhw, +0x11 diffuse + +0x15 specular (8 bytes), u, 1-v from the triplet) with the clip byte (record +0x10) in g_0x7C884C: LOD 0 all 9 vertices / 8 triangles per tile, LOD 1 6 / 4 (3 when a seam flag +0x174 / +0x178 meets the tile's edge flag 4 / 8 in (+0x2C8 + q*0x14)[pass]), LOD 2 4 / 2 (tables 0x79699C vertices per tile, 0x7969A8 triangles per tile); indices into g_0x7C887C; a clipped quarter (+0x144 == 1) runs ctx vt[37] (clip) and compacts through g_0x7C88B8 / g_0x7C88A8 into g_0x7C8864; ctx vt[34](vertices, count) (perspective divide); renderer g_0x7AF080 +0x54 vt[20](0x1D SPECULARENABLE, 1); ctx vt[12] DrawIndexedTriangles(vertices, count, indices, indexCount) (FVF 0x1C4); SPECULARENABLE 0; 0 when the draw fails
+0x006BFF40	5050	TerrainSector_Draw	named	(sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertices go to the static buffer g_0x7C8890 (0x20 bytes: record +0..+0xF x y z rhw, +0x11 diffuse + +0x15 specular (8 bytes), u, 1-v from the triplet) with the clip byte (record +0x10) in g_0x7C884C: LOD 0 all 9 vertices / 8 triangles per tile, LOD 1 6 / 4 (3 when a seam flag +0x174 / +0x178 meets the tile's edge flag 4 / 8 in (+0x2C8 + q*0x14)[pass]), LOD 2 4 / 2 (tables 0x79699C vertices per tile, 0x7969A8 triangles per tile); indices into g_0x7C887C; a clipped quarter (+0x144 == 1) runs ctx vt[37] (clip) and compacts through g_0x7C88B8 / g_0x7C88A8 into g_0x7C8864; ctx vt[34](vertices, count) (perspective divide); renderer g_0x7AF080 +0x54 vt[20](0x1D SPECULARENABLE, 1); ctx vt[12] DrawIndexedTriangles(vertices, count, indices, indexCount) (FVF 0x1C4); SPECULARENABLE 0; 0 when the draw fails
 0x006C0075	6	EHBlock_6C0075	named	EH: exception-handling block (funclet) inside of TerrainSector_Draw (0x006BFF40)
 0x006C1390	13	TerrainSector_SetLod	named	(sector, lod): +0x170 = lod (0 full, 1 half, 2 quarter resolution); from CTerrain::SelectSectorLod
 0x006C13A0	2129	TerrainSector_Load	named	(sector, reader, sx, sy, textureCount, tilesPerTextureSq, mapStem, terrain) -> bool: reads '<stem>%3.3i%3.3i.sec' (reader vt[5]); header dword magic 0xCF4BF774 + byte flags (bit 0 water layer -> +0x10, bits 0-1 -> +0x14); payload size 0x2408 (one layer) / 0x4810 (two) + 0x200 (water tile material map) when flags & 3, FatalError 'Unable to locate resource: ' / 'Wrong format resource: ' otherwise; layout: 0x441 packed vertices x 8 bytes per layer, then 0x100 tile words per layer, then 0x100 ushort water materials (0xFFFF = none -> +0x2B4 int -1); vertex x = sx*32 + col + sbyte0 * 0.5/126, y likewise, z = ushort * maxHeight(terrain +0x114) / 65535; a water vertex takes the ground vertex x / y when its tile material (the lowest +0x2C among the tiles touching it, terrain +0x1E8 links) has type 4, the grid position otherwise, z = 0 without a material; flags |= 1 (loaded); +0x18 keeps the mapped file data (used again by BuildMesh)
@@ -11803,16 +11864,16 @@ addr	size	name	status	purpose
 0x006C5AA0	1011	CTerrain::LoadTextures	named	(count) -> bool: the texture array +0xD8 and material array +0xE8 get count entries '<stem>%3.3i' (texture manager g_0x7AF744 FindOrCreateNamed kind 0xB, refcount++) plus, for each of the two optional lightmap pages '<stem>L%2.2i' (+ '.mmp') that the reader vt[21] finds, one more entry (SetAtGrow; +0xAE4 counts them; the first missing page stops with success); every entry gets a material (CMaterialManager::CreateAndRegister kind 0x12, name 0x796BB4: diffuse +0x20 0.3, alpha +0x2C 1, ambient +0x30 0.7, specular +0x40 0.2, emissive +0x50 0, power +0x60 5) and CTextureManager::LoadTexture (0 on failure)
 0x006C5EA0	163	CTerrain::ReleaseTextures	named	releases (vt[4]) and frees the texture array +0xD8 and the material array +0xE8
 0x006C5F50	275	CTerrain::SetRotationQuat	named	(quat): builds the 3x3 rotation matrix +0x98 from the quaternion and copies the position +0x28..+0x30 into +0xc8..+0xd0
-0x006C6070	442	CTerrain::SetRotation	named	slot 14 (quat): rotates the terrain's world quaternion +0x44.. and rebuilds the 3x3 matrix +0x98 (CObject3D slot 14 pattern); unused by the game (identity terrain)
+0x006C6070	441	CTerrain::SetRotation	named	slot 14 (quat): rotates the terrain's world quaternion +0x44.. and rebuilds the 3x3 matrix +0x98 (CObject3D slot 14 pattern); unused by the game (identity terrain)
 0x006C6175	6	EHBlock_6C6175	named	EH: exception-handling block (funclet) inside of CTerrain::v14 (0x006C6070)
 0x006C6230	250	CTerrain::RenderOpaque	named	(render context): builds the terrain matrix +0x54 from the quaternion +0x34 and position +0x1C (Quat_ToMatrix4), pushes it on the context's world (+0x24 / +0x28) and view (+0x1C / +0x20) stacks (Matrix4_Mul) and draws passes 0 .. textureCount + 1 (RenderSectors: ground textures and the two lightmap pages); pops
 0x006C6330	257	CTerrain::RenderWater	named	(render context): same matrix push, passes textureCount + 2 .. 2 * textureCount + 3 (the water layer's textures); called from CWorldClient::Render after RenderObjects
 0x006C6460	592	CTerrain::RenderSectors	named	(ctx, firstPass, lastPass) -> bool: for every visible sector (rows +0xAA4 / +0xAAC, column ranges +0xAA8 / +0xAB8): GetSector(sx, sy, 4, load = 1) (= build mesh + full relight when needed), SelectSectorLod, TerrainSector_CullFrustum; second loop: visible sectors get UpdateLodSeams + TransformVertices(ctx +8); then per pass: sectors with triplets for that pass in any quarter ((+0x318 / +0x32C / +0x340 / +0x354)[pass] count) draw with TerrainSector_Draw after ctx vt[11](0, texture +0xD8[pass mod (textureCount + 2)]) once per pass; 0 when a draw fails
 0x006C66E0	256	CTerrain::SelectSectorLod	named	(sector): squared distance of the sector centre (sx*32 + 16 + terrain pos, zmid) to the camera g_0x79B2C4..: < LOD1 (g_0x79BD2C)^2 -> 0, < LOD2 (g_0x79BD30)^2 -> 1, else 2, never below the LOD floor +0xAA0; TerrainSector_SetLod
 0x006C67E0	205	CTerrain::SaveModifiedSectors	named	for every loaded sector flagged modified (+0x38C): creates '<stem>%3.3i%3.3i<ext>' through the reader (vt[5](name, 0)) and writes TerrainSector_Pack; editor leftover (the game never modifies sectors)
-0x006C68B0	3743	CTerrain::Load	named	(mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15C vt[1], '*.mp' filter), +0xFC = path, +0xF8 = file stem; reads '<stem>.mp' (vt[5]): header 0x26 bytes {u32 magic 0xCE4AF672, f32 max height -> +0x114, i32 sectors X -> +0x104, Y -> +0x108, i32 texture count -> +0x11C, i32 texture size -> +0x118, i32 tile type count, i32 tile size -> +0x120, u16 material count, u16 animated tile count, u16 (unused)}; size check 0x26 + 4 * (materials * 11 + tileTypes + animated) ('Wrong file format: '); +0x124 = textureSize / tileSize (tiles per row), +0x128 = its square, +0x10C / +0x110 = sectors * 32 (floats); materials +0x12C (0x38 each from 11 file dwords: +0 type, +4/+8/+0xC r g b, +0x10 alpha, +0x14 = 1 / (1 - alpha), +0x18 byte alpha*255, +0x1C/+0x20/+0x24 = min(1, f[5] * rgb), +0x2C = f[6], +0x30 = f[7], +0x34 = 0 (height delta)); tile types +0x13C (count + 16 entries of 0xF); animated tile map +0x14C (count dwords, then pairs {u16 tileId, u16 frames} set map[id] = frames); the sector grid (+0x1F8); LoadTextures; the 4 rotated UV tables +0x1C8 (per tile) and +0x1D8 (lightmap: per column, full height) via Terrain_BuildTileUVs (step 1 / tilesPerRow, inset 8 / tileSize * step); +0x100 = 1; ambient world name +0xAE0 ('Dungeon' / 'Ingos' / 'Suslanger' / 'Gipat'); counts the ambient wav files per type (table 0x7969D4); flags +0x94 |= 0xFFFF; the per-sector material height delta table +0xAEC (0x14-byte vector per sector, one float per material); FatalError 'Unable to open file'
-0x006C754A	6	EHBlock_6C754A	named	EH: exception-handling block (funclet) inside of CTerrain::Load (0x006C68B0)
-0x006C754D	6	EHBlock_6C754D	named	EH: exception-handling block (funclet) inside of CTerrain::Load (0x006C68B0)
+0x006C68B0	3328	CTerrain::Load	named	(mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15C vt[1], '*.mp' filter), +0xFC = path, +0xF8 = file stem; reads '<stem>.mp' (vt[5]): header 0x26 bytes {u32 magic 0xCE4AF672, f32 max height -> +0x114, i32 sectors X -> +0x104, Y -> +0x108, i32 texture count -> +0x11C, i32 texture size -> +0x118, i32 tile type count, i32 tile size -> +0x120, u16 material count, u16 animated tile count, u16 (unused)}; size check 0x26 + 4 * (materials * 11 + tileTypes + animated) ('Wrong file format: '); +0x124 = textureSize / tileSize (tiles per row), +0x128 = its square, +0x10C / +0x110 = sectors * 32 (floats); materials +0x12C (0x38 each from 11 file dwords: +0 type, +4/+8/+0xC r g b, +0x10 alpha, +0x14 = 1 / (1 - alpha), +0x18 byte alpha*255, +0x1C/+0x20/+0x24 = min(1, f[5] * rgb), +0x2C = f[6], +0x30 = f[7], +0x34 = 0 (height delta)); tile types +0x13C (count + 16 entries of 0xF); animated tile map +0x14C (count dwords, then pairs {u16 tileId, u16 frames} set map[id] = frames); the sector grid (+0x1F8); LoadTextures; the 4 rotated UV tables +0x1C8 (per tile) and +0x1D8 (lightmap: per column, full height) via Terrain_BuildTileUVs (step 1 / tilesPerRow, inset 8 / tileSize * step); +0x100 = 1; ambient world name +0xAE0 ('Dungeon' / 'Ingos' / 'Suslanger' / 'Gipat'); counts the ambient wav files per type (table 0x7969D4); flags +0x94 |= 0xFFFF; the per-sector material height delta table +0xAEC (0x14-byte vector per sector, one float per material); FatalError 'Unable to open file'
+0x006C754A	3	EHBlock_6C754A	named	EH: exception-handling block (funclet) inside of CTerrain::Load (0x006C68B0)
+0x006C754D	412	EHBlock_6C754D	named	EH: exception-handling block (funclet) inside of CTerrain::Load (0x006C68B0)
 0x006C7750	491	CTerrain::Unload	named	stops the ambient sounds, UnloadAllSectors, releases textures and materials, reader +0x15C vt[3]() (close archive), frees the sector grid (sizes -1, +0x100 = 0) and the 8 UV tables +0x1C8 / +0x1D8
 0x006C7940	312	Terrain_BuildTileUVs	named	(out float[18], rotation, tileX, tileY, step, inset, isLightmap): u[0..8] = (inset, step/2, step - inset) per row, v[9..17] = (inset, vstep/2, vstep - inset) per column (vstep = 1.0 for a lightmap page: full-height strip) for the 9 points (corners, edge midpoints, centre) of a tile; rotated by `rotation` quarter turns; then u += tileX * step, v += tileY * step (0 for a lightmap)
 0x006C7A80	748	CTerrain::BuildVertexTileLinks	named	(this = CTerrain, from Init): fills +0x1E8 (0x441 entries of 0x14 bytes {count, up to 4 tile indices}) with the 16 x 16 tiles (2 x 2 units each) touching each of the 33 x 33 sector vertices: even / even vertices are corners of up to 4 tiles, odd / even edge midpoints of 2, odd / odd the centre of 1; used by TerrainSector_Load / BuildMesh to pick a water vertex's material
@@ -12035,11 +12096,11 @@ addr	size	name	status	purpose
 0x006D7073	13	StaticInit_CAcksDb_6D7073	named	CRT: static init: CAcksDb::CAcksDb on a global and atexit of its destructor
 0x006D7080	22	StaticInit_CAcksDb_6D7080	named	CRT: static init: CAcksDb::CAcksDb on the global acks database and atexit of its destructor
 0x006D70B0	366	DatabaseSet_Destroy3	named	destroy tables (PoolFreeVector/PoolFree_N5C, N38) of the 0x5C/0x38-byte record sets; 366 bytes
-0x006D7220	262	CAcksDb::CAcksDb	named	constructor of the unit acknowledgement sound database (acks.db): three record vectors (+0 Answers 0x1C4-byte, +0x20 Cryes 0x5C-byte, +0x40 Others 0x38-byte) with name hash maps (+0xC, +0x2C, +0x4C); was CDatabase2
+0x006D7220	261	CAcksDb::CAcksDb	named	constructor of the unit acknowledgement sound database (acks.db): three record vectors (+0 Answers 0x1C4-byte, +0x20 Cryes 0x5C-byte, +0x40 Others 0x38-byte) with name hash maps (+0xC, +0x2C, +0x4C); was CDatabase2
 0x006D7261	6	EHBlock_6D7261	named	EH: exception-handling block (funclet) inside of CDatabase2::CDatabase2 (0x006D7220)
-0x006D7330	342	DatabaseSet_Destroy6	named	free name tables (PoolFree_N14, 0x6DAF20, 0x6DC390) and hash buckets; 342 bytes
-0x006D7477	6	EHBlock_6D7477	named	EH: exception-handling block (funclet) inside of DatabaseSet_Destroy6 (0x006D7330)
-0x006D7490	396	DatabaseSet_Destroy4	named	free hash tables, string pools and 0x28-byte record vectors; 396 bytes
+0x006D7330	327	DatabaseSet_Destroy6	named	free name tables (PoolFree_N14, 0x6DAF20, 0x6DC390) and hash buckets; 342 bytes
+0x006D7477	15	EHBlock_6D7477	named	EH: exception-handling block (funclet) inside of DatabaseSet_Destroy6 (0x006D7330)
+0x006D7490	395	DatabaseSet_Destroy4	named	free hash tables, string pools and 0x28-byte record vectors; 396 bytes
 0x006D7553	6	EHBlock_6D7553	named	EH: exception-handling block (funclet) inside of DatabaseSet_Destroy4 (0x006D7490)
 0x006D7620	3520	CAcksDb::Load	named	(dataDir) -> bool: opens '<dir>database.res' and its 'acks.db' ('Can't open acks database'); Archive tags 1 / 2 / 3 = the Answers (0x1C4 records, 0x71 dwords) / Cryes (0x5C) / Others (0x38) blocks of database-format.md into the vectors +0 / +0x20 / +0x40 and name hash maps; then every Answers record gets an id -> field map (+0xC) of its 0x19 sound-kind lists (ids 0..0x15 -> sub-records at +0x20 + k * 0xC, 0x16..0x18 -> none); called once from main 0x45706C
 0x006D8430	796	CUnit::PlayAck	named	(this = client CUnit, code): plays the unit's acknowledgement for a unit event code (0xFF: respawn vt+0xD0): heroes below a counter remap codes 0..10 -> 0x27 / 0xB..0x13,0x1D -> 0x28; 0x25/0x26 weapons\timecrash.wav only, 0x23/0x24 weapons\crash.wav + the list; code < 0x2A: the Answers record of the proto (code -> list map built by CAcksDb::Load; 0x29 Bored via HitSoundTable::PickRandomMatching with the environment mask), 0x2A..0x2D Cryes, 0x2E..0x32 Others (race fallback); random pick by weight. Called by CBattleHud::OnUnitEvent. CORRECTION: was CAcksDb::PlayUnitHitSound
@@ -12161,7 +12222,7 @@ addr	size	name	status	purpose
 0x006DF7B0	570	AcksCryesVector_InsertRealloc	named	STL: vector<Cryes record 0x5C>::_M_insert_overflow (grow path of insert: DbSubRecord_CopyCtor copies, old records destroyed); used by AcksCryesVector_AssignN (CAcksDb +0x20)
 0x006DFA90	580	DbSubRecord_CopyCtor	named	copy-construct a database sub-record with a hash set (HashSetCopy_Ctor_6DEC40); 580 bytes
 0x006DFCE0	568	AcksOthersVector_InsertRealloc	named	STL: vector<Others record 0x38>::_M_insert_overflow (grow path of insert: AcksLineRecord_CopyCtor copies, old records destroyed); used by AcksOthersVector_AssignN (CAcksDb +0x40)
-0x006DFFC0	264	StlString_CtorCopy_6DFFC0	named	STL: copy-construct std::string for a database record (length_error)
+0x006DFFC0	263	StlString_CtorCopy_6DFFC0	named	STL: copy-construct std::string for a database record (length_error)
 0x006E0028	6	EHBlock_6E0028	named	exception-handling block (funclet) inside of StlString_CtorCopy_6DFFC0 (0x006DFFC0)
 0x006E00D0	24	InitFields4_6E00D0	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
 0x006E00F0	347	DwordVector_InsertN_Core	named	vector<dword> insert-n-copies core (grow, copy, fill; STLport _M_insert_overflow style)
@@ -12241,7 +12302,7 @@ addr	size	name	status	purpose
 0x006E6136	6	WSOCK32_recvfrom	named	import thunk: ordinal 17 recvfrom
 0x006E613C	6	WSOCK32_connect	named	import thunk: ordinal 4 connect
 0x006E6142	6	WSOCK32_recv	named	import thunk: ordinal 16 recv
-0x006E6148	6	WSOCK32_send	named	import thunk: ordinal 19 send
+0x006E6148	5	WSOCK32_send	named	import thunk: ordinal 19 send
 0x006E614A	6	EHBlock_6E614A	named	exception-handling block (funclet) inside of FUN_006E6148 (0x006E6148)
 0x006E614E	6	WSOCK32_select	named	import thunk: ordinal 18 select
 0x006E6154	6	WSOCK32_listen	named	import thunk: ordinal 13 listen
@@ -12250,7 +12311,7 @@ addr	size	name	status	purpose
 0x006E6162	6	EHBlock_6E6162	named	exception-handling block just after of FUN_006E6160 (0x006E6160)
 0x006E6166	6	DSOUND_DirectSoundEnumerateA	named	import thunk: DSOUND ordinal 2 DirectSoundEnumerateA
 0x006E616C	6	DDRAW_DirectDrawEnumerateExA	named	import thunk: DirectDrawEnumerateExA
-0x006E6172	6	DDRAW_DirectDrawCreateEx	named	import thunk: DirectDrawCreateEx
+0x006E6172	5	DDRAW_DirectDrawCreateEx	named	import thunk: DirectDrawCreateEx
 0x006E6174	6	EHBlock_6E6174	named	exception-handling block (funclet) inside of FUN_006E6172 (0x006E6172)
 0x006E61F0	6	DINPUT_DirectInputCreateEx	named	import thunk: DirectInputCreateEx
 0x006E6214	35	MemWriter_PutByte	named	MFC-style memory stream: write 1 byte at +0x24 (grow via 0x7089D1 when past +0x28)
@@ -12289,8 +12350,8 @@ addr	size	name	status	purpose
 0x006E6916	42	CDC_Ctor_74648	named	MFC CDC-like object constructor (vtable 0x746484)
 0x006E6940	28	vt_746484::DeletingDtor_6E6940	named	scalar deleting destructor: runs FUN_006e695c then operator delete when flag&1
 0x006E695C	7	SetVtable_746484_6E695C	named	stores the vtable 0x00746484 into the object (base-class constructor/destructor step)
-0x006E6963	28	vt_7463B4::DeletingDtor_6E6963	named	scalar deleting destructor: runs UIObj7463D4::DtorBody_ then operator delete when flag&1
-0x006E6973	6	EHBlock_6E6973	named	exception-handling block (funclet) inside of FUN_006E6963 (0x006E6963)
+0x006E6963	16	vt_7463B4::DeletingDtor_6E6963	named	scalar deleting destructor: runs UIObj7463D4::DtorBody_ then operator delete when flag&1
+0x006E6973	12	EHBlock_6E6973	named	exception-handling block (funclet) inside of FUN_006E6963 (0x006E6963)
 0x006E697F	20	vt_7461B0::Thunk_PtVisible_6E697F	named	forwards to PtVisible
 0x006E6993	16	vt_7461B0::Thunk_RectVisible_6E6993	named	forwards to RectVisible
 0x006E69A3	28	vt_7461B0::Thunk_TextOutA_6E69A3	named	forwards to TextOutA
@@ -12321,7 +12382,7 @@ addr	size	name	status	purpose
 0x006E6D50	216	Multimon_Init	named	dynamically binds GetSystemMetrics / MonitorFromWindow / MonitorFromRect / MonitorFromPoint / GetMonitorInfo / EnumDisplayMonitors from USER32 (multi-monitor stubs)
 0x006E6E76	86	xMonitorFromPoint	named	multi-monitor stub: MonitorFromPoint or a single-monitor fallback using GetSystemMetrics
 0x006E6ECC	86	xMonitorFromRect	named	multi-monitor stub: MonitorFromRect or single-monitor fallback
-0x006E6F22	107	xMonitorFromWindow	named	multi-monitor stub: MonitorFromWindow or fallback (IsIconic / flags)
+0x006E6F22	106	xMonitorFromWindow	named	multi-monitor stub: MonitorFromWindow or fallback (IsIconic / flags)
 0x006E6F4D	6	EHBlock_6E6F4D	named	exception-handling block (funclet) inside of FUN_006E6F22 (0x006E6F22)
 0x006E6F8D	147	xGetMonitorInfo	named	"multi-monitor stub: GetMonitorInfo or fallback (""DISPLAY"", primary monitor flag 0x12340042)"
 0x006E7020	241	xEnumDisplayMonitors	named	multi-monitor stub: EnumDisplayMonitors or single callback fallback
@@ -12349,9 +12410,9 @@ addr	size	name	status	purpose
 0x006E743D	79	SEH_ClearUnwindFlag	named	exception record: clears the EH_UNWINDING flag bit (flags &= ~2)
 0x006E748C	54	_except_handler3	named	MSVC SEH frame handler (calls the scope-table walker); 2941 callers
 0x006E74DC	84	__CxxFrameHandler_Call	named	C++ EH: calls the handler with a nested frame (uses __CallSettingFrame)
-0x006E7530	37	__CxxNestedHandler	named	C++ EH nested exception handler
+0x006E7530	34	__CxxNestedHandler	named	C++ EH nested exception handler
 0x006E754A	6	EHBlock_6E754A	named	exception-handling block (funclet) inside of FUN_006E7530 (0x006E7530)
-0x006E7553	6	EHBlock_6E7553	named	exception-handling block (funclet) inside of FUN_006E7530 (0x006E7530)
+0x006E7553	2	EHBlock_6E7553	named	exception-handling block (funclet) inside of FUN_006E7530 (0x006E7530)
 0x006E7555	182	_CallCatchBlock	named	C++ EH: calls a catch block with a frame
 0x006E760B	114	__CxxCatchHandler	named	C++ EH: handler for exceptions inside a catch block (checks unwinding flags 0x66)
 0x006E7680	123	__CxxFindTryBlock	named	C++ EH: finds the try-block state range for the current state
@@ -12367,7 +12428,7 @@ addr	size	name	status	purpose
 0x006E78CA	116	_initptd	named	CRT per-thread data init: TlsSetValue(tls index), call init hook
 0x006E793E	20	SEH_FilterExit	named	MSVC __except filter stub: stores the exception code and calls the dispatcher
 0x006E7952	11	SEH_ExceptExit	named	MSVC __except handler body: __exit(code)
-0x006E795D	61	_freeptd_call	named	CRT: calls the per-thread cleanup hook and TlsGetValue-based free
+0x006E795D	60	_freeptd_call	named	CRT: calls the per-thread cleanup hook and TlsGetValue-based free
 0x006E795F	6	EHBlock_6E795F	named	exception-handling block (funclet) inside of FUN_006E795D (0x006E795D)
 0x006E79A0	664	memmove	named	CRT memmove/memcpy with overlap handling (word-copy fast paths); 180 callers
 0x006E7CD5	17	InitVtable_747290_6E7CD5	named	stores vtable 0x00747290 and initializes 3 field(s) (constructor/reset step)
@@ -12509,8 +12570,8 @@ addr	size	name	status	purpose
 0x006EBDD6	231	sqrt_like	named	CRT math: unary double function with Inf/NaN handling
 0x006EBEBD	661	pow_like	named	CRT math: binary double function (pow) with NaN/Inf/zero special cases, 661 bytes
 0x006EC194	146	_fpclass_like	named	CRT math: classifies Inf/NaN of a double
-0x006EC226	253	entry	named	PE entry point (mainCRTStartup/WinMainCRTStartup): GetVersion, heap and lowio init, _cinit, parses the command line, calls main (0x456440), exit
-0x006EC30F	6	EHBlock_6EC30F	named	exception-handling block (funclet) inside of FUN_006EC226 (0x006EC226)
+0x006EC226	233	entry	named	PE entry point (mainCRTStartup/WinMainCRTStartup): GetVersion, heap and lowio init, _cinit, parses the command line, calls main (0x456440), exit
+0x006EC30F	20	EHBlock_6EC30F	named	exception-handling block (funclet) inside of FUN_006EC226 (0x006EC226)
 0x006EC323	11	_EH_amsg_exit_stub	named	CRT funclet: records the code and exits via __exit
 0x006EC32E	34	_amsg_exit	named	CRT: prints the runtime error message n and exits
 0x006EC353	35	_fatal_exit	named	CRT: prints the message (if enabled) and terminates
@@ -12600,10 +12661,10 @@ addr	size	name	status	purpose
 0x006EF420	103	_trandisp1	named	CRT math: transcendental dispatch (single-argument NaN/zero cases)
 0x006EF487	140	_trandisp2	named	CRT math: transcendental dispatch (two arguments)
 0x006EF524	7	vt_797640::Ret_float10_0_6EF524	named	returns the constant (float10)0
-0x006EF55D	42	_fpmath_nan_a	named	CRT math: NaN/infinity result helper
-0x006EF55F	6	EHBlock_6EF55F	named	exception-handling block (funclet) inside of FUN_006EF55D (0x006EF55D)
+0x006EF55D	2	_fpmath_nan_a	named	CRT math: NaN/infinity result helper
+0x006EF55F	40	EHBlock_6EF55F	named	exception-handling block (funclet) inside of FUN_006EF55D (0x006EF55D)
 0x006EF587	63	_nan2	named	CRT math: quiet NaN construction
-0x006EF5C6	29	_fpmath_default_result	named	CRT math: result loader for the error paths
+0x006EF5C6	19	_fpmath_default_result	named	CRT math: result loader for the error paths
 0x006EF5D9	10	EHBlock_6EF5D9	named	exception-handling block (funclet) inside of FUN_006EF5C6 (0x006EF5C6)
 0x006EF5F0	23	_fpmath_store	named	CRT math: stores the FPU result to the stack frame
 0x006EF607	60	__startOneArgErrorHandling	named	CRT math: begins the error path for a one-argument function (matherr)
@@ -13229,7 +13290,7 @@ addr	size	name	status	purpose
 0x00702D35	47	CFile::GetFileTitle_String	named	returns the file title in a CString (via FillFileStatus)
 0x00702D64	218	CFileFind::FillFileStatus	named	GetFileStatus: lstrcpyn of the path, FindFirstFile, converts times to CTime
 0x00702E3E	178	CFile::GetStatus_Static	named	static GetStatus(path, status): AfxFullPath + FindFirstFile + times
-0x00702EF0	179	CFile::TimeToFileTime	named	converts a CTime-like value to FILETIME (SystemTimeToFileTime), throws on error
+0x00702EF0	178	CFile::TimeToFileTime	named	converts a CTime-like value to FILETIME (SystemTimeToFileTime), throws on error
 0x00702F61	6	EHBlock_702F61	named	exception-handling block (funclet) inside of FUN_00702EF0 (0x00702EF0)
 0x00702FA3	301	CFile::SetStatus	named	SetFileAttributes/SetFileTime from a CFileStatus, throws on failure
 0x007030F0	33	AfxThrowFileException	named	maps the error code and throws the CFileException
@@ -13376,8 +13437,8 @@ addr	size	name	status	purpose
 0x00706017	69	AfxGetParentOwner	named	returns the owner or the parent HWND of a window
 0x0070605C	40	CWnd::GetTopLevelOwner	named	walks AfxGetParentOwner up to the top-level owner window
 0x007060F8	52	CWnd::IsForegroundOwner	named	true when the foreground window is this window's owner or its popup
-0x0070612C	61	ActivateTopParent	named	
-0x0070614D	6	EHBlock_70614D	named	exception-handling block (funclet) inside of ActivateTopParent (0x0070612C)
+0x0070612C	33	ActivateTopParent	named	
+0x0070614D	28	EHBlock_70614D	named	exception-handling block (funclet) inside of ActivateTopParent (0x0070612C)
 0x00706169	65	CWnd::GetParentFrameOrTop	named	returns the top-level window of a child chain (virtual slot 44 test)
 0x007061FA	121	CWnd::GetDescendantByID	named	recursive GetDlgItem search through child windows
 0x00706273	125	CWnd::SendMessageToDescendants	named	sends a message to all children (optionally recursive/permanent only)
@@ -13389,8 +13450,8 @@ addr	size	name	status	purpose
 0x007063B0	67	CWnd::EnableScrollBar_Impl	named	EnableScrollBar for horizontal/vertical/both (recursion for SB_BOTH)
 0x00706440	77	CWnd::GetScrollInfo	named	GetScrollInfo with a version check (Win98+)
 0x0070648D	71	CWnd::GetScrollLimit	named	max scroll position = max - (page - 1) from range and info
-0x007064D4	166	CWnd::GetUpdateRegionClient	named	RedrawWindow/GetWindow loop converting a rect to client coordinates for the visible window
-0x00706553	6	EHBlock_706553	named	exception-handling block (funclet) inside of FUN_007064D4 (0x007064D4)
+0x007064D4	127	CWnd::GetUpdateRegionClient	named	RedrawWindow/GetWindow loop converting a rect to client coordinates for the visible window
+0x00706553	39	EHBlock_706553	named	exception-handling block (funclet) inside of FUN_007064D4 (0x007064D4)
 0x0070657A	314	CWnd::RepositionBars_Impl	named	computes and applies child bar positions (layout)
 0x007066B4	154	CWnd::GetChildRectInParent	named	rectangle of a child in the parent's client coordinates
 0x0070674E	43	CWnd::CalcWindowRect	named	AdjustWindowRectEx with style, extended style and menu flag

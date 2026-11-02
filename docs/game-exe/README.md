@@ -353,8 +353,8 @@ Per page, the open items that matter most for the mod work:
   inverted: a game bug, `CreateRandomizedFXSource` never plays; one-byte fix at 0x4BF161, settled 2026-11-03); `HideObject` / `BlockUnit` /
   `ActivateTrap` flip flags without `MarkNetDirty` (the KillUnit / InflictDamage hit record is settled: `InflictDamage(n)` can remove
   up to 7 x n HP).
-- data-sound.md: about 40 of the 60 particle callbacks are `LAB_` code without a function symbol; RaceModels `+0x158..` (Unk47..50)
-  have no reader. (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
+- data-sound.md: RaceModels `+0x158..` (Unk47..50) have no reader; the bodies of the 60 particle emit / step callbacks are not
+  described one by one (defined and named 2026-11-03). (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
   player is dead code, the reverb is set per zone by `LoadZone`, the Levers fields.)
 
 Global:
@@ -373,4 +373,4 @@ Global:
 
 ## Coverage
 
-Coverage (13820 functions): named 13768, guess 52.
+Coverage (13881 functions): named 13829, guess 52.

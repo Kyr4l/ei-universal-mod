@@ -381,7 +381,8 @@ frame **before** the step callback, and restores them when the step returns 0 (t
 ### 7.3 The type table (`CParticle::Init` 0x485540) [V]
 
 Common prologue: `Reset`, bounds empty, `+0xe0 = 4`, `+0xcc = 100`, `+0xd8 = 500`, `+0xdc = 16`, flag 1. Then per type (only the values
-the type sets; `LAB_` callbacks are code without a function symbol):
+the type sets; the `LAB_` callbacks were code without a function symbol: since 2026-11-03 all 60 are defined in Ghidra and named
+`ParticleEmit_<type><Name>` / `ParticleStep_<type><Name>` in functions.tsv, e.g. `LAB_48C800` = `ParticleEmit_2000Fireball`):
 
 | type | texture | emit / step / tick | constants |
 |---|---|---|---|

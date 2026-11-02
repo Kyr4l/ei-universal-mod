@@ -134,14 +134,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0041BC40 | 2004 | LobbyClient::ctor | (this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port),... |
-| 0x0041B2A0 | 974 | LobbyServer::OnNamedEvent | created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must b... |
 | 0x0041D600 | 813 | LobbyClient::OnServerInfoPacket | (GameBuffer from the master TCP stream, CConnectProgressWin::Update): u32 raw length must equal the buffer length, LzDecompress (fresh LzCompressor) then records until exhausted: sockaddr[16] + NetPlayerInfo::Read (0x401170: u32 +... |
 | 0x0041ADB0 | 777 | LobbyServer::OnJoin | created-handler for JoinMessage (kind 5, this = LobbyServer, edx = message): new TwoStringMessage player record appended to +0x2590 {name +0xc, unit +0x18 from the join, +0x24 = join +0x28, +0x2c = join +0x2c, +0x30 = g_0x79B60C++... |
 | 0x0041DA50 | 757 | LobbyClient::FillParty | rebuilds the local exchange record +0x260c (CExchangeScreen::Update / OnLButtonDown when the party changed): +0x18 = party version, one BlobMessage (kind 16) per hero of +0x2660 (count +0x2664): {u32 model +0xc, u32 +0x10, u32 +0x... |
 | 0x0041DDC0 | 723 | LobbyClient::LoadPartnerParty | rebuilds the partner's offer party +0x2690 from its record's BlobMessages (+0xc..): each blob = one serialized offered item (kind 16); the exchange screen shows it as the other counter. Was LoadPartyFromMirror |
 | 0x0041CD80 | 695 | LobbyClient::ApplyPlayerEvents | applies the RefDwordsStringMessages of +0x2608 (kind 14 {player ref, u32 kind +0x10, u32 value +0x14, string +0x18}) to the local CPlayer (CWorldServer::FindPlayerById(0)): 0 experience (GiveExperience(0, string)), 1 money += valu... |
 | 0x0041CA10 | 690 | LobbyClient::dtor | destructor body of the LobbyClient (vtable 0x73BDEC, 0x26f0+ bytes): party blocks +0x2690 / +0x2620, ref +0x2618, party list +0x2614, lists +0x2610..+0x25d8, local record +0x260c, join message +0x2600, then NetClient members (+0x2... |
+| 0x0041B2A0 | 645 | LobbyServer::OnNamedEvent | created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must b... |
+| 0x0041BC40 | 611 | LobbyClient::ctor | (this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port),... |
 | 0x0041ECC0 | 590 | LobbyClient::OnChunkReceived | created-handler for RefBlobMessage (kind 12 {ref +0xc transfer, u16 index +0x10, 64 bytes +0x12}): appends to +0x25e4 (ignored when the transfer name is empty); when all +0xc chunks of the transfer are present: sorts by index, con... |
 | 0x00426CB0 | 587 | ObjRefVector_InsertN | (pos, n, ref*): vector<ObjRef>::_M_fill_insert (external ref protocol copies; reallocating path 0x429B70) |
 | 0x0041A7E0 | 559 | LobbyServer::FillServerInfo | slot 15 of 0x73BB70 (out ref): new ServerInfo {name +0x25c8, +0x34 = +0x25e4, map = Game_GetQuestName of the current map +0x25a8 (empty when none), +0x44 = peer count, +0x45 = +0x25e0, +0x46 = password set}; serialized by NetServe... |
@@ -298,7 +298,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x455000 - 0x456000: CObject helpers (GetWorld, SetManager) + disk / capture
 
-45 functions, group `core`.
+46 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -499,7 +499,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x484000 - 0x499000: particle effects (CParticle, 'Particle effect ...')
 
-100 functions, group `effects`.
+160 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -508,15 +508,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00496EB0 | 2045 | CParticle::Update | slot 6 -> bool (alive): copies g_0x7AF5DC..+0xc (world wind / time block) into +0x140, resets the bounds, Attach(0) when the carrier has flag 1 (dying); +0xa4 = world pos delta since the last tick, +0x98 = world pos, +0xc8 = /delt... |
 | 0x004923B0 | 1986 | ParticleEmit_Weather | (this, particle): invoke-lightning / storm (0x2030): 10 records in +0x154 (grown like a CArray, 0x38 each) describing wind bands {height, direction, speed}; particles spawn in the band and drift with it; the texture TendriLight |
 | 0x0048E070 | 1871 | ParticleEmit_Link | (this, particle, t): "Particle effect Link without carrier"; 2 records in +0x154 (carrier extent * 1.2), particles along the link between the two endpoints (0x410770 lerp, Isaac_RandRange) |
+| 0x004918E0 | 1864 | ParticleEmit_2027Casting | particle types 0x2027..0x202A casting 4 / 7 / fire / 8: emit callback |
+| 0x00489320 | 1827 | ParticleEmit_200B | particle type 0x200B (FireSmoke): emit callback |
 | 0x00484C00 | 1600 | CParticle::GetCarrierOffset | (out xyz, carrier): without flag 0x10: the carrier position; units (type 0x50) by attach mode +0x13C: 0 CUnit::GetAttachPoint2 (the default attach point); 1..7 = FindPartByNameStart with one of six short part-name prefixes (1..6: ... |
 | 0x004976B0 | 1575 | CParticle::Render | (this, I3DFigureImpl): nothing when the live count +0x1c0 is 0 or the bounds box +0x17c is frustum-culled (CViewFrustum::CullBox == 2); static buffers g_0x7A9BD0 (aligned {x,y,z,size} x 0x1000) / g_0x7A9BE0 ({colour, uv rect*} pai... |
+| 0x00490C10 | 1540 | ParticleEmit_202BCasting | particle types 0x202B..0x202E casting 1 / 2 / 3 / 6: emit callback |
 | 0x0048B630 | 1456 | ParticleEmit_Healing | (this, particle): "Particle effect Healing without carrier" (FatalError 0x44C470 without +0x94); record array +0x154 sized round(+0x10c * 6 + 2) (0x497EB0), ring of particles around the carrier (GetCarrierExtent) rising upward |
+| 0x0048D8D0 | 1368 | ParticleEmit_2014Link | particle type 0x2014 link: emit callback |
+| 0x0048C090 | 1278 | ParticleEmit_2002Blast | particle type 0x2002 blast (Explosion): emit callback |
 | 0x0048B080 | 1262 | ParticleEmit_GridFill | (this): poison cloud / acid fog (0x2007 / 0x2008): when the live list +0x1b8 is empty fills it with records on a (-n..n)^2 grid of spacing 1 (jittered 0.3) around the emitter at the terrain height, n from the radius +0x11c; each r... |
-| 0x0048EEA0 | 1113 | ParticleEmit_Streams | (this, particle): rain / snow streams (0x200f, 0x2031..0x2033): +0xe4 = max(1, round(intensity)), count +0xd0 = +0xe4 * 10, the +0x154 array holds +0xe4 stream records (0x38: origin, velocity, phase) re-seeded around the camera; a... |
-| 0x00489F70 | 914 | ParticleEmit_Sparks | (this, particle): random variant +0x54 (0..2), life +0x58 = +0xe4, pos = emitter + carrier z, +0x50 = 100 + rand % 9, interpolates between the +0x154 records (0x38 each) |
-| 0x0048BD50 | 694 | ParticleEmit_Burst | (this, particle): 60% chance of a short-lived (+0x54 = 8, life +0x50 = +0xec * 8) spark at the emitter with random spread +0xf4, else a different variant |
-| 0x0048FDB0 | 676 | ParticleEmit_Ring | (this, particle): colour -1, +0x44 = 0, life = +0xec, +0x4c = +0xe4, random radius (/+0x10c/ scaled by rand^2 / 2) and angle around the emitter |
-| 0x00496C50 | 597 | CParticle::SpawnParticle | (arg): AllocParticle from the manager +0x14, emit callback +0x1e0 (record, arg) (released again when it returns 0), then the same init / list append as InitParticleRecord |
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
@@ -719,7 +719,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the OLD (.ani, double-precision) animation node of the 3ds tool chain: frame fraction +0x38 += dt, frame +0x34 ++ at 1, key indices step past their end frames; CFigureManager::MakeAnimationNode / LoadAnimationF... |
 | 0x00505CB0 | 1078 | AnimNodeOld_ReadFromData | (node, cursor*): +0xe4 / +0xec (two doubles rounded to int64), the pivot +0xf4 (Vec3), the base vertices +0x100 (count +0x104) and their working copy +0xd4, the frame count +0x40, the rotation keys +0x44 (0x28 each: start, end, qu... |
 | 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 (RECT, fov or 0): the 16 stack depths of the library +8 reset; P = Mat4_Perspective(fov (camera g_0x79B2A8 default), rect aspect, near, far) on stack 6, V = Mat4_Viewport(rect) on stack 8, identity on 7, stacks 1 and 0 = V... |
-| 0x00504A60 | 924 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
+| 0x00504A60 | 923 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
 | 0x00507E80 | 826 | AnimNodeOld_ResetToFirstKey | (node): without a parent +0x1c: the rotation +0xb8 = the first rotation key quat, the position +0xc8 = that rotation applied to the pivot +0x110 (quaternion rotation formula); with a parent: rotation = key0 * parent rotation +0xb8... |
 | 0x00507990 | 699 | AnimNodeOld_StepTimeRecursive | (node, double dt) -> 1: the current morph frame (+0x88 [+0x98]) scaled by dt is accumulated into +0xd4; AnimNodeOld_AdvanceTime(dt); the world position / rotation composed with the parent (as in AnimNodeOld_RefreshRecursive); recu... |
 | 0x0050434F | 619 | I3DFigureImpl::DrawRect2D_part2 | tail of I3DRenderer::DrawRect2D split off by Ghidra (the outline line strip drawing) |
@@ -861,19 +861,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00536670 | 1970 | CUnitClientSpecific::BuildSkinTextures | (mode, out): composes the body texture: mode 0 "mo%ds"/"prot%ds" (size 0x80) from the armor +0xa0 (0x6A3480 item texture name) and the weapon (0x6A0AA0); mode 1 "mo%dp"/"prot%dp" (0x100): "%sskin_%.2d.mmp" base skin + the items of... |
-| 0x00534B60 | 1724 | CUnitClientSpecific::UpdateAnimSounds | per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound |
 | 0x00537500 | 1661 | CUnitClientSpecific::PlayAnimation | slot 46 (kind, speed, flags): resolves the animation set name from the proto +0x118 and the equipment (tables 0x73EC80 / 0x73EC78) and plays it (client-only cosmetic animations) |
 | 0x00535CB0 | 1095 | CUnitClientSpecific::BuildArmorModelNames | (unit, armor ids vector, out, ...): for every armor item (item db g_0x7C8718 +0xc slot kind) builds the model name "hr.%.2d.armor%.2d" / "%s.armor%.2d" / "hr.%.2d" from the slot name table at 0x73EC24 (0x1c-byte strings), collects... |
 | 0x005381B0 | 1006 | CUnitClientSpecific::Equip | slot 26 (item id; hi word = index into the item database g_0x7C8718 (200-byte entries; +0xc = equipment slot 0..6)): +0xa0[slot] = id and attaches the item's figure / texture to the owner's figure (figure manager g_0x7AF5F4, name ... |
 | 0x00534760 | 953 | CUnitClientSpecific::GetAnimSoundName | (anim record, t0, t1, out, miss): the sound of an animation event (weapon swing / hit / miss sounds "weapons\\..") |
+| 0x00534E49 | 941 | CUnitClientSpecific::UpdateAnimSounds_EH | exception-handling funclet inside CUnitClientSpecific::UpdateAnimSounds 0x534B60; not a real function |
 | 0x005341A0 | 756 | CUnitClientSpecific::Update | per client frame: paused (+0x260) shifts the move request ids, looping (+0x25c) advances +0x258; weapon parts hidden while the current anim has no weapon bits; hidden flag (owner flag 8) by anim class / death; fade +0x78 += 1/15 p... |
+| 0x00534B60 | 745 | CUnitClientSpecific::UpdateAnimSounds | per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound |
 | 0x00535850 | 706 | CUnitClientSpecific::ReplayMove | (this, time, dt): advances the client-side move interpolation (slots 40 / 41) |
 | 0x005385A0 | 695 | CUnitClientSpecific::Unequip | slot 27 (slot 0..6): +0xa0[slot] = -1 and restores the base figure part (figure manager g_0x7AF5F4, name +0xa4, table 0x73EC24 + 0x1c * kind) |
 | 0x00536300 | 682 | CUnitClientSpecific::BuildEquipmentList | (mode, out CArray<12-byte>): mode 0: two entries {0x3005 armor id +0xa0, item db +0xc} and {0x3004 weapon id, weapon db +0xc}; else 8 entries: {0x32, owner +0x18, -1} + items of +0xa0..+0xb8 (0x3005, item db +0xc) |
 | 0x005370F0 | 622 | CUnitClientSpecific::BuildDamageTextures | builds the wound overlay texture: per damaged body part (GetBodyPartDamageLevels) adds "%s%sw%d.mmp" to a string list and composes "mo%dw" through 0x693180 (texture compose, 0x4444 format); heroes use 0x80 size |
 | 0x00536EA0 | 587 | CUnitClientSpecific::GetBodyPartDamageLevels | (out byte[6]): from the record parts (+0x374 + 0x1c i: state, +4 HP short, +6 max): 0 >= 75 %, 1 >= 33 %, 2 < 33 %, 3 <= 1/max; heroes: armor items (db +0xb4 flag) hide the covered parts; others mirror the limb pairs; returns 1 wh... |
 | 0x00538960 | 579 | CUnitClientSpecific::GetAttackParams | slot 50, client mirror from the packed record: [6] = +0x349 (attack), [7] = +0x34b (defence), [2] = +0x34c (weight), [3] = +0x34d, [4] = +0x34d + +0x34e (damage), [5] = +0x34a (spread); armed heroes: from the item id +0xbc[+0x26c]... |
-| 0x00535590 | 480 | CUnitClientSpecific::SetWeaponFigure | slot 25 (weapon index 0..3): the weapon id +0xbc[idx] vs the current +0x26c: attaches the weapon figure (figure manager g_0x7AF5F4 0x5AA5F0 by owner name +0xa4 ...) |
 
 ## 0x53A000 - 0x545000: units database (units.udb prototypes)
 
@@ -1312,7 +1312,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0061D780 | 2911 | CLobbyScreen::LayoutLobby | 2.9 KB: draws the server table on the surfaces (columns "%s %s" name / "%d/%d" players / "%s %d" ping, a question mark when unknown, "%s %d / %d"), column separators (CDC::LineTo), tooltips, the detail text (DrawWrappedText) of th... |
 | 0x00623880 | 2645 | CUnitInfoWin::Redraw | draws the hero panel: name, HP / mana (UnitStats_MaxHP / MaxMana), weight (HeroRecord::TotalWeight), level, "infoitem_25", damage "damage_%d" / "%d-%d", the six stats with DrawStatValue and the perk lines; mode-dependent rows. Was... |
 | 0x00635250 | 2596 | CBattleHud::Build | vt 0x740764 slot 25 (screen id 1, 0x230 bytes): hero ids +0x1DC.. from the party or, on a load, from the UI stream g_0x7AFDF8 (ids, pause flag, version > 0x46 zone name, > 0x61 zone exit +0x188); "battle00" figure + 2 surface figu... |
-| 0x00641F20 | 2562 | CHudMainPanel::Build | vt 0x742A18 slot 18: the HUD frame "battle00" (quads, InitFrame16, InitN / InitStrip arrows "in25arrow"), the zone name (Records5C_FindByName), the minimap surface (SetPixel), CHudMinimap::Init, DrawMinimapUnits, Layout; 2.5 KB. W... |
+| 0x00641F20 | 2561 | CHudMainPanel::Build | vt 0x742A18 slot 18: the HUD frame "battle00" (quads, InitFrame16, InitN / InitStrip arrows "in25arrow"), the zone name (Records5C_FindByName), the minimap surface (SetPixel), CHudMinimap::Init, DrawMinimapUnits, Layout; 2.5 KB. W... |
 | 0x00611930 | 2361 | CCampScreen::EnterMode | recomputes the confirm state for tab +0x190: +0x20C = price total, +0x210 = confirm allowed, +0x211 = cancel allowed, +0x212 = deconstruct flag, title key: 0 "camp_repair_all" (sum of GetItemPrice(.., 8) over the hero's items, ite... |
 | 0x00628F80 | 2349 | CCampItemConstrWin::Draw | vt 0x7415D4 slot 20: the components (blueprint / materials / usable item) and the result preview with an animated figure. Was CCampTradeWin::Draw |
 
@@ -1326,15 +1326,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0064BE80 | 3459 | CQuestLogWin::Build | vt 0x7411BC slot 25: render state 0x18 saved into +0x1EC and set to 1; texts "obj_%d" 0..2 into +0x1D8; owned CTextListWin (0x3C,0xBE)-(0x180,0x1FE) line height 10 = the objective text; +0x1BC CScrollBar (0x3C,0x1E)-(0x180,0x96) s... |
 | 0x0064CC10 | 3412 | CQuestLogWin::ShowMap | (map name) rebuilds the window for one zone: +0x184 = name; removes the elements / quads / buttons beyond the fixed ones (2 / 0x15 / 9); zone record +0x14 = the map picture figure added as element 2, drawn as quad 3 centred at (58... |
 | 0x00655D40 | 2301 | CSaveLoadWin::ScanSaves | rebuilds the slot vector +0x164 (0x44-byte SaveSlotRecord): every directory "<root>saves\save*": folder name -> +4; its "info.sav" (CFileFind; missing -> error flag +0x40 = 1, label "Error Save") read with Stream_CheckHeader4(0x11... |
-| 0x006462A0 | 2205 | CHudUnitInfoPanel::Draw | vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo... |
+| 0x006462A0 | 2203 | CHudUnitInfoPanel::Draw | vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo... |
 | 0x006456E0 | 2201 | CHudUnitInfoPanel::Build | 2.2 KB: the sliding unit info panel: tab buttons (w_info1-4 tooltips), "in25arrow" art, body-part colour markers ("#iFF" codes), "infounit_%d" texts, "hl_skull" / "hl_torso" / "hl_leg" / "hl_arm" labels into +0x1B8.., InitGrid / I... |
 | 0x00647040 | 1949 | CHudUnitInfoPanel::DrawStats | 1.9 KB: "%s %d/%d" HP / mana, "move_%d" stance speeds (CUnit::GetStanceSpeed, GetAttackModeSpeed), "dmg_%d", damage list (UIItemInfoWin::FormatDamageList), skills (UnitStats_WeightedSkills7), level, "consider_more%d" / "consider_l... |
 | 0x006548A0 | 1835 | CSaveLoadWin::OnKeyDown | vt 0x741354 slot 9: ignored while sliding; DispatchSlot9; Enter = OnConfirm, Esc = cancel (close 0x100001), PgUp / PgDn +-16 slots, Up / Down +-1 (select.wav, ClampSelection); unhandled keys in save mode (+0x178): editing of the s... |
 | 0x0064DC60 | 1742 | CQuestLogWin::FillObjectives | when the selected quest +0x1A0 changed (+0x1A4): g_0x7C8178 = id; builds the objective text for the CTextListWin: the quest text "quest <id>": after the title the description (ReadUntilHash) in colour "\aC..." + "\n \n", the rewar... |
-| 0x006567A0 | 1635 | CSaveLoadWin::RefreshSaveList | redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime "%d/%m, %... |
+| 0x006567A0 | 1634 | CSaveLoadWin::RefreshSaveList | redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime "%d/%m, %... |
 | 0x00653DD0 | 1629 | CSaveLoadWin::Build | vt 0x741388 slot 25: rect (0,0)-(800,600) (+0xE4 written as the bytes 0x58 0x02 0x00 0x00); art "saveload" + 256x256 scratch figure; quads 0 / 1 / 2 = load-or-save / cancel / delete button art (163..237 / 563..637 / 363..437 x 526... |
 | 0x006503C0 | 1291 | COptionsScreen::Build | vt 0x741FAC slot 25: full-screen (0,0)-(800,600); art "saveload" + a 256x256 scratch surface figure; quads 0 / 1 = OK / cancel button art (213..287 / 513..587 x 526..574), buttons 0 OK (0xD5,0x20E)-(0x11F,0x23E) tip 0x111D4, 1 can... |
-| 0x006570E0 | 1228 | CSaveLoadWin::QuickSave | static (ecx = slot folder name "saveq" / "savea" / "saveb", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMess... |
+| 0x006570E0 | 1226 | CSaveLoadWin::QuickSave | static (ecx = slot folder name "saveq" / "savea" / "saveb", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMess... |
 | 0x00650E40 | 1221 | COptionsScreen::OnKeyDown | vt 0x741F78 slot 9 (vk, char, scancode): ignored while sliding; DispatchSlot9; waiting for a key (+0x3F4): Esc cancels; the scancode & 0x1FF looked up in the key-name table g_0x7857B0 (88 x 0x48: +0 scancode, +4 name, +8 CString) ... |
 
 ## 0x65F000 - 0x664000: CParty (hero records 0x784 bytes with four item arrays: equipped / B / inventory / spells, party items, named variables, map name), HeroRecord save reader, PartyStore (*.mp folder), PartySlot::SaveToFile, RichEdit credits scroller
@@ -1372,12 +1372,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00671730 | 778 | CMappedResource::Open | slot 1 (path, writable): closes (vt[3]), opens the file (0x6EB35C, flags 0x8010 / 2 when writable), reads the 16-byte header {magic 0x019ce23c, entry count +8, data offset +0xc, data size +0x10}, allocates and reads the entry tabl... |
 | 0x0066E130 | 766 | CPlayerServer::UpdateVisibleSet | sync marker +0x24 == -1: known objects +0x50f8 = every party unit (+0x40) plus its AiMemory seen lists (+0xa90 / +0xaac), visible units +0x510c = the union; else +0x510c copied from the previous known array and +0x24 = -1. Was Upd... |
 | 0x00669FA0 | 736 | CPlayerClient::OnMsg0E_MovePath | server 0x0E (u32 request id, u32 unit id, u32 x2, u32 unit id, u32 kind, [embedded delta stream: the mover state (MoveState_WriteNet) unless kind == 3]): a temporary kind-0x32 unit decodes it (DeltaWriter / ReadUnitOrder); with th... |
-| 0x00667230 | 734 | CPlayerClient::Init | slot 2: resets the streams / codecs / arrays and fills the 256-entry handler table +0x24 (index = server opcode): 00 OnMsg00_PlayerId 01 OnMsg01_ClearNetStream(0x667DE0) 02 OnMsg02_ZoneState 03 OnMsg03_SpellsAndItems 04 OnMsg04_Ca... |
 | 0x0066D7F0 | 722 | CPlayerServer::SendMsg40_UnitCreate | (array of units): per unit server 0x40 {id, kind +0x10, +0x18 prototype, flags +8, f32[3] morph +0xc4, name +0x1a8, model +0xa4, specific +0x78 / +0x7c strings, u16 part count + part names, display name (vt[7] or "") and +0x23c (0... |
 | 0x00671B40 | 698 | CMappedResource::OpenFile | slot 4 (name, out size): the cached entry of the name hash +0x44 → refcount ++ and its buffer; else the entry index (0x674850), when memory-mapped the base +0x28 + entry offset, else allocates an entry {name, buffer, size (table +... |
-| 0x0066C9A0 | 687 | CPlayerServer::Init | slot 2: resets the streams / arrays, +0x5124 = random 900..1800, and fills the 256-entry handler table +0x28 (index = client opcode): 00 OnMsg00_Identity 01 OnMsg01_Disconnect 02 OnMsg02_RequestParty 03 OnMsg03_ChangeZoneById 04 O... |
 | 0x0066FD70 | 631 | Formation_ComputeOffsets | (unit list, out Vec3 array): one unit = zero offset; else per unit the unit vector (1 m) from the group's centroid to the unit; added to the move target when the offset point is reachable |
 | 0x00669A30 | 599 | CPlayerClient::OnMsg80_Party | server 0x80 (embedded stream: MpFile::Read(party +0x70, full = 1)): the party replaces the local one, the synced item id list +0x114 is rebuilt from the party item manager (items with +0x28 < +0x2c = damaged), in a session the nam... |
+| 0x0066B570 | 580 | Dwords_Reserve | (n): vector<dword>::reserve (STLport chunk allocator, Dwords_AllocCopy2) |
+| 0x00672FA0 | 580 | Dwords_Reserve2 | STL: vector<dword>::reserve(n) (size pool buffer, copy via Dwords_AllocCopy4); the id vector of CMappedResource::ctor |
 
 ## 0x674000 - 0x676000: resources: CMappedResource / CResourceBase / CMappedFile + CObjectManager
 
@@ -1439,8 +1439,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006875D0 | 571 | SpellProto::operator_assign | copy-assigns a SpellProto 0x84 (the std::string code / name fields and the numeric spell fields); 3 calls in SpellProtoVector_InsertN |
 | 0x00689B70 | 560 | HashMapUint_RehashPrime | (this, minBuckets): bucket vector grown to the next prime (binary search in 0x73B914) with zero fill |
 | 0x00686910 | 543 | SpellProtoVector_InsertRealloc | STL: vector<SpellProto 0x84>::_M_insert_overflow (grow path of insert); used by SpellProtoVector_InsertN |
-| 0x006866B0 | 538 | SpellSetRecord::operator_assign | copy-assign the 0x34 record (string +0, string vectors +0xc / +0x18, string +0x24, +0x30) |
 | 0x00685F30 | 528 | SpellSetRecordVector_InsertRealloc | STL: vector<SpellSetRecord 0x34>::_M_insert_overflow (grow path of insert: new size-pool buffer, placement copies, old records destroyed); used by SpellSetRecordVector_InsertN |
+| 0x0068A500 | 515 | DwordVector_ctorN5 | STL: vector<node*>(n) zeroed bucket table with the STLport node allocator inlined; the rehash of the spell id -> CSpell map (HashMapUint_Rehash <- CSpellManager::CreateSpellById, SpellRegistry_ctor) |
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
@@ -1533,7 +1533,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer, 0x882 with water) from the packed vertices +0x18: normal +0x2B/+0x2F/+0x33 from the packed dword d (nx = ((d >> 11 & 0x7FF) - 1000) / 1000, ny = ((d & 0x7FF) - 1000)... |
-| 0x006BFF40 | 5051 | TerrainSector_Draw | (sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertice... |
+| 0x006BFF40 | 5050 | TerrainSector_Draw | (sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertice... |
 | 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTextureSq, mapStem, terrain) -> bool: reads '<stem>%3.3i%3.3i.sec' (reader vt[5]); header dword magic 0xCF4BF774 + byte flags (bit 0 water layer -> +0x10, bits 0-1 -> +0x14); payload ... |
 | 0x006B89F0 | 1737 | CSoundManager::LoadSample | (channel, index, name, decompressMp3) -> bool: the sample cache: map +0x870 (name -> cache node) hit: the node moves to the list head +0x858 (LRU list +0x854, tail +0x85c), tick = GetTickCount, refcount ++, AIL_set_named_sample_fi... |
 | 0x006B4710 | 1584 | CMusicSystem::Init | slot 2: reads "<g_0x7AF45C>music.reg" (CFileRegistry; FatalError "CMusicSystem::Create(): Unable to..."): [Common] Credits -> +0x30, MainMenu -> +0x34; every other section = a zone: two 0x38 MusicZoneRecords appended to the CArray... |
@@ -1553,7 +1553,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006C68B0 | 3743 | CTerrain::Load | (mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15C vt[1], '*.mp' filter), +0xFC = path, +0xF8 = file stem; reads '<stem>.mp' (vt[5]): header 0x26 bytes {u32 magic 0xCE4AF672, f32 max height -> +0x114,... |
+| 0x006C68B0 | 3328 | CTerrain::Load | (mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15C vt[1], '*.mp' filter), +0xFC = path, +0xF8 = file stem; reads '<stem>.mp' (vt[5]): header 0x26 bytes {u32 magic 0xCE4AF672, f32 max height -> +0x114,... |
 | 0x006C98F0 | 2164 | CTerrain::SetVisibleQuad | (float[8] = 4 corner points of the visible ground quadrilateral): the visible sector rows +0xAA4 (first) / +0xAAC (count) with per-row column ranges +0xAA8 (min) / +0xAB8 (max): the sectors whose centre lies inside the 4 edge line... |
 | 0x006CB390 | 2159 | CTerrain::UpdateAmbientSounds | (flag 8): around the listener (sound system g_0x7AF784 +0x250 position / +0x25C forward): the 3 x 3 sectors' material histograms (sector +0x374, weighted by the ambient table 0x7969D8: 16 tile types 'Grass'...) pick the dominant t... |
 | 0x006C31C0 | 1261 | TerrainSector_LightVertexDynamic | (sector, pos, record, terrain, isWaterLayer): c = cached sun colour +0x37..; for every light of the record's link list +0x50: L = light pos - pos, atten = 1 (ground under water: max(0, 1 - material +0x14 * depth^2 * Lz^2 / 15)), o... |
