@@ -3345,7 +3345,7 @@ addr	size	name	status	purpose
 0x004B9FF0	3	ObjRef_Get2	named	(slot): same as ObjRef_Get (second copy, mov eax,[ecx]). Was Nop_4B9FF0
 0x004BA000	4	CWorld::GetItemManager	named	CWorld slot 18: returns +0x54 (CItemManager; CWorld::CreateItem creates through it)
 0x004BA010	19	Round_Float	named	returns ROUND(x) (float to int)
-0x004BA030	7	CItem::ResetCurrentToMax	named	(this): +0x20 = +0x24 (current := maximum of the first cur/max pair, which hierarchy.md calls count); the script FixItems applies it to every item of the item manager. Was SSCScript::CopyCurrentPos
+0x004BA030	7	CItem::ResetCurrentToMax	named	(this): durability +0x20 = max durability +0x24 (a full repair); the script FixItems applies it to every item of the item manager. Was SSCScript::CopyCurrentPos
 0x004BA040	4	CItem::GetScriptId	named	returns +0x4C = the ScriptID of a quest item row (matched by HaveItem / EraseQuestItem / RemoveQuestItem). Was GetField_4C_4BA040
 0x004BA050	4	CUnitServer::GetOwner	named	returns +0x1C = the owning CUnit. Was GetField_1C_4BA050
 0x004BA060	7	CUnit::GetServerSpecific	named	returns +0x240 = the unit's CUnitServer. Was GetField_240_4BA060
