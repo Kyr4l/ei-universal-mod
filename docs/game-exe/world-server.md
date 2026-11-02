@@ -126,6 +126,11 @@ the hour, server mode 4; kind 8: mode 1; else `Session_EnterZoneFromParty(party 
 `SetWeatherMode(record +0x2c)`, `SetRestrictFlag(record +0x30)`, mode 1. `g_0x7C2CC4 = kind`, `SetMode(mode)`,
 `AttachFileStream(g_0x7AFFBC)`.
 
+Which zones are which [I, from the map.txt copy in `extra-assets/unmade-maps/res/texts_res/`: 87 zones]: the 16 `brief` zones are
+the allod bases `bz1g..bz7g` (Gipat), `bz8k..bz11k` (Ingos), `bz13h..bz18h` (Suslanger), e.g. `#res basegipat basecam`: the
+scripted base scenes (zone kind 3); the 23 `game` zones (`gz1g`, ... with `#maps`) are the playable quest zones (kind 1); the
+48 `edge` zones (`gz1g_bz1g`, ...: no `#res`, only `#position` and `#exit` records) are the world-map links between them (kind 4).
+
 | global | values |
 |---|---|
 | zone kind `g_0x7C2CC4` = `CWorldServer +0x12d64` | 1 playable zone, 2 main menu, 3 scripted zone (record kind 2), 4 camp / map screen (record kind 1), 7 editor map (`App_LoadMapAndScript` 0x456140), 8 endofgame; written through the global after the zone is loaded, zeroed by `UnloadZone`; the decompiles show the field (`f_0x12D64`) only as a reader, so earlier reads took it for a dead "net mode" |
