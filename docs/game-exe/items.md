@@ -344,7 +344,8 @@ one blueprint or usable item, materials of one kind). `ApplyWeaponSlots` 0x60F9E
 
 ## 7. The shops (CGSPlayer, ShopStock)
 
-Each `CGSPlayer` (the five multiplayer "GS" players) owns two parties used as stock (`+0x3c` item shop, `+0xac` spell shop) and
+Each `CGSPlayer` (a merchant: five in single player, indices 1..5; four in multiplayer, 1 / 3 / 4 / 5; the nine price factors at
+`+0x10..+0x30`, ui-screens.md "The merchants' price factors") owns two parties used as stock (`+0x3c` item shop, `+0xac` spell shop) and
 two `ShopStock` objects (0xb8, at `+0x11c` / `+0x1d4`; named "GSPlayerLayer" earlier) [V]. `InitAllowedLists` 0x4A7080 fills
 them from the databases: weapon / armor / quick protos whose Shop bits `+0x64` have bit `(player index + 8 - 1)`, materials
 (bits `+0x4c`) with the range 20..50, spell protos (mask `+0x80`) and perks (mask `+0x20`) into both. `SetShopLimits` 0x4A6DC0
@@ -362,6 +363,26 @@ else 10 %), otherwise a random one; stock -= Components; no candidate -> no item
 `+0x40 <= item mana`. Wands (quick subtype 8) get 20 + rand%30 charges. `GenerateSpells` 0x69A780 builds, per filtered spell
 proto, a perk list (mandatory runes `+0xc`, optional `+0x18` at 50 %, repeats of `+0x24` while the summed complexity stays
 under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithPerks` (spell side: another document).
+
+### 7.1 Item texts: `CTextManager::GetItemTextKeys` 0x4E0150 [V, deep read 2026-11-03]
+
+`(item, out name, out description, out category)`: builds a section key, finds it in the loaded text archives
+(`FindInArchives`), takes the section's line value as the **name** and the text up to `#` as the **description**; the
+**category** is the text of a fixed key (`GetString`). Every proto / material name in a key has its spaces replaced by `_` and is
+UPPERCASED. By item kind (`+0x10`):
+
+| kind | section key | category key |
+|---|---|---|
+| 0x3004 weapon | `weapon <PROTO> <MATERIAL>` | `item_weapon` |
+| 0x3005 armor | `armor <PROTO> <MATERIAL>` | `item_armor_upper` (armor type 0..2) / `item_armor_lower` (3..) |
+| 0x3006 quick, proto spell field "none" | `qitem <PROTO>` | `item_potion` |
+| 0x3006 other quick (wands, scrolls) | `qitem <PROTO> <MATERIAL>`, then ": <spell name>" from `spell <SPELL>` is appended to the name (`Unknown` without a spell) | `item_wand` |
+| loot | `litem <NAME>` | `item_loot` |
+| material | `material <MATERIAL>` | `item_material` |
+| blueprint ("instr"), by its target | weapon / armor / quick: `instr <PROTO>`; spell: `spell <SPELL>`; modifier: `modifier <NAME>` | `item_weapon_shape`, `item_armor_shape_upper / lower`, `item_wand_shape`, `item_prototype`, `item_modifier` |
+| 0x3009 quest | `questitem <NAME>` | `item_quest` |
+
+A missing section leaves name and description untouched (no fallback text); the category is filled in any case.
 
 ## 8. What is not known
 
