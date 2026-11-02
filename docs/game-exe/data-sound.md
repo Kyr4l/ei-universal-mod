@@ -505,14 +505,11 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 
 * The readers of the Monsters loot fields (`+0xc8` / `+0xd8`) and of RaceModels `+0x158..+0x164`, the Levers sound / text / places,
   and the udb NPC `+4` / HitLocations `+4` / `+0x40` fields: no reader in the modules of this round.
-* `DescRecordA` 0x4694F0 (0x74) / `DescRecordB` 0x4698F0 (0x48) at the start of the descriptor module: editor-side records (strings +
-  complection + string arrays), no runtime caller found.
-* `Scene3ds_BuildFigures` 0x46F1F0 (10 KB) is a 3DS -> CFigure converter never reached by the game; not read.
-* The meaning of the particle world block `g_0x7AF5DC..` copied into `CParticle +0x140` (CWorldClient +0x24, 4 floats; wind?) and of
-  the `LAB_` emit / step bodies (code without function symbols: ~40 of the 60 per-type callbacks).
-* The 3D pan being zeroed at the end of `UpdateChannel3D`: a Ghidra flattening artefact or the real (mono) behaviour [?]; the earlier
-  code computes it fully.
-* The XMIDI sequence player (`+0x1cc..`) and the reverb parameters `+0x8a8..+0x8b0`: never set by the code read.
+* `DescRecordA` 0x4694F0 (0x74) / `DescRecordB` 0x4698F0 (0x48): editor-side records, no runtime caller [untestable].
+* `Scene3ds_BuildFigures` 0x46F1F0 (10 KB): a 3DS -> CFigure converter never reached by the game [untestable].
+* ~~Particle world block~~ settled [V]: `CWorld +0x24` windDir (3 floats) + `+0x30` windStrength = the wind (SetWind, net message 0x72) copied into `CParticle +0x140`. The `LAB_` emit / step bodies (~40 per-type callbacks without function symbols) stay unread.
+* ~~3D pan zeroed~~ settled [V] from the machine code (0x6B8215..0x6B8243): `pan +0x18 = round(...)`, then `neg` when the cross product is negative, then `ret`: there is NO zeroing (decompiler artefact). 3D sounds are panned +-100.
+* Reverb `+0x8a8..+0x8b0`: set by `CSoundManager::SetReverbParams` 0x6B69E0, whose only caller is `CWorldClient::LoadZone` 0x567AB0 (per zone) [V]. The XMIDI sequence player (`+0x1cc..`): never started by the code read [I].
 * `CSoundDesc +0x70` and the use of SOUND_RANGE2 / MIN / MAX by `CEffectSound` (spells.md gives `+0x24c` volume / `+0x250` radius).
 
 ## 10. Corrections to earlier notes
