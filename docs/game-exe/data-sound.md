@@ -512,8 +512,8 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 
 ## 9. What is not known
 
-* The readers of the Monsters loot fields (`+0xc8` / `+0xd8`) and of RaceModels `+0x158..+0x164`, the Levers sound / text / places,
-  and the udb NPC `+4` / HitLocations `+4` / `+0x40` fields: no reader in the modules of this round.
+* RaceModels `+0x158..+0x164` (Unk47..50) and the udb NPC `+4` / HitLocations `+4` / `+0x40` fields: no reader in the modules
+  read. (Settled 2026-11-03: the Monsters loot fields `+0xc8` / `+0xd8` have no gameplay reader; the Levers fields, section 4.)
 * `DescRecordA` 0x4694F0 (0x74) / `DescRecordB` 0x4698F0 (0x48): editor-side records, no runtime caller [untestable].
 * `Scene3ds_BuildFigures` 0x46F1F0 (10 KB): a 3DS -> CFigure converter never reached by the game [untestable].
 * ~~Particle world block~~ settled [V]: `CWorld +0x24` windDir (3 floats) + `+0x30` windStrength = the wind (SetWind, net message 0x72) copied into `CParticle +0x140`. The `LAB_` emit / step bodies (~40 per-type callbacks without function symbols) stay unread.

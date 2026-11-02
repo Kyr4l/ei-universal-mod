@@ -339,7 +339,8 @@ Per page, the open items that matter most for the mod work:
 - items.md: nothing open (the proto runtime `CStringArray`s are never filled). Dead / unread: `CItemWeapon +0x4C`,
   the material Skill column, several proto byte fields, `CInventory`.
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
-  `BuildFigureMeshB / C`, `LoadFigFile2` and the alternate node tracks were not read.
+  the bodies of `BuildFigureMeshB / C` were not read (`LoadFigFile2` is a live path; which objects load the alternate node tracks
+  is a live check).
 - terrain-lighting.md: `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; which periodic water change the 0.8 s
   stripes are (test with `EnableWaterWaves = 0`); the water pass blend mode (inherited from `RenderObjects`: a live check). (The
   MMP extra block is never read; the sky figure is nask0sky.fig: settled.)
@@ -352,9 +353,9 @@ Per page, the open items that matter most for the mod work:
 - gs-functions.md: the sound-source respawn loop serves `CreateFXSource` records and skips `CreateRandomizedFXSource` ones (inverted
   test or dead command); `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; `HideObject` / `BlockUnit` /
   `ActivateTrap` flip flags without `MarkNetDirty`; the hit record fields of `KillUnit` / `InflictDamage` beyond [8..14].
-- data-sound.md: the readers of the Monsters loot fields `+0xC8 / +0xD8` and of RaceModels `+0x158..`; about 40 of the 60 particle
-  callbacks are `LAB_` code without a function symbol; whether the zeroed 3D pan is real (mono) or a decompiler artefact; the XMIDI
-  player and the reverb parameters are never set by the code read.
+- data-sound.md: about 40 of the 60 particle callbacks are `LAB_` code without a function symbol; RaceModels `+0x158..` (Unk47..50)
+  have no reader. (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
+  player is dead code, the reverb is set per zone by `LoadZone`, the Levers fields.)
 
 Global:
 
