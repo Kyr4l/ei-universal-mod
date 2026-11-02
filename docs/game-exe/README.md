@@ -336,7 +336,7 @@ Per page, the open items that matter most for the mod work:
   (the corridor re-plan), `CUnit +0x274` and the wait shift are settled.
 - spells.md: the exact `CEffectSoundSeq::Activate` modes; the buff `+0x10` flag byte is never read; shapechange and comprehend
   have no server script. (Settled: no fresh sequence numbers are generated, a copy keeps its id; `SpellProto +0x48 / +0x54 / +0x60`.)
-- items.md: the runtime `CStringArray +0x20 / +0x50` of every proto (who fills it). Dead / unread, not open: `CItemWeapon +0x4C`,
+- items.md: nothing open (the proto runtime `CStringArray`s are never filled). Dead / unread: `CItemWeapon +0x4C`,
   the material Skill column, several proto byte fields, `CInventory`.
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
   `BuildFigureMeshB / C`, `LoadFigFile2` and the alternate node tracks were not read.

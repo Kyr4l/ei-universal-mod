@@ -367,8 +367,11 @@ under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithP
 
 * `CItemWeapon +0x4c`: saved and compared, never written after the ctor (-1; 0 in 1.mp files written by older code) [V]: a dead field. `ItemMaterial
   +0x24` Skill and the proto bytes `+0x78`, `+0x7d..`, `+0xbc..`, `+0x83..`: no reader found in this round.
-* The runtime `CStringArray +0x20 / +0x50` of every proto (slot 18 `GetProtoText0`): who fills them (probably
-  `CTextManager::GetItemTextKeys` or the camp screens) was not traced.
+* ~~The runtime `CStringArray +0x20 / +0x50`~~ settled [I] (2026-11-03): nothing fills them. The only typed accesses are the
+  proto constructors (0x6A63B0, the database loader 0x6A5D60), the copy (0x6A8F20 `CStringArray::Copy`) and the destructors; no
+  `Add` / `SetAtGrow` on either array anywhere. So item slot 18 (`GetProtoText0`) yields "" for armor (it checks the count) and
+  element 0 of an empty array for weapons (`CItemWeapon::GetProtoText0` 0x6A0F70 does not check): a leftover of an unused
+  feature.
 * ~~ShopStock +8 / +0x14~~ settled [V] (guess sweep 2026-11-01): `ItemsDb_ListArmorNames` feeds `+8` -> `GenerateArmors`, the weapon list feeds `+0x14`; `ShopStock::AddArmorProto` 0x699080 / `AddWeaponProto` 0x6990E0. The S_* table assignment above stands.
 * `CInventory` (typeId 0x17): no creator and its hash set is never filled: dead class in this build [V] (no `new` site of its vtable). [untestable]
 * ~~Model name arguments~~ settled [V]: `"%s_%.2d.%s.%d"` (`WeaponProto_FormatModelName` 0x6A0BF0, `Armor_FormatModelName` 0x6A3480) = model + type prefix (`unhufe` + `ax`), proto variant (`01`), material code (`co`), texture index (`0`): real file `redress.res/unhufeax_01.co.0.mmp`. `Weapon_GetAttachBones` not re-read.
