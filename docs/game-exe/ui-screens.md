@@ -146,6 +146,15 @@ need the hero's magic skill in tab 1; the constructor rules below); the move is 
 weapons, 4 quick, 8 spells, one armor per type; the first weapon becomes the slot in hand `+0x774`; `CUnitInfoWin::Redraw`). Shift
 (`CInterface +0x7D`) moves a whole material stack. Every move calls `CCampBar2::RebuildList` on the bars concerned.
 
+**The merchants' price factors** [V, deep read 2026-11-03]: the 9 coefficients live in each merchant record (`CGSPlayer +0x10..+0x30`,
+saved with the campaign by `CGSPlayer::Serialize` tag 4; no script command or other code writes them). `GSPlayers_CreateDefaults`
+0x4A7630 sets them on a new game: buy 1.0, sell 0.5, deconstruct 0.2, construct 0.1 (the same four for spells [0..3] and items
+[4..7]), repair 0.2 [8]. Single player (`Session_ResetPlayers_Single`) creates merchants 1..5 and gives **merchant 5 all nine
+factors 0** (everything at that merchant costs 0 and sells for 0; index 5 is the `b.golem.constr_5` building of the campaign start,
+world-server.md 2.6 [I]); multiplayer (`Session_ResetPlayers_Multi`) creates merchants 1, 3, 4, 5, all with the standard factors.
+Both shops (+0xC items, +0xD spells) are enabled for every merchant. A mod can change the factors only by editing this record in
+the campaign save (or by patching the defaults).
+
 **Prices** (`GetItemPrice` 0x60FAB0, slot 54, kind 0..8 = coefficient index; x87 code the decompile drops, verified live in
 `game-memory.md`): base = item `GetPrice`; weapon / armor: round(base * coef[k] - base * coef[8] * (1 - durability / max)); kind 8 repair =
 max(1, round(base * coef[8] * wear)) or 0; others round(base * coef[k]). `EnterMode` 0x611930 recomputes `+0x20C` total, `+0x210 / +0x211`
