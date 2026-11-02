@@ -25,8 +25,12 @@ u32 size, then the same LZ-style compression. The head is 0x102 for `mission.sav
 
 It holds several item groups in the `.mp` list format: u32 n, n x {u32 id, u32 kind, u16 a, u16 b} for the items,
 the same for the spells, then each object's detail block, each group closed by `DF FA FF FF` and a byte. In the
-sample there are five groups. The four before the party alternate stocks of equipment and of spell containers
-(merchants' or the camp's?). The last is the party's, followed exactly as in a `.mp` by:
+sample there are five groups. The four before the party alternate stocks of equipment and of spell containers:
+they are the merchants' shops. The campaign keeps five merchant records (`CGSPlayer`, written by `CGSPlayer::Serialize`):
+tag 1 the merchant index (1..5), tag 2 / tag 3 one byte each (item shop on, spell shop on), tag 4 the nine price factors
+(f32: spell buy / sell / deconstruct / construct, item buy / sell / deconstruct / construct, repair; defaults 1, 0.5, 0.2, 0.1,
+1, 0.5, 0.2, 0.1, 0.2; merchant 5 all 0), then the item-shop and spell-shop stocks of the merchants whose shop is on
+(docs/game-exe/ui-screens.md "The merchants' price factors"). The last group is the party's, followed exactly as in a `.mp` by:
 
 - the backpack: u32 n, n x u32 object id (-1 empty);
 - u32 members, then each member in the `.mp` member format: 5 strings (the name, empty for the hero; the figure;
