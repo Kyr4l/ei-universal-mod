@@ -323,8 +323,8 @@ Conventions shared by all pages:
 
 Per page, the open items that matter most for the mod work:
 
-- world-server.md: (zone kind 3 = the 16 `bz*` allod bases, settled 2.3) the exact hour formula operands and the two save header
-  dwords at +120 / +124; `+0x12E00 staticObjectStream` is filled and never read. (`CWorld +0x5C` / `+0x60` settled 2026-11-02.)
+- world-server.md: `+0x12E00 staticObjectStream` is filled and never read. (Settled: zone kind 3 = the 16 `bz*` allod bases,
+  the hour formula, the save header dwords +120 / +124, `CWorld +0x5C` / `+0x60`.)
 - world-client-players.md: no sender found for opcodes 0x0C, 0x12, 0x19. (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40
   record read in full 2026-11-03, the 0x73 records are the water levels.)
 - combat.md: the player `+0x108` levels and the full list of 0x0B unit event codes; order kind 10 has no caller. (The max HP
