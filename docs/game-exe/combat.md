@@ -169,10 +169,13 @@ into the preview, and accepts when `CanReachTarget` and, with the unit placed at
 0x12); spells blocked by flag 0x10000000; a dead target (vt[55] != 0; talk/use on bodies allowed) or `+0x145` -> message 0xB (attack) / 0xE,
 order cleared and `CancelAction(0)`; otherwise `ExecuteCombatOrder` 0x54D960:
 
-1. weapon switch; `PlanActionApproach(order, +0xC4)` 0x54CA40 — fails (not in reach at any tick of the turn window) -> `ApproachTarget`
-   0x54D140 (chase; pathfinding.md 5.5) and return.
+0. [V, deep-read 2026-11-03] an attack (kind 3) before the next-attack tick `+0x184` goes straight to `ApproachTarget` (no planning).
+1. weapon switch (`CUnit +0x270 != +0x26C` -> vt[25]); `PlanActionApproach(order, +0xC4)` 0x54CA40 — fails (not in reach at any tick of the
+   turn window) -> `ApproachTarget` 0x54D140 (chase; pathfinding.md 5.5) and return. Looting (kind 6, param 0x18A95) a body that is still an
+   aggro target (`IsAggroTarget`) -> order dropped.
 2. stance: spells of humanoids while crawling -> wanted 1, any other order -> wanted 2; `ApplyPendingStance` running -> `+0x18E = 1`, return.
-3. big living target (size >= 1.5) in melee -> message 0xC, order dropped.
+3. **flying target out of reach**: a melee attack (not with a ranged weapon) or an interaction on a living unit of move class 0 (`+0x324`)
+   whose `UnitProto +0x24 altitude + local z >= 1.5` -> message 0xC, order dropped (corrected: it is the flying height, not the size).
 4. attack period: an attack whose start tick `+0xDC` would be before `+0x184` (next-attack tick) chases instead; otherwise
    `+0x184 = max(+0x184, now + AttackAnimDuration)` with `AttackAnimDuration` 0x54B9C0 = `round(weaponProto +0x6C * 15 / actionSpeed +0x210)` ticks.
 5. spells: `CanAffordSpell` 0x54BF80 (mana `placement +0x34 >= cost +0x40 * 25/int`; quick items of subtype 5: charge `+0x28 >= cost`) else
