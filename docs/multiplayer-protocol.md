@@ -220,12 +220,16 @@ else: the bot's zero bytes were read as identity blocks).
 | type | handler | payload | meaning |
 |---|---|---|---|
 | 0x00 | 0x66F890 | 136 bytes: u32 100 (client version 1.00), char name[64], char password[64] ("Very top secret" = the game's default), u32 0 | identity: link state 0 -> 1; a wrong version answers 0x11 "Wrong Client Version. Req. version 1.0" |
-| 0x01 | 0x66FA90 | **unknown** | |
-| 0x02 | 0x66FAA0 | **unknown** | |
-| 0x03-0x07 | 0x670C20.. | **unknown** | |
+| 0x01 | 0x66FA90 | none | disconnect: PlayerOut, 0x80 in session mode, byte 0x01 back, link state 3 (rows 0x01-0x10, 0x38, 0x3A, 0x50 decoded from the game-exe reverse: game-exe/world-client-players.md 4) |
+| 0x02 | 0x66FAA0 | none | request the party: all dirty bits set again + 0x80 |
+| 0x03 | 0x670C20 | u32 zone exit index | change zone through that exit (`ChangeMap(name, entrance)`, then 0x08) |
+| 0x04 | 0x670CE0 | u32 game mode | leave (link state 1 only): PlayerOut (-> 0x83), 0x80, 0x07, state 2 |
+| 0x05 | 0x670DA0 | none | enter the world again (state 2 only, after a 0x50 upload): PlayerIn, 0x07 goes out |
+| 0x06 | 0x670E00 | C string map, u32 entry | change map by name |
+| 0x07 | 0x670EB0 | C string | a named event for the zone scripts |
 | 0x08 | 0x670F50 | the character: the .mp file's decompressed content (mp-format.md "Data", zone := the quest's name) read by 0x6618C0, then u8 0, then the 0x00 identity block above | the hero upload. The real client appends u32 100 + "Tango\0" and uninitialised bytes; the bot sends only the content + 0 + identity and is accepted |
 | 0x09 | 0x671060 | none | READY: link state 4 -> 1, then 0x590700(player) spawns the hero in the world. Sent by the real client with 0x40 right behind it |
-| 0x10 | 0x66FAC0 | **unknown** | |
+| 0x10 | 0x66FAC0 | u8 paused | pause / resume the server world (the clock button); in a session the host posts a chat line |
 | 0x30 | 0x66FFF0 -> 0x5D39E0 | u32 n, n x u32 unit id, u32 flags (0), f32 x, f32 y, f32 z (0) | MOVE to a point (a ground click) for the listed units. `AiLogicPlayer::MoveToNow` **releases the unit's leader (0x39) and its kept target** unless the party fights (player mode 2): a bot that moves its hero must send 0x39 again after the move (0x39 cancels a running move, so only once the move has ended; checked on the rig 2026-11-01) |
 | 0x31 | 0x670190 -> 0x5D3C30 (order 4) | u32 n, n x u32 unit id, u32 0, u32 target unit id, u32 0 | ATTACK (confirmed: the bot gained EXP). Also used on objects near a body (loot?) |
 | 0x32 | 0x6708D0 | **decoded**: u32 spell, u32 caster unit id, f32 x, f32 y, f32 z, u8 flag (21 bytes) | cast at a point (`CPlayerServer::OnMsg_CastAt` -> `AiLogicPlayer::CastAt` -> `CUnitServer::QueueCastAt`). Client sender `CPlayerClient::SendMsg32` 0x66ACD0 |
@@ -234,31 +238,31 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x35 | 0x6709D0 | works as the pace / walk-run switch (um-bot) | |
 | 0x36 | 0x670310 | u32 n, n x u32 unit ids, u32 0, **u32 interaction id (0x18A95 = loot)**, u32 -1, u32 target unit id (decoded from the handler's six reads, 2026-10-20; the captured x, y floats after it are not read) | the interaction order (`OnLootOrder`): the nearest listed unit is ordered to go to the target and interact; for 0x18A95 on a dead unit `CUnitServer::ExecuteInteraction` 0x54F000 calls `CWorldServer::LootUnit` (everything the body holds goes into the looter's party at once) and removes the body |
 | 0x37 | 0x670810 | none | no-op |
-| 0x38 | 0x670A40 | **unknown** | |
+| 0x38 | 0x670A40 | u32 unit id, u32 value | unused: read and ignored (no client code sends it) |
 | 0x39 | 0x670A90 | u32 unit id, u32 leader unit id | SetLeader (`AiLogicPlayer::SetLeader` 0x5D3DE0): the server's own follow (`Brain::TickFollow`), works across players; the unit itself as the leader clears it |
-| 0x3A | | **unknown** | |
+| 0x3A | 0x66FBD0 | as 0x30 | move in formation (`AiLogicPlayer::MoveTo`, the queued variant) |
 | 0x3B | 0x66FB70 | u32 unit id, u8 v | the battle button (`CUnit::SetField438`, net section 13): only a hero with 1 defends itself and friendly sides by the game's logic (`AiLogicPlayer::Regroup`); the .mp keeps the player's last choice (member tail, `HeroRecord +0x780`). Checked on the rig 2026-11-01: a hero poked to 0 was back at 1 after um-bot's 0x3B |
 | 0x40 | 0x670B20 | f32 x, f32 y (map units) | the client's view point (its camera / hero), ~2 per second; stored, not a move |
-| 0x50 | 0x670B60 | **unknown** | |
+| 0x50 | 0x670B60 | embedded party stream (`MpFile::Write(party, 0)`) | upload the party (before 0x05) |
 
 ### Server -> client sub-messages (client table 0x667347)
 
 | type | handler | payload | meaning |
 |---|---|---|---|
 | 0x00 | 0x667DA0 | first the world snapshot (5-6 KB: "\0\x07\0\0\0\x80..." + the quest name, items, every player's party, the map files zone3xobr.mpr / -lmp.mob, "CMPGame1" x5, the unit ids), later 42-56-byte ticks (the game time "gtime"; bit-packed, mostly zero) | the world state / tick |
-| 0x02 | 0x669010 | **unknown** | |
-| 0x03 | 0x6690F0 | **unknown** | |
-| 0x04 | 0x667C20 | **unknown** | |
+| 0x02 | 0x669010 | length-prefixed zone state (see "The zone state and the zone exits" below) | enter a zone (rows 0x02-0x13 decoded from the game-exe reverse: game-exe/world-client-players.md 5) |
+| 0x03 | 0x6690F0 | length-prefixed blob | the whole spell and item managers |
+| 0x04 | 0x667C20 | f32 x, y, z, u32 unit id, u32 flag (20 bytes) | camera look-at (hero spawn, dialogs) |
 | 0x05 | 0x6691C0 | per player: name ... "91" + f32 x, f32 y | the players' ARRIVAL points (sent right after the snapshot; the host's too) |
-| 0x06 | 0x669490 | **unknown** | |
-| 0x07 | 0x669D50 | **unknown** | |
-| 0x0A | 0x669290 | **unknown** | |
+| 0x06 | 0x669490 | u32 money, u8 flag, u32 item ids ... u32 -1 | items added to the player (right after 0x05) |
+| 0x07 | 0x669D50 | u32 game mode, u32 world tick | the game mode (which screen); mode 3 reloads |
+| 0x0A | 0x669290 | u32 item id | an item removed from the player |
 | 0x0B | 0x667DF0 | u32 unit id, u32 0xFF | after a death: the new hero's unit id (sent with 0x09) |
 | 0x0E | | f32 x, f32 y, u32 unit id (seen after a move order; length by heuristics) | |
-| 0x0F | 0x667D10 | **unknown** | |
+| 0x0F | 0x667D10 | f32[3] eye, f32[3] target, u8 | dialog camera |
 | 0x11 | | str | an error text ("Wrong Client Version. Req. version 1.0") |
-| 0x12 | 0x667E20 | **unknown** | |
-| 0x13 | 0x667E60 | **unknown** | |
+| 0x12 | 0x667E20 | 5 bytes: 1 garbage byte, u32 value | script SendEvent: stores the u32 in the client world, nothing reads it |
+| 0x13 | 0x667E60 | C string | a screen command ("say_block", "tutorial", "briefing") |
 | 0x40 | 0x667EC0 | **decoded: see "Unit creation" below**: u32 id, u32 kind, u32 prototype, u32 flags, the complexion, figure / texture / label strings, the part names, the name, then the unit's whole state as a delta coded 0x41 body | a unit appears (creation) |
 | 0x41 | 0x6687B0 -> unit vmethod +0xC4 (0x52EF90, base 0x50EC30) | u32 unit id, then the delta-coded fields below | unit update |
 | 0x42 | 0x668850 | u32 id (decoded from game.exe, game-exe/world-client-players.md 5) | the object left the player's replicated set: party units lose their player, the object is removed |
@@ -292,19 +296,21 @@ state from the unit's creation (0x40) to decode absolute values; um-bot decodes 
 | field | size | meaning |
 |---|---|---|
 | 0 | 24 B (12 x i16) | [2] / [3] = health current / max for monsters (the host's values differ: **to map**) |
-| 1 | 12 B | position vec3 (sent while walking) |
-| 2 | 1, 12, 16 | **unknown** |
-| 3 | 1 (n) + n x 5 | **unknown** |
+| 1 | 12 B | the complexion (3 floats -> SetMorphParams); the old capture note "position while walking" is contradicted by the code (`CMapObject::ReadNetState` 0x50EC30) |
+| 2 | 1, 12, 16 | u8 flag, position vec3, rotation quaternion (the position is the one that changes while walking) |
+| 3 | 1 (n) + n x 5 | the buffs on the unit (kind, level, duration per entry) |
 | 4 | 264 B | the unit's stats: u16 pairs at +72, +100, +128, +156, +184, +212 = the 6 body parts (current / max?), floats at +20 / +32 |
-| 5 | 11 x 4 | **unknown** |
-| 6 | 4, 4, 4 | **unknown** |
-| 7 | 1 | **unknown** |
-| 8 | 1, 1, 4, 1 | **unknown** |
-| 9 | str | **unknown** |
+| 5 | 11 x 4 | 4 weapon ids, 7 armor ids |
+| 6 | 4, 4, 4 | stance, wanted stance, active weapon slot |
+| 7 | 1 | packed: animation loop, paused, dead, walking |
+| 8 | 1, 1, 4, 1 | current animation, queued animation (action code), start tick, flags |
+| 9 | str | the owning player's name |
 | 10 | the ORDER (0x5C7FC0): u8 mode, 2 bytes (count), 3 x u16 (two through 0x47EE00: v * 0.0166 - 32, one through 0x47F110), 4 x f32, then count steps as u16 (bits 0-1 / 2-3 = dx / dy: 0 -1, 1 0, 2 +1, 3 = an absolute u16 follows; the rest **unknown**) | mode 0 none; 2 = move to a point: the 2nd / 3rd floats = the destination x2, the steps = the path in half-unit cells, the first step = where the unit is; 3 = attack: the 4 u32 = tick, TARGET UNIT ID, tick, tick, no steps |
-| 11 | 4, 1, 4 | **unknown** |
-| 12 | 20 B | sent every tick ("00 10 01" when idle); +8 a float rising to 3.0 then falling (an action timer) |
-| 13 | 4 | **unknown** |
+| 11 | 4, 1, 4 | hostile-sides mask, side, owner player id |
+| 12 | 20 B | the 5 detection factors (sight, smell, hearing, unused, life sense): the float at +8 (hearing) rising to 3.0 = undetected again, < 1 = detected |
+| 13 | 4 | the battle button |
+
+(Fields 1-3, 5-9, 11-13 named from `CMapObject::ReadNetState` 0x50EC30 / `CUnit::ReadNetState` 0x52EF90, 2026-11-03.)
 
 Checked on two recordings: every update ends exactly where the next one starts (2106 / 2116 and 574 / 574).
 
