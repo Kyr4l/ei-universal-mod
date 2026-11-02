@@ -4024,3 +4024,4 @@ EffectRecord			0x4	int	refcount
 EffectRecord			0x8	pointer[3]	passes	std::vector<EffectPassRecord 0x28> begin / end / capacity
 EffectRecord			0x14	int	passCount	
 EffectRecord			0x18	int	effectId	returned by slot 1 GetEffectId
+CTextManager			0x1c	pointer	archiveListHead	the .res archive list (TextArchiveList: head pointer at +0 of the embedded list; entries {next, prev, name std::string, CResourceBase*}); texts.res / textsLmp.res
