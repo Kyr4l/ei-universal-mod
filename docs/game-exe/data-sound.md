@@ -495,7 +495,10 @@ x 3 of `+0x11c` bytes, `+0x120` bytes per buffer, play position `+0x130`, switch
 | `MusicFillBuffer` 0x6BB3A0 (was StartStream) | fills the next buffer from the decoder stream; at the switch position opens the pending track (`CResourceBase::OpenFile(+0x24, musicPath + name)`), loads its markers (`MusicLoadMarkers` 0x6BBA00: registry `+0xcc` "Markers1" / "Markers2" per track name), state 1, fade in; pads with the silence byte `+0x140`; loops at `Markers2` / stops at the end depending on the mode |
 | `MusicGetCurrentTrack` 0x6BAEA0 | the current name when state 1 / 2 (the director polls it) |
 | `MusicStartFadeOut` 0x6BAFA0 / `MusicStartFadeIn` 0x6BAFE0 | fade mode 2 / 1, step 1/60 |
-| `SequenceThreadProc` 0x6BBCB0, `SequenceRestart` 0x6BBB80 | an XMIDI sequence player (`+0x1cc..+0x22c`, `AIL_*_sequence`) with the same marker registry; no caller starts a sequence in the code read [?] |
+| `SequenceThreadProc` 0x6BBCB0, `SequenceRestart` 0x6BBB80 | an XMIDI sequence player (`+0x1cc..+0x22c`, `AIL_*_sequence`) with the same marker registry. **Dead** [V]: the thread procs are entered through two undefined 3-instruction trampolines
+(`mov ecx,[esp+4]; call; xor eax,eax; ret`): 0x6B6A10 -> `MusicThreadProc` (pushed by `CSoundManager::Open` at 0x6B6B71) and
+0x6B6A20 -> `SequenceThreadProc`; a byte search of the whole file finds no pointer to 0x6B6A20 nor to `SequenceStart` 0x6BBC70,
+so no XMIDI sequence ever plays |
 
 `CMusicSystem` (vt_CMusicSystem, a CBaseObject created with the world; `Init` 0x6B4710 reads `<g_0x7AF45C>music.reg`: `[Common]
 Credits / MainMenu`, then per zone section two `MusicZoneRecord`s (0x38: name, dungeon flag, Briefing, Constructor, CalmOpen or
