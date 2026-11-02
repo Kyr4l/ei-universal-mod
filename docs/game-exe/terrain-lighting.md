@@ -263,7 +263,9 @@ and / or a y step (`z += |nz/ny|`); sector borders cross through `GetSector(.., 
 unloaded or outside sector ends the ray as lit); the vertex is shadowed as soon as the ray's z is below a walked vertex's z
 (the compare is on the float bits as unsigned: heights below 0 mis-order); lit after `max(A, B)` (<= 95) steps; a sun with
 `D.z >= 0` shadows everything. Both slopes can be added in one iteration, so on diagonal suns the ray rises up to twice as fast
-as the geometry says (shadows about half as long) [V, as decompiled]. Casters: the ground vertex heights only; receivers: ground
+as the geometry says (a one-cell diagonal step should add `nz/nx` once; shadows come out about half as long) [V, machine code
+2026-11-03: after the x step 0x6C941B.. the code falls into the y-step test at 0x6C9473; only an x step that crosses a sector skips
+the y test for that iteration]. Moot in retail: the flag is never set (see above). Casters: the ground vertex heights only; receivers: ground
 vertices only; the water layer never traces. What um-engine's `SunShadows` (docs/shadows.md) replaces is this plus the caster
 bitmaps of `receivers.md`; the terrain still computes `rec.+0x37` and draws it, the GPU pass darkens on top.
 
@@ -548,7 +550,7 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
   0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); nothing reads them, so the block is skipped data
   (the game only needs its size, in `GetMipOffset`). No file seen has one.
 * The sun object's `+0x24` in the under-water sun attenuation (4.2): [live] (expected 0; live-checklist.tsv).
-* `TraceSunRay`'s double slope on diagonal suns is "as decompiled": [live] (shadow length comparison; live-checklist.tsv).
+* ~~`TraceSunRay`'s double slope~~ settled from the machine code (4.3), 2026-11-03; retail never runs the trace.
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
 * Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass: [live] (live-checklist.tsv).
 * ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. The second colour array (+0x148, "specular") beyond the per-hour colours stays open.

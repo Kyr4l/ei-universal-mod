@@ -341,7 +341,7 @@ Per page, the open items that matter most for the mod work:
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
   which objects load the alternate node tracks is a live check. (`LoadFigFile2` and `BuildFigureMeshB / C` read 2026-11-03: copies
   of the two mesh builders.)
-- terrain-lighting.md: `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; which periodic water change the 0.8 s
+- terrain-lighting.md: which periodic water change the 0.8 s
   stripes are (test with `EnableWaterWaves = 0`); the water pass blend mode (inherited from `RenderObjects`: a live check). (The
   MMP extra block is never read; the sky figure is nask0sky.fig: settled.)
 - ui-framework.md: `CamCtlClassic` / `CamCtlSimple` are dead; several static-init globals are unexplained. (`InitQuadUV`, the
