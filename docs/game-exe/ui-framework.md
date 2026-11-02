@@ -491,8 +491,12 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
   derived; then every uv gets the half-texel inset (+1/512, -1/512).
 - `InitBorderStrips`: the 3rd / 4th strips are read as left / right by symmetry (only the first two vertex blocks were
   decoded) [I].
-- The console handler bodies (0x5DD920..0x5E0A10) are undefined code in this listing; their argument syntax is from strings.
-  Settling it needs Ghidra to define them as functions (next Ghidra chain, `gh.sh define`), not a re-read.
+- ~~Console handler bodies~~ settled [V] (2026-11-03): the 21 handlers 0x5DD920..0x5E0A10 are now Ghidra functions, named
+  `Console_*` in functions.tsv (`Console_DebugInfo`, `Console_Console`, `Console_History`, `Console_LogMask`, `Console_Show`,
+  `Console_LoadVar`, `Console_LastFps`, `Console_Join`, `Console_Host`, `Console_MemUsage_Nop` (empty in this build),
+  `Console_LootAll`, `Console_Help`, `Console_Net`, `Console_Disconnect`, `Console_Days` (a date easter egg), `Console_PartyResend`,
+  `Console_Kick` / `Console_Ban` (the top screen's slot 38 with 1 / 2), `Console_FpsBar`, `Console_Rate`, `Console_LocalRate`);
+  the argument syntax above matches their bodies.
 - `CamCtlClassic` and `CamCtlSimple`: no creator, their vtables are referenced only by their own methods [V]: dead code, the
   live game uses only `CamCtlFree` [untestable: no path reaches them].
 - ~~GetGroundPoint / ShowPart / ItemLink::Clone fall-throughs~~ settled [V] (2026-11-03): the typed re-exports have proper returns
