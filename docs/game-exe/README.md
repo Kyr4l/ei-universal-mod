@@ -324,10 +324,11 @@ Conventions shared by all pages:
 842 functions (182 KB; 552 / 152 KB in the game code below 0x6E0000, 290 / 30 KB in the libraries) can never run: no absolute
 pointer to them exists anywhere in the file and every call to them comes from other dead code (`_cpr/claude-re/full/tools/
 dead_closure.py`, 2026-11-03, from Ghidra's call graph; a call site outside a known function keeps its target alive, so the list
-errs on the safe side). The big blocks: the 3ds model importer (`Scene3ds_*`, `Chunk3ds_*`), the ini settings reader / writer
-(`AppSettings::ReadFromIni / WriteToIni`; the game uses the registry), the script decompiler (`GSWorld::Decompile`,
-`Decompiler_*`), the AI stimulus system (`PerceiveFootsteps`, `PerceiveStimuli`), oriented-box intersection tests, several terrain
-ray / quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip them.
+errs on the safe side). The biggest: the second 3ds entry point `Scene3ds_BuildFigures` and 9 `Chunk3ds_*` readers (the rest
+of the 3ds importer is live: `CFakeUnit::LoadModelFromScene` loads the `scenes\` models with it), the ini settings reader /
+writer (`AppSettings::ReadFromIni / WriteToIni`; the game uses the registry), `GSWorld::Decompile` and one `Decompiler_*` writer,
+the AI stimulus entry points (`PerceiveFootsteps`, `PerceiveStimuli`), the oriented-box intersection tests, 17 `CTerrain` ray /
+quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip them.
 
 ## Known gaps
 
