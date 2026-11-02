@@ -1046,7 +1046,7 @@ ItemMaterial			0x14	float	weightFactor	Weight (tag 5): multiplies the proto weig
 ItemMaterial			0x18	float	manaAdd	Mana (tag 6): added to the proto mana
 ItemMaterial			0x1c	int	slotsAdd	Slots (tag 7): added to the proto complexity
 ItemMaterial			0x20	float	durabilityFactor	Durability (tag 8): multiplies the proto durability
-ItemMaterial			0x24	int	skill	Skill (tag 9) [?] not read in this round
+ItemMaterial			0x24	int	skill	Skill (tag 9): serialized and copied only, no gameplay reader [V]
 ItemMaterial			0x28	float	damageFactor	Damage (tag 10): multiplies D.Min / D.Max of weapons
 ItemMaterial			0x2c	float[7]	absorb	Absorption (tag 11): multiplies the armor values per damage type
 ItemMaterial			0x48	uint	flags	tag 12 (Unk12): ORed into the armor flags +0x8c / +0xb0

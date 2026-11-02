@@ -486,7 +486,7 @@ Attack table: non-heroes with a natural weapon (`+0x28c != 0x10`) get `{0 weapon
 `Spell_GetAiCategory` 0x5CEDC0 (spell class = proto +0x18 >> 16): 1 direct attack (0..2, 0x28, 0x29), 2 area (3..5), 3 area needing a fighting caster (6..8), 4 buff
 on others (0x19, 0x1e, 0x20) -> attack table; 5 (9..0xb, 0x1a, 0x1d), 6 (0xc..0x11, 0x1f, 0x21) buffs and 7 heal (0x18) -> support table; 8 = unusable.
 **Heroes get only the weapon entry**: the AI never casts for a player's hero. `AiSpellInfo_GetLevel` rates entries (weapon max damage, x 1.3 for attack spells,
-1 buffs, 10 heal); the table maximum sits at brain +0xcc [?] its reader was not found.
+1 buffs, 10 heal); the table maximum sits at brain +0xcc (`AiSpellInfos +0x28 maxLevel`): written by `AiSpellInfos_Build`, saved by `Brain::Write` / `Read`, read by nothing else [V, 2026-11-03]: a dead value.
 
 ### 7.2 The score (`AiSpellInfo_Score` 0x5CF9A0; `sum` = the positive parts of `damage - target absorption (CUnitServer +0x8e4)`, `n` = candidates - 1) [V]
 | kind | score |

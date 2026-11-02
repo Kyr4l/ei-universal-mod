@@ -89,7 +89,7 @@ scripts use codes). Field tags = the `FLD` numbers of the xlsx dump (`resources/
 | +0x3C | actions | Actions | cast time `CSpell +0x4C` |
 | +0x40 | req.trace | Req.Trace | 1 = line of sight (`ComputeCastTarget`) |
 | +0x44 | complex | Complex | required magic skill `CSpell +0x50` |
-| +0x48 / +0x54 | vector<dword> | Build-in Mods / Special Mods | item constructor only [?] |
+| +0x48 / +0x54 | vector<dword> | Build-in Mods / Special Mods | serialized only; +0x54 also feeds the camp spell-constructor preview (section 9) [V] |
 | +0x60 | TTI | TTI | not read by the spell code |
 | +0x64..+0x6C, +0x70, +0x74 | light rgb, light radius, fadeout | L:Red.. Fadeout Time | the point lights of the effects; drift = radius / max(fadeout, 1) |
 | +0x78 | 5 bytes r/t/a/e/d | Range/Targets/Area/Effect/Dur. Mod | which rune kinds the blueprint accepts |
@@ -176,7 +176,7 @@ other letters always pass; `Finalize` after each) -> `EndConstructSpell` 0x68425
 copy: `CSpellManager::CreateSpellById(id)` 0x688EC0 allocates a `CSpell`, and for a non-zero low id looks the container's registry up
 (`+0xBC` hash keyed by `id & 0xFFFF0000` -> sub-table keyed by `id & 0xFFFF`, "Can't find spell sequence to create child"). The manager
 tracks `+0xD0` the largest high id and per sub-table `+0x14` the largest low id [V]; how the fresh sequence number is chosen for a new
-construction was not followed (`FillFromId` passes the container's own id) [?].
+construction: `CSpellManager` never generates one; a copy keeps its source id (section 9) [V].
 
 ### 3.3 Where spells live
 

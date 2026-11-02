@@ -84,7 +84,7 @@ block: tag 1 Materials -> vector `+0` (map `+0xc`), 2 Weapons `+0x20` (map `+0x2
 | +0x18 | 6 | Mana | mana += this |
 | +0x1c | 7 | Slots | slots (complexity) += this |
 | +0x20 | 8 | Durability | durability factor |
-| +0x24 | 9 | Skill | not read in this round [?] |
+| +0x24 | 9 | Skill | serialized and copied only (`ItemMaterial::SerializeFields` 0x69F620, `CopyCtor` 0x6A9E40); no gameplay reader, typed or by table offset [V, 2026-11-03] |
 | +0x28 | 10 | Damage | damage factor (weapons) |
 | +0x2c | 11 | Absorption[7] | armor factor per damage type |
 | +0x48 | 12 | Unk12 | ORed into the armor flags `+0x8c` / `+0xb0` |
