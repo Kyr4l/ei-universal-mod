@@ -339,8 +339,8 @@ Per page, the open items that matter most for the mod work:
 - items.md: nothing open (the proto runtime `CStringArray`s are never filled). Dead / unread: `CItemWeapon +0x4C`,
   the material Skill column, several proto byte fields, `CInventory`.
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
-  the bodies of `BuildFigureMeshB / C` were not read (`LoadFigFile2` is a live path; which objects load the alternate node tracks
-  is a live check).
+  which objects load the alternate node tracks is a live check. (`LoadFigFile2` and `BuildFigureMeshB / C` read 2026-11-03: copies
+  of the two mesh builders.)
 - terrain-lighting.md: `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; which periodic water change the 0.8 s
   stripes are (test with `EnableWaterWaves = 0`); the water pass blend mode (inherited from `RenderObjects`: a live check). (The
   MMP extra block is never read; the sky figure is nask0sky.fig: settled.)

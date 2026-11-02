@@ -390,7 +390,12 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   `CFigureClientSpecific +0x30..+0x38` are written only by `Init` 0x5A70E0 and read nowhere (class methods and raw `+0x30`
   accesses through `CFigure +0x94` checked): dead [I].
 - ~~CStateBlockSet slot 6~~ settled [V]: `GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 copy the records OUT of the registry (getters; guess sweep 2026-11-01).
-- `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3); their bodies are left for the deep-read step (FINISH-PLAN T5).
+- `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3). Deep read 2026-11-03 [V]: `LoadFigFile2(scene,
+  archive or 0, name, s, d, h)` opens `<prefix><name>.fig` from the given archive, or searches every archive of `+archives` when none is
+  given; a file starting with the bytes `FIG` (`& 0xFFFFFF == 0x474946`) goes to `BuildFigureMeshB` = the FIG8 eight-corner trilinear
+  blend of `BuildFigureMesh` 0x4F7F00 (3.3), anything else to `BuildFigureMeshC` = the six-corner blend of `BuildFigureMeshOld`
+  0x4F87D0. Both write into the scene entry of that name (`CRenderScene::FindOrCreateEntry`). They duplicate the two builders for
+  this second entry point; no new format.
 - The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.
 - ~~CMapObject +0x178 / +0x1A8~~ settled [V]: `+0x178` is the **animation playback rate** (`animRate`):
   `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
