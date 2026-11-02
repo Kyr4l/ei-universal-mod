@@ -488,7 +488,7 @@ extents, +0x18 growth per tick, +0x1C ttl (short), +0x20 `std::string` texture n
 | angle +0x44 | random, spins by +0x8C = pi/180 * 30 / ttl per tick | the unit's direction | parameter |
 | growth | `(sizeMax - size0) / growTicks`, growTicks +0x90 = min(ttl/2, 45); the mesh is rebuilt every tick while growing (`CBloodPrint::Update` 0x6CFA20) | 0 | 0 |
 | colour +0x54 | the light colour of the moment (world +0x6CC) | 0xFFFFFFFF | 0xFFFFFFFF |
-| creator | `CWorldClient::AddTerrainPrint` 0x56CE90 (gate `EnableBloodprints` g_0x79BD50), list +0x1B8 | `AddTerrainPrint2` 0x56D150 (`EnableFootprints` g_0x79BD4C), +0x1BC | `AddTerrainPrint3` 0x56D4C0 (`EnableFireprints` g_0x79BD54), +0x1C0 |
+| creator | `CWorldClient::AddBloodPrint` 0x56CE90 (gate `EnableBloodprints` g_0x79BD50), list +0x1B8 | `CWorldClient::AddFootPrint` 0x56D150 (`EnableFootprints` g_0x79BD4C), +0x1BC | `CWorldClient::AddScorchPrint` 0x56D4C0 (`EnableFireprints` g_0x79BD54), +0x1C0 |
 
 `CPrintDecal::Update` 0x6CECD0 (footprints, scorch): `ttl--`, extents += growth, `opacity = (1 - clamp01((life0 - ttl) / life0)) *
 maxOpacity`; a ttl <= 0 lets `CWorldClient::Update` delete the print. Every print takes `CTerrain::GetEdgeFadeAlpha` at creation.

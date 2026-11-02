@@ -48,7 +48,7 @@ Addresses are VAs; offsets are bytes. "tick" = the server world tick `CWorldServ
 | weapon kinds (`CItemWeapon::GetDamageKind` 0x6A07F0 = weapon proto +0xC) | 0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow, 8 natural/unarmed [I]; the attack kind mask `1 << kind` selects the animation set |
 | random | ISAAC words `g_0x7A9D48[g_0x7A9D44]` (`rand % n`); the hero damage/accuracy use CRT `rand()` |
 | difficulty | `g_0x79BEC0` indexes two float tables: 0x7C54A0[] scales the armor of non-player targets, 0x7C54AC[] scales the natural attack skill of monsters (both 1.0 at static init) [V] |
-| stats constants (`AiParams_Init` 0x5CDFB0) | 0x7C5454/68 = 25, 0x7C5458/6C = 30, 0x7C545C/70 = 50, 0x7C5460/74 = 1.1, 0x7C5464/78 = 1.61, 0x7C5488 = 200, 0x7C548C = 1.61, 0x7C543C/40/4C = 0.5, 0x7C5448 = 0.33, 0x7C549C = 0.3, 0x7C5438 = 100 (turn mult), 0x7C5430 = 3.0 (backstab base) [V]; a config may override them at run time [?] |
+| stats constants (`AiInfo_StaticInit` 0x5CDFB0) | 0x7C5454/68 = 25, 0x7C5458/6C = 30, 0x7C545C/70 = 50, 0x7C5460/74 = 1.1, 0x7C5464/78 = 1.61, 0x7C5488 = 200, 0x7C548C = 1.61, 0x7C543C/40/4C = 0.5, 0x7C5448 = 0.33, 0x7C549C = 0.3, 0x7C5438 = 100 (turn mult), 0x7C5430 = 3.0 (backstab base) [V]; a config may override them at run time [?] |
 
 ## 2. The server unit tick
 
@@ -105,9 +105,9 @@ otherwise (monsters keep it); run wanted (`+0x175 bit 1`) when the order's run b
 stop, the transition clip (`BuildTransitionAnim` 0x5516D0) plays in state 3 and the current order is pushed back to the queue; returns 1 while
 the transition runs. `UpdateStance` 0x548520 (from `BeginMoveTo`) turns running on when wanted, standing, on walkable ground and not
 crippled/overloaded (`UnitStats_EffectLevel` 0x5241C0: 1 = leg ratio < 0.5, 2 = carried > carry max -> messages 0x14/0x15), writes
-`+0x264 = 3` and sets `+0x146` (the path is re-planned). A player's stance message (`CPlayerServer::OnMsg_AttackMode` 0x6709D0 ->
+`+0x264 = 3` and sets `+0x146` (the path is re-planned). A player's stance message (`CPlayerServer::OnMsg35_SetStance` 0x6709D0 ->
 `RequestStance` 0x555270, was "SetAttackMode"): `StanceAllowedHere` 0x54A5A0, run refused when `EffectLevel(1) != 0`, message 9 on success.
-Speeds per stance: `CUnit::GetSpeeds` 0x52F920 (pathfinding.md 5.3); `UpdateSpeedFactors` 0x5536B0 (slot 45) derives the AI factors:
+Speeds per stance: `CUnit::GetSpeeds` 0x52F920 (pathfinding.md 5.3); `CUnitServer::UpdatePerceptionFactors` 0x5536B0 (slot 45) derives the AI factors:
 noise `+0x8F8` (crawl 0.4, sneak 0.2, walk 1, run x2; 0 when standing), visibility `+0x900` (0.5 crawl, 0.75 sneak, x1.5 while casting a
 non-silent spell), night visibility `+0x904 = world+0x88 * ((1-night) + night * nightSight%)`, grid refresh mask `+0x914` by speed.
 
@@ -130,15 +130,15 @@ Entry points (all write the queued slot, then `ValidateQueuedOrder` 0x54E600 for
 
 | function | caller | queued |
 |---|---|---|
-| `QueueOrderMoveTo` 0x554740 / `QueueOrderMoveTo2` 0x5546B0 | AI, `WorldServer::OrderMoveTo` 0x5D39E0 (click), script `Order_MoveTo` | 1 / 2 (pathfinding.md) |
-| `QueueOrderAttack` 0x554B30 (target, location, run, msg) | `WorldServer::OrderOnTarget` 0x5D3C30 <- `WorldServer::OnAttackOrder` 0x670190 (the player's click: unit ids, target id, location); `Brain::OrderAttack` 0x5D7B50 / `OrderAttackChecked` 0x5D7C60, `Brain::SelectCombatTarget` 0x5CFE40, `AiLogicPlayer::Regroup` 0x5D4170 | 3; a dead body part -> 6; melee on a unit of size >= 1.5 (`proto +0x24 + z`) without a bow -> message 0xC and refused |
-| `QueueCastAt` 0x554D00 / `QueueCastOn` 0x554F50 (spell id, pos / target, run) | `CPlayerServer::OnMsg_CastAt` 0x6708D0 / `OnMsg_CastOn` 0x670820 -> `AiLogicPlayer::CastAt/CastOn` 0x5D3D90/0x5D3D20; `Brain::OrderCastAt` 0x5D7DA0, `Brain::ApplyCastOrder` 0x5CF170, `AiLogicAggression::Update` | 4 / 5; subtype-8 quick items (scrolls) are cast immediately; player units need `MagicSkill(school) >= spell +0x50` (message 0x13) and no flag 0x10000000 (silenced); validated with message 3 when affordable |
+| `QueueOrderMoveTo` 0x554740 / `CUnitServer::QueueOrderDirectMove` 0x5546B0 | AI, `AiLogicPlayer::MoveToNow` 0x5D39E0 (click), script `Order_MoveTo` | 1 / 2 (pathfinding.md) |
+| `QueueOrderAttack` 0x554B30 (target, location, run, msg) | `AiLogicPlayer::AttackTarget` 0x5D3C30 <- `CPlayerServer::OnMsg31_Attack` 0x670190 (the player's click: unit ids, target id, location); `Brain::OrderAttack` 0x5D7B50 / `OrderAttackChecked` 0x5D7C60, `Brain::CastSupportSpell` 0x5CFE40, `AiLogicPlayer::Regroup` 0x5D4170 | 3; a dead body part -> 6; melee on a unit of size >= 1.5 (`proto +0x24 + z`) without a bow -> message 0xC and refused |
+| `QueueCastAt` 0x554D00 / `QueueCastOn` 0x554F50 (spell id, pos / target, run) | `CPlayerServer::OnMsg32_CastAt` 0x6708D0 / `CPlayerServer::OnMsg33_CastOn` 0x670820 -> `AiLogicPlayer::CastAt/CastOn` 0x5D3D90/0x5D3D20; `Brain::OrderCastAt` 0x5D7DA0, `Brain::ApplyCastOrder` 0x5CF170, `AiLogicAggression::Update` | 4 / 5; subtype-8 quick items (scrolls) are cast immediately; player units need `MagicSkill(school) >= spell +0x50` (message 0x13) and no flag 0x10000000 (silenced); validated with message 3 when affordable |
 | `QueueOrderInteract` 0x5553B0 / `Interact2` 0x555480 / `UseOn` 0x555570 / `Talk` 0x555630 | `Brain::OrderInteract` 0x5D7CE0 | 6 with param 1 / 2 / 0 (+0x1C = param) / 0x18A95 |
 | `QueueScriptOrder` 0x555700 (clip name) | `SSCScript::Run`, dialog scenes | 7 (8 when the clip entry's +0x14 bit 31 = loop), +0x1C = clip index |
 | `QueueOrderSit` 0x555200 (was KindB) | script, `Brain::TickMoveOrder` | 11 |
 | `QueueOrderUseQuickItem` 0x5557E0 (was KindA) | (no caller found) | 10 |
 | `ClearQueuedOrder` 0x555180 | everywhere an order ends | 0 (stand) unless a script animation is queued |
-| `RequestWeapon` 0x5552E0 (was SetOwnerField270) | `CPlayerServer::OnMsg_UnitByte` 0x670960 | `CUnit +0x270`; TickState switches via vt[25] `SelectWeapon` 0x553610 (needs durability `+0x20` > 0; `DropOtherWeapons` 0x5528F0 unlinks the other weapon items) |
+| `RequestWeapon` 0x5552E0 (was SetOwnerField270) | `CPlayerServer::OnMsg34_SelectWeapon` 0x670960 | `CUnit +0x270`; TickState switches via vt[25] `SelectWeapon` 0x553610 (needs durability `+0x20` > 0; `CUnitServer::RebuildEquipmentLists` 0x5528F0 unlinks the other weapon items) |
 
 `DispatchQueuedOrder` 0x54A900 [V]: nothing queued -> 0. Sitting (stance 4) and not kind 11 -> stand up first. The run byte with a
 non-walking stance and no reachable combat target -> wanted stance 2. Then by kind: **0** `RebuildMoveAnims` idle set, `StopMove`, state 2;
@@ -228,7 +228,7 @@ with `-2*dist/10` for ranged weapons, mapped over a +-5 band around the defence:
 | 0..6 (+0) | weapon proto +0x98.. 7 factors | `stats +0x90` 7 factors (udb +0x50) | damage type distribution; a spell hit puts its element weights into [3..5] (1.0 = spell: `Hit_IsSpell` 0x522B80, no defender roll, death kind 7; the direction code is +0x30: spells.md) |
 | 7 (+0x1C) | `CItemWeapon +0x4C` | 0 | not read by the damage code |
 | 8 (+0x20) | random | `stats +0x74 * difficulty 0x7C54AC[]` | the roll; overwritten with +-INF by `ResolveHitChance`; a finite value = unresolved (spells are rolled in `TakeHit`) |
-| 9 (+0x24) | `proto +0x50 + rand * +0x54` (`ItemProto_RandomValue50` 0x6A2DE0) | `stats +0x84 + rand(0..+0x88)` | **damage**, then * strengthen/weaken |
+| 9 (+0x24) | `proto +0x50 + rand * +0x54` (`CItemWeapon::RollDamage` 0x6A2DE0) | `stats +0x84 + rand(0..+0x88)` | **damage**, then * strengthen/weaken |
 | 10 (+0x28) | 1.0 | 1.0 | armor factor (multiplies the armor subtracted) |
 | 11 (+0x2C) | hit location | | 0..5, 6 = whole body |
 | 12 (+0x30) | 0 | | direction code handed to `OnDamaged` |
@@ -264,7 +264,7 @@ ApplyDamage(part = +0x110 + loc*0xF4):   state < 2 -> nothing
 
 After damage passed (`ApplyHit != 0`): `CUnit +0x350 = death kind` (7 = no attacker / effect, else the weapon kind, natural kind of a unit,
 `typeId + 0x10` of an object), `Recompute2`, net 0/4, `OnDamaged(attacker, hit[12])` 0x553AC0 (was "OnKilledBy"): **still alive**
-(`specific vt[17] == 0`, HP >= 1): `TriggerArmorSpells(0)`, `AggroTable_Add` 0x455680, `UnitAI_OnAttackedBy` 0x5D7E90, alarm flag 0x80000 ->
+(`specific vt[17] == 0`, HP >= 1): `TriggerArmorSpells(0)`, `PlayerRelations::DeclareHostile` 0x455680, `UnitAI_OnAttackedBy` 0x5D7E90, alarm flag 0x80000 ->
 `PropagateAlarm`, `+0x160 = HitDirectionFlag` 0x5518F0 (front 0xC00000 / back 0x1000000 / sides 0x800000, 0x400000: the hit reaction
 `BuildHitDeathAnimQueue(dir, 0)` plays at the next TickState through `RestartIdleAnim`, interrupting the current clip and freezing the timers
 `+0x21`). **Dead**: attacker alertness 9 or player message 0x30; `WitnessMurder` 0x5538D0 on both known-unit lists; `ClearBuffs`; `SetDead(1)`
@@ -406,9 +406,9 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 
 ## 10. Corrections to earlier notes
 
-1. `docs/game-exe/flows.md` "Server unit tick": Think/TickState run for states {0,1,2,6}, not "0..2 / 8"; `FinishDying` 0x549690 is
-   `CancelAction` (aborts the current attack/cast), `StartAttacking` 0x548DE0 is `PlayOneShotAnim`, `StartCasting` is `PlayLoopAnim`,
-   `TickAttackAnim` is `TickAction`, `StartAttackAnim2` is `StartAction`, `OnKilledBy` 0x553AC0 is `OnDamaged` (runs on every damaging hit).
+1. `docs/game-exe/flows.md` "Server unit tick": Think/TickState run for states {0,1,2,6}, not "0..2 / 8"; `CUnitServer::CancelAction` 0x549690 is
+   `CancelAction` (aborts the current attack/cast), `CUnitServer::PlayOneShotAnim` 0x548DE0 is `PlayOneShotAnim`, `StartCasting` is `PlayLoopAnim`,
+   `TickAttackAnim` is `TickAction`, `StartAttackAnim2` is `StartAction`, `CUnitServer::OnDamaged` 0x553AC0 is `OnDamaged` (runs on every damaging hit).
 2. `full/structs.tsv` `CUnitServer +0x164`: "3 attacking 4 casting 5 strike" -> 3 one-shot animation, 4 looping animation, 5 action wind-up.
 3. `full/structs.tsv` `UnitStats +0x700 hpFraction` -> experience accumulator; `+0x2C moveSpeedBase` / `+0x30 actionPoints` -> action
    speed base / action speed (the attack period divisor); `+0x58/+0x5C crippleRatio` -> leg / arm factor; `+0x2F0 scale` -> torso HP fraction;
@@ -421,7 +421,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
    sub_523740 is always the derived `maxHP - part penalties`, so writing the HP directly is undone at the next recompute (edit the parts).
 6. `CUnitServer::SetAttackMode` (0x555270 / 0x546830) set the *stance* (`CUnit +0x268`), not an attack mode; the combat mode is the byte pair
    `+0x16C/+0x174`.
-7. `CUnit::InitIdFields` 0x52E0D0 writes the natural attack/defence skills into the attack-params array, not unit ids.
+7. `AttackParams_NaturalSkills` 0x52E0D0 writes the natural attack/defence skills into the attack-params array, not unit ids.
 
 ## 11. Function index
 

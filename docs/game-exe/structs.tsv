@@ -3627,7 +3627,6 @@ CSoundManager			0x864	pointer	cacheFree	free node chain of the cache list
 CSoundManager			0x868	pointer	cachePlex	CPlex block chain (List_FreeChain in the dtor)
 CSoundManager			0x86c	int	cacheBlock	10 nodes per block
 CSoundManager			0x89c	int	unk_0x89c	zeroed by InitFields between initialised +0x898 and reverbEnabled +0x8a0; no other reader or writer in the typed decompiles
-
 StrHash		0x14	0x0	pointer	vtable	name -> record hash (0x14: the hash tables of the data managers; IdHash is the 0x18 variant)
 StrHash			0x4	pointer	buckets	
 StrHash			0x8	int	bucketCount	

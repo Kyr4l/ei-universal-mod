@@ -82,7 +82,7 @@ The `z` of the order position is **not a height**: `QueueOrderMoveTo(pos, flag, 
 `orderPos[2]` as `BeginMoveTo(goal, speed)` and that parameter is `CAIMap::FindPath`'s `maxLength` (all callers use 1e6; `Brain::CanWalkBetween` uses 2 x distance,
 `FindRandomReachableSpot` 3 x distance + 10). It is stored in the mover at +0x68 (CUnitServer +0xA4). [V] (docs/game-memory.md calls it "z = 1000000 = ground".)
 
-Order kinds that move (CUnitServer +0x190 / queued +0x1B4): 1 = walk to a point; **2 = turn in place to face a direction** (`QueueOrderMoveTo2` 0x5546B0, pos = direction
+Order kinds that move (CUnitServer +0x190 / queued +0x1B4): 1 = walk to a point; **2 = turn in place to face a direction** (`CUnitServer::QueueOrderDirectMove` 0x5546B0, pos = direction
 vector, `+0x1D0` = turn speed; `DispatchQueuedOrder` case 2 -> `CMover::ResetWithTarget` = request kind 1; the old name "direct move" is wrong); 3..6 attack / cast /
 interact -> `ExecuteCombatOrder`, `ApproachTarget` 0x54D140 (chase, below); 7/8/10/11 animations, consumables, sit.
 
@@ -97,10 +97,10 @@ tables (`rows[y] -> first cell of row y`); each grid object is `{+0 data, +4 row
 | **terrain** | obj +0x2698, rows +0x269C | 9 bytes (below) | `Load` (height, water, material), `UpdatePassability` 0x5B8FA0 (nibbles), `SetBridgeCells` (height, bit 6), `TerrainStampApplier` 0x5B39D0/0x5B3A70 (byte +8) | everything: `PathFinder::StepCost` 0x5C1D50, `CanUnitStandAt` 0x5B80F0, `RateFootprintPath`, `IsCellWater`... |
 | **flags** | obj +0x26A8, rows +0x26AC | u32: bits 0-4 material index; bits 5-6 object flag; bit 7 (0x80) "chain in the sector"; bit 8 (0x100) empty; inline volume: bits 9-11 type, 12-21 zmax, 22-31 zmin; chained: bits 9-28 entry index | `Load` (material, 0x100 init), `AddCellObject` 0x5B61B0 / `RemoveCellObject` 0x5B6380 | `GetCellStepCost` 0x5B8BA0, `GetMaterialAt`, `HasObjectType3At` 0x5BBD10 |
 | **occupancy / scratch** | obj +0x26B8, rows +0x26BC | u8 | `UpdatePassability` (per-class cost nibble before erosion), `PathFinder::WriteOccupancy` 0x5C2A30 (direction codes 1..8 during a long search), `FindFreeCellNear` (reachability marks 1/2) | `ExtractOccupancyPath` 0x5B9A20, `ClearPassabilityClass` 0x5B89F0 (skips cells != 0) |
-| **obstacle (walking units)** | obj +0x1F4, rows +0x1F8 | u8 level | `ObstacleStampApplier` 0x5B3B20/0x5B3B90 (StampMap at +0x12A4) | `CanUnitStandAt`/`CanUnitMoveTo` (level 2), `StampUnitFootprint` 0x5B7EF0 |
+| **obstacle (walking units)** | obj +0x1F4, rows +0x1F8 | u8 level | `ObstacleStampApplier` 0x5B3B20/0x5B3B90 (StampMap at +0x12A4) | `CanUnitStandAt`/`CanUnitMoveTo` (level 2), `CAIMap::PromoteWalkersToStanding` 0x5B7EF0 |
 | **cell-object records** | +0x14C (floors/obstacles) and +0x1A0 (bridges); 24-byte records, 16 hash heads at +0x15C / +0x1B0 | `{x, y, zmin, zmax, type u8 @+0x10, flag u8 @+0x11, border u8 @+0x12, next @+0x14}` | `StampObject` 0x5B6A80, `CSpellEffect::UpdateVolumes` 0x67EFC0 (via `CollectCircleCells` 0x5B2760 / `CollectHalfCircleCells` 0x5B2A00, type 3) | `AddCellObjects` 0x5B65B0, `SetBridgeCells` 0x5B6740 |
 | **sector entry chains** | `CollisionMap +0x14` sectors (below) at CAIMap +0x138, 0x54 bytes each | entries of 8 bytes `{u16 zmax, u16 zmin, u8 type, u8 flag, i16 next}` in the sector's CArray (+0x44), free chain +0x3C | `NavSector::AllocObjectEntry` 0x5BFE70 / `UnlinkObjectEntry` 0x5BFFD0 | `GetCellStepCost` |
-| **bridge hash** | +0x10C (ScriptRefCacheHash, buckets) | key `x << 16 | y` -> saved original `{height, flags}` of a cell turned into a bridge | `SetBridgeCells`, `StampHash_TakeInto` 0x5B30B0 | `GetWalkHeightAt` 0x5BBA10, `ShortPairHash_Find` 0x5B3160 |
+| **bridge hash** | +0x10C (ScriptRefCacheHash, buckets) | key `x << 16 | y` -> saved original `{height, flags}` of a cell turned into a bridge | `SetBridgeCells`, `CAIMap::RestoreBridgeCell` 0x5B30B0 | `GetWalkHeightAt` 0x5BBA10, `CAIMap::BridgeHashFind` 0x5B3160 |
 | **NavGrid (AIGRAPH)** | +0x22F8, size 0x29C | see section 4.2 | `NavGrid_Read` 0x5B1180 from the `.mob` (and `NavGrid_Build` 0x5AFC70 on dynamic changes) | `NavGrid_FindPath` 0x5B0D90, `DominantRegion`, `IsCellInRegion` |
 | **StimulusMap** | +0x26C8 | | hearing / vision (module 0x5C8000) | not movement |
 
@@ -136,14 +136,14 @@ Called for a rectangle (+3 margin) after load and after every object change. For
    margin), the units are put back. `navGridOn` is `CWorldServer +0x172`; set after a zone/save is loaded, cleared during loading (`CWorldServer::BeginPaint/EndPaint` 0x595A90/0x595A70,
    misnamed: now `EndAIMapBatch` / `BeginAIMapBatch`, and neither has any reference in the exe: dead editor code [V]) and for the duration of `ApproachTarget` / `ValidateQueuedOrder`.
 
-The class an individual unit uses (`CUnitServer::v23_ComputeAnimSpeedClasses` 0x552FB0, [V]): size `S = CUnit::GetSize`, speed `s = proto[+0x120] * field14C`:
+The class an individual unit uses (`CUnitServer::ComputeMoveClasses` 0x552FB0, [V]): size `S = CUnit::GetSize`, speed `s = proto[+0x120] * field14C`:
 S <= 0.85: class 1 if s < 0.6, 2 if < 1.2, 3 if < 1.9, else 4; S <= 1.5: class 5 (s <= 1.7) or 6; S > 1.5: class 7. Stored `+0x248` (walk / run), `+0x24C`
 (crawl, uses 0.2 s) and `+0x24E` (sneak, 0.6 s); `UpdateMoveParams` 0x530570 copies the right one into `CUnit +0x324` by stance. Class 0 = flying / floating units (server
 `+0x240 == 2`, `+0x33F == 2`); they use the "class 0" slope table and treat water as ground.
 
 ### 3.3 The unit footprint stamps and the two levels [V]
 
-* `CollisionMap::AddUnit` 0x5C0DF0 / `RemoveUnit` 0x5C1010 / `MoveUnit` 0x5C11D0 (the map at CAIMap +0x124, global 0x7B01F4; sectors of 32 x 32 tiles, 0x54 bytes each, a unit list at
+* `CollisionMap::AddObjectAndStamp` 0x5C0DF0 / `CollisionMap::RemoveObjectAndUnstamp` 0x5C1010 / `CollisionMap::MoveObjectAndRestamp` 0x5C11D0 (the map at CAIMap +0x124, global 0x7B01F4; sectors of 32 x 32 tiles, 0x54 bytes each, a unit list at
   sector +0x20 and an object list at +4; the unit's tile is cached in `CUnit +0x1B8/+0x1BC`, flag 0x8000 in `CUnit +8`) call `CAIMap::StampObject` 0x5B6A80.
 * For a unit (type id 0x50) `StampObject` takes `FootprintStamp_GetCached(radius)` 0x5B8350 (cache keyed by radius rounded to 0.1; `FootprintStamp::Ctor` 0x5B3440:
   16 x 16 bytes, value `max(0, round((r + 2 - dist/2) * 16))`, `dist` in tiles from the centre tile (8, 8)) and `StampMap::AddStamp` 0x5B36B0 / `RemoveOwner` 0x5B3890 it at `tile - 8`.
@@ -159,7 +159,7 @@ S <= 0.85: class 1 if s < 0.6, 2 if < 1.2, 3 if < 1.9, else 4; S <= 1.5: class 5
   target so a group does not block itself.
 * `PathFinder::SaveFreeRadius` 0x5C33F0 / `WriteFreeRadius` 0x5C3530 clear the byte +8 of the window for nav-level work (so nav connectivity ignores units) and restore it.
 * Static objects do **not** use stamps: they become volumes (`cell-object records`) via `StampObject`: each body part (`OBJ_BODYPARTS`; part flags: bits 3-5 type, 6-9 flag, 0x400 bridge,
-  0x800 skip) box faces are sampled ~3 per tile and merged per tile (`AddUnitStamp` 0x5B2D10 keeps the highest top sample, `AddObjectStamp` 0x5B2E10 the lowest bottom/side sample);
+  0x800 skip) box faces are sampled ~3 per tile and merged per tile (`CellObjectRecords::AddTopSample` 0x5B2D10 keeps the highest top sample, `CellObjectRecords::AddBottomSample` 0x5B2E10 the lowest bottom/side sample);
   `BASE` parts are floors (tile height raised, material ROAD, bit 6 set via `SetBridgeCells`), `CROWN` ignored. Exact rules: aigraph.md "Objects".
 
 ### 3.4 Dynamic changes
@@ -217,7 +217,7 @@ alternates `ExpandCurrent` on both until the current node of one is closed by th
 3. same tile as the unit -> one-cell path (flag 0x200; only if the unit can stand there and its nibble != 0). Octile distance `|dx - dy| + 1.414 * min < 25` tiles and both `PathFinder::BeginForUnit` succeed -> `MeetLocalSearches` 0x5B9690 (forward from the unit, backward from the goal,
    alternate `Expand` until one's current node is reached by the other; extract, reverse, join, de-duplicate).
 4. otherwise (or on a miss) `FindFreeCellNear(checkRegion = 1)` again, then `FindLongPath` 0x5B9C90 with `allowRetry = (mover.+0x6E || mover.+0x6F)` (AI units, or the first request after a reset).
-5. `ChooseExitDirection` 0x5C46C0 (see 4.5) with the unit's facing direction (8 directions); `StepAlongPath` 0x5BB190; `CollisionMap::AddUnit(self)`; on failure mover `+0x6D = 1`; `+0x6F = 0`.
+5. `CAIMap::SmoothPathStart` 0x5C46C0 (see 4.5) with the unit's facing direction (8 directions); `CAIMap::DeliverPathChunk` 0x5BB190; `CollisionMap::AddUnit(self)`; on failure mover `+0x6D = 1`; `+0x6F = 0`.
 
 ### 4.4 `FindLongPath` 0x5B9C90 [V]
 
@@ -230,11 +230,11 @@ blocked list (`+0x70..`) and the whole function recurses (a unit-blocked corrido
 
 ### 4.5 Start smoothing, chunking, speeds
 
-* `ChooseExitDirection` 0x5C46C0 (for paths of >= 3 cells): re-plans the first cells with a heading penalty (each 45 deg beyond the first costs 600, diagonal moves get `(1 - straightness) * 2048`) over the tables built by
+* `CAIMap::SmoothPathStart` 0x5C46C0 (for paths of >= 3 cells): re-plans the first cells with a heading penalty (each 45 deg beyond the first costs 600, diagonal moves get `(1 - straightness) * 2048`) over the tables built by
   `NavPortalTables_Build` 0x5C42B0 / `NavGraph::RelaxPortal` 0x5C45D0, and replaces the leading cells when cheaper. [V that it exists and what it feeds; the portal tables' exact meaning is only partly decoded [?]]
-* `StepAlongPath` 0x5BB190: `MoveRequest::Clear`, `SetRect(unit pos, facing, tick - 1)`, moves **up to 32 cells** (`0x20`) from the pending list (`CMover +0x3C`) into the request's list (`+0x20`). All delivered ->
+* `CAIMap::DeliverPathChunk` 0x5BB190: `MoveRequest::Clear`, `SetRect(unit pos, facing, tick - 1)`, moves **up to 32 cells** (`0x20`) from the pending list (`CMover +0x3C`) into the request's list (`+0x20`). All delivered ->
   `flags[0] (+0x6C) = 1` and the request target is the exact snapped goal; else `flags[0] = 0`, the last cell is pushed back to the front of the pending list (so the next chunk starts there) and the request target is that cell's centre.
-  Then `RateFootprintPath` 0x5BA400 stamps each cell node: `+0xC` = speed factor `= (table94[nibble(next)] << 9) / slope(h(next) - h(cur))` (512 = 1.0; 0x200 if the slope is blocked), `+0xE` = bit0 water (`terrain +6 bit 7`),
+  Then `CAIMap::RatePathCellSpeeds` 0x5BA400 stamps each cell node: `+0xC` = speed factor `= (table94[nibble(next)] << 9) / slope(h(next) - h(cur))` (512 = 1.0; 0x200 if the slope is blocked), `+0xE` = bit0 water (`terrain +6 bit 7`),
   bit1 "very costly" (step cost > 12000).
 * `ContinueMove` 0x5BB900 (called when a chunk ran out): `+0x6D` set and nothing pending -> `FindPath` again from the unit to the stored goal (`+0x60`, length 1e6); else `StepAlongPath`.
   Returns "more path was expected"; 0 -> the unit stops.
@@ -260,11 +260,11 @@ Three objects, all called "CMover/Mover" in functions.tsv (the old struct merged
 | +0x14 / +0x18 / +0x1C | kind 1: target angle (f32), turn speed (f32, 0 = unit default); kind 2: goal x, y (f32, tile units; the chunk end); kind 3: target unit id, end-of-track tick(s) (`+0x18`, `+0x1C` are ticks); kind 4: angle, speed, time |
 | +0x20..+0x38 | cell list (vtable 0x73EDB0): head +0x24, tail +0x28, count +0x2C, free +0x30, plex +0x34, block size +0x38 (0x80); node 0x10 `{next, prev, i16 x, i16 y, i16 speedFactor, i16 flags}` |
 
-`SetRect` 0x5C7B00 = kind 0 (stand at pos with heading and tick; returns whether anything changed), `SetTurnTo` 0x5C7C00 kind 1, `0x5C7C70` kind 2 target, `0x5C7C20` kind 3 (`ResetWithTarget2`, used by `StartAttackAnim2` to face a target),
-`SetTurnToTimed` 0x5C7C40 kind 4, `Clear` 0x5C7D50, `ClearTargetIf(id)` 0x5C7C90 (kind 3 with that id -> -1; called before every curve rebuild with the unit's own id), `ShiftIds` 0x5C7CB0 (adds a delta to the start tick and, for kind 3,
+`MoveRequest::SetStand` 0x5C7B00 = kind 0 (stand at pos with heading and tick; returns whether anything changed), `SetTurnTo` 0x5C7C00 kind 1, `0x5C7C70` kind 2 target, `0x5C7C20` kind 3 (`ResetWithTarget2`, used by `StartAttackAnim2` to face a target),
+`SetTurnToTimed` 0x5C7C40 kind 4, `Clear` 0x5C7D50, `ClearTargetIf(id)` 0x5C7C90 (kind 3 with that id -> -1; called before every curve rebuild with the unit's own id), `MoveRequest::ShiftTimes` 0x5C7CB0 (adds a delta to the start tick and, for kind 3,
 the two end ticks; the client applies -1 when `CUnit +0x260 == 1` [?]).
 
-**Wire format** (`MoveState_WriteNet` 0x5C7DB0 / `ReadUnitOrder` 0x5C7FC0, net section 10 of the unit; `CUnit::WriteNetState` 0x52EC70 / `ReadNetState` 0x52EF90): u8 kind, u8 count high, u8 count low, Vec2 (+4) quantised
+**Wire format** (`MoveState_WriteNet` 0x5C7DB0 / `MoveRequest::ReadNet` 0x5C7FC0, net section 10 of the unit; `CUnit::WriteNetState` 0x52EC70 / `ReadNetState` 0x52EF90): u8 kind, u8 count high, u8 count low, Vec2 (+4) quantised
 (`Q64`: 16 bit each, step 1/60.2), heading as 16-bit range -pi..pi, then +0x10, +0x14, +0x18, +0x1C as raw dwords, then per cell one u16 `bits 0-1 = x code (0: x-1, 1: same, 2: x+1, 3: explicit i16 follows), bits 2-3 = y code the same,
 bits 4-5 = flags & 3, bits 6-15 = speedFactor clamped to 0x3FF` plus the explicit shorts. The stream is delta-coded against the previous state (DeltaCodec). A section-10 read does `ReadUnitOrder`, `ClearTargetIf(own id)`,
 `GetSpeeds` -> `CUnit +0x2B8/+0x2BC`, `CMover::BuildPath` and `MarkNetDirty(10)` again (relay). Also message 0x0E (below).
@@ -274,7 +274,7 @@ bits 4-5 = flags & 3, bits 6-15 = speedFactor clamped to 0x3FF` plus the explici
 +0x3C pending cell list (vtable, head +0x40, tail +0x44, count +0x48, free +0x4C, plex +0x50, block +0x54), **+0x58/+0x5C snapped goal** (tile units, f32), **+0x60/+0x64 requested goal x, y (metres)**, **+0x68 max path length** (the order's z),
 flags **+0x6C "whole path delivered"**, **+0x6D "partial / no path: re-plan from the stored goal when the chunk ends"**, **+0x6E "AI unit" (no player)**, **+0x6F "first request after reset"**, +0x70 blocked nav-cell list (CArray of `{x, y}` pairs: vtable +0x70, data +0x74,
 count +0x78, cap +0x7C), +0x84 int. In CUnitServer terms: goal `+0x9C`, length `+0xA4`, delivered `+0xA8`, partial `+0xA9`, AI `+0xAA`. `Reset` 0x5B23A0, `ResetForUnit` 0x5B2190, `ResetWithTarget*` 0x5B1DE0 / 0x5B1F10 / 0x5B2050
-(reset + request kind 1 / 3 / 4), `ExportPath` 0x5B22C0 (request + all cells incl. pending, speed factors forced to 0x200, for the report message), `ReadState/WriteState` (save games).
+(reset + request kind 1 / 3 / 4), `CMover::ExportFullPath` 0x5B22C0 (request + all cells incl. pending, speed factors forced to 0x200, for the report message), `ReadState/WriteState` (save games).
 
 ### 5.3 `MoveCurve` (0xA4 at CUnit +0x27C) [V from `BuildPath` / `Evaluate` / `Predict`]
 
@@ -292,7 +292,7 @@ segment start / end time, +0xA0 cached segment index (`CUnit +0x31C`, -1 = none)
   `CopySegmentCells` 0x5C6750 copies the request cells' x / y into the segments.
 * initial turn: if the first segment's direction is within cos > 0.9 (~26 deg) of the heading the first direction is replaced by the heading and there is no turn, otherwise a turn in place by the wrapped angle precedes the path.
 
-`Evaluate` 0x5C6FC0 (t = ticks since `startTick`): before the turn ends -> heading only (`turning = 1`); otherwise find the segment (cached), `Curve_Init` 0x5C73B0 builds the cubic `p(s) = p0 + d0 s + a2 s^2 + a3 s^3` with
+`MoveCurve::EvalPath` 0x5C6FC0 (t = ticks since `startTick`): before the turn ends -> heading only (`turning = 1`); otherwise find the segment (cached), `MoveCurve::HermiteInit` 0x5C73B0 builds the cubic `p(s) = p0 + d0 s + a2 s^2 + a3 s^3` with
 `p(len) = p1`, `p'(len) = d1` (Hermite in **distance**, `s = (t - t0) * segmentSpeed`, `t0` accumulating `len / speed`), position = `(Poly3_Eval(X), Poly3_Eval(Y))`, direction = the derivative; returns the *next* segment's cell as "the
 cell being entered"; past the last segment: the end point, speed 0, cell = the last segment's. `Mover::Predict` 0x5C7430 switches on the request kind (kind 3: heading interpolated from the start heading to the target's bearing between
 start and end tick, or the bearing; position fixed) and clamps `t` to `startTick`. Speed units: tile units per tick (walk ~0.2 -> ~1.9 m/s at 18 ticks/s; docs/game-memory.md's "x 10 = m/s" is ~10 % high) [I].
@@ -310,14 +310,14 @@ start and end tick, or the bearing; position fixed) and clamps `t` to `startTick
    No blocker found (the stamps overlap but no unit is within the radii sum) -> move anyway.
 3. `state == 0`, standing on a type-3 tile (`HasObjectType3AtPos`, e.g. in a spell zone), not in attack mode and a counter `+0x4C < world +0x2804` [? meaning] -> re-path.
 4. Moved: `CollisionMap::MoveUnit` (restamp), yaw from `dir`, `CUnit +0x278 = (state == 0)` (re-registers the unit when it changes, `MarkNetDirty(7)`).
-5. **Re-path** (level 1): clear the pending cells, `CAIMap::FindPath(self, goal +0x9C, moveState, maxLen +0xA4)` (after `StampUnitFootprint` 0x5B7EF0 copies the obstacle grid 15 x 15 around us into the terrain level for the walking neighbours, removed again afterwards); failure -> `StopMove`, state 6 (`+0x145 = (partial flag == 1)`); success -> `CUnit::ResetMover` (new curve, replicated).
+5. **Re-path** (level 1): clear the pending cells, `CAIMap::FindPath(self, goal +0x9C, moveState, maxLen +0xA4)` (after `CAIMap::PromoteWalkersToStanding` 0x5B7EF0 copies the obstacle grid 15 x 15 around us into the terrain level for the walking neighbours, removed again afterwards); failure -> `StopMove`, state 6 (`+0x145 = (partial flag == 1)`); success -> `CUnit::ResetMover` (new curve, replicated).
 6. **Wait** (level 2): pause flag `+0x20` (`+0x21` for move type 2), the unit is re-registered as standing (`+0x278 = 0`, `MarkNetDirty(7)`). The next `TickAnimation` 0x546F30 sees the flag and calls `MoveRequest::ShiftTimes(+1)` (start tick and the kind-3 end ticks), the animation start ticks and `CUnit +0x258` + 1: time stands still for the unit, so the curve does **not** run ahead; `TickState` clears the flag at the start of the next tick [V].
 7. `ended` (curve finished its chunk): `flags[0]` set -> arrived: `CMover::Reset`, `SetRect(stand at current pos)`, `ResetMover`, `SetSide(0)`, state 6 (idle). Else `ContinueMove`; refused -> same stop; ok -> `ResetMover` (next chunk).
 
 Order completion: a move order (kind 1 / 2) is finished when `TickMovement` has put the unit into **state 6** (idle); `CUnitServer::Think` 0x54B390 (called from `Update` 0x552300 and `TickState` before the state
 switch) then clears the order, and when `+0x145` (blocked / partial path) is set sends the player message 0xE ("cannot reach").
 
-Arrival conditions: whole path delivered and curve ended; `DispatchQueuedOrder` pre-test (already within 0.14 m of the goal); `OnMoveFinished` 0x54EB30 afterwards compares the final goal with the request: `|snapped goal - requested|^2 < 0.01 * |unit - requested|^2` is "reached" -> player message 1 else 0xE (blocked), and `CPlayerServer::SendMsg0E_MoveState` 0x66D490 sends the complete path (`ExportPath`) to the commanding client; `CPlayerClient::OnMsg_UnitMoveState` 0x669FA0 stores it
+Arrival conditions: whole path delivered and curve ended; `DispatchQueuedOrder` pre-test (already within 0.14 m of the goal); `CUnitServer::ReportMoveResult` 0x54EB30 afterwards compares the final goal with the request: `|snapped goal - requested|^2 < 0.01 * |unit - requested|^2` is "reached" -> player message 1 else 0xE (blocked), and `CPlayerServer::SendMsg0E_MovePath` 0x66D490 sends the complete path (`ExportPath`) to the commanding client; `CPlayerClient::OnMsg0E_MovePath` 0x669FA0 stores it
 into the client unit's request (and, with the debug flag `0x79BE70`, rebuilds the curve and spawns the path effects 0x2039 / 0x203A) [? exact purpose].
 
 ### 5.5 Chase, follow, group

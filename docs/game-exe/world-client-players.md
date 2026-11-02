@@ -44,8 +44,8 @@ Addresses are VAs; offsets are bytes; "tick" = `CWorld +0x64` (18/s on the serve
 | player object | `CPlayer` (0x134, kind 0x300a, typeId 0xf, vtable 0x743104, 13 slots) made by `CPlayerManager::CreatePlayerWithConnection` 0x66C180 together with its *connection* (kind 0x49): `CPlayerClient` (0x50f8, vt 0x743180) on the client, `CPlayerServer` (0x5128, vt 0x743280) on the server [V] |
 | connection slots (callbacks from CPlayer) | 2 Init, 3 Done, 6 SendClientState (client) / unused (server), 13 OnTrackedCleared, 14 OnUnitTracked (client `OnUnitAdded`), 15 Reset (net stream set), 16 Disconnect, 17 SendItems, 18 ClearItems, 19 RemoveItem, 20 Respawn (server), 21 ClearKnownObjects (server), 22 SendItemValue (server), 23 Update [V] |
 | net stream | `CPlayer +0x1c`: an `IMsgStream` (TcpMsgStream 0x73CA10, PeerMsgStream 0x73C990, FileMsgStream 0x73C8F8 for recorded packets); slots 4 ready, 6 HasPacketHeader, 7 CountPackets, 8 SendBuffered, 9 PopPacket (net-notes.md) [V] |
-| message framing | `MsgStream_Decompress2` 0x4A5790 writes `{u32 compressed length, u32 raw length}` + LZ bytes; `MsgStream_Decompress` 0x4A5790.. inflates with the receive `LzCompressor`; empty keep-alive = `04 00 00 00 00 00 00 00` (multiplayer-protocol.md) [V] |
-| strings in payloads | C strings with their NUL (`SendMsgString`, `Stream_ReadCString` 0x4A5330); "embedded stream" = `Stream_WriteEmbeddedStream` 0x4A5250: u16 `len*2` or u32 `len*2+1` (>= 0x7531) then the bytes; "length-prefixed blob" = `MsgStream_WriteLenPrefixed` / `ReadLenPrefixed` 0x47DAE0: 1 or 4 byte length (bit 0 = long), max 100000 [V] |
+| message framing | `MsgStream_Compress` 0x47D7F0 writes `{u32 raw length}` + LZ bytes and `MsgStreamBase::v8_SendBuffered` 0x47BAD0 adds the u32 frame length; `MsgStream_Decompress` 0x47D970 inflates with the receive `LzCompressor` (corrected by net-transport.md 7; nothing is at 0x4A5790); empty keep-alive = `04 00 00 00 00 00 00 00` (multiplayer-protocol.md) [V] |
+| strings in payloads | C strings with their NUL (`SendMsgString`, `Stream_ReadCString` 0x4A48F0); "embedded stream" = `Stream_WriteEmbeddedStream` 0x4A5250: u16 `len*2` or u32 `len*2+1` (>= 0x7531) then the bytes; "length-prefixed blob" = `MsgStream_WriteLenPrefixed` / `ReadLenPrefixed` 0x47DAE0: 1 or 4 byte length (bit 0 = long), max 100000 [V] |
 | ids | object ids (`CObject +0xc`); heroes 0x3B9ACA0D.. (1 000 000 013); `IsHeroId` 0x5F8B20 marks them; a respawned hero gets the first free id >= old + 250000 [V] |
 | flags used here (`CObject +8`) | 1 deleted, 2 net dirty (PackDeltaNetState before sending), 0x10 selected by the local player (the UI iterates units with it), 0x20 inside the view frustum, 0x100 ghost / hidden render mode (message 0x19), 0x200 animation-budget candidate, 0x400 animation enabled, 0x400000 party unit (message 0x60), 0x800000 dead (orders skip it) [V] |
 | type ids (`vt[12]`) seen in the client lists | 0x50 CUnit, 0x52 CTree, 0x54 CBuilding (`GetTypeId` 0x529820) and 0x5d CLeverObject (0x52B2F0) = the objects with walkable parts (`ActivateObjectBridges`; no other vtable reuses these two slots), 0x44 CFigure, 0x4f CSpell [V] |
@@ -223,7 +223,7 @@ exits, `+0xa0` zone exit effects, `+0xf0` screen rectangles of the drawn objects
 
 **AddObject** 0x5647E0 / **RemoveObject** 0x564BE0: object list, grid A cell, hero list (kind 0x32 + `IsHeroId`), visible list when `vt[29]`,
 and for types 0x54 CBuilding / 0x5d CLeverObject the walkable part faces (flag 0x400 parts) into the bridge manager; `ActivateObjectBridges` 0x5651A0 refreshes them
-on every `41`. `HideObject` / `UnhideObject` 0x566030 / 0x566100 (message 0x19). `CollectObjectsNear` 0x56DAF0 walks the grid cells of a square.
+on every `41`. `HideObject` / `CWorldClient::HideObject` 0x566030 / 0x566100 (message 0x19). `CollectObjectsNear` 0x56DAF0 walks the grid cells of a square.
 `FindNearestPartyUnitFor` 0x5640A0 uses the connection's party ids and the relation masks `+0x244 / +0x248 / +0x250`. [V]
 
 **LoadZone** 0x567AB0 (the `02` payload) [V]: sounds paused; `+0x64` tick; zone name, map name; zone exits (`ZoneExitArray_SetSize`,
@@ -354,7 +354,7 @@ getters 0x561890..0x5619D0, `CWeather::dtor` 0x5616C0, `CreateSky` 0x562F70, `Pi
 `InitClientResources` 0x563710, `LoadDayLightTable` 0x563930, `TerrainHeightClamped` 0x563F70, `GetHeight` 0x564070, `FindNearestPartyUnitFor`
 0x5640A0, `SetWind` 0x564190, `Update` 0x5641F0, `AddObject` 0x5647E0, `RemoveObject` 0x564BE0, `ClearAll` 0x564E70, `ClearVisibleEffects`
 0x565090, `ActivateObjectBridges` 0x5651A0, `ApplyObjectVariables` 0x5652E0, `SetNamedObjectState` 0x565380, `World_BuildObjectVarName`
-0x5654F0, `FindTexture` / `FindMaterial` 0x5655D0 / 0x5655F0, `SetCamera` 0x565670, picking 0x5656A0..0x565F60, `HideObject` / `UnhideObject`
+0x5654F0, `FindTexture` / `CWorldClient::FindTexture` 0x5655D0 / 0x5655F0, `SetCamera` 0x565670, picking 0x5656A0..0x565F60, `HideObject` / `UnhideObject`
 0x566030 / 0x566100, `CameraLookAt` 0x5662B0, `SendPause` 0x566330, `SetPaused` 0x566350, `UpdateDayLight` 0x566360, `CreateMoshkaEffect`
 0x566C20, net stream attach 0x566CB0..0x566F30, `CreateHeroUnits` 0x566F70, `RemoveHeroUnits` 0x567400, zone exits 0x567440..0x5677F0,
 `ReadItemObjects` 0x567950, `ReadSpellsAndItems` 0x567A60, `LoadZone` 0x567AB0, `Hero_BuildEquipmentEntries` 0x5683D0,

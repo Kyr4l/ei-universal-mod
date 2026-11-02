@@ -42,8 +42,8 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
    quick items from the protos whose "Shop N" bit is set, picks a material of the right type whose stock is not exhausted
    (price-weighted), embeds a random spell in half of them, adds 1..3 blueprints per proto and 20..50 materials
    (`ShopStock::GenerateItems` 0x69AE20). Prices in the camp are `CItem::GetPrice` x the mode coefficient
-   (`docs/game-memory.md`, verified live); deconstruction and construction are `CCampItemConstr::Deconstruct` 0x6129C0 /
-   `TryConstruct` 0x612600.
+   (`docs/game-memory.md`, verified live); deconstruction and construction are `CCampScreen::DeconstructItem` 0x6129C0 /
+   `CCampScreen::RefreshItemComponents` 0x612600.
 
 ## 1. Conventions
 
@@ -202,10 +202,10 @@ Client-side shortcuts that bypass the constructor (the HUD): `ItemId_GetDamageMi
 (`CUnitClientSpecific::GetAttackParams` 0x538960); the server reads the item fields instead (`CItemWeapon::RollDamage`
 0x6A2DE0 = `+0x50 + ISAAC * +0x54`).
 
-**Deconstruction / construction (camp mode 5)** [V]: `CCampItemConstr::Deconstruct` 0x6129C0 clones the single item of the
+**Deconstruction / construction (camp mode 5)** [V]: `CCampScreen::DeconstructItem` 0x6129C0 clones the single item of the
 component party (`+0x1c0`), removes it and adds to the party an "Instruction Weapon / Armor / Quick Item" loot item with `+0x54
 = item +0x18 >> 16`, `Components` x `material.<name of material (+0x18 & 0xffff)>` and, when the item had a spell, a "spell
-container" with a copy of it. `TryConstruct` 0x612600 scans the component party for one blueprint (category 2, table 0/1/2 ->
+container" with a copy of it. `CCampScreen::RefreshItemComponents` 0x612600 scans the component party for one blueprint (category 2, table 0/1/2 ->
 kind 0x3004/5/6, proto by `+0x54`), N materials of one material and an optional spell container; it builds the item only when
 `N == proto Components` and `material Type == proto M.Type` (case-insensitive). The fees are in docs/game-memory.md.
 
@@ -295,9 +295,9 @@ spell slots are not copied: a client hero reads them from the record); `CWorldSe
 `GetSpellSlotItem` 0x5319A0 and `GetItemSpell` 0x531A10 return the party record's arrays when the unit's specific typeId is
 0x3d (client hero): the record is the source of truth there [V].
 
-Net: `CPlayerServer::SendItems` 0x66E7D0 (slot 17, from `CPlayer::AddItems` 0x665470) sends opcode 5 + a blob of the spells
+Net: `CPlayerServer::SendMsg05_06_Items` 0x66E7D0 (slot 17, from `CPlayer::AddItems` 0x665470) sends opcode 5 + a blob of the spells
 then the items (`ObjList_WriteStream`), then opcode 6 with money (u32), a byte and the item ids ending in -1;
-`CPlayerClient::OnMsg_AddItems` 0x669490 resolves them in the client item manager `g_0x7AF60C` (filled by
+`CPlayerClient::OnMsg06_AddItems` 0x669490 resolves them in the client item manager `g_0x7AF60C` (filled by
 `CWorldClient::ReadSpellsAndItems` 0x567A60 from opcode 5); opcode 0x80 / 0x83 (server) and 0x50 (client) carry a whole
 party through `CParty::Write`; units replicate their slot ids in net section 5 (`CUnit::WriteNetState`, combat.md 8) and
 `CUnitClientSpecific::SetEquipment` / `SetWeapons` rebuild the figures from ids.
@@ -312,7 +312,7 @@ release one; `EquipArmor` 0x530730 (durability >= 1 only) replaces `+0x480[type]
 textures on the client, `UnitStats_AddArmorModifiers` preview on the server) and marks net section 5; `UnequipArmor`
 0x530840 (`vt[27]`, sections 5 + 4); `DropAllItems` 0x5315B0 clears everything. `CUnitServer::SelectWeapon` 0x553610 (slot 25;
 the client asks through `CPlayerServer::OnMsg_UnitByte` -> `RequestWeapon` 0x5552E0 which sets `+0x270`, `TickState` switches) accepts a slot whose item has durability,
-sets `+0x26c = +0x270`, rebuilds the AI spell infos for player units and `DropOtherWeapons` 0x5528F0 (only the weapon in hand
+sets `+0x26c = +0x270`, rebuilds the AI spell infos for player units and `CUnitServer::RebuildEquipmentLists` 0x5528F0 (only the weapon in hand
 stays attached; the passive spell list `+0x920` is rebuilt from the items whose spell has flag 0x20000). Carried weight =
 sum of `+0x34` over the 23 slots (`GetCarriedWeight`, capped by `str * 12 * (1 + lift)` in UnitStats). Two-handed / shield
 rules: none in this code; the only exclusivity is one armor per type [V]. Quick slots are also the belt: `CUnit::QuickItemUsability`
@@ -331,7 +331,7 @@ money (`rand(+0xd0..+0xd4)` with chance `+0xc8` %, plus `rand(+0xe0..+0xe4)` wit
 the `+0x4a0` extras of every unit and, for hero ids, the armor and weapon slots too, and sets flag 0x100000; in a lobby game the
 host player gets the quest items (typeId 0x14) first; `player +0xc0 += money`, `CPlayer::AddItems(player, items, 0)`; a unit
 already flagged 0x20000000 gives its stored loot record (`+0x12e64` list: unit id, lobby index, money, item ids). The pick-up
-order itself is `QueueOrderInteract*` (combat.md 3) -> `ExecuteInteraction` 0x54F000 -> `WorldServer::OnLootOrder` 0x670310;
+order itself is `QueueOrderInteract*` (combat.md 3) -> `ExecuteInteraction` 0x54F000 -> `CPlayerServer::OnMsg36_Interact` 0x670310;
 items never lie on the ground as objects: they go straight to `CPlayer +0xe4`, and `GivePartyItemsToPlayer` 0x590460 /
 `MoveTrackedItemsToParty` 0x590160 move them between that list and the party backpack at zone changes.
 
@@ -384,18 +384,18 @@ under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithP
 2. `full/structs.tsv` `WeaponProto +0x50 damageMin / +0x54 damageSpread`: those are `CItemWeapon` fields; the proto's `+0x50`
    is a runtime CStringArray. The proto damage is `+0x90 / +0x94`. `docs/game-exe/hierarchy.md` "+0x20/+0x24 count, +0x28/+0x2c
    durability": same correction.
-3. `docs/game-exe/item-tables.md` / um-engine `item_proto.cpp`: `ItemId_GetPrice` 0x6A2A50 and `ItemId_GetPrice2` 0x6A2AE0
+3. `docs/game-exe/item-tables.md` / um-engine `item_proto.cpp`: `ItemId_GetDamageMin` 0x6A2A50 and `ItemId_GetDamageMax` 0x6A2AE0
    compute the damage min / max (`D.Min * material Damage`, `(D.Min + D.Max) * material Damage`), not prices; `CItemWeapon::GetSkill`
    0x6A2C60 is the first nonzero damage-proportion index. (The replacement is still right, the names are not.)
 4. `docs/file-formats/mp-format.md`: the quantity of a loot item is the u32 at **+44** of its block (every kind: it is `CItem
    +0x48`), **+48** is the slots / complexity max; the lists of a member are weapons, belt (quick items), worn armour, spells
    (confirmed: `+0x730 / +0x740 / +0x750 / +0x760`). The game-side names in functions.tsv were swapped: `HeroRecord::AddInventoryItem`
    (+0x730) is `AddWeapon`, `AddWeapon` (+0x740) is `AddQuickItem`, `AddQuickItem` (+0x760) is `AddSpellItem`; `CUnit::GetWeaponSlotItem`
-   0x531920 reads the **quick** slots and `CUnit::GetItemById` 0x5318B0 the weapon slots; `CUnit +0x460` are the spell containers.
-5. `full/functions.tsv` `CItem::GetSlotClass` 0x6A31A0: types 0..2 (helmet, plate, legs) are tier **2**, 3..6 tier 1 (the old
+   0x531920 reads the **quick** slots and `CUnit::GetWeaponSlotItem` 0x5318B0 the weapon slots; `CUnit +0x460` are the spell containers.
+5. `full/functions.tsv` `CItemArmor::GetArmorTier` 0x6A31A0: types 0..2 (helmet, plate, legs) are tier **2**, 3..6 tier 1 (the old
    purpose had it reversed; combat.md 6 "at its tier" is unaffected).
 6. `docs/game-memory.md` camp section: "Deconstruction = CCampItemConstr::CreateItem 0x6129C0" is right in effect; the function
-   is the deconstruction (`Deconstruct`), the construction is `RefreshComponents` 0x612600 (`TryConstruct`). The blueprint's `+0x54`
+   is the deconstruction (`Deconstruct`), the construction is `CCampScreen::RefreshItemComponents` 0x612600 (`TryConstruct`). The blueprint's `+0x54`
    is the item's prototype row, the materials come one per proto Components: confirmed.
 7. `docs/game-exe/findings.md` 0x699xxx "CItemConstructor (lists ... BuildResultItem)": that class is the shop stock
    generator (`ShopStock`, CGSPlayer +0x11c / +0x1d4), not the `CItemConstructor` of 0x6A5AB0; `CGSPlayer::CollectUnitsIntoParty`

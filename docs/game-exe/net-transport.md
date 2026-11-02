@@ -333,7 +333,7 @@ above its join watermark (no history on join); the server keeps the last 50 (`Po
 
 Only `.mq` files travel. `AddFileTransfer(name, GameBuffer)` 0x419A00 makes a `ListStringMessage {chunkCount = (size + 63) / 64, size,
 name}` plus one `RefBlobMessage {transfer, index, 64 bytes}` per chunk (the last padded) in its vector `+0x20`. Every client receives the
-kind-11 object; `OnFileTransferAdded` creates a `TwoRefMessage {transfer}` (kind 13) in `+0x25e8` unless `Game_MapDirExists` 0x5812F0 says
+kind-11 object; `OnFileTransferAdded` creates a `TwoRefMessage {transfer}` (kind 13) in `+0x25e8` unless `Game_MapFileExists` 0x5812F0 says
 the file is already there: it runs `CFileFind::FindFile(World_MapPath() + name)` with the transfer's file name (`+0x14`), so it
 tests the specific `maps\<name>` file, not the folder [V]. The server's `OnChunkRequest` records `{transfer, peer}` in
 `+0x259c`; `GatherReplicated` then includes that transfer's chunks (group 1) for that peer only, so all chunks go out through the normal
@@ -515,7 +515,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   empty in this exe).
 - `SentPacket`: the chunk copy is 260 bytes (0x41 dwords: the stream-chunk node from `+8`), at `+0x18..+0x11b`; the lost flag is `+0x11c`
   (3.4) [V].
-- `Game_MapDirExists` 0x5812F0 tests the specific file `maps\<name>` (FindFile on `World_MapPath() + name`) [V]; the name is misleading
+- `Game_MapFileExists` 0x5812F0 tests the specific file `maps\<name>` (FindFile on `World_MapPath() + name`) [V]; the name is misleading
   (batch-t3b renames it `Game_MapFileExists`).
 - The base A / B semantics of the delta codec stay [I] (5.6): **[live]** (`live-checklist.tsv`: log `DeltaCodecSet::BeginRead` /
   the base lengths on a client for a 0x40 and a following 0x41 of the same unit).

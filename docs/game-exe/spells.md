@@ -38,7 +38,7 @@ Tags: **[V]** read directly in the decompile, **[I]** inferred from several func
    `UnitStats_ApplyRangeBuffs` 0x523D30 (damage x `(1+0.003*str)/(1+0.003*weak)`), `Placement_Regenerate` (regeneration rate), slot 49
    (feeblemind flag), slot 46 (stun/teleport freeze), `ApplyBuffKinds` (enlarge/shrink/strengthen/weaken scale).
 6. **Effect objects are server-owned, client-drawn.** `CWorldServer::AddEffectObject` 0x58E520 puts a `CEffect*` into the hash +0x12DE8,
-   `ReplicateToPlayer` sends it as message 0x50 (full state, slot 22) and later 0x51 (delta); the client (`OnMsg_WorldObject` 0x668940)
+   `ReplicateToPlayer` sends it as message 0x50 (full state, slot 22) and later 0x51 (delta); the client (`CPlayerClient::OnMsg50_EffectCreate` 0x668940)
    creates the same class through `CEffectManager::CreateByKind` 0x67E170 and its `ReadDelta` (slot 21) -> `Activate` (slot 23) builds the
    particle system / light / sound / figure. Each object's slot 6 `Update` runs on both sides; returning 0 removes it.
 
@@ -346,7 +346,7 @@ stop their effect and undo the flags. `UpdateBuffSounds` 0x5112A0 / `BuffSound_S
 `+0x148 lastChangeTick`. `SetVelocity` 0x675D50 / `MarkDirty` 0x675CA0 set flag bit 1 and the tick. Server: `AddEffectObject` 0x58E520
 (`+0x94 = tick`, hash `+0x12DE8`), `CWorldServer::Update` calls slot 6 of every effect and removes those returning 0, `RemoveEffectObject`
 0x58E5D0 by id. Replication (`ReplicateToPlayer` 0x58B750): dirty objects go as message 0x50 `{id, typeId, full state}` (`WriteNetStateB`
-0x675B70 = slot 22 into +0xF8) the first time and 0x51 (delta +0x120) later; the client `OnMsg_WorldObject` 0x668940 creates the class
+0x675B70 = slot 22 into +0xF8) the first time and 0x51 (delta +0x120) later; the client `CPlayerClient::OnMsg50_EffectCreate` 0x668940 creates the class
 (`CEffectManager::CreateByKind`), `CEffect::ReadDelta` 0x675BA0 -> slot 21 (reads the fields; `update` = 0 the first time) -> slot 23
 `Activate(update)` builds or updates the client resource. The CSpellEffect's `Remove*` drop the server object; the client removes its copy
 when told (`CWorldClient::RemoveObject`).
@@ -412,8 +412,8 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
 3. `combat.md` 5 "buffs 15/16/17 subtract from the resistance pairs, 19 adds": the pairs `+0xE0..` are the detectability values
    (visibility / noise / smell), the resistances are the placement armor pairs (+0x3C / +0x44 / +0x4C get the protections).
 4. `functions.tsv` `CSpellEffect::GetRangeFactor`: `+0x58` is the power (effect), the function is the power factor; `IsDamageSpell` is the
-   hostile-spell list (includes weaken, slow, charm ...); `RefCount_DecAndTest` 0x688530 is the buff duration tick; `SpellCaster_*` are
-   `CSpellEffect` members; `DropOtherWeapons` 0x5528F0 also rebuilds the passive spell list.
+   hostile-spell list (includes weaken, slow, charm ...); `Buff_TickDuration` 0x688530 is the buff duration tick; `SpellCaster_*` are
+   `CSpellEffect` members; `CUnitServer::RebuildEquipmentLists` 0x5528F0 also rebuilds the passive spell list.
 5. `docs/game-memory.md` "Spells": the constructor description is confirmed; add: the script / item syntax uses the **code** column
    (`fireball{e1;r1}`), the `d` and `t` runes truncate `v * protoValue`, the mana final value is `max(proto, computed)`, and `+0x4C`
    ("field 14") is the cast time in action frames. "A container carried in the items but not worn is not castable" is the inventory slot rule.

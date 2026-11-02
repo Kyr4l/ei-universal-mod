@@ -395,9 +395,9 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | file | wrong | right |
 |---|---|---|
 | `findings.md` 0x4E3000 section, `functions.tsv` | "DrawMeshBatch ... appends indices (CVertexBuffer::AppendIndices) and flushes", "FlushVertexBuffer ... draw-queue accounting" | the vertex-buffer path is dead: `ReserveBatchVertices_Stub` 0x4E7820 returns 0, `CreateVertexBuffer` has no callers; every batch is an immediate `DrawIndexedPrimitive`; `FlushVertexBuffer` returns at once (um-engine's `FlushPending` is harmless but a no-op) |
-| `functions.tsv` | `DDraw_EnumDriversCallbackEx_Add` 0x4ED820 "DirectDrawEnumerateEx callback" | the `IDirect3D7::EnumDevices` callback (description, name, D3DDEVICEDESC7) |
-| `functions.tsv` | `CRenderDevice::SetMaterialTextures` 0x4EB550 "bind the textures of a material" | it is the draw: `DrawIndexedWithMaterial` (state blocks per pass + `DrawIndexedPrimitive`) |
-| `functions.tsv` | `DrawQuadBatchClipped` 0x4E9A50 "clipped 2D quad / sprite batch", `DrawShadowQuadBatch` 0x4EA4A0 | `DrawMeshBatchBlended` (the two-texture wounds pass of a figure) and `DrawTrianglesTransformed` (plain xyz triangles: shadow receiver, prints, arrows) |
+| `functions.tsv` | `D3D_EnumDevicesCallback_Add` 0x4ED820 "DirectDrawEnumerateEx callback" | the `IDirect3D7::EnumDevices` callback (description, name, D3DDEVICEDESC7) |
+| `functions.tsv` | `CRenderDevice::DrawIndexedWithMaterial` 0x4EB550 "bind the textures of a material" | it is the draw: `DrawIndexedWithMaterial` (state blocks per pass + `DrawIndexedPrimitive`) |
+| `functions.tsv` | `CRenderDevice::DrawMeshBatchBlended` 0x4E9A50 "clipped 2D quad / sprite batch", `CRenderDevice::DrawTrianglesTransformed` 0x4EA4A0 | `DrawMeshBatchBlended` (the two-texture wounds pass of a figure) and `DrawTrianglesTransformed` (plain xyz triangles: shadow receiver, prints, arrows) |
 | `functions.tsv` | `CRenderScene::GetVertexData / Ex` 0x4F3C60 / 0x4F42D0 "copy vertex data of a named entry" | they draw a part (`DrawMesh / DrawMeshBlended`) |
 | `functions.tsv`, `findings.md` | "NewFigureInstance 0xB0 bytes figure instance", `FindNearestFigure` "nearest in a float key" | the 0xB0 object is a `CRenderScene`; the search is an exact match (1e-5) on the complection: the per-build mesh cache |
 | `functions.tsv` | `CViewFrustum::CullBox` "transform a box ... by the current matrix stack (+0x24, depth +0x28)" | `this` is the `CD3DLibrary` render context `g_0x7AF068`; stack 2 is clip space; the record is a `BoundsRecord` {flags, centre, radius, min, max} |

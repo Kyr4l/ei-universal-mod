@@ -528,7 +528,7 @@ Iteration order is the address order (reversed by `For`): not stable across runs
 **Global variables and the quest state.** `GlobalVars` live in `GSWorld +0xA0` and are the only assignable variables; they are *per VM*, saved with the
 zone, and shared by every module compiled into that VM (base map, quest map, generated quest chain, named-event scripts). They are **not** the
 `q.*` quest variables: `GSSetVar / GSGetVar / GSSetVarMax / GSDelVar` (0x7F / 0x80 / 0x98 / 0x82) go to the player's `StringFloatMap` at
-`CPlayer +0xC4` (`FindPlayerById(round(f))`, `StringFloatMap_Get` 0x460AF0; hosted lobby: `LobbyServer::GetEntryValueByName`), which is saved with
+`CPlayer +0xC4` (`FindPlayerById(round(f))`, `NamedFloatMap_Get` 0x460AF0; hosted lobby: `LobbyServer::GetEntryValueByName`), which is saved with
 the party and sent to the client with messages 0x81 / 0x82 (players.md) - the VM only reads and writes them through those four handlers [V].
 `gtime` and `constr.current` are entries of the same map set by the engine, not by the VM.
 
@@ -593,7 +593,7 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 | functions.tsv | `Decompiler_WriteProgram` "a command with the function id 0x6b (if)" | 0x6B = `For` |
 | functions.tsv | `GSWorld::IsScriptDeclared` | searches the *active instance* list `+0x144`: renamed `GSWorld::IsScriptActive` |
 | functions.tsv | `GSWorld::ResetPlayers_Single/Multi`, `CompiledScript_Destroy` | session / party-store functions, not the VM (renamed `Session_ResetPlayers_*`, `GSPlayerLayer::Destroy?`) |
-| functions.tsv (CRT) | `atoi` 0x6E911A, `_isalpha_like` 0x6E9379, `_isdigit_like` 0x6E93CE | `atof` (`fld qword [eax+0x10]` of the `_fltin` result), `isdigit` (ctype bit 4), `isspace` (ctype bit 8) |
+| functions.tsv (CRT) | `atof` 0x6E911A, `CRT_isdigit` 0x6E9379, `CRT_isspace` 0x6E93CE | `atof` (`fld qword [eax+0x10]` of the `_fltin` result), `isdigit` (ctype bit 4), `isspace` (ctype bit 8) |
 | functions.tsv | `Compiler_SetError` "+0x1f4 = code, +0x1f0 = line"; compile functions "-> 1 / 0 / error code" | reversed (see above); they return 0 on error, the code is in `+0x1F0` |
 | functions.tsv | `Compiler_CompileText(this, text, qualify)` | the 3rd argument starts the WorldScript body (`StartScript`); qualification depends on `+0x1AC` only |
 | game-memory.md "Console" | "`#Sin(0)` prints 0" | there is no `Sin` in the 225-entry table: `#Sin(0)` is compile error 7; "`@SetCameraPosition(57,65,20)` did nothing" is explained: 0x13 has no `Run` case (no-op), like the 9 other ids listed in section 7 |

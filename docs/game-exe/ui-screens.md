@@ -354,7 +354,7 @@ Buttons 0 prev / 1 OK / 2 next (50 px, bottom row, tips 0x7594..0x7596); the foo
 CHudSpellList, `+0x1A0` CHudAbilityList, `+0x1A4` CHudMainPanel (portraits + minimap frame), `+0x1A8` CHudUnitInfoPanel, `+0x1AC`
 CHudMinimap, `+0x1B0` CHudClockStrip, `+0x1B4` CHudStanceStrip, `+0x1B8` CTextListWin combat log, `+0x1BC` CHudMessagePanel, a
 UIControl740208 camera child; personality labels "pers *" (`+0x1F0`). `Update` 0x638280: the controlled units come from the client
-player's unit list (hero first; `IntArray_Equals` 0x6381E0 detects changes -> `BuildUnitPortraits`, camera carrier = the hero), the
+player's unit list (hero first; `UnitIdLists_Equals` 0x6381E0 detects changes -> `BuildUnitPortraits`, camera carrier = the hero), the
 leave-zone prompt (`Game_CollectHeroesInZoneExit` -> box "leave_zone", 0x10001 -> `Session_RequestMapChange(+0x188)`), quest sounds
 (quest.wav / subcomplete.wav / complete.wav). Slots 28..35: `OnLootMessage` 0x636150 (items / money into the message panel),
 `OnUnitAdded` 0x6361B0, `OnUnitRemoved` 0x6364E0, `ShowGameOver` 0x6365E0 ("game_over" / "end_of_game", base 0x90000 -> leave),

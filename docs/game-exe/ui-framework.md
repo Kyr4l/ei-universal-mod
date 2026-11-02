@@ -511,7 +511,7 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 - `findings.md` 0x5EE000: "`UIHitRegion`" = `UIButton` (the 0x34-byte record at `+0x128[]`); "`CUIBlitSurface` = widget
   background" = any GDI text / picture surface.
 - `flows.md`: `DDraw_ProbeDevice` is `App_ProbeDirectX` 0x45E310 (the DX level, not a device probe); `CSoftCursor::Reset`
-  0x5E6260 is `Start` (it starts the cursor thread); `CInterface::CloseAllScreens3` 0x5F5220 is `Render3D`; `CCamera::ClampPitch`
+  0x5E6260 is `Start` (it starts the cursor thread); `CInterface::Render3D` 0x5F5220 is `Render3D`; `CCamera::ClampPitch`
   0x40D710 is `LevelRoll` (it removes roll; the pitch clamp is in `Update`); `CCamera::SaveKeyframe` = `RecordKeyframe`,
   `UpdateFlyPath` = `PlayCamFile`; `CSoftCursor::AddFrame` has one caller family (`Cursors_Register`), not 49.
 - `game-memory.md` console: `+0x2C` is the selection anchor, not the input length; `+0x04` is the surface pointer (set while

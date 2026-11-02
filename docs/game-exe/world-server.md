@@ -13,11 +13,11 @@ Addresses are VAs; offsets are `this+off`; "tick" = one game tick (55 ms at norm
 ## How to re-implement it (short version)
 
 1. **Two world objects, one process.** `CWorldServer g_0x7AFF60` simulates, `CWorldClient g_0x7AF5B8` renders; in single
-   player they talk through the same in-memory connection as a network game (`CWorldClient::AttachFileStream` 0x566CE0 gives the
+   player they talk through the same in-memory connection as a network game (`CWorldClient::PlayRecordedStream` 0x566CE0 gives the
    local client a `FileMsgStream` connection; the server treats it like a TCP peer). Both derive from `CWorld` (0x84 bytes: the
    nine managers, the clock, the wind, the water levels). [V]
 2. **Fixed-step ticks, decoupled from frames.** `main` accumulates real ms (at most 5 ticks per frame) and runs
-   `CWorldServer::Tick` 0x58DFF0 once per `g_0x78FF34` ms (55; 27 at x2), then `CWorldClient::Tick` 0x5641F0 on its own
+   `CWorldServer::Tick` 0x58DFF0 once per `g_0x78FF34` ms (55; 27 at x2), then `CWorldClient::Update` 0x5641F0 on its own
    accumulator, then `Session_ProcessRequest` 0x57C700 (pending session requests only), then UI + render. `Tick` replicates every
    slice; the game clock (`CWorldServer +0x64`, `g_0x7AFFC4`) and the simulation (`CWorldServer::Update` 0x58DCD0) advance
    only while `+0x6c paused == 0`. [V]
@@ -205,7 +205,7 @@ saved copy `g_0x79BEC4`. `Databases_Reload` 0x57DEE0 is the explicit variant.
 | +0x34 | manager34 | slot 23; client only (`CWorldClient::InitClientResources`) |
 | +0x38 .. +0x58 | the managers | created in this order by `CreateManagers` 0x55EE40 (`SetWorld(this)` each): `+0x38` CPlayerManager (0xb0), `+0x40` CMapObjectManager (0xbc), `+0x3c` CFigureManager (0xd0), `+0x48` CEffectManager (0xb0), `+0x50` CSpellConstructor (0x24), `+0x4c` CSpellManager (0xd4), `+0x58` CItemConstructor (0x34), `+0x54` CItemManager (0xbc); slots 20 / 19 / 15 / 14 / 17 / 22 / 16 / 18 return them; `Done` 0x55F8E0 releases them in reverse |
 | +0x5c | refHolder | 12-byte handle (vt 0x73F240) kept with the "shared-ref" protocol (short refcount +4, flag +6 bit 0 = shared, cloned on write) [?] |
-| +0x60 | refListPair | `RefListPair` (vt 0x73F3A8, two lists) created by `ResetRefListPair` 0x55F410 in modes 2 / 3 and `ConnectToLobbyHost`; released by `UnloadZone` [?] |
+| +0x60 | refListPair | `RefListPair` (vt 0x73F3A8, two lists) created by `CWorld::ResetNetDriver` 0x55F410 in modes 2 / 3 and `ConnectToLobbyHost`; released by `UnloadZone` [?] |
 | +0x64 / +0x68 / +0x6c | tick / frameTick / paused | see 1. |
 | +0x70 | waterLevels | MFC CArray (vt 0x73F234, `WaterLevels::Serialize` 0x560200) of 16-byte `{id, stepsLeft, level, step}`; script `SetWaterLevel` 0x593FA0 -> `WaterLevels::SetTarget` 0x6D4410, `WaterLevels::Tick` 0x6D44E0 in `Update`, replicated by msg 0x73, saved |
 
@@ -307,7 +307,7 @@ bound), 0xBBAB0000 magic traps (0xd0), 0xBBAC0000 levers (0xa4), 0xBBBB0000 unit
 | 7 magic trap | like 1 (static flag 8) + `CMagicTrapObject::SetParams(+0x8c)` | all, dynamic, non-units, active |
 
 The same function spawns heroes (`SpawnPartyHeroes` 0x58EF20, `SpawnSingleHero` 0x5910A0) and the console unit
-(`SpawnDebugUnit` 0x58ECE0: proto `st.tr.130`, model `unhuma`, type 0x3010). `CObjectDesc::Spawn` 0x46AFB0 / `CUnitDesc::Spawn`
+(`CWorldServer::SpawnConsumableUnit` 0x58ECE0: proto `st.tr.130`, model `unhuma`, type 0x3010). `CObjectDesc::Spawn` 0x46AFB0 / `CUnitDesc::Spawn`
 0x46C4D0 (the editor / script path) call it when `+0x1c` is 0.
 
 ### 4.5 Loading a zone, step by step [V]
@@ -508,7 +508,7 @@ Session: `Session_ProcessRequest` 0x57C700, `Game_EnterZone` 0x57C460, `Session_
 
 CWorld: `ctor` 0x55EAB0, `CreateManagers` 0x55EE40, `Done` 0x55F8E0, `dtor` 0x55EC80, `SetTime` 0x55FB30, `SetTimeScale`
 0x55FB50, `GetHourAndRate` 0x55FBD0, `IsNight` 0x55FC10, `NightFactor` 0x55FC50, `SetWindFields` 0x55FCB0, `CloneItem` 0x55E940,
-`FindUnitById` 0x55FB00, `ResetRefListPair` 0x55F410, `ReleaseRef60` 0x55F890, `World_MapPath` 0x55E990, `World_MapFilePath`
+`FindUnitById` 0x55FB00, `CWorld::ResetNetDriver` 0x55F410, `ReleaseRef60` 0x55F890, `World_MapPath` 0x55E990, `World_MapFilePath`
 0x595BA0, `WaterLevels::Serialize` 0x560200, `WaterLevels::SetTarget` 0x6D4410, `WaterLevels::Tick` 0x6D44E0.
 
 CWorldServer: `ctor` 0x589ED0, `Init` 0x58AE10, `Done` 0x58B020, `Reset` 0x58B600, `ClearObjects` 0x58B250, `ClearEffects`
@@ -516,7 +516,7 @@ CWorldServer: `ctor` 0x589ED0, `Init` 0x58AE10, `Done` 0x58B020, `Reset` 0x58B60
 `ActivateObjectsAround` 0x58D3D0, `ActivateLogicSlot` 0x593FC0, `AcceptPlayers` 0x58DAF0, `SetMode` 0x58DC90, `SetPaused`
 0x5942C0, `ReplicateToPlayer` 0x58B750, `SendZoneState` 0x58C890, `SendPlayerPosition` 0x58CBB0, `WriteUnitHashes` 0x58C4F0,
 `FlagAllPlayers` 0x58B6D0, `BroadcastGameTime` 0x58D280, `BroadcastMsg0B` 0x58D340, `UpdateEnvironment` 0x58CCD0,
-`SetWeatherMode` 0x58CC80, `SetRestrictFlag` 0x58CC70, `SetRain` 0x58EE00, `SetWind` 0x58EE20, `SetTime` 0x58EEA0,
+`SetWeatherMode` 0x58CC80, `CWorldServer::SetCaveFlag` 0x58CC70, `SetRain` 0x58EE00, `SetWind` 0x58EE20, `SetTime` 0x58EEA0,
 `SetTimeScale` 0x58EEE0, `GetHeight` 0x594220, `GetTerrainCell` 0x58A390, `FindObjectById` 0x593AA0, `FindPlayerById` 0x594180,
 `CreateObjectFromDesc` 0x5927C0, `RemoveObject` 0x5935C0, `RemoveAllObjects` 0x596C60, `RemoveAllUnits` 0x5939E0,
 `AddEffectObject` 0x58E520, `RemoveEffectObject` 0x58E5D0, `CastSpell` 0x58E670, `CastSpellMulti` 0x58E850, `LoadZone` 0x595480,
@@ -530,12 +530,12 @@ CWorldServer: `ctor` 0x589ED0, `Init` 0x58AE10, `Done` 0x58B020, `Reset` 0x58B60
 `GiveExperience` 0x5911C0, `CountOtherLiveHeroes` 0x591740, `UpdateMercenaryFlags` 0x591800, `OnMercenaryEvent` 0x591DE0,
 `OnNamedEvent` 0x592090, `LootUnit` 0x5942D0, `LootAllDeadUnits` 0x593D60, `HasLootRecordFor` 0x5949D0, `CollectLootUnitsFor`
 0x594A30, `CheckUnitsPlacement` 0x593B80, `OnUnitDied` 0x593AF0, `CloneItem` 0x594CE0, `AddItemToUpdateList` 0x594F30,
-`CreateItemByName` 0x594AB0, `CreateSpellItemByName` 0x594BC0, `Unit_ConsumeItemCharge` 0x595020, `SpawnDebugUnit` 0x58ECE0,
+`CreateItemByName` 0x594AB0, `CreateSpellItemByName` 0x594BC0, `Unit_ConsumeItemCharge` 0x595020, `CWorldServer::SpawnConsumableUnit` 0x58ECE0,
 `CopyHero` 0x5947E0, `SetWaterLevel` 0x593FA0.
 
 Descriptors and the mob loader: `MobFile_Load` 0x481660, `MobFile_ParseChunks` 0x481F00, `CObjectDesc::ctor` 0x46A5C0 / `OnChunk`
-0x46AB20 / `Spawn` 0x46AFB0, `CUnitDesc::ctor` 0x46C010 / `OnChunk` 0x46D080 / `Spawn` 0x46C4D0, `CLeverDesc` 0x46B4A0,
-`CTrapDesc` 0x46BD40, `CTorchDesc` 0x46B210.
+0x46AB20 / `Spawn` 0x46AFB0, `CUnitDesc::ctor` 0x46C010 / `OnChunk` 0x46D080 / `Spawn` 0x46C4D0, `CMagicTrapDesc::ctor` 0x46B4A0,
+`CLeverDesc::ctor` 0x46BD40, `CTorchDesc` 0x46B210.
 
 Resources: `CResourceBase::InitBase` 0x674790, `Reset` 0x674810, `FindEntry` 0x674850, `AccelIndex` 0x6748F0, `CreateAccelTable`
 0x674910, `FreeAccelTable` 0x674A90, `ListFiles` 0x674AC0, `WildcardMatch` 0x674CE0; `CResourceFile` (named CResourceBase::)

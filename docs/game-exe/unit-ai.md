@@ -2,7 +2,7 @@
 
 Written 2026-10-27 from the typed Ghidra decompiles of the Russian `EIStarter OBT-1/Engine/game.exe`: the perception module
 0x5C8B00-0x5CDF00 (`StimulusMap`, `AiMemory`), the spell scoring 0x5CDFB0-0x5D0A50 (`AiInfo`, `AiSpellInfo`, `Brain::ChooseTarget`),
-the motivations 0x5D0A50-0x5D3760 (`AiLogic*`), the party logic and the `Brain` 0x5D3760-0x5DA2B0, plus the callers that matter
+the motivations 0x5D0A50-0x5D3760 (`AiLogic*`), the party logic and the `AiLogicPlayer::InitFields` 0x5D3760-0x5DA2B0, plus the callers that matter
 (`CUnitServer::Update` 0x552300, `AiAcknowledge` 0x5AEA40, `PlayerRelations` 0x4554B0, the `.mob` logic reader 0x46CBC0, the script
 commands in `gs-functions.md`). It supersedes `docs/monster-ai.md` (2026-10-20) and the AI paragraphs of `docs/game-exe/hierarchy.md`;
 every disagreement is listed in section 11. Movement itself (`CAIMap::FindPath`, `CMover`) is `docs/game-exe/pathfinding.md`; the combat
@@ -223,7 +223,7 @@ Base classes: 0x73D15C "stationary" (kinds 0, 1, 2, 10: Evaluate 50, Update = `C
 "reactive" (3..8: Begin 0x5D0A50 = target released + order kind 0, IsStationary false). `Brain::AddLogic` 0x5D5F60 replaces a logic of the same kind,
 and any stationary one by a new stationary one: a unit has at most one post.
 
-### 3.6 The `.mob` logic slot (`MobLogicSlot`, 0x4c bytes, 5 per unit; chunk 0xBBBB read by `UnitLogic_OnChunk` 0x46CBC0, copied by `Brain::SetMobLogics` 0x5D6D20) [V]
+### 3.6 The `.mob` logic slot (`MobLogicSlot`, 0x4c bytes, 5 per unit; chunk 0xBBBB read by `MobLogicSlot_OnChunk` 0x46CBC0, copied by `Brain::SetMobLogics` 0x5D6D20) [V]
 
 | off | chunk | field |
 |---|---|---|
@@ -304,7 +304,7 @@ unit keeps only the newest sound). **No wall or line-of-sight test.** Sources:
 | melee / ranged attack | `S.noise x 2` | 26 | `CUnitServer::FireAttack` 0x54F450 |
 | spell cast (proto +0x10 != 1) | `S.noise x 2` | 26 | `CastOrderSpell` 0x54EE10 |
 | loot / interact | `S.noise x 1.5` | 26 | `ExecuteInteraction` 0x54F000 |
-| spell hit | 5.0 at the hit position, delay = ftol of a spell value | | `CSpellEffect::OnHit` 0x681BB0 |
+| spell hit | 5.0 at the hit position, delay = ftol of a spell value | | `CSpellEffect::TickFlight` 0x681BB0 |
 | call for help | not a HearSound: a record `{pos, 26, 0}` written directly into every friend within the Help radius | 26 | `Brain::CallForHelp` 0x5D5990 |
 | alarm | record `{?, 30, enemyMask}` | 30 | `CUnitServer::DeclareEnemies` 0x552D00 |
 
@@ -593,7 +593,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 10. `hierarchy.md`: "0x4BA710 Suspection, 0x4BA610 Aggression" -> 0x4BA710 constructs Aggression (vtable 0x73D260), 0x4BA610 Suspection (0x73D1F8).
 11. `hierarchy.md`: "+0xe0 / +0xe4 current point, +0xe8 stay time" -> these are `AiMemory` noticedPos / interest (brain +0xd0 + 0x10 / +0x18).
 12. `hierarchy.md`: "CAIMap (class name from the StimulusMap::Load string; one global at 0x7B2798)" -> the object at 0x7B2798 is the `StimulusMap` (CAIMap +0x26c8).
-13. `functions.tsv` (before this batch): `UnitGrid_Insert` 0x5C9770 is `StimulusMap::EmitFootstep`; `SelectCombatTarget` 0x5CFE40 casts support spells only;
+13. `functions.tsv` (before this batch): `StimulusMap::EmitFootstep` 0x5C9770 is `StimulusMap::EmitFootstep`; `Brain::CastSupportSpell` 0x5CFE40 casts support spells only;
     `WorldServer::OrderMoveTo / OrderOnTarget` are `AiLogicPlayer` methods; `Alertness` is the voice reaction object; `AggroTable_Add` is `PlayerRelations::DeclareHostile`
     and `CWorldServer +0x12c64` a `PlayerRelations`; `UnitAI_OnAttackedBy` is `Brain::OnAttackedBy`; `Brain::IsTargetHostile` tests friendship (no caller).
 14. `docs/game-exe/pathfinding.md` 5.5: "`AiLogicPlayer::Update` ... `IsNearLeader`" -> the function is `Brain::AreFollowersClose` (true when every follower
