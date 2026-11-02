@@ -27,7 +27,7 @@ The range 0x470000-0x474000 named in the brief holds no AI code (it is the 3DS s
    returns a priority (stationary logics 50, Suspection = the interest, Aggression 10000 when it has a target, Fear 15000 / 3000 / interest / 6, Player 10,
    Tamed 1e8); the current one gets +100; the best becomes current (`End` on the old, `Begin` on the new) and its `Update` runs. The motivation set comes
    from the unit's `.mob` logic slot (`Brain::BuildFromLogicSlot` 0x5D6630: Model + AggrMode) or from script commands.
-4. **Targets**: `Brain::ChooseTarget` 0x5D0030 scores every (spell or weapon) x (candidate) pair with `AiSpellInfo_Score` 0x5CF9A0 (damage minus the
+4. **Targets**: `AiSpellInfos::ChooseTarget` 0x5D0030 scores every (spell or weapon) x (candidate) pair with `AiSpellInfo_Score` 0x5CF9A0 (damage minus the
    target's absorption, minus 25 per metre out of range, minus 2 x the hits needed to kill) and keeps the best that is reachable
    (`Brain::TryAttackTarget` = a path + `CanReachOrderTargetFrom`). Candidates: the seen enemies (`AiMemory::CollectHostiles`) for monsters, the
    units attacking the party for heroes (`CollectAttackers` + `CollectCallers`).
@@ -496,16 +496,19 @@ on others (0x19, 0x1e, 0x20) -> attack table; 5 (9..0xb, 0x1a, 0x1d), 6 (0xc..0x
 Then, when >= minScore: `- 25 x max(0, distance - range)` (x 10 and no range for kinds >= 5) and for kinds 0..3 `- 2 x (target HP / sum)` (20 when sum is 0):
 **the AI prefers the target it kills in the fewest hits**, not the nearest. The old target keeps its score as `minScore`, so a switch needs a strictly better score.
 
-### 7.3 `Brain::ChooseTarget` 0x5D0030 (`this = brain +0xa4`, brain, out `{spell, target}`, candidates, pos, filter, direct) [V]
+### 7.3 `AiSpellInfos::ChooseTarget` 0x5D0030 (`this = brain +0xa4` = the spell tables, brain, out `{spell, target}`, candidates, pos, filter, direct) [V, deep-read 2026-11-03]
+0. no support entry and (no candidate or no attack entry): out target = none, return;
 1. the current order's `{spell, target}` (`Order::GetSpellAndTarget`) is kept as the baseline when `AiSpellInfos::IsTargetClear` 0x5CF7F0 accepts it (area spells:
-   not when a fighting friend of the neighbour list stands within 7 m of the target or the target is out of radius; other kinds always); with `filter` and a one-entry
-   attack table the baseline is returned at once;
+   not when a fighting friend of the neighbour list stands within 7 m of the target or the target is out of radius; other kinds always); its score (with the
+   matching attack or support entry, floor -1e20) is the bar to beat. **When the candidate list has exactly one entry and there is no support entry, the baseline
+   is returned at once** (the earlier text tied this to `filter`; the code tests the candidate count);
 2. `filter == 0`: every candidate x every attack entry; always: itself and every living, non-ignored **friend** of the neighbour list x every support entry (kind 6
    skipped under `filter`); scores above the baseline go to a list;
 3. from the best down: `IsTargetClear`, under `filter` either `Brain::IsNearPath(target, 30 m)` (the post / patrol segment) or `CanReachOrderTargetFrom`, then
    `Brain::TryAttackTarget(direct)` 0x5CF3C0 (attack position = the unit (direct / self) or the end of `CAIMap::FindPath(unit, target, max 3 d + 10)` with the target
    removed from the collision map; `CanReachOrderTargetFrom(order, position)`); a candidate that fails and was the only entry for its target goes to the ignore pairs
-   for 20 ticks; the first that passes wins; none -> the baseline.
+   for 20 ticks unless it is the baseline target; reaching the baseline pair again in the list returns it; the first that passes wins; none -> the baseline.
+   Under `filter`, `CanReachOrderTargetFrom` is only asked when the target is NOT within 30 m of the post / patrol path.
 `Brain::CastSupportSpell` 0x5CFE40 (the stationary `Update`s) is `ChooseTarget(empty, filter 1)`: heals / buffs on friends only. `AiLogicAggression` uses filter 0
 with the seen enemies; `Regroup` filter 0 with the attackers; `Fear` filter 1 direct 1.
 
