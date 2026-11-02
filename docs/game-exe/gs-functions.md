@@ -234,8 +234,8 @@ Areas (`AddRoundToArea`, `AddRectToArea`) are records of the VM (GSWorld+0x198) 
 | 0x5A | GroupSub | function -> G | gg | EvalGroup 0x4B5BE2 | GroupSub(g1, g2): difference g1 \ g2. | V |
 | 0x5B | GroupCross | function -> G | gg | EvalGroup 0x4B5BF8 | GroupCross(g1, g2): intersection. | V |
 | 0x5C | GroupHas | function -> F | go | EvalFloat 0x4B47D0 | GroupHas(group, obj): 1.0 when the reference occurs (linear pointer compare). | V |
-| 0x5D | UnitSee | function -> G | o | EvalGroup 0x4B5C0E | UnitSee(unit): a temporary group of the units the unit currently perceives: the "seen units" list of its AI memory (CUnitServer +0xA94 = AiMemory +0x44). Empty for non-units. | I |
-| 0x5E | GroupSee | function -> G | g | EvalGroup 0x4B5C61 | GroupSee(group): the union of UnitSee over all members. | I |
+| 0x5D | UnitSee | function -> G | o | EvalGroup 0x4B5C0E | UnitSee(unit): a temporary group of the unit's AI-memory seen list (`AiMemory +0x40`, head +0x44 = CUnitServer +0xA94; filled by `StimulusMap::SeeUnits` / `UpdateVision`, unit-ai.md). Empty for non-units. Not "currently visible" for AI units: a monster drops a seen ENEMY only when it dies, the memory is reset or the unit is removed (the range test only drops non-enemies and the units of player-owned observers), so `UnitSee(monster)` = every living enemy it ever noticed plus the non-enemies in range. | V |
+| 0x5E | GroupSee | function -> G | g | EvalGroup 0x4B5C61 | GroupSee(group): the union of UnitSee over all members (same seen-list semantics). | V |
 | 0xA5 | PlayerSee | function -> G | f | EvalGroup 0x4B5CCA | PlayerSee(player): everything the player sees: the visible set of the player's connection ([conn]+0x50F8), its own party units and for each of them the units in its AI-memory seen list. | V |
 | 0x62 | GetPlayerUnits | function -> G | f | EvalGroup 0x4B5DDF | GetPlayerUnits(n): all units (type 0x50) of the object manager whose side / diplomatic group (+0x250) equals n (NOT the owner player id). | V |
 
