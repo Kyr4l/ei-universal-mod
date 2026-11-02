@@ -162,7 +162,7 @@ the declarations CArray `+0x90`; functions by the token id in the table. There i
 returns 0 and every parser returns that 0 upward, so a compile stops at the **first** error and `Compiler_CompileText` returns 0 with the VM left
 holding whatever was appended before the failing top-level item (programs, declarations and globals of the earlier items stay; `+0x1A8` /
 `+0x1AC` are *not* bumped). Who shows it: `App_LoadMapAndScript` (`FatalError "%s, line %i"` through `GSWorld::GetLastError`), the console
-(`Console_RunScriptLine` 0x5DD800 prints `Script error: <text>`); `MobFile_Load` and `LoadWorldScript` ignore the result [I] (the map runs with the
+(`Console_RunScriptLine` 0x5DD800 prints `Script error: <text>`); `MobFile_Load` and `LoadWorldScript` ignore the result [V] (the map runs with the
 partial script). The codes:
 
 | code | message (format) | where |
@@ -567,7 +567,11 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 
 ## 9. What is not known
 
-- Whether `MobFile_Load` / `LoadWorldScript` report a failed compile anywhere: they do not read `+0x1EC` [V]; the visible symptom is a [live] check (load a map with a deliberately broken script and watch the console / log).
+- ~~Whether a failed `.mob` compile is reported~~ settled 2026-11-03 [V]: it is not. The only readers of the error state
+  (`+0x1EC` text / `+0x1F0` code, `GSWorld::GetLastError` 0x456360) are `App_LoadMapAndScript` (the editor path),
+  `WorldScript_Execute` (the console) and `Compiler_CompileFile`. `MobFile_Load` 0x481660 and `SpawnPartyHeroes` call
+  `Compiler_CompileText` and drop the result. A broken `.mob` script fails silently: the map runs with everything compiled before
+  the first error and nothing after it (useful for mod authors: check scripts with the console or the multitool checker).
 - ~~`+0x6C`~~ settled [V]: `nextAutoId2` is the id of script sound sources created without one: `GSWorld::CreateSoundSource` 0x4BD310 (CreateFXSource / CreateRandomizedFXSource) takes it when the given id is < 0 and decrements it (-2, -3, ...); reset by `GSWorld::Reset` 0x4BE6E0, saved.
 - The MFC `Serialize` slots of all script containers (vt slot 2) are present but no `CArchive` path into them was found; the save uses the explicit
   `Write` / `Read` pairs. Taken as dead code.
