@@ -530,7 +530,7 @@ highest vertex of the covered box (1-cell margin, clamped to the map), `ReserveF
 | class | file (in `database.res`) | blocks (Archive tags) | record sizes | readers |
 |---|---|---|---|---|
 | `CPrintsDb` 0x6D0250 (g_0x7C89C8), `Load` 0x6D0630 | `prints.db` | 1 BloodPrints, 2 FootPrints, 3 FirePrints | 0x28, 0x34, 0x28 | `CWorldClient::AddTerrainPrint` 1 / 2 / 3 |
-| `CAcksDb` 0x6D7220, `Load` 0x6D7620 (once from `main` 0x45706C) | `acks.db` | 1 Answers, 2 Cryes, 3 Others | 0x1C4 (`AcksAnswer`, 0x6DC000), 0x5C, 0x38 | `CAcksDb::PlayUnitHitSound` 0x6D8430, `FindUnitRecord` 0x6D8A40 (the unit's prototype name + gender) |
+| `CAcksDb` 0x6D7220, `Load` 0x6D7620 (once from `main` 0x45706C) | `acks.db` | 1 Answers, 2 Cryes, 3 Others | 0x1C4 (`AcksAnswer`, 0x6DC000), 0x5C, 0x38 | `CUnit::PlayAck` 0x6D8430 (was CAcksDb::PlayUnitHitSound: unit event code -> sound list, combat.md 9), `FindUnitRecord` 0x6D8A40 (the unit's prototype name + gender) |
 
 Each block is a `std::vector` of records with a name -> record hash map (+0xC, +0x2C, +0x4C); an `AcksAnswer` additionally maps the
 sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line records `{wav path, weight, subtitle, text id}` =
@@ -630,7 +630,7 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 | 0x6D0250 / 0x6D0630 / 0x6D00E0 | CPrintsDb::ctor / Load / dtor | prints.db |
 | 0x6D4410 / 0x6D44E0 / 0x6D45D0 | WaterLevels::SetTarget / Tick / Read | script water levels |
 | 0x6D4AA0 / 0x6D4D40 / 0x6D5910 / 0x6D5BF0 / 0x6D6D40 | CBitmapDib ctor / LoadFile / LoadStream / LoadMmpMipLevel / FromSurface | |
-| 0x6D7220 / 0x6D7620 / 0x6D8430 / 0x6D8A40 | CAcksDb::ctor / Load / PlayUnitHitSound / FindUnitRecord | acks.db |
+| 0x6D7220 / 0x6D7620 / 0x6D8430 / 0x6D8A40 | CAcksDb::ctor / Load / CUnit::PlayAck / FindUnitRecord | acks.db |
 | 0x68CED0 / 0x68D010 / 0x68D0A0 / 0x68D280 / 0x68D310 / 0x68D5A0 / 0x68D730 | CLight ctor / InitPositional / InitDirectional / PrecomputeMaterialTerms / ApplyDirectional / ApplyPointWrap / LuminanceAt | |
 | 0x68DA40 | CLightManager::CreateByKind | kinds 0x2E / 0x31 |
 | 0x68DBC0 / 0x68E640 / 0x68E970 | CMaterial::ctor / CMaterialManager::Init / CreateAndRegister | materials.res templates |

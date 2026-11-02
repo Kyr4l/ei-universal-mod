@@ -139,7 +139,7 @@ UnitStats			0x7c	float	naturalDefence	proto +0x70: parry/defence skill (AttackPa
 UnitStats			0x80	float	naturalWeight	proto +0x74: weapon-weight equivalent (AttackParams[2]); CUnit +0x34c
 UnitStats			0x84	float	naturalDamageMin	proto +0x80; CUnit +0x34d
 UnitStats			0x88	float	naturalDamageSpread	proto +0x84: damage roll = min + rand(0..spread); CUnit +0x34e
-UnitStats			0x8c	float	field_8c	proto +0x5c
+UnitStats			0x8c	float	actionsTuning	Tuning Actions (UnitProto +0x5c); no reader found in an offset search (write-only) [I]. CORRECTION: was field_8c
 UnitStats			0x90	float[7]	naturalDamageFactors	udb +0x50: damage type distribution (impaling, slashing, crushing, thermal, chemical, electrical, general)
 UnitStats			0xac	int	naturalAttackKind	proto +0x78 (8 = none, 0x10 = ?); the animation set bit and the death kind; CUnitServer +0x28c, CUnit +0x34f; = stats +0xac; CORRECTION: was bodyClass
 UnitStats			0xb0	float[12]	senses	6 base/current pairs: Sight, Infra, SenseLife, Hearing, Smell, Tracking (current = base + buffs); base / current (= stats +0xb0/+0xb4)
@@ -763,12 +763,12 @@ MobLogicSlot		0x4c	0x18	float[3]	guardPoint
 MobLogicSlot		0x4c	0x24	int	cyclic	0 = the patrol goes back along the points
 MobLogicSlot		0x4c	0x28	int	flags	bit 3 AlwaysActive
 MobLogicSlot		0x4c	0x2c	float	guardRadius	
-MobLogicSlot		0x4c	0x30	float	unused30	chunk 0xBBBC000A
+MobLogicSlot		0x4c	0x30	float	mobWait	.mob Wait (0xBBBC000A), default -1.0 (UnitLogic::ctor); copied and saved, not read by Brain::BuildFromLogicSlot. CORRECTION: was unused30
 MobLogicSlot		0x4c	0x34	int	numAlarm	alarm slot raised by this unit
 MobLogicSlot		0x4c	0x38	int	use	slot usable by InvokeAlarm
 MobLogicSlot		0x4c	0x3c	float	help	CallForHelp radius
 MobLogicSlot		0x4c	0x40	int	alarmCondition	0 / 1 / 2
-MobLogicSlot		0x4c	0x44	int	wait	ticks before the alarm
+MobLogicSlot		0x4c	0x44	int	alarmWait	75 from UnitLogic::ctor 0x45D5B0; no .mob chunk writes it; Brain +0x40 = max(1, this). CORRECTION: was wait (ticks before the alarm)
 MobLogicSlot		0x4c	0x48	int	aggrMode	0 standard 1 revenge 2 fearful 3 player-fear
 PlayerRelations		0x100	0x0	uint[32]	friends	row[a] bit b = a treats b as FRIEND (self bit set by Reset); g_0x7C2BC4 (.mob diplomacy) and CWorldServer +0x12c64
 PlayerRelations		0x100	0x80	uint[32]	enemies	forced enemy bits = initial alarmMask of a side
@@ -1192,7 +1192,7 @@ CPlayer			0xe0	pointer	itemListVt	MFC CList vtable 0x73BE80 of the loose item li
 CPlayer			0xfc	uint	partyId	the party / session key handed to PartyHash_GetParty / SetParty; sent by the client in the identity block (last u32) and bumped by NextUniqueId on upload
 CPlayer		0x0	0x100	int	zoneKindCopy	CWorldServer +0x12d64 (g_0x7C2CC4) at AcceptPlayers; saved; CPlayerServer 0x670DA0 copies it again
 CPlayer			0x104	int	prevGameMode	previous +0x100 (client OnMsg07_GameMode)
-CPlayer			0x108	byte	flag108	cleared by Reset; not read in the functions of this round
+CPlayer			0x108	byte	godMode	script GodMode (0x97): 0 normal; != 0 the player's units take no damage (TakeHit) and run without stamina (UpdateStance); > 1 their hits kill (BuildHitRecord -> Hit_Init). CORRECTION: was flag108
 CPlayer			0x10c	int	netLogFlag	logs "client to server / server to client, size = N squeezed ..." when set
 CPlayer		0x0	0x110	int	gtimeTick	the world tick at which "gtime" was last updated (BroadcastGameTime); = tick after PlayerIn / LoadSave
 CPlayer			0x114	pointer	syncedItemsVt	MFC CList<DWORD> vtable 0x743138; +0x118 head (existing row trackedIds), +0x11c tail, +0x120 count, +0x124 free, +0x128 CPlex, +0x12c block 10: ids of party items whose float +0x28 (durability) is synced with message 0x14 (CPlayer::TrackItemId / PurgeSyncedItems / CPlayerServer::ResendItemValues)

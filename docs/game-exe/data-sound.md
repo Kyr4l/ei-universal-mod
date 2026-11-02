@@ -195,7 +195,7 @@ fraction [I].
 prototype), `CUnit::GetProto` 0x530930 / `GetProto2` 0x5309E0 (43 callers), `CUnit::SetProtoIndex` 0x5308A0 (`+0x23c = (proto -
 base) / 0x120`), `CUnitClientSpecific::PlayAnimation` / `GetStepSoundName` / `BuildSkinTextures` 0x536670 / `GetAnimSoundName`
 0x534760 (client), `CWorldClient::CreateHeroUnits` 0x566F70, `CPlayerClient::OnMsg40_UnitCreate` 0x667EC0, `CParty::InitHeroFromProto`,
-`UIUnitPreview::PickFaceFigure` 0x5ED7B0 ('unhuma' / 'unhufe' -> face figures), `CAcksDb::PlayUnitHitSound` 0x6D8430.
+`UIUnitPreview::PickFaceFigure` 0x5ED7B0 ('unhuma' / 'unhufe' -> face figures), `CUnit::PlayAck` 0x6D8430 (was CAcksDb::PlayUnitHitSound; the unit event code -> acks.db sound, combat.md 9).
 
 ### 3.6 What um-multitool assumes (`viewer/unit_db.hpp`) - verified
 

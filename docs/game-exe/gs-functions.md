@@ -306,7 +306,7 @@ Areas (`AddRoundToArea`, `AddRectToArea`) are records of the VM (GSWorld+0x198) 
 | 0xCE | GiveStrength | command | of | Run 0x4B92C1 | GiveStrength(unit, n): UnitStats_BoostMaxHP: base strength (stats +0x0C) += n and the dependent maxima are recomputed. (functions.tsv calls it "BoostMaxHP"; the script id says strength.) | I |
 | 0xCF | GiveDexterity | command | of | Run 0x4B9309 | GiveDexterity(unit, n): UnitStats_BoostMaxMP: base +0x14 += n and recompute. | I |
 | 0xD0 | GiveIntelligence | command | of | Run 0x4B9351 | GiveIntelligence(unit, n): UnitStats_BoostMaxStamina: base +0x1C += n and recompute. | I |
-| 0x97 | GodMode | command | ff | Run 0x4B6EDA | GodMode(player, mode): the byte at player +0x108 = (char)mode. CUnitServer::TakeHit applies damage to the player's units only while this byte is 0, so any non-zero value blocks damage (the docs distinguish 1 and 2 = every hit kills; that second behaviour is not in TakeHit). | V |
+| 0x97 | GodMode | command | ff | Run 0x4B6EDA | GodMode(player, mode): the byte at player +0x108 = (char)mode. CUnitServer::TakeHit applies damage to the player's units only while this byte is 0, so any non-zero value blocks damage; >= 2 also makes every hit of the player's units kill (`BuildHitRecord` 0x54F630 -> `Hit_Init`, damage 3.4e36), and any non-zero value lets them run without stamina (`UpdateStance` 0x548520): the documented 1 / 2 levels are both real. | V |
 | 0x7C | HaveItem | function -> F | ff | EvalFloat 0x4B4F2C | HaveItem(player, scriptId): CPlayer::HasSpellById (0x665640): 1.0 when an item of kind 0x3009 (quest item) with +0x4C == id is in the player's list or a unit of the player carries such an item in its +0x4A0 array. 0.0 for an unknown player. | V |
 | 0xE1 | GetLootItemsCount | function -> F | f | EvalFloat 0x4B45E1 | GetLootItemsCount(player): player +0xEC; 0.0 for an unknown player. | V |
 | 0xE2 | GetMoney | function -> F | f | EvalFloat 0x4B4622 | GetMoney(player): player +0xC0. | V |
@@ -542,5 +542,5 @@ Honest list of what the code read here does not settle:
 - **GSSetVar / GSGetVar / GSSetVarMax / GSDelVar** ignore the player in a hosted lobby (one session table); in all modes a value of 0 deletes the entry.
 - **GetObject** of a missing id does not report anything (the error function is empty).
 - **DeleteParticleSource** removes the first node with the id, **DeleteLightning** removes every node with the id; **CreateLightning** with an existing id adds a second lightning.
-- **GodMode**: the byte is only tested for "non-zero" in `TakeHit`.
+- **GodMode**: `TakeHit` tests "non-zero" (no damage), `BuildHitRecord` tests "> 1" (one-hit kills): the two documented levels exist (combat.md 4.3).
 - The functions.tsv text of `Compiler_CompileText` has the keyword ids 0x75 / 0x76 swapped: 0x75 = `Script`, 0x76 = `DeclareScript` (this table's order is right).

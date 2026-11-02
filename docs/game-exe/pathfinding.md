@@ -41,7 +41,7 @@ Addresses are VAs in game.exe; offsets are bytes. "tile" = one 0.5 m cell of the
 | world position | floats `CUnit +0x1C/+0x20/+0x24` = x, y, z in metres |
 | tile index | `round(pos * 2 - 0.5)` in x and y [V] (`CAIMap::IsUnitCellPassable` 0x5BA6E0 etc.); tile (i, j) covers metres [i/2, i/2 + 0.5) |
 | path / mover coordinates | metres * 2 (floats, "tile units"): cell centre = (i + 0.5, j + 0.5); conversion back `* 0.5` (TickMovement) [V] |
-| map size | `width = sectors * 64`, `height likewise` at `CAIMap +0x26A0 / +0x26A4`; sector = 32 m = 64 tiles |
+| map size | `width = sectors * 64`, `height likewise` at `CAIMap +0x26A0 / +0x26A4`; map sector = 32 m = 64 tiles. The **collision-map** sectors are smaller: `Resize(w >> 5, h >> 5)`, 32 tiles = 16 m [V] |
 | world tick | `CWorldServer +0x64` (`DAT_007AFFC4`), 55 ms at normal speed (docs/game-memory.md); all movement times are ticks (ints, evaluated as floats) |
 | direction codes | 1 N (y-1), 2 NW, 3 W, 4 SW, 5 S (y+1), 6 SE, 7 E, 8 NE (x+1,y-1) [V] (`Cell_Neighbour` 0x5C5CC0, `PathFinder::ExtractPath`, table 0x791988). The code stored in a node is the way **back** to its parent. In an AIGRAPH file the same eight directions are 0..7 (code - 1) |
 | facing | `heading = atan2(dir.y, dir.x)` of the facing vector; the game takes `dir = -QuatForwardAxis(CUnit +0x34)` [V] |
@@ -134,7 +134,7 @@ Called for a rectangle (+3 margin) after load and after every object change. For
    only) and the neighbours' classes 5-7 are cleared by lists `+0x240 / +0x254 / +0x268`.
 4. When `CAIMap +0x02` (`navGridOn`) is set: units in the area are taken out of the collision map, `NavGrid_Build` rebuilds the nav cells of the rectangle (+1 cell
    margin), the units are put back. `navGridOn` is `CWorldServer +0x172`; set after a zone/save is loaded, cleared during loading (`CWorldServer::BeginPaint/EndPaint` 0x595A90/0x595A70,
-   misnamed: see names file) and for the duration of `ApproachTarget` / `ValidateQueuedOrder`.
+   misnamed: now `EndAIMapBatch` / `BeginAIMapBatch`, and neither has any reference in the exe: dead editor code [V]) and for the duration of `ApproachTarget` / `ValidateQueuedOrder`.
 
 The class an individual unit uses (`CUnitServer::v23_ComputeAnimSpeedClasses` 0x552FB0, [V]): size `S = CUnit::GetSize`, speed `s = proto[+0x120] * field14C`:
 S <= 0.85: class 1 if s < 0.6, 2 if < 1.2, 3 if < 1.9, else 4; S <= 1.5: class 5 (s <= 1.7) or 6; S > 1.5: class 7. Stored `+0x248` (walk / run), `+0x24C`
@@ -150,7 +150,7 @@ S <= 0.85: class 1 if s < 0.6, 2 if < 1.2, 3 if < 1.9, else 4; S <= 1.5: class 5
   A `StampMap` keeps 4 x 4 blocks in 1024 buckets keyed `(by + bx*17) & 0x3FF`; adding **max**-merges (applier vt[1]), removing deletes the owner's blocks and **re-sets** the cell
   block to the max of the remaining owners (vt[0]).
 * **Which grid**: `CUnit::Get278` (`+0x278` = "walking": set by `TickMovement` when state == 0, cleared by `StopMove`) selects the `StampMap` at **+0x12A4 -> obstacle grid** for
-  walking units and **+0x27C -> terrain byte +8** for standing ones. A unit with `+0x274` set (vt[55]; `GetDisplayPos` uses the same slot to switch to an attach point, so probably "attached to / carried by something") is not stamped at all [?].
+  walking units and **+0x27C -> terrain byte +8** for standing ones. A unit with `+0x274` set is not stamped at all: `+0x274` is the dead flag (`CUnitServer::SetDead` 0x546720 writes it, vt[55] `CUnit::Get274` 0x446880 returns it), so corpses never block [V].
 * **Fit test** `CAIMap::CanUnitStandAt` 0x5B80F0: `R = max(0, round((2 - radius) * 16))`; fits when `terrain.b8 <= R` (else blocked at *level 1*) and `obstacle <= R` (else *level 2*).
   The stamps are exactly `(r_other + 2 - d)*16` so the test is `d >= r_other + r_self` (a circle test quantised to tiles).
   `CanUnitMoveTo` 0x5B81B0 additionally accepts a cell that is no tighter than the unit's current cell (so a unit already inside a stamp can leave).
@@ -311,7 +311,7 @@ start and end tick, or the bearing; position fixed) and clamps `t` to `startTick
 3. `state == 0`, standing on a type-3 tile (`HasObjectType3AtPos`, e.g. in a spell zone), not in attack mode and a counter `+0x4C < world +0x2804` [? meaning] -> re-path.
 4. Moved: `CollisionMap::MoveUnit` (restamp), yaw from `dir`, `CUnit +0x278 = (state == 0)` (re-registers the unit when it changes, `MarkNetDirty(7)`).
 5. **Re-path** (level 1): clear the pending cells, `CAIMap::FindPath(self, goal +0x9C, moveState, maxLen +0xA4)` (after `StampUnitFootprint` 0x5B7EF0 copies the obstacle grid 15 x 15 around us into the terrain level for the walking neighbours, removed again afterwards); failure -> `StopMove`, state 6 (`+0x145 = (partial flag == 1)`); success -> `CUnit::ResetMover` (new curve, replicated).
-6. **Wait** (level 2): pause flag `+0x20/+0x21` (animation), the unit is re-registered as standing (`+0x278 = 0`, `MarkNetDirty(7)`). The curve keeps running in time, so after a wait the evaluated position is *ahead* of the unit (it catches up in one step if free) [I].
+6. **Wait** (level 2): pause flag `+0x20` (`+0x21` for move type 2), the unit is re-registered as standing (`+0x278 = 0`, `MarkNetDirty(7)`). The next `TickAnimation` 0x546F30 sees the flag and calls `MoveRequest::ShiftTimes(+1)` (start tick and the kind-3 end ticks), the animation start ticks and `CUnit +0x258` + 1: time stands still for the unit, so the curve does **not** run ahead; `TickState` clears the flag at the start of the next tick [V].
 7. `ended` (curve finished its chunk): `flags[0]` set -> arrived: `CMover::Reset`, `SetRect(stand at current pos)`, `ResetMover`, `SetSide(0)`, state 6 (idle). Else `ContinueMove`; refused -> same stop; ok -> `ResetMover` (next chunk).
 
 Order completion: a move order (kind 1 / 2) is finished when `TickMovement` has put the unit into **state 6** (idle); `CUnitServer::Think` 0x54B390 (called from `Update` 0x552300 and `TickState` before the state
@@ -345,14 +345,29 @@ into the client unit's request (and, with the debug flag `0x79BE70`, rebuilds th
 
 ## 7. What is not known
 
-* `Vec2Q64` range / base: 16 bits over +-32 cannot be an absolute coordinate; the delta codec's base semantics are unresolved [?].
-* The exact value of `RotateSpeedMult` in the shipped aiinfo ([Logic] block read by `AiInfo_Load` 0x5CE0F0 from a registry I did not locate; the `aiinfo.res` archive holds `tileDesc.reg`, `units.reg`, `normal.dat` only).
-* `NavPortalTables` (0x5C3690-0x5C4440, `ChooseExitDirection`'s portal tables): construction read, meaning only partly understood.
-* `CUnit +0x274` (vt[55]) meaning; bridge heights for rendering (`GetWalkHeightAt` has no callers; the z of walkers comes from the world height function vt[27]).
-* The `PathCells` flag +0xE bits' effect on the client (animation?).
-* Whether a pause (wait) shifts the request's start tick (no code found that does; see 5.4 step 6).
-* `CollisionMap::FindUnitsNear` radius classes (the `* 0.03125` radius scaling and the offset table lookup were read but not verified against sector size).
-* The unit stamp rule for dead / hidden units, and the editors' use of `BeginPaint/EndPaint`.
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+* `Vec2Q64` is absolute: `(v + 32) * 60.234375` to u16 covers v in [-32, 1056) in steps of 1/60.23 (`65535 / 60.234375 = 1088`); the
+  +32 is a shift, not a +-32 range. The request position is in tile units (metres * 2), so it covers -16..528 m, the same as `Pos3D`'s
+  x / y range `(v + 16) * 120.46875` [V]. The delta codec bases are the previous state of the field (net-transport.md 5.6).
+* `RotateSpeedMult`: `AiInfo_Load` reads `config\ai.reg` of the work dir (`main`, string 0x784898), not aiinfo.res; the shipped
+  Universal-Mod/config/ai.reg (and the XP-Mates one) has no [RPG] RotateSpeedMult key, so the static default **100** applies [V]
+  (parsed with the reg-format.md reader; the file holds DifficultyLevels, LMP, AddonPerk, Addon and RPG Perk Power Base 1.95).
+* `NavPortalTables`: [untestable] deterministic tables built once at static init from constants (no game state); their effect on
+  paths is described in 4.5, the remaining decoding only matters for a re-implementation.
+* `CUnit +0x274` = the dead flag (section 3.3: corpses are not stamped) [V]. Bridge heights for rendering: the client world's slots 29 /
+  30 (`HeightWithBridges` 0x5618E0 / 0x561930: `CBridgeManager::GetHeightAt` 0x560F00 = highest walkable quad under the point, else the
+  terrain; world-client-players.md 8) [V].
+* `PathCells +0xE`: written by `RateFootprintPath`, sent by `MoveRequest::WriteNet` (bits 4-5) and stored by `ReadNet`; no other reader
+  in the decompiles of the curve (0x5C6000-0x5C7FFF), the path code or the client unit [I]: transmitted, unused.
+* A wait does shift the request start tick: `TickAnimation` -> `ShiftTimes(+1)` every paused tick (5.4 step 6, corrected) [V].
+* `FindUnitsNear` 0x5C0BD0: the offset table (`CellOffsets_Build` 0x5BF8F0) holds the 21 x 21 sector offsets sorted by the gap distance
+  `int(sqrt((|dx|-1)^2 + (|dy|-1)^2))`; the call takes the prefix with gap <= `int(radius * 0.03125)`. Sectors are 16 m (32 tiles), so the
+  scan is only guaranteed to reach `16 * (int(radius / 32) + 1)` m: radii in [16, 32) m (and [48, 64), ...) can miss units in the far
+  corner of the scanned square [V the arithmetic, I the effect]. `RefreshNearbyUnits` scales correctly (`radius * 2 * 0.03125`, tile
+  units). Live check in `live-checklist.tsv`.
+* Stamp rule: dead units are not stamped (+0x274) [V]; units removed from the world are not in the collision map at all [I].
+  `BeginPaint / EndPaint` (now `BeginAIMapBatch` / `EndAIMapBatch`) have no reference in the exe: the editors' use is [untestable].
 
 ## 8. Corrections to earlier notes
 

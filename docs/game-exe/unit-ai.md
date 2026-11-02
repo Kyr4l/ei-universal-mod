@@ -123,7 +123,7 @@ CorpseWatcher pops a corpse, Aggression picks its target, Fear computes its kiti
 | +0x34.. | [RPG] HumanCrossAnimationSpeed 1, BackstabAdd 3, BackstabMult 0, RotateSpeedMult 100, DamageLevel1 0.5, DamageLevel1Value 0.5, DamageLevel2 0, DamageLevel2Value 0.33, DamageLevelRunLimit 0.5, Int1ExpBonus 0.2, HP_Val_1..5 25 30 50 1.1 1.61, MP_Val_1..5 same, Skill_Val_1 50, Skill_Val_2 5, Perk_Power_Base 2, Consider_Modifier 200, Consider_Log_Base 1.61, Item_Durability_Critical 0.3 (+0xa4) | | combat / stats (not AI) |
 | +0x98 / +0x9c | [LMP] Lost_Money 0.1, Lost_XP 0.1; +0xa0 [Scenario] QuestsToRespawn 3 (int); +0xa8 / +0xb4 / +0xc0 [DifficultyLevels] Absorption / Attack / Defence [3] = 1 | | |
 
-`normal.dat` of `aiinfo.res` (0x400 dwords -> `g_0x7C43C4`, loaded by `StimulusMap::Load`) has no reader in the AI code read here [?].
+`normal.dat` of `aiinfo.res` (0x400 dwords -> `g_0x7C43C4`, loaded by `StimulusMap::Load`) has no reader: the only reference to 0x7C43C4 in the whole exe is the `rep movs` of the load (0x5C94E6) [V].
 
 ### 3.2 The senses (`UnitStats`, `CUnitServer +0x1e0 + off`; units.db columns "Senses *" / "Detections *" / "Skills Peripheral") [V]
 
@@ -165,7 +165,7 @@ as + values; visibility, noise, life signature as - values; scent +).
 | +0x18 | interest | 0..1000 (CUnitServer +0xa68): 1000 lost unit, 900 sound, 800 corpse; `HearSound` ignores listeners at >= 900 |
 | +0x1c | decay | added to interest every tick: -1 footstep (dead), -2 lost unit, -3 sound / corpse (doubles as the stimulus kind) |
 | +0x20 | refreshCountdown | neighbour scan every (rand & 3) + 8 ticks |
-| +0x24 | neighbours (ObjRefList, head +0x28 = CUnitServer +0xa78) | every unit within `2 x max(sightMult x sight, senseLife)` (sector granularity 32 m) |
+| +0x24 | neighbours (ObjRefList, head +0x28 = CUnitServer +0xa78) | every unit within `2 x max(sightMult x sight, senseLife)` (sector granularity 16 m: collision-map sectors are 32 tiles) |
 | +0x40 | seen (head +0x44 = +0xa94) | units currently perceived; the only source of enemies for the AI |
 | +0x5c | corpses | seen dead units |
 | +0x78 | friendCorpses (count +0x84) | seen corpses of friend sides; emptied every tick; CorpseWatcher pops them |
@@ -187,9 +187,9 @@ as + values; visibility, noise, life signature as - values; scent +).
 | +0x36 / +0x37 | currentSlot / alwaysActive | .mob logic slot in use; AlwaysActive bit |
 | +0x38 | callForHelpRadius | .mob Help (7 default); also `PropagateAlarm`'s radius (+0x9b8) |
 | +0x3c | alarmCondition | .mob AlarmCondition 0 / 1 / 2 |
-| +0x40 | alarmWait | .mob Wait ticks (min 1) |
-| +0x44 / +0x48 | nearRange / farRange | radius + 35 / + 80 (guard) or 35 / 80; 100000 after a reset; no reader found [?] |
-| +0x4c | idleSpeedFactor | random 0.8..1.0 on a stationary `Begin`, decays to 1; no reader found outside the brain [?] |
+| +0x40 | alarmWait | `max(1, slot +0x44)` = 75 ticks for every .mob unit: the slot ctor's default, no chunk fills it (the .mob Wait float lands in slot +0x30, unused) [V] |
+| +0x44 / +0x48 | nearRange / farRange | radius + 35 / + 80 (guard) or 35 / 80; 100000 after a reset; only written, saved and loaded (typed-field and raw-offset search) [I] |
+| +0x4c | idleSpeedFactor | random 0.8..1.0 on a stationary `Begin`, decays to 1 in `Brain::Tick`; no other reader (only the decay, Write / Read) [I] |
 | +0x50 / +0x5c | prevWaypoint / curWaypoint | post / patrol points (-1313 none); `IsNearPath` |
 | +0x68 | spotRetryCountdown | `FindRandomReachableSpot` backoff |
 | +0x6c | followTick | `TickFollow` every 8 |
@@ -233,12 +233,12 @@ and any stationary one by a new stationary one: a unit has at most one post.
 | +0x24 | 0002 byte | cyclic (0 = a patrol walks the points back in reverse) |
 | +0x28 | 000D byte | bit 3 AlwaysActive |
 | +0x2c | 0004 float | guard radius |
-| +0x30 | 000A float | unused by the brain |
+| +0x30 | 000A float | Wait (the editor's value, default -1.0 from `UnitLogic::ctor` 0x45D5B0): copied by `Brain::SetMobLogics`, saved, but not read by `BuildFromLogicSlot` [V] |
 | +0x34 | 0006 byte | NumAlarm (alarm slot 0..4 raised by this unit; 0 = none) |
 | +0x38 | 0007 byte | Use (this slot can be switched to by an alarm) |
 | +0x3c | 000C float | Help (CallForHelp radius) |
 | +0x40 | 000B byte | AlarmCondition: 0 enemy seen, 1 attacked, 2 enemy seen or any reactive motivation begins |
-| +0x44 | | Wait (ticks before the alarm fires, min 1) [?] chunk id not in the switch read |
+| +0x44 | (none) | the alarm wait the brain uses (`+0x40 = max(1, this)`): 75 from `UnitLogic::ctor`, no chunk writes it, only saves restore it [V] |
 | +0x48 | 000E byte (0001 / 0008 / 0009 legacy bytes clamp it to 0 / 1 / 2) | AgressionMode: 0 standard, 1 revenge, 2 fearful, 3 player-fear |
 
 `Brain::BuildFromLogicSlot` (slot, index): Model 1 -> `AiLogicGuard(point, radius, -1)`; 2 -> `AiLogicPatrol` with every point snapped to a tile centre and
@@ -278,7 +278,7 @@ The numbers of `docs/monster-ai.md` (sight 8.5 animals / 13 heroes, fov 50 / 75)
 
 ### 4.2 Neighbour scan (`StimulusMap::RefreshNearbyUnits` 0x5CA1D0) [V]
 
-Every `(rand & 3) + 8` ticks (`AiMemory +0x20`): the neighbour list is rebuilt from the collision-map sectors (32 m) within
+Every `(rand & 3) + 8` ticks (`AiMemory +0x20`): the neighbour list is rebuilt from the collision-map sectors (16 m) within
 `max(S.sightMult x S.sight, S.senseLife) x 2 / 32` sectors of the eye cell, i.e. every unit within roughly twice the sight range, friend or foe, alive or dead,
 except O itself. The scan also sets the unit flag 0x80000 (alarm to propagate), so `PropagateAlarm` re-runs at the same cadence. The neighbour list
 feeds `SeeUnits`, `ComputeDetectionFactors`, `AiAcknowledge::Tick`, `PropagateAlarm`, `WitnessMurder`, the support-spell candidates and the
@@ -362,7 +362,7 @@ the receiver's `alarmMask` 30 ticks later. So hostility spreads through chains o
 ### 5.4 The .mob alarm slots (`CWorldServer::ActivateLogicSlot` 0x593FC0; script `InvokeAlarm`, `IsAlarm`, `AlarmTime`, `AlarmPosX/Y`) [V]
 
 `brain +0x3c alarmCondition` decides when a unit *raises* its alarm flag: 0 = an enemy is seen; 1 = it is attacked (`Brain::OnAttackedBy`); 2 = an enemy is seen or
-any of Suspection / Aggression / CorpseWatcher / Fear becomes current. With the flag set, `brain +0x40 wait` counts down (the .mob Wait, min 1) and then
+any of Suspection / Aggression / CorpseWatcher / Fear becomes current. With the flag set, `brain +0x40 wait` counts down (75 ticks: the .mob Wait is not used, table 3.6) and then
 `ActivateLogicSlot(alarmSlot +0x35, unit position, force 0)` runs, with the "ALARM ALARM ALARM" voice level 8. The world marks slot n (`+0x8c + 0x10 n`:
 active byte, tick, x, y) and **every AI unit** (`player == 0`) calls `Brain::SelectLogicSlot(n)` 0x5D5940: units whose slot n has the Use flag (or n == 0)
 rebuild their motivations from that slot (`BuildFromLogicSlot`: new post, new AggrMode) and voice "to Alarm!" (level 7); units with AlwaysActive are activated.
@@ -555,13 +555,23 @@ flag / slot, the 5 mob slots (`UnitLogic::Write` 0x45D760), wait, active, both s
 (`MoveRequest`, stance, `alarmMask` / side / player via net section 0xb, the detection factors via 0xc, the battle button via 0xd).
 
 ## 10. What is not known
-* Readers of `brain +0x44 / +0x48` (near / far range) and of `+0x4c idleSpeedFactor` outside the brain, of `AiSpellInfos +0x28 maxLevel`, of `FollowLimit`,
-  of `normal.dat` (`g_0x7C43C4`) and of `AiMemory +0x20` beyond the scan countdown [?].
-* The exact activation rule for sleeping units other than damage / AlwaysActive / alarm: answered in world-server.md 4.3 (`ActivateObjectsAround` around every tracked unit, radius sight x 2 + 20 m, in playable zones only).
-* `MobLogicSlot +0x30` (chunk 0xBBBC000A) and which chunk fills `+0x44 Wait` (the switch read has no case for it; `UnitLogic::Read` loads it from saves).
-* `HeardSounds_AppendAlarm` writes an uninitialised stack position into the record (harmless: flagged records never use it).
-* The player mode `CPlayerServer +0x5120`: answered in world-client-players.md 7 (0 calm, 1 a party unit has a body-part stat <= 2.0, 2 a visible unit fights the party; computed in `SendMsg60_PartyStatus`). Still open: the UMAg preset table of gs-functions.md
-  (Fear(1) for preset 0) against the .mob AggrMode mapping (Fear(1) only for mode 3): both read as written, not re-verified here.
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+* `brain +0x44 / +0x48 / +0x4c` and `AiSpellInfos +0x28 maxLevel`: written, saved and loaded only (`Brain::Write` / `Read`; +0x4c also decayed by
+  `Brain::Tick`); no reader in a typed-field and raw-offset search [I]. `FollowLimit` (AiInfo +0x20 = 0x7C5418): no instruction in the exe
+  references the address; the AiInfo block is only addressed through its base 0x7C53F8 by the static init and the aiinfo.res loader in
+  `main` [V]. `normal.dat`: only the load copies into it (the AiInfo table above) [V]. `AiMemory +0x20`: only the `RefreshNearbyUnits` countdown,
+  `Clear`, `Read`, `Write` [V].
+* The activation rule for sleeping units: world-server.md 4.3 (`ActivateObjectsAround` around every tracked unit, radius sight x 2 + 20 m, in playable zones only).
+* `MobLogicSlot +0x30` is the .mob Wait (0xBBBC000A, float, default -1) and is not used; `+0x44` (the wait the brain uses) is the
+  `UnitLogic::ctor` default 75 and no chunk writes it, so every alarm fires 75 ticks after it is raised whatever the editor says [V]
+  (live check in `live-checklist.tsv`).
+* `HeardSounds_AppendAlarm` writes an uninitialised stack position into the record: a code observation, harmless (flagged records never use
+  the position) [untestable: no behaviour depends on it].
+* The player mode `CPlayerServer +0x5120`: world-client-players.md 7. The UMAg presets (script 0xC8, re-read in `SSCScript::Run`: 0 = Fear(1) +
+  Suspection + CorpseWatcher, 1 = Fear(0) + ..., 2 = Aggression(revenge) + ..., 3 = Aggression(0) + ...) and the .mob AggrMode mapping
+  (`BuildFromLogicSlot`: Fear(1) only for mode 3) are two separate numberings, both right as written: UMAg preset 0 ~ AggrMode 3,
+  preset 2 ~ mode 1, preset 3 ~ mode 0 [V].
 
 ## 11. Corrections to earlier notes
 1. `docs/monster-ai.md`: "a monster that is hit or sees an enemy calls its friends within CallForHelpRadius" -> the radius is the unit's own `.mob` Help value

@@ -235,7 +235,9 @@ with `-2*dist/10` for ranged weapons, mapped over a +-5 band around the defence:
 | 13 (+0x34) | 1.0, backstab: `3.0 + backstab perk %` (`UnitStats_PerkBonusB` 0x525D60, group 22) | 1.0 | > 1: no defence and the damage multiplier ("backstab with power" in the log) |
 | 14 (+0x38) | called shot byte | | |
 
-Player `+0x108 > 1` (a cheat level) replaces the record with `Hit_Init` 0x522B40 (all factors 1, damage 3.4e36).
+Player `+0x108 > 1` (a cheat level) replaces the record with `Hit_Init` 0x522B40 (all factors 1, damage 3.4e36): every hit of that
+player's units kills [V]. The byte is the script command `GodMode(player, mode)` (0x97, gs-functions.md): 0 normal, 1 = the player's units
+take no damage (`TakeHit`) and may run without stamina (`UpdateStance` 0x548520), >= 2 = the same plus one-hit kills [V].
 
 ### 4.4 Damage application (`TakeHit` 0x553F40 -> `UnitStats_ApplyHit` 0x5254B0 -> `UnitStats_ApplyDamage` 0x525070) [V]
 
@@ -319,9 +321,12 @@ experience, perk names). The full field list is in `batch-combat-structs.tsv`; t
 | +0x6FC | stored max HP | monsters (proto +0x48) |
 
 Derived values [V]: `MaxHP` 0x523E80 = `(str/25) * 30 * 1.1^L * (1 + health perk %)`, `MaxMana` 0x523F50 the same with dex and the mana perk,
-`L = log(exp/50)/log(1.61)` [I: the decompiler shows the two logs and a pow helper; 1.1 is read by `UnitStats_BoostMaxHP`]; `GetLevel`
+`L = log(exp/50)/log(1.61)` [V: the disassembly at 0x5248DA pushes `g_0x7C5460` (1.1) then `L` and calls 0x6E81A0, which is the MSVC
+`_CIpow` x87 helper (pow(ST1, ST0)), not atan2]. The five numbers are the AiInfo `HP_Val` / `MP_Val` rows (25, 30, 50, 1.1, 1.61 at
+`g_0x7C5454..` / `g_0x7C5468..`, defaults from `AiInfo_StaticInit` 0x5CDFB0, overridable by aiinfo.res) [V]; `GetLevel`
 0x556760 = `round(log(exp/200)/log(1.61))`. Max HP is then multiplied by the strengthen/weaken ratio `(1+0.005 b1)/(1+0.005 b2)` and
-**capped at 1.0** in every refresh (`Recompute2`, `RefreshMaxHP` 0x5243D0) — the placement max HP seems to be kept as a fraction [?].
+**floored at 1.0** in every refresh (`Recompute2`, `RefreshMaxHP` 0x5243D0, `GainExperience` 0x5239B0): the branchless select
+`(~m & 1.0) | (x & m)` with `m = (1.0 < x)` is `max(1.0, x)`, so max HP never drops below 1 [V] (the "fraction" reading was wrong).
 Mana cost of a spell = `spell +0x40 * 25 / int` (`UnitStats_ManaCostFactor` 0x523CD0). Regeneration (`Placement_Regenerate` 0x523740, every
 15 ticks): mana `+= (1 + spirit%) * manaRegen * maxMana` only without an order; HP: `rate = (1 + vitality%) * hpRegen * buff 0x1F`, the
 parts are healed by `UnitStats_SpendEffectBudget` 0x525800 (shared by part rate, a part becomes functional again at hp >= 0.001) and the HP
@@ -332,11 +337,13 @@ accumulator and `+8`), perks through `UnitStats_LearnPerk` 0x526450 (see docs/ga
 
 `CUnit +0x440[4]` weapon slots, `+0x450[4]` quick slots, `+0x460[8]` inventory (spells: item `+0x44`), `+0x480[7]` armor (slot = `CItem::GetType`).
 The weapon in hand is the id `+0x26C` (`+0x270` requested). Armor: `UnitStats_RebuildFromArmor` 0x523300 (slot 27) clears the tiers and
-`UnitStats_AddArmorModifiers` 0x5230C0 adds each equipped armor's 7 values (`+0x4C`, second set `+0x68`) into the parts it covers (table
-0x73E048[type*3 + k]) at its tier (`CItem::GetSlotClass`), setting the tier state 3 and the cripple mask. Durability: items are placements too
+`UnitStats_AddArmorModifiers` 0x5230C0 adds each equipped armor's 7 values into the parts it covers (table 0x73E048[type*3 + k]): the
+first covered part gets `+0x4C`, the second and third get the second set `+0x68` (ArmorProto `addValues`, mask `+0x88`) [V]; at its tier
+(`CItem::GetSlotClass`), setting the tier state 3 and the cripple mask. `ApplyDamage` reads every part's tier values, so the second set
+is the armor of the extra parts (e.g. the arms of a mail shirt) [V]. Durability: items are placements too
 (`+0x20` durability, `+0x24` max, `+0x48` count): weapons wear by the damage absorbed by armor, armor by the damage it absorbs; < 1 ->
 `DropBrokenItems`. Ammunition: none in this code — bows need no arrows (the client only shows "rh3.arrow00", `UpdateArrowVisibility` 0x538C20).
-Quick items (`CItemQuick` typeId 0x13): subtype 2 consumables (order 10), 5 charged magic items (charge `+0x28` >= spell cost), 8 scrolls
+Quick items (`CItemQuick` typeId 0x13): subtype 2 consumables (order 10: dead, nothing queues it, see section 9), 5 charged magic items (charge `+0x28` >= spell cost), 8 scrolls
 (cast at once by `QueueCastAt/On`, `Unit_ConsumeItemCharge` 0x595020). Passive item spells: `TickPassiveSpells` 0x552B90 casts affordable
 embedded spells of the `+0x920` list on self on a countdown (`spell +0x20 - 3`, min 8); kind 0x18 ones only while hurt. Armor spells:
 `TriggerArmorSpells` 0x54F8E0 on hit (kind != 0x18) and on death (kind 0x18).
@@ -367,15 +374,35 @@ attachment (`v25_SetWeaponFigure` 0x535590, `Equip/Unequip` 0x5381B0/0x5385A0). 
 
 ## 9. What is not known
 
-* `CItemWeapon +0x4C` (hit[7]) and `UnitStats +0x48/+0x8C` (proto +0x94/+0x5C), udb +0x44.. shorts: copied, never read in these modules.
-* Whether the placement max HP is really a fraction (the `min(1.0, ...)` cap after the buff ratio in 0x524560 / 0x5243D0) or a decompiler
-  artefact; live memory showed max HP ~ 70 at `specific +0x2C` (docs/game-memory.md), so the cap is probably on a different value [?].
-* The exact pow in `MaxHP` (`atan2_wrap` is the x87 helper the decompiler could not name); the constants may be overridden from a config.
-* The player's `+0x108` levels (0 normal, 1 no damage?, > 1 instant kill) and the unit event message codes of `SendMsg0B` beyond those
-  listed in `NotifyPlayer`'s batch row (inferred from their call sites).
-* `UnitStats_TickExperienceAndMaxima` 0x5239B0 (experience grows with dt): its callers are outside this round.
-* The second value set of armor items (`+0x68`, tier `+0x20..`): written by `AddArmorModifiers`, not read by `ApplyDamage`.
-* Order kind 10 has no caller found; `CWorldServer::SpawnDebugUnit` as the consumable effect looks like a misnamed function.
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+* `UnitStats +0x48` (Skills Peripheral, proto +0x94) **is read**: `StimulusMap::SeeUnits` 0x5CA5A0 uses it as the peripheral vision
+  range (observer `CUnitServer +0x228` = stats +0x48) [V]. `CItemWeapon +0x4C` (hit[7]) and `UnitStats +0x8C` (Tuning Actions, proto
+  +0x5C) have no reader in an offset search of the decompiles: write-only [I].
+* The max HP "cap" is a floor: `max(1.0, x)` (section 5) [V].
+* The pow in `MaxHP` / `MaxMana`: `1.1^(log(exp/50)/log(1.61))`; 0x6E81A0 is `_CIpow`, not atan2 (renamed in `batch-t3.tsv`) [V]. The
+  constants are the AiInfo HP_Val / MP_Val rows, overridable by aiinfo.res [V].
+* Player `+0x108` = `GodMode` level: 0 / 1 no damage (+ run without stamina) / >= 2 also one-hit kills (section 4.3) [V].
+* The unit event codes of `SendMsg0B`: the client (`CBattleHud::OnUnitEvent` 0x6366F0 -> `CUnit::PlayAck` 0x6D8430, was
+  `CAcksDb::PlayUnitHitSound`) plays the acks.db sound list of the code; the code -> list map is built by `CAcksDb::Load` 0x6D7620 and the
+  list names are the acks.db folders (parsed from Universal-Mod/res/database.res) [V]:
+  0 Selected, 1 Move, 2 Attack, 3 Cast, 4 Loot, 5 UseObj, 6 Steal, 7 Follow, 8 UsePot, 9 ChPos (stance ok), 0xA BigAtt, 0xB NoWayAtt
+  (cannot attack), 0xC field 33 "Unknown" (no sounds in acks.db; sent for melee on a target >= 1.5 m up), 0xD CntChPos, 0xE NoPath,
+  0xF CantCast, 0x10 CantTele, 0x11 SciFail, 0x12 NoTarget, 0x13 ComplSp (spell too complex), 0x14 Overload, 0x15 Injured (cannot
+  run), 0x16..0x1B no sound (0x1B cannot sit), 0x1C DecToAtt, 0x1D OutStam (out of stamina, `TickMovement`), 0x1E ArmCrip, 0x1F LegCrip,
+  0x20 AttInDef (`AiLogicPlayer`: has a leader while the battle button is off), 0x21 WaitFoll, 0x22 StealEmp, 0x23 ArmorCri (+
+  weapons\crash.wav), 0x24 WeapCrip (+ crash.wav), 0x25 / 0x26 only weapons\timecrash.wav (wear low), 0x27 ShopYes, 0x28 ShopNo
+  (heroes below some unit counter play 0x27 for codes 0..10 and 0x28 for 0xB..0x13 / 0x1D: the generic yes / no), 0x29 Bored (idle);
+  the Answers map also keys 0x2A -> Scenario, but `PlayAck` sends 0x2A..0x2D to the Cryes block and 0x2E..0x32 to the Others block
+  (`AiAcknowledge` broadcasts), and `OnUnitEvent` handles 0x2A / 0x2B itself (the "say" line from the Scenario record); 0x30 also greys the portrait (killed), 0xB..0x15 shake it; 0xFF = respawn.
+* 0x5239B0 is `UnitStats_GainExperience` (was `TickExperienceAndMaxima`): its only caller chain is `CWorldServer::GiveExperience`
+  0x5911C0 -> `CUnitServer::UpdateStatsFromPlacement` 0x553380, and the float is the experience share, not dt: experience `+=
+  xp * 1.04^(int - 25)` (`stats +0x20`, constants 0x73E128 / 0x73E124), through the accumulator +0x700 (it only holds negative values),
+  then max HP / mana re-derived [V].
+* The second armor set `+0x68` is the armor of the second / third covered body part, read by `ApplyDamage` with the part tiers [V].
+* Order kind 10: `QueueOrderUseQuickItem` 0x5557E0 and `UseConsumable` 0x54ED10 have no reference at all in the exe (no call, no
+  pointer): the consumable path (and `SpawnConsumableUnit` 0x58ECE0, was SpawnDebugUnit, reached only from `CompleteOrder` kind 10) is
+  dead code [V].
 
 ## 10. Corrections to earlier notes
 
