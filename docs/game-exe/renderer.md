@@ -384,7 +384,11 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 ## 6. What is not known
 
 - Pipeline slots 5 (`SetFog`?) and 35 (the `+0x158` post-process) and the clipping algorithm live inside `3DfpFPU.dll`, outside game.exe [untestable here: needs a reverse of that DLL].
-- `CFigureClientSpecific +0x30..+0x38` (three 1.0 floats) and `CI3DFigure +0x27C` (lighting params) are set but their readers were not found. [?]
+- ~~CFigureClientSpecific +0x30 / CI3DFigure +0x27C~~ settled: `CI3DFigure +0x27C` is a **CMaterial** [V], handed to the
+  renderer's DrawFigure (vt[14]) by `CI3DFigure::Draw` 0x5E6D90; the UI quad figures get the widget's `+0xEC quadMaterial`
+  (kind 0x16, colour 0,0,0) from `AddQuadMesh` / `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10. The three 1.0 floats at
+  `CFigureClientSpecific +0x30..+0x38` are written only by `Init` 0x5A70E0 and read nowhere (class methods and raw `+0x30`
+  accesses through `CFigure +0x94` checked): dead [I].
 - ~~CStateBlockSet slot 6~~ settled [V]: `GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 copy the records OUT of the registry (getters; guess sweep 2026-11-01).
 - `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3); their bodies are left for the deep-read step (FINISH-PLAN T5).
 - The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.

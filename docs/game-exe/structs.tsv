@@ -1822,11 +1822,11 @@ CFigure			0x21c	int	ownUvGrow
 CI3DFigure	CFigure	0x284	0x220	int	visible	Draw skips when 0
 CI3DFigure			0x224	float[3]	ambientRGB	the renderer's ambient during the draw (0..1)
 CI3DFigure			0x23c	float[16]	scaleMatrix	pushed on top of the model matrix (identity in Init)
-CI3DFigure			0x27c	pointer	lightParams	passed to DrawFigure (0 in Init) [?]
+CI3DFigure			0x27c	pointer	material	CMaterial passed to the renderer DrawFigure (vt[14]) by CI3DFigure::Draw; 0 in Init / Done; the UI quad figures get the widget +0xEC quadMaterial (kind 0x16, colour 0,0,0: AddQuadMesh, UIUnitPreview::GetOrCreatePortrait)
 CI3DFigure			0x280	pointer	texture	CTexture bound to stage 0 by Draw
 CI3DFigure	CFigure	0x284	0x230	int[3]	unk_0x230	zeroed by CI3DFigure::Init together with the ambient +0x224..+0x22C; no reader in the typed decompiles (Draw passes only +0x224..+0x22C to the renderer's ambient): three unused floats between the ambient and the scale matrix [?] (renderer.md)
 CFigureClientSpecific	CFigureSpecific	0x3c	0x20	int[4]	screenRect	RECT of the last draw (picking: HitTestPointParts / HitTestRect)
-CFigureClientSpecific			0x30	float[3]	colorScale	1.0 each (Init) [?]
+CFigureClientSpecific			0x30	float[3]	colorScale	1.0 each (Init); no other reader or writer in the decompiles: neither the class methods (Render, RenderLit, ComputeScreenRect*) nor a raw +0x30 access through CFigure +0x94 touch it, so it is dead [I]
 CAnimationTrack	CObject	0x78	0x1c	pointer	entry	the .adb record (0x58) this clip belongs to (UpdateTransform reads the header floats through it)
 CAnimationTrack			0x20	pointer	node	owner CAnimationNode
 CAnimationTrack			0x24	int	posKeyCount	
