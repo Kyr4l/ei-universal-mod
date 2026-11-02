@@ -494,7 +494,8 @@ on others (0x19, 0x1e, 0x20) -> attack table; 5 (9..0xb, 0x1a, 0x1d), 6 (0xc..0x
 | 3 area in combat | -1e30 unless the caster's state != 0; `(effect / 8) x` that sum, then as kind 2 |
 | 4 / 5 / 6 buffs | -1e30 when the target already has the buff kind (`CMapObject::HasBuffKind`); else `10 if self + 1 + min(uses, n)` |
 | 7 heal | -1e30 when target HP > max HP (buffed) - 2; HP x 3 < max: `3 x caster mana ratio (+0xa4c)` (+ the ratio when the caster has full HP); else `10 if self + 5 + 2 min(uses, n)` |
-Then, when >= minScore: `- 25 x max(0, distance - range)` (x 10 and no range for kinds >= 5) and for kinds 0..3 `- 2 x (target HP / sum)` (20 when sum is 0):
+Then, when >= minScore [V, deep-read 2026-11-03; corrected]: kinds 0..4 `- 25 x distance` (2D, caster to target; the range is NOT subtracted),
+kinds 5..7 `- 250 x max(0, distance - range)`; and for kinds 0..3 `- 2 x (target HP / sum)` (integer division; 20 when sum is 0):
 **the AI prefers the target it kills in the fewest hits**, not the nearest. The old target keeps its score as `minScore`, so a switch needs a strictly better score.
 
 ### 7.3 `AiSpellInfos::ChooseTarget` 0x5D0030 (`this = brain +0xa4` = the spell tables, brain, out `{spell, target}`, candidates, pos, filter, direct) [V, deep-read 2026-11-03]
