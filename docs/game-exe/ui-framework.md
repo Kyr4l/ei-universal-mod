@@ -434,7 +434,7 @@ in UI units, origin `+0x28/+0x2C` subtracted for scrolled lists) and plays `UI_P
 | `InitBorderRing` 0x5E8450 (was InitFrame8) | same | 8 vertices, 8 triangles; inner uv inset by `border * (u1 - u0) / (r - l)` |
 | `InitDisc` 0x5E8C60 (was InitN) | z, scale, cx, cy, radius, n, uv | n points on a circle, fan `(0, i + 1, i)` |
 | `InitRing` 0x5E91F0 (was InitStrip) | + thickness | n quads between `radius` and `radius - thickness` |
-| `InitQuadUV` 0x5E99D0 | corners + 3 uv pairs | one quad with explicit per-corner uv (rotated / mirrored art) [?] argument order |
+| `InitQuadUV` 0x5E99D0 | corners + 3 uv pairs | one quad with explicit per-corner uv (rotated / mirrored art): `(z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2)`, 4th uv (0, 0) (section 6) [V] |
 | helpers | `SetUniformScale` 0x5E7060, `SetScaleY` 0x5E7090, `BindOwnArrays` 0x5EA150, `CloneQuadMesh` 0x5FF460 | |
 
 Every builder ends with the 1/512 uv inset and `BindOwnArrays` (own arrays -> draw pointers `+0x9C..+0xC8`, colour arrays sized).

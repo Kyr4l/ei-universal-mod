@@ -435,7 +435,7 @@ horizon table +0x220). `CSkyObject::Recolour` 0x4D9360 (through `CSky::Recolour`
 0x566B9C outdoor, with the hour's colours): the horizon table (`sqrt(-normal.z)` for vertices whose position z >= 1, else 0) is
 rebuilt when the vertex count changed; a horizon-ring vertex gets diffuse `(r g b, alpha 0)` and specular 0, every other vertex
 diffuse `0xFF r g b` and the second colour; the dome fades into the fog colour (render globals +0x14) at the horizon. The dome
-mesh itself is a figure resource (`sky00` texture, the figure name is in the holder's model [?]).
+mesh itself is the figure `nask0sky.fig` (0x562F70), `Sky00` / `Sky01` per zone (`LoadZone`) [V].
 
 ## 8. Fog of war: `CVisibilityFog` / `CVisFogManager` [V]
 

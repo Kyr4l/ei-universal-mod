@@ -441,7 +441,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0047B1F0 | 1064 | PtrArray_Diff | (old, new, outAdded, outRemoved, outKept): sorts new, then merges the two sorted pointer arrays: pointers only in new go to outAdded (refcount +4 ++), only in old to outRemoved (vt[4] called), common ones to outKept |
-| 0x00477B00 | 829 | UnitProto::ApplyTo | (this = unit prototype record, unit): empty prototype -> only adds the named spells (+0xc4 list, 0x531180) and perks (+0xb0, 0x531220); otherwise resets the unit stats (0x5315B0) and copies hp / mana / stats (+0..+0x50) into the u... |
+| 0x00477B00 | 829 | MobUnitStats_ApplyTo | (this = unit prototype record, unit): empty prototype -> only adds the named spells (+0xc4 list, 0x531180) and perks (+0xb0, 0x531220); otherwise resets the unit stats (0x5315B0) and copies hp / mana / stats (+0..+0x50) into the u... |
 | 0x0047ADF0 | 809 | PtrArray_SortUnique | (array): radix-sorts the pointer array by all four key bytes (scratch array g_0x7A9738) and removes consecutive duplicates |
 | 0x0047DCA0 | 785 | DeltaWriter::WriteBytes | (this = DeltaCodec, data, n): writes n bytes against both base snapshots: base A (+0 stream, bits to +0x50) and base B (+0x28, bits to +0x78): no snapshot at the base position -> a 0 bit then per dword 0 bit + 4 raw bytes, rest ra... |
 | 0x0047C680 | 607 | TcpConnectThread_dead | thread body of ConnectAsync (socket, split host:port, connect); NO CALLERS (dead) |

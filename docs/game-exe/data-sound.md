@@ -118,10 +118,10 @@ The field ids below are the sheet's `FLDx-y` (= the tag byte x, list index y); t
 | 21 / 22 / 23 / 24 | Skills General / Steal / Tame / Peripheral | +0x88 / +0x8c / +0x90 / +0x94 | float | skill bases |
 | 25 | Senses Sight Infra SenseLife Hearing Smell Tracking | +0x98 | float[6] | perception bases -> `UnitStats +0xb0` pairs |
 | 26 | Detections (same six) | +0xb0 | float[6] | detectability bases -> `UnitStats +0xe0` pairs |
-| 27 / 28 | Common / Rare loot Probability Mask Min Max | +0xc8 / +0xd8 | float[4] | TypeList(21) sub-tags 0..3 (loot generation [?]: no reader in this round) |
+| 27 / 28 | Common / Rare loot Probability Mask Min Max | +0xc8 / +0xd8 | float[4] | TypeList(21) sub-tags 0..3 (loot generation: serialized / copied only, no gameplay reader [V, 2026-11-03]; the apparent use in the old `UnitProto::ApplyTo` was a type mix-up, that function works on the .mob stats block) |
 | 29 | Items | +0xe8 | vector<CString> | "proto.material[count]" (`Unit_GiveProtoEquipment`) |
 | 30 | Skills Elemental Senses Astral | +0xf4 | float[3] | magic skill bases |
-| 31 | Spells | +0x100 | vector<CString> | "code{mods}" (`UnitProto::ApplyTo` 0x477B00 adds them) |
+| 31 | Spells | +0x100 | vector<CString> | "code{mods}" (`MobUnitStats_ApplyTo` 0x477B00 adds them) |
 | 32 | Equipment Wears | +0x10c | vector<CString> | armor names |
 | 33 / 42 | Weapon 1 / 2 | +0x118 / +0x11c | CString | weapons; `+0x118` also selects the animation set (`CUnitClientSpecific::PlayAnimation` 0x537500) |
 | 34 | Info Window Scale | +0x20 | float | unit info window |
@@ -191,7 +191,7 @@ fraction [I].
 ### 3.5 Who reads the units database [V]
 
 `Unit_InitStatsFromProto` 0x5136D0 (stats, combat.md 5), `Unit_ApplyPrototype` 0x513B60 (model, offset, morph, equipment),
-`UnitProto::ApplyTo` 0x477B00 (the `.mob` UNIT_STATS block `CUnitDesc +0x210`, 0xac bytes = a packed stats record, applied over the
+`MobUnitStats_ApplyTo` 0x477B00 (the `.mob` UNIT_STATS block `CUnitDesc +0x210`, 0xac bytes = a packed stats record, applied over the
 prototype), `CUnit::GetProto` 0x530930 / `GetProto2` 0x5309E0 (43 callers), `CUnit::SetProtoIndex` 0x5308A0 (`+0x23c = (proto -
 base) / 0x120`), `CUnitClientSpecific::PlayAnimation` / `GetStepSoundName` / `BuildSkinTextures` 0x536670 / `GetAnimSoundName`
 0x534760 (client), `CWorldClient::CreateHeroUnits` 0x566F70, `CPlayerClient::OnMsg40_UnitCreate` 0x667EC0, `CParty::InitHeroFromProto`,
@@ -301,7 +301,7 @@ are ignored, missing ones keep the ctor defaults listed below.
 | chunk | field | notes |
 |---|---|---|
 | 0xBBBB0002 UNIT_PROTONAME | `+0x20c` CString | the Monsters name |
-| 0xBBBB0004 UNIT_STATS | `+0x210` 0xac bytes | packed stats (`UnitProto::ApplyTo`; the mob-format.md "43 uint32" block) |
+| 0xBBBB0004 UNIT_STATS | `+0x210` 0xac bytes | packed stats (`MobUnitStats_ApplyTo`; the mob-format.md "43 uint32" block) |
 | 0xBBBB0005 UNIT_QUEST_ITEMS | `+0x2bc` CStringArray | |
 | 0xBBBB0006 UNIT_QUICK_ITEMS | `+0x2d0` | |
 | 0xBBBB0007 UNIT_SPELLS | `+0x2e4` | |

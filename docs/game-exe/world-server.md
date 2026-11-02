@@ -299,7 +299,7 @@ bound), 0xBBAB0000 magic traps (0xd0), 0xBBAC0000 levers (0xa4), 0xBBBB0000 unit
 
 | kind | creates | registered in |
 |---|---|---|
-| 1 object, 5 unit, 8 lever, 9 | map object manager `vt[23](type, id)`; needs `+0x11d` (units) / `+0x11e` (objects); names, model, `vt[34](proto)`, `PackFullNetState`; units: `SetPlayer(0)`, `SetSide`, forced alarm mask from `PlayerRelations`, `Unit_ApplyPrototype`, `Unit_GiveProtoEquipment`, quick items, `UnitProto::ApplyTo`, the six animation speeds from the units database (`+0x4b0`); lever: `CLeverObject::SetParams(+0x8c)`; morph, position, rotation, `+0x6d == 0` -> flag 8 (static), `BuildFromAnimation(model)`, units `ResetOrdersAndStance` | all, dynamic, non-units (not 0x50), CollisionMap; kinds 8 / 9 also active; named when `+0x1a8` non-empty |
+| 1 object, 5 unit, 8 lever, 9 | map object manager `vt[23](type, id)`; needs `+0x11d` (units) / `+0x11e` (objects); names, model, `vt[34](proto)`, `PackFullNetState`; units: `SetPlayer(0)`, `SetSide`, forced alarm mask from `PlayerRelations`, `Unit_ApplyPrototype`, `Unit_GiveProtoEquipment`, quick items, `MobUnitStats_ApplyTo`, the six animation speeds from the units database (`+0x4b0`); lever: `CLeverObject::SetParams(+0x8c)`; morph, position, rotation, `+0x6d == 0` -> flag 8 (static), `BuildFromAnimation(model)`, units `ResetOrdersAndStance` | all, dynamic, non-units (not 0x50), CollisionMap; kinds 8 / 9 also active; named when `+0x1a8` non-empty |
 | 2 light | effect manager type 0x4b (pos, `+0x14c`.. colour, `+0x158`) | effects |
 | 3 sound / particle | type 0x48 (wave name `+0x58`; "Adding sound without wave name") or type 0x49 when `+0x84` | effects |
 | 4 | type 0x4a | effects |
