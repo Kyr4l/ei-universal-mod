@@ -362,8 +362,13 @@ neighbours). A test: `EnableWaterWaves = 0` removes the sine band (flag 1), terr
 
 ### 5.5 Draw
 `CTerrain::RenderWater` (passes `textureCount + 2 ..`, after `RenderObjects`), the water records' DIFFUSE alpha = the material's
-alpha byte; the state block of the pass is set by `CWorldClient::Render` (see `receivers.md` section 9: whether the diffuse alpha
-reaches the blend depends on the block, the terrain block selects the texture alpha) [?].
+alpha byte. Before the pass `CWorldClient::Render` turns ALPHATEST off and applies the global stage block `g_0x7AEDD0` [V]:
+COLOROP MODULATE(texture, diffuse), **ALPHAOP SELECTARG1(DIFFUSE)**, so the pixel alpha IS the material alpha byte (the opaque
+terrain pass uses `g_0x7AEDDC`, texture alpha). Neither `RenderWater` 0x6C6330, `RenderSectors` nor `TerrainSector_Draw` sets a
+blend state (only SPECULARENABLE around each draw, and the stage-0 texture), so the blend mode is the one left by
+`RenderObjects`: it sets ALPHABLENDENABLE 1 with SRCALPHA / INVSRCALPHA at 0x56B479 before drawing, but an opaque single-pass
+material drawn later through `DrawIndexedWithMaterial` 0x4EB550 writes ALPHABLENDENABLE 0 without restoring it. Which one the water
+gets is a [live] check (`full/live-checklist.tsv`).
 
 ## 6. Textures: `CTexture` and `CTextureManager`
 
