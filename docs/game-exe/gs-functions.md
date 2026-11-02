@@ -533,7 +533,7 @@ Honest list of what the code read here does not settle:
 ## 6. Where the code differs from the vendor reference (scripting.md)
 
 - **AddLoot** does not move: the source wagon is left as it is (items are cloned, money added). **CopyLoot** replaces the target (items and money), also without touching the source.
-- **InflictDamage** is a hit with no attacker (exactly like KillUnit, only the damage differs); the kill-experience path of `TakeHit` needs an attacker, so it grants no XP.
+- **InflictDamage** is a hit with no attacker (exactly like KillUnit, only the damage differs); the kill-experience path of `TakeHit` needs an attacker, so it grants no XP. The damage is not n: the hit carries all seven damage types at weight 1.0, so an unarmoured unit loses up to 7 x n HP on body part 1 (each type reduced by its armor value; section 5).
 - **CreateRandomizedFXSource** takes (id, x, y, z, volume, radius, minDelay, maxDelay, scatter, wav): the arguments describe a respawning sound near one point, not a box (but see section 5: the code that should service it skips it).
 - **SendStringEvent**'s first argument is ignored; **SendEvent** has no player filter. Both go to every connection (opcodes 0x13 / 0x12).
 - **UMRevenge** is an `AiLogicAggression` with flag 1 (retaliation), not a fear logic; **UMAg** knows presets 0..3.
