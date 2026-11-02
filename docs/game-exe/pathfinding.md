@@ -230,8 +230,17 @@ blocked list (`+0x70..`) and the whole function recurses (a unit-blocked corrido
 
 ### 4.5 Start smoothing, chunking, speeds
 
-* `CAIMap::SmoothPathStart` 0x5C46C0 (for paths of >= 3 cells): re-plans the first cells with a heading penalty (each 45 deg beyond the first costs 600, diagonal moves get `(1 - straightness) * 2048`) over the tables built by
-  `NavPortalTables_Build` 0x5C42B0 / `NavGraph::RelaxPortal` 0x5C45D0, and replaces the leading cells when cheaper. [V that it exists and what it feeds; the portal tables' exact meaning is only partly decoded [?]]
+* `CAIMap::SmoothPathStart` 0x5C46C0 (for paths of >= 3 cells; the name undersells it): a **corridor re-plan of the whole path** [V for the
+  loop structure, I for the table meaning]. The state is 9 `{cost, back-link}` slots = the positions of the 3 x 3 window around the current
+  path cell. Start: the 8 neighbours of the start cell cost the step (passability x slope from `walkCostTable`, x 1.414 on diagonals) plus a
+  turn penalty from the unit's facing `lastDir` (`(|dir - lastDir| folded to 0..4) - 1`, min 0, x `walkCostTable +0x10` x 60). Then for every
+  following path cell (the whole list, head to tail) `NavGraph::RelaxPortal` moves the 9 slots to the next window through the table entry
+  `g_0x7C3058[inDir][outDir]` (0x3C bytes, 9 x 9 entries, built once by `NavPortalTables_Build` 0x5C42B0 from
+  `NavPortalSet_BuildForDirection` / `NavPortalPair_Build`): the positions shared by the two windows copy their cost, the entry and exit
+  edges are relaxed with `PathFinder::RelaxNeighbour` (real terrain cost). At the goal the 8 approach slots get `(1 - straightness) * 2048`
+  on the diagonals and the cheapest wins; when it beats the previous total the path list is rebuilt from the goal backwards along the
+  back-links (`Cell_Neighbour` per stored direction, `AddHead`), and the whole pass repeats until the cost stops improving. Net effect: the
+  path may shift by one cell sideways anywhere along its length to cut corners, follow the facing and avoid diagonal arrival.
 * `CAIMap::DeliverPathChunk` 0x5BB190: `MoveRequest::Clear`, `SetRect(unit pos, facing, tick - 1)`, moves **up to 32 cells** (`0x20`) from the pending list (`CMover +0x3C`) into the request's list (`+0x20`). All delivered ->
   `flags[0] (+0x6C) = 1` and the request target is the exact snapped goal; else `flags[0] = 0`, the last cell is pushed back to the front of the pending list (so the next chunk starts there) and the request target is that cell's centre.
   Then `CAIMap::RatePathCellSpeeds` 0x5BA400 stamps each cell node: `+0xC` = speed factor `= (table94[nibble(next)] << 9) / slope(h(next) - h(cur))` (512 = 1.0; 0x200 if the slope is blocked), `+0xE` = bit0 water (`terrain +6 bit 7`),
