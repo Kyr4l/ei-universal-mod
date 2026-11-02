@@ -79,7 +79,7 @@
 | **Sleep** (Sleep: float) | Pauses script execution (in 1/15 sec units). |
 | **KillScript** () | Stops the current script (only in map script modules). |
 | **KillUnit** (Unit: object) | Kills a unit (no XP granted). |
-| **InflictDamage** (Unit: object, Amount: float) | Deals damage (XP is granted). |
+| **InflictDamage** (Unit: object, Amount: float) | Deals damage. In the real code no XP is granted, and the hit carries all seven damage types at full weight: an unarmoured unit loses up to 7 x Amount HP (docs/game-exe/gs-functions.md). |
 | **IsAlive** (Unit: object) → float | Checks if unit is alive. |
 | **IsDead** (Unit: object) → float | Checks if unit is dead. |
 | **GetX / GetY / GetZ** (Object: object) → float | Returns world coordinates. |
