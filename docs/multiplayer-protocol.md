@@ -368,7 +368,7 @@ The sections (CMapObject::ReadNetState 0x50EC30, CUnit::ReadNetState 0x52EF90; t
 | 1 | 12 bytes: the complexion again |
 | 2 | u8 flag, **f32 x, y, z** (z is not sent: 0 means "on the ground"), 16 bytes rotation quaternion |
 | 3 | u8 n, then n x 5 raw bytes: the effects (spells) on the unit |
-| 4 | 264 bytes: the large stats block (exp total at +4 as an integer: 500 for the test bot; level at +8; attributes at +0xC) |
+| 4 | 264 bytes: the large stats block (`UnitStats_PackToRecord` 0x522CE0, game-exe/structs.tsv UnitRecord): +4 total exp, +8 exp still to spend (total + fraction - spent; the old note "level at +8" was a guess), +0xC / +0xD / +0xE strength / dexterity / intelligence bytes, +0xF move type (2 flying), +0x10..+0x13 stance speed factors x 127.5, +0x14 base speed x 25.5, +0x15 action speed, +0x16 carry max (i16), +0x18..+0x1F natural attack bytes, +0x20 death kind (i16), +0x22..+0x2D the current values of the 2 x 6 perception / resistance pairs, +0x30 six body parts x 0x1C {kind, mask, 7 armor shorts, state, HP i16 +0x18, max i16 +0x1A}, +0xD8 3 attribute skills, +0xDB 8 weapon / magic skills, +0xE3 36 perk levels, +0x107 flags (bit 4 = a hit landed) |
 | 5 | 11 x u32: the 4 weapon ids then the 7 armor ids (proto << 16 + material, -1 empty); the client drops all items and re-equips (game-exe: `CUnit::ReadNetState` 0x52EF90) |
 | 6 | 3 x u32: stance (+0x264), wanted stance (+0x268), active weapon slot (+0x26C, a float; a change swaps the weapon figure) |
 | 7 | 1 byte: bits 0-2 animation loop (+0x25C), bits 3-5 animation paused (+0x260, 1 = frozen), bit 6 dead (+0x274), bit 7 walking (+0x278) |
@@ -407,7 +407,7 @@ Verified on the live rig: um-bot's `0x33` with `0x80000000 | 0` makes the server
 
 - ~~The payloads of the unknown sub-message types~~: all decoded from the game-exe reverse (2026-11-03): the tables above, full
   detail per message in game-exe/world-client-players.md sections 4 / 5; lobby kinds 12 / 14 / 17 in game-exe/net-transport.md.
-- Left of the unit state: the order section of stationary monsters (see above), the stats block's fields (section 4: attributes, skills), a monster's HP (not in the stream: only the hero's is), 
+- Left of the unit state: the order section of stationary monsters (see above), a monster's HP (not in the stream: only the hero's is), 
 - The world snapshot's layout (0x00 first message) and the tick (0x00 later): the game time, the day.
 - Reliable kinds 4, 12, 14, 17; the kind-16 hero blob's serializer (vtable +0x28 of the member class).
 - The resend timing (0x4346D0 / 0x433F20), the login's u32 12500 and 20 zero bytes, the master server 0xFF.
