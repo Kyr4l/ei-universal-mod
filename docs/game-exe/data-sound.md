@@ -264,7 +264,7 @@ Place1-1 Place1-2 Place2-1 Place2-2 (+4 float[4]), 2 Unk2-0 (+0x14 int), 3 Scale
 `LeversDb_FindByName` 0x52CA40 / `FindByName2` 0x52CB40, whose only callers are below):
 - `CLeverObject::SwitchState` 0x52B7A0: a negative duration argument becomes the record's Switch Time (10 when the model has no
   record).
-- `CLeverObject::v44_AttachPoints` 0x52BBE0: the **places** are up to two interaction points (forward / right offsets from the
+- `CLeverObject::AttachPoints` 0x52BBE0: the **places** are up to two interaction points (forward / right offsets from the
   lever, `Unk2-0` = how many are used), the offsets scaled by `(1 - h) + h * Scale` with h = the lever's height complection
   (`+0xCC`); `CUnitServer::FindInteractPoint` 0x54DF50 (order kind 6) tries them as path goals: where a unit stands to pull it.
 - `CLeverObject::ReadNetState` 0x52B650 (client): plays **Switch Sound** with `Play3D` at the lever when the phase changes.

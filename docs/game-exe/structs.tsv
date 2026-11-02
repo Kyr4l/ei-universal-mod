@@ -3325,7 +3325,7 @@ QuestsDb			0xc	StrHash	questMap	std::string -> Quest* (0x14 nodes); g_0x7C87B4 (
 QuestsDb			0x20	pointer[3]	briefings	vector<Briefing 0x6c> (tag 2 + quest.reg)
 QuestsDb			0x2c	StrHash	briefingMap	std::string -> Briefing*; g_0x7C87D4 (OnNamedEvent, DialogScreen, LobbyServer map records)
 LeverRecord		0x2c	0x0	CString	name	LeverPrototypes FLD0 (tag 0): the lever model name (CLeverObject +0xa4)
-LeverRecord			0x4	float[4]	places	FLD1 Place1-1, Place1-2, Place2-1, Place2-2 (tag 1): up to two interaction points as (forward, right) offsets from the lever; CLeverObject::v44_AttachPoints 0x52BBE0 turns them into world points that CUnitServer::FindInteractPoint 0x54DF50 tries as path goals (where a unit stands to pull it)
+LeverRecord			0x4	float[4]	places	FLD1 Place1-1, Place1-2, Place2-1, Place2-2 (tag 1): up to two interaction points as (forward, right) offsets from the lever; CLeverObject::AttachPoints 0x52BBE0 turns them into world points that CUnitServer::FindInteractPoint 0x54DF50 tries as path goals (where a unit stands to pull it)
 LeverRecord			0x14	int	pointCount	FLD2 Unk2-0 (tag 2): number of places used (0 = no interaction point)
 LeverRecord			0x18	float	scale	FLD3 Scale (tag 3): the offsets are multiplied by (1 - h) + h x scale, h = the lever complection height (+0xCC)
 LeverRecord			0x1c	int	switchTime	FLD4 Switch Time (tag 4): CLeverObject::SwitchState duration when the caller passes < 0 (10 when the model is unknown)
