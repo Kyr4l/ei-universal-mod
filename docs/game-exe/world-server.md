@@ -129,7 +129,7 @@ the hour, server mode 4; kind 8: mode 1; else `Session_EnterZoneFromParty(party 
 |---|---|
 | zone kind `g_0x7C2CC4` = `CWorldServer +0x12d64` | 1 playable zone, 2 main menu, 3 scripted zone (record kind 2), 4 camp / map screen (record kind 1), 7 editor map (`App_LoadMapAndScript` 0x456140), 8 endofgame; written through the global after the zone is loaded, zeroed by `UnloadZone`; the decompiles show the field (`f_0x12D64`) only as a reader, so earlier reads took it for a dead "net mode" |
 | server mode `CWorldServer +0x138` (`SetMode` 0x58DC90, once per zone) | 1 single-player zone, 2 hosted multiplayer zone (`Session_HostMpZone`), 4 main-menu zone; 3 never set; modes 2 / 3 also `CWorld::ResetRefListPair` |
-| `ZoneRecord` | `+0` name, `+4` allod (gipat / ingos / suslanger: loading video), `+8` mob base, `+0xc` mpr base (empty = no world), `+0x28` kind, `+0x2c` weather (0 none, 1 rain, 2, 3 tornado), `+0x30` restrict [?], `+0x44` cage byte, `+0x48` CArray of `ZoneExit` (0x3c: `+4` rect, `+0x28` target zone, `+0x2c` entrance, `+0x30` view angle, `+0x34` has angle, `+0x38` angle) |
+| `ZoneRecord` | `+0` name, `+4` allod (gipat / ingos / suslanger: loading video), `+8` mob base, `+0xc` mpr base (empty = no world), `+0x28` kind, `+0x2c` weather (0 none, 1 rain, 2, 3 tornado), `+0x30` cave flag (`#sky cave`; `#restrict` fills `+0x34` byte + floats `+0x38..+0x40`) [V], `+0x44` cage byte, `+0x48` CArray of `ZoneExit` (0x3c: `+4` rect, `+0x28` target zone, `+0x2c` entrance, `+0x30` view angle, `+0x34` has angle, `+0x38` angle) |
 
 ### 2.4 Zone transition and the saves\current folder [V]
 
@@ -204,8 +204,8 @@ saved copy `g_0x79BEC4`. `Databases_Reload` 0x57DEE0 is the explicit variant.
 | +0x24 / +0x30 | windDir / windStrength | `SetWindFields` 0x55FCB0; server `SetWind` 0x58EE20 clamps 0..1 and flags 8 |
 | +0x34 | manager34 | slot 23; client only (`CWorldClient::InitClientResources`) |
 | +0x38 .. +0x58 | the managers | created in this order by `CreateManagers` 0x55EE40 (`SetWorld(this)` each): `+0x38` CPlayerManager (0xb0), `+0x40` CMapObjectManager (0xbc), `+0x3c` CFigureManager (0xd0), `+0x48` CEffectManager (0xb0), `+0x50` CSpellConstructor (0x24), `+0x4c` CSpellManager (0xd4), `+0x58` CItemConstructor (0x34), `+0x54` CItemManager (0xbc); slots 20 / 19 / 15 / 14 / 17 / 22 / 16 / 18 return them; `Done` 0x55F8E0 releases them in reverse |
-| +0x5c | refHolder | 12-byte handle (vt 0x73F240) kept with the "shared-ref" protocol (short refcount +4, flag +6 bit 0 = shared, cloned on write) [?] |
-| +0x60 | refListPair | `RefListPair` (vt 0x73F3A8, two lists) created by `CWorld::ResetNetDriver` 0x55F410 in modes 2 / 3 and `ConnectToLobbyHost`; released by `UnloadZone` [?] |
+| +0x5c | refHolder | the local "loopback" net holder (`RefHolder`, vt 0x73F240, 12 bytes, built by `CreateManagers`): pumped every frame (slot 5, empty here) by `CWorldClient::PumpNet` and the server tick, whose `AcceptPlayers(this, +0x5c)` takes the local player's stream from it (slot 6 `MoveRefToList`) [I, 2026-11-03] |
+| +0x60 | refListPair | `RefListPair` (vt 0x73F3A8, two lists) created by `CWorld::ResetNetDriver` 0x55F410 in modes 2 / 3 and `ConnectToLobbyHost`; released by `UnloadZone`; it is the live `CTcpNetDriver` of the remote peers (net-transport.md) [V] |
 | +0x64 / +0x68 / +0x6c | tick / frameTick / paused | see 1. |
 | +0x70 | waterLevels | MFC CArray (vt 0x73F234, `WaterLevels::Serialize` 0x560200) of 16-byte `{id, stepsLeft, level, step}`; script `SetWaterLevel` 0x593FA0 -> `WaterLevels::SetTarget` 0x6D4410, `WaterLevels::Tick` 0x6D44E0 in `Update`, replicated by msg 0x73, saved |
 
