@@ -190,6 +190,18 @@ map from `LobbyClient +0x25ec`) or 6 (host, `+0x7c`), `+0x80 = 1`; second call =
 `Lobby_*` (0x57F560-0x580900) keep their names: mission file scan (`*.mq`), named floats (`constr.current`, `b.smith.*`),
 briefing text keys.
 
+`Campaign_AdvanceMission` 0x5800C0 (deep read 2026-11-03 [V]; the multiplayer client, called when a lobby variable message 10
+arrives, net-transport.md) **rebuilds the player's named floats from the lobby's campaign state**. It does nothing without a live
+`LobbyClient`. It unloads the text archives queued in `g_0x7AFDD0` and clears the player's named float map `CPlayer +0xC4`, keeping only
+`constr.current`. With a current map (`+0x25F4`) it queues that map's file transfer. By the starting allod `+0x261C` (0..3) it
+sets the first built camp building (`b.smith.constr_1`, `b.Shopper.constr_3`, `b.kuzn.constr_4`, `b.golem.constr_5`) and the intro
+name `intro_1..4`; the briefing keys `<intro>q` / `<intro>k` (`Briefing_MakeKey`) are raised to at least 1. Every briefing of the list
+`+0x25F8` goes through `Briefing_SetNamedFloat`, and every lobby variable of `+0x25FC` named `q.<x>.<y>` triggers `QuestFiles_Scan(x)`.
+The variables `+0x25FC` are records {name +0xC, value +0x18, serial +0x1C}. In a playable world (`CWorldClient` kind 1) they are replayed
+in serial order: the journal counters `g_0x7AFED0` (highest serial seen) and `g_0x7AFED4` (next to show) pick the new ones, which are
+sorted (`Sort_IntroLoop`) and shown through `CampScreen_ShowNamedState`, then every variable up to the shown serial is written into
+the named floats. Elsewhere they are all written at once and the counter resets to 0. `Lobby_SetMpGameFlags` (`z.MPGame1`) ends it.
+
 ### 2.7 Databases and the balance index [V]
 
 `Databases_LoadAll` 0x57CB50 loads units / perks / spells / items from the database path (`g_0x79BC94`, file `g_0x7AFDEC`);
