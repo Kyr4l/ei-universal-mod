@@ -407,8 +407,8 @@ decode format."` for anything else); 0x8888 sources through `CopyToSurface32` 0x
 16-bit formats copied; then `IDirect3DDevice7::Load(texture, 0, staging, 0, 0)` under the DDraw critical section, flags |= 8, surface
 `SetPriority`-like vt[45](100), and the header's extra block copied to +0x2C. `MmpHeader::GetMipOffset(level)` 0x6908E0 = `hdr[0x48] +
 (w * h * bpp / 8) * (4^n - 1) * 4 / (3 * 4^n)` from the end of the 0x4C header (`hdr[0x48]`, the "reserved" field of
-`mmp-format.md`, is the size of an extra block between the header and level 0; it is 0 in the files seen and the block's meaning
-is unknown [?]). Pixel formats: `PixelFormat_ARGB1555 / 4444 / 8888` 0x693850 / 0x6938B0 / 0x693910 build the mask descriptors of
+`mmp-format.md`, is the size of an extra block between the header and level 0; it is 0 in the files seen and the block is
+copied but never read [V], see section 12). Pixel formats: `PixelFormat_ARGB1555 / 4444 / 8888` 0x693850 / 0x6938B0 / 0x693910 build the mask descriptors of
 `mmp-format.md` (QU / DD / 0x8888).
 
 ### 6.3 Cache [V]
@@ -544,8 +544,9 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 
 ## 12. What is not known
 
-* The MMP extra block (`hdr[0x48]` bytes after the header, copied to `CTexture +0x2C`): no file seen has one; what the game would
-  put there is unknown.
+* ~~The MMP extra block~~ settled [V]: `hdr[0x48]` bytes after the header are copied to `CTexture +0x2C` by `LoadMipChain`
+  0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); nothing reads them, so the block is skipped data
+  (the game only needs its size, in `GetMipOffset`). No file seen has one.
 * The sun object's `+0x24` in the under-water sun attenuation (4.2): [live] (expected 0; live-checklist.tsv).
 * `TraceSunRay`'s double slope on diagonal suns is "as decompiled": [live] (shadow length comparison; live-checklist.tsv).
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).

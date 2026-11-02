@@ -2089,7 +2089,7 @@ CTexture	CObject	0x68	0x1c	CString	name
 CTexture			0x20	int	width	of the loaded level 0 (after the mip skip)
 CTexture			0x24	int	height	
 CTexture			0x28	int	byteSize	uploaded bytes (UploadMip); summed in CTextureManager bytesInUse
-CTexture			0x2c	pointer	extraBlock	copy of the MMP extra block (CArray<byte>: +0x30 size, +0x34 cap, +0x38 grow)
+CTexture			0x2c	pointer	extraBlock	copy of the MMP extra block (CArray<byte>: +0x30 size, +0x34 cap, +0x38 grow); write-only: only LoadMipChain fills it and Init / FreeMipTables / the dtor free it, no reader
 CTexture			0x30	int	extraSize	
 CTexture			0x34	int	extraCapacity	
 CTexture			0x38	int	extraGrow	
