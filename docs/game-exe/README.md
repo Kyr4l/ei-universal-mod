@@ -324,29 +324,29 @@ Conventions shared by all pages:
 Per page, the open items that matter most for the mod work:
 
 - world-server.md: which campaign zones use zone kind 3 (scripted zone); the exact hour formula operands and the two save header
-  dwords at +120 / +124; `+0x12E00 staticObjectStream` is filled and never read; the payload of `CWorld +0x5C` / `+0x60`.
-- world-client-players.md: no sender found for opcodes 0x0C, 0x12, 0x19; which classes carry type ids 0x54 and 0x5D; the field order
-  of the 0x40 unit record after the display name (confirm with a capture); the 16-byte records of 0x73.
-- combat.md: whether the placement max HP is really capped at 1.0 (live memory showed ~70); the player `+0x108` levels and the
-  full list of 0x0B unit event codes; order kind 10 has no caller.
+  dwords at +120 / +124; `+0x12E00 staticObjectStream` is filled and never read. (`CWorld +0x5C` / `+0x60` settled 2026-11-02.)
+- world-client-players.md: no sender found for opcodes 0x0C, 0x12, 0x19. (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40
+  record read in full 2026-11-03, the 0x73 records are the water levels.)
+- combat.md: the player `+0x108` levels and the full list of 0x0B unit event codes; order kind 10 has no caller. (The max HP
+  "cap" is a floor, `max(1, x)`, settled.)
 - unit-ai.md: the readers of brain +0x44 / +0x48 / +0x4C, `FollowLimit` and `normal.dat` (none found); `MobLogicSlot +0x30` and the
   chunk that fills `+0x44 Wait`; the activation of sleeping units is answered by world-server.md 4.3 (sight circles around tracked
   units), the `+0x5120` party modes by world-client-players.md 7.
-- pathfinding.md: the base semantics of the quantised `Vec2Q64` in the delta codec; the shipped value of `RotateSpeedMult`; the
-  meaning of the portal tables behind `ChooseExitDirection`; `CUnit +0x274`; whether a wait shifts the request start tick.
+- pathfinding.md: nothing open except live checks (`FindUnitsNear` corner miss); `Vec2Q64`, `RotateSpeedMult`, the portal tables
+  (the corridor re-plan), `CUnit +0x274` and the wait shift are settled.
 - spells.md: who assigns the sequence number of a freshly constructed spell; `SpellProto +0x48 / +0x54 / +0x60`; shapechange and
   comprehend have no server script; the buff `+0x10` flag byte is never read.
 - items.md: `CItemWeapon +0x4C` is saved but never set; the material Skill column and several proto byte fields have no reader;
   `CInventory` has no creator; the runtime `CStringArray` of every proto (who fills it).
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
   `BuildFigureMeshB / C`, `LoadFigFile2` and the alternate node tracks were not read.
-- terrain-lighting.md: the MMP extra block (`hdr[0x48]`) has no example file; `TraceSunRay`'s double slope on diagonal suns is "as
-  decompiled"; which periodic water change the 0.8 s stripes are (test with `EnableWaterWaves = 0`); the water pass blend state; the
-  sky dome's figure file.
-- ui-framework.md: `UIQuadMesh::InitQuadUV` argument order; the console handler bodies 0x5DD920-0x5E0A10 are undefined code in the
-  listing (named from their strings); `CamCtlClassic` / `CamCtlSimple` are dead; several static-init globals are unexplained.
-- ui-screens.md: the tooltip index -> text key mapping; the options ini writer was not found; `GetMagicTotals`' second output is
-  read from dropped x87 code; `CCampScreen +0x168..+0x18F` and `CCampScreen2 +0x1A0..+0x220` are unmapped.
+- terrain-lighting.md: `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; which periodic water change the 0.8 s
+  stripes are (test with `EnableWaterWaves = 0`); the water pass blend mode (inherited from `RenderObjects`: a live check). (The
+  MMP extra block is never read; the sky figure is nask0sky.fig: settled.)
+- ui-framework.md: `CamCtlClassic` / `CamCtlSimple` are dead; several static-init globals are unexplained. (`InitQuadUV`, the
+  console handlers 0x5DD920-0x5E0A10 (now defined) and the map.txt zone record are settled.)
+- ui-screens.md: the options ini writer was not found; `CCampScreen +0x168..+0x18F` and `CCampScreen2 +0x1A0..+0x220` are
+  unmapped. (Tooltip ids = text keys `tip N`, `GetMagicTotals` = a quotient: settled.)
 - script-vm.md: whether a failed compile of a `.mob` script is reported anywhere (the map runs with a partial script); the second
   auto-id counter `+0x6C` has no reader; `GetBSZValue` reads a stale vtable slot (undefined on the server).
 - gs-functions.md: the sound-source respawn loop serves `CreateFXSource` records and skips `CreateRandomizedFXSource` ones (inverted
