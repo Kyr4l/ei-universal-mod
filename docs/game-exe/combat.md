@@ -294,10 +294,15 @@ projectile collision with other units in this code.
 
 ### 4.5 Attack animation selection
 
-`ChooseAttackAnim` 0x54F970: the body part (order param 6 = random from {0 x2, 1 x6, 2..5 x3 each}, resolved by `UnitStats_PickHitLocation`
-0x525B20: the wanted part if functional, else its pair 0<->1, 2<->3, 4<->5, else a random live part, else torso); the strike height band from
-both units' heights (`CUnit +0x14C * 2`): flag 0x1000000 high / 0x2000000 middle / 0x3000000 low (| 0x800000), by slope for targets farther
-than 5 m; non-humanoids: 0x2000000.. by reach `(stats +0x64 + 1) * radius`. `BuildActionAnimQueue` 0x550100: clip key = `attackKindMask |
+`ChooseAttackAnim` 0x54F970 [V, deep-read 2026-11-03]: a non-unit target -> middle strike, location 1. The body part: order param 6 = random
+from {0 x2, 1 x6, 2..5 x3 each} (20 slots, ISAAC), out-of-range params -> 1; both then go through `UnitStats_PickHitLocation` 0x525B20 (the
+wanted part if functional, else its pair 0<->1, 2<->3, 4<->5, else a random live part, else torso); **a called shot (param 0..5) is used as
+given, without that redirection**. The strike height: random in 1 cm steps inside the overlap of the target part's band (head 0.8..1.0 of the
+target's height `CUnit +0x14C * 2`, parts 1..3 0.4..0.8, legs 0..0.4, above its terrain z) and the attacker's own z .. z + height; the flag
+is 0x1000000 high when the target band is above the attacker, 0x3000000 low when below, else by the chosen height, then for targets
+farther than 5 m by the slope (`dz / distance` > 1.732 high, < -1.732 low = steeper than 60 degrees, else 0x2000000 middle), | 0x800000.
+Non-humanoids (kind != 0x32): low (0x3800000) when closer than `reach - 0.15`, middle at the edge, with reach = target radius +
+(`stats +0x64` + 1) x own radius. `BuildActionAnimQueue` 0x550100: clip key = `attackKindMask |
 flags | 0x90000`, with stance transitions around it; duration = frames * `CUnit::AnimDurationFor` 0x5327D0 (per-unit factors `+0x4B0` attack,
 `+0x4B4` cast, `+0x4B8` hit, `+0x4BC` death, `+0x4C0` transition, `+0x4C4` special). Clip keys (`CUnit::FindAnimRecord` 0x5301B0): bits
 0..6 weapon kind, 0x8000 sit / 0x10000 walk / 0x20000 sneak / 0x30000 crawl (`MoveModeAnimFlag` 0x5500A0), class bits 0x3C0000 (0x80000 attack,
