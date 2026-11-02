@@ -23,7 +23,7 @@ Addresses are VAs; offsets are bytes; "tick" = `CWorld +0x64` (18/s on the serve
    replication then sends `0x02` zone state (the client runs `LoadZone` and answers `0x09`), `0x40` for every unit near the view point,
    `0x50` effects, `0x60` party status, `0x07` game mode, `0x71` time, `0x72` wind, `0x70` weather, `0x73` db. `0x09` makes the server spawn the
    hero (`World::PlayerIn`). From then on the client sends `0x40` (view point) every frame while in world (state 2). [V]
-3. **Per tick (server):** `CWorldServer::ReplicateToPlayer` 0x58B750 diffs the units within 100 units of the view point (plus the party units,
+3. **Per tick (server):** `CWorldServer::ReplicateToPlayer` 0x58B750 diffs the non-unit objects within 100 m of the view point (plus the visible units,
    the named objects and the units the party sees) against the player's tracked array: `0x42` remove, `0x40` create, `0x41` delta; the same
    for effects (`0x52` / `0x50` / `0x51`); then `0x60` party status, the periodic `0x80` party resend (every 900..1800 ticks) and whatever
    dirty bits of `CPlayer +0x130` are set (`0x02`, `0x70`, `0x71`, `0x72`, `0x07`, `0x73`). [V]
