@@ -135,7 +135,7 @@ scripted base scenes (zone kind 3); the 23 `game` zones (`gz1g`, ... with `#maps
 |---|---|
 | zone kind `g_0x7C2CC4` = `CWorldServer +0x12d64` | 1 playable zone, 2 main menu, 3 scripted zone (record kind 2), 4 camp / map screen (record kind 1), 7 editor map (`App_LoadMapAndScript` 0x456140), 8 endofgame; written through the global after the zone is loaded, zeroed by `UnloadZone`; the decompiles show the field (`f_0x12D64`) only as a reader, so earlier reads took it for a dead "net mode" |
 | server mode `CWorldServer +0x138` (`SetMode` 0x58DC90, once per zone) | 1 single-player zone, 2 hosted multiplayer zone (`Session_HostMpZone`), 4 main-menu zone; 3 never set; modes 2 / 3 also `CWorld::ResetRefListPair` |
-| `ZoneRecord` | `+0` name, `+4` allod (gipat / ingos / suslanger: loading video), `+8` mob base, `+0xc` mpr base (empty = no world), `+0x28` kind, `+0x2c` weather (0 none, 1 rain, 2, 3 tornado), `+0x30` cave flag (`#sky cave`; `#restrict` fills `+0x34` byte + floats `+0x38..+0x40`) [V], `+0x44` cage byte, `+0x48` CArray of `ZoneExit` (0x3c: `+4` rect, `+0x28` target zone, `+0x2c` entrance, `+0x30` view angle, `+0x34` has angle, `+0x38` angle) |
+| `ZoneRecord` | `+0` name, `+4` allod (gipat / ingos / suslanger: loading video), `+8` mob base, `+0xc` mpr base (empty = no world), `+0x28` kind, `+0x2c` weather (0 none, 1 rain or any other word, 2 snow, 3 tornado), `+0x30` cave flag (`#sky cave`; `#restrict` fills `+0x34` byte + floats `+0x38..+0x40`) [V], `+0x44` cage byte, `+0x48` CArray of `ZoneExit` (0x3c: `+4` rect, `+0x28` target zone, `+0x2c` entrance, `+0x30` view angle, `+0x34` has angle, `+0x38` angle) |
 
 ### 2.4 Zone transition and the saves\current folder [V]
 
