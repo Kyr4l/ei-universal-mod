@@ -327,17 +327,17 @@ Per page, the open items that matter most for the mod work:
   the hour formula, the save header dwords +120 / +124, `CWorld +0x5C` / `+0x60`.)
 - world-client-players.md: no sender found for opcodes 0x0C, 0x12, 0x19. (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40
   record read in full 2026-11-03, the 0x73 records are the water levels.)
-- combat.md: the player `+0x108` levels and the full list of 0x0B unit event codes; order kind 10 has no caller. (The max HP
-  "cap" is a floor, `max(1, x)`, settled.)
-- unit-ai.md: the readers of brain +0x44 / +0x48 / +0x4C, `FollowLimit` and `normal.dat` (none found); `MobLogicSlot +0x30` and the
-  chunk that fills `+0x44 Wait`; the activation of sleeping units is answered by world-server.md 4.3 (sight circles around tracked
-  units), the `+0x5120` party modes by world-client-players.md 7.
+- combat.md: nothing open for the mod work: order kind 10 is dead code (no reference), the player `+0x108` cheat level only
+  replaces the hit record. (Settled: the full 0x0B unit event code list, the max HP floor `max(1, x)`.)
+- unit-ai.md: brain +0x44 / +0x48 / +0x4C and `FollowLimit` / `normal.dat` are written, saved and loaded only (no reader); the
+  .mob Wait (`MobLogicSlot +0x30`) is unused, the alarm wait is always 75 (a live check confirms it). Sleeping-unit activation:
+  world-server.md 4.3; the `+0x5120` party modes: world-client-players.md 7.
 - pathfinding.md: nothing open except live checks (`FindUnitsNear` corner miss); `Vec2Q64`, `RotateSpeedMult`, the portal tables
   (the corridor re-plan), `CUnit +0x274` and the wait shift are settled.
-- spells.md: who assigns the sequence number of a freshly constructed spell; `SpellProto +0x48 / +0x54 / +0x60`; shapechange and
-  comprehend have no server script; the buff `+0x10` flag byte is never read.
-- items.md: `CItemWeapon +0x4C` is saved but never set; the material Skill column and several proto byte fields have no reader;
-  `CInventory` has no creator; the runtime `CStringArray` of every proto (who fills it).
+- spells.md: the exact `CEffectSoundSeq::Activate` modes; the buff `+0x10` flag byte is never read; shapechange and comprehend
+  have no server script. (Settled: no fresh sequence numbers are generated, a copy keeps its id; `SpellProto +0x48 / +0x54 / +0x60`.)
+- items.md: the runtime `CStringArray +0x20 / +0x50` of every proto (who fills it). Dead / unread, not open: `CItemWeapon +0x4C`,
+  the material Skill column, several proto byte fields, `CInventory`.
 - renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
   `BuildFigureMeshB / C`, `LoadFigFile2` and the alternate node tracks were not read.
 - terrain-lighting.md: `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; which periodic water change the 0.8 s
