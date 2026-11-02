@@ -72,7 +72,7 @@ CUnit			0x264	int	stance	applied: 0 crawl 1 sneak 2 walk 3 run 4 sit
 CUnit			0x268	int	stanceWanted	the stance the player asked for (0 crawl 1 sneak 2 walk 3 run 4 sit); CUnitServer::RequestStance
 CUnit			0x26c	int	weaponSlot	0-3, -1 none
 CUnit			0x324	int	animSpeedClass	
-CUnit			0x328	float	moveRadius2	
+CUnit			0x328	float	bodyRadius	slot 60 GetBodyRadius returns it (map objects: 0.75); contact distance = the sum of the two radii (ChooseAttackAnim, FindInteractPoint). Was moveRadius2
 CUnit			0x32c	float	radius	collision radius (footprint stamps)
 CUnit			0x49c	pointer	quickItemsVt	CORRECTION: was int animSetType '0x19 axe/spear, 0x10 dagger, 0xF bow/none': the ctor and the dtor write the CArray vtable 0x73EB84 here; the extra item array is +0x4a0 data, +0x4a4 count, +0x4a8 cap, +0x4ac grow (AddObject4A0, Clear releases the entries)
 CUnit			0x4a0	pointer	quickItems	
