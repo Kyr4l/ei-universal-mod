@@ -260,13 +260,14 @@ Skin composition in detail (`PrebuildUnitSkinsAndModels` 0x568800, deep read 202
 (prototype index -> 0x120 `UnitProto` -> units-database row; the row's `+0xE8` is the texture prefix) with a non-empty armor id list,
 two layered textures are composed with `CTextureManager::ComposeAndSaveLayers` 0x693180 (format code 0x5551) and registered with
 `FindOrCreateByName`. Every layer name is `<prefix><Armor_FormatModelName(id >> 16, id & 0xFFFF)>.mmp`. The armor ids are
-`proto << 16 | material`, and -1 means an empty slot.
-- **primary** (`prot%dp`, or `mo%dp` when the record's `+0x1C` is not -1; 256 x 256, texture kind 1): the base skin
+`proto << 16 | material`, and -1 means an empty slot. Look record: u16 prototype index at +0, armor id list +4 / +8 (begin / end),
+weapon id list +0x10 / +0x14, active weapon byte +0x1C, `+0x20`.
+- **primary** (`prot%dp`, or `mo%dp` when the record's `+0x20` is not -1; 256 x 256, texture kind 1): the base skin
   `<prefix>skin_00.mmp` (`skin_%.2d` when the record has a skin index), then armor slots 3..6 of the list, then slots 1 and 2. When
   both of these are worn, the one whose armor row (200-byte table `g_0x7C8718`) has the smaller `+0xB8` is drawn first, so the other
   one covers it.
-- **secondary** (`prot%ds` / `mo%ds`; 128 x 128, kind 2): armor slot 0, then the active weapon (record byte `+0x18` indexes the
-  weapon id list `+0xC`; `WeaponProto_FormatModelName` from the 0xB4 table `g_0x7C86F8` + material).
+- **secondary** (`prot%ds` / `mo%ds`; 128 x 128, kind 2): armor slot 0, then the active weapon (record byte `+0x1C` indexes the
+  weapon id list `+0x10`; `WeaponProto_FormatModelName` from the 0xB4 table `g_0x7C86F8` + material).
 `ComposeAndSaveLayers` also writes the result to `textures\<name>.mmp` (the skin cache). The second loop assembles the figures:
 `CUnitClientSpecific::BuildArmorModelNames` and the render manager's `vt[3]`.
 
