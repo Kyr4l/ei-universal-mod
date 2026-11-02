@@ -2809,6 +2809,13 @@ CCampScreen	CUIWindow	0x260	0x25C	int	heroChangePending	1 prev / 2 next while th
 CCampScreen	CUIWindow	0x260	0x1a4	int	campUnitCount	number of CUnit* in campUnits +0x1a0 (= the party hero count after Game_CreateHeroUnits in Build; 0 and the array freed in OnOpen / an empty party)
 CCampScreen			0x1a8	int	campUnitCap	allocated entries of +0x1a0 (Build grows it CArray-style when the count exceeds it)
 CCampScreen			0x1ac	int	campUnitGrow	grow step (0 = auto: count / 8, min 4)
+CCampScreen			0x168	pointer	hoveredItem	the item under the cursor, recomputed every Draw 0x60F050 from the hit tests (vt[25]) of heroSlots, quickBar, partyBar (and the special buttons 4..11)
+CCampScreen			0x170	byte[12]	list170	STL container (0x28-byte nodes) built by the shared base ctor 0x5F6240 (also CUIScreen740D18 0x5F6F30) and freed by the dtor; no other access in the camp screen methods [I]
+CCampScreen			0x178	byte	list170Variant	the ctor variant argument
+CCampScreen			0x17c	int	list170Limit	0x32
+CCampScreen			0x180	byte[8]	list180	second STL container (0x28-byte nodes), same pattern
+CCampScreen			0x188	byte	list180Variant	the ctor variant argument
+CCampScreen			0x18c	int	list180Limit	0x32
 CQuestLogWin	CUIWindow	0x1F0	0x164	pointer	mapsBegin	std::vector<CString> of the zones the window can show (Build: the z.* variables of the current allod)
 CQuestLogWin	CUIWindow	0x1F0	0x168	pointer	mapsEnd	
 CQuestLogWin	CUIWindow	0x1F0	0x16C	pointer	mapsCap	

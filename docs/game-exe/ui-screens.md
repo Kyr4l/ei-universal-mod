@@ -438,7 +438,10 @@ Backspace clears it.
   variable; the version gates (time at v >= 2, label at v >= 3) are [I].
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.
 - ~~CCampScreen2 +0x1A0..+0x220~~ settled [V]: the full CCampScreen2 layout (+0x164..+0x21C, 33 fields) is in structs.tsv (struct
-  completion 2026-11-02). The 0x168..0x18F region of `CCampScreen` (the `CUIWindowWith2Lists28` base lists) is still not mapped.
+  completion 2026-11-02). ~~CCampScreen +0x168..+0x18F~~ settled 2026-11-03: `+0x168` is the hovered item (recomputed by `Draw`
+  0x60F050 from the hit tests of the hero slots, quick bar and party bar) [V]; `+0x170` / `+0x180` are two STL containers of 0x28-byte
+  nodes (limit 50 at `+0x17C` / `+0x18C`, the ctor's variant byte at `+0x178` / `+0x188`) that only the shared base ctor 0x5F6240 /
+  0x5F6F30 builds and the dtor frees [I] (structs.tsv).
 
 ## 15. Corrections to earlier notes
 
