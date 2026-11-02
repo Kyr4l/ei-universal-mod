@@ -423,9 +423,9 @@ Backspace clears it.
 
 - The tooltip text indices passed to `UIButton::SetTooltipById` (0x4E84.., 0x9CA4.., 0xEAC4.., 0x111D4.., 0x138E4.., 0x7594..)
   are resolved by the framework; the mapping index -> text key is not read here [?].
-- `GetMagicTotals` 0x610020 second output: `UnitStats_MaxMana * UnitStats_ManaCostFactor` 0x523CD0 (renamed by the combat round;
-  was `GetSpeedFactor`) is read from x87 code the decompiler drops; the product (vs a quotient) is [I] from `CCampScreen2::GetSpellCost`
-  [asm-check pending].
+- ~~GetMagicTotals second output~~ settled [V] from the machine code (0x610020: `call UnitStats_MaxMana`, `fstps`, `call
+  UnitStats_ManaCostFactor`, `fdivrs`, `_ftol`): `trunc(MaxMana / ManaCostFactor)` = max mana x intelligence / 25, a QUOTIENT (the
+  earlier "product" inference was wrong).
 - `CTooltipControl` size (0x184 assumed), `CEditWin` size (0x17C assumed): their `operator new` sites are in the framework.
 - Where the option globals are persisted (keyboard.ini is written by the framework's key-table code; the options ini writer was not found
   in these ranges).
