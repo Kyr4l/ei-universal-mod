@@ -351,7 +351,8 @@ Per page, the open items that matter most for the mod work:
 - script-vm.md: the second auto-id counter `+0x6C` has no reader (a failed `.mob` compile is silent: settled 2026-11-03); `GetBSZValue` reads a stale vtable slot (undefined on the server).
 - gs-functions.md: `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; (the sound-source respawn loop's test is
   inverted: a game bug, `CreateRandomizedFXSource` never plays; one-byte fix at 0x4BF161, settled 2026-11-03); `HideObject` / `BlockUnit` /
-  `ActivateTrap` flip flags without `MarkNetDirty`; the hit record fields of `KillUnit` / `InflictDamage` beyond [8..14].
+  `ActivateTrap` flip flags without `MarkNetDirty` (the KillUnit / InflictDamage hit record is settled: `InflictDamage(n)` can remove
+  up to 7 x n HP).
 - data-sound.md: about 40 of the 60 particle callbacks are `LAB_` code without a function symbol; RaceModels `+0x158..` (Unk47..50)
   have no reader. (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
   player is dead code, the reverb is set per zone by `LoadZone`, the Levers fields.)

@@ -278,7 +278,7 @@ for each type i:  eff_i = max(0, dmg * f_i - hit[10] * placementArmor_i (+0x24 +
 total <= 0 -> absorbed, nothing happens.  location != 6 -> ApplyDamage(part)   location 6 -> split over the live parts by rate/maxHP
 ApplyDamage(part = +0x110 + loc*0xF4):   state < 2 -> nothing
   per type: d = f_i * dmg; the armor tiers (heroes 2..0, others tier 0 only) with state > 1 absorb hit[10] * tier_i each (armor items worn:
-            Unit_DamageArmorSlots 0x525720 -> messages 0x23/0x25), the rest * hit[13]: part.hp -= d
+            Unit_DamageArmorSlots 0x525720 -> messages 0x23/0x25), the rest * hit[13] only when hit[13] > 1.0: part.hp -= d
             d >= part.max and type bit in part.crippleMask (+4), or hp < -5*max  -> state 1 crippled, hp = -5*max, message 0x1E (arm) / 0x1F (leg)
             else hp <= 0 -> state 2 ("HL is dead")
   hit[13] != 1 -> statFlags |= 1;   placement.hp = ApplyBodyPartPenalties(placement.maxHP)
