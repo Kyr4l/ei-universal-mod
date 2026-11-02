@@ -383,13 +383,11 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 
 ## 6. What is not known
 
-- The exact meaning of pipeline slots 5 (`SetFog`?) and 35 (the `+0x158` post-process) and the precise clipping algorithm live inside
-  `3DfpFPU.dll`; only the call shapes were read. [?]
+- Pipeline slots 5 (`SetFog`?) and 35 (the `+0x158` post-process) and the clipping algorithm live inside `3DfpFPU.dll`, outside game.exe [untestable here: needs a reverse of that DLL].
 - `CFigureClientSpecific +0x30..+0x38` (three 1.0 floats) and `CI3DFigure +0x27C` (lighting params) are set but their readers were not found. [?]
-- `CStateBlockSet::GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 (were CaptureEffect / ApplyDefaultEffect): slot 6 copies the records OUT of the registry, a getter, resolved by the guess sweep 2026-11-01
-  (the material manager, other page). [?]
-- `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 and `LoadFigFile2` 0x4F9E50 (the "second path" with `GetNamedValue`) were not read.
-- Which objects use the alternate node tracks `+0x54 / +0x58` (`SetTrackAnimationB / C`) was not found.
+- ~~CStateBlockSet slot 6~~ settled [V]: `GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 copy the records OUT of the registry (getters; guess sweep 2026-11-01).
+- `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3); their bodies are left for the deep-read step (FINISH-PLAN T5).
+- The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.
 - `CMapObject +0x178` (1.0) and `+0x1A8` (a CString) are guesses. [?]
 
 ## 7. Corrections to earlier notes
