@@ -363,6 +363,22 @@ parts are healed by `UnitStats_SpendEffectBudget` 0x525800 (shared by part rate,
 re-derived. `Heal` 0x5543B0 (slot 21) = the same with an amount. Skills raise through `UnitStats_RaiseSkill` 0x528AB0 (cost into the experience
 accumulator and `+8`), perks through `UnitStats_LearnPerk` 0x526450 (see docs/game-memory.md for the costs, verified live).
 
+### 5.x The unit save record (`CUnitServer::Write` 0x5561C0 / `Read` 0x555D10, slots 10 / 9; `stream +8` = save version) [V, 2026-11-03]
+
+In order (sizes in bytes when not 4): paused `+0x20` (1), frozenAnim `+0x21` (1), the current AnimQueue `+0x24` + its start tick `+0x38`;
+`CMover::ReadState +0x3C`; the action record `+0xC4` (AnimQueue), `+0xD8`, end tick `+0xE0`, face target `+0xE4`, hit location `+0xF0`,
+reach^2 `+0xE8`, spell flag `+0xEC` (1), called shot `+0xF4` (1), damage kind `+0xF8`, [version > 0x47: direction `+0xFC` (12)]; `+0x144..+0x147`
+(4 bytes: idle anim saved, pathBlocked, replan, standAnimApplied); the saved AnimQueue `+0x148` + start tick `+0x15C`; pending hit reaction
+`+0x160`; state `+0x164`; stance block `+0x168` (8: stance, combatMode, running); wanted block `+0x170` (8: wanted, fighting, stancePending);
+next attack tick `+0x184`, `+0x188`, `+0x178`; the current order `+0x190` (kind, param, target as an object id, pos 12, extra `+0x1AC`, run `+0x1B0`
+(1), [> 0x47: exact `+0x1A8` (1)]); the queued order `+0x1B4` (kind, param, target id, pos 12, `+0x1D0`, `+0x1D4` (1), [> 0x47: `+0x1CC` (1)]);
+`UnitStats_ReadSave +0x1E0` (version < 0x50: max HP from the placement); the perception multipliers `+0x8F8..+0x904`; taming `+0x908..+0x910`;
+`+0x914`; `+0x97C`; `Brain::Read +0x980`; `AiAcknowledge +0xB10`; `+0x18C` (1), `+0x18D` (1), corpse sink `+0x8F4`; hit effect `+0x17C` (object
+id, -1 none); the passive spell list `+0x91C` (count + {id, countdown}); chain link `+0x1D8` (1) + `+0x1DC` (object id); then version-gated:
+> 0x43 action timeout `+0x180`, > 0x47 a dummy dword (Write stores 2), > 0x49 `+0x18E` (1), > 0x4B attack skill `+0x8E4` + effective armor
+(0x10), > 0x53 idle voice counter `+0x938`, > 0x68 pending hit `+0x108` (0x3C), > 0x72 `lastOrderTick +0x93C`. **Game bug**: `Read` fetches
+that last field through the stream's slot +8 (write) on a local copy instead of slot +4 (read), so `lastOrderTick` is never restored from a save.
+
 ## 6. Items in combat
 
 `CUnit +0x440[4]` weapon slots, `+0x450[4]` quick slots, `+0x460[8]` inventory (spells: item `+0x44`), `+0x480[7]` armor (slot = `CItem::GetType`).
