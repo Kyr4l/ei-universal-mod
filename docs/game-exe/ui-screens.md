@@ -430,8 +430,10 @@ Backspace clears it.
   earlier "product" inference was wrong).
 - `CTooltipControl` size 0x184 confirmed [V] (`operator new(0x184)` in `UIButton::SetTooltipById`); `CEditWin` size 0x17C
   confirmed [V] (`operator new(0x17c)` in `CCampScreen2::Build`, `CLobbyScreen::Build`, `CExchangeScreen::Build`).
-- Where the option globals are persisted (keyboard.ini is written by the framework's key-table code; the options ini writer was not found
-  in these ranges).
+- ~~Where the option globals are persisted~~ settled [V]: not in an ini. They are the `AppSettings` fields `g_0x79BC70`, read by
+  `AppSettings::ReadFromRegistry` 0x45B210 at start and written back by `AppSettings::WriteToRegistry` 0x45C560 (127 `CWinRegistry`
+  set calls) once, at exit from `main`, under `HKCU\Software\Nival Interactive\EvilIslands` (ui-framework.md 2). keyboard.ini is
+  written by `KeyBindings_Save` at exit.
 - `CSaveLoadWin::ScanSaves`: the number parsed from the folder names (the next "save<n>") and the info.sav version share one decompiler
   variable; the version gates (time at v >= 2, label at v >= 3) are [I].
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.

@@ -346,8 +346,8 @@ Per page, the open items that matter most for the mod work:
   MMP extra block is never read; the sky figure is nask0sky.fig: settled.)
 - ui-framework.md: `CamCtlClassic` / `CamCtlSimple` are dead; several static-init globals are unexplained. (`InitQuadUV`, the
   console handlers 0x5DD920-0x5E0A10 (now defined) and the map.txt zone record are settled.)
-- ui-screens.md: the options ini writer was not found; `CCampScreen +0x168..+0x18F` and `CCampScreen2 +0x1A0..+0x220` are
-  unmapped. (Tooltip ids = text keys `tip N`, `GetMagicTotals` = a quotient: settled.)
+- ui-screens.md: `CCampScreen +0x168..+0x18F` and `CCampScreen2 +0x1A0..+0x220` are
+  unmapped. (Tooltip ids = text keys `tip N`, `GetMagicTotals` = a quotient, the options are saved to the registry at exit: settled.)
 - script-vm.md: whether a failed compile of a `.mob` script is reported anywhere (the map runs with a partial script); the second
   auto-id counter `+0x6C` has no reader; `GetBSZValue` reads a stale vtable slot (undefined on the server).
 - gs-functions.md: the sound-source respawn loop serves `CreateFXSource` records and skips `CreateRandomizedFXSource` ones (inverted
