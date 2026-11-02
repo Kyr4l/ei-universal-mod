@@ -261,15 +261,15 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x13 | 0x667E60 | **unknown** | |
 | 0x40 | 0x667EC0 | **decoded: see "Unit creation" below**: u32 id, u32 kind, u32 prototype, u32 flags, the complexion, figure / texture / label strings, the part names, the name, then the unit's whole state as a delta coded 0x41 body | a unit appears (creation) |
 | 0x41 | 0x6687B0 -> unit vmethod +0xC4 (0x52EF90, base 0x50EC30) | u32 unit id, then the delta-coded fields below | unit update |
-| 0x42 | 0x668850 | 47 bytes, zero in captures | **unknown** |
-| 0x50 | 0x668940 | **unknown** | |
-| 0x51 | 0x668A30 | **unknown** | |
-| 0x52 | 0x668AA0 | **unknown** | |
-| 0x60 | 0x668C50 | a list (ids) | a resync list of unit ids seen once (0x12A0 0x1320 0x3B9ACA0D 0x3B9ACA10) |
-| 0x70-0x72 | 0x669760.. | **unknown** | |
+| 0x42 | 0x668850 | u32 id (decoded from game.exe, game-exe/world-client-players.md 5) | the object left the player's replicated set: party units lose their player, the object is removed |
+| 0x50 | 0x668940 | u32 id, u32 type id, length-prefixed full state | an effect (light, sound, particles, lightning) comes into range |
+| 0x51 | 0x668A30 | u32 id + delta | effect update |
+| 0x52 | 0x668AA0 | u32 id | effect removed |
+| 0x60 | 0x668C50 | u8 paused, u32 sync marker, u32 player index, u32 n + n unit ids (the visible units), u32 party mode, u32 m + m loot-owner unit ids | party status, every replication tick in player states 1 / 2 |
+| 0x70-0x72 | 0x669760.. | 0x70: u8 rain kind, i16 strength; 0x71: f32 hour, f32 time rate; 0x72: f32[3] wind, u32 strength | weather, game time, wind (sent when the world marks them dirty) |
 | 0x80 | 0x669A30 | the player's party: a length (2 bytes = size × 2; 4 bytes = size × 2 + 1 from 15000) + the character in the .mp's unpacked layout (zone name, u32, party, variables) | sent at the start of the session and every 900-1800 ticks (`SendMsg80_Party` 0x66EF80); um-bot writes it back into the character's .mp (checked 2026-10-20: it parses and re-serializes identically) |
 | 0x81 | 0x669850 | str; when it starts with "q." -> 0x5F7FC0 / 0x565380 | quest-related (can embed a 0x40 record) |
-| 0x82 | 0x669960 | **unknown** | |
+| 0x82 | 0x669960 | C string | remove a named value (GSDelVar); "q." names reset that quest state |
 | 0x83 | 0x669C90 | the same party blob as 0x80 | sent when the player leaves the world (`World::PlayerOut` 0x590A40, after the picked-up items are moved into the party): the final save; the client message 0x04 + u32 0 triggers it (checked live 2026-10-20: the reply holds a 0x83 and then a 0x80); entering again after it needs a new connection (JOIN 3 + upload got no snapshot) |
 
 ### The zone state and the zone exits (read from game.exe 2026-10-21, not yet checked live)
