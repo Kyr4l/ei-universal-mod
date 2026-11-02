@@ -157,7 +157,7 @@ message = [flag bit] u8 kind u16 id [payload when the flag bit is 1]
 entry's, one message; the loop stops once `cursor - start > budget`, so a datagram is ~220-230 bytes (um-bot measured 228 in the lobby).
 `NetSocket::SendTo` sends the buffer's content length (`validEnd`), which can include stale bytes of an earlier, longer packet. Every message
 is recorded in the packet's `SentPacket` (`+0x10f8` list, 0x120-byte node: `+8` time, `+0x10` seq, `+0x14` list of `{channel, version,
-entry}`, `+0x18` the chunk copy, `+0x114` lost flag).
+entry}`, `+0x18..+0x11b` the copy of the whole 0x104-byte stream-chunk node tail `{u16 offset, u8 len, data[257]}` (`rep movsd` of 0x41 dwords at 0x435B2B), `+0x11c` lost flag; `PacketLost` gets the record at node + 8, so its offsets read 8 lower) [V].
 
 An empty keep-alive is `00 seq ack bits 0000 00 00` (offset = the current stream position); it is enough to keep a peer alive.
 
@@ -334,7 +334,8 @@ above its join watermark (no history on join); the server keeps the last 50 (`Po
 Only `.mq` files travel. `AddFileTransfer(name, GameBuffer)` 0x419A00 makes a `ListStringMessage {chunkCount = (size + 63) / 64, size,
 name}` plus one `RefBlobMessage {transfer, index, 64 bytes}` per chunk (the last padded) in its vector `+0x20`. Every client receives the
 kind-11 object; `OnFileTransferAdded` creates a `TwoRefMessage {transfer}` (kind 13) in `+0x25e8` unless `Game_MapDirExists` 0x5812F0 says
-the file is already there [? the test reads as "the maps folder exists"]. The server's `OnChunkRequest` records `{transfer, peer}` in
+the file is already there: it runs `CFileFind::FindFile(World_MapPath() + name)` with the transfer's file name (`+0x14`), so it
+tests the specific `maps\<name>` file, not the folder [V]. The server's `OnChunkRequest` records `{transfer, peer}` in
 `+0x259c`; `GatherReplicated` then includes that transfer's chunks (group 1) for that peer only, so all chunks go out through the normal
 reliable path (one 64-byte chunk is 67 bytes + 3 of header: two or three per update, ~150 chunks/s on LAN). `OnChunkReceived` keeps the
 chunks in `+0x25e4`; when `chunkCount` chunks of a transfer are present it sorts them by index, concatenates, truncates to `size`,
@@ -359,7 +360,8 @@ in `+0x25c0` for 60 s. um-bot implements the whole dance (`AnswerSwap`).
   sent) with default port 28004; `v14_Tick` sends `SendMasterHeartbeat` 0x41AA10 every 20 s: a raw `NetPlayerInfo::Write` 0x401000 record
   `{name, map, u8 players, u8 max, u8 kind, u8 hasPassword, u32 requestId, u32 publicAddress, u32 magic}` with **no type byte** through the
   UDP socket. The master answers `{0xFF, u32 requestId, u32 publicAddress}` -> `v10_OnMasterPacket` stores the public address.
-- List download: `CLobbyScreen::StartConnect` 0x61D0D0 -> `CConnectProgressWin` 0x61E2F0 opens a `TcpStream` to the typed address;
+- List download: `CLobbyScreen::StartConnect` 0x61D0D0 -> `CConnectProgressWin` 0x61E2F0 opens a `TcpStream` to the master (`NetAddress::FromString(g_0x79BED8, 28004)`, not a typed address) whose whole request is one
+  `u32`: `NetClient +0x25b8`, the dword stored with the address book (`SetServerList`; 0 without a saved book) [V];
   `Poll` 0x440DE0 sends the request buffer, reads until the remote closes; `LobbyClient::OnServerInfoPacket` 0x41D600 parses
   `{u32 rawLength, LZ(records)}` where each record is `sockaddr[16] + NetPlayerInfo::Read 0x401170` -> `ServerInfo` (source 2) ->
   `NetClient::AddServerInfo` 0x4428A0 and one get-info probe. The address book (`NetServerRecord` vector, `AddrBook_Serialize` 0x4414E0)
@@ -505,16 +507,23 @@ texture layer (0x4E6000-0x4F1000, 43 sites) and caught there.
 
 ## 6. What is not known
 
-- The TcpStream request bytes sent to the master (`TcpStream` send buffer `+0`) and the master's reply beyond `{rawLength, LZ(records)}`:
-  the master host name `g_0x79BED8` is empty in this exe, so the internet lobby is unreachable without patching it. [?]
-- The exact byte length of the chunk copy inside a `SentPacket` (`+0x18`.. with the lost flag at `+0x114`: 252 bytes?). [?]
-- Whether `Game_MapDirExists` 0x5812F0 tests the specific file or only the maps folder (it reads as the folder: a client with a maps
-  folder would then never request chunks). [?]
-- The precise base A / B semantics of the delta codec are inferred (5.6): read `CPlayerServer::SendMsg50/51` and `CMapObject::ReadNetState`
-  against a capture to confirm which form hits an empty base.
-- `NetPeer +0x1108` / `+0x1114` flag bytes next to the received-object trees (set from the linkId at construction). [?]
-- `ServerInfo` write of `gameKind` (`LobbyServer +0x25e4`, 4 by default) shows as zero bytes in the 2026-10 captures: the lobby screen's
-  argument to the ctor was not traced. [?]
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+- The master request is 4 bytes: `u32 NetClient +0x25b8` (the address-book dword, also passed to `Lobby_StartServerOrClient` as its last
+  argument), written by the `CConnectProgressWin` ctor into the `TcpStream` send buffer; the TCP target is the master name
+  `g_0x79BED8`:28004 (4.8) [V]. The master's reply beyond `{rawLength, LZ(records)}`: [untestable] (no master exists and the name is
+  empty in this exe).
+- `SentPacket`: the chunk copy is 260 bytes (0x41 dwords: the stream-chunk node from `+8`), at `+0x18..+0x11b`; the lost flag is `+0x11c`
+  (3.4) [V].
+- `Game_MapDirExists` 0x5812F0 tests the specific file `maps\<name>` (FindFile on `World_MapPath() + name`) [V]; the name is misleading
+  (batch-t3b renames it `Game_MapFileExists`).
+- The base A / B semantics of the delta codec stay [I] (5.6): **[live]** (`live-checklist.tsv`: log `DeltaCodecSet::BeginRead` /
+  the base lengths on a client for a 0x40 and a following 0x41 of the same unit).
+- `NetPeer +0x1108` / `+0x1114` are the empty `less<>` comparator bytes of the STLport maps `+0x1100` / `+0x110c` (the `_Rb_tree` ctor
+  stores the comparator byte at map + 8 after the node count, 0x432EC9 / 0x432EF5): no flag, never read [V].
+- `ServerInfo.gameKind` = `LobbyServer +0x25e4` = the ctor argument = the lobby screen's allod tab `CLobbyScreen +0x19c` (0..3,
+  `lmp_allod_name_%d`; 0 after `Build`): `JoinSelected` 0x61CD8C -> `Lobby_StartServerOrClient` third argument -> `LobbyServer::ctor`.
+  The zero bytes of the captures are the first allod tab [V]; the "4 by default" was wrong.
 
 ## 7. Corrections to earlier notes
 

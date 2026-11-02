@@ -48,7 +48,7 @@ Addresses are VAs; offsets are bytes; "tick" = `CWorld +0x64` (18/s on the serve
 | strings in payloads | C strings with their NUL (`SendMsgString`, `Stream_ReadCString` 0x4A5330); "embedded stream" = `Stream_WriteEmbeddedStream` 0x4A5250: u16 `len*2` or u32 `len*2+1` (>= 0x7531) then the bytes; "length-prefixed blob" = `MsgStream_WriteLenPrefixed` / `ReadLenPrefixed` 0x47DAE0: 1 or 4 byte length (bit 0 = long), max 100000 [V] |
 | ids | object ids (`CObject +0xc`); heroes 0x3B9ACA0D.. (1 000 000 013); `IsHeroId` 0x5F8B20 marks them; a respawned hero gets the first free id >= old + 250000 [V] |
 | flags used here (`CObject +8`) | 1 deleted, 2 net dirty (PackDeltaNetState before sending), 0x10 selected by the local player (the UI iterates units with it), 0x20 inside the view frustum, 0x100 ghost / hidden render mode (message 0x19), 0x200 animation-budget candidate, 0x400 animation enabled, 0x400000 party unit (message 0x60), 0x800000 dead (orders skip it) [V] |
-| type ids (`vt[12]`) seen in the client lists | 0x50 CUnit, 0x52 CTree, 0x54 and 0x5d = objects with walkable parts (buildings / stuff: `ActivateObjectBridges`), 0x44 CFigure, 0x4f CSpell [V]; which class is 0x54 and which 0x5d: [?] |
+| type ids (`vt[12]`) seen in the client lists | 0x50 CUnit, 0x52 CTree, 0x54 CBuilding (`GetTypeId` 0x529820) and 0x5d CLeverObject (0x52B2F0) = the objects with walkable parts (`ActivateObjectBridges`; no other vtable reuses these two slots), 0x44 CFigure, 0x4f CSpell [V] |
 | the game-state globals | `g_0x7C83D0` server packet stream (+5 ok byte), `g_0x7AFF60` CWorldServer (its +0x64 = `g_0x7AFFC4` tick), `g_0x7AF5B8` CWorldClient (+0x64 = `g_0x7AF61C`), `g_0x79B2A8` CCamera, `g_0x7C7D50` CInterface, `g_0x79B5D8` lobby client, `g_0x7B0098` party store mode (1 local store, 2 session hash, 3, 4 none) [V] |
 
 ## 2. The link
@@ -119,7 +119,7 @@ PlayerIn, and the old unit's seen list is copied to the new one.
 | 35 | SetStance | u32 unit id, u8 stance | `SendMsg35_SetStance` 0x66AED0 (keys, `CUIWidget7424FC`; `CUnit +0x268` locally) | `OnMsg35_SetStance` 0x6709D0 | `CUnitServer::RequestStance(stance)` (walk / run / sneak / battle) |
 | 36 | Interact | u32 n, n x u32 ids, u32 a, u32 interaction id, u32 b, u32 target id | `SendMsg36_Interact` 0x66AB80 (selection; b = -1), `SendMsg36_InteractOne` 0x66AA20 (one unit: talk / use / loot from `IssueCommandAt`) | `OnMsg36_Interact` 0x670310 | with several units the nearest that can reach the target (`CanReachOrderTarget`, `CAIMap::FindPath`); `AiLogicPlayer::Interact(brain, target, interaction, b, a != 0)`; 0x18A95 = loot |
 | 37 | - | - | - | `OnMsg37_Nop` 0x670810 | nothing |
-| 38 | unused | u32 unit id + bytes | - | `OnMsg38_Unused` 0x670A40 | resolves the unit, nothing |
+| 38 | unused | u32 unit id, u32 value | `SendMsg38` 0x66AF90 (not a Ghidra function; no call or pointer anywhere in the exe) | `OnMsg38_Unused` 0x670A40 | reads both words (from the packet stream `g_0x7C83D0`), resolves the unit, nothing: a removed feature at both ends [V] |
 | 39 | SetLeader | u32 unit id, u32 leader id | `SendMsg39_SetLeader` 0x66AFE0 (`IssueCommandAt` on the selected units) | `OnMsg39_SetLeader` 0x670A90 | `AiLogicPlayer::SetLeader(brain, leader or 0)` (follow / regroup) |
 | 3A | MoveFormation | as 30 | `SendMsg3A_MoveFormation` 0x66A720 (`SendOrder` with the formation option) | `OnMsg3A_MoveFormation` 0x66FBD0 | `AiLogicPlayer::MoveTo(logic 6, ...)` (the queued variant) |
 | 3B | SetField438 | u32 unit id, u8 v | `SendMsg3B_SetField438` 0x66AF30 (`CUIWindow742530::OnSelect`) | `OnMsg3B_SetField438` 0x66FB70 | `CUnit::SetField438` (net section 13) |
@@ -145,21 +145,21 @@ error during parsing command"). [V]
 | 09 | TopScreenVt7C | - | `Respawn` (no session) | `OnMsg09_TopScreenVt7C` 0x669F30 | `CInterface::FwdTopVt7C(0)` (respawn screen) |
 | 0A | RemoveItem | u32 item id | `SendMsg0A_RemoveItem` 0x66EA30 (slot 19) | `OnMsg0A_RemoveItem` 0x669290 | `CPlayer::RemoveItemById`, inventory UI refresh |
 | 0B | UnitEvent | u32 unit id, u32 code | `SendMsg0B_UnitEvent` 0x66D6E0 (20 CUnitServer callers, `BroadcastMsg0B` 0x58D340) | `OnMsg0B_UnitEvent` 0x667DF0 | `CInterface::FwdTopVt80(record, 8)`: order feedback (codes in combat.md 3; 0xFF = respawned hero id) |
-| 0C | ItemValues | (u32 item id, f32 value)* then u32 -1 | not found in CPlayerServer [?] | `OnMsg0C_ItemValues` 0x6696A0 | item `+0x28` (durability) of each item of the item manager |
+| 0C | ItemValues | (u32 item id, f32 value)* then u32 -1 | `SendMsg0C_ItemValues` 0x66EAC0 (item CList: id `+0xc`, `+0x28`): not a Ghidra function, no call or pointer anywhere in the exe: dead [V] | `OnMsg0C_ItemValues` 0x6696A0 | item `+0x28` (durability) of each item of the item manager |
 | 0D | MusicTrack | C string | `SendMsg0D_MusicTrack` 0x66EB90 (scripts), `BroadcastMsgString` | `OnMsg0D_MusicTrack` 0x669F40 | `CMusicZone::SetTrackIfBattle` |
-| 0E | MovePath | u32 request id, u32 unit id, u32 x2, u32 unit id, u32 kind, [embedded delta stream: `MoveState_WriteNet` unless kind == 3] | `SendMsg0E_MovePath` 0x66D490 (`ReportMoveResult` 0x54EB30, `ValidateQueuedOrder` 0x54E600) | `OnMsg0E_MovePath` 0x669FA0 | decoded into a temporary unit; only drawn with the debug flag `g_0x79BE70` (particles 0x2039 / 0x203a): a move acknowledgement |
+| 0E | MovePath | u32 kind (3 = no path: nothing follows), u32 flag (0 / 1), f32 x, f32 y (the request's target point, mover state `+0x60`), u32 unit id, f32 value (1 000 000.0 from `ReportMoveResult`, a local float in `ValidateQueuedOrder`), [embedded delta stream: `MoveState_WriteNet` unless kind == 3] (order read from the sender's disassembly) [V] | `SendMsg0E_MovePath` 0x66D490 (`ReportMoveResult` 0x54EB30, `ValidateQueuedOrder` 0x54E600) | `OnMsg0E_MovePath` 0x669FA0 | decoded into a temporary unit; only drawn with the debug flag `g_0x79BE70` (particles 0x2039 / 0x203a): a move acknowledgement |
 | 0F | CameraFromTo | f32[3] eye, f32[3] target, u8 | `SendMsg0F_CameraFromTo` 0x66EDA0 (dialog camera) | `OnMsg0F_CameraFromTo` 0x667D10 | `CCamera::LookFromTo` + flag 0x40 |
 | 11 | Error text | C string | `OnMsg00_Identity` (wrong version) | none in the table (the link is dead) | - |
-| 12 | WorldByte | 5 bytes (u32, u8) | `SendMsg12_WorldByte` 0x66D730 (`BroadcastMsg12`, script op 0x39) | `OnMsg12_WorldByte` 0x667E20 | `CWorldClient +0x7c0` = first byte << 24 [?] |
+| 12 | WorldByte | 5 bytes: 1 uninitialised stack byte, u32 round(b) | `SendMsg12_WorldByte` 0x66D730 (`BroadcastMsg12`, script `SendEvent(a, b)` op 0x39: `a` is passed but never written) | `OnMsg12_WorldByte` 0x667E20 | `CWorldClient +0x7c0` = the u32 (bytes 1..4); nothing in the exe reads `+0x7c0`: no effect [V] |
 | 13 | ScreenCommand | C string | `SendMsgString(0x13)` (`BroadcastMsgString`, script op 0x3a) | `OnMsg13_ScreenCommand` 0x667E60 | `CInterface::HandleScreenCommand` ("say_block", "tutorial", "briefing") |
 | 14 | ItemValue | u32 item id, f32 value | `SendMsg14_ItemValue` 0x66EB40 (slot 22, `CPlayer::TrackItemId`, `ResendItemValues` 0x66F080) | `OnMsg14_ItemValue` 0x66A420 | party item `+0x28` = value, `TrackItemId` |
 | 15 | PartyExperience | f32 xp | `SendMsg15_PartyExperience` 0x66F280 (`GiveExperience` 0x5911C0, no session) | `OnMsg15_PartyExperience` 0x66A480 | floating number on every party unit |
 | 16 | WeaponBroken | u32 hero unit id, u32 weapon index | `SendMsg16_WeaponBroken` 0x66EA70 (`CUnit::DropBrokenItems` 0x532AC0) | `OnMsg16_WeaponBroken` 0x669400 | `HeroRecord::RemoveWeapon`, `CUnitClientSpecific vt[25] SetWeaponFigure(-1)` |
 | 17 | ClearItems | - | `SendMsg17_ClearItems` 0x66EA10 (slot 18) | `OnMsg17_ClearItems` 0x669350 | `CPlayer::ClearItems`, UI refresh |
 | 18 | UnitExperience | u32 unit id, f32 xp | `SendMsg18_UnitExperience` 0x66F2C0 (`GiveExperience`, session share) | `OnMsg18_UnitExperience` 0x66A5A0 | floating number (kind 8) |
-| 19 | UnitVisibility | u8 mode, u32 unit id | (scripts) [?] | `OnMsg19_UnitVisibility` 0x66A620 | 0 `HideObject`, 1 ghost flag 0x100 + render specific `vt[26](1)`, 2 clear, 3 `UnhideObject(all)` |
+| 19 | UnitVisibility | u8 mode, u32 unit id | `SendMsg19_Dialog` 0x66F840, only from the server `DialogScreen` and only to player 0: `AddSpeaker` (1), `RemoveSpeakerByName` (2), `Update` talk markers (1 / 2), `StartBriefing` (0, 3), `StartDialogLine` end (2 per speaker, then (0, 0)) [V] | `OnMsg19_UnitVisibility` 0x66A620 | 0 `HideObject`, 1 ghost flag 0x100 + render specific `vt[26](1)`, 2 clear, 3 `UnhideObject(all)` |
 | 40 | UnitCreate | unit record + full net state (multiplayer-protocol.md "Unit creation") | `SendMsg40_UnitCreate` 0x66D7F0 | `OnMsg40_UnitCreate` 0x667EC0 | the unit is created (figure manager), `CMapObject::ReadNetState(0)`, `CWorldClient::AddObject`, player unit hash `+0x28` |
-| 41 | UnitUpdate | u32 id + delta net state | `SendMsg41_UnitUpdate` 0x66DBA0 (objects changed this tick) | `OnMsg41_UnitUpdate` 0x6687B0 | `UnpackNetState(1)`; types 0x54 / 0x5d re-register their bridge quads |
+| 41 | UnitUpdate | u32 id + delta net state | `SendMsg41_UnitUpdate` 0x66DBA0 (objects changed this tick) | `OnMsg41_UnitUpdate` 0x6687B0 | `UnpackNetState(1)`; types 0x54 (CBuilding) / 0x5d (CLeverObject) re-register their bridge quads |
 | 42 | UnitRemove | u32 id | `SendMsg42_UnitRemove` 0x66DAD0, `RemoveTrackedUnit` 0x66DC90 | `OnMsg42_UnitRemove` 0x668850 | `SetPlayer(0)` for party units, hash `+0x28` erase, `RemoveObject` |
 | 43 | UnitDied | u32 id | `SendMsg43_UnitDied` 0x66D6A0 (`CWorldServer::OnUnitDied` 0x593AF0, players that see it) | `OnMsg43_UnitDied` 0x66A3B0 | `CUnitClientSpecific vt[48]` (death blood) |
 | 50 | EffectCreate | u32 id, u32 type id + length-prefixed full state | `SendMsg50_EffectCreate` 0x66DDE0 | `OnMsg50_EffectCreate` 0x668940 | effect manager `vt[23](type, id)`, `CEffect::ReadDelta(0)` (spells.md), hash `+0x58` |
@@ -169,7 +169,7 @@ error during parsing command"). [V]
 | 70 | Weather | u8, i16 (3 B) | `SendMsg70_Weather` 0x66EC10 (dirty bit 2: `CWorldServer +0xe4 / +0xe8`) | `OnMsg70_Weather` 0x669760 | `CWeatherSound::SetRain(g_0x7AFCAC, 3, 0)` |
 | 71 | GameTime | f32 hour, f32 rate | `SendMsg71_GameTime` 0x66EC70 (dirty bit 4, `CWorld::GetHourAndRate`) | `OnMsg71_GameTime` 0x6697B0 | `SetTimeScale(rate)`, `SetTime(hour)`, `UpdateDayLight` |
 | 72 | Wind | f32[3], u32 | `SendMsg72_Wind` 0x66ECD0 (dirty bit 8) | `OnMsg72_Wind` 0x669800 | `CWorldClient::SetWind` (terrain + weather) |
-| 73 | DbArray | u32 count + 16-byte records | `SendMsg73_DbArray` 0x66F240 (dirty bit 0x20, `Vec16Array_Write`) | `OnMsg73_DbArray` 0x66A400 | `DbArray16_Read` into the world [?] which table |
+| 73 | WaterLevels | u32 count + 16-byte records `{material id, steps left, f32 level, f32 step}` | `SendMsg73_DbArray` 0x66F240 (dirty bit 0x20, `WaterLevels::Write`) | `OnMsg73_DbArray` 0x66A400 | `WaterLevels::Read` into `CWorld +0x70`: the script water levels, applied with `CTerrain::SetMaterialHeight` (terrain-lighting.md, world-server.md) [V] |
 | 80 | Party | embedded stream (`CParty::Write` full) | `SendMsg80_Party` 0x66EF80 (identity, respawn, map change, disconnect, every 900..1800 ticks, scripts, `Console_Give`) | `OnMsg80_Party` 0x669A30 | `MpFile::Read(party, 1)`, synced item list rebuilt (items with `+0x28 < +0x2c`), named values kept in a session, `ApplyObjectVariables`, the .mp file rewritten |
 | 81 | NamedValue | C string, f32 | `SendMsg81_NamedValue` 0x66EE10 / `SendMsg81_MaxValue` 0x66EE80 (`BroadcastGameTime` "gtime", scripts, mercenaries, `um.speed`) | `OnMsg81_NamedValue` 0x669850 | `StringFloatMap_Set(+0xc4)`; "q." names also `NotifyScreenName` + `SetNamedObjectState` |
 | 82 | RemoveNamedValue | C string | `SendMsg82_RemoveNamedValue` 0x66EF30 (GSDelVar) | `OnMsg82_RemoveNamedValue` 0x669960 | remove; "q." names -> state 0 |
@@ -222,7 +222,7 @@ exits, `+0xa0` zone exit effects, `+0xf0` screen rectangles of the drawn objects
 `+0x1b0` moshka bird, `+0x1b4` floating numbers, `+0x1cc` sound, `+0x1d0` texts; `+0x20c` the local player, `+0x210` the camera. [V]
 
 **AddObject** 0x5647E0 / **RemoveObject** 0x564BE0: object list, grid A cell, hero list (kind 0x32 + `IsHeroId`), visible list when `vt[29]`,
-and for types 0x54 / 0x5d the walkable part faces (flag 0x400 parts) into the bridge manager; `ActivateObjectBridges` 0x5651A0 refreshes them
+and for types 0x54 CBuilding / 0x5d CLeverObject the walkable part faces (flag 0x400 parts) into the bridge manager; `ActivateObjectBridges` 0x5651A0 refreshes them
 on every `41`. `HideObject` / `UnhideObject` 0x566030 / 0x566100 (message 0x19). `CollectObjectsNear` 0x56DAF0 walks the grid cells of a square.
 `FindNearestPartyUnitFor` 0x5640A0 uses the connection's party ids and the relation masks `+0x244 / +0x248 / +0x250`. [V]
 
@@ -253,7 +253,7 @@ stacks of `g_0x7AF068`; flag 0x1000: the sky (fog / z off); `Net_TickAll`; flag 
 classified, then the deferred units (`g_0x7AF5B4`) and the hero list; `ClassifyCellObjects` 0x56A990 per object: heroes only in the last
 pass, units get `vt[25] UpdateClientPresence`, the world matrix `+0x54` is built from `+0x34 / +0x1c`, `CViewFrustum::CullBox(+0x124)`:
 outside -> flag 0x20 cleared and, when `IsShadowVisible`, the shadow-only list of its type; inside -> flag 0x20, world position `+0x28`, the
-draw list of its type (units 0x7AF578, trees 0x7AF568, 0x54 0x7AF5A8, 0x5d 0x7AF588, others 0x7AF598) and the shadow list; flag 0x200 objects
+draw list of its type (units 0x7AF578, trees 0x7AF568, buildings 0x54 0x7AF5A8, levers 0x5d 0x7AF588, others 0x7AF598) and the shadow list; flag 0x200 objects
 whose animation is older than `g_0x79BD24` frames go to 0x7AF508, sorted by last animation tick (`Unit_IntroSortLoopByEC`), and at most
 `max(10, visible / 8)` of them get flag 0x400 cleared (the animation budget). Then: the object lists sorted by material key (`RenderObj_Less`
 0x574300) and drawn in two passes, the units (flag 0x80), the prints (`CPrintDecal::Render`, toggles `g_0x79BD50 / 4C / 54`), the shadows
@@ -291,14 +291,27 @@ in this round.
 
 ## 9. What is not known
 
-* The sender of `0x0C` (item durabilities list) was not found in CPlayerServer / CWorldServer by name; it may be written inline by a function
-  of the server page. `0x19` (unit visibility) and `0x12` (world byte) have no CPlayerServer sender either: scripts / console. [?]
-* The meaning of `CWorldClient +0x7c0` (message 0x12), of `+0x6dc`, `+0x228`, and of the two getters `vt[37] / vt[38]` (`+0x194 / +0x198`, null).
-* Which class has type id 0x54 and which 0x5d (both carry walkable parts); the 16-byte records of message `0x73`.
-* `OnMsg38_Unused` (client 0x38) reads a unit id and does nothing: a removed feature.
-* The exact field order inside the `0x40` unit record after the display name (`+0x23c`) and the 0x0E payload words 3..4 (two copies of the
-  unit id?) were read from garbled decompiles: confirm with a capture.
-* `CPlayerServer +0x44` (-1) and `CPlayer +0x108` are never read in the functions of this round.
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+* Senders: `0x0C` is written by `0x66EAC0` (`SendMsg0C_ItemValues`: the item CList, id `+0xc` and `+0x28` per item, then -1), a body
+  Ghidra never made a function; an exe-wide scan finds no call, jump or pointer to it: dead code, the client handler is never fed [V].
+  `0x19` comes from `CPlayerServer::SendMsg19_Dialog` 0x66F840, called only by the server-side `DialogScreen` (speakers, talk
+  markers, briefing start / end) for player 0 [V]. `0x12` = script `SendEvent(a, b)`: the payload is one uninitialised byte then
+  `u32 round(b)`; `a` is dropped by `SendMsg12` (disassembly of 0x66D730 / 0x66C340 / 0x4B6EB6) [V].
+* `CWorldClient +0x7c0` (msg 0x12, -1 after the ctor) and `+0x6dc` (0 in `Init`, 0x80 in `UpdateDayLight`) are write-only: an
+  exe-wide disassembly scan of `0x7c0(` / `0x6dc(` finds only these stores [V]. `+0x228` (10 in the ctor) has no other access in
+  0x55E000-0x579000 [I]. `vt[37] / vt[38]` return `+0x194 / +0x198`, written only by the ctor (0): null manager slots, and the server
+  versions return 0 too (`CWorldServer::v37_Ret0 / v38_Ret0`) [I].
+* Type id 0x54 = `CBuilding`, 0x5d = `CLeverObject` (the only `GetTypeId` bodies returning them) [V]. The 16-byte records of `0x73`
+  are the `WaterLevels` of `CWorld +0x70` [V].
+* `0x38` is dead at both ends: the client writer `0x66AF90` (`{u32 unit id, u32 value}`) has no reference anywhere, and the server
+  handler reads the two words and does nothing [V].
+* The `0x40` tail [V] (disassembly 0x66D971..0x66DA01): for units only (`vt[12] == 0x50`) the display name `vt[7]()` with its NUL and
+  `u32 CUnit +0x23c` (protoIndex); any other object writes "" and 0; then `BitStream_FlushByte` and the raw full net-state bytes of
+  `+0x1e8` (no length prefix). The `0x0E` words are `{kind, flag, f32 x, f32 y, unit id, f32}` (section 5 row): words 3..4 are the
+  target point, not unit ids [V].
+* `CPlayerServer +0x44` is only ever set to -1 (ctor, Init, Done, Reset, ClearLists): write-only [V by disassembly of 0x66C540-0x671280];
+  `CPlayer +0x108` = `GodMode` level (combat.md 4.3) [V].
 
 ## 10. Corrections to earlier notes
 

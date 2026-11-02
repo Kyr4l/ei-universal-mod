@@ -57,7 +57,7 @@ Addresses are VAs; offsets are `this+off`; "tick" = one game tick (55 ms at norm
 | game tick | `CWorldServer +0x64` = `g_0x7AFFC4` (client copy `g_0x7AF61C`), ++ per `Update`; 55 ms (`g_0x78FF34` = 0x37; 0x1B at x2 speed, set by the UI 0x63A560 / 0x648D70 ..) [V] |
 | frame tick | `CWorldServer +0x68` = `g_0x7AFFC8`: ++ per `Tick` even while paused; `CEffect::lastChangeTick` uses it [V] |
 | paused | `CWorldServer +0x6c` = `g_0x7AFFCC` (byte; `SetPaused` 0x5942C0, `Game_SetServerPaused` 0x578D10); client `+0x6c` = `g_0x7AF624` (the Space pause the memory notes found) [V] |
-| hour of day | `fmod(+0x1c + tick * +0x20, 24)` [I] (`_CIfmod` 0x6E95AA hides the operands); `+0x20 = 1 / (15 * rate)`, rate = 60 in every save -> 900 ticks (49.5 s) per game hour, 19.8 min per day [V] |
+| hour of day | `fmod(tick * +0x20 + +0x1c, 24)` [V] (x87: `fild +0x64; fmul +0x20; fadd +0x1c; fld 24.0; call _CIfmod`, `Game_GetDayHour` 0x5786E0 on the globals `g_0x7AFFC4 / 0x7AFF80 / 0x7AFF7C` = `g_0x7AFF60 +0x64 / +0x20 / +0x1c`; `SetTime(h)` stores `h - fmod(tick * +0x20, 24)`); `+0x20 = 1 / (15 * rate)`, rate = 60 in every save -> 900 ticks (49.5 s) per game hour, 19.8 min per day [V] |
 | gtime | the campaign clock in game hours, a party variable (`CPlayer +0xc4` table) advanced by `BroadcastGameTime` 0x58D280 = `(tick - CPlayer +0x110) * +0x20` [V] |
 | positions | metres, x / y / z floats as everywhere; the replication radius 100 m is `dx^2 + dy^2 < 10000` [V] |
 | zone kind | `g_0x7C2CC4` (see 2.3); server mode `CWorldServer +0x138` = `g_0x7B0098` (see 2.3) |
@@ -246,7 +246,7 @@ through), `World_InitWorkDir` 0x55EA10 = `g_0x7AF454`.
 | +0x12d64 | zoneKind | = `g_0x7C2CC4` (2.3); the branch selector of the tick set, the replication set, the random weather, the hero spawn and the camp behaviour |
 | +0x12d68 / +0x12d6c | mapName (.mob) / terrainName (.mpr) | |
 | +0x12d70 .. +0x12dfc | the six id hashes | all (+MaxId `+0x12d84`), static (`+0x12d9c`), dynamic (`+0x12db4`), dynamic non-units (`+0x12dcc`), named (`+0x12de4`), effects (count `+0x12df8`, max `+0x12dfc`) |
-| +0x12e00 | staticObjectStream | `CMemStream` filled by `SeparateStaticObjects`; no reader found [?] |
+| +0x12e00 | staticObjectStream | `CMemStream` of 0x40 records filled by `SeparateStaticObjects`; read by `CWorldClient::LoadZone` through `Game_GetGlobal7C2D60` 0x578750 (= `&g_0x7AFF60 +0x12e00`) and appended to the local player's packet stream (`CPlayerClient::AppendStream`): the static objects reach the client without crossing the network [V] |
 | +0x12e28 .. +0x12e40 | cast list | `CSpellEffect` refs (vt 0x73F9D0) |
 | +0x12e44 .. +0x12e5c | item update list | regenerating items (`AddItemToUpdateList` 0x594F30) |
 | +0x12e60 .. +0x12e78 | loot records | `LootRecord` (0x20: unit id, lobby index, money, item RefArray) nodes; `LootUnit` 0x5942D0, `HasLootRecordFor` 0x5949D0 |
@@ -388,7 +388,7 @@ the container version (`g_0x790260` = 0x74 today).
 | 1 | mob name, mpr name, zone name | `+0x12d68`, `+0x12d6c`, `+0x120` (sav-format.md saw them first); the names are relative to `maps\` |
 | 2 | wind 12 B, strength, nightFactor, 5 alarm slots x 16 B | = 100 bytes (the "128-byte header" of sav-format.md starts here) |
 | 3 | tick, rainKind, rainStrength, hour, rate | `+0x64`, `+0xe4`, `+0xe8`; read side: version < 0x4c one dword instead of rate |
-| 4 | u32 (version > 0x73), `+0x13c`, u32 | the two words sav-format.md found at +120 / +124 [?] |
+| 4 | `+0x13c` lastThunderTick (version > 0x73), `+0x12d64` zone kind | = the two words sav-format.md found at +120 / +124 (+124: 3 in bz* / cz*, 1 in gz* zones = scripted / playable zone kind) [V] (disassembly 0x597DA5..0x597DCA, read 0x597142..0x597179) |
 | 5 | AIGRAPH patch | `World_LoadAIGraphStream` of the files patched against the live `NavGrid_Write` (`Stream_WritePatch` 0x4A4DA0: the long run of 0x00FF u16 of sav-format.md) |
 | 6 | object id table | `WriteObjectIds` 0x5965F0: `{id, kind +0x10, objectId +0x18}` per dynamic object, -1; `LoadSave` creates each through the map object manager `vt[23]` with `+0x18` restored |
 | 7 | effect, spell, item manager headers | `vt[10] Write` of `+0x48`, `+0x4c`, `+0x54` |
@@ -450,15 +450,33 @@ index -> entry, "Index out of range / No entry"), `Reset` 0x674810.
 
 ## 6. What is not known
 
-- Zone kind 3 (zone record kind 2, "scripted zone": every object replicated, the world script read with `LoadWorldScript`):
-  which zones of the campaign use it (map.txt `_zone` records with the second value 2) - to list from the data.
-- The exact hour formula (the `_CIfmod` operands are on the x87 stack) and the two header dwords at +120 / +124 of the save.
-- `+0x12e00 staticObjectStream`: filled, never read - dead or consumed through a global the decompiles do not show.
-- `CWorld +0x5c` RefHolder and `+0x60` RefListPair: their payload (net object lists?) was not traced.
-- `CObjectDesc +0x3c` vs `+0x4c` (two names), `+0x5c`; `ZoneRecord +0x30` ("restrict"); `CUnitDesc` item list -> chunk mapping.
-- `World_SelectProgressVideo`'s two special zones `g_0x78B0EC` / `g_0x7905CC` (progres1.bik) by name.
-- `MpFile::ReadContainer / WriteContainer` argument lists (the decompiles are garbled by `_chkstk`); the "same as previous image"
-  shortcut of the writer compares against a caller-provided buffer.
+Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
+
+- Zone record kinds come from the `#zone` type word (`MapInfo_Load` 0x45EA20: "game" 0, "edge" 1, "brief" 2) [V]. Zone kind 3 (record
+  kind 2) = the 20 "brief" zones of map.txt / map-lmp.txt: bz1g..bz7g, bz8k..bz11k, bz13h..bz18h and bz1mpg..bz4mpg (the villages /
+  bases); zone kind 4 (record kind 1) = the 43 "edge" zones (`gz1g_bz1g` ...: the travel screens between zones); the 21 "game" zones
+  (gz*) are kind 1 [V] (data: `_cpr/ru-texts/texts-RU/map.txt`, `textslmp-RU/map-lmp.txt`). The saves agree: header +124 = 3 in bz* /
+  cz*, 1 in gz* (sav-format.md).
+- Hour = `fmod(tick * timeScale + timeBase, 24)` (section 1 row) [V]. The save dwords at +120 / +124 are `+0x13c` lastThunderTick and the
+  zone kind `+0x12d64` (save chunk 4) [V].
+- `+0x12e00 staticObjectStream` is read: `CWorldClient::LoadZone` appends it to its player stream through the absolute address
+  0x7C2D60 (`Game_GetGlobal7C2D60`) [V]. A remote client's own process builds the same stream with its own `CWorldServer::NewZone`
+  [I] (the "client loads them from the same `.mob`" of section 4).
+- `CWorld +0x5c` is a `RefHolder` (vt 0x73F240) created empty by `CWorld::Init` (`+8` ref = 0); nothing sets its ref, its slot 5
+  ("pump") is empty and `AcceptPlayers` on it moves a null ref: a dead placeholder of a removed net driver [I]. `+0x60` = the
+  `RefListPair` of the game streams (`CTcpNetDriver::SyncPeers`, net-transport.md 4.9) [V].
+- `CObjectDesc`: `+0x3c` = chunk 0xB004 OBJNAME (the editor name, e.g. "Human Kania Hunter F7-1000324"), `+0x4c` = chunk 0xB016 =
+  the object's script name (empty in 56527 of 56805 objects of the 200 shipped .mob files; set examples "q1r.5", "z0jq1.1"): it is
+  what `CreateObjectFromDesc` gives the object as its name (named hash `+0x12dd0`) [V]. `+0x5c` = chunk 0xB012 (-1 in 7843 objects,
+  another object's NID in 4959, any number otherwise): only copied and written back, never used at run time [V for the data, I for
+  the use]. `ZoneRecord +0x30` = the `#sky cave` flag (section 3, `caveFlag`) [V]. The `CUnitDesc` item lists: 0xBBBB0005 quest
+  items +0x2bc, 06 quick +0x2d0, 07 spells +0x2e4, 08 weapons +0x2f8, 09 armors +0x30c (structs.tsv) [V].
+- `World_SelectProgressVideo`: `g_0x78B0EC` = "gz1g", `g_0x7905CC` = "bz7g" get progres1.bik [V].
+- `MpFile::WriteContainer` 0x579B80 = (ecx out IStream, edx head word 0x102, stack: u32 version `g_0x790260` (0x74), CMemStream* body),
+  `ret 8`; `MpFile::ReadContainer` 0x579830 = (ecx out CMemStream, edx expected head word 0x102, stack: u32 newest version
+  `g_0x790260` 0x74, u32 oldest version `g_0x790268` 0x42, source stream), `ret 0xc`; the compressed form starts above `g_0x790264`
+  (0x64) [V] (call sites 0x57A01D..0x57A028, 0x579EC2..0x579EDD). The "same as previous image" shortcut has no caller-side buffer in
+  these signatures: [?] left as read in the decompile.
 
 ## 7. Corrections to earlier notes
 

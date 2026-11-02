@@ -1243,7 +1243,7 @@ CPlayerServer			0x20	int	state	0 new (identity awaited), 1 in game, 2 left the w
 CPlayerServer			0x24	int	syncMarker	-1 = UpdateVisibleSet rebuilds the known / visible arrays from the party units' AiMemory; else the previous known array is copied; sent in message 0x60
 CPlayerServer			0x28	pointer	handlers	256 handler pointers indexed by the client opcode (CPlayerServer::Init); +0x2c count, +0x30 capacity, +0x34 grow
 CPlayerServer			0x38	float[3]	viewPoint	the client's last view point (message 0x40: x, y) or the last camera position sent (SendMsg04 / 0x0F); ReplicateToPlayer replicates the objects within 100 units of it
-CPlayerServer			0x44	int	field44	-1 after Init / Reset; not read in this round
+CPlayerServer			0x44	int	field44	-1 in ctor / dtor / Init / Done / Reset; no read in 0x66C540-0x671280 (disassembly): write-only. CORRECTION: was "not read in this round"
 CPlayerServer			0x48	CMemStream	sendStream	the outgoing message; FlushSendStream compresses it with +0x88 and hands it to the net stream
 CPlayerServer			0x70	byte	inWorld	1 between World::PlayerIn and World::PlayerOut
 CPlayerServer			0x74	pointer	spawnRecordsVt	MFC CArray (vt 0x73D2C8) of 0x28-byte spawn records (zeroed, quaternion +0x10 identity): +0x78 data, +0x7c count, +0x80 capacity, +0x84 grow; filled by World::PlayerOut and handed back to World::PlayerIn on re-entry (the units' positions between zones)
@@ -1341,14 +1341,14 @@ CWorldClient			0x52c	float[96]	fogTable	24 x rgba fog / sky colours (third secti
 CWorldClient			0x6ac	float[4]	ambientColor	current ambient light (UpdateDayLight)
 CWorldClient			0x6bc	float[4]	fogColor	current fog colour (also the sky)
 CWorldClient			0x6cc	float[4]	sunColor	current sun colour (CTerrain::SetSunLight once per hour)
-CWorldClient			0x6dc	int	lightFlags	0x80 outdoor after UpdateDayLight; 0 after Init
+CWorldClient			0x6dc	int	lightFlags	0 in Init, 0x80 in UpdateDayLight (0x566770 / 0x566C00); write-only: no other access in the exe (disassembly scan). CORRECTION: note only (reader none)
 CWorldClient			0x6e0	int	indoor	1 = cave zone (fixed light, "Sky01", "lightscave" tables, reverb)
 CWorldClient			0x6e4	int	partyMode	the server's party mode from message 0x60 (0 calm, 1 hurt, 2 fighting)
 CWorldClient			0x6ec	int	frameCounter	frames since LoadZone (10 = autosave + volumes; 0x5a music reset)
 CWorldClient			0x6f0	float	tickOffset	added to the tick for the session object updates (vt[25])
 CWorldClient			0x6f4	CWeather	weather	rain / snow (CWeatherSound, CEffectSoundObj::Update in Render, SetWind)
 CWorldClient			0x7bc	pointer	hiddenObjectIds	STL list of the ids hidden by HideObject (message 0x19)
-CWorldClient			0x7c0	int	field7c0	-1 after the ctor; message 0x12 writes byte << 24
+CWorldClient			0x7c0	int	scriptEventValue	u32 round(b) of script SendEvent(a, b) via msg 0x12 (-1 after the ctor); write-only, no reader in the exe. CORRECTION: was field7c0 "byte << 24"
 CWorldClient			0x7d0	pointer	hCursor	LoadCursorFromFile("wincurs/Df0000.cur")
 CWorldClient			0x7d4	CString	windowTitle	"EvilIslands"
 CWorldClient			0x7d8	CString	windowClass	"EvilIslandsClass"
@@ -3677,10 +3677,10 @@ NetPeer			0x1058	float	idRecycleTimer
 NetPeer			0x105c	byte[12]	entriesByKey	rb-tree key (kind << 16 + id) -> NetPendingEntry (sent objects with an id)
 NetPeer			0x1068	byte[12]	entriesByObject	rb-tree object pointer -> NetPendingEntry (everything this side replicates to the peer)
 NetPeer			0x1074	byte[132]	groupTrees	11 rb-trees (0xc each) of NetPendingEntry by group byte (GatherReplicated's second field: 1 file chunks, 2 everything else in the lobby); SendUpdate walks group 10 down to 0
-NetPeer			0x10f8	pointer	sentPackets	list of SentPacket records (0x120 nodes): +8 double time, +0x10 u16 seq, +0x14 list of {channel, version, entry}, +0x18 copy of the stream chunk (0x104), +0x114 lost flag
+NetPeer			0x10f8	pointer	sentPackets	list of SentPacket records (0x120 nodes): +8 double time, +0x10 u16 seq, +0x14 list of {channel, version, entry}, +0x18..+0x11b copy of the stream chunk (0x104), +0x11c lost flag. CORRECTION: was "+0x114 lost flag"
 NetPeer			0x10fc	pointer	lostPackets	sent records moved here after the resend timeout; discarded after NetConnection +0x10 s
 NetPeer			0x1100	byte[8]	receivedByKey	rb-tree key (kind << 16 + id) -> {ObjRef +0x14, version +0x18 = seq of the last change} of objects the peer sent us
-NetPeer			0x1108	byte	receivedFlag	= linkId low byte at construction [?]
+NetPeer			0x1108	byte	receivedByKeyCmp	empty less<> comparator byte of the STLport map +0x1100 (_Rb_tree ctor stores it after the node count, 0x432EC9); never read. CORRECTION: was receivedFlag "= linkId low byte"
 NetPeer			0x110c	byte[12]	idsByReceivedObject	rb-tree object pointer -> {u16 id +0x14, u8 kind +0x16} (for WriteRef of received objects, flag bit 1)
 NetPeer			0x1118	ushort	outStreamOffset	byte offset of the next out-stream chunk (the unreliable "stream" = the in-game LZ message bytes)
 NetPeer			0x111a	ushort	inStreamExpected	offset of the next in-order chunk to append to the in stream
@@ -3805,7 +3805,7 @@ NetClient			0x25a0	float	retryTimer	seconds since the last login send
 NetClient			0x25a4	float	retryInterval	0.1 s then doubled per retry; "Connection failed" once it exceeds 3 s
 NetClient			0x25a8	pointer	serverInfos	STLport list of ServerInfo (the browser rows); aged by Receive (+0x18 timeout), internet entries carry 0x7e967699 and never expire
 NetClient			0x25ac	pointer	addrBookBegin	vector<NetServerRecord 0x2c> (end +0x25b0, cap +0x25b4): the saved server address book (AddrBook_Serialize)
-NetClient			0x25b8	int	addrBookExtra	dword saved with the address book
+NetClient			0x25b8	int	addrBookExtra	dword stored with the address book (SetServerList); the whole TCP master request (CConnectProgressWin) and the last argument of Lobby_StartServerOrClient. CORRECTION: was "dword saved with the address book"
 NetClient			0x25bc	pointer	probeQueue	STLport list (0x18 nodes) of addresses to send one get-info to (TickDiscovery pops the first each call)
 NetClient			0x25c0	pointer	requeueList	addresses re-queued for probing when +0x25c4 is set (the LAN browser refresh); [?] sweep A: 0x4422D0 copies a 16-byte NetAddress into +0x25c0..+0x25cc before TickDiscovery, which tests the +0x25c4 dword: probably the selected server address, not a list + flag
 NetClient			0x25c4	byte	requeueFlag	[?] sweep A: 0x4422D0 copies a 16-byte NetAddress into +0x25c0..+0x25cc before TickDiscovery, which tests the +0x25c4 dword: probably the selected server address, not a list + flag
@@ -3832,7 +3832,7 @@ LobbyServer			0x25c4	pointer	banList	hash of banned sockaddr (BanPeer); CanAccep
 LobbyServer			0x25c8	byte[12]	name	std::string server name (ServerInfo::Write, heartbeat)
 LobbyServer			0x25d4	byte[12]	mapName	std::string current quest name (SetMap)
 LobbyServer			0x25e0	int	maxPlayers	8; CanAccept counts peers + pending accepts against it (reason 1)
-LobbyServer			0x25e4	int	gameKind	ctor argument; ServerInfo +0x34 / heartbeat kind byte
+LobbyServer			0x25e4	int	gameKind	ctor argument = CLobbyScreen +0x19c allod tab (0..3, 0 after Build) through Lobby_StartServerOrClient arg 3; ServerInfo gameKind / heartbeat kind byte. CORRECTION: was "ctor argument" (source untraced, "4 by default")
 LobbyServer			0x25e8	char[20]	password	SetPassword strncpy; CanAccept compares 20 login payload bytes when set (reason 3)
 LobbyServer			0x25fc	uint	masterRequestId	matched against the u32 of the type 0xFF master reply
 LobbyClient	NetClient	0x2700	0x25d8	pointer	players	list of received TwoStringMessage (kind 1)
@@ -3862,8 +3862,9 @@ PendingAccept			0x20	float	age	seconds; dropped at 60 ("Accept period elapsed")
 SentPacket		0x120	0x8	double	time	NetPeer clock +0x48 when sent (RTT on ack)
 SentPacket			0x10	ushort	seq	the 16-bit sequence of the update
 SentPacket			0x14	pointer	messages	STLport list of {channel (0 update / 1 ack-mode update / 2 removal / 3), version, NetPendingEntry*}: what the packet carried
-SentPacket			0x18	byte[252]	chunkCopy	copy of the stream chunk {u16 offset, u8 len, data} re-queued by PacketLost; [?] exact copy length not read (the record is 0x120 bytes and the lost flag sits at +0x114)
-SentPacket			0x114	byte	lostFlag	PacketLost runs once per record
+SentPacket			0x18	byte[260]	chunkCopy	copy of the 0x104-byte stream-chunk node tail {u16 offset, u8 len, data[257]} (rep movsd 0x41 dwords at 0x435B2B), +0x18..+0x11b; re-queued by PacketLost. CORRECTION: was byte[252]
+SentPacket			0x114	byte	lostFlag	CORRECTION: REMOVE this row: +0x114 is inside chunkCopy; the lost flag is +0x11c (PacketLost receives the record at node + 8, its +0x114 = node +0x11c)
+SentPacket			0x11c	byte	lostFlag	set to 1 by PacketLost (0x433F8A, record-relative +0x114); PacketLost runs once per record
 StreamChunk		0x10c	0x8	ushort	offset	byte offset of the chunk in the stream (wraps at 0x10000)
 StreamChunk			0xa	byte	len	1..204 bytes (budget 220 - 16; the hard cap in TakeStreamChunk is 255)
 StreamChunk			0xb	byte[257]	data	
