@@ -509,7 +509,7 @@ Then, when >= minScore: `- 25 x max(0, distance - range)` (x 10 and no range for
    removed from the collision map; `CanReachOrderTargetFrom(order, position)`); a candidate that fails and was the only entry for its target goes to the ignore pairs
    for 20 ticks unless it is the baseline target; reaching the baseline pair again in the list returns it; the first that passes wins; none -> the baseline.
    Under `filter`, `CanReachOrderTargetFrom` is only asked when the target is NOT within 30 m of the post / patrol path.
-`Brain::CastSupportSpell` 0x5CFE40 (the stationary `Update`s) is `ChooseTarget(empty, filter 1)`: heals / buffs on friends only. `AiLogicAggression` uses filter 0
+`AiSpellInfos::CastSupportSpell` 0x5CFE40 (the stationary `Update`s) is `ChooseTarget(empty, filter 1)`: heals / buffs on friends only. `AiLogicAggression` uses filter 0
 with the seen enemies; `Regroup` filter 0 with the attackers; `Fear` filter 1 direct 1.
 
 ## 8. Outputs: what the AI asks the unit to do
@@ -596,7 +596,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 10. `hierarchy.md`: "0x4BA710 Suspection, 0x4BA610 Aggression" -> 0x4BA710 constructs Aggression (vtable 0x73D260), 0x4BA610 Suspection (0x73D1F8).
 11. `hierarchy.md`: "+0xe0 / +0xe4 current point, +0xe8 stay time" -> these are `AiMemory` noticedPos / interest (brain +0xd0 + 0x10 / +0x18).
 12. `hierarchy.md`: "CAIMap (class name from the StimulusMap::Load string; one global at 0x7B2798)" -> the object at 0x7B2798 is the `StimulusMap` (CAIMap +0x26c8).
-13. `functions.tsv` (before this batch): `StimulusMap::EmitFootstep` 0x5C9770 is `StimulusMap::EmitFootstep`; `Brain::CastSupportSpell` 0x5CFE40 casts support spells only;
+13. `functions.tsv` (before this batch): `StimulusMap::EmitFootstep` 0x5C9770 is `StimulusMap::EmitFootstep`; `AiSpellInfos::CastSupportSpell` 0x5CFE40 casts support spells only;
     `WorldServer::OrderMoveTo / OrderOnTarget` are `AiLogicPlayer` methods; `Alertness` is the voice reaction object; `AggroTable_Add` is `PlayerRelations::DeclareHostile`
     and `CWorldServer +0x12c64` a `PlayerRelations`; `UnitAI_OnAttackedBy` is `Brain::OnAttackedBy`; `Brain::IsTargetHostile` tests friendship (no caller).
 14. `docs/game-exe/pathfinding.md` 5.5: "`AiLogicPlayer::Update` ... `IsNearLeader`" -> the function is `Brain::AreFollowersClose` (true when every follower
