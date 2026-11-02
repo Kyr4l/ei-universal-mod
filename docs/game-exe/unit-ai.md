@@ -266,7 +266,7 @@ For the observer O (CUnit, server S) and every neighbour T (server TS), unless T
   Nothing else happens on sighting: the Brain reads the seen list.
 
 **Losing sight** (`UpdateVision`, before `SeeUnits`): a seen living unit T is dropped only when **(T is not an enemy of O, or O belongs to a player)** and
-not (T fights, `TS +0x174`, with its brain target == O) and `d >= 1.05 x R` (1.0 for player observers) and `d >= 1.05 x senseLife range` and O is not T's
+not (T fights, `TS +0x174`, with its brain target == O) and `d >= m x R` and `d >= m x senseLife range` with the margin `m` = 1.05 for AI observers, 1.0 for player-owned observers (both ranges) [V, deep-read 2026-11-03] and O is not T's
 current Aggression target (`Brain::GetCurrentTarget(TS brain)`): "lost from sight unit", and when T is an enemy the noticed position becomes T's position with
 interest 1000, decay -2 (unless already >= 1000). Read literally: **an AI unit never forgets a seen enemy by distance**; the seen list of a monster keeps every
 enemy it ever saw until the enemy dies (`Forget` / the corpse lists), the memory is cleared (`ResetTarget`, death) or the unit is removed. Only player units and
