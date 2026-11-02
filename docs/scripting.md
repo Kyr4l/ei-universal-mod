@@ -141,7 +141,7 @@
 
 | Function | Description |
 |----------|-------------|
-| **Cast** (Unit: object, x: float, y: float) | The unit casts its active area spell at the point (x,y); the spell must be one meant for a place, not for targets. |
+| **Cast** (Unit: object, x: float, y: float) | The unit casts its active area spell at the point (x,y); the spell must be one meant for a place, not for targets. (Per the code: the first spell of the unit's spell list.) |
 | **CastSpellPoint** (constSpell: string, x1: float, y1: float, x2: float, y2: float) | Casts a terrain spell by its name: the effect starts at (x1,y1) and lands at (x2,y2). Area spells only. |
 | **CastSpellUnit** (constSpell: string, x: float, y: float, Unit: object) | Casts a spell on the unit; the visual effect starts at (x,y). |
 | **GiveUnitSpell** (Unit: object, sSpell: string) | Puts the spell into the unit's set of active spells (nothing happens when it is full). Does not work in the shop; on a zone the spell is given but the panel does not refresh. |
