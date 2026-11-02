@@ -291,7 +291,7 @@ count +0x78, cap +0x7C), +0x84 int. In CUnitServer terms: goal `+0x9C`, length `
 ### 5.3 `MoveCurve` (0xA4 at CUnit +0x27C) [V from `BuildPath` / `Evaluate` / `Predict`]
 
 Layout: +0 vtable, +4/+8/+0xC/+0x10 segment array (0x1C-byte `{x, y, dirx, diry, speed, cellx, celly}`, count, cap, grow), +0x14 vtable, +0x18/+0x1C.. point array (0xC-byte `{x, y, runLength}`), +0x28 vtable, +0x2C/+0x30.. cell speed array (f32),
-**+0x3C base speed** (= `CUnit +0x2B8`, `GetSpeeds` a), **+0x40 turn rate** (= `CUnit +0x2BC`, `GetSpeeds` b = run-speed stat * `AiInfo.RotateSpeedMult` (+0x40 of the AiInfo block at 0x7C53F8, global 0x7C5438; the exe's initial value is 100, the [Logic] section may override it [?]);
+**+0x3C base speed** (= `CUnit +0x2B8`, `GetSpeeds` a), **+0x40 turn rate** (= `CUnit +0x2BC`, `GetSpeeds` b = run-speed stat * `AiInfo.RotateSpeedMult` (+0x40 of the AiInfo block at 0x7C53F8, global 0x7C5438; `config\ai.reg` [RPG] may override it; the shipped configs do not, so 100 applies [V], see 7);
 with 100 a turn of pi takes a small fraction of a tick, i.e. effectively instantaneous), +0x44 current turn speed, +0x48 start heading, +0x4C turn delta, +0x50..+0x74 the cached segment (start xy, start dir, end xy, end dir, length, speed), +0x78 X cubic (4 f32), +0x88 Y cubic, +0x98 / +0x9C
 segment start / end time, +0xA0 cached segment index (`CUnit +0x31C`, -1 = none).
 
@@ -379,8 +379,8 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 * `RotateSpeedMult`: `AiInfo_Load` reads `config\ai.reg` of the work dir (`main`, string 0x784898), not aiinfo.res; the shipped
   Universal-Mod/config/ai.reg (and the XP-Mates one) has no [RPG] RotateSpeedMult key, so the static default **100** applies [V]
   (parsed with the reg-format.md reader; the file holds DifficultyLevels, LMP, AddonPerk, Addon and RPG Perk Power Base 1.95).
-* `NavPortalTables`: [untestable] deterministic tables built once at static init from constants (no game state); their effect on
-  paths is described in 4.5, the remaining decoding only matters for a re-implementation.
+* `NavPortalTables`: deterministic tables built once at static init from constants (no game state): `[inDir][outDir]` = how the 9
+  window slots of one path cell connect to those of the next (shared cells, entry and exit edges); used by the corridor re-plan, 4.5 [I].
 * `CUnit +0x274` = the dead flag (section 3.3: corpses are not stamped) [V]. Bridge heights for rendering: the client world's slots 29 /
   30 (`HeightWithBridges` 0x5618E0 / 0x561930: `CBridgeManager::GetHeightAt` 0x560F00 = highest walkable quad under the point, else the
   terrain; world-client-players.md 8) [V].
