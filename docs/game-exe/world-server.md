@@ -41,9 +41,10 @@ Addresses are VAs; offsets are `this+off`; "tick" = one game tick (55 ms at norm
    `<prefix><zone>` = last-visit gtime); `Session_SaveToSlot` 0x57B3B0 copies them into `saves\<name>\`, writes `scenario.sav`
    (party store + UI + camera) and `mission.sav` (the live zone, `WriteSave` 0x597BD0) ; `Session_LoadSaveSlot` 0x57ABA0 does the
    reverse. All compressed files share the `MpFile` container (0x579830 / 0x579B80: head word, version 0x74, checksum, LZ). [V]
-7. **Replication is view-point based.** Per tick and per player `ReplicateToPlayer` 0x58B750 sends the dynamic objects within
-   100 m of the player's view point (`CPlayerServer +0x38`, the client's msg 0x40) plus, in a playable zone, the player's own
-   units, the named objects and the units near every tracked unit, that the player does not know yet (msg 0x40 creation, 0x41
+7. **Replication is view-point and senses based.** Per tick and per player `ReplicateToPlayer` 0x58B750 sends, in a playable
+   zone, the non-unit dynamic objects within 100 m of the player's view point (`CPlayerServer +0x38`, the client's msg 0x40), the
+   player's visible units, the named objects and the units within twice the sight / life-sense range (+5) of each party unit
+   (other zones: by distance only), that the player does not know yet (msg 0x40 creation, 0x41
    figure update, 0x42 untrack), and the effects within their radius (0x50 full / 0x51 delta / 0x52 remove); world state goes by
    flags on `CPlayer +0x130` (0x02 zone state blob, 0x70 rain, 0x71 time, 0x72 wind, 0x73 water levels). [V]
 8. **Stats are XOR-scrambled only while the window is inactive** (`World_SetStatScramble` 0x5790E0, key `g_0x7AFECC`, flag
@@ -354,8 +355,10 @@ wrap the CWorld versions and flag 4 (msg 0x71). The client renders the day-light
 
 Join: `AcceptPlayers` creates the player with `+0x130 = -1`; the first `ReplicateToPlayer` sends `SendZoneState` 0x58C890 =
 msg 0x02 blob `{u32 tick - 1, mpr name\0, mob name\0, u32, ZoneExit records (count +0xf4), u32 +0xe0, the unit equipment hashes
-(CUnit::BuildEquipmentTables per unit, UnitHashes_WriteSave: one record per distinct look = prototype + complection (3 x 10 bits) + the 7 worn and 4 weapon-slot item ids + active weapon slot, or the texture names of non-humanoids, with the unit ids sharing it)}`, then `ResendTrackedObjects` (every id of `CPlayer +0x118`
-through `vt[22]`) and `FlushSendStream`; when `+0x11c`: `SendMsg04_Position` of the first tracked unit. Per tick afterwards:
+(CUnit::BuildEquipmentTables per unit, UnitHashes_WriteSave: one record per distinct look = prototype + complection (3 x 10 bits) + the 7 worn and 4 weapon-slot item ids + active weapon slot, or the texture names of non-humanoids, with the unit ids sharing it)}`, then
+`CPlayerServer::SetState4` (player state 4 = waiting for the client's 0x09), `ResendItemValues` 0x66F080 (message 0x14 for every
+synced party item id of `CPlayer +0x114`) and `FlushSendStream`, and returns (nothing else that tick) [V, deep read 2026-11-03].
+Nothing runs unless `CPlayerServer +0x20 state == 1` and the map is loaded. Per tick afterwards:
 
 | flag / set | message | content |
 |---|---|---|
@@ -368,12 +371,23 @@ through `vt[22]`) and `FlushSendStream`; when `+0x11c`: `SendMsg04_Position` of 
 | effects | 0x52 / 0x50 / 0x51 | effects of `+0x12de8` whose `vt[19]` radius squared covers the view point: remove / full state (`+0xf8` stream) / delta (`+0x120` stream) |
 | states 1 / 2 | 0x60 | `SendMsg60_PartyStatus` (low health / in combat) |
 
-The wanted object set by zone kind: 1 (playable zone): the dynamic objects (type != 0x3b; `+0x12db8` non-units only when
-`g_0x79BE6C` is set) within 100 m of the player's view point (`CPlayerServer +0x38 / +0x3c`, updated by the client's 0x40
-view-point message, `PlayerIn` and `SendMsg04_Position`) or owned by the player (`CUnit +0x24c`), plus the player's `+0x5110`
-units, every named object `+0x12dd0` and the units within `sight * 2 + 5` m of every tracked unit (`CollisionMap::FindUnitsNear`);
-3 (scripted zone): every non-0x3b object without flag 0x10000; 2 / 4 (menu, camp): the objects within 100 m. In the playable
-zone with a lobby alive the party is re-sent every `+0x5124` ticks (`ResendParty`).
+The wanted object set (static array `g_0x7AFF48`) by zone kind [V, deep read 2026-11-03]:
+- 1 (playable zone), the normal case: `g_0x79BE6C` is set by `Game_EnterZone` for every playable zone and by `Session_HostMpZone`,
+  and never cleared. Then: the dynamic **non-unit** objects `+0x12db8` (type != 0x3b) within 100 m (squared distance < 10000) of
+  the player's view point (`CPlayerServer +0x38 / +0x3c`, updated by the client's 0x40 view-point message, `PlayerIn` and
+  `SendMsg04_Position`), the player's `visibleUnits` (`CPlayerServer +0x510C`), every named object `+0x12dd0`, and for every unit
+  of the player's `CPlayer +0x40 partyUnits` the units within `max(sight +0x294 x sightMult +0x904, life-sense range +0x2A4) x 2 + 5`
+  of it (`CollisionMap::FindUnitsNear`; fields of the unit's `CUnitServer`). Units are therefore replicated by what the party
+  can sense, not by distance to the camera.
+- 1 without `g_0x79BE6C` (only before any `Game_EnterZone`): every dynamic object `+0x12da0` (type != 0x3b) within 100 m or a unit
+  owned by the player (`CUnit +0x24C == player`), and none of the extras.
+- 3 (scripted zone): every dynamic object except type 0x3b and flag 0x10000. 2 / 4 (menu, camp): the dynamic objects within 100 m.
+
+Effects: every `+0x12de8` effect whose `vt[19]` radius r gives `distance^2 < r^2` to the view point (diffed against
+`+0x50E8`). In the playable zone with a lobby alive and `partyMode == 0`, the party is re-sent when the countdown `+0x5124`
+reaches 0 (`ResendParty`). The tail runs even when the early checks fail: `SendMsg60_PartyStatus` for player states 1 / 2 with a
+map loaded, then (state 3: return 1 without flushing) `SendMsg07_GameMode` when dirty bit 0x10 and state not 0 / 4, and
+`FlushSendStream`; a failed send returns 0 (the caller drops the player).
 `BroadcastMsg0B` 0x58D340 (to the players tracking an object), `SendMsg81_NamedValue` (named floats: `gtime`, the mercenary
 flags of `UpdateMercenaryFlags` 0x591800 / `OnMercenaryEvent` 0x591DE0, `World_SetConstrCurrent` 0x578560) and
 `SendMsg80 / 83_Party` (the party blob) complete the server -> client traffic; the inside of the senders is the players page.
