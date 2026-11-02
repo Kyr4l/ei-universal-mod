@@ -260,9 +260,15 @@ quests.qdb entries win over quest.reg duplicates [V]. Readers: the quest log rew
 The "0x6CC000 loaders" of findings.md are the prints / acks ones; the 0x463000 module only holds Levers.ldb. **LeverPrototypes**
 (`LeverRecord` 0x2c, `LeverRecord::SerializeFields` 0x463030): tag 0 Name (+0; the lever **model name**: `CLeverObject +0xa4`), 1
 Place1-1 Place1-2 Place2-1 Place2-2 (+4 float[4]), 2 Unk2-0 (+0x14 int), 3 Scale (+0x18 float), 4 Switch Time (+0x1c int), 5 Material
-(+0x20), 6 Switch Sound (+0x24), 7 Lever Text (+0x28). The only reader found is `CLeverObject::SwitchState` 0x52B7A0: a negative
-duration argument becomes the record's Switch Time (10 when the model has no record) [V]; the sound / text / places have no reader in
-the code read this round [?].
+(+0x20), 6 Switch Sound (+0x24), 7 Lever Text (+0x28). Readers [V] (the record is found by model name with
+`LeversDb_FindByName` 0x52CA40 / `FindByName2` 0x52CB40, whose only callers are below):
+- `CLeverObject::SwitchState` 0x52B7A0: a negative duration argument becomes the record's Switch Time (10 when the model has no
+  record).
+- `CLeverObject::v44_AttachPoints` 0x52BBE0: the **places** are up to two interaction points (forward / right offsets from the
+  lever, `Unk2-0` = how many are used), the offsets scaled by `(1 - h) + h * Scale` with h = the lever's height complection
+  (`+0xCC`); `CUnitServer::FindInteractPoint` 0x54DF50 (order kind 6) tries them as path goals: where a unit stands to pull it.
+- `CLeverObject::ReadNetState` 0x52B650 (client): plays **Switch Sound** with `Play3D` at the lever when the phase changes.
+- Material and Lever Text have no reader (the two lookups above are the only users of the table).
 
 ## 6. The .mob descriptors (module 0x469000) [V]
 
