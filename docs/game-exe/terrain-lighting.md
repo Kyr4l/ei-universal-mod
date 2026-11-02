@@ -541,11 +541,11 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 
 * The MMP extra block (`hdr[0x48]` bytes after the header, copied to `CTexture +0x2C`): no file seen has one; what the game would
   put there is unknown.
-* The sun object's `+0x24` in the under-water sun attenuation (4.2): read it on the rig (expected 0).
-* `TraceSunRay`'s double slope on diagonal suns is "as decompiled"; a rig comparison of the shadow length would settle it.
-* Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): test with `EnableWaterWaves = 0`.
-* Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass.
-* The sky dome's figure file and the meaning of the second colour array (+0x148, "specular") beyond the per-hour colours.
+* The sun object's `+0x24` in the under-water sun attenuation (4.2): [live] (expected 0; live-checklist.tsv).
+* `TraceSunRay`'s double slope on diagonal suns is "as decompiled": [live] (shadow length comparison; live-checklist.tsv).
+* Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
+* Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass: [live] (live-checklist.tsv).
+* ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. The second colour array (+0x148, "specular") beyond the per-hour colours stays open.
 * `CTextureManager::LoadTextureFromRegistry` 0x691BF0 (searches the list by kind and name, then creates): its name is kept, its
   second half was not read.
 * The `TerrainSector +0x390` field (reset to 0, never read in this module) and `CTerrain +0x218`'s initial value 1.
