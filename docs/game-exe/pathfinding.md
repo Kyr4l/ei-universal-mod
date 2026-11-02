@@ -271,7 +271,10 @@ Three objects, all called "CMover/Mover" in functions.tsv (the old struct merged
 
 `MoveRequest::SetStand` 0x5C7B00 = kind 0 (stand at pos with heading and tick; returns whether anything changed), `SetTurnTo` 0x5C7C00 kind 1, `0x5C7C70` kind 2 target, `0x5C7C20` kind 3 (`ResetWithTarget2`, used by `StartAttackAnim2` to face a target),
 `SetTurnToTimed` 0x5C7C40 kind 4, `Clear` 0x5C7D50, `ClearTargetIf(id)` 0x5C7C90 (kind 3 with that id -> -1; called before every curve rebuild with the unit's own id), `MoveRequest::ShiftTimes` 0x5C7CB0 (adds a delta to the start tick and, for kind 3,
-the two end ticks; the client applies -1 when `CUnit +0x260 == 1` [?]).
+the two end ticks). It freezes a unit's motion in time while its animation is paused [V]: `CUnitServer::TickAnimation` 0x546F30
+shifts the mover by +1 every tick while `CUnitServer +0x20 paused` is set (and sets `CUnit +0x260 animPaused`), the client's
+`CUnitClientSpecific::Update` 0x5341A0 does the same +1 per tick while `animPaused == 1`, and `CUnit::ReadNetState` 0x52EF90 applies -1
+to a move request received while paused (the server already shifted it in that tick, the client update adds its own +1).
 
 **Wire format** (`MoveState_WriteNet` 0x5C7DB0 / `MoveRequest::ReadNet` 0x5C7FC0, net section 10 of the unit; `CUnit::WriteNetState` 0x52EC70 / `ReadNetState` 0x52EF90): u8 kind, u8 count high, u8 count low, Vec2 (+4) quantised
 (`Q64`: 16 bit each, step 1/60.2), heading as 16-bit range -pi..pi, then +0x10, +0x14, +0x18, +0x1C as raw dwords, then per cell one u16 `bits 0-1 = x code (0: x-1, 1: same, 2: x+1, 3: explicit i16 follows), bits 2-3 = y code the same,
