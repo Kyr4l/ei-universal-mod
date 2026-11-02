@@ -492,8 +492,10 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
   Settling it needs Ghidra to define them as functions (next Ghidra chain, `gh.sh define`), not a re-read.
 - `CamCtlClassic` and `CamCtlSimple`: no creator, their vtables are referenced only by their own methods [V]: dead code, the
   live game uses only `CamCtlFree` [untestable: no path reaches them].
-- `GetGroundPoint` / `ShowPart` / `ItemLink::Clone`: the decompiles show fall-through stores after the conditional branch
-  (likely dropped returns); to be checked in the machine code (a narrow disassembly each) [asm-check pending].
+- ~~GetGroundPoint / ShowPart / ItemLink::Clone fall-throughs~~ settled [V] (2026-11-03): the typed re-exports have proper returns
+  and `ShowPart` 0x5FC4C0 / `ItemLink::Clone` 0x5ED710 match their machine code exactly. `GetGroundPoint` 0x40E810 = the camera's
+  forward ray hits height 0 at `t = -z / dirZ` (if |dirZ| > 1e-5 and t > 0), else the camera position. `ShowPart`: show clears
+  part flag 0x80, hide sets it. `Clone` writes the refcount before its null check (a harmless quirk of the original).
 - ~~Static initialiser globals~~ settled [V] (generic sweep 2026-11-01): 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0
   fill per-TU math-header constants (g_0x7C7CF8 / 7C7D28 / 7C7E00 / 7C7E28 / 7C7E50 = 1.0f, g_0x7C7D20 = 2 pi, g_0x7C7D24 = pi/2),
   unreferenced; `g_0x7C7E58` is the default widget colour.
