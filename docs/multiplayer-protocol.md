@@ -141,12 +141,12 @@ read); 0x4355B0 writes a `ref`.
 | 9 | chosen quest | str ("z3xq1") | server | client |
 | 10 | quest variable | str name ("q.z3xq1.z3xq1.1"), f32 value, u32 | server | client |
 | 11 | quest of the session | u16 index, u32, str file ("z3xq1.mq") | server, the quest list at join | client |
-| 12 | | ref, u16, 64 bytes | | **unknown** (world helpers 0x427A62..0x4289B0) |
+| 12 | file chunk | ref transfer, u16 index, 64 bytes | server, only to the peers that requested that transfer | client: a 64-byte chunk of a map file transfer (rows 12 / 14 / 17 decoded in game-exe/net-transport.md) |
 | 13 | | ref | client | server 0x41B690: sets the sender's ref to the current world (0x79B924), then 0x420610 / 0x4229B0 |
-| 14 | | u32, u32, str | server | client (seen in captures, meaning **unknown**) |
+| 14 | player event | ref player, u32 kind (0 experience, 1 money, 2 give item, 3 take item, 4 clear the kind-0x14 items), u32 value, str | server (kept 60 s), to the addressed player | client: applied to that player's party |
 | 15 | party | u32 n, n refs (the kind-16 members), u32, u8, u32, u32, ref, ref | client (client+0x260C, filled by 0x41DA50) | server: the heroes' list |
 | 16 | hero blob | u16 len, bytes (the member's own serializer, vtable +0x28: NOT the .mp format) | client, one per party member | server |
-| 17 | | ref, ref, u8, u32, u32 | | **unknown** |
+| 17 | exchange pair | ref record A, ref record B, u8 confirmed, u32 nonce A, u32 nonce B | server, to the two players | client: a hero swap between two players; confirmed opens the exchange screen |
 
 Kinds 15 and 16 are re-sent by the camp UI (0x62C975, 0x62D16D, 0x62D1BC) every time the party's equipment
 changes in the lobby, so the server always holds the current heroes; for entering a quest the stream upload of
@@ -405,10 +405,9 @@ Verified on the live rig: um-bot's `0x33` with `0x80000000 | 0` makes the server
 
 ## 5. Open questions (what a complete client or server still needs)
 
-- The payloads of the **unknown** sub-message types in both tables (0x01, 0x02, 0x03-0x07, 0x10, 0x32-0x34,
-  0x38-0x3B, 0x50 client-side; 0x02-0x04, 0x06, 0x07, 0x0A, 0x0F, 0x12, 0x13, 0x42, 0x50-0x52, 0x70-0x72,
-  0x80, 0x82, 0x83 server-side): the handlers are listed above; each is a decompile away.
-- Left of the unit state: the order section of stationary monsters (see above), the stats block's fields (section 4: attributes, skills), sections 5, 6, 12, 13's meaning, a monster's HP (not in the stream: only the hero's is), 
+- ~~The payloads of the unknown sub-message types~~: all decoded from the game-exe reverse (2026-11-03): the tables above, full
+  detail per message in game-exe/world-client-players.md sections 4 / 5; lobby kinds 12 / 14 / 17 in game-exe/net-transport.md.
+- Left of the unit state: the order section of stationary monsters (see above), the stats block's fields (section 4: attributes, skills), a monster's HP (not in the stream: only the hero's is), 
 - The world snapshot's layout (0x00 first message) and the tick (0x00 later): the game time, the day.
 - Reliable kinds 4, 12, 14, 17; the kind-16 hero blob's serializer (vtable +0x28 of the member class).
 - The resend timing (0x4346D0 / 0x433F20), the login's u32 12500 and 20 zero bytes, the master server 0xFF.
