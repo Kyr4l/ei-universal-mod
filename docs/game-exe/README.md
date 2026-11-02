@@ -350,8 +350,8 @@ Per page, the open items that matter most for the mod work:
   the options are saved to the registry at exit.)
 - script-vm.md: whether a failed compile of a `.mob` script is reported anywhere (the map runs with a partial script); the second
   auto-id counter `+0x6C` has no reader; `GetBSZValue` reads a stale vtable slot (undefined on the server).
-- gs-functions.md: the sound-source respawn loop serves `CreateFXSource` records and skips `CreateRandomizedFXSource` ones (inverted
-  test or dead command); `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; `HideObject` / `BlockUnit` /
+- gs-functions.md: `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; (the sound-source respawn loop's test is
+  inverted: a game bug, `CreateRandomizedFXSource` never plays; one-byte fix at 0x4BF161, settled 2026-11-03); `HideObject` / `BlockUnit` /
   `ActivateTrap` flip flags without `MarkNetDirty`; the hit record fields of `KillUnit` / `InflictDamage` beyond [8..14].
 - data-sound.md: about 40 of the 60 particle callbacks are `LAB_` code without a function symbol; RaceModels `+0x158..` (Unk47..50)
   have no reader. (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
