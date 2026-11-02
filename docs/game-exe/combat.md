@@ -153,6 +153,16 @@ with `+0x1AC` set, `ReportMoveResult` when moving or not yet arrived (2D >= 0.00
 `PlayLoopAnim`; **10** `BuildActionAnimQueue(kind 6)` into the action record and `StartAction(1, 0)`; **11** sit: not sitting -> wanted
 stance 4, refused -> message 0x1B to the owner and the order is dropped (return 0); already sitting -> idles like kind 0.
 
+`ValidateQueuedOrder(order, msg)` 0x54E600 [V, deep-read 2026-11-03] (after every queued order of a player unit; it also sends the path
+preview): units without a player accept everything except interact (kind 6). `FindInteractPoint` fails -> preview `SendMsg0E_MovePath(kind 3,
+failed 1, eta 1e6)`, refused. A player-less unit -> accepted. Target already reachable now (`CanReachTarget` and `IsOrderTargetReachable`) ->
+preview (kind 3, ok), `msg` sent as a unit event when `msg < 0x2A` or `== 0x30`, accepted. Otherwise the preview kind is 2 for attacks and for
+spells whose proto `+0x10 == 0`, else 1; a non-exact order computes a scratch path `CAIMap::FindPath(unit, target position, budget 1e6)` with
+uniform costs (`+0x43C = 1` for the call) and the target lifted off the collision map (failure -> a path reset to the unit's cell), exports it
+into the preview, and accepts when `CanReachTarget` and, with the unit placed at the path end, `IsOrderTargetReachable`; then the ETA =
+`PredictInterceptTime`. An exact-position order tests the same from the request's half extents without a path. The preview goes out with
+`(kind, failed, eta)`; a refusal sends message 0xB (attack) / 0xE (others) instead of `msg`; the return value is the acceptance.
+
 ### 3.2 Combat orders per Think
 
 `TickCombatOrder` 0x54DD70: player units must "know" a unit target (`AiMemory::IsFriendOrKnown` / `CPlayerServer::IsIdKnown`, else message
