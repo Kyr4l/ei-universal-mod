@@ -152,8 +152,11 @@ saved with the campaign by `CGSPlayer::Serialize` tag 4; no script command or ot
 [4..7]), repair 0.2 [8]. Single player (`Session_ResetPlayers_Single`) creates merchants 1..5 and gives **merchant 5 all nine
 factors 0** (everything at that merchant costs 0 and sells for 0; index 5 is the `b.golem.constr_5` building of the campaign start,
 world-server.md 2.6 [I]); multiplayer (`Session_ResetPlayers_Multi`) creates merchants 1, 3, 4, 5, all with the standard factors.
-Both shops (+0xC items, +0xD spells) are enabled for every merchant. A mod can change the factors only by editing this record in
-the campaign save (or by patching the defaults).
+Both shops (+0xC items, +0xD spells) start enabled for every merchant; the campaign toggles them later (the `i.on/offitemconstr`,
+`i.on/offspellconstr` variables). Confirmed in a real save (`_cpr/claude-re/sav/save38_scenario.sav.raw`, the five records after
+tag 4): merchants 1..4 hold 1.0 0.5 0.2 0.1 1.0 0.5 0.2 0.1 0.2, merchant 5 holds nine zeros; there merchant 1 has only the item
+shop and merchant 2 only the spell shop. A mod can change the factors only by editing these records in the campaign save
+(`scenario.sav`) or by patching the defaults.
 
 **Prices** (`GetItemPrice` 0x60FAB0, slot 54, kind 0..8 = coefficient index; x87 code the decompile drops, verified live in
 `game-memory.md`): base = item `GetPrice`; weapon / armor: round(base * coef[k] - base * coef[8] * (1 - durability / max)); kind 8 repair =
