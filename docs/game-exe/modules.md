@@ -177,7 +177,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004319E0 | 4787 | Ripemd128_Compress | (state[4], block[64]): RIPEMD-128 compression function (two parallel lines, constants 0x5a827999 / 0x6ed9eba1 / 0x8f1bbcdc and 0x50a28be6 / 0x5c4dd124 / 0x6d703ef3) |
-| 0x0042E700 | 3436 | OBB_Intersects | (boxA, boxB, posA xyz, posB xyz, quatA, quatB): separating-axis test of two oriented boxes (half extents at +0x20 / +0x24 / +0x28, axes from the quaternions, Mat3_Solve for the relative axes): 15 axis tests, 1 when they overlap |
+| 0x0042E700 | 3436 | OBB_Intersects | (boxA, boxB, posA xyz, posB xyz, quatA, quatB): separating-axis test of two oriented boxes (half extents at +0x20 / +0x24 / +0x28, axes from the quaternions, Mat3_Solve for the relative axes): 15 axis tests, 1 when they overlap DE... |
 | 0x00430960 | 1523 | LzDecompress | (this = LzCompressor, in GameBuffer view, out GameBuffer): u32 raw length then tokens until it is produced: bit 0 = literal byte (next stream byte); bit 1 = match: length prefix tree (0 0 -> 2, 0 1 -> 4, 1 0 0 0 -> 3, 1 0 0 1 + 3 ... |
 | 0x00430450 | 1243 | LzCompress | (this = LzCompressor, GameBuffer in/out): rewrites the buffer in place: u32 raw length, then LZ77 tokens over a 1 KB ring window (+0 window, +0x400 window copy, +0x800 per-position chain distance, +0x1800 hash heads [1024], hash =... |
 | 0x0042FD10 | 1222 | LzCompressor::EmitMatch | (this, matchPos): writes the match length +0x2820 (< 35 table code; 35..98 prefix 0x17 in 5 bits + 6 bits of len-35; 99..226 prefix 0x3f in 6 bits + 7 bits of len-99) then the distance d = (pos - len - matchPos - 1) & 0x3ff (d < 3... |
@@ -407,7 +407,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, 3DS scene*, out): editor leftover: converts a parsed .3ds scene into CFigure arrays (0x1c0 each); not reached by the game |
+| 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, 3DS scene*, out): editor leftover: converts a parsed .3ds scene into CFigure arrays (0x1c0 each); not reached by the game DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
 | 0x0046AB20 | 824 | CObjectDesc::OnChunk | slot 0 (ChunkFile reader, OBJECT 0xB001 children): 0xB002 NID -> +0x18, B003 OBJTYPE -> +0x50, B004 OBJNAME -> +0x3C, B006 OBJMODEL -> +0x54, B007 -> +0x70, B008 -> +0x74, B009 OBJPOSITION -> +0x20, B00A OBJROTATION quaternion -> ... |
 | 0x0046CBC0 | 792 | MobLogicSlot_OnChunk | (children of UNIT_LOGIC 0xBBBC0000 into the 0x4c MobLogicSlot): 0xBBBD0000 appends a 0x20 point {pos, CArray of 0x14 look-at records} and reads it (MobLogicPoint_OnChunk); 0001 byte (legacy aggressive: AggrMode -> 0), 0002 byte +0... |
 | 0x0046B7D0 | 774 | CMagicTrapDesc::OnChunk | slot 0 (MAGIC_TRAP 0xBBAB0000 children, as the explicit compares in MobFile_ParseChunks 0x481F00 and this switch read them): 0xBBAB0001 diplomacy dword -> +0x8C, 0002 spell string -> +0x90, 0003 count + N x 12 bytes area circles {... |
@@ -694,7 +694,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x004F16A0 | 4016 | CD3DLibrary::CullBox | (this = the library g_0x7AF068; bounds record {+0 byte flags: 1 sphere valid, 2 box valid; +4 centre xyz, +0x10 radius, +0x14 min xyz, +0x20 max xyz (extents relative to the centre)}) -> 0 fully inside, 1 partly, 2 outside: the 8 ... |
 | 0x004EA4A0 | 2855 | CRenderDevice::DrawTrianglesTransformed | (ctx, positions {Vec3*, count} (plain xyz, not SoA), uvs, indices {ushort*, count}, diffuse, specular, flags, zScale): CD3DLibrary::TransformForDraw (cull box; vt[9] with clip codes or vt[14]); FVF 0x1C4 vertices with the constant... |
-| 0x004F93E0 | 2660 | CViewFrustum::BuildCornerRaysEx | 2.7 KB: extended variant of BuildCornerRays with rotation (0x448A10) |
+| 0x004F93E0 | 2660 | CViewFrustum::BuildCornerRaysEx | 2.7 KB: extended variant of BuildCornerRays with rotation (0x448A10) DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
 | 0x004E9A50 | 2632 | CRenderDevice::DrawMeshBatchBlended | (texA, texB, then the DrawMeshBatch arguments): DrawMeshBatch whose final draw is DrawIndexedTwoPassBlend(texA, texB, ...): the mesh twice, the second pass with texture B alpha-blended over A (the wounds texture of CObject3DClient... |
 | 0x004E4240 | 2623 | CEffectObj::UpdateParticles | 2.6 KB: per-frame update of an effect's particles from object transform (+0xA8..+0xB0 velocity, object +0x20), writes vertices with random jitter |
 | 0x004E9010 | 2616 | CRenderDevice::DrawMeshBatch | (positions SoA (blocks of 4: 4x,4y,4z,4w), vertBlocks, normals SoA, normalBlocks, diffuse[], specular[], uv[] (8 B), uvCount, components[] {ushort posIdx, colourIdx (= normal index), uvIdx}, compCount, -, -, indices[], indexCount,... |
@@ -703,7 +703,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004E4C80 | 2525 | CEffectObj::UpdateParticles_Alt | 2.5 KB: second effect particle update variant (positions from object transform, velocity +0xA8..+0xB0, jitter) |
 | 0x004F7F00 | 2245 | CRenderManager::BuildFigureMesh | (scene, part name, data** (FIG8 file), s, d, h): the entry of the scene's +0x14 map (FindOrCreateEntry) gets +0 = textureNumber (file +0x24), +4 = materialKind (file +0x20, the 17..25 word); the 10-dword header is read, the bounds... |
 | 0x004E8900 | 1795 | Mesh_ComputeBounds2D_C | (this = CRenderDevice, {verts, count}, skipFlags or 0): screen RECT of the projected 32-byte vertices (x +0, y +4; loop unrolled by 4): min/max over all, or only those whose skipFlags byte is 0 (clipped vertices skipped); SetRect ... |
-| 0x004E7FB0 | 1783 | Mesh_ComputeBounds2D_A | compute 2D min/max of projected vertices for a draw call set (mode 0 / 1), 1.8 KB |
+| 0x004E7FB0 | 1783 | Mesh_ComputeBounds2D_A | compute 2D min/max of projected vertices for a draw call set (mode 0 / 1), 1.8 KB DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
 | 0x004EEE30 | 1756 | CDXDirectDraw::CreateSurfaces | (backBuffers (> 10 = "Probably, this is a PROGRAMMERS ERROR"), with3D): windowed (+0x20 bit 0 clear): primary (DDSCAPS_PRIMARYSURFACE 0x200) -> +0x14, then backBuffers == 0 -> the render surface +0x18 wraps the primary itself, els... |
 | 0x004F9FD0 | 1690 | CRenderManager::BuildFigureMeshB | build a scene mesh entry for a figure part (1.7 KB): FindOrCreateEntry, GetNamedValue, vertex/index arrays from the figure data |
 
@@ -1078,7 +1078,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0059FDF0 | 3351 | CFigure::AccumulateWorldBounds | (out min xyz, max xyz): the 8 corners of the box (centre +0x18C +- extents +0x19C / +0x1A8 of the bounds record +0x188) transformed by the figure's model matrix (SetRotationQuat +0xE0) extend the min / max; skipped for figures far... |
 | 0x005A18E0 | 2967 | CFigure::ReadBoundsHeader | (cursor, a, b, c, magic): "FIG8" (0x38474946): the 8-variant trilinear interpolation (morph params a, b, c) of the centre +0x160, min +0x16c, max +0x178 (three 0x60-byte groups) and radius +0x184 (0x20 bytes); other magics read th... |
 | 0x005AAE60 | 2867 | PartRecord_ReadBoundsFIG8 | (record (0x38: flags, centre +4, radius +0x10, min / max +0x14..), data, a, b, c, magic): "FIG8": the 8-variant trilinear interpolation of centre, min, max (three 0x60 groups) and radius (0x20); else raw; flag 1 and 0x4F93A0 |
-| 0x005A1210 | 1736 | CFigure::ReadBoundsFIG6 | (cursor, a, b, c): old .fig bounds: three 0x48-byte groups (6 points) + a 0x60 group interpolated with the morph params into the offset +0x18c, +0x198, min +0x19c, max +0x1a8; flags +0x188 /= 3; the cursor advances |
+| 0x005A1210 | 1736 | CFigure::ReadBoundsFIG6 | (cursor, a, b, c): old .fig bounds: three 0x48-byte groups (6 points) + a 0x60 group interpolated with the morph params into the offset +0x18c, +0x198, min +0x19c, max +0x1a8; flags +0x188 /= 3; the cursor advances DEAD CODE: no c... |
 | 0x005AB9A0 | 1646 | PartRecord_ReadBoundsFIG6 | (record, data, a, b, c): the 6-variant interpolation of the old .fig bounds (0x48-byte groups) into the record; flag 1 and 0x4F93A0 |
 | 0x005ACE80 | 1612 | Menus_GetNewGameRect | (resource loader): opens "menus.reg" (vt[19]) as a .reg (0x694610) and reads the "MainMenu" / "NewGame" rect (0x695410); FatalError "Can't open file menus.reg" / "Can't open menus.reg as .reg" / "Can't get rect for MM_NewGame" |
 | 0x0059F8F0 | 1273 | CFigure::ReadParts | CFigure slot 17 (stream*): stream->vt[13]() then reads the part tree ... (231 lines) |
