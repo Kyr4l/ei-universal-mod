@@ -1,6 +1,9 @@
 # libreoffice lock files
 .~lock*
 
+# claude env
+.claude
+
 # vscode env
 .vscode
 
