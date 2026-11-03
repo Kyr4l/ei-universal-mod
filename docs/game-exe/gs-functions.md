@@ -508,7 +508,7 @@ Sorted by id; the section is where the behaviour is described. `Run` ids 0x2..0x
 Honest list of what the code read here does not settle:
 
 - **GetBSZValue** (0xBE): the result is stored from the FPU stack although the callee returns a pointer in EAX; treat it as undefined. What "BSZ" stands for is a guess.
-- **Sound-source respawn loop** (`GSWorld::Tick`, 0x4BF156): it serves records with flag `+0x20 == 0`, which are the `CreateFXSource` ones (whose timer fields are uninitialised stack data), while `CreateRandomizedFXSource` records have flag 1 and are skipped. Settled 2026-11-03 from the machine code (0x4BF156..0x4BF2D8) [I, strong]: **the test is inverted** (a game bug). The serviced
+- **Sound-source respawn loop** (`GSWorld::Tick`, 0x4BF156): it serves records with flag `+0x20 == 0`, which are the `CreateFXSource` ones (whose timer fields are uninitialised stack data), while `CreateRandomizedFXSource` records have flag 1 and are skipped. Settled 2026-11-03 from the machine code (0x4BF156..0x4BF2D8) [V]: **the test is inverted** (a game bug; confirmed independently by an outside reverse engineer from the same disassembly, 2026-11-03). The serviced
   body is the randomized-source logic: the countdown runs out -> a new delay `min + rand() % (max - min + 1)`, the old sound object is
   released, a new one is created and placed at the record position plus a random scatter of up to the record's scatter radius, with
   its volume, radius and wave, then `AddEffectObject`. That only makes sense for `CreateRandomizedFXSource` records. As shipped, the
