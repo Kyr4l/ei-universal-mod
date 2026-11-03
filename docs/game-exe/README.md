@@ -325,7 +325,8 @@ Conventions shared by all pages:
 pointer to them exists anywhere in the file and every call to them comes from other dead code (`_cpr/claude-re/full/tools/
 dead_closure.py`, 2026-11-03, from Ghidra's call graph; a call site outside a known function keeps its target alive, so the list
 errs on the safe side). The biggest: the second 3ds entry point `Scene3ds_BuildFigures` and 9 `Chunk3ds_*` readers (the rest
-of the 3ds importer is live: `CFakeUnit::LoadModelFromScene` loads the `scenes\` models with it), the ini settings reader /
+of the 3ds importer is reachable only through `CFakeUnit`, object kind 0x39, which no shipped map places and no code creates:
+unused in practice, world-server.md 4.4), the ini settings reader /
 writer (`AppSettings::ReadFromIni / WriteToIni`; the game uses the registry), `GSWorld::Decompile` and one `Decompiler_*` writer,
 the AI stimulus entry points (`PerceiveFootsteps`, `PerceiveStimuli`), the oriented-box intersection tests, 17 `CTerrain` ray /
 quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip them.

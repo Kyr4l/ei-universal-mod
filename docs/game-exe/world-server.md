@@ -326,8 +326,10 @@ bound), 0xBBAB0000 magic traps (0xd0), 0xBBAC0000 levers (0xa4), 0xBBBB0000 unit
 
 Object kind 0x39 is `CFakeUnit` (0x580, a `CUnit` with an old-style animation system at `+0x4E0`): its model comes from a 3ds
 scene file through `CFakeUnit::LoadModelFromScene` 0x446C10 (path under `scenes\`, "Can't open file", "Scene %s have more then one
-top ..."), one client figure per scene part; it is the only live user of the 3ds importer (`Scene3ds_*`). Whether a shipped map
-or the menu places one is open [?] (no `.mob` type scan yet).
+top ..."), one client figure per scene part; it is the only user of the 3ds importer (`Scene3ds_*`). No shipped map places one
+[V, data 2026-11-03]: the object type chunks (0xB003) of the 99 campaign maps and the 130 LostInAstral maps hold only 0x32 (4857),
+0x33 (5599), 0x34 (4715) units, 0x35 (93300), 0x36 (27613), 0x37 (2867), 0x3A (565), 0x3B (15) and 0x3C (2025); no code asks the
+factory for kind 0x39 either, so `CFakeUnit` and the 3ds importer never run in the shipped game.
 
 The same function spawns heroes (`SpawnPartyHeroes` 0x58EF20, `SpawnSingleHero` 0x5910A0) and the console unit
 (`CWorldServer::SpawnConsumableUnit` 0x58ECE0: proto `st.tr.130`, model `unhuma`, type 0x3010). `CObjectDesc::Spawn` 0x46AFB0 / `CUnitDesc::Spawn`
