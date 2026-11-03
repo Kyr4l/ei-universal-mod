@@ -503,6 +503,27 @@ Sorted by id; the section is where the behaviour is described. `Run` ids 0x2..0x
 | 0x74 | WorldScript | 3.1 | 0xE8 | ResetTarget | 3.4 |
 | 0x75 | Script | 3.1 |  | |  |
 
+### 4.1 Which commands the shipped maps use (`script-usage.tsv`) [V, scan 2026-11-03]
+
+The `SS_TEXT` scripts of every `.mob` were decrypted (mob-format.md) and the calls `Name(` counted: the original campaign (99 maps,
+`Evil Islands\maps`) and the LostInAstral mod (130 maps); Hard Lands is left out (a reference mod of poor quality). The generated
+quest scripts of the `.mq` files and console input are not counted. Per command, `script-usage.tsv` gives maps / calls for both sets.
+
+- Most used in the campaign: `KillScript` (95 maps, 3346 calls), `GetObject` (1925), `AddObject` (1881), `GSSetVarMax` (1449),
+  `GetObjectByID` (1066), `IsEqual` (760), `GSGetVar` (706), `IsLess` (606), `Sleep` (97 maps, 523).
+- **58 of the exe's commands are used by no map in either set**, among them `GiveUnitSpell` (so the shapechange / comprehend spells
+  of spells.md cannot be handed out by a shipped map either), `CreateRandomizedFXSource`, `GetBSZValue`, `RemoveObject`, `SetEnemy`,
+  every `UM*` AI preset command (`UMAg`, `UMPatrol*`, `UMGuardEx`, `UMSuspection`, `UMCorpseWatcher`), the camera commands
+  (`PlayCamera`, `SetCameraPosition`, `SetCameraOrientation`), `SetSunLight`, `SetWind`, `ShowCredits`, `GodMode`; 71 are unused in
+  the campaign alone. The full list is the rows with 0 / 0 in `script-usage.tsv`.
+- **17 command names do not exist in game.exe**: `GameOver`, `GameOverMSG`, `Sin`, `Cos`, `Pow`, `StrCat`, `StrLen`, `StrToFloat`,
+  `FloatToStr`, `DistancePointPoint`, `NearestUnit`, `UnitsNearPoint`, `GetArmor`, `GetObjectStringID`, `GetPlayerOfUnit`,
+  `GetUnitExp`, `Standt`. Their strings are in EIStarter's `addon.dll` and `Engine\EI_Plugin.asi`, which add them to the script
+  language; a map that uses them needs those plugins. Only `GameOver` (35 calls) and `GameOverMSG` (1) are used, by LostInAstral.
+- Spelling: game.exe's names are `QFinish` and `SetBackGroundColor`. The lexer matches names case-insensitively (`Qfinish` works),
+  but the ATD spelling `SetBackgroudColor` (in um.dll's checker table and the multitool's map-editor list) is not a prefix of any
+  name and would not compile. No shipped map uses either spelling.
+
 ## 5. Not resolved
 
 Honest list of what the code read here does not settle:
