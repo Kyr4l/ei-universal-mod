@@ -574,7 +574,9 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   `Clear`, `Read`, `Write` [V].
 * The activation rule for sleeping units: world-server.md 4.3 (`ActivateObjectsAround` around every tracked unit, radius sight x 2 + 20 m, in playable zones only).
 * `MobLogicSlot +0x30` is the .mob Wait (0xBBBC000A, float, default -1) and is not used; `+0x44` (the wait the brain uses) is the
-  `UnitLogic::ctor` default 75 and no chunk writes it, so every alarm fires 75 ticks after it is raised whatever the editor says [V]
+  `UnitLogic::ctor` default 75 and no chunk writes it, so every alarm fires 75 ticks after it is raised whatever the editor says [V].
+  In the data (scan of the 99 campaign maps, 2026-11-03): 39,715 of the 39,765 Wait values are the default -1; only 50 were set by
+  the designers (15 x18, 10 x11, 150 x7, 30 x7, 5 x2, 500, 60, 120, 0.5, 0.25), and those are the ones the engine ignores.
   (live check in `live-checklist.tsv`).
 * `HeardSounds_AppendAlarm` writes an uninitialised stack position into the record: a code observation, harmless (flagged records never use
   the position) [untestable: no behaviour depends on it].
