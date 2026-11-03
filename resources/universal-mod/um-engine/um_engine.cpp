@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.14.2";
+static const char* const kEngineVersion = "0.14.3";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -169,6 +169,10 @@ static const UmBytePatch kBytePatches[] = {
     // Hero_BuildEquipmentEntries (0x5683D0), the null record of the WEAPON table: after `xor eax, eax` at 0x5685A6 only this path reaches the load (the valid path returns at 0x5685A1),
     // so the load goes and eax stays 0, the field stored is 0. (The armour lookups at 0x56849C / 0x568529 are shared with their valid paths: not patched; an earlier version broke them.)
     { "ItemTable::InlineLookups", 0x005685A8, 3, {0x8B, 0x40, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },
+    // GSWorld::Tick (0x4BF000), the script sound-source respawn loop: it skipped the records of CreateRandomizedFXSource (flag 1) and re-created the
+    // CreateFXSource ones (flag 0) with uninitialised delay / scatter fields. jne -> je: only the randomized sources are respawned
+    // (docs/game-exe/gs-functions.md section 5; confirmed by an outside reverse engineer 2026-11-03).
+    { "GSWorld::RandomizedSoundSources", 0x004BF161, 4, {0x0F, 0x85, 0x65, 0x01}, {0x0F, 0x84, 0x65, 0x01}, 0 },
     { nullptr, 0, 0, {0}, {0}, 0 }
 };
 
