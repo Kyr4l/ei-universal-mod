@@ -271,6 +271,8 @@ current Aggression target (`Brain::GetCurrentTarget(TS brain)`): "lost from sigh
 interest 1000, decay -2 (unless already >= 1000). Read literally: **an AI unit never forgets a seen enemy by distance**; the seen list of a monster keeps every
 enemy it ever saw until the enemy dies (`Forget` / the corpse lists), the memory is cleared (`ResetTarget`, death) or the unit is removed. Only player units and
 non-enemies are dropped by range [V]. (The old "lost from sight" notes assumed a symmetric rule; the distance test exists but is gated by the enemy test.)
+This is the original design (monsters never release aggro), not a bug; SpellAddon's `aggrmod` setting patches the engine to add an
+aggro drop (modes 2 / 3 / 4, docs/SpellAddonInfo.en.md).
 A seen unit that dies moves to the corpse lists ("sees corpse of unit"); a friend's corpse sets the noticed position with interest 800 / decay -3 (unless >= 800).
 Corpses in `SeeUnits`: an AI observer only *notices* corpses that are not enemies / not player-owned (the friends the CorpseWatcher cares about); a player's
 unit notices every corpse.
