@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cctype>
 #include <chrono>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -36,6 +37,8 @@ namespace {
 
 constexpr int kFirstRow = 4, kFirstCol = 2; // records start at B4
 const ImVec4 kErrorColor(0.95f, 0.42f, 0.38f, 1), kWarningColor(0.95f, 0.78f, 0.35f, 1);
+// Comparison: the compared file's value in a split cell, and the tint of rows / columns that differ.
+const ImVec4 kCompareOther(1.0f, 0.72f, 0.3f, 1), kCompareTint(0.2f, 0.42f, 0.78f, 0.35f);
 
 // One undo step: a cell's value before and after, or one row inserted / deleted (its cells kept: a
 // whole-sheet copy per row action grew to hundreds of MB over a long session).
@@ -110,6 +113,9 @@ struct State {
     std::vector<int> cmpSheet; // per sheet of the book: its index in diff.sheets (-1 none)
     std::vector<std::map<std::pair<int, int>, int>> cmpCell; // per sheet: (row, col) -> index in its changes
     std::vector<std::set<int>> cmpRowOnlyHere;               // per sheet: rows only in this file
+    std::vector<std::set<int>> cmpRowChanged, cmpColChanged; // per sheet: rows / columns with a changed cell
+    bool onlyDiff = false, rowsOnlyDiff = false;             // the table shows the rows with a difference only
+    int cmpGen = 0, rowsCmpGen = -1;                         // bumped by every comparison (the shown rows are recomputed)
     char cmpFilter[128] = "";
     int cmpListSheet = -1;   // the diff sheet shown in the window
 };
@@ -211,7 +217,8 @@ void Open(const std::string& path) {
     // another database: an earlier comparison no longer matches its rows
     g.cmpOn = g.cmpWindow = false;
     g.diff = {};
-    g.cmpSheet.clear(); g.cmpCell.clear(); g.cmpRowOnlyHere.clear();
+    g.cmpSheet.clear(); g.cmpCell.clear(); g.cmpRowOnlyHere.clear(); g.cmpRowChanged.clear(); g.cmpColChanged.clear();
+    ++g.cmpGen;
     dbmodel::Book book;
     std::string err;
     if (!dbmodel::LoadBook(path, book, err)) { Say("Cannot open " + path + ": " + err, true); return; }
@@ -432,7 +439,11 @@ std::string ColumnTitle(const sheetio::Sheet& sh, int col) {
 
 void UpdateRows() {
     const std::string filter = Lower(g.filter);
-    if (g.rowsVersion == g.version && g.rowsSheet == g.sheet && g.rowsFilter == filter && g.rowsOnlyProblems == g.onlyProblems) return;
+    const bool onlyDiff = g.onlyDiff && g.cmpOn;
+    if (g.rowsVersion == g.version && g.rowsSheet == g.sheet && g.rowsFilter == filter && g.rowsOnlyProblems == g.onlyProblems &&
+        g.rowsOnlyDiff == onlyDiff && g.rowsCmpGen == g.cmpGen) return;
+    g.rowsOnlyDiff = onlyDiff;
+    g.rowsCmpGen = g.cmpGen;
     g.rowsVersion = g.version;
     g.rowsSheet = g.sheet;
     g.rowsFilter = filter;
@@ -448,6 +459,7 @@ void UpdateRows() {
     for (int r = kFirstRow; r <= last; ++r) {
         if (!filter.empty() && !matching.count(r)) continue;
         if (g.onlyProblems && !g.rowIssue[g.sheet].count(r)) continue;
+        if (onlyDiff && g.sheet < static_cast<int>(g.cmpRowChanged.size()) && !g.cmpRowChanged[g.sheet].count(r) && !g.cmpRowOnlyHere[g.sheet].count(r)) continue;
         g.rows.push_back(r);
     }
 }
@@ -493,6 +505,11 @@ void Toolbar() {
     ImGui::SameLine();
     ImGui::Checkbox("Only rows with problems", &g.onlyProblems);
     ImGui::SameLine();
+    if (g.cmpOn) {
+        ImGui::Checkbox("Differences only", &g.onlyDiff);
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Shows only the rows that differ from %s", g.cmpName.c_str());
+        ImGui::SameLine();
+    }
     ImGui::TextDisabled("|");
     ImGui::SameLine();
     ImGui::BeginDisabled(g.selRow < kFirstRow);
@@ -648,6 +665,8 @@ void SheetTable(float height) {
     for (int c = kFirstCol; c <= lastCol; ++c) {
         ImGui::TableSetColumnIndex(1 + c - kFirstCol);
         ImGui::PushID(c);
+        if (g.cmpOn && g.sheet < static_cast<int>(g.cmpColChanged.size()) && g.cmpColChanged[g.sheet].count(c))
+            ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(kCompareTint));
         ImGui::TableHeader(ImGui::TableGetColumnName(1 + c - kFirstCol));
         if (ImGui::IsItemHovered()) {
             const dbmodel::ColumnInfo info = dbmodel::DescribeColumn(sh, c);
@@ -684,8 +703,11 @@ void SheetTable(float height) {
             ImGui::TableSetColumnIndex(0);
             auto ri = rowIssue.find(row);
             const bool onlyHere = g.cmpOn && g.sheet < static_cast<int>(g.cmpRowOnlyHere.size()) && g.cmpRowOnlyHere[g.sheet].count(row);
+            const bool rowChanged = g.cmpOn && g.sheet < static_cast<int>(g.cmpRowChanged.size()) && g.cmpRowChanged[g.sheet].count(row);
             if (onlyHere && ri == rowIssue.end())
                 ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.45f, 0.3f, 0.75f, 0.7f)));
+            else if (rowChanged && ri == rowIssue.end())
+                ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(kCompareTint));
             else if (ri != rowIssue.end())
                 ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ri->second == 0 ? ImVec4(0.6f, 0.15f, 0.12f, 0.75f)
                                                                                                     : ImVec4(0.55f, 0.42f, 0.08f, 0.65f)));
@@ -704,7 +726,7 @@ void SheetTable(float height) {
                     if (cc != g.cmpCell[g.sheet].end()) cmpChange = &g.diff.sheets[g.cmpSheet[g.sheet]].changes[cc->second];
                 }
                 if (cmpChange && ci == cellIssue.end())
-                    ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.2f, 0.42f, 0.78f, 0.55f)));
+                    ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.2f, 0.42f, 0.78f, 0.18f)));
                 else if (ci != cellIssue.end())
                     ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ci->second == 0 ? ImVec4(0.75f, 0.18f, 0.15f, 0.8f)
                                                                                                         : ImVec4(0.7f, 0.55f, 0.1f, 0.7f)));
@@ -760,7 +782,23 @@ void SheetTable(float height) {
                     std::string shown;
                     if (cell && cell->text.find('\n') != std::string::npos) { shown = cell->text.substr(0, cell->text.find('\n')) + " ..."; text = shown.c_str(); }
                     bool clicked;
-                    { // the cell's value as it is: a name such as "Sword" is also a UI text the language hook would swap
+                    if (cmpChange) {
+                        // a split cell: this file's value | the compared file's value (another colour)
+                        clicked = ImGui::Selectable("##cmpcell", selected, ImGuiSelectableFlags_AllowDoubleClick);
+                        const ImVec2 a = ImGui::GetItemRectMin(), b = ImGui::GetItemRectMax();
+                        const float mid = std::floor((a.x + b.x) * 0.5f);
+                        ImDrawList* dl = ImGui::GetWindowDrawList();
+                        const float ty = a.y + (b.y - a.y - ImGui::GetTextLineHeight()) * 0.5f;
+                        const std::string mine = cmpChange->before.empty() ? "-" : cmpChange->before;
+                        const std::string theirs = cmpChange->after.empty() ? "-" : cmpChange->after;
+                        dl->PushClipRect(a, ImVec2(mid - 3, b.y), true);
+                        dl->AddText(ImVec2(a.x, ty), ImGui::GetColorU32(ImGuiCol_Text), mine.c_str());
+                        dl->PopClipRect();
+                        dl->AddLine(ImVec2(mid, a.y + 1), ImVec2(mid, b.y - 1), ImGui::GetColorU32(ImGuiCol_TextDisabled));
+                        dl->PushClipRect(ImVec2(mid + 3, a.y), b, true);
+                        dl->AddText(ImVec2(mid + 4, ty), ImGui::GetColorU32(kCompareOther), theirs.c_str());
+                        dl->PopClipRect();
+                    } else { // the cell's value as it is: a name such as "Sword" is also a UI text the language hook would swap
                         const i18n::Verbatim verbatim;
                         clicked = ImGui::Selectable(text[0] ? text : "##empty", selected, ImGuiSelectableFlags_AllowDoubleClick);
                     }
@@ -788,7 +826,7 @@ void SheetTable(float height) {
                         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35);
                         if (cell) { const i18n::Verbatim verbatim; ImGui::TextUnformatted(cell->text.c_str()); }
                         if (cmpChange) {
-                            ImGui::TextColored(ImVec4(0.55f, 0.75f, 1.0f, 1), "In %s:", g.cmpName.c_str());
+                            ImGui::TextColored(kCompareOther, "In %s:", g.cmpName.c_str());
                             ImGui::SameLine();
                             const i18n::Verbatim verbatim;
                             ImGui::TextUnformatted(cmpChange->after.empty() ? "(empty)" : cmpChange->after.c_str());
@@ -917,7 +955,8 @@ void ClearComparison() {
     g.cmpOn = false;
     g.cmpWindow = false;
     g.diff = {};
-    g.cmpSheet.clear(); g.cmpCell.clear(); g.cmpRowOnlyHere.clear();
+    g.cmpSheet.clear(); g.cmpCell.clear(); g.cmpRowOnlyHere.clear(); g.cmpRowChanged.clear(); g.cmpColChanged.clear();
+    ++g.cmpGen;
 }
 
 void CompareWith(const std::string& path) {
@@ -929,17 +968,24 @@ void CompareWith(const std::string& path) {
     g.diff = dbdiff::Compare(g.book, other);
     g.cmpName = fs::path(path).filename().string();
     g.cmpVersion = g.version;
-    g.cmpOn = g.cmpWindow = true;
+    g.cmpOn = true; // the table shows the differences; List opens the window
     g.cmpSheet.assign(g.book.size(), -1);
     g.cmpCell.assign(g.book.size(), {});
     g.cmpRowOnlyHere.assign(g.book.size(), {});
+    g.cmpRowChanged.assign(g.book.size(), {});
+    g.cmpColChanged.assign(g.book.size(), {});
+    ++g.cmpGen;
     g.cmpListSheet = -1;
     for (size_t i = 0; i < g.book.size(); ++i) {
         for (size_t k = 0; k < g.diff.sheets.size(); ++k) {
             const dbdiff::SheetDiff& sd = g.diff.sheets[k];
             if (sd.name != g.book[i].name || sd.onlyInB) continue;
             g.cmpSheet[i] = static_cast<int>(k);
-            for (size_t c = 0; c < sd.changes.size(); ++c) g.cmpCell[i][{sd.changes[c].rowA, sd.changes[c].colA}] = static_cast<int>(c);
+            for (size_t c = 0; c < sd.changes.size(); ++c) {
+                g.cmpCell[i][{sd.changes[c].rowA, sd.changes[c].colA}] = static_cast<int>(c);
+                g.cmpRowChanged[i].insert(sd.changes[c].rowA);
+                g.cmpColChanged[i].insert(sd.changes[c].colA);
+            }
             for (int r : sd.rowsRemovedAt) g.cmpRowOnlyHere[i].insert(r);
             if (g.cmpListSheet < 0 && !sd.Same()) g.cmpListSheet = static_cast<int>(k);
         }
@@ -1134,8 +1180,8 @@ void DrawTab() {
     ImGui::SameLine();
     if (ImGui::Button("Compare", ImVec2(110, 0))) CompareWith(g.cmpPath);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Another database (.res, .xlsx or .ods). Changed cells turn blue (hover: the other file's value);\n"
-            "rows only in this file have a purple number. Records are matched by Name, columns by title.");
+        ImGui::SetTooltip("Another database (.res, .xlsx or .ods). A changed cell shows both values: this file | the other file (orange);\n"
+            "rows and columns that differ are tinted, rows only in this file have a purple number. Records are matched by Name, columns by title.");
     if (g.cmpOn) {
         ImGui::SameLine();
         if (ImGui::Button("List")) g.cmpWindow = true;
