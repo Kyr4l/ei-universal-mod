@@ -46,6 +46,7 @@
 #include "viewer/res_archive.hpp"
 #include "subtools.hpp"
 #include "db_diff.hpp"
+#include "mp_stats.hpp"
 #include "log.hpp"
 #include "viewer/viewer_app.hpp"
 #include "mapedit/map_app.hpp"
@@ -94,6 +95,7 @@ static void PrintTopLevelHelp() {
               << "  xlsxdb   (alias: db)    Compile .xlsx / .ods gameplay databases to .res\n"
               << "  dbexport                Export .res gameplay databases to .xlsx / .ods (the reverse of xlsxdb)\n"
               << "  dbdiff                  Compare two gameplay databases (.res / .xlsx / .ods): changed cells, rows, columns\n"
+              << "  mpstats                 Update the weapons and armour of .mp characters to the database's stats\n"
               << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
@@ -111,6 +113,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool xlsxdb databaselmp.xlsx\n"
               << "  um-multitool dbexport databaselmp.res -o databaselmp.ods\n"
               << "  um-multitool dbdiff databaselmp.xlsx databaselmp-new.xlsx --csv changes.csv\n"
+              << "  um-multitool mpstats Universal-Mod/mp --db databaselmp.xlsx [--write]\n"
               << "  um-multitool texture.dds                 # auto-detected -> ddsmmp\n\n"
               << "Note: directory-mode auto-detection only succeeds when every file in the\n"
               << "directory belongs to exactly one of ddsmmp/inireg/mobdump; anything mixed,\n"
@@ -190,7 +193,7 @@ static int RunTexts(int argc, char* argv[]) {
     return 0;
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, DbDiff, Texts };
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, DbDiff, MpStats, Texts };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
@@ -200,6 +203,7 @@ static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
     if (tok == "dbexport")                return SubTool::DbExport;
     if (tok == "dbdiff")                  return SubTool::DbDiff;
+    if (tok == "mpstats")                 return SubTool::MpStats;
     if (tok == "texts")                   return SubTool::Texts;
     return SubTool::None;
 }
@@ -213,6 +217,7 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
         case SubTool::DbExport: return RunDbExport(argc, argv);
         case SubTool::DbDiff: return RunDbDiff(argc, argv);
+        case SubTool::MpStats: return mpstats::RunMpStats(argc, argv);
         case SubTool::Texts: return RunTexts(argc, argv);
         default: return 1;
     }
@@ -545,6 +550,7 @@ static const CompletionEntry kCompletions[] = {
     {"xlsxdb",   "-o --output --check --no-check -h --help --version --verbose"},
     {"dbexport", "-o --output -h --help --verbose"},
     {"dbdiff",   "--cells --sheet --csv -h --help"},
+    {"mpstats",  "--db --write --quiet -q -h --help"},
     {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --weapon-export-ref --weapon-import --weapon-project --edit --kind --number --out --races --reference --group --flip --roll --grip --keep-depth --no-ground --uv --uv-width --normals --no-fit --scale --shift --level --up-down --height-from-anchors --keep-prod-height --replace --pack-res --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
     {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},

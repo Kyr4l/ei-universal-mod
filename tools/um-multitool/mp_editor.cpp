@@ -19,6 +19,8 @@
 #include "imgui.h"
 #include "db_model.hpp"
 #include "mp_file.hpp"
+#include "mp_stats.hpp"
+#include "i18n.hpp"
 #include "sav_file.hpp"
 #include "viewer/library.hpp"
 #include "viewer/ui_common.hpp"
@@ -51,6 +53,12 @@ struct State {
     // the database's names (sheet -> rows), by path
     std::string dbFor;
     std::map<std::string, std::vector<std::string>> sheets;
+    mpstats::Database stats;          // the item columns of the same database (Update item stats)
+    std::string statsErr;
+    // Update item stats: what would change, per party of the open file, while the confirmation is shown
+    struct StatsPart { std::string where; std::vector<mpstats::Item> items; };
+    std::vector<StatsPart> statsPlan;
+    bool statsAsk = false;
 };
 State g;
 
@@ -58,10 +66,13 @@ void LoadDatabase(const Library& lib) {
     if (g.dbFor == lib.dbPath) return;
     g.dbFor = lib.dbPath;
     g.sheets.clear();
+    g.stats = mpstats::Database{};
+    g.statsErr.clear();
     if (lib.dbPath.empty()) return;
     dbmodel::Book book;
     std::string err;
     if (!dbmodel::LoadBook(lib.dbPath, book, err)) return;
+    if (!mpstats::FromBook(book, g.stats, g.statsErr)) g.stats = mpstats::Database{};
     for (const sheetio::Sheet& s : book) {
         std::vector<std::string>& names = g.sheets[s.name];
         int col = 1; // the "Name" column of the header row (row 2; the sheets often start at column B)
@@ -394,15 +405,117 @@ void Locked() {
     if (!g.unsafe) ImGui::SetItemTooltip("Read-only: changing it can break the character. Tick \"Allow unsafe edits\" to change it.");
 }
 
+// A save's party, as the Party list names it.
+std::string PartyLabel(int k) {
+    auto name = [](const sav::Section& x) { const mp::Member& mm = x.party.members[0]; return (mm.strings[0].empty() ? mm.strings[4] : mm.strings[0]) + " (" + mm.s1 + (x.party.members.size() > 1 ? ", +" + std::to_string(x.party.members.size() - 1) : "") + ")"; };
+    if (IsMissionSection(k)) return "In the zone: " + name(g.mission.sections[0]);
+    return (k == 0 ? "Campaign: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(k)]);
+}
+
+// Update item stats (mp_stats.hpp): every weapon and armour of the open file (each party of a save) recomputed from the
+// database; apply = false only lists the changes.
+std::vector<State::StatsPart> ItemStats(bool apply) {
+    std::vector<State::StatsPart> out;
+    if (!g.isSave) {
+        out.push_back({"", mpstats::Update(g.ch, g.stats, apply)});
+        return out;
+    }
+    StoreSection(); // the shown party's edits first
+    const int parties = static_cast<int>(g.sav.sections.size()) + (g.hasMission ? 1 : 0);
+    for (int k = 0; k < parties; ++k) {
+        mp::Character& c = IsMissionSection(k) ? g.mission.sections[0].party : g.sav.sections[static_cast<size_t>(k)].party;
+        out.push_back({PartyLabel(k), mpstats::Update(c, g.stats, apply)});
+    }
+    const int member = g.member;
+    ShowSection(g.section); // the shown party again, with the new values
+    g.member = member < static_cast<int>(g.ch.members.size()) ? member : 0;
+    return out;
+}
+mpstats::Counts CountAll(const std::vector<State::StatsPart>& parts) {
+    mpstats::Counts n;
+    for (const auto& p : parts) {
+        const mpstats::Counts c = mpstats::Count(p.items);
+        n.items += c.items; n.fields += c.fields; n.skipped += c.skipped;
+    }
+    return n;
+}
+void ApplyItemStats() {
+    const mpstats::Counts n = CountAll(ItemStats(true));
+    SaveCurrent();
+    g.message = "Updated " + std::to_string(n.items) + " item(s). " + g.message;
+}
+void StartItemStats(const Library& lib) {
+    g.statsPlan = ItemStats(false);
+    const mpstats::Counts n = CountAll(g.statsPlan);
+    if (!n.items) {
+        g.message = "The items already match the database" + (n.skipped ? " (" + std::to_string(n.skipped) + " not in it)" : std::string()) + ".";
+        return;
+    }
+    if (lib.confirmItemStats) g.statsAsk = true;
+    else ApplyItemStats();
+}
+void ItemStatsPopup(Library& lib) {
+    const char* id = "Update item stats##mp";
+    if (g.statsAsk) { ImGui::OpenPopup(id); g.statsAsk = false; }
+    ImGui::SetNextWindowSize(ImVec2(880, 0), ImGuiCond_Appearing);
+    if (!ImGui::BeginPopupModal(id, nullptr, ImGuiWindowFlags_NoSavedSettings)) return;
+    const mpstats::Counts n = CountAll(g.statsPlan);
+    const std::string file = g.selected >= 0 ? g.files[g.selected].file : std::string();
+    ImGui::TextWrapped(i18n::Tr("%d item(s) of %s get the database's stats (%d value(s)). The file is written at once; the first save keeps the original as .bak."),
+                       n.items, file.c_str(), n.fields);
+    ImGui::TextDisabled("Wear and spent energy keep their share of the new maximum. An item with a spell keeps its price.");
+    if (Dirty()) ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.35f, 1), "Your other unsaved edits of this file are saved with it.");
+    const ImVec4 newColor(1.0f, 0.78f, 0.35f, 1);
+    int lines = 0;
+    for (const auto& p : g.statsPlan) for (const auto& it : p.items) lines += static_cast<int>(it.fields.size()) + (it.skipped.empty() ? 0 : 1);
+    const float h = std::min(lines + 2 + static_cast<int>(g.statsPlan.size()), 22) * ImGui::GetTextLineHeightWithSpacing() + 8;
+    ImGui::BeginChild("changes", ImVec2(0, h), ImGuiChildFlags_Borders);
+    for (const auto& p : g.statsPlan) {
+        const mpstats::Counts c = mpstats::Count(p.items);
+        if (!c.items && !c.skipped) continue;
+        if (!p.where.empty()) ImGui::SeparatorText(p.where.c_str());
+        if (!ImGui::BeginTable(("t" + p.where).c_str(), 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingFixedFit)) continue;
+        ImGui::TableSetupColumn("Item", ImGuiTableColumnFlags_WidthFixed, 230);
+        ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthFixed, 120);
+        ImGui::TableSetupColumn("Now", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("After", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableHeadersRow();
+        for (const auto& it : p.items) {
+            if (!it.skipped.empty()) {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn(); ImGui::TextUnformatted(it.name.c_str());
+                ImGui::TableNextColumn(); ImGui::TextDisabled("kept");
+                ImGui::TableNextColumn(); ImGui::TextDisabled("%s", it.skipped.c_str());
+                ImGui::TableNextColumn();
+                continue;
+            }
+            for (size_t f = 0; f < it.fields.size(); ++f) {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                if (f == 0) ImGui::TextUnformatted(it.name.c_str());
+                ImGui::TableNextColumn(); ImGui::TextUnformatted(it.fields[f].name.c_str());
+                ImGui::TableNextColumn(); ImGui::TextUnformatted(it.fields[f].before.c_str());
+                ImGui::TableNextColumn(); ImGui::TextColored(newColor, "%s", it.fields[f].after.c_str());
+            }
+        }
+        ImGui::EndTable();
+    }
+    ImGui::EndChild();
+    if (ImGui::Button("Update and save")) { ApplyItemStats(); g.statsPlan.clear(); ImGui::CloseCurrentPopup(); }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel") || ImGui::IsKeyPressed(ImGuiKey_Escape)) { g.statsPlan.clear(); ImGui::CloseCurrentPopup(); }
+    ImGui::SameLine();
+    bool ask = lib.confirmItemStats;
+    if (ImGui::Checkbox("Always ask", &ask)) { lib.confirmItemStats = ask; lib.SaveConfig(); }
+    ImGui::SetItemTooltip("Off: Update item stats saves at once (Settings > General > Saves turns it back on)");
+    ImGui::EndPopup();
+}
+
 void CharacterPanel() {
     if (g.isSave && (g.sav.sections.size() > 1 || g.hasMission)) { // the party in the zone, other characters kept in the save (spare heroes, NPCs)
         ImGui::SetNextItemWidth(260);
-        auto name = [](const sav::Section& x) { const mp::Member& mm = x.party.members[0]; return (mm.strings[0].empty() ? mm.strings[4] : mm.strings[0]) + " (" + mm.s1 + (x.party.members.size() > 1 ? ", +" + std::to_string(x.party.members.size() - 1) : "") + ")"; };
         const int zoneSection = static_cast<int>(g.sav.sections.size());
-        auto label = [&](int k) {
-            if (IsMissionSection(k)) return "In the zone: " + name(g.mission.sections[0]);
-            return (k == 0 ? "Campaign: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(k)]);
-        };
+        const auto label = PartyLabel;
         if (ImGui::BeginCombo("Party", label(g.section).c_str())) {
             for (int k = 0; k < zoneSection + (g.hasMission ? 1 : 0); ++k)
                 if (ImGui::Selectable((label(k) + "##s" + std::to_string(k)).c_str(), k == g.section)) {
@@ -807,6 +920,15 @@ void DrawTab(Library& lib) {
     if (ImGui::Button("Revert")) Open(g.selected);
     ImGui::EndDisabled();
     ImGui::SameLine();
+    ImGui::BeginDisabled(g.stats.Empty());
+    if (ImGui::Button("Update item stats")) StartItemStats(lib);
+    ImGui::EndDisabled();
+    if (g.stats.Empty())
+        ImGui::SetItemTooltip("%s", g.statsErr.empty() ? i18n::Tr("Needs the database: set it in Settings") : (i18n::Tr("The database lacks a column: ") + g.statsErr).c_str());
+    else
+        ImGui::SetItemTooltip("Gives every weapon and armour the stats the database gives it now (damage, protection, durability,\n"
+                              "energy, weight, price, slots), like a new one from the shop: for a database whose numbers changed.");
+    ImGui::SameLine();
     ImGui::TextDisabled("%s%s", g.files[g.selected].file.c_str(), dirty ? " (unsaved)" : "");
     if (!g.message.empty()) { ImGui::SameLine(); ImGui::TextUnformatted(g.message.c_str()); }
     ImGui::TextDisabled("Close the game first, or it may overwrite the file with its own copy.");
@@ -825,6 +947,7 @@ void DrawTab(Library& lib) {
         ImGui::EndTable();
     }
     ImGui::EndChild();
+    ItemStatsPopup(lib);
 }
 
 } // namespace mpedit

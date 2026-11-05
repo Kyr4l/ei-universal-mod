@@ -84,6 +84,10 @@ the wrong item; the MP editor flags it and can retarget it). In the game's memor
 | +44 | count (quantity) |
 | +48 | slots / complexity max (the card's "Complexity: 30/48"; the used part is the spell's) |
 
+An item keeps these values when the database changes; um-multitool's MP / Saves > Update item stats (`mpstats` on the command
+line, `tools/um-multitool/mp_stats.cpp`) recomputes them with the game's constructor formulas (docs/game-exe/items.md
+section 3): checked on the mod's characters, every field of an item made under the current database comes out identical.
+
 Weapons end with 3 floats: +56 the minimum damage, +60 the damage range (max = min + range: 48.51 + 37.8 shows as
 "Damage: 48-86"), +64 0. Armour ends with 2 × 7 protection floats, one per damage type (the third and sixth are 0.8 ×
 the others in every piece seen). Checked against the game's item card (an alloy battle axe of 1.mp, 2026-10-03).

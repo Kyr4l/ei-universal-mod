@@ -581,6 +581,12 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
         ImGui::SetTooltip("The DB editor checks the database (errors and warnings, alerts), and the Map Editor checks the maps'\n"
                           "item, spell and prototype names against it. Off: neither (a database compiles as it is).");
 
+    ImGui::SeparatorText("Saves");
+    if (ImGui::Checkbox("Confirm item stats update", &lib.confirmItemStats)) lib.SaveConfig();
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("File Processing > MP / Saves > Update item stats: list what changes and ask before writing the file.\n"
+                          "Off: it updates and saves at once (the first save still keeps the original as .bak).");
+
     ImGui::SeparatorText("Background");
     {
         // A picture behind the menus: for every tab, or per main tab (which wins).
