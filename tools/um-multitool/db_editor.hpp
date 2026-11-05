@@ -28,6 +28,7 @@ struct Hooks {
 void SetHooks(Hooks hooks);
 void Update();           // every frame: opens the Settings' database when asked to
 void DrawTab();          // inside the DB sub-tab
+void DrawWindows();      // every frame, whatever the tab: the comparison list (can be popped out)
 void OpenFile(const std::string& path);
 void CompareFile(const std::string& path); // the open database against another one (the Compare with field)
 bool HasUnsavedChanges();

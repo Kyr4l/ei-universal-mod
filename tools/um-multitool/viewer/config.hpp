@@ -156,6 +156,7 @@ struct Config {
     bool vsync = true;                        // Performance: wait for the display (off: the cap alone paces)
     bool uiAntialias = true;                  // Performance: anti-aliased lines and shapes in the UI
     bool showFps = false;                     // Performance: the frame rate in the window's corner
+    bool windowsSeparate = false;             // General > Layout: tool windows open in their own OS window
     float mapDrawDistance = 0.0f;             // Performance: the Map Editor draws objects within this many units of the camera's target (0: all)
     bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
     bool scriptChecks = true;                 // Checks: the maps' scripts checked (off: games with their own commands)
@@ -232,6 +233,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "VSYNC") cfg.vsync = value == "true";
         else if (key == "UI_ANTIALIAS") cfg.uiAntialias = value == "true";
         else if (key == "SHOW_FPS") cfg.showFps = value == "true";
+        else if (key == "WINDOWS_SEPARATE") cfg.windowsSeparate = value == "true";
         else if (key == "MAP_DRAW_DISTANCE") cfg.mapDrawDistance = static_cast<float>(std::atof(value.c_str()));
         else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
         else if (key == "SCRIPT_CHECKS") cfg.scriptChecks = value != "false";
@@ -402,6 +404,7 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "VSYNC=" << flag(cfg.vsync) << "\n";
     f << "; Show the frame rate in the window's top-right corner (true/false)\n";
     f << "SHOW_FPS=" << flag(cfg.showFps) << "\n";
+    f << "WINDOWS_SEPARATE=" << flag(cfg.windowsSeparate) << "\n";
     f << "; Anti-aliased lines and shapes in the UI (true/false; off: fewer vertices to draw)\n";
     f << "UI_ANTIALIAS=" << flag(cfg.uiAntialias) << "\n";
     f << "; Map Editor: draw the objects within this many units of the camera's target (0: all of them)\n";

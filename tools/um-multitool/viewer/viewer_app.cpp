@@ -15,6 +15,7 @@
 // ImGui::Render, underneath ImGui's own drawing.
 
 #include "viewer_app.hpp"
+#include "../popout.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -376,7 +377,7 @@ static void GifDialog(App& app, int maxSize) {
     // Top-left of the viewport, out of the way of the preview (bottom-right).
     ImGui::SetNextWindowSize(ImVec2(470, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 10.0f, app.viewportMin.y + 36.0f), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Export GIF", &app.gifOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
+    if (!popout::Begin("Export GIF", &app.gifOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { popout::End(); return; }
     config::GifSettings& g = app.lib.gif;
     bool changed = false;
     ImGui::TextWrapped("A full 360 degree turn of %s, from the current camera angle and zoom.",
@@ -464,7 +465,7 @@ static void GifDialog(App& app, int maxSize) {
         ImGui::PopStyleColor();
     }
     if (changed) app.lib.SaveConfig();
-    ImGui::End();
+    popout::End();
 }
 
 // The shown model gets the rotation of the tab it belongs to.

@@ -3,6 +3,7 @@
 // Map Editor: Objects: find, delete / copy / paste / duplicate / new, randomize, Diplomacy, IDs.
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
+#include "../popout.hpp"
 
 #include <cstdarg>
 
@@ -194,7 +195,7 @@ void MissingWindow(App& app) {
     if (++app.missingCheck % 60 == 1 && app.scene.modelsPending == 0) app.missing = app.scene.MissingFigures();
     if (!app.missingOpen) return;
     ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Figures that cannot be shown", &app.missingOpen)) { ImGui::End(); return; }
+    if (!popout::Begin("Figures that cannot be shown", &app.missingOpen)) { popout::End(); return; }
     if (app.missing.empty()) ImGui::TextDisabled("None.");
     if (ImGui::BeginTable("##miss", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable)) {
         ImGui::TableSetupColumn("Map"); ImGui::TableSetupColumn("Object"); ImGui::TableSetupColumn("Figure"); ImGui::TableSetupColumn("Why");
@@ -213,7 +214,7 @@ void MissingWindow(App& app) {
         }
         ImGui::EndTable();
     }
-    ImGui::End();
+    popout::End();
 }
 
 static const char* FigureCategory(const std::string& lowerName) { return objects::Category(lowerName); }
@@ -288,8 +289,8 @@ void NewObjectWindow(App& app) {
     if (!app.newOpen) return;
     ImGui::SetNextWindowSize(ImVec2(640, 560), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 60, app.viewportMin.y + 60), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Add object / unit", &app.newOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
-    if (app.mobs.empty()) { ImGui::TextDisabled("Load a map first."); ImGui::End(); return; }
+    if (!popout::Begin("Add object / unit", &app.newOpen, ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
+    if (app.mobs.empty()) { ImGui::TextDisabled("Load a map first."); popout::End(); return; }
     BuildFigureTextures(app);
     const mob::File& f = app.mobs[app.activeMob]->file;
     if (ImGui::BeginTabBar("##newtabs")) {
@@ -382,7 +383,7 @@ void NewObjectWindow(App& app) {
     ImGui::EndDisabled();
     ImGui::SetItemTooltip("At the ground under the mouse, else the view's centre; press G to move it");
     if (!app.newMessage.empty()) { ImGui::SameLine(); ImGui::TextDisabled("%s", app.newMessage.c_str()); }
-    ImGui::End();
+    popout::End();
 }
 
 // Ctrl+A: everything in the active map that can be selected (only units in logic mode).
@@ -402,7 +403,7 @@ void SelectAll(App& app) {
 void OffsetWindow(App& app) {
     if (!app.offsetOpen) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 40, app.viewportMin.y + 60), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Offset the selection", &app.offsetOpen, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
+    if (!popout::Begin("Offset the selection", &app.offsetOpen, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
     const bool ok = !app.mobs.empty() && app.scene.selectedFile == app.activeMob && !app.scene.selection.empty();
     if (ok) ImGui::Text("%zu object(s) selected in %s", app.scene.selection.size(), app.mobs[app.activeMob]->file.fileName.c_str());
     else ImGui::TextDisabled("Select objects in the active map first.");
@@ -437,7 +438,7 @@ void OffsetWindow(App& app) {
     }
     ImGui::EndDisabled();
     if (!app.offsetMessage.empty()) ImGui::TextDisabled("%s", app.offsetMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 // ---- randomize ------------------------------------------------------------------------------------------
@@ -465,7 +466,7 @@ static void EulerToQuat(float rx, float ry, float rz, float q[4]) {
 void RandomizeWindow(App& app) {
     if (!app.randomOpen) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 50, app.viewportMin.y + 70), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Randomize", &app.randomOpen, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
+    if (!popout::Begin("Randomize", &app.randomOpen, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
     const bool ok = !app.mobs.empty() && app.scene.selectedFile == app.activeMob && !app.scene.selection.empty();
     if (ok) ImGui::Text("%zu object(s) selected in %s", app.scene.selection.size(), app.mobs[app.activeMob]->file.fileName.c_str());
     else ImGui::TextDisabled("Select objects in the active map first.");
@@ -537,15 +538,15 @@ void RandomizeWindow(App& app) {
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         ImGui::SetTooltip("Each object gets its own value between min and max. Rotation and complection apply to figures only.");
     if (!app.randomMessage.empty()) ImGui::TextDisabled("%s", app.randomMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 void FindWindow(App& app) {
     if (!app.findOpen) return;
     ImGui::SetNextWindowSize(ImVec2(440, 460), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 30, app.viewportMin.y + 50), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Find objects", &app.findOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
-    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); ImGui::End(); return; }
+    if (!popout::Begin("Find objects", &app.findOpen, ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
+    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); popout::End(); return; }
     ImGui::TextDisabled("In the active map: %s", app.mobs[app.activeMob]->file.fileName.c_str());
     if (app.findFocus) { ImGui::SetKeyboardFocusHere(); app.findFocus = false; }
     ImGui::SetNextItemWidth(-1);
@@ -635,7 +636,7 @@ void FindWindow(App& app) {
             }
         ImGui::EndTable();
     }
-    ImGui::End();
+    popout::End();
 }
 
 // ------------------------------------------------------------------------------------------------

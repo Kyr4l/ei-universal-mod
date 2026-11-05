@@ -28,6 +28,7 @@
 #include "alerts.hpp"
 #include "db_model.hpp"
 #include "db_diff.hpp"
+#include "popout.hpp"
 
 namespace fs = std::filesystem;
 
@@ -999,7 +1000,7 @@ void ComparisonWindow() {
     const ImGuiViewport* vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowSize(ImVec2(820, 460), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - 840, vp->WorkPos.y + vp->WorkSize.y - 480), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin("Comparison##db", &g.cmpWindow)) { ImGui::End(); return; }
+    if (!popout::Begin("Comparison##db", &g.cmpWindow)) { popout::End(); return; }
     ImGui::Text("%s  ->  %s", fs::path(g.loadedPath).filename().string().c_str(), g.cmpName.c_str());
     if (g.cmpVersion != g.version) { ImGui::SameLine(); ImGui::TextColored(kWarningColor, "(edited since: Compare again)"); }
     ImGui::BeginChild("##cmpsheets", ImVec2(230, 0), true);
@@ -1072,7 +1073,7 @@ void ComparisonWindow() {
         }
     }
     ImGui::EndGroup();
-    ImGui::End();
+    popout::End();
 }
 
 void ConfirmDiscard() {
@@ -1124,6 +1125,8 @@ void CompareFile(const std::string& path) {
     std::snprintf(g.cmpPath, sizeof(g.cmpPath), "%s", path.c_str());
     if (g.loaded) CompareWith(path);
 }
+
+void DrawWindows() { ComparisonWindow(); }
 
 void Update() {
     AutoLoad();
@@ -1189,7 +1192,6 @@ void DrawTab() {
         ImGui::SameLine();
         if (ImGui::Button("Clear")) ClearComparison();
     }
-    ComparisonWindow();
     ImGui::Text("%s%s", fs::path(g.loadedPath).filename().string().c_str(), g.dirty ? " (modified)" : "");
     if (!g.message.empty()) {
         ImGui::SameLine();

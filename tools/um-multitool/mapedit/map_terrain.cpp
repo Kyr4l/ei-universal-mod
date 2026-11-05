@@ -3,6 +3,7 @@
 // Map Editor: Terrain editing: the tile brush, paint by ground, sculpt, water, tile parameters, lighting, the sidebar.
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
+#include "../popout.hpp"
 
 namespace mapedit {
 
@@ -1220,8 +1221,8 @@ void SaveAsWindow(App& app) {
     if (!app.saveAsOpen) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 40, app.viewportMin.y + 60), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(560, 0), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Save active MOB as", &app.saveAsOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
-    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); ImGui::End(); return; }
+    if (!popout::Begin("Save active MOB as", &app.saveAsOpen, ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
+    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); popout::End(); return; }
     MobEntry& m = *app.mobs[app.activeMob];
     ImGui::Text("%s", m.file.path.c_str());
     ImGui::SetNextItemWidth(-1);
@@ -1257,7 +1258,7 @@ void SaveAsWindow(App& app) {
     ImGui::EndDisabled();
     if (same) ImGui::TextDisabled("That is the map's own file: save it with %s.", ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str());
     if (!app.saveAsMessage.empty()) ImGui::TextWrapped("%s", app.saveAsMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 // The undo history: every step Ctrl+Z can take back (oldest first) and those Ctrl+Y can do again (grey).
@@ -1266,7 +1267,7 @@ void HistoryWindow(App& app) {
     if (!app.historyOpen) return;
     ImGui::SetNextWindowSize(ImVec2(320, 420), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMax.x - 340, app.viewportMin.y + 30), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin("Undo history", &app.historyOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
+    if (!popout::Begin("Undo history", &app.historyOpen, ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
     ImGui::TextDisabled("Click a step to go back or forward to it.");
     int target = -2; // steps to keep done: -1 none
     if (ImGui::Selectable("(start)", app.undoSteps.empty())) target = 0;
@@ -1285,7 +1286,7 @@ void HistoryWindow(App& app) {
         ImGui::PopID();
     }
     ImGui::PopStyleColor();
-    ImGui::End();
+    popout::End();
     if (target < 0) return;
     for (int guard = 0; guard < 700; ++guard) {
         const size_t done = app.undoSteps.size(), undone = app.redoSteps.size();
@@ -1316,8 +1317,8 @@ void MobParamsWindow(App& app) {
     if (!app.mobParamsOpen) return;
     ImGui::SetNextWindowSize(ImVec2(420, 0), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 40, app.viewportMin.y + 60), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin("MOB parameters", &app.mobParamsOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
-    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); ImGui::End(); return; }
+    if (!popout::Begin("MOB parameters", &app.mobParamsOpen, ImGuiWindowFlags_NoCollapse)) { popout::End(); return; }
+    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); popout::End(); return; }
     mob::File& f = app.mobs[app.activeMob]->file;
     ImGui::Text("%s", f.fileName.c_str());
     {
@@ -1364,7 +1365,7 @@ void MobParamsWindow(App& app) {
     if (ImGui::Button("Diplomacy")) app.requestTab = SideTab::Diplomacy;
     ImGui::SameLine();
     if (ImGui::Button("Script")) { if (app.scriptWindow) app.focusScriptWindow = true; else app.requestTab = SideTab::Script; }
-    ImGui::End();
+    popout::End();
 }
 
 

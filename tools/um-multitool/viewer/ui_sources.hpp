@@ -548,6 +548,8 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The item list on the right of the view (off: on the left)");
     if (ImGui::Checkbox("Map Editor: Sidebar right", &lib.mapSidebarRight)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The panel on the right of the view (off: on the left)");
+    if (ImGui::Checkbox("Separate tool windows", &lib.windowsSeparate)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Tool windows (Comparison, Log, Find objects...) open in their own window, outside the main one.\nEach window's Pop out / Dock back button still moves it.");
 
     if (ImGui::SliderFloat("Map Editor: Marker opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
         lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);

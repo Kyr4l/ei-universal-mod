@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 #include "log.hpp"
+#include "popout.hpp"
 
 #include <chrono>
 #include <cstdio>
@@ -62,7 +63,7 @@ void Clear() {
 void DrawWindow(bool* open) {
     if (!open || !*open) return;
     ImGui::SetNextWindowSize(ImVec2(760, 360), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin("Log", open)) { ImGui::End(); return; }
+    if (!popout::Begin("Log", open)) { popout::End(); return; }
     ImGui::TextDisabled("%s", FilePath().c_str());
     ImGui::SameLine();
     if (ImGui::SmallButton("Copy")) {
@@ -87,7 +88,7 @@ void DrawWindow(bool* open) {
     }
     if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 4) ImGui::SetScrollHereY(1.0f);
     ImGui::EndChild();
-    ImGui::End();
+    popout::End();
 }
 
 } // namespace umlog

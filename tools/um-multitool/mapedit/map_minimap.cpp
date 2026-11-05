@@ -3,6 +3,7 @@
 // Map Editor: Minimap export, new terrain from a picture, crop, merge.
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
+#include "../popout.hpp"
 
 namespace mapedit {
 
@@ -56,7 +57,7 @@ void CropDialog(App& app) {
     if (!app.cropOpen) return;
     ImGui::SetNextWindowPos(ImVec2(std::max(app.viewportMin.x + 20, app.viewportMax.x - 600), app.viewportMin.y + 40), ImGuiCond_Appearing); // at the right: the rectangle is dragged in the view
     ImGui::SetNextWindowSizeConstraints(ImVec2(560, 0), ImVec2(FLT_MAX, FLT_MAX)); // room for the preview and the text beside it
-    if (!ImGui::Begin("Crop terrain", &app.cropOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
+    if (!popout::Begin("Crop terrain", &app.cropOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { popout::End(); return; }
     const mpr::Map& m = app.terrain;
     ImGui::TextWrapped("Keeps a rectangle of %s's sectors (%d x %d) as a new terrain, the same textures. The maps open beside it are written next to "
                        "it with the objects inside the rectangle, moved so its corner is the origin. Rebuild the navmesh after (Tools).", m.name.c_str(), m.sectorsX, m.sectorsY);
@@ -120,7 +121,7 @@ void CropDialog(App& app) {
     }
     ImGui::EndDisabled();
     if (!app.cropMessage.empty()) ImGui::TextWrapped("%s", app.cropMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 // The picture a new terrain takes its heights from (#59, #106): grey, blurred, with the levels / gamma / invert
@@ -212,7 +213,7 @@ void NewTerrainDialog(App& app) {
     if (!app.newTerrainOpen) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMin.y + 40), ImGuiCond_Appearing);
     ImGui::SetNextWindowSizeConstraints(ImVec2(560, 0), ImVec2(FLT_MAX, FLT_MAX)); // room for the preview and the text beside it
-    if (!ImGui::Begin("New terrain", &app.newTerrainOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
+    if (!popout::Begin("New terrain", &app.newTerrainOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { popout::End(); return; }
     ImGui::TextWrapped("A flat terrain, every tile the same, with the textures, materials and tile types of the open terrain (%s). "
                        "Then paint it, raise it, add water as usual.", app.terrain.name.c_str());
     ImGui::SetNextItemWidth(160);
@@ -330,7 +331,7 @@ void NewTerrainDialog(App& app) {
     }
     ImGui::EndDisabled();
     if (!app.newTerrainMessage.empty()) ImGui::TextWrapped("%s", app.newTerrainMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 
@@ -376,8 +377,8 @@ void MergeWindow(App& app) {
     if (!app.mergeOpen) return;
     ImGui::SetNextWindowSize(ImVec2(480, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMin.y + 40), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Merge from another map", &app.mergeOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
-    if (app.mobs.size() < 2) { ImGui::TextWrapped("%s", i18n::Tr("Load the map to take the objects from as a second .mob (Files tab); the active map receives them.")); ImGui::End(); return; }
+    if (!popout::Begin("Merge from another map", &app.mergeOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { popout::End(); return; }
+    if (app.mobs.size() < 2) { ImGui::TextWrapped("%s", i18n::Tr("Load the map to take the objects from as a second .mob (Files tab); the active map receives them.")); popout::End(); return; }
     ImGui::TextWrapped("%s", i18n::Tr("Copies objects of another loaded .mob into the active map, where they stand. Units and traps are off by default (they carry scripts); objects the active map already has at the same spot are skipped."));
     ImGui::Text("%s: %s", i18n::Tr("Into"), app.mobs[app.activeMob]->file.fileName.c_str());
     if (app.mergeSource < 0 || app.mergeSource >= static_cast<int>(app.mobs.size()) || app.mergeSource == app.activeMob) {
@@ -417,14 +418,14 @@ void MergeWindow(App& app) {
     ImGui::EndDisabled();
     ImGui::SameLine();
     ImGui::TextDisabled("%s", i18n::Tr("The copies get new IDs and come selected."));
-    ImGui::End();
+    popout::End();
 }
 
 void MinimapDialog(App& app) {
     if (!app.minimapOpen) return;
     ImGui::SetNextWindowSize(ImVec2(460, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMin.y + 40), ImGuiCond_Appearing);
-    if (!ImGui::Begin("Export minimap", &app.minimapOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
+    if (!popout::Begin("Export minimap", &app.minimapOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { popout::End(); return; }
     ImGui::TextWrapped("The terrain seen straight from above, like the game's <zone>map textures: a square image, the map in its "
                        "top-left corner with its longer side filling it, y = 0 at the top.");
     static const int sizes[] = {256, 512, 1024, 2048};
@@ -457,7 +458,7 @@ void MinimapDialog(App& app) {
     ImGui::EndDisabled();
     if (app.scene.modelsPending > 0) { ImGui::SameLine(); ImGui::TextDisabled("waiting for figures to load"); }
     if (!app.minimapMessage.empty()) ImGui::TextWrapped("%s", app.minimapMessage.c_str());
-    ImGui::End();
+    popout::End();
 }
 
 void ExportMinimap(App& app, int fbW, int fbH) {

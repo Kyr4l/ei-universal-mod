@@ -3,6 +3,7 @@
 // Map Editor: Patrol simulation.
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
+#include "../popout.hpp"
 
 namespace mapedit {
 
@@ -218,7 +219,7 @@ void SimulationWindow(App& app) {
     if (!app.simulating) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMax.y - 110), ImGuiCond_FirstUseEver);
     bool open = true;
-    if (ImGui::Begin("Patrol simulation", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) {
+    if (popout::Begin("Patrol simulation", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) {
         ImGui::Text("%zu unit(s) on patrol%s", app.sim.size(), app.scene.walk.w ? "" : " (no terrain loaded: straight lines)");
         if (ImGui::Button(app.simPaused ? "Play" : "Pause", ImVec2(70, 0))) app.simPaused = !app.simPaused;
         ImGui::SameLine();
@@ -230,7 +231,7 @@ void SimulationWindow(App& app) {
         ImGui::TextDisabled("(?)");
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", kSimLimits);
     }
-    ImGui::End();
+    popout::End();
     if (!open) StopSimulation(app);
 }
 

@@ -51,6 +51,7 @@
 #include "alerts.hpp"
 #include "i18n.hpp"
 #include "db_editor.hpp"
+#include "popout.hpp"
 #include "text_editor.hpp"
 #include "mp_editor.hpp"
 #include "inireg_editor.hpp"
@@ -982,6 +983,19 @@ int RunGui(const GuiOptions& options) {
     library.onLoadProgress = [](const std::string& what, float f) { splash::Step(what, 0.1f + f * 0.55f); };
     if (!options.configFile.empty()) library.configPath = options.configFile;
     library.LoadConfig();
+    { // tool windows that can leave the main window (popout.hpp)
+        popout::Setup ps;
+        ps.mainWindow = window;
+        ps.fonts = [](ImGuiIO& pio) { AddFallbackFonts(pio); };
+        ps.windowHints = [](GLFWwindow*) {
+            HintAppId("um-multitool");
+            glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
+            glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
+        };
+        ps.appName = PROGRAM_NAME_SHOWN;
+        ps.separateByDefault = [&library] { return library.windowsSeparate; };
+        popout::Init(ps);
+    }
     library.onLoadProgress = nullptr;
     splash::Step("Sources loaded", 0.66f);
     // The colours (Settings > General, viewer/theme.hpp): applied now and again whenever they change.
@@ -1136,6 +1150,7 @@ int RunGui(const GuiOptions& options) {
         float dt = static_cast<float>(now - lastTime);
         lastTime = now;
 
+        popout::BeginFrames();
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -1229,6 +1244,7 @@ int RunGui(const GuiOptions& options) {
         }
         alerts::Draw();
         umlog::DrawWindow(&library.logWindow);
+        dbedit::DrawWindows(); // the DB comparison list: drawn whatever the tab, so it also works popped out
         // First start (no LANGUAGE in um-multitool.cfg): ask for the display language. English is the default.
         if (askLanguage) {
             ImGui::OpenPopup("Language / Язык##firstLanguage");
@@ -1294,12 +1310,13 @@ int RunGui(const GuiOptions& options) {
         }
 
         glfwSwapBuffers(window);
+        popout::EndFrames();
 
         // Settings > Performance: a frame rate cap, and resting while the mouse and keyboard are quiet.
         if (library.frameRateLimit > 0 || library.idleRedraw) {
             static double lastActivity = 0.0;
             bool active = ImGui::IsAnyMouseDown() || io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f || io.MouseWheel != 0.0f ||
-                          io.InputQueueCharacters.Size > 0 || ImGui::IsAnyItemActive() || mapedit::Busy(mapCtx) || IsValid(g_activeProc) ||
+                          io.InputQueueCharacters.Size > 0 || ImGui::IsAnyItemActive() || mapedit::Busy(mapCtx) || IsValid(g_activeProc) || popout::Busy() ||
                           !options.screenshotPath.empty();
             for (int k = ImGuiKey_NamedKey_BEGIN; k < ImGuiKey_NamedKey_END && !active; ++k) if (ImGui::IsKeyDown(static_cast<ImGuiKey>(k))) active = true;
             if (active) lastActivity = now;
@@ -1365,6 +1382,7 @@ int RunGui(const GuiOptions& options) {
         if (scriptWin && !mapedit::ScriptWindowWanted(mapCtx)) closeScriptWindow();
     }
     closeScriptWindow();
+    popout::Shutdown();
 
     viewer::Destroy(viewerCtx);
     mapedit::Destroy(mapCtx);
