@@ -1046,6 +1046,7 @@ int RunGui(const GuiOptions& options) {
     splash::Step("Database", 0.84f);
     dbedit::Update(); // the Settings' database, when it opens automatically (else the first frame would)
     if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
+    if (!options.dbCompare.empty()) dbedit::CompareFile(options.dbCompare);
     if (!options.textureFile.empty()) texedit::OpenPath(options.textureFile);
     splash::Step("Ready", 1.0f);
     splash::End();

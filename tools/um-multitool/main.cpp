@@ -45,6 +45,7 @@
 #include "text_groups.hpp"
 #include "viewer/res_archive.hpp"
 #include "subtools.hpp"
+#include "db_diff.hpp"
 #include "log.hpp"
 #include "viewer/viewer_app.hpp"
 #include "mapedit/map_app.hpp"
@@ -72,6 +73,7 @@ static void PrintTopLevelHelp() {
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
+              << "  um-multitool gui --db <file> --compare <other>  # ... compared with another database (changed cells in blue)\n"
               << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--weapon <item.material>]... [--complection a,b,c] [--zoom f] [--look dx,dy,dz] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, other weapons, a build, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
               << "  um-multitool gui --ini <file>         # ... on File Processing > INI <-> REG with this .ini or .reg open in the editor\n"
@@ -91,6 +93,7 @@ static void PrintTopLevelHelp() {
               << "  texts                   texts.res / textslmp.res as a few grouped .umtexts files (pack, unpack, group, set)\n"
               << "  xlsxdb   (alias: db)    Compile .xlsx / .ods gameplay databases to .res\n"
               << "  dbexport                Export .res gameplay databases to .xlsx / .ods (the reverse of xlsxdb)\n"
+              << "  dbdiff                  Compare two gameplay databases (.res / .xlsx / .ods): changed cells, rows, columns\n"
               << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
@@ -107,6 +110,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool inireg -d ./ini -o ./reg -m\n"
               << "  um-multitool xlsxdb databaselmp.xlsx\n"
               << "  um-multitool dbexport databaselmp.res -o databaselmp.ods\n"
+              << "  um-multitool dbdiff databaselmp.xlsx databaselmp-new.xlsx --csv changes.csv\n"
               << "  um-multitool texture.dds                 # auto-detected -> ddsmmp\n\n"
               << "Note: directory-mode auto-detection only succeeds when every file in the\n"
               << "directory belongs to exactly one of ddsmmp/inireg/mobdump; anything mixed,\n"
@@ -117,7 +121,7 @@ static void PrintTopLevelHelp() {
 
 static void PrintTopLevelVersion() {
     std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n"
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport, dbdiff (each 1.0), the GUI, the 3D Viewer and the Map Editor\n"
               << "Copyright (C) 2026 Kyr4l\n"
               << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
               << "This is free software: you are free to change and redistribute it.\n"
@@ -186,7 +190,7 @@ static int RunTexts(int argc, char* argv[]) {
     return 0;
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, Texts };
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, DbDiff, Texts };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
@@ -195,6 +199,7 @@ static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "restool" || tok == "res") return SubTool::ResTool;
     if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
     if (tok == "dbexport")                return SubTool::DbExport;
+    if (tok == "dbdiff")                  return SubTool::DbDiff;
     if (tok == "texts")                   return SubTool::Texts;
     return SubTool::None;
 }
@@ -207,6 +212,7 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::ResTool: return RunResTool(argc, argv);
         case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
         case SubTool::DbExport: return RunDbExport(argc, argv);
+        case SubTool::DbDiff: return RunDbDiff(argc, argv);
         case SubTool::Texts: return RunTexts(argc, argv);
         default: return 1;
     }
@@ -324,6 +330,8 @@ static int StartGui(int argc, char* argv[], int first) {
             while (i + 1 < argc && argv[i + 1][0] != '-') options.mapFiles.push_back(argv[++i]);
         } else if (a == "--db" && i + 1 < argc) {
             options.dbFile = argv[++i];
+        } else if (a == "--compare" && i + 1 < argc) {
+            options.dbCompare = argv[++i];
         } else if (a == "--naked") {
             options.viewerNaked = true;
         } else if (a == "--mode" && i + 1 < argc) {
@@ -536,11 +544,12 @@ static const CompletionEntry kCompletions[] = {
     {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --grouped-texts --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version --verbose"},
     {"xlsxdb",   "-o --output --check --no-check -h --help --version --verbose"},
     {"dbexport", "-o --output -h --help --verbose"},
+    {"dbdiff",   "--cells --sheet --csv -h --help"},
     {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --weapon-export-ref --weapon-import --weapon-project --edit --kind --number --out --races --reference --group --flip --roll --grip --keep-depth --no-ground --uv --uv-width --normals --no-fit --scale --shift --level --up-down --height-from-anchors --keep-prod-height --replace --pack-res --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
     {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},
     {"dll",      "--port --listen --stats --help --verbose"},
-    {"gui",      "--db --viewer --map --mp --ini --skin --naked --weapon --complection --zoom --look --config --clip --frame --yaw --settings --texture --mode --screenshot --verbose"},
+    {"gui",      "--db --compare --viewer --map --mp --ini --skin --naked --weapon --complection --zoom --look --config --clip --frame --yaw --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
 };

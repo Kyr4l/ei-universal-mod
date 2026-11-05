@@ -27,6 +27,7 @@ struct GuiOptions {
     std::vector<std::string> mapFiles; // with openMap: open these (.mpr, .mob) instead of the last session's
     bool openSettings = false;     // start on the Settings tab
     std::string dbFile;            // start on File Processing > DB with this database (.res, .xlsx, .ods)
+    std::string dbCompare;         // ... compared with this other database (the DB tab's Compare with)
     std::string mpFolder;          // start on File Processing > MP with this characters folder
     std::string iniFile;           // start on File Processing > INI <-> REG with this file (.ini or .reg)
     bool openTexture = false;      // start on the Texture Editor tab

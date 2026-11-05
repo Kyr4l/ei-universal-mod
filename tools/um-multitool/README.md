@@ -2,7 +2,7 @@
 
 __um-multitool__ (`tools/um-multitool`) is the toolkit we use to build this mod, in a single program for Windows and Linux. It runs as a GUI or from the command line.
 
-- __File Processing__: converts textures (`.dds` <-> `.mmp`) and configs (`.ini` <-> `.reg`), packs and unpacks `.res` / `.mq` archives, dumps `.mob` maps, edits the gameplay database (with checks), the language packs and multiplayer characters (`.mp`).
+- __File Processing__: converts textures (`.dds` <-> `.mmp`) and configs (`.ini` <-> `.reg`), packs and unpacks `.res` / `.mq` archives, dumps `.mob` maps, edits the gameplay database (with checks) and compares two of them (DB tab: Compare with; command line: `um-multitool dbdiff old.xlsx new.xlsx [--cells] [--sheet Monsters] [--csv changes.csv]`, any mix of `.res` / `.xlsx` / `.ods`), the language packs and multiplayer characters (`.mp`).
 - __3D Viewer__: browses every item and unit of the database with its model and textures. Units are dressed like in the game, custom skins can be tried on them, and GIFs and UV maps can be exported.
 - __Map Editor__: edits `.mob` maps and `.mpr` terrains, quests and their scripts, checks them like the game does, and rebuilds the navmesh like the game does (no more navmesh regeneration at load time).
 - __UM DLL Connector__: talks to the running game through `um.dll`: stats, quests and scripts live, and a game console.
