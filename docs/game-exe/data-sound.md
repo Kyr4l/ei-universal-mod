@@ -118,7 +118,7 @@ The field ids below are the sheet's `FLDx-y` (= the tag byte x, list index y); t
 | 21 / 22 / 23 / 24 | Skills General / Steal / Tame / Peripheral | +0x88 / +0x8c / +0x90 / +0x94 | float | skill bases |
 | 25 | Senses Sight Infra SenseLife Hearing Smell Tracking | +0x98 | float[6] | perception bases -> `UnitStats +0xb0` pairs |
 | 26 | Detections (same six) | +0xb0 | float[6] | detectability bases -> `UnitStats +0xe0` pairs |
-| 27 / 28 | Common / Rare loot Probability Mask Min Max | +0xc8 / +0xd8 | float[4] | TypeList(21) sub-tags 0..3 (loot generation: serialized / copied only, no gameplay reader [V, 2026-11-03]; the apparent use in the old `UnitProto::ApplyTo` was a type mix-up, that function works on the .mob stats block) |
+| 27 / 28 | Common / Rare loot Probability Mask Min Max | +0xc8 / +0xd8 | float[4] | TypeList(21) sub-tags 0..3: the **money of a corpse**. `CHoover::CollectUnitLoot` 0x461CB0 reads them [V, disassembly 2026-11-05: `fcomp [ebx+0xc8]` at 0x461E78, `[ebx+0xd0]` / `[ebx+0xd4]` at 0x461DBE..0x461DE9, `[ebx+0xd8]` at 0x461F47, `[ebx+0xe0]` / `[ebx+0xe4]` at 0x461E8A..0x461EB5]: money = rand(Min..Max) when rand % 100 + 1 <= Probability, for each of the two rows, summed, clamped >= 0. Mask (+0xcc / +0xdc) is not read there. (The apparent use in the old `UnitProto::ApplyTo` was a type mix-up, that function works on the .mob stats block.) |
 | 29 | Items | +0xe8 | vector<CString> | "proto.material[count]" (`Unit_GiveProtoEquipment`) |
 | 30 | Skills Elemental Senses Astral | +0xf4 | float[3] | magic skill bases |
 | 31 | Spells | +0x100 | vector<CString> | "code{mods}" (`MobUnitStats_ApplyTo` 0x477B00 adds them) |
