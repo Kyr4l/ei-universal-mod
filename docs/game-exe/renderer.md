@@ -167,6 +167,27 @@ fog start / end, `+0x3C` `255 / (end - start)`, `+0x40..+0x7C` the projection (a
   never used, and the game has no per-vertex specular highlight [V]. The other 28 slots (6, 8, 10..23, 25..28) are unused transform /
   bounds variants for other vertex layouts (16-, 32- and 64-byte strides, with and without the divide) [I, not read line by line].
 
+### 2.2b Inside 2DintMMX.dll (reverse 2026-11-07) [V unless marked]
+
+The 2D helper (md5 501aa7a4b57887915f6e34e7ef753c8b, same file in both installs) exports only `GetGraphicsProcessor` 0x100036E0: a static
+object 0x10012FA0 with a **13-slot** vtable 0x10012140 (names: `_cpr/claude-re/dll/2dintmmx-names.tsv`, decompiles `dll/dec2/2dintmmx/`).
+The game holds it twice: `CD3DLibrary +0x10` / `g_0x7AF06C` (textures, shadows) and `CDXDirectDraw +0x4C` (pictures).
+
+| slot | what it does |
+|---|---|
+| 1 | `SetPixelFormat(mode, a, r, g, b masks)`: mode 0 the 16-bit opaque format, 1 = 555, 2 = 1555 (masks and shifts). Each mode also sets a "standard masks" fast-path flag and clears it on the next line, so slot 2 always takes its generic path (only a speed loss) |
+| 2 | `ConvertRow32To16(dst, src, mode, count)`: ARGB -> 565 / 555 / 1555 by those masks, mode 3 = 4444 |
+| 3 / 4 | palette blend `dst = (dst * w2 + palette[i] * w1) >> 8`, saturated; 4 = the same with separate byte planes, 128 x 128 pixels [I] |
+| 5 | alpha "over" `dst = src + dst * (255 - src alpha) >> 8` (premultiplied), a flag picks a second variant (`ComposeLayers` isPNT3) [I] |
+| 6 | premultiply `rgb *= a / 256` |
+| 7 | 2 x 2 box downsample (the mip chain of composed textures) |
+| 8 / 9 | triangle fill into a 16-bit target, flat / textured (the unit shadow bitmap; 9 is dead: docs/shadows.md) |
+| 10 | **DXT1 decoder**: 4 x 4 blocks, two 565 colours, 4-colour (thirds by `* 0x5555`) or 3-colour + transparent mode |
+| 11 / 12 | 3-tap box blur, vertical / horizontal (`* 0x5556 >> 16` = / 3; shadow quality 2) |
+
+All the pixel loops are MMX (2 or 4 pixels per step); the decompiles show them as byte shuffles, so the per-channel formulas of slots
+3 to 5 are read from the arithmetic pattern, not from a clean listing.
+
 ### 2.3 The matrix stacks (CD3DLibrary +0x14 + 8n: {buffer of 16 x 0x40, depth}) [V]
 
 | n | offset | after InitRenderer / SetupCamera | pushed by |
