@@ -435,3 +435,20 @@ textures, visible only where the alpha changes from one pixel to the next.
 - Caller: the game's layer composer (`ComposeLayers` 0x693010, flag = isPNT3) when it composes texture layers that are not PNT3.
 - Fix: one byte in the DLL: the displacement of `mov al, byte ptr [ecx + 7]` at 0x100017B4 (the first one) from 7 to 3.
 
+## 26. Multiplayer name / password check: Cyrillic letters pass or fail at random (T7 g04, 2026-11-06)
+
+CONFIRMED in the machine code, not tested live. `IsValidNameString` 0x47ADA0 (used by `CPlayerServer::OnMsg00_Identity` 0x66F890
+on the client's name and password, max 63) passes each byte through `movsx eax, al` (0x47ADB4) to the CRT printable test 0x6E944C
+(`_pctype[c]`). Bytes 0x80..0xFF become negative and read the 256 bytes in front of the static "C" ctype table (0x797CE2..0x797DE0:
+the CRT message table and float constants), so 75 of the 128 high bytes pass and 53 fail, with no pattern: e.g. 'Б' C1, 'В' C2,
+'е' E5, 'в' E2, 'у' F3 pass; 'А' C0, 'а' E0, 'и' E8, 'о' EE, 'р' F0, 'с' F1, 'т' F2, 'я' FF fail. A failed check drops the identity
+message, so a Cyrillic name or password is silently refused depending on its letters. Not in SpellAddonInfo.
+Fix: `movzx` instead of `movsx` at 0x47ADB4 (all high bytes then fail cleanly in the "C" locale), or accept 0xC0..0xFF on purpose.
+
+## 27. Change-hero / explosion smoke: the last fade step wraps the alpha back to opaque (T7 g04, 2026-11-06)
+
+CONFIRMED in the machine code, not tested live. `ParticleStep_200EChangeHero` 0x488DB0 fades in by +0x40 per step clamped to 0xFF,
+then fades out by -0x40 for the last four steps (life 4..1, 0x488DFF): 0xFF -> 0xBF -> 0x7F -> 0x3F -> 0xFF (0x3F - 0x40 wraps in the
+alpha byte). The smoke puffs of particle types 0x200E (change hero) and 0x2052 (explosion) flash fully opaque on their final frame
+instead of vanishing. Minor visual. Fix: clamp the fade-in to 0x100, or stop subtracting once alpha < 0x40.
+

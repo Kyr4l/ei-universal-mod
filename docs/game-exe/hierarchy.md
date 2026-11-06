@@ -97,6 +97,9 @@ Slots: 13 GetWorld(self), 14 GetEffectManager, 15 GetFigureManager, 16 GetItemCo
 ## CFigure (vtable 0x73C1C4, 24 slots; typeId 0x44; three vtables share the stub: 0x73C1C4 full, 0x73C224 (20), 0x73FBF0 (22)); CI3DFigure (0x73FC48, 24, typeId 0x46) shares 15..23
 +0x120 name, +0x158/+0x15c header counts, +0x1c0[]/+0x1d0[] rotation tables (0x40-byte entries). Slots: 7 GetName, 15 UpdateWorldTransform,
 16 collect parts, 17 read parts, 18 CopyFrom, 19 Load(data) ("FIG" magic), 20 ParseFIG, 21 BuildMorphed(data, s, d, h), 22/23 negate rotations.
+Sizes [V, t7 g04]: objects of vt 0x73C224 are 0x1C0 bytes (`CFigure_ConstructN` 0x476FB0); vt 0x73C1C4 objects are 0x220 = the same plus six owned
+32-byte-aligned mesh vectors {data, count, cap, grow} at +0x1C0 (vertices), +0x1D0 (normals), +0x1E0, +0x1F0, +0x200, +0x210, built by `CFigures_ConstructN`
+0x453240 (base vt 0x73C224, then 0x73C1C4) and freed by `CI3DFigure::dtor2` 0x454510 (deleting dtor 0x4543A0).
 
 ## Items — "CItem" base (vtable 0x743DA4, 22 slots; CItemWeapon 0x5c bytes, CItemArmor 0x8c, CItemQuick, CItemQuest, CItemLoot, CItemSpell; CInventory shares the base)
 +0x18 proto ids (lo = material index into g_0x7C86D8 (0x50-byte entries), hi = weapon index into g_0x7C86F8 (0xb4-byte entries)),
@@ -125,7 +128,7 @@ its own copy: slots 1..6 / 9..12 empty defaults, 7 / 8 forward to its slots 2 / 
 ## Other hierarchies (not CObject-derived; phase 3 per module)
 - Net: NetConnection (0x73BF5C, 15 slots; seed names from net/README.md), NetServer 0x73BB70/0x73BBB4 (17), NetClient 0x73BDEC/0x73BE30 (17).
 - Renderer: I3DFigure? (0x73D8A0, 25 slots, abstract) / C3DFigureImpl? (0x73D93C, 26: Load 2566 lines, Render 3211/2524; CI3DFigure::SetTexture at 11).
-- Resource readers: IResReader? (0x73C8A4, 13, abstract) and the 13/14-slot classes at 0x73C8F8..0x73CA10 (ctors 0x4782E0..0x47CD40).
+- Message streams [V, t7 g04]: IMsgStream (0x73C8A4, abstract; slot 0 deleting dtor, 2 Reset, 3 Clone) and FileMsgStream 0x73C8F8, DualFileMsgStream 0x73C92C, MsgStreamBase 0x73C9C8, PeerMsgStream 0x73C990, TcpMsgStream 0x73CA10 (net-transport.md 5; 0x47CD40 is TcpMsgStream slot 2 Reset, not a ctor). Was "Resource readers: IResReader?".
 - Small 13-slot helper classes 0x73D128..0x73D294 (ctors 0x4BA1C0..0x4BA950), 0x73F0C4/0x73F0F8 (0x551AE0), 0x73FF40/0x73FF8C (AI/orders 0x5D0F60..).
 
 ## UnitStats block (CUnitServer +0x1e0, 0x704 bytes; UnitStats_* in functions.tsv; module 0x520000-0x529000)

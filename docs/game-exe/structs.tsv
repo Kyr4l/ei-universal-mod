@@ -1038,6 +1038,9 @@ CItemLoot			0x50	int	refTable	loot proto +0x70: 0 weapons 1 armors 2 quick 3 spe
 CItemLoot			0x54	int	refIndex	loot proto +0x74; category 1: the material ID; category 2: the referenced proto row (shifts when the database rows move)
 CInventory	CItem	0x64	0x4c	byte[3]	flags	unused CItem subclass (typeId 0x17); hosts the base Read/Write 0x6A0270/0x6A0360
 CInventory			0x50	pointer	hashBuckets	hash set of objects (100 buckets, 0xc nodes) released in Done
+CInventory			0x54	pointer	hashBucketsEnd	STLport hashtable bucket vector end (the table object starts at +0x4c; CInventory::dtorBody 0x462420)
+CInventory			0x58	pointer	hashBucketsEos	bucket vector end of storage
+CInventory			0x5c	int	hashCount	element count, zeroed by the dtor
 ItemMaterial		0x50	0x0	CString	name	Materials Name (tag 0)
 ItemMaterial			0x4	CString	type	Type (tag 1): must equal the proto's M.Type to be usable (shop, camp constructor)
 ItemMaterial			0x8	CString	code	Code (tag 2)
@@ -2204,7 +2207,7 @@ CLightning			0x20	pointer	glowTexture	"SmtgLight" / "DemonLight"
 CLightning			0x24	float[4]	bounds	CViewFrustum record (+0x24 = 3, centre +0x28, radius +0x34)
 CLightning			0x38	float[3]	boundsMin	
 CLightning			0x44	float[3]	boundsMax	
-CLightning			0x5c	LightningSegment	mainSegment	ends +0x104
+CLightning			0x5c	LightningSegment	mainSegment	its point array is CLightning +0xf0 (= +0x5c + 0x94), freed by CLightning::dtor 0x468810; the six branches +0x104 go through the eh vector destructor 0x6E859F with Array_FreeAt94
 CLightning			0x104	byte[1008]	branches	LightningSegment[6]
 CLightning			0x4f4	float[6]	branchFractions	0.2 0.3 0.5 0.8 0.9 0.9 along the main bolt (type != 0)
 CLightning			0x50c	float	type	> 0 thin spell bolt (amplitude 0.05), 0 random-branch bolt (width 4), < 0 static (no Update in Render)
@@ -2729,7 +2732,7 @@ KeyAction		0x10	0x0	int	code	action code stored in g_0x79BF70[scancode] (1..0x3B
 KeyAction		0x10	0x4	pointer	name	keyboard.ini action name
 KeyAction		0x10	0x8	int	group	options list group: 3 game (pause, decel, accel, obj, quicksave, quickload), 4 selection, 5 movement, 6 camera, 7 weapons / items, 8 spells, 9 called shots, 0xA windows
 KeyAction		0x10	0xc	int	groupIndex	order inside the group
-DInputMouse		0x20	0x0	pointer	vtable	0x73C350 (refcounted object created in main)
+DInputMouse		0x20	0x0	pointer	vtable	0x73C350 {DeletingDtor 0x4578B0 (was PartyPair::DeletingDtor), ...}; dtor 0x4578D0 = DInputMouse::Release then base vt 0x73C368 (RcObjectBase); CORRECTION: was 'PartyPair' for those two functions
 DInputMouse		0x20	0x4	int	refCount	
 DInputMouse		0x20	0x8	pointer	dinput	IDirectInput7 (DirectInputCreateEx 0x700)
 DInputMouse		0x20	0xC	pointer	device	IDirectInputDevice7 of GUID_SysMouse, c_dfDIMouse, NONEXCLUSIVE | FOREGROUND
@@ -3923,6 +3926,9 @@ CFileStream			0x8	int	limit	2000000000
 CFileStream			0xc	pointer	fileVtable	the embedded MFC CFile {vt, hFile +0x10, closeOnDelete +0x14, CString name +0x18}
 FileMsgStream	IMsgStream	0x30	0x28	pointer	recordedChunks	STLport list (0x30 nodes holding a CMemStream) of recorded frames: the replay queue (PlayRecordedStream)
 FileMsgStream			0x2c	pointer	chainedStream	ref to the second stream of the chain (CreateChain makes two linked objects)
+FileMsgStream	IMsgStream	0x30	0x8	byte	open	copied by Clone 0x4784D0, 0 after Reset 0x478610
+FileMsgStream			0x9	byte	fresh	copied by Clone
+FileMsgStream			0xc	CFileStream	file	Clone and Reset build a FRESH (unopened) CFileStream here; the file is not shared
 DualFileMsgStream	IMsgStream	0x44	0x28	CFileStream	secondFile	the recorded frames file read back by v9_PopPacket (Stream_ReadEmbeddedStream)
 MsgStreamBase	IMsgStream	0x54	0x28	CMemStream	frames	received frames not yet popped (PopPacket) / the send scratch; bytes pulled from the peer by vt[10]
 MsgStreamBase			0x50	pointer	link	PeerMsgStream: NetPeer ref; TcpMsgStream: TcpSocketRef (never created); PeerMsgStream: the NetPeer; TcpMsgStream: the TcpSocketRef
@@ -3938,6 +3944,8 @@ HuffmanNode		0x18	0x0	pointer	left
 HuffmanNode			0x4	pointer	right	
 HuffmanNode			0x10	byte	symbol	
 HuffmanNode			0x14	int	weight	
+HuffmanNode			0x8	int	leftWeight	total weight of the left subtree (HuffmanTree_Insert 0x47A980 recurses into the lighter side)
+HuffmanNode			0xc	int	rightWeight	total weight of the right subtree
 NetServerRecord		0x2c	0x0	NetAddress	addr	address-book entry (NetClient +0x25ac vector)
 NetServerRecord			0x10	GameBuffer	infoBytes	the ServerInfo record as last received (decoded by SetServerList)
 NetPeerInfo		0x28	0x0	pointer	vtable	0x73BB40 abstract (slots 2..5 pure: Reset, Clone, Write, Read); ServerInfo 0x73BB28 derives (its +0x28.. fields in the ServerInfo rows)
@@ -4097,3 +4105,9 @@ PartyListEntry			0x8	CParty	partyA	0x70 bytes (CParty::CopyCtor / dtor)
 PartyListEntry			0x78	CParty	partyB	0x70 bytes
 PartyListEntry			0xe8	CParty	partyC	0x70 bytes; PartyListEntry_Dtor 0x424DB0 destroys +0xE8, +0x78, +8
 StlNamedException	exception	0x10c	0xc	char[256]	name	STLport __Named_exception message (strncpy 0x100, +0x10B = 0); vt 0x73B994; logic_error 0x73B98C, length_error 0x73B984 (ThrowInfo 0x749CE8), out_of_range 0x73BE8C (ThrowInfo 0x74C640)
+CFakeFigure	CObject3D	0x18c	0x0	pointer	vtable	vt_CFakeFigure 0x73C274 (slots 0 ~ 0x454810, 2 Init = 1, 3 Done, 7 GetName, 16 / 17 empty); built in place by CFakeFigures_ConstructN 0x4545C0
+CFakeFigure			0x94	CString	name	returned by slot 7 GetName 0x4547C0
+CFakeFigure			0x98	byte[176]	meshVectors	eleven 32-byte-aligned vectors {data, count, cap, grow} at +0x98, +0xa8 .. +0x138 (raw block at data[-4]); freed by CFakeFigure::dtor 0x454830
+CFakeFigure			0x148	CArray	strRecs	MFC CArray vt 0x73C2BC of 0x18-byte StrRec18 {CString, CDWordArray} (data +0x14c, count +0x150)
+StrRec18		0x18	0x0	CString	name	StrRecs18_ConstructN 0x454DB0 / StrRec18_Destroy 0x454C50 / StringPair_Assign 0x474C50
+StrRec18			0x4	CArray	values	MFC dword array (vt 0x7464B8, data +8, count +0xc, cap +0x10, grow +0x14)

@@ -479,7 +479,7 @@ A **frame** on the byte stream is `u32 n` + `n` bytes = `MsgStream_Compress` 0x4
 0x47B9F0 / `v7_CountPackets` 0x47BA40. The empty keep-alive is `04 00 00 00 00 00 00 00`. `MsgStream_Decompress` 0x47D970 inflates a popped
 frame with the receive `LzCompressor` into the player's receive `CMemStream`.
 
-`IMsgStream` 0x73C8A4 (14 slots: 2 dtor, 3 Clone, 4 IsAlive, 5 IsOpen, 6 HasPacketHeader, 7 CountPackets, 8 SendBuffered, 9 PopPacket,
+`IMsgStream` 0x73C8A4 (14 slots: 0 deleting dtor, 2 Reset = in-place destroy + re-construct empty [V], 3 Clone, 4 IsAlive, 5 IsOpen, 6 HasPacketHeader, 7 CountPackets, 8 SendBuffered, 9 PopPacket,
 10 Pull, 11 Flush / Close, 13 Write): `+8` open, `+9` fresh, `+0xc` a `CFileStream` 0x73C8D8 (`IStream` 0x73BDB0 slots 1 Read, 2 Write,
 3 Seek, 4 GetSize, 5 GetPos, 6 Clear, 7 CopyFrom over an MFC `CFile`). Subclasses:
 
@@ -603,6 +603,8 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | `functions.tsv` (merged by the caller) | `LzCompress` "rewrites the buffer in place"; `Scene3ds_ConvertToModel` | `(compressor, input view, output buffer)`; `Scene3ds_ReadBinaryScene` (a binary scene reader, dead in practice) (batch-t5-wcp-net rows) |
 | `structs.tsv` | `LzCompressor +0 byte[10256] "1 KB ring window and the Huffman / bit writer"`; `DeltaCodec +0 byte[160] streams`; `DeltaCodecSet +0x22 inStream` | the LZ coder has no Huffman part (window, window copy, chain, hash heads, bit writer, pos, match); four named CMemStreams; `+0x1c` (batch CORRECTION rows) |
 | `functions.tsv` (merged by the caller, t7 2026-11-06) | `BitWriter_PutByte` 0x4357C0; `BitReader::GetRemaining` 0x441640; `RbTree_RotateRight` 0x43E300 / `RotateLeft` 0x43E350; `HashTable_ClearNodes` 0x439BB0; `NetItem_Ctor / Dtor` | `BitWriter_PutBit` (one bit per call, LSB first, used by `NetWriter::WriteRef`); `GameBuffer::Length` (validEnd - data + bias); the two rotations are swapped (0x43E300 rotates LEFT: left +8, right +0xc); `RbTree18_Clear` (an rb-tree); the 0x2c-byte record is `NetServerRecord` [V] |
+| this page 5 / `functions.tsv` (t7 g04) | `IMsgStream` slot 2 "dtor" (`FileMsgStream::dtor` 0x478610, `DualFileMsgStream::dtor` 0x478B10, `PeerMsgStream::dtor` 0x479C10, `TcpMsgStream::dtor` 0x47CD40) | slot 2 is a Reset: each destroys its members, then re-runs the constructor body in place (`this != 0` guard, empty `CFileStream`, open = 0); the real destructors are the slot-0 deleting dtors (`*::dtor_base`) [V] |
+| `functions.tsv` (t7 g04) | `PartyPair::dtor` 0x4578D0 | `DInputMouse::dtor` (vt 0x73C350, the mouse object made in `main`) [V] |
 | this page 4.2 / `structs.tsv` (t7 g02) | kind 6 / 7 / 8 / 9 strings "no NUL on the wire"; kind 14 payload starts with `ref player` | every string is written with its NUL (`ChatMessage::Write` 0x413B10 etc.: `strlen + 1`); `RefDwordsStringMessage::Write` 0x416C00 writes only `u32 kind, u32 value, text\0`, the player ref is server-side routing [V] |
 
 ## 8. Function index
