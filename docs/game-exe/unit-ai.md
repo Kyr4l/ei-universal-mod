@@ -188,7 +188,7 @@ as + values; visibility, noise, life signature as - values; scent +).
 | +0x36 / +0x37 | currentSlot / alwaysActive | .mob logic slot in use; AlwaysActive bit |
 | +0x38 | callForHelpRadius | .mob Help (7 default); also `PropagateAlarm`'s radius (+0x9b8) |
 | +0x3c | alarmCondition | .mob AlarmCondition 0 / 1 / 2 |
-| +0x40 | alarmWait | `max(1, slot +0x44)` = 75 ticks for every .mob unit: the slot ctor's default, no chunk fills it (the .mob Wait float lands in slot +0x30, unused) [V] |
+| +0x40 | alarmWait | `max(1, slot +0x44)` = 75 ticks for every .mob unit: the slot ctor's default, no chunk fills it (the .mob Wait float lands in slot +0x30, unused) [V; live 2026-11-07 in a new game's zone1: six units, alarmWait 75, all five slots +0x44 = 75 (their Wait was -1)] |
 | +0x44 / +0x48 | nearRange / farRange | radius + 35 / + 80 (guard) or 35 / 80; 100000 after a reset; only written, saved and loaded (typed-field and raw-offset search) [I] |
 | +0x4c | idleSpeedFactor | random 0.8..1.0 on a stationary `Begin`, decays to 1 in `Brain::Tick`; no other reader (only the decay, Write / Read) [I] |
 | +0x50 / +0x5c | prevWaypoint / curWaypoint | post / patrol points (-1313 none); `IsNearPath` |

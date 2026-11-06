@@ -834,7 +834,8 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 - The decompiles of `CBattleHud::IssueCommandAt` 0x638EF0, `SetCursorTarget` 0x639EF0 and `CHudMinimap::DrawMinimapUnits` 0x643DC0
   lost most branch targets (empty `if` bodies): the order / cursor / marker conditions in section 12 are [I] where marked; a
   machine-code read would settle them.
-- Portrait face variant 3 tests `CUnit +0x182 / +0x184` < 0.25 (the second bar's pair, mana if `+0x17E / +0x180` is HP): live row.
+- ~~Portrait face variant 3 tests `CUnit +0x182 / +0x184`~~ settled live 2026-11-07: the hero's shorts `+0x17E..+0x184` read 30 / 39 / 50 / 50
+  = HP, max HP, **mana, max mana**: the tired face follows mana. The red flash and hurt face on an HP drop seen on the portrait at the same time.
 - The minimap colour-3 squares come from the light manager g_0x7AF748 as read; what they show in a zone is a live check.
 - The labels of the HUD spell tooltip ("infoitem_7 / 18 / 8..13 / 21 / 22 / 26..28") are paired with their values by x87 code the
   decompile hides; the text resources defining them were not found in the repository.
