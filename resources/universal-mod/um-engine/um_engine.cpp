@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.14.3";
+static const char* const kEngineVersion = "0.15.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -195,6 +195,27 @@ static void InstallBytePatches(const std::map<std::string, bool>& config) {
     }
 }
 
+// Patches with their own installer (code computed at run time, e.g. a jump into this DLL): on / off by name like the others.
+extern "C" bool UmTrilinearInstall(); // texture_filter.cpp
+struct UmInstaller {
+    const char* name;        // the key in um-engine.cfg
+    bool (*install)();
+    int required;            // as in UmEngineFunction
+};
+static const UmInstaller kInstallers[] = {
+    // texture_filter.cpp: the options' "Trilinear" filtering really blends the mip levels (the game set the nearest-level filter for it, like "Bilinear")
+    { "Renderer::Trilinear", &UmTrilinearInstall, 0 },
+    { nullptr, nullptr, 0 }
+};
+
+static void InstallInstallers(const std::map<std::string, bool>& config) {
+    for (const UmInstaller& in : kInstallers) {
+        if (!in.name) continue;
+        const auto it = config.find(in.name);
+        if (in.required > 0 || (it != config.end() ? it->second : in.required >= 0)) in.install();
+    }
+}
+
 static HMODULE g_module = NULL;
 static std::vector<UmModuleFunction> g_enabledModule;
 static HANDLE g_moduleThread = NULL;
@@ -338,6 +359,12 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    for (const UmInstaller& fn : kInstallers)
+        if (fn.name && !values.count(fn.name)) {
+            const bool on = fn.required >= 0;
+            missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
+            values[fn.name] = on;
+        }
     for (const UmModuleFunction& fn : kModuleFunctions)
         if (fn.name && !values.count(fn.name)) {
             const bool on = fn.required >= 0;
@@ -414,6 +441,7 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
     InstallCallSites(config);
     UmWorldEarlyInit(g_sunShadowsInstalled ? 1 : 0);
     InstallBytePatches(config);
+    InstallInstallers(config);
     { // the unit shadow size: a number
         double resolution = 64;
         if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
