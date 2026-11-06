@@ -307,6 +307,9 @@ spell trade: every sold item is restored to full durability and its prototype is
 the item `ShopStock` `+0x11C` (usable weapon / armor / quick item -> `AddWeapon / AddArmor / AddQuickProto` by proto row `+0x18 >> 16`;
 an instruction by its `+0x50` table and `+0x54` row), plain loot (kind 0x3007 category 0, e.g. trophies) is **deleted** instead of
 going into the stock; so a sold prototype can appear in that merchant's next generated stock (`ShopStock::Generate*`, items.md; regeneration: see Build above).
+[V live 2026-11-06, new single-player game: an iron dagger (the "dagger" proto, listed only by merchant 3) sold to merchant 1 in tab
+4: that merchant's weapon vector `+0x11C +0x14` went from 8 protos (stone / bone weapons only) to 9, with "dagger" appended last;
+the dagger went into the stock (shown at its buy price 2600, deal value +1300 = sell factor 0.5).]
 3 = `DeconstructSpell` 0x612500 when `+0x212` (container -> a "Prototype" + one "Rune" per perk) else the preview `+0x218` replaces
 the components; 5 = `DeconstructItem` 0x6129C0 when `+0x212` (item -> "Instruction Weapon/Armor/Quick Item" with `+0x54` = proto row,
 one "material.<name>" per proto Components, a "spell container" with its spell) else the preview `+0x214` replaces the components;
