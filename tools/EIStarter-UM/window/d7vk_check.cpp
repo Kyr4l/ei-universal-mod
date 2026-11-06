@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int) {
         if (FAILED(hr = dd->CreateSurface(&sd, &surface, NULL))) code = Result(7, "no 3D surface", hr);
         else if (FAILED(hr = d3d->CreateDevice(IID_IDirect3DTnLHalDevice, surface, &device)) && FAILED(hr = d3d->CreateDevice(IID_IDirect3DHALDevice, surface, &device)))
             code = Result(8, "no hardware 3D device", hr);
-        else code = Result(0, "D7VK works");
+        else code = Result(0, "OK");
     }
     Release(device); Release(surface); Release(d3d); Release(dd);
     if (window) DestroyWindow(window);

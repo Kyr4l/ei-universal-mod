@@ -335,17 +335,55 @@ static bool MenuButton(App& app, const char* mask, const char* fallback, ImVec2 
     return ImGui::IsItemDeactivated() && hovered && enabled;
 }
 
-// Bottom right corner: whether the selected mod uses um.dll, and the state of its update.
+// The selected mod's components: um.dll, um-engine (loaded by um.dll) and D7VK (Options > Renderer, renderer.hpp), one line each.
+struct StatusLine { std::string text; ImU32 color; std::string tip; };
+static const ImU32 kGreen = IM_COL32(110, 210, 120, 255), kAmber = IM_COL32(235, 180, 70, 255), kGrey = IM_COL32(195, 195, 195, 255);
+
+static std::vector<StatusLine> ModStatus(App& app, const ModInfo& m) {
+    std::vector<StatusLine> lines;
+    const bool um = m.umListed && m.umFile;
+    lines.push_back({um ? "um.dll detected" : m.umFile ? "um.dll not enabled" : m.umListed ? "um.dll missing" : "no um.dll",
+                     um ? kGreen : (m.umFile || m.umListed) ? kAmber : kGrey,
+                     um ? "config.reg loads um.dll." : m.umFile ? "um.dll is there, but config.reg [DEV] Plugin does not name it." : m.umListed ? "config.reg names um.dll, but the file is missing." : "This mod does not use um.dll."});
+    if (um) {
+        if (m.umEngineFile && m.umEngineEnabled) lines.push_back({"um-engine detected", kGreen, "um.dll loads um-engine.dll (um.cfg UM_ENGINE)."});
+        else if (m.umEngineFile) lines.push_back({"um-engine not enabled", kAmber, "um-engine.dll is there, but um.cfg has UM_ENGINE=false."});
+        else if (m.umEngineEnabled) lines.push_back({"um-engine missing", kAmber, "um.cfg enables um-engine, but um-engine.dll is missing."});
+        else lines.push_back({"no um-engine", kGrey, "This mod does not use um-engine."});
+    } else if (m.umEngineFile) lines.push_back({"um-engine not enabled", kAmber, "um-engine.dll needs um.dll, which this mod does not load."});
+    // D7VK: the files in Engine are looked at every 2 s, not every frame.
+    static std::string cachedMod; static double cachedAt = -10; static bool engineD7vk = false, windowAsi = false; static std::string checkKey;
+    if (cachedMod != m.folder || glfwGetTime() - cachedAt > 2) {
+        std::error_code ec;
+        engineD7vk = fs::is_regular_file(app.dir / "Engine" / "d7vk.dll", ec);
+        windowAsi = fs::is_regular_file(app.dir / "Engine" / "um-window.asi", ec);
+        checkKey = D7vkCheckKey(app.dir, FindD7vk(app.dir, &m));
+        cachedMod = m.folder; cachedAt = glfwGetTime();
+    }
+    const RendererOptions& r = app.cfg.renderer;
+    const fs::path file = m.d7vkFile ? fs::path(m.path) / "d7vk.dll" : app.dir / "Engine" / "d7vk.dll";
+    const std::string source = m.d7vkFile ? "(mod)" : "(launcher)";
+    if (r.mode == 2) lines.push_back({"D7VK disabled", kGrey, "Options > Renderer: Native. The game uses its own DirectDraw."});
+    else if (!m.d7vkFile && !engineD7vk)
+        lines.push_back({r.mode == 1 ? "D7VK missing" : "no D7VK", r.mode == 1 ? kAmber : kGrey, "No d7vk.dll in the mod folder or in Engine. The game uses its own DirectDraw."});
+    else if (!um && !windowAsi) lines.push_back({"D7VK not enabled", kAmber, "Engine\\um-window.asi is missing. The game uses its own DirectDraw."});
+    else if (r.mode == 0 && r.checkCode > 0 && r.checkKey == checkKey)
+        lines.push_back({"D7VK not compatible " + source, kAmber, "Test result: " + r.checkText + "\nAuto: the game uses its own DirectDraw."});
+    else {
+        std::string tip = "Loads " + file.string() + (um ? " (through um.dll)." : " (through um-window.asi).");
+        if (r.mode == 0 && (r.checkCode < 0 || r.checkKey != checkKey)) tip += "\nAuto: tested at the next Play.";
+        lines.push_back({"D7VK detected " + source, kGreen, tip});
+    }
+    return lines;
+}
+
+// Bottom right corner: the selected mod's components, and the state of its update.
 static void DrawCorner(App& app, ImDrawList* bg) {
     const ModInfo* m = app.CurrentMod();
     if (!m) return;
-    struct Line { std::string text; ImU32 color; std::string tip; };
-    std::vector<Line> lines;
-    const bool ok = m->umListed && m->umFile;
-    const ImU32 green = IM_COL32(110, 210, 120, 255), amber = IM_COL32(235, 180, 70, 255), grey = IM_COL32(195, 195, 195, 255);
-    lines.push_back({ok ? "um.dll detected" : m->umFile ? "um.dll not enabled" : m->umListed ? "um.dll missing" : "no um.dll",
-                     ok ? green : (m->umFile || m->umListed) ? amber : grey,
-                     ok ? "config.reg loads um.dll." : m->umFile ? "um.dll is there, but config.reg [DEV] Plugin does not name it." : m->umListed ? "config.reg names um.dll, but the file is missing." : "This mod does not use um.dll."});
+    using Line = StatusLine;
+    std::vector<Line> lines = ModStatus(app, *m);
+    const ImU32 green = kGreen, amber = kAmber;
     {
         using S = update::Updater::State;
         char buf[96];
@@ -363,6 +401,7 @@ static void DrawCorner(App& app, ImDrawList* bg) {
         }
     }
     const ImVec2 o = ImGui::GetWindowPos();
+    const bool uncovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows); // the main window itself: no Info / Options / other window over the corner
     float y = static_cast<float>(kH) - 8;
     for (size_t i = lines.size(); i-- > 0;) {
         const Line& l = lines[i];
@@ -373,7 +412,7 @@ static void DrawCorner(App& app, ImDrawList* bg) {
         bg->AddText(p, l.color, l.text.c_str());
         bg->AddCircleFilled(ImVec2(p.x - 8, top + sz.y * 0.5f + 1), 4.5f, IM_COL32(0, 0, 0, 255));
         bg->AddCircleFilled(ImVec2(p.x - 8, top + sz.y * 0.5f), 4.0f, l.color);
-        if (ImGui::IsMouseHoveringRect(ImVec2(p.x - 16, top), ImVec2(right, top + sz.y))) ImGui::SetTooltip("%s", l.tip.c_str());
+        if (uncovered && ImGui::IsMouseHoveringRect(ImVec2(p.x - 16, top), ImVec2(right, top + sz.y))) ImGui::SetTooltip("%s", l.tip.c_str());
         y -= sz.y + 5;
     }
 }
@@ -484,7 +523,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     if (!modal) {
         if (play && idle && !app.UpdateInstalling()) { app.Click(); app.Play(); }
-        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the Evil Islands folder.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
+        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the Evil Islands folder.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); app.options.SetD7vkKey(D7vkCheckKey(app.dir, FindD7vk(app.dir, app.CurrentMod()))); }
         if (readme) {
             app.Click();
             fs::path p = app.dir / "lang" / app.cfg.language / "readme.txt", en = app.dir / "lang" / "en" / "readme.txt";
@@ -529,11 +568,11 @@ static void DrawMain(App& app, GLFWwindow* window) {
         }
         // Utils > Pull / Push: the registry's game settings to / from EIStarter-UM-reg.cfg.
         const OptionsWindow::Request req = app.options.TakeRequest();
-        if (req == OptionsWindow::Request::CheckD7vk) { // Renderer > Check: run now, keep the result (the edited copy gets it too)
+        if (req == OptionsWindow::Request::CheckD7vk) { // Renderer > Test: run now, keep the result (the edited copy gets it too)
             const fs::path d7vk = FindD7vk(app.dir, app.CurrentMod());
-            app.Log("renderer: check of " + (d7vk.empty() ? std::string("(no d7vk.dll)") : d7vk.string()));
+            app.Log("renderer: D7VK test of " + (d7vk.empty() ? std::string("(no d7vk.dll)") : d7vk.string()));
             RunD7vkCheck(app.dir, d7vk, app.cfg.renderer);
-            app.Log("renderer: check result " + std::to_string(app.cfg.renderer.checkCode) + ": " + app.cfg.renderer.checkText);
+            app.Log("renderer: D7VK test result " + std::to_string(app.cfg.renderer.checkCode) + ": " + app.cfg.renderer.checkText);
             app.options.D7vkChecked(app.cfg.renderer);
             app.Save();
         } else if (req != OptionsWindow::Request::None) {
@@ -558,8 +597,10 @@ static void DrawMain(App& app, GLFWwindow* window) {
                 const std::string info = FormatInfo(app.texts, *m);
                 std::vector<char> buf(info.begin(), info.end());
                 buf.push_back('\0');
-                const bool ok = m->umListed && m->umFile;
-                ImGui::TextColored(ok ? ImVec4(0.43f, 0.82f, 0.47f, 1) : (m->umFile || m->umListed) ? ImVec4(0.92f, 0.7f, 0.27f, 1) : ImVec4(0.6f, 0.6f, 0.6f, 1), "%s", ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled (config.reg)" : m->umListed ? "um.dll listed, but the file is missing" : "no um.dll");
+                for (const StatusLine& l : ModStatus(app, *m)) { // as in the corner
+                    ImGui::TextColored(ImGui::ColorConvertU32ToFloat4(l.color), "%s", l.text.c_str());
+                    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", l.tip.c_str());
+                }
                 // Updates: the release and the beta live in their own folders (their saves never mix); each has its own button.
                 const bool umFamily = LowerAscii(m->folder).compare(0, 13, "universal-mod") == 0 || m->title == "Universal Mod";
                 const float below = ImGui::GetFrameHeightWithSpacing() * (umFamily ? 6 : 2) + 12;

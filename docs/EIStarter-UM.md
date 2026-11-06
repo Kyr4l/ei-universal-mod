@@ -187,7 +187,8 @@ no Wine DLL override and no `ddraw.dll` in `Engine` are needed.
 
 * **Renderer**: Auto (default) / D7VK / Native. Auto runs `Engine\d7vk-check.exe` first (a 32-bit program, like the game: it loads D7VK, creates
   DirectDraw 7, Direct3D 7, a small 3D surface and a hardware device) and uses D7VK only when that works, else the game's own DirectDraw. The result
-  is kept in `EIStarter-UM.cfg` `[Renderer]` until `d7vk.dll` or the check program changes (or the last check failed); **Check** runs it now.
+  is kept in `EIStarter-UM.cfg` `[Renderer]` until `d7vk.dll` or the test program changes (or the last test failed). The tab shows
+  **D7VK status:** Compatible / Not compatible (the reason in its tooltip) / Not tested; **Test** runs it now.
   Native = the `ddraw.dll` the game folder gives (Wine's own, or a wrapper with a `ddraw=native` override).
 * The file: the mod's own `d7vk.dll` (Universal Mod ships the build its sun shadows need), else `Engine\d7vk.dll` (shipped with the launcher).
 * A mod with um.dll gets the choice through the environment (`UM_RENDERER`, `UM_D7VK`; um.dll 1.8.2 obeys it instead of um.cfg `DDRAW_DLL` /
@@ -196,6 +197,10 @@ no Wine DLL override and no `ddraw.dll` in `Engine` are needed.
 * D7VK options (`DXVK_CONFIG`, added to the user's own): MSAA (`ddraw.emulateFSAA`, up to 4x), Anisotropy (`d3d9.samplerAnisotropy`, default
   16x), V-sync (`d3d9.presentInterval`; Default = `Engine\dxvk.conf`), FPS limit (`dxvk.maxFrameRate`), Latency (`d3d9.maxFrameLatency`),
   FPS overlay (`DXVK_HUD=fps`).
+
+* The bottom-right corner and the (i) window list the mod's parts: `um.dll detected`, `um-engine detected` (or not enabled / missing:
+  um.cfg `UM_ENGINE`), `D7VK detected (mod)` / `(launcher)` (which `d7vk.dll` Play loads; the tooltip names the file), or `D7VK disabled`
+  (Native), `D7VK not compatible`, `D7VK missing`. The corner's tooltips no longer show through a window above them (the (i) window's OK).
 
 Tested in the launcher rig (2026-11-06): Universal Mod with Auto (check 1 s, D7VK, world hosted), Native, Auto without Vulkan
 (`VK_ICD_FILENAMES` pointing nowhere: check step 4 fails, the game starts on Wine's ddraw); the "New Features" mod (no um.dll) with D7VK and

@@ -25,6 +25,8 @@ struct ModInfo {
     std::string pluginPath = "none", pluginText = "Plugin"; // [starter] pluginpath / plugintext: a script the Info window offers to run
     // um.dll: UmListed = the mod's config.reg [DEV] Plugin names it (addon.dll loads it), UmFile = um.dll is in the mod's folder.
     bool umListed = false, umFile = false;
+    // um-engine.dll (loaded by um.dll when um.cfg UM_ENGINE is not false) and the mod's own d7vk.dll (renderer.hpp prefers it to Engine's).
+    bool umEngineFile = false, umEngineEnabled = true, d7vkFile = false;
     std::string commit; // build.info (written by makemod): the commit the build was made at ("" for older builds)
 };
 
@@ -34,7 +36,13 @@ inline bool ReadMod(const fs::path& folder, bool iniConfigs, ModInfo& m) {
     m.folder = folder.filename().string();
     m.path = folder.string();
     std::error_code ec;
-    for (const fs::directory_entry& f : fs::directory_iterator(folder, ec)) if (LowerAscii(f.path().filename().string()) == "um.dll") m.umFile = true;
+    for (const fs::directory_entry& f : fs::directory_iterator(folder, ec)) {
+        const std::string name = LowerAscii(f.path().filename().string());
+        if (name == "um.dll") m.umFile = true;
+        else if (name == "um-engine.dll") m.umEngineFile = true;
+        else if (name == "d7vk.dll") m.d7vkFile = true;
+    }
+    m.umEngineEnabled = LowerAscii(GetCfgLine((folder / "um.cfg").string(), "UM_ENGINE")) != "false";
     { IniFile info; if (info.Load((folder / "build.info").string())) m.commit = LowerAscii(info.Get("", "commit")); }
     if (iniConfigs && fs::exists(folder / "mod.config", ec)) {
         IniFile ini;

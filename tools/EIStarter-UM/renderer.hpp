@@ -65,7 +65,7 @@ inline bool RunD7vkCheck(const fs::path& dir, const fs::path& d7vk, RendererOpti
     std::ifstream f(result.string());
     r.checkText.clear();
     std::getline(f, r.checkText);
-    if (r.checkText.empty()) r.checkText = r.checkCode == 0 ? "D7VK works" : (error.empty() ? "the check failed" : "the check failed: " + error);
+    if (r.checkText.empty()) r.checkText = r.checkCode == 0 ? "OK" : (error.empty() ? "the check failed" : "the check failed: " + error);
     fs::remove(result, ec);
     return r.checkCode == 0;
 }
@@ -91,9 +91,9 @@ template <class Log> fs::path ApplyRenderer(const fs::path& dir, const ModInfo* 
     if (r.mode != 2 && d7vk.empty()) log("renderer: no d7vk.dll (mod folder or Engine): the game's own DirectDraw");
     if (r.mode == 0 && !d7vk.empty()) {
         if (r.checkKey != D7vkCheckKey(dir, d7vk) || r.checkCode != 0) { // never checked, files changed, or it failed last time (a new driver may have fixed it)
-            log("renderer: checking D7VK (" + d7vk.string() + ")");
+            log("renderer: testing D7VK (" + d7vk.string() + ")");
             RunD7vkCheck(dir, d7vk, r);
-            log("renderer: check result " + std::to_string(r.checkCode) + ": " + r.checkText);
+            log("renderer: D7VK test result " + std::to_string(r.checkCode) + ": " + r.checkText);
         }
         if (r.checkCode != 0) { log("renderer: Auto -> the game's own DirectDraw (" + r.checkText + ")"); d7vk.clear(); }
     }

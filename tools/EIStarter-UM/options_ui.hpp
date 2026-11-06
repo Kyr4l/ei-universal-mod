@@ -23,7 +23,7 @@ public:
         edit_ = cfg;
         modBorderless_ = !modCfg.empty() && !GetCfgLine(modCfg, "BORDERLESS").empty();
         open_ = true; requestTab_ = pathsTab ? 4 : 0; hint_ = hint;
-        note_.clear(); pushArmed_ = false;
+        note_.clear(); pushArmed_ = false; d7vkKey_.clear();
         adapters_ = platform::Adapters();
         resolutions_ = offered_ = platform::Resolutions();
         const std::string cur = edit_.game.GetString("general settings", "videoresolution");
@@ -42,7 +42,9 @@ public:
         edit_.game = cfg.game; edit_.gameBase = cfg.gameBase;
         note_ = note; noteOk_ = ok;
     }
-    // After Renderer > Check (run by the caller): the result.
+    // What the D7VK test would run on now (renderer.hpp D7vkCheckKey): a stored result for other files shows as "Not tested".
+    void SetD7vkKey(const std::string& key) { d7vkKey_ = key; }
+    // After Renderer > Test (run by the caller): the result.
     void D7vkChecked(const RendererOptions& r) { edit_.renderer.checkKey = r.checkKey; edit_.renderer.checkCode = r.checkCode; edit_.renderer.checkText = r.checkText; }
 
     enum class Result { None, Ok, Cancel };
@@ -187,14 +189,21 @@ private:
         RendererOptions& r = edit_.renderer;
         labelWidth_ = 110; comboWidth_ = 150;
         Combo(tx, "Renderer", "lbRenderer", "cbbRenderer", {"Auto", "D7VK", "Native"}, r.mode);
-        Tip(tx, "tipRenderer", "Auto: D7VK when it runs on this PC, else the game's own.\nD7VK: DirectDraw on Vulkan: faster, MSAA, anisotropy, Universal Mod's sun shadows.\nNative: the game's own DirectDraw.");
-        // The last check's result, and a button to run it now.
-        if (r.checkCode == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "d7vkWorks", "D7VK works here.").c_str());
-        else if (r.checkCode < 0) ImGui::TextDisabled("%s", tx.Get("Options", "d7vkUnchecked", "D7VK not checked yet.").c_str());
-        else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "%s", (tx.Get("Options", "d7vkFails", "D7VK does not run here:") + " " + r.checkText).c_str());
+        Tip(tx, "tipRenderer", "Auto: D7VK if it is compatible with this PC, otherwise the game's own DirectDraw.\nD7VK: DirectDraw on Vulkan: faster, MSAA, anisotropy, Universal Mod's sun shadows.\nNative: the game's own DirectDraw.");
+        // The last test's result, and a button to run it now.
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextUnformatted(tx.Get("Options", "lbD7vkStatus", "D7VK status:").c_str());
         ImGui::SameLine();
-        if (ImGui::SmallButton((tx.Get("Options", "btD7vkCheck", "Check") + "##d7vkCheck").c_str())) request_ = Request::CheckD7vk;
-        Tip(tx, "tipD7vkCheck", "Tries D7VK now (a few seconds).");
+        const bool stale = !d7vkKey_.empty() && r.checkKey != d7vkKey_; // d7vk.dll or the test program changed since
+        if (r.checkCode < 0 || stale) ImGui::TextDisabled("%s", tx.Get("Options", "d7vkUntested", "Not tested").c_str());
+        else if (r.checkCode == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "d7vkCompatible", "Compatible").c_str());
+        else {
+            ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "%s", tx.Get("Options", "d7vkIncompatible", "Not compatible").c_str());
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", r.checkText.c_str());
+        }
+        ImGui::SameLine();
+        if (ImGui::SmallButton((tx.Get("Options", "btD7vkCheck", "Test") + "##d7vkCheck").c_str())) request_ = Request::CheckD7vk;
+        Tip(tx, "tipD7vkCheck", "Tests D7VK on this PC now (a few seconds).");
         ImGui::Separator();
         ImGui::BeginDisabled(r.mode == 2);
         Check(tx, "cbMsaa", "MSAA", r.msaa);
@@ -381,6 +390,7 @@ private:
     }
 
     bool modBorderless_ = false;
+    std::string d7vkKey_;
     float labelWidth_ = 150, comboWidth_ = 170;
     LauncherConfig edit_;
     bool open_ = false;
