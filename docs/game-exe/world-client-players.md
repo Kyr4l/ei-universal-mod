@@ -314,7 +314,7 @@ advanced (`tick + g_0x7AFCA8`). Classification (`ClassifyCellObjects` 0x56A990, 
    only appended to the deferred list, heroes (kind 0x32 + `IsHeroId`) skipped;
 2. the deferred units, then the hero list `+0xb4`: each unit gets `vt[25] UpdateClientPresence`, and is classified only when the world is
    not a playable zone (`g_0x79BE6C` and the local player's mode `+0x100 == 1`) or the unit has flag 0x400000 (visible to the party,
-   message 0x60): **the client-side fog of war**;
+   message 0x60): **the client-side fog of war** [V live 2026-11-06: a boar replicated 16 units away, beyond the hero's sight, kept flag 0x20 clear and was not drawn; with `g_0x79BE6C` poked to 0 it was classified (0x20) and drawn];
 3. classifying one object (with a render specific `+0x94`): world matrix `+0x54` = `Quat_ToMatrix4(+0x34)` with the position `+0x1c` in
    column 3; `CD3DLibrary::CullBox(+0x124)` under it. Outside (2) -> flag 0x20 cleared and, when `IsShadowVisible`, the animation
    advanced and the object pushed to the shadow list of its type. Inside -> flag 0x20, `+0x28..+0x30` = the position rotated into view

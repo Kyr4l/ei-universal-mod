@@ -163,7 +163,7 @@ leaving (request 4 with mode 1): Session_SaveZoneToCurrent 0x57A780: CCamera::Sa
 ```
 
 The catch-up multiplier was checked in the disassembly (0x57A4FE: `fld gtime; fsub zt; fmul 100.0; _ftol; cmp 1000`): one game
-hour away = 100 ticks = 5.5 s of simulated time, so a zone left for 10 game hours or more gets the full 1000 ticks (55 s) [V].
+hour away = 100 ticks = 5.5 s of simulated time, so a zone left for 10 game hours or more gets the full 1000 ticks (55 s) [V; live 2026-11-06: zone1 left at tick ~7860 with `zt.gz1g` = 14.5944, back at `gtime` 18.0911 -> reloaded at tick ~8210, i.e. +350].
 
 `PlayerIn` 0x590700: `GivePartyItemsToPlayer` (the backpack items become loose `CPlayer +0xe4` items, quest items filtered by
 `FilterQuestItems` in single player), then, in zone kinds 1 / 3 (not in the camp or the menu), the hero spawn: arrival point = the centre of zone exit
