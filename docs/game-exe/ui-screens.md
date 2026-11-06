@@ -840,8 +840,7 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   (`NetClient +0x25B8`). The client sends it as its 4-byte master request (`CLobbyScreen::StartConnect`); `JoinSelected` passes it to
   `Lobby_StartServerOrClient`, which stores it as `LobbyServer +0x25FC masterRequestId`: a host puts it in the server record it sends
   to the master (0x41AA10) and accepts the master's type-0xFF reply (its public address) only with the same id (0x41ACA0). Made
-  once (`GetTickCount() ^ ISAAC` when 0) and kept in addrbook.ini, which is written only when a game is hosted (live 2026-11-07:
-  identical bytes in two installs and after a hosted session).
+  once and kept in addrbook.ini, which is written only when a game is hosted [V live 2026-11-06]: `CLobbyScreen::Build` replaces a 0 by `GetTickCount() ^ ISAAC` **only when the file exists**; with no file nothing is generated and the first hosted game writes id 0; the next run finds that 0, generates the id (rig: 0x7FA1371D, also in `LobbyServer +0x25FC`) and the next hosting saves it; afterwards it is stable (live 2026-11-07: identical bytes after a hosted session).
 - ~~`CExchangeScreen::Exchange` 0x62D210 (a, b, c): which party is which~~ settled from the machine code 2026-11-06 [V]: a = the
   partner's offer, b = our offer, c = our party (section 6).
 - ~~The decompiles of `IssueCommandAt` 0x638EF0, `SetCursorTarget` 0x639EF0 and `DrawMinimapUnits` 0x643DC0 lost branch
