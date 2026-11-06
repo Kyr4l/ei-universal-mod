@@ -585,8 +585,8 @@ UnitProto			0x80	float[2]	naturalDamage	min, spread
 UnitProto			0x88	float[3]	skillBases	skills / science / ? bytes
 UnitProto			0x98	float[6]	perceptionBases	sight, night sight, hearing ...
 UnitProto			0xb0	float[6]	detectionBases	FLD26 Detections sight / infra / sense life / hearing / smell / tracking (tag 0x1a) -> UnitStats +0xE0 detection pairs. CORRECTION: was resistanceBases
-UnitProto			0x108	int	bloodKind	1..4 blood print
-UnitProto			0x114	int	hitEffectFlag	strike effect 0x4a allowed
+UnitProto			0x108	pointer	spellsCapacity	CORRECTION: was bloodKind "1..4 blood print": the end-of-storage word of the spells vector +0x100 (the blood print kind is UdbRaceModel +0x108, data-sound.md 3.2)
+UnitProto			0x114	pointer	wearsCapacity	CORRECTION: was hitEffectFlag "strike effect 0x4a allowed": the end-of-storage word of the wears vector +0x10c (operator_assign 0x542830, InsertN 0x540B80)
 UnitProto		0x120	0x0	CString	name	Monsters FLD0 (tag 0); the prototype name looked up by Units_FindProtoByName (map UnitsDb +0xc)
 UnitProto			0x4	CString	raceName	FLD1 Base Race (tag 1) -> a RaceModels name
 UnitProto			0x8	int	raceIndex	FLD2 (tag 2) overwritten by UnitsDb::Load with the RaceModels index of +4 (-1 unknown); CUnit::GetProto2 / g_0x7AF398[this]
@@ -605,8 +605,8 @@ UnitProto			0xc8	float[4]	commonLoot	FLD27 TypeList(21) (tag 0x1b, sub tags 0..3
 UnitProto			0xd8	float[4]	rareLoot	FLD28 (tag 0x1c): probability, mask, min, max
 UnitProto			0xe8	pointer[3]	items	FLD29 Items (tag 0x1d): vector<CString> item names "proto.material[count]"
 UnitProto			0xf4	float[3]	magicSkills	FLD30 Skills Elemental / Senses / Astral (tag 0x1e)
-UnitProto			0x100	pointer[2]	spells	FLD31 Spells (tag 0x1f): vector<CString> "code{modifiers}" [?] vector begin/end only: the third word would overlap bloodKind +0x108
-UnitProto			0x10c	pointer[2]	wears	FLD32 Equipment Wears (tag 0x20): vector<CString> armor names (Unit_GiveProtoEquipment) [?] vector begin/end only: the third word would overlap hitEffectFlag +0x114
+UnitProto			0x100	pointer[3]	spells	CORRECTION: was pointer[2] with +0x108 bloodKind: FLD31 Spells vector<CString> {begin +0x100, end +0x104, end-of-storage +0x108} (UnitProto::operator_assign 0x542830 compares the capacity +0x108, dtor 0x53EBC0 frees by it)
+UnitProto			0x10c	pointer[3]	wears	CORRECTION: was pointer[2] with +0x114 hitEffectFlag: FLD32 vector<CString> {begin +0x10c, end +0x110, end-of-storage +0x114}
 UnitProto			0x118	CString	weapon1	FLD33 Equipment Weapon 1 (tag 0x21); also selects the animation set name (CUnitClientSpecific::PlayAnimation)
 UnitProto			0x11c	CString	weapon2	FLD42 Equipment Weapon 2 (tag 0x2a)
 AiInfo		0xcc	0x0	byte	loaded	AiInfo_Load runs once
@@ -1132,7 +1132,7 @@ CParty			0x68	CString	mapName	current map name (CPlayerServer::ChangeMap, World_
 CParty			0x6c	int	mapEntry	entrance index for the next map (ChangeMap); = CPlayer +0xdc
 HeroRecord		0x784	0x0	CString	displayName	
 HeroRecord			0x4	CString	modelName	unhuma / unhufe ...; hashed into the id
-HeroRecord			0x8	CString	className	udb entry +0xe8 ("Hero")
+HeroRecord			0x8	CString	figureMask	CORRECTION: was className "Hero": = UdbRaceModel +0xe8 Mask Name (the figure stem unhuma / unhufe ..; CParty::InitHeroFromProto 0x6621F0); SpawnPartyHeroes uses it as the CUnitDesc model +0x54
 HeroRecord			0xc	CString	field_c	
 HeroRecord			0x10	CString	skinName	texture set unless "none" (CreateHeroUnits)
 HeroRecord			0x14	CString	protoName	units database prototype name
@@ -3309,16 +3309,16 @@ UnitsDb			0x4c	StrHash	raceModelMap	string -> UdbRaceModel*
 UnitsDb			0x60	pointer[3]	hitLocations	vector<UdbHitLocation 0x44> (tag 1 HitLocations); g_0x7AF3B8
 UnitsDb			0x6c	StrHash	hitLocationMap	string -> UdbHitLocation*
 Quest		0x38	0x0	byte[12]	name	std::string (tag 0): quest id as named in quest.reg [quest] / "quest <id>" text key
-Quest			0xc	int	exp	tag 1: experience reward (CQuestLogWin::FillObjectives "obj_cost_exp")
-Quest			0x10	int	money	tag 2 (obj_cost_money)
-Quest			0x14	int	zoneIndex	tag 5 (quest.reg "zone index")
-Quest			0x18	int	order	tag 3 (quest.reg "order")
-Quest			0x1c	int	field_1c	tag 6
+Quest		0x38	0xc	float	exp	CORRECTION: was int: quest.reg "exp" stored with fstp (QuestsDb::ParseQuestReg 0x6AEA1D), read as float by CQuestLogWin::FillObjectives; qdb tag 1
+Quest		0x38	0x10	int	field_10	CORRECTION: was money: qdb tag 2, never written by the quest.reg parser (0) and not read by the quest log [?]
+Quest		0x38	0x14	float	money	CORRECTION: was zone index: quest.reg "money" (fstp at 0x6AEA38), shown by the quest log (+0x14 > 0); qdb tag 5
+Quest		0x38	0x18	int	zoneIndex	CORRECTION: was order: quest.reg "zone index" (0x6AEA62); qdb tag 3
+Quest		0x38	0x1c	int	order	CORRECTION: was unnamed: quest.reg "order" (0x6AEA6E); qdb tag 6
 Quest			0x20	pointer[3]	questPlaces	tag 7: vector<float> x, y pairs (quest.reg questplaces "{x;y}")
 Quest			0x2c	byte[12]	field_2c	std::string, tag 4
 Briefing		0x6c	0x0	byte[12]	name	std::string (tag 0): briefing id ("briefing receive/reject/complete" name)
-Briefing			0xc	int	exp	tag 1 (DialogScreen "brief_get_exp")
-Briefing			0x10	int	money	tag 2 (brief_get_money; CWorldServer::OnNamedEvent adds it to the party)
+Briefing		0x6c	0xc	float	exp	CORRECTION: was int: fstp 0x6AED61; OnNamedEvent passes it as the float xp of GiveExperience
+Briefing		0x6c	0x10	float	money	CORRECTION: was int: fstp 0x6AED79; OnNamedEvent adds ftol(money) to CParty +0x50
 Briefing			0x14	pointer[3]	giveItems	tag 3: vector<CString> item names created with CItemManager::CreateItemByName and given (brief_get_item)
 Briefing			0x20	pointer[3]	removeItems	tag 5: vector<CString> items taken from the party (brief_lost_item)
 Briefing			0x2c	pointer[3]	giveQuests	tag 6: vector<CString> quest ids set to 1 (brief_get_quest)
