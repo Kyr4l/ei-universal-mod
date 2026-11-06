@@ -368,8 +368,9 @@ experience, perk names). The full field list is in `batch-combat-structs.tsv`; t
 max HP = `proto +0x48`, HP regen `udb +8`, mana = max = `proto +0x4C`, mana regen `udb +0xC`, the 7 armor pairs `{base, current} = udb +0x6C[i] x
 proto +0x58` (an armor scale per prototype); `stats +0x6FC` = max HP. Monsters: str = HP / 3, dex = MP / 3, int = 25; heroes (a hero record of that
 name exists): str / dex / int from the record `+0xC / +0x10 / +0x14`, skill bytes `+0x6C8..+0x6CA` and `+0x6CB..+0x6D2` from record `+0x18..+0x22`;
-monsters get every skill byte `round(proto +0x88)`, then `+0x6C8 / +0x6C9 = round(proto +0x8C)`, `+0x6CA = round(proto +0x90)` and three more
-converted values in `+0x6CE..+0x6D0` (the decompile lost their source). Senses / detections bases `+0xB0 + 8i = proto +0x98 + 4i`, `+0xE0 + 8i = proto
+monsters get every skill byte `round(proto +0x88)`, then `+0x6C8 / +0x6C9 = round(proto +0x8C)`, `+0x6CA = round(proto +0x90)` and
+`+0x6CE..+0x6D0` = the magic school skills Elemental / Senses / Astral, `ftol(proto +0xF4 / +0xF8 / +0xFC)` (FLD30; machine code
+0x51396E..0x51399B; live 2026-11-07: a fresh zone1 monster of proto 237 {35, 0, 35} holds 0 0 35 35 35 35 0 0 0 35 35, its +0xF4.. = 0). Senses / detections bases `+0xB0 + 8i = proto +0x98 + 4i`, `+0xE0 + 8i = proto
 +0xB0 + 4i`; `+0x44 = cos(udb +0x18 / 2)`, `+0x48 = proto +0x94`, `+0x4C = cos 90 deg = 0`, `+0x60` move type `udb +0x14`, `+0x64 udb +0x44`, u16
 `+0x68 = udb +0x48`, u16 `+0x6C = +0x6E = udb +0x4C`. Body parts from `udb +0x8C` (4 dwords per part: kind index into the 0x44-byte part-kind table
 `g_0x7AF3B8`, fraction, rate, -): **fraction 0 = the part does not exist** (state 0); else part kind = table `+4`, cripple mask = table `+0x40`,
