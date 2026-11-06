@@ -827,7 +827,8 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   next camp visit) is inferred from the offset only (live row in live-t5-scr-a.tsv).
 - New multiplayer hero limits: `CUnitInfoWin::Redraw` greys "-" at 15 and "+" at 35 / no points left; whether the click handler
   (not read in the 2026-11-06 round) refuses the same values, or only the grey colour stops the player, is not checked.
-- The addrbook.ini dword that `CLobbyScreen::Build` replaces by `GetTickCount() ^ ISAAC` when 0 is probably the client id.
+- The addrbook.ini dword that `CLobbyScreen::Build` replaces by `GetTickCount() ^ ISAAC` when 0 is probably the client id. Live 2026-11-07: the file is not written by the character / lobby screens (deleted, two visits, no file), only when
+  a game is hosted; a rewrite keeps the dword (identical bytes in two installs and after a hosted session).
 - `CExchangeScreen::Exchange` 0x62D210 (a, b, c): which party is which comes from the confirmed-pair update code at 0x41F270, which
   has no function entry in the database (live row in live-t5-scr-b.tsv).
 - The decompiles of `CBattleHud::IssueCommandAt` 0x638EF0, `SetCursorTarget` 0x639EF0 and `CHudMinimap::DrawMinimapUnits` 0x643DC0

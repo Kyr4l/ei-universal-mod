@@ -749,7 +749,7 @@ Deep-read round 2026-11-06 (30 functions; wrong -> right):
 | this page 3.6, `structs.tsv` was right | `CCamera +0x104` pitch "(degrees)" | radians; only the settings limits are degrees (`pi / 180` per clamp) |
 | this page 3.6 | distance spring "`1.1 * dt` of the excess" | `excess * 1.1 * dt / (hard - soft gap)`; with the defaults the hard max 80 < soft max 100, so the zoom stops at 80 |
 | this page 2.5, `structs.tsv` AppSettings +0x0 note | values flat under `HKCU\...\EvilIslands`, "the registry uses the value names only" | one subkey per section (`Camera Settings` ...); fog start / end are the values `LOD1` / `LOD2` |
-| this page 2.1 step 4 | `-benchmark_` / `-devicetarget_` set their settings | they are written before `ReadFromRegistry`, which overrides them whenever the value exists (always after the first run) |
+| this page 2.1 step 4 | `-benchmark_` / `-devicetarget_` set their settings | they are written before `ReadFromRegistry`, which overrides them whenever the value exists (live 2026-11-07: started with `-devicetarget_1`, registry DrawingTarget 0 -> `g_0x79BC9C` = 0) (always after the first run) |
 | this page 2.1 step 9 / 11 | "software device -> 16 px cursors", "small set when `g_0x784756`" | `Cursors_Register` always gets small = 0 (`main` and `App_WndProc`): the `sm_cursor_*` set is never used |
 | this page 2.3 | reactivation "re-query the primary surface" | `IDirectDraw7::RestoreAllSurfaces`; server and client ticks interleave, the in-world client ticks only on a received packet |
 | this page 2.6 | `#allod <n>` / `#zone <n>` / `#exit <n>` counts, kind words brief / camp / base, `#maps` 2 names -> +0x20 / +0x24 | one record per line with a name; kinds game / edge / brief; `#maps` = 2 ints then 2 picture names |
