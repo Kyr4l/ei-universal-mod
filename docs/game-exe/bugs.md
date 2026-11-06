@@ -452,3 +452,16 @@ then fades out by -0x40 for the last four steps (life 4..1, 0x488DFF): 0xFF -> 0
 alpha byte). The smoke puffs of particle types 0x200E (change hero) and 0x2052 (explosion) flash fully opaque on their final frame
 instead of vanishing. Minor visual. Fix: clamp the fade-in to 0x100, or stop subtracting once alpha < 0x40.
 
+## 28. Casting particle bias: off-by-one record index (T7 g05, 2026-11-06)
+
+CONFIRMED in the machine code, cosmetic. `ParticleEmit_2027Casting` 0x4918E0 picks the bias record of point k as `(k - 1) % count`
+(0x491EAA `lea eax, [edx-1]` ... 0x491EB8 `idiv [ebx+0xEC]`), so point 0 uses record -1 % count = the header record (its +0x20 is never
+written) and the last record is never used. Effect: one ring point of the casting effects (types 0x2027 / 0x202B..) gets a zero bias.
+
+## 29. Random seed from files: divide by zero with exactly one file (T7 g05, 2026-11-06)
+
+CONFIRMED in the machine code, exotic. `Isaac_SeedFromFiles` 0x49F660 seeds the ISAAC generator with 1 KB of a randomly chosen file of
+a directory walk on C:: the index is `rand() % (count - 1)` (0x49F6E5 `dec ecx`, then `idiv ecx`): a walk that counts exactly one file
+divides by zero (crash at start-up), and a walk with no readable file loops forever. Only a nearly empty C: drive (a minimal Wine prefix)
+can hit it.
+

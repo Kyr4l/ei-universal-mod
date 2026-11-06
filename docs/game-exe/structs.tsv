@@ -1422,7 +1422,7 @@ ZoneExit		0x3c	0x38	float	viewAngleOverride	used instead of the rect direction w
 ZoneExit		0x3c	0x0	float	passTime	map.txt '#passtime' (the travel time of this exit)
 CMemStream		0x28	0x0	pointer	vtable	0x73C960 (IStream 0x73BDB0 base 0x73BD90): slots 1 Read(buf, n), 2 Write(buf, n), 3 Seek(pos), 4 GetSize, 5 GetPos, 6 Clear / SetSize
 CMemStream			0x5	byte	ok	1 while every read succeeded; a short read clears it (the dispatchers test it)
-CMemStream			0x8	int	limit	2000000000
+CMemStream			0x8	int	version	data version of the stream (IStream base field): Stream_ReadHeader 0x4A52D0 / Stream_WriteHeader 0x4A5340 store the header version here, NamedParty::Serialize 0x4A5AF0 sets it from archive +0x54 before CParty::Read; 2000000000 after construction (= newest, every version test passes). CORRECTION: was "limit 2000000000"
 CMemStream			0xc	byte	bitByte	pending bit-writer byte
 CMemStream			0x10	int	bitMask	0x80 after a flush
 CMemStream			0x14	int	bitPos	-1 = no pending bit byte
@@ -3436,7 +3436,7 @@ CParticle			0xdc	int	frameCount	texture atlas frames (16 default): size of the U
 CParticle			0xe0	int	atlasColumns	frames per atlas row (4 = 4x4); UV cell = 1 / this
 CParticle			0xe4	int	interval	per-type period / counter reload (10000 after Reset; e.g. frame advance period)
 CParticle			0xe8	int	framesSinceRender	++ in Render, 0 when culled
-CParticle			0xec	int	life	per-type particle life in ticks (-1 = infinite) copied into the record +0x50
+CParticle			0xec	int	life	per-type reuse [V, T7 g05]: most types copy it into the record life +0x50; 0x202B..0x202E use it as the ring point count (2 / 1 / 2 / 1), 0x2027..0x202A as the bias record count, 0x2041 / 0x2042 as the start frame (15), 0x2044..0x204C as a mode (1 = 5 circling particles). CORRECTION: was "per-type particle life in ticks" only
 CParticle			0xf0	float[3]	spawnBoxMin	random spawn offset min x y z (per type)
 CParticle			0xfc	float[3]	spawnBoxMax	random spawn offset max x y z
 CParticle			0x108	float	field_108	per-type parameter
@@ -4111,3 +4111,24 @@ CFakeFigure			0x98	byte[176]	meshVectors	eleven 32-byte-aligned vectors {data, c
 CFakeFigure			0x148	CArray	strRecs	MFC CArray vt 0x73C2BC of 0x18-byte StrRec18 {CString, CDWordArray} (data +0x14c, count +0x150)
 StrRec18		0x18	0x0	CString	name	StrRecs18_ConstructN 0x454DB0 / StrRec18_Destroy 0x454C50 / StringPair_Assign 0x474C50
 StrRec18			0x4	CArray	values	MFC dword array (vt 0x7464B8, data +8, count +0xc, cap +0x10, grow +0x14)
+FlameNoise		0x34	0x0	pointer	vtable	0x73D030 (pure base; slot 2 dtor 0x499E30); the world map uses OctaveNoise 0x7420D4 (slot 0 OctaveNoise_GenerateTable, slot 1 OctaveNoise_FillBand)
+FlameNoise			0x4	int	alphaStart	BuildAlphaPalette a: palette alpha 0 up to this index
+FlameNoise			0x8	int	alphaBase	BuildAlphaPalette b: alpha = 255 - 255 x (b / 255)^(i - a)
+FlameNoise			0xc	float	speed	texture steps per Render dt unit (2.0 from CWorldMapScreen::ApplyFadeColor)
+FlameNoise			0x10	pointer	palette	256 ushort entries (ARGB4444 from BuildAlphaPalette, RGB565 from the dead BuildPalette)
+FlameNoise			0x14	pointer	hashTable	(size / 8)^2 dwords; OctaveNoise: the 32 x 32 int noise of GenerateTable
+FlameNoise			0x18	pointer	octaves	(size / 8)^2 x 4 bytes; OctaveNoise: four 32 x 32 byte octave tables (+0 / +0x400 / +0x800 / +0xC00)
+FlameNoise			0x1c	pointer	textureA	size^2 bytes: the current noise texture (weight 256 - w in Render)
+FlameNoise			0x20	pointer	textureB	size^2 bytes: the next noise texture (weight w)
+FlameNoise			0x24	pointer	textureC	size^2 bytes: built one sixteenth per Render step; rotates into B after frame 15
+FlameNoise			0x28	float	phase	fraction of the current step (0..1)
+FlameNoise			0x2c	int	frame	0..15: the FillBand step for texture C
+FlameNoise			0x30	int	size	texture side (256)
+ObjPartyRecord		0x44	0x0	StlHashTable	partyHash	id -> CParty (functor bytes +0..+2, buckets +4..+0xc, size +0x10; 0x78-byte nodes {next, key, CParty +8}); 100 buckets at construction; PartyHash_Destroy (EH) / ObjPartyRecord_dtor
+ObjPartyRecord			0x14	pointer	records	vector of 0x14-byte records (begin +0x14, end +0x18, cap +0x1c; Records20_Destroy each) [?]
+ObjPartyRecord			0x24	PartyList	partyList	the script party list (vector of NamedParty* +0x24..+0x2c, CString +0x30, CString +0x34): PartyStore::FindByName / AddParty / RemoveByName / ResetToDefault (0x4A5xxx), ObjPartyRecord::GetPartyStoreAddr
+ObjPartyRecord			0x38	pointer	refs	vector of object refs (begin +0x38, end +0x3c, cap +0x40; ObjRef_ReleaseAt0b each in the dtor) [?]
+NamedParty		0x7c	0x0	pointer	vtable	0x73C360 (slot 1 NamedParty::Serialize)
+NamedParty			0x4	short	refCount	16-bit refcount (RcPtrShort_Assign / RcPtrShort_Release; vt[0](1) at 0)
+NamedParty			0x8	CParty	party	0x70: FindByName returns &entry->party
+NamedParty			0x78	CString	name	the script party name ("" = the default party made by ResetToDefault)
