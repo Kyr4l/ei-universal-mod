@@ -85,7 +85,7 @@ Modes `+0x16C` [V]: 0 world, 1 topic list, 2 walking into place, 3 briefing text
 | L click, mode 0 | unit under the cursor whose server brain is idle (`+0x190` 0 / 0xB and `+0x1B4` == 9) -> click1.wav + `BuildAnswerList` 0x608B60 (topics = every `b.<unit>.<topic>` variable == 1, "goodbye" appended, 5 row buttons (0xD2,0x1B8+0x18 i)-(0x23A,..), mode 1); else terrain point -> `Order_MoveTo(player brain, pt, run=0)` unless `+0x27D` (0x6030F0) |
 | double click, mode 0 | same, but a terrain point runs (`Order_MoveTo(.., 1)`) (0x603360) |
 | L click, mode 1 | row i + page `+0x264` -> `+0x184` = topic, `SelectAnswer(0,1)` 0x6064E0 |
-| L click, mode 3 / 4 | 3 = `ParseDialogScript(0)` next phrase; 4 = `StartDialogLine` (end the briefing) |
+| L click, mode 3 / 4 | 3 = `ParseDialogScript(0)` next phrase; 4 = `EndBriefing` 0x608450 (was StartDialogLine) |
 | keys (0x6034A0) [V, deep read 2026-11-06] | while the lobby modal flag `+0x2A0` is set only Esc does something (clears it). Esc: mode 0 pushes CEscMenu, 3 skip the rest (as Enter), 4 end (`EndBriefing`), 2 `SelectAnswer(1,0)` (stop walking, start at once), 1 -> mode 0; Space: 3 next phrase (`ParseDialogScript(0)`), 4 end, 2 `SelectAnswer(1,0)`; Enter (single player): 3 = click1.wav + `ParseDialogScript(1)` repeated while the mode stays 3 (the whole remaining text and the rewards appear at once), 4 end; lobby: Enter opens the chat, Backspace clears it. keyboard.ini actions in mode 0: 4 (obj) pushes CQuestLogWin `SetCaption(current map, 0, 0, allowTravel 1)` for the first variable `q.<zone>.<x>` (3 parts) == 1.0 whose zone record has the current zone's name (any zone in a lobby); 0xB camera follows the player unit; 0x35 QuickSave("saveq"); 0x36 SaveGame_BeginLoad("saveq") |
 | mouse move (0x603D00) [V, deep read 2026-11-06] | lobby modal -> cursor 0xD and forwarded to the box; mode 1: hovered row (button 0..4 + page `+0x264`, below the topic count) -> `+0x188` + DrawTopicList; mode 3 cursor 0xE, mode 4 cursor 0; mode 0 with no mouse button held: a living unit (vt+0xDC == 0, not the own lobby unit) whose server brain is idle (`+0x190` 0 / 0xB and `+0x1B4` == 9) -> `LoadSpeakersFor(id)` (its topics), cursor 0xE only when it has topics, its name (cached map `+0x1D8`: id -> vt+0x1C name) always drawn in beige at (x-0x7D, y-0x14); else a zone exit under the terrain point -> cursor 0xF when `z.<target of exit +0x164>` != 1 (the hovered exit's own index is computed and **ignored**: the test always uses exit `+0x164` = 0) |
 | OnCommand 0x606F40 | 0x10001 (leave-zone yes) = `Session_RequestMapChange(+0x164)`; 0x20001 = push CSaveLoadWin in save mode; 0x90001 / 0x100001 = leave the game (`CInterface +0x44` = 1, `LobbySession_ReleaseActive(2)`) |
@@ -188,7 +188,19 @@ Entered by `Game_SendLeave(5)` with `constr.current` naming the merchant `CGSPla
 (`Game_SetWorldServerField6C(1)`), reads the merchant flags (`+0xC / +0xD` item / spell constructor, variables i.on/offitemconstr,
 i.on/offspellconstr, i.noconstr), the 9 price coefficients (`+0x21C` = CGSPlayer +0x10..+0x30) and the two stock parties
 (`+0x1B4` items = +0x3C, `+0x1C8` spells = +0xAC), creates the camp hero units (`Game_CreateHeroUnits` of the proto-type 0x32 records,
-`+0x1A0`), `SelectNextHero` and the first enabled tab. A first visit (`CGSPlayer +0x38` set) computes per magic school 0..7 the
+`+0x1A0`), `SelectNextHero` and the first enabled tab. [V, deep read 2026-11-06] Details: the pause call is `Game_SetServerPaused(1)`;
+the merchant id is trunc(`constr.current`); an id > 0 without a merchant record leaves at once (`Game_SendEnterWorld`), an id <= 0
+gives no merchant (no stocks, both shop flags 0 unless a variable turns one on); the variables are tested == 1.0 in the order
+i.noconstr, i.offspellconstr, i.onspellconstr, i.offitemconstr, i.onitemconstr, so **"on" wins over "off"**; the panes of a shop
+(stock bar, trade window, constructor window, and the repair window for items) are only created when that shop flag is on. Camp
+units: every party hero record (0x784 bytes, client party `+0x30` / `+0x34`) gets its id `+0x1C` raised by 100,000,000 while the
+units are made (so the camp copies never collide with the zone units), the records whose prototype type is 0x32 go to
+`Game_CreateHeroUnits(list, 1)`, each new unit gets a random-phase idle animation (model entry 0x21, phase from the ISAAC pool
+mod 0x33), `UpdatePackedStats` from the record `+0x20` and the armor modifiers of `+0x750` re-applied, then the ids are lowered
+again. Mode titles `+0x240`: "mode_weapons", "mode_spells" (the skills tab), "mode_spelltrade", "mode_spellconstr",
+"mode_itemtrade", "mode_itemconstr", "mode_itemrepair" + a literal for leave; first tab = 4 (item trade) with the item shop, else 2
+(spell trade) with the spell shop, else 0; `OnButton(tab)` + `EnterMode`; music `CMusicSystem::PlayConstructor(zone record +4, or
+"gipat")`. A first visit (`CGSPlayer +0x38` set) computes per magic school 0..7 the
 party's min and max `UnitStats_MagicSkill`, `CGSPlayer::SetShopLimits(min[8], max[8])`, `GenerateSpellShop`, `GenerateItemShop`
 and clears `+0x38`. The flag is set on a new merchant and, [I], again for every merchant by `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0, which the script `QuestComplete` calls: the shops would be re-rolled (`items.md` 6) on the first camp visit after each completed quest. `FillConstructorStock` 0x612CF0 (slot 39) has **no
 caller** (no direct call; no virtual `+0x9C` call on a camp screen found) [V]: a leftover developer stock that clears both stocks and fills them
@@ -216,7 +228,7 @@ when the camp was opened from the multiplayer hero editor (`+0x194` set by the i
 |---|---|
 | 0 / 1 | prev / next hero arrows (0xC,0x1C2)-(0x34,0x1EA) / (0x94..0xBC): press sets `+0x25C` = 1 / 2 and repeats every 0.5 s while held (Update 0x60F6B0); hidden in tab 0 without the item shop or with i.noconstr (OnButton) |
 | 2 / 3 | confirm (300,0x1D6)-(0x14A,500) / cancel (0x1D6,0x1D6)-(500,500) -> `OnBuyOrRepair` 0x611220 / `OnCancel` 0x611760 when `+0x210 / +0x211` allow |
-| 4..11 | 8 tabs across x 0x26C..0x30C (20 px each), y 0x1AE..0x1EA: 0 weapons (tip 0x4E84) 1 skills 2 spell trade 3 spell constr 4 item trade 5 item constr 6 repair 7 leave; disabled tabs fall back (`OnButton` 0x60E9E0) |
+| 4..11 | 8 tabs = button - 4: 0 weapons (tip 0x4E84) 1 skills 2 spell trade 3 spell constr 4 item trade 5 item constr 6 repair 7 leave; disabled tabs fall back (`OnButton` 0x60E9E0). [V, deep read 2026-11-06; the old row said "one row of 20-px tabs"] a **2 x 4 grid of 40 x 30 px** cells, columns x 620 / 660 / 700 / 740, rows y 430..460 and 460..490: top row weapons, item trade, item constr, repair; bottom row skills, spell trade, spell constr, leave; tips `tip 20100` weapons, 20101 skills, 20102 item trade, 20103 item constr, 20104 repair, 20105 spell trade, 20106 spell constr, 20107 leave, set only for the tabs the merchant offers (constructors also need no i.noconstr); the icon quads 2..9 sit in the same cells and are hidden for missing shops, the leave icon is drawn at half size |
 | sub-windows (ItemAtPoint slot 25, kinds) | party bar `+0x1E0` kind 1, spell stock bar `+0x1EC` kind 2, item stock bar `+0x1F0` kind 3, hero bar `+0x1E4` (`CCampBar`: weapons kind 2, belt kind 3, doll armor kinds 4..10; "kind 0" = hero slot in OnDropItem), spell slots `+0x1E8` (`CCampQuickBar`, kind 1), trade baskets kinds 0x11 / 0x1C, repair 0x19, spell components 0x13, item components 0xD |
 
 **Drawing** [V, checked 2026-11-06]: `CCampScreen::Draw` 0x60F050 recomputes the hovered item `+0x168`, calls **`EnterMode` every
@@ -669,12 +681,29 @@ Two constructors in CInterface [V]: `ShowTutorialForTopScreen` 0x5F86F0 (the scr
 queued script command `tutorial <name>` / the F1 key tutorial_script, shown only when the option show_tutorial g_0x79BE78 is on or
 forced: `+0x164` = 1, page `CInterface +0xA8`). `Build` 0x658E10 reads the text
 "tutorial <key>" (first line = title, every `#screen` first line = page title, titles replaced by "tutor <title>" texts) and
-`BuildPage` 0x659420 lays out page `+0x184`: `#position x y w [lines]` sets the panel (default (200,50)-(600,560)), `#rectangle l t r b`
+`BuildPage` 0x659420 lays out page `+0x184`: `#position x y right [lines]` sets the panel (default (200,50)-(600,560)), `#rectangle l t r b`
 adds a pulsing red frame over the screen area it explains (quads list `+0x188`), `#text <icon>` + the next line (a text key) adds a
 paragraph with a 64x64 picture "tutorial_<icon>" (decoded 4 per row into the scratch texture) drawn with `DrawWrappedText` (0xBBF9FF).
 Buttons 0 prev / 1 OK / 2 next (50 px, bottom row, tips 0x7594..0x7596); the footer shows the neighbour page titles and
 "show_tutorial_key <F1 name>". Enter = next page / close on the last, Esc or the tutorial_script key = close; closing stores the page
 (`TutorialMapFind` 0x65A770 or `CInterface +0xA8`). Render state 0x18 is forced to 1 while the window is up (0x65A6D0).
+
+`BuildPage` 0x659420, the page format for modders [V, deep read 2026-11-06]: page n (`+0x184`, from 0) is the (n+1)-th `#screen`
+section of the text "tutorial <key>" (missing text or section -> the window closes). Inside it:
+- `#position x y right [lines]`: the third number is the **right edge**, not a width (raised to x + 300 when narrower); bottom = y +
+  lines * 16 + 110, at most y + 600. Without `lines` (or without `#position`, default (200,50)-(600,560)) the body is laid out twice
+  and the panel height fitted to the text (bottom = y + text height + 110).
+- `#rectangle l t r b` (four numbers): a 5-px translucent red (0x82FF0000) frame over that screen area.
+- `#text [icon]` followed by one line = a text key: a paragraph whose text is the first paragraph of the text **"tutor <key>"**
+  (`ReadUntilHash`, right-trimmed), drawn in 0xBBF9FF with 16-px lines; with an icon (at most 16 per page) the picture
+  "tutorial_<icon>" (64x64) is blitted into texture [1] at cell ((i / 4) * 64, (i mod 4) * 64), shown at (x + 47, y + 95 + paragraph
+  top), the text indented to 90 px (15 without an icon) and the paragraph at least 80 px tall.
+The section ends at the next `#screen`. Layout: dark panel (0xFF211B11; 0xFF282313 for a queued tutorial) + border, title surface
+(x, y)-(right, y + 55) with the page title (font 2, 0x82F5FF) and "%s (%d/%d)" (tutorial title, page + 1, page count), body surface
+(x, y + 55)-(right, bottom - 55), buttons 0 prev / 1 OK (`tip 30100`) / 2 next, 50 px wide on the row bottom - 30..bottom - 10 at
+x + s, x + 3 s + 50, x + 5 s + 100 with s = (width - 150) / 6 (prev art hidden on the first page, next art on the last); footer
+(x, bottom - 55)-(right, bottom): previous page title (prev tip `tip 30101`), "show_tutorial_key" + the key bound to action 0x3B,
+next page title (next tip `tip 30102`).
 
 ## 12. The battle HUD (CBattleHud 0x740764 / 0x740730, screen id 1)
 
@@ -823,6 +852,14 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   written by `KeyBindings_Save` at exit.
 - ~~`CSaveLoadWin::ScanSaves` version gates~~ settled [V] from the machine code (0x656063 / 0x656089: `cmp [stream + 8], 1 / 2`): the
   version is the stream's own field, the folder number is a separate local (0x656128); time at v >= 2, label at v >= 3.
+- Briefing voices (live row): the root of "<r>\briefing\<topic>\<n>.mp3" is "t" or "s" at random per phrase; whether both sets
+  exist in the speech archives (two voice casts, or one silent half) was not checked (the game install is not read).
+- Talk mode and zone exits (live row): `DialogScreen +0x164` is only ever 0, so Update / OnMouseMove / the leave box always use exit
+  #0. Whether every talk zone has exactly one exit (a design limit) or this is a latent bug is not known.
+- The NPC portrait table `g_0x7C8764` (name -> "quitem%04d" number) of `AddSpeaker` has no other reference in the decompiles; who
+  fills it is not known (live row).
+- The active-effect line of the unit info panel prints record `+4` / 15; that `+4` is a tick count at 15 per second is inferred
+  (live row).
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.
 - ~~CCampScreen2 +0x1A0..+0x220~~ settled [V]: the full CCampScreen2 layout (+0x164..+0x21C, 33 fields) is in structs.tsv (struct
   completion 2026-11-02). ~~CCampScreen +0x168..+0x18F~~ settled 2026-11-03: `+0x168` is the hovered item (recomputed by `Draw`
@@ -875,6 +912,17 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | ui-screens.md 12 (strips) / structs.tsv CBattleHud +0x198 | `CHudQuickBar` "8 belt slots" | 4 belt quick items + up to 4 quest items (kind 0x3009) of the player for an owned unit (`SetUnit` 0x63D2B0) |
 | functions.tsv 0x641F20 | `CHudMainPanel::Build` | runs on the `CHudMinimap` object (+0x1AC, vt 0x742660) from `CBattleHud::Build`: renamed `CHudMinimap::Build` |
 | ui-screens.md 12 (orders) | "another unit = SendInteractOrder and, when hostile, SendAttackOrder" | object vt+0xDC is `CUnit +0x274` dead (slot 55): a corpse gets `SendInteractOrder` (loot), a living hostile unit `SendAttackOrder`, other living units a move [I: branches lost in the decompile] |
+| ui-screens.md 3 (Build) / functions.tsv 0x6024B0 / structs.tsv DialogScreen +0x27E | topic panel "(155..416 x 580..645)"; music `CMusicZone::PlayBattle`; +0x27E "0 in player mode 5 or when the UI stream is empty" | topic panel (155,416)-(645,580); `CMusicSystem::PlayBriefing`; +0x27E = 1 only on a fresh build (empty stream) with client mode != 5 (deep read 2026-11-06) |
+| ui-screens.md 3 (ParseDialogScript) / structs.tsv DialogScreen +0x250 | voice "<root>\briefing\<name>\<n>.mp3" via `PlaySound3D`; `#show <unit> [idx] [weapon]` as if the word mattered | `Play2D("<t or s, random>\briefing\<topic>\<n>.mp3")`; one `#phrase` per call, directives apply to the next phrase; `[weapon]` of `#show` has no effect (AddSpeaker never reads its third argument, machine code) |
+| ui-screens.md 3 (end of a briefing) / functions.tsv 0x608450 | `StartDialogLine`: "every `b.<x>.<topic>` variable equal to the topic fires" the script event | renamed `EndBriefing`; only the **first** 3-part `b.<x>.<topic>` whose third part equals the topic fires `CWorldServer::OnNamedEvent` (the loop exits after it) |
+| ui-screens.md 3 (SelectAnswer) | the constr test lower-cases the topic (`MakeLower`) | SelectAnswer compares `Left(6)` with `_stricoll` (case-insensitive); the merchant id is `atol(topic.Mid(7))` |
+| functions.tsv 0x6FD9B4 | `CString::Left` "via Mid(0, count)" | `CString::Mid(nFirst)` = Mid(nFirst, length - nFirst): the tail from index nFirst (machine code: `sub eax, [ebp+0xc]`) |
+| ui-screens.md 9 (quest log map list) / functions.tsv 0x64BE80 | with allowTravel the map list is "every zone of the `z.` variables" | every zone with an open quest: 3-part `q.<zone>.<quest>` == 1.0 in the caption zone's allod (prefix "q.", 0x783D7C) |
+| ui-screens.md 9 (ShowMap) | "the nearest exit is pre-selected"; the map "150 px for the larger zone size" | only with travel times, the exit with the smallest time; otherwise none; the larger side spans 300 px (150 is the half size) |
+| ui-screens.md 12 (CHudClockStrip) / functions.tsv 0x6488E0 | clock hands "from gtime" | hour = fmod(client tick g_0x7AF61C x CWorld +0x20 + CWorld +0x1C, 24.0) (machine code 0x6488FA..0x648912) |
+| functions.tsv 0x646B90 | `DrawSpellInfo` "spell <id> icon + name / description lines" | the unit's active effects `CUnit +0x198` (up to 6): title + remaining time (+4 / 15) + "spell%04d" icon |
+| ui-screens.md 11 (tutorial) | `#position x y w [lines]` | `#position x y right [lines]`: the third number is the right edge |
+| ui-screens.md 4 (camp tabs) | "8 tabs across x 0x26C..0x30C (20 px each)" | a 2 x 4 grid of 40 x 30 px cells (x 620..780, y 430..490) |
 
 ## 16. Function index (one line each; the batch rows carry the detail)
 
@@ -887,7 +935,7 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | 0x604C50 | DialogScreen::ParseDialogScript | #nolips #show #hide #animation #camera #phrase, rewards, camera shots |
 | 0x6064E0 | DialogScreen::SelectAnswer | topic -> briefing / constr -> camp / goodbye |
 | 0x607BB0 / 0x607EC0 | DialogCamera::FocusOn / SetShot | camera cuts = SendMsg0F_Move; shots 1..12 |
-| 0x608210 / 0x608450 | DialogScreen::StartBriefing / StartDialogLine | begin / end of a briefing (script events on end) |
+| 0x608210 / 0x608450 | DialogScreen::StartBriefing / EndBriefing | begin / end of a briefing (EndBriefing was StartDialogLine; one script event on end) |
 | 0x608D20..0x609900 | CLobbyStatusBar | multiplayer portrait strip over the dialog |
 | 0x60C870 / 0x60E6B0 | CCampScreen::Build / OnClose | merchant, stocks, baskets, camp units; teardown |
 | 0x60E9E0 | CCampScreen::OnButton | tab switch, leave |

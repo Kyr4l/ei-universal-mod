@@ -617,7 +617,7 @@ current zone `+0x120` equals merc i's base (table `g_0x7907AC`: 1 bz1g, 2 bz1g, 
 
 ### 4.14 Briefing completion (`OnNamedEvent` 0x592090) [V deep read 2026-11-06]
 
-`(player index, "a.b.c")`, from `DialogScreen::StartDialogLine` and `CPlayerServer::OnMsg_NamedEvent` (the client finished a
+`(player index, "a.b.c")`, from `DialogScreen::EndBriefing` and `CPlayerServer::OnMsg_NamedEvent` (the client finished a
 briefing / dialog line). With a lobby alive: only `Lobby_SendNamedEvent(b)` when the name has three dot-separated parts. Else:
 
 1. Three parts -> the `Briefing` record of `b` (`StringHash_GetOrInsert(g_0x7C87D4)`, data-sound.md 4.2; an unknown name gives

@@ -3030,7 +3030,7 @@ CBattleHud			0x200	byte	firstZoneEnter	1 when Build created the id list from the
 CBattleHud			0x204	pointer[3]	sortedIdsBegin	std::vector<int> (DwordVector_Assign_64AF30 in Update): the sorted controlled unit ids compared with the party each tick (IntArray_Equals) to detect a party change
 CBattleHud			0x210	int	cameraUnitId	id of the unit the camera follows: -1 in Build; Update: when the hero id differs CCamera::FollowUnitId(id) + RefreshPanels
 CBattleHud			0x214	pointer[3]	sortedIdsSpare	std::vector<int> second id list assigned by Update next to +0x204 (the unsorted / previous order) [?]
-DialogScreen	CUIWindow	0x2A4	0x164	int	zoneExitIndex	exit the party stands in (Session_RequestMapChange when the z.<target> allows)
+DialogScreen	CUIWindow	0x2A4	0x164	int	zoneExitIndex	CORRECTION: was "exit the party stands in": only Build writes it (0); Update / OnMouseMove / OnCommand always use exit #0 (no other write in 0x6024B0..0x609D00, machine code)
 DialogScreen	CUIWindow	0x2A4	0x168	int	exitCheckEnabled	
 DialogScreen	CUIWindow	0x2A4	0x16C	int	mode	0 world (walk / talk), 1 topic list, 2 walking into place, 3 briefing text, 4 end of line
 DialogScreen	CUIWindow	0x2A4	0x170	CStringArray	topics	b.<unit>.<topic> variables == 1 of the hovered / clicked unit (LoadSpeakersFor)
@@ -3040,9 +3040,9 @@ DialogScreen	CUIWindow	0x2A4	0x18C	int	autoBriefing	1 = started on zone entry (O
 DialogScreen	CUIWindow	0x2A4	0x1A4	pointer	playerUnit	the host player own unit
 DialogScreen	CUIWindow	0x2A4	0x1A8	pointer	secondSpeaker	
 DialogScreen	CUIWindow	0x2A4	0x1AC	pointer	thirdSpeaker	
-DialogScreen	CUIWindow	0x2A4	0x1B0	float[3]	posPlayer	facing pose computed by SelectAnswer
-DialogScreen	CUIWindow	0x2A4	0x1BC	float[3]	posOther	
-DialogScreen	CUIWindow	0x2A4	0x1C8	float[3]	center	
+DialogScreen	CUIWindow	0x2A4	0x1B0	float[3]	posPlayer	CORRECTION: was "facing pose": normal zone = the second speaker's own position; single-speaker zone = the spot (radius + 2.5 m along the player's forward axis) the second speaker walks to (SelectAnswer 0x6064E0); the name is misleading
+DialogScreen	CUIWindow	0x2A4	0x1BC	float[3]	posOther	CORRECTION: was empty: the player's place: normal zone = radius + 2.5 m along the second speaker's forward axis (the player walks there), single-speaker zone = the player's position
+DialogScreen	CUIWindow	0x2A4	0x1C8	float[3]	center	CORRECTION: was empty: the third speaker's spot = midpoint of +0x1B0 / +0x1BC plus the half-vector rotated 90 deg (SelectAnswer)
 DialogScreen	CUIWindow	0x2A4	0x1D4	float[3]	dirPlayer	
 DialogScreen	CUIWindow	0x2A4	0x1E0	float[3]	dirSecond	
 DialogScreen	CUIWindow	0x2A4	0x1EC	float[3]	dirThird	
@@ -3054,7 +3054,7 @@ DialogScreen	CUIWindow	0x2A4	0x240	pointer	placements	std::list of 0x30-byte wal
 DialogScreen	CUIWindow	0x2A4	0x244	int	firstLine	1 = first phrase of the briefing (voice timer + 1 s)
 DialogScreen	CUIWindow	0x2A4	0x248	CString	text	the briefing text shown in the CTextListWin
 DialogScreen	CUIWindow	0x2A4	0x24C	float	voiceTimer	seconds left for the current phrase (len * 0.05)
-DialogScreen	CUIWindow	0x2A4	0x250	int	voiceChannel	PlaySound3D handle of the phrase mp3
+DialogScreen	CUIWindow	0x2A4	0x250	int	voiceChannel	CORRECTION: was "PlaySound3D handle": CSoundManager::Play2D channel of "<t|s>\briefing\<topic>\<n>.mp3" (ParseDialogScript 0x604C50), -1 = none
 DialogScreen	CUIWindow	0x2A4	0x25C	pointer	textList	CTextListWin (0xA5,0x1AA)-(0x27B,0x23A)
 DialogScreen	CUIWindow	0x2A4	0x260	pointer	topicScrollBar	CScrollBar (0x248,0x1B8)-(0x252,0x230)
 DialogScreen	CUIWindow	0x2A4	0x264	int	topicPage	first visible topic row
@@ -3063,7 +3063,7 @@ DialogScreen	CUIWindow	0x2A4	0x26C	pointer	personalities	std::map<int hash, CStr
 DialogScreen	CUIWindow	0x2A4	0x278	pointer	speakerWidgets	std::list of 0x18-byte NPC portrait nodes (#show of a non-unit name)
 DialogScreen	CUIWindow	0x2A4	0x27C	byte	isBriefing	SelectAnswer argument
 DialogScreen	CUIWindow	0x2A4	0x27D	byte	singleSpeaker	zone record +0x44: the NPC walks instead of the player
-DialogScreen	CUIWindow	0x2A4	0x27E	byte	exitEnabled	0 in player mode 5 or when the UI stream is empty
+DialogScreen	CUIWindow	0x2A4	0x27E	byte	exitEnabled	CORRECTION: was "0 in player mode 5 or when the UI stream is empty": 1 only when the UI stream g_0x7AFE1C is empty (fresh build) and the client mode (connection +0x1C +0x104) != 5; on a load the stream is emptied and it stays 0 (Build 0x6024B0)
 DialogScreen	CUIWindow	0x2A4	0x280	pointer	lobbyStatusBar	CLobbyStatusBar (0x170 bytes, vt 0x741478) in a lobby game
 DialogScreen	CUIWindow	0x2A4	0x284	pointer	partyIdsBegin	std::vector<int> hero ids of the client party
 DialogScreen	CUIWindow	0x2A4	0x288	pointer	partyIdsEnd	
