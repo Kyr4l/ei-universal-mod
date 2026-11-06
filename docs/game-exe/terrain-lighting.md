@@ -255,7 +255,7 @@ lit; unlit ones get it with their full relight).
 amb = terrain.ambient(+0x224..);  base = rec.+0x43..;  I = 1
 ground vertex under water (water rec.+0x25 != 0xFFFF and rec.+0x27 >= 0):
     k = (1/15) * material[+0x14] * depth^2            (g_0x7C8908 = 1/15)
-    amb *= max(0, 1 - k);  I = max(0, 1 - sun.+0x24^2 * k)   (sun +0x24 = the sun object's position z, 0: I stays 1 [I])
+    amb *= max(0, 1 - k);  I = max(0, 1 - sun.+0x24^2 * k)   (sun +0x24 = the sun object's position z: **0 live** (2026-11-07), so I stays 1 [V])
     base = max(base, water tint)
 if (ground and terrain.flags & 0x10 and TraceSunRay(pos) == 0):  rec.sun = min(1, amb + base)
 else:  rec.sun = max(amb, ApplyDirectional(sun, I, base, N))  per channel
@@ -666,7 +666,7 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
   0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); the texture side never reads them (it only needs the
   size, in `GetMipOffset`). The block is the **skin-cache key**: `ComposeAndSaveLayers` writes the layer recipe there and compares
   it on the next build to reuse the cached `textures\<name>.mmp` (corrected 2026-11-06; shipped archive files have none).
-* The sun object's `+0x24` in the under-water sun attenuation (4.2): [live] (expected 0; live-checklist.tsv).
+* ~~The sun object's `+0x24` in the under-water sun attenuation (4.2)~~ settled live 2026-11-07: 0.
 * ~~`TraceSunRay`'s double slope~~ settled from the machine code (4.3), 2026-11-03; retail never runs the trace.
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
 * Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass: [live] (live-checklist.tsv).

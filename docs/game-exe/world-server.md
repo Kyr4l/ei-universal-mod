@@ -366,7 +366,7 @@ with the same NID silently replaces the first (the first is leaked, never create
 
 `MobFile_Load` 0x481660 (called by `LoadMapObjects(mob, noScript)`): parse; result 1 -> `PlayerRelations::Set(g_0x7C2BC4, a, b,
 m[a][b], applyToUnits = 1)` for all 32 x 32 pairs. With the registry option `AutomaticQuantization` (`g_0x79BCF4` = AppSettings
-`+0x84`, default 0, read nowhere else) the complection (`+0x60` morph) of every kind-1 object (types other than 0x32..0x34) is
+`+0x84`, default 0, read nowhere else; **0 in the running game**, live check 2026-11-07, so this never runs) the complection (`+0x60` morph) of every kind-1 object (types other than 0x32..0x34) is
 grouped by model name `+0x54` and snapped to the nearest of at most two centroids (`PointSet_ClusterCentroids(points, out, 2)`,
 `Vec3s_FindNearest`): fewer distinct morphed meshes. Then per descriptor, in hash order: kind 7 -> `+0x8c` = the trap's hostile
 mask (bit b set when `m[side +0x6e][b] == 2`) and `+0x94..+0x9c` = the position; `CreateObjectFromDesc`; kind 5 with a created

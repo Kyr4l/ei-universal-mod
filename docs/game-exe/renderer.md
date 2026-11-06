@@ -365,7 +365,7 @@ this behind "unreachable" blocks.) Its functions:
   section 6); the same scene is returned. Otherwise (shared) slot 4 = `FindOrCreateScene(name, s, d, h, 0)` gives a cached or new
   scene. So a buff on a unique unit re-blends its own mesh; a shared complection gets a separate scene.
 - **Complection quantisation** (cross-note from the script round, checked 2026-11-06 [V]): when the registry option
-  `AutomaticQuantization` (AppSettings `+0x84`, `g_0x79BCF4`) is non-zero, `MobFile_Load` 0x481660 groups the descriptors of kind 1
+  `AutomaticQuantization` (AppSettings `+0x84`, `g_0x79BCF4`; **0 in the running game**, live 2026-11-07: never) is non-zero, `MobFile_Load` 0x481660 groups the descriptors of kind 1
   (`CObjectDesc +0x48`), except types 0x32..0x34 (`+0x50`), by model name (`+0x54`), runs `PointSet_ClusterCentroids` 0x49BEA0 with 2
   levels on their complections (`+0x60..+0x68`; points rounded to 1/127 cells, median split along the longest axis, count-weighted
   centroids: at most 4) and snaps every complection to its nearest centroid (`Vec3s_FindNearest`). This caps the number of distinct

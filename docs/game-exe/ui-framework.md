@@ -109,7 +109,7 @@ loop:
             0.9 + 0.1 sqrt(lag); g_0x784758 = clamp(speed, 0.1, 10); 'Client speed ... balance' log when g_0x79BC60
       CCamera::Update once per whole tick of dt (while dt > tick), then once with the remainder (um-engine camera_smooth
             redirects these 3 call sites); together with the per-client-tick call the camera eases about twice per tick of
-            real time while a world runs [I]
+            real time while a world runs [V live 2026-11-07: 229 calls in 10 s of a world = ~18 tick calls + one per frame a second]
       not paused: recording flag 0x10 -> CCamera::RecordKeyframe; playback flag 0x20 -> CCamera::PlayCamFile(tick g_0x7AF61C + fraction)
       frameRendered = 1
       CInterface::ProcessPendingScreens 0x5F57C0      (pops / replaces screens requested during the frame, ticks the top screen)
