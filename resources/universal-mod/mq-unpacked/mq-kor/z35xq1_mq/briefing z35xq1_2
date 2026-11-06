@@ -1,10 +1,10 @@
-Inhibition failed!
+방어에 실패했다!
 #show Hero
 #show Marshal
 #CAMERA 3 20 3 1.5
 #phrase Marshal  1
-What happened?!
+무슨 일이냐?!
 #phrase Hero  2
-This mission is impossible for me, wild animals are so...
+이 임무는 제게 불가능합니다. 야생 짐승들이 너무...
 #phrase Marshal  3
-You're all equally useless! I'll have to take up axe again!
+너희는 하나같이 쓸모가 없군! 내가 다시 도끼를 들어야겠다!

@@ -1,41 +1,41 @@
 # um-texts 1
 === QUESTITEM DoorKey00
-Prison gates key
-This key opens the prison gates.
+Clé des portes de la prison
+Cette clé ouvre les portes de la prison.
 
 === QUESTITEM KKey01
-Key to the mine gates
-Will open the gates to the mine in the northern area of the mine.
+Clé des portes de la mine
+Ouvre les portes de la partie nord de la mine.
 
 === QUESTITEM KKey02
-Key to the mine
-This key is needed to enter the eastern part of the mine.
+Clé de la mine
+Cette clé permet d'entrer dans la partie est de la mine.
 
 === QUESTITEM KKey03
-Key from the ravine gate
-With this key, you can enter the ravine in the southeastern area of the city.
+Clé de la porte du ravin
+Avec cette clé, vous pourrez entrer dans le ravin, au sud-est de la ville.
 
 === QUESTITEM KKey04
-Key from the gate to the secret cave
-With this key you can open the entrance to a cave with an artifact.
+Clé de la porte de la grotte secrète
+Avec cette clé, vous pourrez ouvrir l'entrée d'une grotte qui abrite un artefact.
 
 === QUESTITEM KKey05
-The Gate Key
-With this key you can open the gate to a cave with a portal.
+Clé de la porte
+Avec cette clé, vous pourrez ouvrir la porte d'une grotte qui abrite un portail.
 
 === QUESTITEM KKey06
-Key to Neglected Mines
-With this key you can open the gates to the neglected mines.
+Clé des mines abandonnées
+Avec cette clé, vous pourrez ouvrir les portes des mines abandonnées.
 
 === QUESTITEM KKey07
-Key
-Such keys are used for levers in mines.
+Clé
+On utilise ce genre de clé pour les leviers des mines.
 
 === QUESTITEM Ogrestuff
-Ogre's necklace
-Probably the ogre has discovered the loss of his necklace by now...will he figure out how he lost it?
+Collier d'ogre
+L'ogre s'est probablement rendu compte que ce collier lui manquait, mais sait-il comment il l'a perdu ?
 
 === QUESTITEM TeleportKey01
-Portal Key
-This key activates the Portal.
+Clé du portail
+Cette clé active le portail.
 

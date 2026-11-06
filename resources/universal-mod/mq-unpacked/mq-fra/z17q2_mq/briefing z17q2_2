@@ -1,8 +1,8 @@
-Kholai asks to wait
+Kholai demande d'attendre
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-Necromancer Kholai managed to let me know that he has been summoned to the guild for interrogation, so he will not be able to use the zombie magician's head even if we get it.
+Le nécromancien Kholai a réussi à me faire savoir qu'il est convoqué à la guilde pour un interrogatoire : il ne pourra donc pas se servir de la tête du mage zombie, même si nous la lui apportons.
 #phrase Glav  2
-So now we shall have to wait until the interrogation session is over, then start to hunt for that head again!
+Nous devrons donc attendre la fin de l'interrogatoire, puis reprendre la chasse à cette tête !

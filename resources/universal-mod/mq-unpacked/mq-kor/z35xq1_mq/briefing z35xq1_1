@@ -1,18 +1,18 @@
-[Medium] Crazy animals
+[보통] 미친 짐승들
 #show Hero
 #show Marshal
 #CAMERA 3 0 3.5 1.5
 #phrase Marshal  1
-I see you've got nothing better to do. Get over here!
+보아하니 할 일이 없는 모양이군. 이리 와라!
 #phrase Hero  2
-Huh?
+네?
 #phrase Marshal  3
-Our men are out there holding back attacks from crazed beasts, while you're wandering around. And I can tell you've got the makings of a fine warrior. I'll put your name down. If none of our men fall, you'll earn yourself some gold.
+우리 병사들이 저 밖에서 미친 짐승들의 공격을 막고 있는데, 너는 어슬렁거리고 있지. 그런데 보니 훌륭한 전사의 자질이 있군. 이름을 올려 두겠다. 우리 병사가 하나도 쓰러지지 않으면 금을 좀 벌게 될 거다.
 #phrase Hero  4
-If only Lord Firez weren't conducting his disastrous experiments...
+피레즈 경이 그 끔찍한 실험만 하지 않았어도...
 #phrase Marshal  5
-That is none of your concern.
+그건 네가 상관할 일이 아니다.
 #phrase Hero  6
-I'll make sure our soldiers suffer no losses while repelling the attacks, sir.
+공격을 막는 동안 우리 병사들이 피해를 입지 않도록 하겠습니다.
 #phrase Marshal  7
-At ease!
+쉬어!

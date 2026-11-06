@@ -1,10 +1,10 @@
-The traitor died a natural death
+배신자가 자연사했다
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-You can forget it. The treacherous slave died a natural death.
+그 일은 잊어도 되네. 배신한 노예는 자연사했어.
 #phrase Hero  2
-Natural?
+자연사요?
 #phrase Glav  3
-Oh yes! What can be more natural than death of poison added in his plate by the slave cook? As I said, our Shelter is the last hope for the ones who work at the plantations, and they do not want to lose that hope!
+그렇다네! 노예 요리사가 접시에 넣은 독으로 죽는 것보다 더 자연스러운 죽음이 있겠나? 말했듯이, 우리 은신처는 농장에서 일하는 이들의 마지막 희망이고, 그들은 그 희망을 잃고 싶어 하지 않네!

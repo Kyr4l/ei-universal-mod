@@ -1,12 +1,12 @@
-[Hard] Ogres in the Sands
+[어려움] 모래 지대의 오우거
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Our ally the Shei-Var Clan of orcs, has asked us for help. They report that the three ogres living in the Sands have joined forces with their enemies!
+우리 동맹인 오크 셰이바르 부족이 도움을 청했어. 모래 지대에 사는 오우거 셋이 자기들 적과 손을 잡았다는군!
 #phrase Hero  2
-Let me guess... You're probably going to ask me to take care of it?
+맞혀 볼까... 아마 나더러 처리해 달라고 하겠지?
 #phrase Merc1  3
-Correct! We must stand by our allies. They keep the Sands under control for us.
+맞아! 우리는 동맹을 도와야 해. 그들이 우리를 위해 모래 지대를 장악하고 있으니까.
 #phrase Merc1  4
-Be careful, these ogres are serious opponents! They are really tough and very strong. And while you're there you can also plunder the ogres' treasures!
+조심해, 그 오우거들은 만만치 않은 상대야! 정말 질기고 엄청나게 세지. 그리고 간 김에 오우거들의 보물도 털어 와!

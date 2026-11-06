@@ -1,12 +1,12 @@
-The spider queen
+여왕거미
 #show Hero
 #show Glav
 #CAMERA 9
 #phrase Glav  1
-Our scouts report that the Khadaganians have captured a spider queen and are breeding huntsman spiders.
+정찰병들의 보고에 따르면 카다간 놈들이 여왕거미를 잡아서 사냥거미를 번식시키고 있다네.
 #phrase Hero  1
-As if there aren't already enough of these vermin out there...
+그 해충들이 이미 충분히 많은데도 말이죠...
 #phrase Glav  2
-There are only a few of us, and if these spiders reinforce the forces of the Khadagan Empire, we won't be able to stop them!
+우리는 몇 안 되네. 그 거미들이 카다간 제국의 군세에 더해지면 우리는 놈들을 막을 수 없어!
 #phrase Glav  3
-You must stop their plans or we'll be lost!
+놈들의 계획을 막아야 하네. 그렇지 않으면 우린 끝이야!

@@ -32,7 +32,7 @@ Stronger and more stylish than a regular helmet.
 Provides minimal defense.
 
 === ARMOR Gipat_Brigand_Helm Wolf_Hide_White
-"White Wolf's head" helmet
+"White wolf's head" helmet
 Stronger and more stylish than a fur hat.
 
 === ARMOR Gipat_Brigand_Leggins Hyena_Hide
@@ -80,7 +80,7 @@ Wolf's fur breastplate
 Simple, warm, and lightly protective.
 
 === ARMOR Gipat_Brigand_Shirt Wolf_Hide_White
-White wolf's fur breastplate
+White wolf fur breastplate
 Strong, attractive, and warm for harsh conditions.
 
 === ARMOR Gipat_High_Boots Black
@@ -89,7 +89,7 @@ Durable boots crafted from tempered leather, ideal for challenging environments.
 
 === ARMOR Gipat_High_Gloves Black
 Gipath stitched gauntlets of tempered leather
-Resilient gloves, protects your wrists while maintaining dexterity.
+Resilient gauntlets that protect your wrists while keeping your fingers nimble.
 
 === ARMOR Gipat_High_Helm Black
 Gipath stitched helmet of tempered leather
@@ -105,7 +105,7 @@ Durable pants made from tempered leather, providing excellent leg coverage.
 
 === ARMOR Gipat_High_Plate Black
 Gipath stitched coat of tempered leather
-Heavy plate armor offers maximum protection without sacrificing mobility.
+A heavy coat that offers maximum protection without sacrificing mobility.
 
 === ARMOR Gipat_High_Shirt Black
 Gipath stitched breastplate of tempered leather
@@ -160,7 +160,7 @@ Gipath light trousers of tempered leather
 Light trousers designed for mobility with decent leg protection.
 
 === ARMOR Gipat_Low_Plate Black
-Gipath light shirt of tempered leather
+Gipath light coat of tempered leather
 Flexible coat offering decent protection while allowing mobility.
 
 === ARMOR Gipat_Low_Shirt Black
@@ -185,7 +185,7 @@ Sturdy leggings that balance comfort and durability for extended wear.
 
 === ARMOR Gipat_Medium_Pants Black
 Gipath simple shorts of tempered leather
-Dependable trousers, they provide a good leg protection.
+Dependable shorts that still give good leg protection.
 
 === ARMOR Gipat_Medium_Plate Black
 Gipath simple coat of tempered leather
@@ -196,8 +196,8 @@ Gipath simple breastplate of tempered leather
 Reliable medium armor shirt combining comfort and solid defense.
 
 === ARMOR Hadagan_Brigand_Boots Black
-Khadaganian tempered leather leggings
-Reinforced boots offering strong protection and comfort for rough terrains.
+Khadaganian tempered leather boots
+Reinforced boots offering strong protection and comfort on rough terrain.
 
 === ARMOR Hadagan_Brigand_Gloves Black
 Khadaganian tempered leather gauntlets
@@ -217,7 +217,7 @@ Robust trousers providing freedom of movement and solid protection.
 
 === ARMOR Hadagan_Brigand_Plate Black
 Khadaganian tempered leather coat
-Solid coat ensuring protection from both elements and foes alike.
+Solid coat ensuring protection from both the elements and foes.
 
 === ARMOR Hadagan_Brigand_Shirt Black
 Khadaganian lower breastplate of tempered leather
@@ -225,115 +225,115 @@ Flexible jerkin designed for solid protection without restricting movement.
 
 === ARMOR Hadagan_High2_Boots Alloy
 Khadaganian alloy laminar boots
-<placeholder>
+Every plate is forged from an alloy that even meteorite iron cannot match.
 
 === ARMOR Hadagan_High2_Gloves Alloy
 Khadaganian alloy laminar gauntlets
-<placeholder>
+Better than meteorite gauntlets - and few smiths in Khadagan would even dare to forge them.
 
 === ARMOR Hadagan_High2_Helm Alloy
 Khadaganian forged alloy helmet
-<placeholder>
+Blows that would split a meteorite helmet only ring off this one.
 
 === ARMOR Hadagan_High2_Leggins Alloy
 Khadaganian forged alloy top leggings
-<placeholder>
+The forge-masters of Khadagan guard the secret of this alloy jealously.
 
 === ARMOR Hadagan_High2_Pants Alloy
 Khadaganian alloy laminar trousers
-<placeholder>
+Light enough to march in, hard enough to blunt any blade.
 
 === ARMOR Hadagan_High2_Plate Alloy
 Khadaganian forged alloy cuirass
-<placeholder>
+A cuirass worthy of a Khadaganian general - and priced like one.
 
 === ARMOR Hadagan_High2_Shirt Alloy
 Khadaganian light alloy body armor
-<placeholder>
+Light armor, yet stronger than most heavy cuirasses.
 
 === ARMOR Hadagan_High_Boots Blue_Lizard
-Khadaganian boots of blue Lizard hide
+Khadaganian boots of blue lizard hide
 Decent protection for your feet, quite functional.
 
 === ARMOR Hadagan_High_Boots Green_Lizard
-Khadaganian boots of green Lizard hide
+Khadaganian boots of green lizard hide
 Minimal foot protection, unreliable in tough terrain.
 
 === ARMOR Hadagan_High_Gloves Blue_Lizard
-Khadaganian gauntlets of blue Lizard hide
+Khadaganian gauntlets of blue lizard hide
 Good hand protection, fairly durable.
 
 === ARMOR Hadagan_High_Gloves Green_Lizard
-Khadaganian gauntlets of green Lizard hide
+Khadaganian gauntlets of green lizard hide
 Basic hand cover, not very durable.
 
 === ARMOR Hadagan_High_Helm Alloy
 Khadaganian light alloy helmet
-<placeholder>
+A simple design, but the alloy makes up for it many times over.
 
 === ARMOR Hadagan_High_Leggins Alloy
 Khadaganian alloy chainmail trousers
-<placeholder>
+Each ring of this chainmail is worth more than a peasant's house.
 
 === ARMOR Hadagan_High_Pants Blue_Lizard
-Khadaganian trousers of blue Lizard hide
+Khadaganian trousers of blue lizard hide
 Well-cut and practical for everyday use.
 
 === ARMOR Hadagan_High_Pants Green_Lizard
-Khadaganian trousers of green Lizard hide
+Khadaganian trousers of green lizard hide
 Cheap but functional, limited defense.
 
 === ARMOR Hadagan_High_Plate Alloy
 Khadaganian light alloy cuirass
-<placeholder>
+Who would forge such a light cuirass from such a precious alloy? Someone very rich.
 
 === ARMOR Hadagan_High_Shirt Blue_Lizard
-Khadaganian armor of blue Lizard hide
+Khadaganian armor of blue lizard hide
 Offers moderate protection, reasonably reliable.
 
 === ARMOR Hadagan_High_Shirt Green_Lizard
-Khadaganian armor of green Lizard hide
+Khadaganian armor of green lizard hide
 Minimal protection, easily damaged.
 
 === ARMOR Hadagan_Highest2_Helm Alloy
 Khadaganian heavy alloy helmet
-<placeholder>
+Heavier blows than yours have already failed to dent it.
 
 === ARMOR Hadagan_Highest2_Leggins Alloy
 Khadaganian heavy alloy leggings
-<placeholder>
+The finest leggings the forges of Khadagan have ever produced.
 
 === ARMOR Hadagan_Highest2_Plate Alloy
 Khadaganian heavy alloy cuirass
-<placeholder>
+Swords break, arrows shatter - and the cuirass stays whole.
 
 === ARMOR Hadagan_Highest_Boots Alloy
 Khadaganian alloy reinforced boots
-<placeholder>
+Plates of meteorite alloy: your feet have never been this safe.
 
 === ARMOR Hadagan_Highest_Gloves Alloy
 Khadaganian alloy reinforced gauntlets
-<placeholder>
+These could stop a battle axe, not just a knife.
 
 === ARMOR Hadagan_Highest_Helm Alloy
 Khadaganian alloy reinforced helmet
-<placeholder>
+With this on your head, even a troll's club is just a nuisance.
 
 === ARMOR Hadagan_Highest_Leggins Alloy
 Khadaganian alloy reinforced leggings
-<placeholder>
+Freedom of movement and protection that no meteorite armor can offer.
 
 === ARMOR Hadagan_Highest_Pants Alloy
 Khadaganian reinforced alloy chainmail trousers
-<placeholder>
+Expensive beyond belief, and worth every coin.
 
 === ARMOR Hadagan_Highest_Plate Alloy
 Khadaganian alloy reinforced cuirass
-<placeholder>
+Only the greatest masters can work this alloy into such a cuirass.
 
 === ARMOR Hadagan_Highest_Shirt Alloy
 Khadaganian reinforced alloy chainmail
-<placeholder>
+No chainmail on the islands gives better protection.
 
 === ARMOR Hadagan_Low_Boots Jute
 Jute footwraps
@@ -357,7 +357,7 @@ They will cover your legs, but do not expect them to last long.
 
 === ARMOR Hadagan_Low_Plate Jute
 Jute collar
-Calling this an armor is quite the stretch.
+Calling this armor is quite a stretch.
 
 === ARMOR Hadagan_Low_Shirt Jute
 Light jute shirt
@@ -365,7 +365,7 @@ It keeps the sun off your skin, but that is all.
 
 === ARMOR Hadagan_Medium_Boots Jute
 Khadaganian jute travel boots
-A good craftsman does not save these from being utterly mediocre.
+Even a good craftsman could not save these from being utterly mediocre.
 
 === ARMOR Hadagan_Medium_Gloves Jute
 Khadaganian jute gloves
@@ -421,115 +421,115 @@ Strong shirt crafted for durability and reliable protection.
 
 === ARMOR Kania_High2_Boots Alloy
 Canian army alloy boots
-<placeholder>
+Not even the Emperor's guard is issued boots like these.
 
 === ARMOR Kania_High2_Gloves Alloy
 Canian army alloy high gauntlets
-<placeholder>
+Reserved for the most distinguished commanders of the Empire.
 
 === ARMOR Kania_High2_Helm Alloy
 Canian army alloy helmet
-<placeholder>
+A helmet fit for the Emperor himself.
 
 === ARMOR Kania_High2_Leggins Alloy
 Canian army alloy leggings
-<placeholder>
+The army treasury can only afford these for a handful of officers.
 
 === ARMOR Kania_High2_Pants Alloy
-Cania army leggings
-<placeholder>
+Canian army alloy chainmail trousers
+Few in Cania have ever seen chainmail woven from this alloy.
 
 === ARMOR Kania_High2_Plate Alloy
 Canian army alloy cuirass
-<placeholder>
+If there is anything better in all of Cania, nobody has found it yet.
 
 === ARMOR Kania_High2_Shirt Alloy
 Canian army alloy chainmail
-<placeholder>
+Only the highest commanders of the Empire wear chainmail like this - and rarely at that.
 
 === ARMOR Kania_High_Boots Blue_Lizard
-Canian light boots of blue Lizard hide
+Canian light boots of blue lizard hide
 Lightweight and fairly reliable.
 
 === ARMOR Kania_High_Boots Green_Lizard
-Canian light boots of green Lizard hide
+Canian light boots of green lizard hide
 Barely reliable, avoid rough use.
 
 === ARMOR Kania_High_Gloves Blue_Lizard
-Canian light gauntlets of blue Lizard hide
+Canian light gauntlets of blue lizard hide
 Provides decent hand protection, quite useful.
 
 === ARMOR Kania_High_Gloves Green_Lizard
-Canian light gauntlets of green Lizard hide
+Canian light gauntlets of green lizard hide
 Basic hand protection, very thin.
 
 === ARMOR Kania_High_Helm Alloy
 Canian light alloy helmet
-<placeholder>
+Light as a cap, yet stronger than a meteorite helmet.
 
 === ARMOR Kania_High_Leggins Alloy
 Canian light alloy leggings
-<placeholder>
+Light leggings that would stop a tiger's fangs - and much worse.
 
 === ARMOR Kania_High_Pants Blue_Lizard
-Canian trousers of blue Lizard hide
+Canian trousers of blue lizard hide
 Basic cut, provides fair protection.
 
 === ARMOR Kania_High_Pants Green_Lizard
-Canian trousers of green Lizard hide
+Canian trousers of green lizard hide
 Only stops the weakest blows, not durable.
 
 === ARMOR Kania_High_Plate Alloy
 Canian light alloy cuirass
-<placeholder>
+Freedom of movement, with protection beyond anything meteorite can give.
 
 === ARMOR Kania_High_Shirt Blue_Lizard
-Canian jerkin of blue Lizard hide
+Canian jerkin of blue lizard hide
 Light and suitable for hunting and light combat.
 
 === ARMOR Kania_High_Shirt Green_Lizard
-Canian jerkin of green Lizard hide
+Canian jerkin of green lizard hide
 Better for hunting, poor in combat.
 
 === ARMOR Kania_Highest2_Helm Alloy
-Canian army heavy alloy  helmet
-<placeholder>
+Canian army heavy alloy helmet
+Commanders of this rank rarely have to fight - but when they do, they wear this.
 
 === ARMOR Kania_Highest2_Leggins Alloy
 Canian army heavy alloy leggings
-<placeholder>
+The price is more frightening than a tiger - and so is the protection.
 
 === ARMOR Kania_Highest2_Plate Alloy
 Canian army heavy alloy cuirass
-<placeholder>
+Not armor but a masterpiece - at the price of a whole estate.
 
 === ARMOR Kania_Highest_Boots Alloy
 Canian combat alloy boots
-<placeholder>
+Even more "out of this world" than meteorite boots!
 
 === ARMOR Kania_Highest_Gloves Alloy
 Canian alloy combat gauntlets
-<placeholder>
+No blade on these islands can bite through these gauntlets.
 
 === ARMOR Kania_Highest_Helm Alloy
 Canian alloy winged helmet
-<placeholder>
+The wings alone cost more than most helmets.
 
 === ARMOR Kania_Highest_Leggins Alloy
 Canian heavy alloy leggings
-<placeholder>
+An enemy who sees these will look for an easier target.
 
 === ARMOR Kania_Highest_Pants Alloy
 Canian alloy chainmail trousers
-<placeholder>
+A thick weave of alloy rings that steel cannot cut.
 
 === ARMOR Kania_Highest_Plate Alloy
 Canian heavy alloy cuirass
-<placeholder>
+In this cuirass, you can simply walk through the enemy ranks.
 
 === ARMOR Kania_Highest_Shirt Alloy
 Canian alloy chainmail shirt
-<placeholder>
+Not even a heavy crossbow bolt gets through this shirt.
 
 === ARMOR Kania_Low_Boots Jute
 Canian jute boots
@@ -540,7 +540,7 @@ Canian jute gloves
 At least they are better than bare hands...
 
 === ARMOR Kania_Low_Helm Black
-Canian tempered hat for farmers
+Canian farmer's hat of tempered leather
 Light helmet offering decent protection while maintaining comfort.
 
 === ARMOR Kania_Low_Leggins Black
@@ -553,7 +553,7 @@ Better than wearing nothing, but not by much.
 
 === ARMOR Kania_Low_Plate Black
 Canian light coat of tempered leather
-Flexible plate offering reliable protection while allowing movement.
+Flexible coat offering reliable protection while allowing movement.
 
 === ARMOR Kania_Low_Shirt Jute
 Canian jute shirt
@@ -601,7 +601,7 @@ A steel crown set with amethysts. It turns a glancing blow.
 
 === ARMOR Crown Mithrill
 Mithrill crown
-A light mithril crown: kings wear it to battle.
+A light mithrill crown: kings wear it to battle.
 
 === ARMOR Crown Adamantium
 Adamantite crown

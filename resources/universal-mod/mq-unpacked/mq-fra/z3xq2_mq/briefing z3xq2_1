@@ -1,12 +1,12 @@
-[Easy] Giant toad
+[Facile] Le crapaud géant
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-What are those strange rumors circulating in the village? People are talking about some Ogre who learned how to change into a toad...
+Quelles sont ces étranges rumeurs qui circulent au village ? Les gens parlent d'un ogre qui aurait appris à se changer en crapaud...
 #phrase Nsheriff  2
-Well, I never! You can not tell anything to anybody without them twisting it all around! Of course nobody has changed into anything; just the Orcs breeding another Ogre toad ...
+Ça alors ! On ne peut rien dire à personne sans que tout soit déformé ! Bien sûr que personne ne s'est changé en quoi que ce soit ; les orques élèvent simplement un nouveau crapaud ogre...
 #phrase Nsheriff  3
-The Seers make potage from some herbs, pour those over an ordinary poisonous toad and it grows huge! Every time the Orcs make themselves another ally like that, we search for brave men who are willing to go and deal with the toad.
+Les prophètes préparent une mixture à base d'herbes, la versent sur un crapaud venimeux ordinaire, et il devient énorme ! Chaque fois que les orques se font un tel allié, nous cherchons des braves prêts à aller s'occuper du crapaud.
 #phrase Nsheriff  4
-By the way, now that you know all about it, why not you have a try? You may find the toad in the north-east of the Foothills!
+D'ailleurs, maintenant que vous savez tout, pourquoi ne pas tenter votre chance ? Vous trouverez le crapaud au nord-est des Collines basses !

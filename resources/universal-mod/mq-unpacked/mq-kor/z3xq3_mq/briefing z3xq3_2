@@ -1,8 +1,8 @@
-No way to beat the Orcs!
+오크들을 이길 수 없다!
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-The Orcs are far too formidable. I need more experience to fight them!
+오크들은 너무 무시무시합니다. 그들과 싸우려면 경험이 더 필요합니다!
 #phrase Nsheriff  2
-I see... After all, so far the Orcs are busy enough in the east. Perchance you will have time to switch the pyramid off before they decide to deal with us seriously!
+알겠네... 어쨌든 지금은 오크들이 동쪽에서 충분히 바쁘니까. 놈들이 본격적으로 우리를 상대하기 전에 피라미드를 끌 시간이 있을지도 모르지!

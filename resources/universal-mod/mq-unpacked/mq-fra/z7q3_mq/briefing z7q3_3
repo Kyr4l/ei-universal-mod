@@ -1,8 +1,8 @@
-The Orcs are furious!
+Les orques sont furieux !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Good work! My spies report that the Orcs are furious. Ha, they slaughter Goblins better than the Chosen ever did.
+Beau travail ! Mes espions rapportent que les orques sont furieux. Ha, ils massacrent les gobelins mieux que l'Élu ne l'a jamais fait.
 #phrase Nsheriff  2
-Have a rest, go to Babur, maybe buy something... meanwhile I shall try to figure out another clever plan!
+Reposez-vous, allez voir Babur, achetez quelque chose... pendant ce temps, je vais essayer de trouver un autre plan génial !

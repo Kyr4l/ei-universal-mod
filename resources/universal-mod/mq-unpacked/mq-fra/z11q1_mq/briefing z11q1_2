@@ -1,10 +1,10 @@
-The poachers disappeared on their own
+Les braconniers sont partis d'eux-mêmes
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-You are back already?
+Déjà de retour ?
 #phrase Hero  1
-It looks like the poachers left on their own. I couldn't locate them.
+On dirait que les braconniers sont partis d'eux-mêmes. Je ne les ai pas trouvés.
 #phrase Huber  3
-That's probably fine for me. From now on with you!
+Cela me convient, je suppose. Allez, filez !

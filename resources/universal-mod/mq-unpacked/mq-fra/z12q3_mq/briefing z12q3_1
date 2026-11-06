@@ -1,14 +1,14 @@
-[Hard] Captain Tilvar is missing!
+[Difficile] Le capitaine Tilvar a disparu !
 #show Hero
 #show Huber
 #CAMERA 3 20 3.5 1
 #phrase Huber  1
-I am very worried about captain Tilvar! There was no news at all from him since I sent him with a party to kill all those wormheads near the mines!
+Je suis très inquiet pour le capitaine Tilvar ! Aucune nouvelle de lui depuis que je l'ai envoyé avec une troupe tuer tous ces Tentacules près des mines !
 #phrase Huber  2
-I need a man who is prepared to go north across the lake and find out what happened to him. And I believe you may well be that man!
+J'ai besoin de quelqu'un prêt à traverser le lac vers le nord pour découvrir ce qui lui est arrivé. Et je crois que vous pourriez bien être cette personne !
 #phrase Hero  3
-I would be honored, Your Excellency! But I would like to understand one thing: I thought Wormheads were subterranean creatures? Do you expect me to go underground and fight them down there?
+Ce serait un honneur, Votre Excellence ! Mais j'aimerais comprendre une chose : je croyais que les Tentacules vivaient sous terre ? Vous attendez de moi que je descende les combattre là-dessous ?
 #phrase Huber  4
-Oh no, let those nightmarish creatures live in their catacombs for as long as they might care! I only told Tilvar to kill the ones who dared to venture outside!
+Oh non, que ces créatures cauchemardesques restent dans leurs catacombes aussi longtemps qu'il leur plaira ! J'ai seulement dit à Tilvar de tuer ceux qui osaient sortir !
 #phrase Huber  5
-And you might also take part in this enterprise - and if my worst fears are realized, you will have to do the job alone. I cannot promise you a reward, but the experience you gain will be priceless!
+Et vous pourriez aussi prendre part à l'entreprise - et si mes pires craintes se confirment, vous devrez faire le travail seul. Je ne peux pas vous promettre de récompense, mais l'expérience que vous y gagnerez n'a pas de prix !

@@ -1,8 +1,8 @@
-No way to beat the Orcs!
+Impossible de vaincre les orques !
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-The Orcs are far too formidable. I need more experience to fight them!
+Les orques sont bien trop redoutables. Il me faut plus d'expérience pour les combattre !
 #phrase Nsheriff  2
-I see... After all, so far the Orcs are busy enough in the east. Perchance you will have time to switch the pyramid off before they decide to deal with us seriously!
+Je vois... Après tout, pour l'instant, les orques sont bien occupés à l'est. Peut-être aurez-vous le temps de désactiver la pyramide avant qu'ils ne décident de s'occuper sérieusement de nous !

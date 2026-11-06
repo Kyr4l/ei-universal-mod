@@ -1,14 +1,14 @@
-[Easy] Kadagan Recons
+[쉬움] 카다간 정찰병
 #show Hero
 #show Marshal
 #CAMERA 11
 #phrase Marshal  1
-I've just received a report that indicates the other portal was turned on!
+방금 다른 포탈이 작동했다는 보고를 받았다!
 #phrase Hero  2
-What portal? There's more than this one in the city?
+무슨 포탈이요? 도시에 이것 말고도 포탈이 있습니까?
 #phrase Marshal  3
-There is an abandonned portal at the East, we thought it was broken but apparently someone has managed to turn it back on!
+동쪽에 버려진 포탈이 하나 있다. 고장 난 줄 알았는데, 누군가 다시 작동시킨 모양이야!
 #phrase Marshal  4
-And apparently the Khadagan empire is preparing an invasion, they sent recon units to explore Jigran. If you can take them out and close the portal, that might earn enough time for us to prepare defenses. If they ever try to come back...
+게다가 카다간 제국이 침공을 준비하는 듯하다. 지그란을 살피라고 정찰병들을 보냈어. 놈들을 처치하고 포탈을 닫아준다면, 놈들이 다시 오더라도 방어를 준비할 시간을 벌 수 있을 거다...
 #phrase Hero 5
-If these are recon units then I suppose they should not be that strong, I guess I can do it...
+정찰병이라면 그렇게 강하지는 않겠군요. 제가 할 수 있을 것 같습니다...

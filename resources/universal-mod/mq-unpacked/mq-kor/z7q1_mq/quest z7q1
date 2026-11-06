@@ -1,20 +1,20 @@
-Save GoGo
-The Goblin chief GoGo is not the most aggressive or dangerous of goblins. That is why the Orcs have decided to execute him and replace him with a more evil, Orc-subservient Goblin. GoGo must be saved.
+고고 구출
+고블린 족장 고고는 고블린 중에서 가장 공격적이지도, 위험하지도 않다. 그래서 오크들은 그를 처형하고 더 사악하고 오크에게 순종하는 고블린으로 바꾸기로 했다. 고고를 구해야 한다.
 #subobj  1
-Central island
-The execution will take place on the central island in the river delta. To prevent it, you must get on to the island.
+가운데 섬
+처형은 강 삼각주의 가운데 섬에서 열린다. 이를 막으려면 섬으로 가야 한다.
 #subobj  2
-Killing the Orcs
-All the Orcs who gathered on the central island must be killed.
+오크 처치
+가운데 섬에 모인 오크들을 모두 죽여야 한다.
 #subobj  3
-Taking GoGo away
-After all the Orcs have been killed, approach GoGo and lead him away from the central island.
+고고 데려가기
+오크들을 모두 죽인 뒤 고고에게 다가가 가운데 섬에서 데리고 나와라.
 #subobj  4
-Take GoGo to Barren Island
-GoGo can hide on Barren Island (located in the east); he'll be safe there.
+고고를 황량한 섬으로
+고고는 동쪽에 있는 황량한 섬에 숨을 수 있다. 그곳이라면 안전할 것이다.
 #subobj  5
-Find material to repair the bridge
-The material needed to repair the broken bridge can be found on the Barren Island. You should take it with you and attempt to repair the bridge.
+다리를 고칠 재료 찾기
+부서진 다리를 고칠 재료는 황량한 섬에 있다. 챙겨 가서 다리를 고쳐 보라.
 #subobj  6
-Repair the bridge
-The leader of the GoGo rescue mission must come to the broken bridge. If he has a plank, the bridge will be repaired.
+다리 수리
+고고 구출대의 대장이 부서진 다리로 가야 한다. 판자를 가지고 있으면 다리가 수리된다.

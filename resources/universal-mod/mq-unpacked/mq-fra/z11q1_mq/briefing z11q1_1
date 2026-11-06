@@ -1,14 +1,14 @@
-[Easy] Poachers in the Duke's hunting grounds!
+[Facile] Des braconniers sur les terres du Duc !
 #show Hero
 #show Huber
 #CAMERA 3 30 3 1
 #phrase Huber  1
-The Duke has ordered me to take care of a problem. Poachers hunting on the Duke's hunting grounds...this must stop!
+Le Duc m'a chargé de régler un problème. Des braconniers chassent sur ses terres... Cela doit cesser !
 #phrase Huber  2
-The city guards report that they discovered deer killed in the hunting area outside the city. It's best to look there first to find these poachers.
+Les gardes de la cité ont trouvé des cerfs abattus dans la zone de chasse hors de la ville. Le mieux est de commencer par chercher là-bas.
 #phrase Huber  3
-You must understand that the Duke's concerns are also mine, as the hunting grounds around the city also support us. We can't afford to share these grounds with any outsiders.
+Comprenez bien que les soucis du Duc sont aussi les miens : les terres de chasse autour de la cité nous nourrissent, nous aussi. Nous ne pouvons pas les partager avec des étrangers.
 #phrase Hero  1
-All right, I'll go and drive these poachers away. But there has to be something for me in it other than a warm soup once I return!
+Entendu, je vais chasser ces braconniers. Mais il faudra qu'il y ait autre chose pour moi qu'une soupe chaude à mon retour !
 #phrase Huber  4
-Of course my friend, the Duke is kind and generous to his allies! As long as they serve him faithfully.
+Bien sûr, mon ami, le Duc est bon et généreux envers ses alliés ! Tant qu'ils le servent fidèlement.

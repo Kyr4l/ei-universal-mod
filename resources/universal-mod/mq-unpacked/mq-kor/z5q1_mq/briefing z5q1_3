@@ -1,10 +1,10 @@
-The Armadillo Mother is dead!
+어미 아르마딜로가 죽었다!
 #show Hero
 #show NSheriff
 #CAMERA 9
 #phrase NSheriff  1
-So the rumors were true?
+그럼 소문이 사실이었나?
 #phrase Hero  2
-The entire cave is full of orcs and monsters. We should clean the whole tunnel.
+동굴 전체가 오크와 괴물로 가득합니다. 터널을 통째로 정리해야겠어요.
 #phrase NSheriff  3
-For now the immediate threat is averted. There are other, more urgent threats.
+당장의 위협은 사라졌네. 더 급한 위협들이 남아 있지만.

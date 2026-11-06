@@ -1,12 +1,12 @@
-The spider queen is dead!
+여왕거미가 죽었다!
 #show Hero
 #show Glav
 #CAMERA 9
 #phrase Glav  1
-Well done, my friend! That should give us an advantage in the next battles.
+잘했네, 친구! 이걸로 다음 전투에서 우리가 유리해질 걸세.
 #phrase Hero  1
-However, this will not work again, the spider was heavily guarded. They'll definitely double their guards next time.
+하지만 두 번은 통하지 않을 겁니다. 거미는 삼엄하게 지켜지고 있었어요. 다음엔 분명 경비를 두 배로 늘릴 겁니다.
 #phrase Glav  2
-For now, the queen is dead. I don't think the Khadaganians will find a new one anytime soon. You have to know that females are very rare in this species.
+어쨌든 지금은 여왕이 죽었네. 카다간 놈들이 금방 새 여왕을 찾지는 못할 거야. 이 종에서 암컷은 아주 드물거든.
 #phrase Hero  2
-I hope you are right...
+그 말씀이 맞기를 바랍니다...

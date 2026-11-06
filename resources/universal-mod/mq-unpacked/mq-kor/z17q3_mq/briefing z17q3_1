@@ -1,10 +1,10 @@
-The exit from the Shelter is unsafe!
+은신처의 출구가 위험하다!
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-I've already warned everyone else about this and now I must to warn you. Do not leave the Last Shelter via the exit leading to the necromancers' desert!
+다른 이들에게는 이미 경고했고, 이제 자네에게도 경고해야겠네. 강령술사들의 사막으로 이어지는 출구로는 최후의 은신처를 나가지 말게!
 #phrase Glav  2
-Something happened in the north of Suslanger, and a family of cyclops who lived there left their habitat. Now they roam near the exit to our catacombs!
+수슬랑게르 북쪽에서 무슨 일이 생겨서, 그곳에 살던 키클롭스 가족이 서식지를 떠났네. 지금은 우리 지하 묘지 출구 근처를 돌아다니고 있어!
 #phrase Hero  3
-Yes, they are indeed dangerous neighbors ... they should be gotten rid of. I shall see to it!
+네, 정말 위험한 이웃이군요... 없애야겠습니다. 제가 처리하죠!

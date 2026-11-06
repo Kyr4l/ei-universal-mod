@@ -1,14 +1,14 @@
-[Medium] Clear the path to the cave
+[보통] 동굴로 가는 길 확보
 #show Hero
 #show KMage
 #CAMERA 2
 #phrase Hero  1
-You don't seem alright. What happened?
+안색이 좋지 않군요. 무슨 일입니까?
 #phrase KMage  2
-Well, scouts have reported that ogres are now guarding the path to a cave!
+정찰병들이 보고하길, 이제 오우거들이 동굴로 가는 길을 지키고 있다는군!
 #phrase Hero  3
-And what is wrong with that?
+그게 뭐가 문제입니까?
 #phrase KMage  4
-Inside that cave there is an ancient portal... We can't let these monsters block the way. There are also a few ice elementals near the center of the lake...
+그 동굴 안에 고대 포탈이 있네... 저 괴물들이 길을 막게 둘 수는 없어. 호수 한가운데 근처에는 얼음 정령도 몇 있고...
 #phrase KMage  5
-Of course clearing the way will grant you a small reward, that shouldn't take too long for someone like you!
+물론 길을 확보하면 작은 보상을 주겠네. 자네 같은 사람이라면 오래 걸리지 않을 걸세!

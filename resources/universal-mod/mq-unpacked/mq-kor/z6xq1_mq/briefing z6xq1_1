@@ -1,14 +1,14 @@
-[Medium] Chief Seer
+[보통] 주술사 족장
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Pity we do not have the Chosen with us! He would make a deal with the Orcs, but now they are going to attack our village!
+선택받은 자가 우리와 함께 있지 않다니 안타깝군! 그라면 오크들과 거래를 할 텐데, 이제 놈들이 우리 마을을 공격하려 하네!
 #phrase Nsheriff  2
-They took the old Goblin settlement in the Middle Mountains and recently elected themselves a new Seer who is going to lead them in their expeditions! I do not know what we are going to do ...
+놈들은 중부 산맥의 옛 고블린 정착지를 차지하고, 최근 원정을 이끌 새 주술사를 뽑았네! 어떻게 해야 할지 모르겠군...
 #phrase Hero  3
-Is it so difficult? Just send a couple of capable guys and cut that Seer's throat for him... It will take the Orcs a while to elect another one!
+그렇게 어렵습니까? 쓸 만한 녀석 둘만 보내서 그 주술사의 목을 따면 되죠... 오크들이 새 주술사를 뽑으려면 한동안 걸릴 겁니다!
 #phrase Nsheriff  4
-Do you think this did not occur to me? But it is very difficult to get into their village, and the Seer is sure to be well protected! I can not send people to a certain death, and so far nobody has volunteered...
+그 생각을 안 해 봤을 것 같나? 하지만 놈들 마을에 들어가기는 아주 어렵고, 주술사는 분명 단단히 보호받고 있을 걸세! 사람들을 확실한 죽음으로 보낼 수는 없고, 지금까지 자원한 사람도 없네...
 #phrase Hero  5
-Well, yes they did. I shall do it.
+그럼, 이제 한 명 있습니다. 제가 하죠.

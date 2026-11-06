@@ -1,21 +1,21 @@
 # um-texts 1
 === MODIFIER a0
-Half Area
-Increase the spell's initial coverage area by half.
+절반 범위
+주문의 초기 효과 범위를 절반만큼 늘린다.
 -A+
 
 === MODIFIER d0
-Half Duration
-Increases the spell's duration by half.
+절반 지속
+주문의 지속 시간을 절반만큼 늘린다.
 -D+
 
 === MODIFIER e0
-Half Effect
-Increases the spell's effect by half.
+절반 효과
+주문의 효과를 절반만큼 늘린다.
 -E+
 
 === MODIFIER r0
-Half Range
-Increases the spell's range by half.
+절반 사거리
+주문의 사거리를 절반만큼 늘린다.
 -R+
 

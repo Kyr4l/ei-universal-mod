@@ -1,20 +1,20 @@
-Zombie mage
+좀비 마법사
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I often remember brother Blondie who left us in as strange a way as he joined us. That young man had a common enough appearance, but he was very clever and cunning. Even now, when Blondie is no longer with us, his deeds live in our memories.
+나는 종종 블론디 형제를 떠올린다네. 우리에게 올 때처럼 떠날 때도 이상하게 떠났지. 그 젊은이는 생김새는 평범했지만 아주 영리하고 교활했어. 블론디가 없는 지금도 그의 행적은 우리 기억 속에 살아 있네.
 #phrase Glav  2
-For example, recently I received a communication from the disgraced Necromancer Kholai with whom Blondie had some sort of very mysterious business. But this time the interests of Kholai are very simple, and similar to our own.
+예를 들어, 최근에 블론디와 무언가 아주 수상한 거래를 하던 실각한 강령술사 홀라이에게서 전갈을 받았네. 하지만 이번에 홀라이의 관심사는 아주 단순하고, 우리의 것과 비슷하다네.
 #phrase Glav  3
-Kholai's enemy, the young magician Taivo, managed to use the body of a dead Necromancer and made a zombie magician out of it. This creature never sleeps or rests, is stronger than an ordinary zombie, and it also uses combat magic!
+홀라이의 적인 젊은 마법사 타이보가 죽은 강령술사의 시신으로 좀비 마법사를 만들어 냈네. 그 괴물은 자지도 쉬지도 않고, 보통 좀비보다 강하며, 전투 마법까지 쓴다네!
 #phrase Glav  4
-Kholai wants to teach us how to kill such enemies quickly and safely - he thinks that would be a blow to Taivo's authority. However, to achieve that Kholai needs the head of the zombie magician head.
+홀라이는 그런 적을 빠르고 안전하게 죽이는 법을 우리에게 가르쳐 주고 싶어 하네. 그게 타이보의 권위에 타격이 될 거라 생각하지. 하지만 그러려면 홀라이에게 좀비 마법사의 머리가 필요하네.
 #phrase Hero  5
-Are you going to order me to get it?
+제게 그걸 가져오라고 명령하실 겁니까?
 #phrase Glav  6
-Oh no! We all are brothers here, no one orders anyone else around. Everything is done on purely voluntary basis, because people understand the need for action!
+아니, 아니! 여기선 모두가 형제일세. 누구도 남에게 명령하지 않아. 모든 건 순전히 자발적으로 이루어지지. 다들 행동이 필요하다는 걸 이해하니까!
 #phrase Glav  7
-So when you realize it has to be done, keep in mind that the zombie magician is now in the Necromancers' city.
+그러니 그 일이 필요하다고 깨닫거든, 좀비 마법사가 지금 강령술사들의 도시에 있다는 걸 기억하게.
 #phrase Glav  8
-And old Kholai's tower is located north of the town. But please be careful! The disgraced Necromancer's home is guarded as heavily as the town itself! 
+그리고 늙은 홀라이의 탑은 도시 북쪽에 있네. 하지만 부디 조심하게! 실각한 강령술사의 집은 도시만큼이나 삼엄하게 지켜지고 있으니!

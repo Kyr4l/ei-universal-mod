@@ -1,10 +1,10 @@
-Inhibition failed!
+La défense a échoué !
 #show Hero
 #show Marshal
 #CAMERA 3 20 3 1.5
 #phrase Marshal  1
-What happened?!
+Que s'est-il passé ?!
 #phrase Hero  2
-This mission is impossible for me, wild animals are so...
+Cette mission est impossible pour moi, les bêtes sauvages sont si...
 #phrase Marshal  3
-You're all equally useless! I'll have to take up axe again!
+Vous êtes tous aussi inutiles les uns que les autres ! Je vais devoir reprendre ma hache !

@@ -1,14 +1,14 @@
-Open the portal
-Find the keys to open the gates and activate the portal.
+Ouvrir le portail
+Trouvez les clés pour ouvrir les portes et activer le portail.
 #subobj  1
-Find the gates key
-You need a key to reach the other half of the cave. It should be in a chest not far from the entrance.
+Trouver la clé des portes
+Il vous faut une clé pour atteindre l'autre moitié de la grotte. Elle devrait se trouver dans un coffre, non loin de l'entrée.
 #subobj  2
-Open the gates
-Once you have the key, open both gates then look for the portal key.
+Ouvrir les portes
+Une fois la clé en main, ouvrez les deux portes, puis cherchez la clé du portail.
 #subobj  3
-Find the portal key
-The portal cannot be activated without the right key, it should be located in a chest
+Trouver la clé du portail
+Le portail ne peut être activé sans la bonne clé ; elle devrait se trouver dans un coffre.
 #subobj  4
-Activate the portal
-Use the portal key to activate the mechanism near the portal
+Activer le portail
+Utilisez la clé du portail pour actionner le mécanisme près du portail.

@@ -1,12 +1,12 @@
-[Hard] Dragons have been spotted in Gipath!
+[어려움] 지페스에서 용이 목격되었다!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-The lizards that live in the remote mountains originally come from a distant land. It is said that it was once an idyllic land, but today it is withered and desolate. Recently young dragons have been spotted. The lizards must have brought these from their homeland, because dragons have been extinct in Gipath for a very long time.
+먼 산맥에 사는 도마뱀인들은 원래 먼 땅에서 왔어. 한때는 낙원 같은 곳이었지만 지금은 메마르고 황폐해졌다더군. 최근에 어린 용들이 목격됐어. 지페스에서 용은 아주 오래전에 사라졌으니, 도마뱀인들이 고향에서 데려온 게 틀림없어.
 #phrase Hero  2
-Dragons?!... You mean those big, flying lizards that kill and eat everyone that crosses their path?!
+용이라고?!... 앞길을 막는 건 뭐든 죽이고 잡아먹는 그 거대한 날도마뱀 말이야?!
 #phrase Merc1  3
-Yes, that is correct. But do not worry, they are young ones and not yet reached their full potential.
+그래, 맞아. 하지만 걱정 마. 아직 어려서 제 힘을 다 갖추지 못했으니까.
 #phrase Merc1  4
-But once fully grown, no one can stand against them anymore! You have to kill them all, because the lizards in the remote mountains are allies with them, they are unfortunately not as friendly to us.
+하지만 다 자라면 아무도 놈들을 당해 낼 수 없어! 모두 죽여야 해. 먼 산맥의 도마뱀인들은 놈들과 한편이고, 안타깝게도 우리에게는 그리 우호적이지 않거든.

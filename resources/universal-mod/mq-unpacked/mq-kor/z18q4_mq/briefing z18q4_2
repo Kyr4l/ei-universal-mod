@@ -1,8 +1,8 @@
-Scientists have been transferred to another location.
+학자들이 다른 곳으로 옮겨졌다
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I am extremely upset! The governor gave the order to move the killer scientists to another location, and now they are unreachable!
+몹시 언짢군! 총독이 살인마 학자들을 다른 곳으로 옮기라고 명령해서, 이제 손이 닿지 않네!
 #phrase Glav  2
-I dread to think what will happen when their research is completed! We only have one hope now: that the governor cancels his order and we can then destroy those killers...
+그들의 연구가 완성되면 무슨 일이 벌어질지 생각만 해도 끔찍하네! 이제 남은 희망은 하나뿐이야. 총독이 명령을 거두어서 우리가 그 살인마들을 없앨 수 있게 되는 것...

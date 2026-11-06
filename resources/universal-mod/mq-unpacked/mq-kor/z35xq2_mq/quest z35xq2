@@ -1,14 +1,14 @@
-Confiscated Belongings
-A kind wealthy merchant asked me to recover several belongings of great importance to her friend, which are still being held by the prison guards. To avoid damaging my relations with Lord Firez and the Hadagan army, I must act with stealth and avoid harming the soldiers guarding the prison.
+압수된 물건
+친절하고 부유한 상인이 그녀의 친구에게 매우 중요한, 아직 감옥 경비병들이 보관하고 있는 물건들을 되찾아 달라고 부탁했다. 피레즈 경과 카다간 군대와의 관계를 해치지 않으려면, 은밀하게 움직이고 감옥을 지키는 병사들을 해치지 말아야 한다.
 #subobj  1
-Find the prison
-The prison lies south of the town of Sadrok. According to the merchant's words, a paved road leading from Sadrok climbs straight up the mountain to it.
+감옥 찾기
+감옥은 사드록 시 남쪽에 있다. 상인의 말에 따르면 사드록에서 이어진 포장된 길이 산을 곧장 올라 감옥까지 닿는다.
 #subobj  2
-Find a way inside
-If the gate is locked, then one of the patrols must have the key... and, naturally, so does the prison warden.
+들어갈 방법 찾기
+문이 잠겨 있다면 순찰대 중 하나가 열쇠를 갖고 있을 것이다... 물론 교도소장도.
 #subobj  3
-Steal the belongings
-The belongings are kept inside a chest. The chest itself is unguarded, but the prison is filled with Hadagan soldiers.
+물건 훔치기
+물건은 상자 안에 있다. 상자 자체는 지키는 이가 없지만, 감옥은 카다간 병사들로 가득하다.
 #subobj  4
-Remain unseen
-Only by staying unseen I may return to the merchant with the belongings she needs.
+들키지 않기
+들키지 않아야만 상인이 필요로 하는 물건을 가지고 돌아갈 수 있다.

@@ -1,14 +1,14 @@
-[Medium] Chief Seer
+[Moyen] Le chef prophète
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Pity we do not have the Chosen with us! He would make a deal with the Orcs, but now they are going to attack our village!
+Dommage que l'Élu ne soit pas parmi nous ! Il saurait traiter avec les orques, mais voilà qu'ils s'apprêtent à attaquer notre village !
 #phrase Nsheriff  2
-They took the old Goblin settlement in the Middle Mountains and recently elected themselves a new Seer who is going to lead them in their expeditions! I do not know what we are going to do ...
+Ils ont pris l'ancienne colonie gobeline des Montagnes du milieu et se sont récemment élu un nouveau prophète qui va les mener dans leurs expéditions ! Je ne sais pas ce que nous allons faire...
 #phrase Hero  3
-Is it so difficult? Just send a couple of capable guys and cut that Seer's throat for him... It will take the Orcs a while to elect another one!
+Est-ce si difficile ? Envoyez juste quelques gars capables de trancher la gorge de ce prophète... Il faudra un moment aux orques pour en élire un autre !
 #phrase Nsheriff  4
-Do you think this did not occur to me? But it is very difficult to get into their village, and the Seer is sure to be well protected! I can not send people to a certain death, and so far nobody has volunteered...
+Vous croyez que je n'y ai pas pensé ? Mais il est très difficile d'entrer dans leur village, et le prophète est sûrement bien protégé ! Je ne peux pas envoyer des gens à une mort certaine, et jusqu'ici personne ne s'est porté volontaire...
 #phrase Hero  5
-Well, yes they did. I shall do it.
+Eh bien, maintenant quelqu'un se porte volontaire. Je m'en charge.

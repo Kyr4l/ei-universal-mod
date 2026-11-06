@@ -1,9 +1,9 @@
-Undeads disappeared all by themselves
+The undead disappeared all by themselves
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Sorry if I scared you with my tale and put you at risk! I am told those undeads have simply disappeared, all by themselves.
+Sorry if I scared you with my tale and put you at risk! I am told those undead have simply disappeared, all by themselves.
 #phrase Hero  2
 Forever?
 #phrase Nsheriff  3

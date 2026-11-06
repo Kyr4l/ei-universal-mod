@@ -1,18 +1,18 @@
-A good man is in trouble!
+Un brave homme a des ennuis !
 #show Hero
 #show Glav
 #CAMERA 3 20 3.5 1.5
 #phrase Glav  1
-There is a rule in the brotherhood of the Last Shelter: if a good man is in trouble and we can help, then we will. Now an antiques collector named Baluddin is in trouble, and I would like to help him.
+La confrérie du Dernier sanctuaire a une règle : si un brave homme a des ennuis et que nous pouvons l'aider, nous l'aidons. En ce moment, un collectionneur d'antiquités nommé Baluddin a des ennuis, et j'aimerais l'aider.
 #phrase Hero  2
-Hmmm... Is he really a good man?
+Hum... Est-ce vraiment un brave homme ?
 #phrase Glav  3
-Do you doubt my word? There is nothing wrong with that: only doubts can lead you to the truth. I will tell you about Baluddin!
+Vous doutez de ma parole ? Il n'y a rien de mal à cela : seul le doute mène à la vérité. Je vais vous parler de Baluddin !
 #phrase Glav  4
-Brother Blondie told me that Baluddin gave shelter to an unknown man of very strange appearance, and he was very upset when that man was captured by the guards.
+Frère Blondinet m'a raconté que Baluddin avait hébergé un inconnu à l'allure fort étrange, et qu'il avait été très affecté quand les gardes l'ont capturé.
 #phrase Glav  5
-I concluded that Baluddin was a noble man albeit in tight circumstances, so I sent him a message. Now Baluddin reports to us about the latest developments in the city, and we occasionally help him to extend his collection.
+J'en ai conclu que Baluddin était un homme noble, bien que dans une situation délicate, et je lui ai envoyé un message. Depuis, Baluddin nous informe des derniers événements de la cité, et nous l'aidons de temps en temps à enrichir sa collection.
 #phrase Glav  6
-The commander of one of the guards' units found out about it and arrested Baluddin; he also set up an ambush near his home.
+Le chef d'une unité de gardes l'a découvert et a fait arrêter Baluddin ; il a aussi tendu une embuscade près de sa maison.
 #phrase Glav  7
-We must kill the guards who know why the collector has been arrested and get him home; that way no one will know what actually happened!
+Nous devons tuer les gardes qui savent pourquoi le collectionneur a été arrêté, et le ramener chez lui : ainsi, personne ne saura ce qui s'est réellement passé !

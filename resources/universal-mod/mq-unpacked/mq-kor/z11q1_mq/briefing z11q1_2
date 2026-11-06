@@ -1,10 +1,10 @@
-The poachers disappeared on their own
+밀렵꾼들이 스스로 사라졌다
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-You are back already?
+벌써 돌아왔나?
 #phrase Hero  1
-It looks like the poachers left on their own. I couldn't locate them.
+밀렵꾼들이 스스로 떠난 것 같습니다. 찾을 수가 없었어요.
 #phrase Huber  3
-That's probably fine for me. From now on with you!
+뭐, 나쁘진 않군. 그럼 가보게!

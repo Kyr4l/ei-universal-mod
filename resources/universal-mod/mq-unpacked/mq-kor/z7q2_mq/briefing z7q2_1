@@ -1,12 +1,12 @@
-[Medium] Hermit's request
+[보통] 은둔자의 부탁
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-We have a chance to improve our relations with lizards, and I hope you'll play the main role in that one!
+도마뱀인들과의 관계를 개선할 기회가 생겼네. 자네가 그 일의 주역이 되어 주길 바라네!
 #phrase Hero  2
-So must I repeat the Chosen's expedition after the Big Shell?
+그럼 선택받은 자처럼 큰 소라껍데기를 찾으러 가야 합니까?
 #phrase Nsheriff  3
-No, no, it is not about that. Recently the Hermit Lizard came to the village and asked to free his people from the trap.
+아니, 아니, 그게 아니야. 얼마 전 도마뱀인 은둔자가 마을에 와서 덫에 걸린 자기 종족을 풀어 달라고 부탁했네.
 #phrase Nsheriff  4
-The young and silly Lizards went to the Orc land west of the northern river bank and got themselves thrown in prison. Hermit promised that if the Lizards were set free, he would forbid the tribe to bother humans for a whole month!
+어리고 철없는 도마뱀인들이 북쪽 강기슭 서쪽의 오크 땅에 갔다가 감옥에 갇혔다는군. 은둔자는 그들을 풀어 주면 한 달 내내 부족이 인간을 괴롭히지 못하게 하겠다고 약속했네!

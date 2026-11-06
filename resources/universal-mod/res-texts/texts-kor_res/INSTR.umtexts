@@ -16,7 +16,7 @@
 가능한 최고의 창.
 === INSTR Komposite_Bow
 합성 활
-롱보우보다 관통력과 피해가 더 크다.
+장궁보다 관통력과 피해가 더 크다.
 === INSTR Light_Crystal_Axe
 경량 크리스탈 도끼
 최고의 크리스탈 도끼 중 하나.
@@ -33,8 +33,9 @@
 경량 크리스탈 철퇴
 최고의 크리스탈 철퇴 중 하나.
 === INSTR Light_Crystal_Short_Bow
-경량 크리스탈 활
-최고의 크리스탈 활 중 하나.
+경량 크리스탈 단궁
+최고의 크리스탈 단궁 중 하나.
+
 === INSTR Light_Crystal_Spear
 경량 크리스탈 창
 최고의 크리스탈 창 중 하나.
@@ -42,8 +43,8 @@
 경량 크리스탈 검
 최고의 크리스탈 검 중 하나.
 === INSTR Stone_Battle_Sword
-Combat stone sword
-This is a fearsome weapon in the hands of an experienced warrior.
+석기 전투검
+노련한 전사의 손에서는 무시무시한 무기다.
 
 === INSTR Wand_10
 크리스탈 마법 지팡이

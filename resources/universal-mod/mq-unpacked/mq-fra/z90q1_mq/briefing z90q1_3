@@ -1,14 +1,14 @@
-No dragons! But the treasure is still there...
+Pas de dragon ! Mais le trésor est toujours là...
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-I have been to that mountain and never saw any dragons there - young or old. So t'is all but fairy tales. The Chosen surely just made it up to appear a hero.
+Je suis allé sur cette montagne et je n'y ai vu aucun dragon, ni jeune ni vieux. Ce ne sont donc que des contes. L'Élu a sûrement tout inventé pour passer pour un héros.
 #phrase Nsheriff  2
-And the treasure - was that a tale as well?
+Et le trésor, c'était une légende aussi ?
 #phrase Hero  3
-No, that was actually true, though the treasure turned out to be rather modest - only a rusty iron sword... The old dragon gave one to the Chosen also, but that one had a spell in it, while mine is but a rusty piece of iron... And nothing much can be done about it, because Babur does not know how to work with metals.
+Non, ça, c'était vrai, même si le trésor s'est révélé plutôt modeste : une simple épée de fer rouillée... Le vieux dragon en a aussi donné une à l'Élu, mais la sienne était enchantée, alors que la mienne n'est qu'un morceau de fer rouillé... Et on ne peut pas y faire grand-chose, car Babur ne sait pas travailler les métaux.
 #phrase Nsheriff  4
-So you took risks for nothing?
+Vous avez donc pris des risques pour rien ?
 #phrase Hero  5
-Oh no! I gained experience, and as they say, you cannot drink that away, can you?
+Oh non ! J'ai gagné de l'expérience, et comme on dit, celle-là, on ne peut pas la boire, pas vrai ?

@@ -1,12 +1,12 @@
-They won't come back!
+Ils ne reviendront pas !
 #show Hero
 #show Marshal
 #CAMERA 11
 #phrase Hero  1
-I got rid of these units! The portal is closed and they won't come back for a while hopefully.
+Je me suis débarrassé de ces éclaireurs ! Le portail est fermé, et avec un peu de chance ils ne reviendront pas de sitôt.
 #phrase Marshal  2
-Do you know what they were preparing?
+Savez-vous ce qu'ils préparaient ?
 #phrase Hero  3
-They were preparing an exploration, or maybe an invasion. They seemed pretty scared of this place and attacked anything on sight!
+Une exploration, ou peut-être une invasion. Cet endroit semblait les terrifier : ils attaquaient tout ce qu'ils voyaient !
 #phrase Marshal  4
-That makes sense, these recons are probably afraid of anything they aren't used to see. Typical Khadaganians...
+Cela se tient, ces éclaireurs ont sans doute peur de tout ce qu'ils ne connaissent pas. Typiquement khadaganien...

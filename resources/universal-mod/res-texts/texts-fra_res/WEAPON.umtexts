@@ -1,83 +1,82 @@
 # um-texts 1
 === WEAPON Axe Alloy
-Alloy axe
-<placeholder>
+Hache en alliage
+Tranche une armure en météorite comme si elle était en cuir.
 
 === WEAPON Bad_Axe Bronze
-Peasant's axe
-With such an axe you can chop down trees. Or break it on yourself...
+Hache de paysan
+Une hache comme celle-ci sert à abattre des arbres. Ou à se casser sur votre dos...
 
 === WEAPON Bad_Crossbow Bronze
-Shattered crossbow
-Can also be used in close quarters as a bludgeon - you won't feel bad about this thing.
+Arbalète fracassée
+On peut aussi s'en servir de gourdin au corps à corps - on ne la regrettera pas.
 
 === WEAPON Bad_Dagger Bronze
-Kitchen knife
-You can use a knife like this to separate a hyena's ears from its head.
+Couteau de cuisine
+Avec un tel couteau, on peut séparer les oreilles d'une hyène de sa tête.
 
 === WEAPON Bad_Hammer Bronze
-Baton
-Perfect for shaking the dust out of carpets... ...and to beat reason into the heads of slaves.
+Bâton
+Parfait pour dépoussiérer les tapis... et pour faire entrer la raison dans la tête des esclaves.
 
 === WEAPON Bad_Short_Bow Bronze
-Old bow
-A good piece of equipment for the beginner archer, dreaming of becoming better at his craft.
+Vieil arc
+Un bon équipement pour l'archer débutant qui rêve de progresser dans son art.
 
 === WEAPON Bad_Spear Bronze
-Bad spear
-The name completely reflects its performance.
+Mauvaise lance
+Son nom reflète parfaitement ses performances.
 
 === WEAPON Bad_Sword Bronze
-Unbalanced sword
-You can't fight with a sword like that for very long!
+Épée mal équilibrée
+On ne se bat pas longtemps avec une épée pareille !
 
 === WEAPON Battle_Axe Alloy
-Alloy battle axe
-<placeholder>
+Hache de combat en alliage
+Aucun arsenal royal ne renferme meilleure hache.
 
 === WEAPON Bone_Club Scrab_Bones
 Gourdin en os (coquille de conque)
 La coquille de conque est un bon matériau pour de nombreuses armes.
 
 === WEAPON Bone_Crossbow Burned_bones
-ArbalÃ¨te en os (os dur)
-Si vous n'avez plus beaucoup d'argent, Ã§a reste une arme acceptable.
+Arbalète en os (os dur)
+Si vous n'avez plus beaucoup d'argent, ça reste une arme acceptable.
 
 === WEAPON Bone_Crossbow Decayed_bones
-AbalÃ¨te en os (os fin)
-Fabriquer une abalÃ¨te est un art, utiliser de l'os fin est une insulte !
-
+Arbalète en os (os fin)
+Fabriquer une arbalète est un art, utiliser de l'os fin est une insulte !
 === WEAPON Bone_Crossbow Dragon_Black_Bones
-ArbalÃ¨te en os (os de dragon bleu)
-Vous ne trouverez pas mieux Ã  Gipath.
+Arbalète en os (os de dragon bleu)
+Vous ne trouverez pas mieux à Gipath.
 
 === WEAPON Bone_Crossbow Dragon_Green_Bones
-ArbalÃ¨te en os (os de dragon vert)
-Il faut dÃ©penser beaucoup pour une telle arme !
+Arbalète en os (os de dragon vert)
+Il faut dépenser beaucoup pour une telle arme !
 
 === WEAPON Bone_Crossbow Dragon_Red_Bones
-ArbalÃ¨te en os (os de dragon rouge)
-MÃªme un troll serait terrifiÃ©.
+Arbalète en os (os de dragon rouge)
+Même un troll serait terrifié.
 
 === WEAPON Bone_Crossbow Dry_bones
-ArbalÃ¨te en os (os Ã©pais)
-Une bonne arme, et un mauvais matÃ©riau.
+Arbalète en os (os épais)
+Une bonne arme, et un mauvais matériau.
 
 === WEAPON Bone_Crossbow Scrab_bones
-ArbalÃ¨te en os (coquille de conque)
+Arbalète en os (coquille de conque)
 Ce n'est pas la pire des combinaisons.
 
 === WEAPON Bone_Dagger Burned_bones
 Dague en os (os dur)
-Bien pour dÃ©buter.
+Bien pour débuter.
 
 === WEAPON Bone_Dagger Decayed_bones
 Dague en os (os fin)
-Une dague en os est meilleure qu'une dague en pierre, mais un meilleur matÃ©riau ne ferait pas de mal !
+Une dague en os est meilleure qu'une dague en pierre, mais un meilleur matériau ne ferait pas de mal !
 
 === WEAPON Bone_Dagger Dragon_Black_Bones
 Dague en os (os de dragon bleu)
-La meilleure dague Ã  Gipath.
+La meilleure dague à Gipath.
 
 === WEAPON Bone_Dagger Dragon_Green_Bones
 Dague en os (os de dragon vert)
@@ -85,43 +84,43 @@ Une vraie dague de combat.
 
 === WEAPON Bone_Dagger Dragon_Red_Bones
 Dague en os (os de dragon rouge)
-Une telle dague est un signe d'autoritÃ© !
+Une telle dague est un signe d'autorité !
 
 === WEAPON Bone_Dagger Dry_bones
-Dague en os (os Ã©pais)
+Dague en os (os épais)
 Un peu mieux qu'une dague en os fin.
 
 === WEAPON Bone_Dagger Scrab_bones
 Dague en os (coquille de conque)
-Avec cette dague, n'ayez pas peur de chasser un sanglier noir!
+Avec cette dague, n'ayez pas peur de chasser un sanglier noir !
 
 === WEAPON Cheat_Dagger Alloy
-Ritual alloy knife
-<placeholder>
+Poignard rituel en alliage
+Une fortune en alliage, gâchée pour un poignard rituel. Son commanditaire est fou - ou c'est un mage très riche.
 
 === WEAPON Crash_Axe Bronze
-Sharpened axe
-You can chase rats with this axe.
+Hache aiguisée
+Avec cette hache, vous pourrez chasser les rats.
 
 === WEAPON Crash_Crossbow Bronze
-Old crossbow
-Pierces leather armor from a hundred paces away.
+Vieille arbalète
+Perce une armure de cuir à cent pas.
 
 === WEAPON Crash_Short_Bow Bronze
-Wrong bow
-It's already better value for money.
+Arc tordu
+Déjà un meilleur rapport qualité-prix.
 
 === WEAPON Crash_Spear Bronze
-Light spade
-Not the worst weapon for a novice.
+Pique légère
+Pas la pire des armes pour un novice.
 
 === WEAPON Crash_Sword Bronze
-Broken sword
-A good sword, if not for the fact that it is broken and hastily forged.
+Épée brisée
+Une bonne épée, si elle n'était pas brisée et forgée à la hâte.
 
 === WEAPON Crossbow Alloy
-Alloy crossbow
-<placeholder>
+Arbalète en alliage
+Ses carreaux percent les plaques comme une alêne perce le tissu.
 
 === WEAPON Crystal_Axe Diamond
 Hache en diamant
@@ -133,7 +132,7 @@ Une merveille des temps anciens.
 
 === WEAPON Crystal_Crossbow Diamond
 Arbalète en diamant
-C'est un peu onéreux mais un carreau tiré pas cette arbalète peut percer n'importe quelle armure.
+C'est un peu onéreux mais un carreau tiré par cette arbalète peut percer n'importe quelle armure.
 
 === WEAPON Crystal_Dagger Diamond
 Dague en diamant
@@ -145,139 +144,139 @@ Même une armure en météorite ne résiste pas.
 
 === WEAPON Crystal_Short_Bow Diamond
 Arc court en diamant
-A placer aux côtés des joyaux de la couronne !
+À placer aux côtés des joyaux de la couronne !
 
 === WEAPON Crystal_Spear Diamond
 Lance en diamant
 Aucune armure ne résiste à cette lance.
 
 === WEAPON Crystal_Sword Diamond
-Epée en diamant
+Épée en diamant
 Superbe dans la main et terrible au combat !
 
 === WEAPON Curved_Dagger Alloy
-Alloy dirk
-<placeholder>
+Coutelas en alliage
+Une petite lame à la morsure terrible. Et au prix terrible.
 
 === WEAPON Dagger Alloy
-Alloy dagger
-<placeholder>
+Dague en alliage
+Aucun forgeron ne ferait meilleure dague - seul un mage pourrait l'améliorer.
 
 === WEAPON Hammer Alloy
-Alloy battle hammer
-<placeholder>
+Marteau de combat en alliage
+Un seul coup, et l'armure ennemie est bonne pour la ferraille.
 
 === WEAPON Komposite_Bow Adamantium
 Arc composite en adamantite
-Rares sont les cibles capables de rÃ©sister a cet arc.
+Rares sont les cibles capables de résister à cet arc.
 
 === WEAPON Komposite_Bow Bronze
 Arc composite en bronze
-Lourd et peu maniable, mais causera des dÃ©gats!
+Lourd et peu maniable, mais causera des dégâts !
 
 === WEAPON Komposite_Bow Iron
 Arc composite en fer
 Mieux qu'un arc long, mais c'est tout.
 
 === WEAPON Komposite_Bow Meteoric
-Arc composite en mÃ©tÃ©orite
-Un arc extrÃ¨mement puissant. Capable de traverser des armures Ã  plaques.
+Arc composite en météorite
+Un arc extrêmement puissant, capable de percer même les armures à plaques.
 
 === WEAPON Komposite_Bow Mithrill
 Arc composite en mithrill
-Puissant et solide! Mais on peut encore faire mieux.
+Puissant et solide ! Mais on peut encore faire mieux.
 
 === WEAPON Komposite_Bow Steel
 Arc composite en acier
 Ce genre d'arc n'est pas fait pour de l'acier, mais tout est possible...
 
 === WEAPON Light_Crystal_Axe Diamond
-Hache lÃ©gÃ¨re en diamant
+Hache légère en diamant
 Une des meilleures haches en diamant.
 
 === WEAPON Light_Crystal_Bow Diamond
-Arc lÃ©ger en diamant
+Arc léger en diamant
 Un seul arc peut faire mieux que celui-ci.
 
 === WEAPON Light_Crystal_Crossbow Diamond
-ArbalÃ¨te lÃ©gÃ¨re en diamant
-Une des meilleures arbalÃ¨tes en diamant.
+Arbalète légère en diamant
+Une des meilleures arbalètes en diamant.
 
 === WEAPON Light_Crystal_Dagger Diamond
-Dague lÃ©gÃ¨re en diamant
+Dague légère en diamant
 Une des meilleures dagues en diamant.
 
 === WEAPON Light_Crystal_Mace Diamond
-Masse lÃ©gÃ¨re en diamant
+Masse légère en diamant
 Une des meilleures masses en diamant.
 
 === WEAPON Light_Crystal_Short_Bow Diamond
-Arc lÃ©ger court en diamant
-Un des meilleurs arcs en diamant.
+Arc court léger en diamant
+Un des meilleurs arcs courts en diamant.
 
 === WEAPON Light_Crystal_Spear Diamond
-Lance lÃ©gÃ¨re en diamant
+Lance légère en diamant
 Une des meilleures lances en diamant.
 
 === WEAPON Light_Crystal_Sword Diamond
-Ã‰pÃ©e lÃ©gÃ¨re en diamant
-Une des meilleures Ã©pÃ©es en diamant.
+Épée légère en diamant
+Une des meilleures épées en diamant.
 
 === WEAPON Long_Bow Alloy
-Long alloy bow
-<placeholder>
+Arc long en alliage
+Meilleur que le meilleur arc en météorite - ce que personne ne croyait possible.
 
 === WEAPON Long_Crossbow Alloy
-Heavy alloy crossbow
-<placeholder>
+Arbalète lourde en alliage
+Ses carreaux traversent une armure en météorite comme du papier.
 
 === WEAPON Long_Spear Alloy
-Long alloy spear
-<placeholder>
+Grande lance en alliage
+Tient n'importe quel ennemi à distance - définitivement.
 
 === WEAPON Long_Sword Alloy
-Alloy long sword
-<placeholder>
+Grande épée en alliage
+Une lame légendaire, forgée par l'un des rares maîtres qui connaissent le secret de l'alliage.
 
 === WEAPON Mace Alloy
-Alloy mace
-<placeholder>
+Masse en alliage
+Chaque coup tombe comme un rocher.
 
 === WEAPON Saber Alloy
-Alloy sabre
-<placeholder>
+Sabre en alliage
+Entre des mains habiles, cette lame garantit presque la victoire.
 
 === WEAPON Short_Bow Alloy
-Short alloy bow
-<placeholder>
+Arc court en alliage
+Petit, léger, et plus mortel que la plupart des arcs longs.
 
 === WEAPON Spear Alloy
-Alloy spear
-<placeholder>
+Lance en alliage
+Aucune armure ne résiste à cette lance - pas même en météorite.
 
 === WEAPON Spiked_Club Alloy
-Alloy heavy spiked mace
-<placeholder>
+Masse lourde à pointes en alliage
+Les forgerons se sont surpassés : même les mages n'ont plus rien à y ajouter.
 
 === WEAPON Spiked_Club Mithrill
 Masse lourde à pointes en mithrill
 Avec un tel objet entre les mains, on vous respectera !
 
 === WEAPON Spiked_Mace Alloy
-Alloy spiked mace
-<placeholder>
+Masse à pointes en alliage
+Chaque pointe vaut une petite fortune, et chaque coup aussi.
 
 === WEAPON Stone_Axe Corundum
 Hache en corindon
-Vous pourriez mÃªme vous couper avec cette hache!
+Vous pourriez même vous couper avec cette hache !
 
 === WEAPON Stone_Axe Jade
 Hache en jade
-Peu coupante, mais elle supporte bien les sorts!
+Peu coupante, mais elle supporte bien les sorts !
 
 === WEAPON Stone_Axe Malachite
 Hache en obsidienne
-Seules les haches en corindon peuvent rivaliser!
+Seules les haches en corindon peuvent rivaliser !
 
 === WEAPON Stone_Battle_Axe Corundum
 Hache de combat en corindon
@@ -285,62 +284,62 @@ Votre ennemi vous respectera.
 
 === WEAPON Stone_Battle_Axe Jade
 Hache de combat en jade
-Une belle hache, et elle frappe fort!
+Une belle hache, et elle frappe fort !
 
 === WEAPON Stone_Battle_Axe Malachite
 Hache de combat en obsidienne
-Une des meilleures haches Ã  Gipath! Seul le corindon fait mieux!
+Une des meilleures haches de Gipath ! Seul le corindon fait mieux !
 
 === WEAPON Stone_Battle_Sword Corundum
-Corundum battle sword
-The best sword on Gipath.
+Épée de combat en corindon
+La meilleure épée de Gipath.
 
 === WEAPON Stone_Battle_Sword Granite
-Granite battle sword
-With this weapon you can successfully fight goblins.
+Épée de combat en granite
+Avec cette arme, vous pourrez combattre les gobelins sans crainte.
 === WEAPON Stone_Battle_Sword Jade
-Jade battle sword
-Great potential if you infuse it with magic!
+Épée de combat en jade
+Un grand potentiel, si vous l'imprégnez de magie !
 
 === WEAPON Stone_Battle_Sword Malachite
-Obsidian battle sword
-One of the best.
+Épée de combat en obsidienne
+Une des meilleures.
 
 === WEAPON Stone_Battle_Sword Rock
-Stone battle sword
-This weapon is quite good, but the material chosen for it is unfortunate.
+Épée de combat en pierre
+Une assez bonne arme, mais le matériau choisi est malheureux.
 
 === WEAPON Stone_Battle_Sword Silicon
-Silicon battle sword
-Not a bad weapon, well worth the price.
+Épée de combat en silicium
+Pas une mauvaise arme, elle vaut bien son prix.
 
 === WEAPON Stone_Battle_hammer Corundum
 Marteau lourd en corindon
-TrÃ¨s lourd ! Mais seuls les marteaux en mÃ©tal font mieux.
+Très lourd ! Mais seuls les marteaux en métal font mieux.
 
 === WEAPON Stone_Battle_hammer Jade
 Marteau lourd en jade
-Une telle arme peut surement invoquer la foudre !
+Une telle arme peut sûrement invoquer la foudre !
 
 === WEAPON Stone_Battle_hammer Malachite
 Marteau lourd en obsidienne
-PrÃªt Ã  briser des crÃ¢nes.
+Prêt à briser des crânes.
 
 === WEAPON Stone_Dagger Corundum
 Dague en corindon
-Une bonne dague transpercante, la meilleure de sa catÃ©gorie.
+Une bonne dague transperçante, la meilleure de sa catégorie.
 
 === WEAPON Stone_Dagger Jade
 Dague en jade
-Vous devriez en faire un bijoux plutÃ´t qu'une arme...
+Vous devriez en faire un bijou plutôt qu'une arme...
 
 === WEAPON Stone_Dagger Malachite
 Dague en obsidienne
-Une des meilleures dagues. TrÃ¨s bon choix.
+Une des meilleures dagues. Très bon choix.
 
 === WEAPON Stone_Hammer Corundum
 Marteau en corindon
-PrÃªt pour la guerre.
+Prêt pour la guerre.
 
 === WEAPON Stone_Hammer Jade
 Marteau en jade
@@ -348,10 +347,10 @@ Joli mais cher ! C'est votre seule option ?
 
 === WEAPON Stone_Hammer Malachite
 Marteau en obsidienne
-Suffisant pour fendre le crÃ¢ne dâ€™un gobelin dâ€™un seul coup !
+Suffisant pour fendre le crâne d’un gobelin d’un seul coup !
 
 === WEAPON Stone_Short_Bow Corundum
-Arc (flÃ¨ches Ã  pointes en corindon)
+Arc (flèches à pointes en corindon)
 Le meilleur arc en pierre.
 
 === WEAPON Stone_Short_Bow Granite
@@ -359,8 +358,8 @@ Arc (flèches à pointes en granite)
 Ses défauts sont nombreux, mais c'est mieux que rien.
 
 === WEAPON Stone_Short_Bow Jade
-Arc (flÃ¨ches Ã  pointes en jade)
-Chaque flÃ¨che compte!
+Arc (flèches à pointes en jade)
+Chaque flèche compte !
 
 === WEAPON Stone_Short_Bow Malachite
 Arc (flèches à pointes en obsidienne)
@@ -372,54 +371,54 @@ Vous avez peu de chances d'atteindre votre cible, mais au moins vous avez un arc
 
 === WEAPON Stone_Short_Bow Silicon
 Arc (flèches à pointes en silicium)
-Equipé de la sorte, vous pourrez faire face à de nombreux dangers.
+Équipé de la sorte, vous pourrez faire face à de nombreux dangers.
 
 === WEAPON Stone_Spear Corundum
 Lance en corindon
 La meilleure lance en pierre.
 
 === WEAPON Stone_Spear Jade
-Lance Ã  tÃªte en jade
-Une belle lance ! Elle n'est pas donnÃ©e cependant...
+Lance à tête en jade
+Une belle lance ! Elle n'est pas donnée cependant...
 
 === WEAPON Stone_Spear Malachite
-Lance Ã  tÃªte en obsidienne
-Maintenant Ã§a ressemble Ã  une vraie lance !
+Lance à tête en obsidienne
+Maintenant ça ressemble à une vraie lance !
 
 === WEAPON Stone_Sword Corundum
-Ã‰pÃ©e en corindon
-Seules les Ã©pÃ©es en mÃ©tal peuvent rivaliser !
+Épée en corindon
+Seules les épées en métal peuvent rivaliser !
 
 === WEAPON Stone_Sword Jade
-Ã‰pÃ©e en jade
-Tranchante, chÃ¨re, efficace.
+Épée en jade
+Tranchante, chère, efficace.
 
 === WEAPON Stone_Sword Malachite
-Ã‰pÃ©e en obsidienne
-Une des meilleures Ã©pÃ©es Ã  Gipath !
+Épée en obsidienne
+Une des meilleures épées à Gipath !
 
 === WEAPON Thief_Crossbow Bronze
-Thieving Crossbow
-With a crossbow like this, you can kill a troll by hitting it in the forehead!
+Arbalète de voleur
+Avec une arbalète pareille, vous pouvez tuer un troll en le touchant au front !
 
 === WEAPON Thief_Dagger Bronze
-Thief's dagger
-If money is no object, you won't find a better knife.
+Dague de voleur
+Si l'argent n'est pas un problème, vous ne trouverez pas meilleur couteau.
 === WEAPON Thief_Short_Bow Bronze
-Thief's bow
-Thief bows are used by the most experienced hunters.
+Arc de voleur
+Les arcs de voleur sont utilisés par les chasseurs les plus expérimentés.
 
 === WEAPON Thief_Spear Bronze
-Thieves' Spike
-Although its damage is low, it can be used for support.
+Pique de voleur
+Ses dégâts sont faibles, mais elle peut servir en soutien.
 
 === WEAPON Thief_Sword Bronze
-Thieving sword
-With such a sword, you can prove to a young ogre that sometimes food is wormy.
+Épée de voleur
+Avec une telle épée, vous pourrez prouver à un jeune ogre que la nourriture est parfois véreuse.
 
 === WEAPON Sickle Bronze
 Faucille en bronze
-Une faucille de paysan en bronze, aiguisÃ©e pour la guerre. Elle accroche bien, mais plie sur l'armure.
+Une faucille de paysan en bronze, aiguisée pour la guerre. Elle accroche bien, mais plie sur l'armure.
 
 === WEAPON Sickle Iron
 Faucille en fer
@@ -427,133 +426,133 @@ Le fer tient mieux la courbe que le bronze, mais rouille sous la pluie.
 
 === WEAPON Sickle Steel
 Faucille en acier
-Une faucille d'acier : sa lame courbe passe derriÃ¨re le bouclier.
+Une faucille d'acier : sa lame courbe passe derrière le bouclier.
 
 === WEAPON Sickle Mithrill
-Faucille en mithril
-LÃ©gÃ¨re et tranchante : la lame de mithril chante en fauchant.
+Faucille en mithrill
+Légère et tranchante : la lame de mithrill chante en fauchant.
 
 === WEAPON Sickle Adamantium
 Faucille en adamantite
-Une faucille d'adamantite fauche les boucliers comme le blÃ©.
+Une faucille d'adamantite fauche les boucliers comme le blé.
 
 === WEAPON Sickle Meteoric
-Faucille en fer mÃ©tÃ©orique
-Du fer mÃ©tÃ©orique dans la courbe d'une faucille : aucune armure ne survit Ã  cette moisson.
+Faucille en météorite
+De la météorite dans la courbe d'une faucille : aucune armure ne survit à cette moisson.
 
 === WEAPON Sickle Alloy
 Faucille en alliage
 Une faucille d'alliage, sombre et lourde, au fil inusable.
 
 === WEAPON Guard_Dagger Bronze
-Dague Ã  garde en bronze
-Une dague de bronze Ã  lame ondulÃ©e. Le forgeron ne s'est pas donnÃ© la peine d'une garde.
+Dague à garde en bronze
+Une dague de bronze à lame ondulée. Le forgeron ne s'est pas donné la peine d'une garde.
 
 === WEAPON Guard_Dagger Iron
-Dague Ã  garde en fer
-Du fer, une lame ondulÃ©e et pas de garde : attention aux doigts.
+Dague à garde en fer
+Du fer, une lame ondulée et pas de garde : attention aux doigts.
 
 === WEAPON Guard_Dagger Steel
-Dague Ã  garde en acier
+Dague à garde en acier
 De l'acier et une garde de main : elle pare aussi bien qu'elle frappe.
 
 === WEAPON Guard_Dagger Mithrill
-Dague Ã  garde en mithril
-Une lame de mithril derriÃ¨re une fine garde. LÃ©gÃ¨re et vive.
+Dague à garde en mithrill
+Une lame de mithrill derrière une fine garde. Légère et vive.
 
 === WEAPON Guard_Dagger Adamantium
-Dague Ã  garde en adamantite
-Adamantite : la garde dÃ©tourne l'Ã©pÃ©e, la lame trouve les failles.
+Dague à garde en adamantite
+Adamantite : la garde détourne l'épée, la lame trouve les failles.
 
 === WEAPON Guard_Dagger Meteoric
-Dague Ã  garde en fer mÃ©tÃ©orique
-Une dague Ã  garde en fer mÃ©tÃ©orique : la plus belle qu'un duelliste puisse possÃ©der.
+Dague à garde en météorite
+Une dague à garde en météorite : la plus belle qu'un duelliste puisse posséder.
 
 === WEAPON Guard_Dagger Alloy
-Dague Ã  garde en alliage
+Dague à garde en alliage
 Alliage sombre et garde de main : une dague pour la nuit.
 
 === WEAPON Royal_Sword Bronze
-Ã‰pÃ©e royale en bronze
-Une copie en bronze de l'Ã©pÃ©e d'un roi. Jolie, mais elle ne garde pas son fil longtemps.
+Épée royale en bronze
+Une copie en bronze de l'épée d'un roi. Jolie, mais elle ne garde pas son fil longtemps.
 
 === WEAPON Royal_Sword Iron
-Ã‰pÃ©e royale en fer
-Du fer habillÃ© en roi : plus lourd qu'il n'en a l'air.
+Épée royale en fer
+Du fer habillé en roi : plus lourd qu'il n'en a l'air.
 
 === WEAPON Royal_Sword Steel
-Ã‰pÃ©e royale en acier
-Une Ã©pÃ©e royale en acier, Ã  la garde et au pommeau richement ouvragÃ©s.
+Épée royale en acier
+Une épée royale en acier, à la garde et au pommeau richement ouvragés.
 
 === WEAPON Royal_Sword Mithrill
-Ã‰pÃ©e royale en mithril
-Mithril et dorures : une Ã©pÃ©e pour la garde d'un prince.
+Épée royale en mithrill
+Mithrill et dorures : une épée pour la garde d'un prince.
 
 === WEAPON Royal_Sword Adamantium
-Ã‰pÃ©e royale en adamantite
-Une Ã©pÃ©e royale en adamantite, aussi dure que la couronne qu'elle sert.
+Épée royale en adamantite
+Une épée royale en adamantite, aussi dure que la couronne qu'elle sert.
 
 === WEAPON Royal_Sword Meteoric
-Ã‰pÃ©e royale en fer mÃ©tÃ©orique
-Du fer mÃ©tÃ©orique dans l'Ã©pÃ©e d'un roi. On en voit rarement de pareille.
+Épée royale en météorite
+De la météorite dans l'épée d'un roi. On en voit rarement de pareille.
 
 === WEAPON Royal_Sword Alloy
-Ã‰pÃ©e royale en alliage
-Une Ã©pÃ©e royale d'alliage, sombre et ornÃ©e, la fiertÃ© d'une armurerie royale.
+Épée royale en alliage
+Une épée royale d'alliage, sombre et ornée, la fierté d'une armurerie royale.
 
 === WEAPON Hunter_Crossbow Bronze
-ArbalÃ¨te de chasseur en bronze
-Une arbalÃ¨te de chasseur Ã  l'arc de bronze : assez lÃ©gÃ¨re pour la porter tout le jour.
+Arbalète de chasseur en bronze
+Une arbalète de chasseur à l'arc de bronze : assez légère pour la porter tout le jour.
 
 === WEAPON Hunter_Crossbow Iron
-ArbalÃ¨te de chasseur en fer
-Un arc de fer sur une crosse de bois faÃ§onnÃ©e : un fidÃ¨le outil des bois.
+Arbalète de chasseur en fer
+Un arc de fer sur une crosse de bois façonnée : un fidèle outil des bois.
 
 === WEAPON Hunter_Crossbow Steel
-ArbalÃ¨te de chasseur en acier
-Un arc d'acier donne Ã  cette arbalÃ¨te de chasseur un tir sec et puissant.
+Arbalète de chasseur en acier
+Un arc d'acier donne à cette arbalète de chasseur un tir sec et puissant.
 
 === WEAPON Hunter_Crossbow Mithrill
-ArbalÃ¨te de chasseur en mithril
-Le mithril rend l'arbalÃ¨te de chasseur lÃ©gÃ¨re et prompte Ã  armer.
+Arbalète de chasseur en mithrill
+Le mithrill rend l'arbalète de chasseur légère et prompte à armer.
 
 === WEAPON Hunter_Crossbow Adamantium
-ArbalÃ¨te de chasseur en adamantite
-Un arc d'adamantite : l'arbalÃ¨te de chasseur abat dÃ©sormais bien plus que du gibier.
+Arbalète de chasseur en adamantite
+Un arc d'adamantite : l'arbalète de chasseur abat désormais bien plus que du gibier.
 
 === WEAPON Hunter_Crossbow Meteoric
-ArbalÃ¨te de chasseur en fer mÃ©tÃ©orique
-Du fer mÃ©tÃ©orique sur une crosse de chasseur : aucune proie ne lui Ã©chappe.
+Arbalète de chasseur en météorite
+De la météorite sur une crosse de chasseur : aucune proie ne lui échappe.
 
 === WEAPON Hunter_Crossbow Alloy
-ArbalÃ¨te de chasseur en alliage
-Un arc d'alliage, sombre et raide, sur une crosse de chasseur bien usÃ©e.
+Arbalète de chasseur en alliage
+Un arc d'alliage, sombre et raide, sur une crosse de chasseur bien usée.
 
 === WEAPON Barbed_Spear Bronze
-Lance barbelÃ©e en bronze
-Une longue lance de bronze Ã  tÃªte barbelÃ©e. Une fois plantÃ©e, elle ne ressort pas facilement.
+Lance barbelée en bronze
+Une longue lance de bronze à tête barbelée. Une fois plantée, elle ne ressort pas facilement.
 
 === WEAPON Barbed_Spear Iron
-Lance barbelÃ©e en fer
+Lance barbelée en fer
 Des barbes de fer : la plaie est pire en sortant qu'en entrant.
 
 === WEAPON Barbed_Spear Steel
-Lance barbelÃ©e en acier
-Une lance barbelÃ©e d'acier, assez longue pour tenir une charge Ã  distance.
+Lance barbelée en acier
+Une lance barbelée d'acier, assez longue pour tenir une charge à distance.
 
 === WEAPON Barbed_Spear Mithrill
-Lance barbelÃ©e en mithril
-De lÃ©gÃ¨res barbes de mithril sur une longue hampe.
+Lance barbelée en mithrill
+De légères barbes de mithrill sur une longue hampe.
 
 === WEAPON Barbed_Spear Adamantium
-Lance barbelÃ©e en adamantite
+Lance barbelée en adamantite
 Des barbes d'adamantite percent la plaque, et y restent.
 
 === WEAPON Barbed_Spear Meteoric
-Lance barbelÃ©e en fer mÃ©tÃ©orique
-Une lance barbelÃ©e en fer mÃ©tÃ©orique : le rÃªve des chasseurs.
+Lance barbelée en météorite
+Une lance barbelée en météorite : le rêve des chasseurs.
 
 === WEAPON Barbed_Spear Alloy
-Lance barbelÃ©e en alliage
+Lance barbelée en alliage
 Des barbes d'alliage sombre : une lance pour la plus cruelle des chasses.
 

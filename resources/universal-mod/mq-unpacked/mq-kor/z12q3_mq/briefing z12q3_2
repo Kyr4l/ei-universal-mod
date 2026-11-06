@@ -1,10 +1,10 @@
-No way to deal with those wormheads...
+¹ú·¹¸Ó¸®µéÀ» °¨´çÇÒ ¼ö ¾ø´Ù...
 #show Hero
 #show Huber
 #CAMERA  2
 #phrase Hero  1
-I am sorry, Your Honor, I was unable to either help the captain or to accomplish your mission. Mayhap I shall in time, but right now I am simply not up to it …
+ÁË¼ÛÇÕ´Ï´Ù, °¢ÇÏ. ´ëÀ§¸¦ µ½Áöµµ, ÀÓ¹«¸¦ ¿Ï¼öÇÏÁöµµ ¸øÇß½À´Ï´Ù. ¾ğÁ¨°¡´Â ÇÒ ¼ö ÀÖ°ÚÁö¸¸, Áö±İÀº µµÀúÈ÷ °¨´çÀÌ ¾È µË´Ï´Ù...
 #phrase Huber  2
-Frankly, I was not too hopeful! If Tilvar himself could not manage that menace, what could one expect from you, adventurers!
+¼ÖÁ÷È÷ Å« ±â´ë´Â ¾È Çß³×! Æ¿¹Ù¸£ º»ÀÎµµ ±× À§ÇùÀ» °¨´çÇÏÁö ¸øÇß´Âµ¥, ÀÚ³× °°Àº ¸ğÇè°¡µé¿¡°Ô ¹«¾ùÀ» ±â´ëÇÏ°Ú³ª!
 #phrase Huber  3
-I suppose I will have to write to the capital and ask for troops! You cannot imagine how reluctant I am to do this!
+¼öµµ¿¡ ÆíÁö¸¦ ½á¼­ ±º´ë¸¦ ¿äÃ»ÇØ¾ß°Ú±º! ³»°¡ ¾ó¸¶³ª ³»Å°Áö ¾Ê´ÂÁö ÀÚ³×´Â ¸ğ¸¦ °É¼¼!

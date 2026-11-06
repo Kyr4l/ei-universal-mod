@@ -1,14 +1,14 @@
-Zombie Magician
-The young Necromancer Taivo managed to create a Zombie Magician using his colleague's corpse. Taivo's enemy, old Kholai, could think of a way to fight those creatures, but to do that, he needs this Ghoul's head.
+Le mage zombie
+Le jeune nécromancien Taivo a réussi à créer un mage zombie à partir du cadavre d'un collègue. L'ennemi de Taivo, le vieux Kholai, pourrait trouver un moyen de combattre ces créatures, mais pour cela il lui faut la tête de cette goule.
 #subobj  1
-Finding the Zombie Magician
-Try looking for the Zombie Magician in the Necromancer's town.
+Trouver le mage zombie
+Cherchez le mage zombie dans la cité des Nécromanciens.
 #subobj  2
-Killing the Zombie Magician
-Zombie Magician must be killed.
+Tuer le mage zombie
+Le mage zombie doit être tué.
 #subobj  3
-Cutting the head
-Getting the head of this Ghoul is the whole point of this quest.
+Trancher la tête
+Obtenir la tête de cette goule est tout l'objet de cette quête.
 #subobj  4
-Bringing the head to Kholai
-Old Kholai's tower is located north of the Necromancers' town. Kholai is still in disgrace, so the tower is heavily guarded. However, he simply must get the Zombie Magician head!
+Apporter la tête à Kholai
+La tour du vieux Kholai se trouve au nord de la cité des Nécromanciens. Kholai est toujours en disgrâce, la tour est donc lourdement gardée. Mais il doit absolument obtenir la tête du mage zombie !

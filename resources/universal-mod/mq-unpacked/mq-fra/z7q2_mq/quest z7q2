@@ -1,14 +1,14 @@
-Lizards in the trap
-The Orcs have caught a number of young Forest Lizards in a trap. Hermit Lizard has asked humans to set them free and in return has promised to convince his tribe not to attack the humans. The location where the Lizards are trapped is to the west of the northern river bank, where the Goblin settlement used to be.
+Les hommes-lézards pris au piège
+Les orques ont capturé de jeunes hommes-lézards des forêts dans un piège. L'Ermite homme-lézard a demandé aux humains de les libérer et a promis en échange de convaincre sa tribu de ne pas attaquer les humains. L'endroit où ils sont prisonniers se trouve à l'ouest de la rive nord du fleuve, là où se trouvait l'ancienne colonie gobeline.
 #subobj  1
-Find the Orc with the key
-To open the trap you must have a key. This key is kept by the Orc Seer. Look for him in the south western sector of the camp.
+Trouver l'orque qui a la clé
+Pour ouvrir le piège, il vous faut une clé. C'est le prophète orque qui la garde. Cherchez-le dans la partie sud-ouest du camp.
 #subobj  2
-Take the key
-The main thing is to get that key. Whether the Seer is killed or not is no concern of yours.
+Prendre la clé
+L'essentiel est d'obtenir cette clé. Que le prophète soit tué ou non ne vous regarde pas.
 #subobj  3
-Find the bar
-The trap is a hole in the earth with the exit blocked by the bar. You must open it.
+Trouver la grille
+Le piège est un trou dans la terre dont la sortie est fermée par une grille. Vous devez l'ouvrir.
 #subobj  4
-Open the trap
-To set the Lizards free, you must open the trap. Use the key taken from the Orc.
+Ouvrir le piège
+Pour libérer les hommes-lézards, vous devez ouvrir le piège. Utilisez la clé prise à l'orque.

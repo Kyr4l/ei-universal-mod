@@ -1,14 +1,14 @@
-[Easy] Magic pyramid
+[쉬움] 마법 피라미드
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Look, we have a big problem! You surely know how the Chosen disarmed the magic pyramid and forced the Orcs out of the eastern area of the Foothills?
+이보게, 큰 문제가 생겼네! 선택받은 자가 마법 피라미드를 무력화하고 오크들을 구릉지대 동쪽에서 몰아낸 이야기는 자네도 알겠지?
 #phrase Hero  2
-Come on, everybody knows about that!
+에이, 그거야 다들 알죠!
 #phrase Nsheriff  3
-Right, well the Orcs managed to get the pyramid working again! Those swine! Now we can not fight them on equal terms, and I fear they will conquer all of the Foothills soon! I would like you to score another coup, like the one the Chosen did a while ago: could you go and switch the pyramid off again?
+그래, 그런데 오크들이 피라미드를 다시 작동시켰네! 그 돼지 같은 놈들! 이제 놈들과 대등하게 싸울 수가 없으니, 곧 구릉지대 전체를 정복당할까 봐 걱정이야! 선택받은 자가 예전에 해냈던 것처럼 다시 한번 큰일을 해 주게. 가서 피라미드를 다시 꺼 줄 수 있겠나?
 #phrase Nsheriff  4
-It would be even more difficult now: you can not just use the magic obelisk the way he did, you will need a special key first. My spies report that the Seer who has the key lives in the Orc village. You may find him on the plateau in the east of the Foothills, across the river.
+이번에는 더 어려울 걸세. 그가 했던 것처럼 마법 오벨리스크를 그냥 쓸 수는 없고, 먼저 특별한 열쇠가 필요하지. 첩자들 말로는 열쇠를 가진 주술사가 오크 마을에 산다네. 강 건너, 구릉지대 동쪽 고원에서 찾을 수 있을 걸세.
 #phrase Nsheriff  5
-Do that and your glory will equal that of the Chosen!
+그 일을 해내면 자네의 영광은 선택받은 자와 같아질 걸세!

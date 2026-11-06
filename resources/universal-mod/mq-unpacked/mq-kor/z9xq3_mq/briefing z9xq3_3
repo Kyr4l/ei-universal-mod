@@ -1,8 +1,8 @@
-The Queen is finished!
+여왕은 끝났다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Congratulations! But did you know that the Will-o'-the-wisps are going to have another queen soon? Ha,  ha, does this mean you shall be forced to pay again to repair your armor!
+축하하네! 그런데 도깨비불들에게 곧 새 여왕이 생긴다는 거 알고 있었나? 하하, 그럼 자네는 또 갑옷 수리비를 내야 한다는 뜻인가?
 #phrase Hero  2
-Oh, never mind that! I know my way to the ravine now, so the new Queen shall not reign for long!
+아, 그건 상관없습니다! 이제 협곡 가는 길을 아니까, 새 여왕은 오래 다스리지 못할 겁니다!

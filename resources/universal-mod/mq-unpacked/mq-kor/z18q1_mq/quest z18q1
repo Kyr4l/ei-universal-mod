@@ -1,20 +1,20 @@
-Collector's trouble
-Baluddin, an antiques collector, has been arrested by a unit of the guards. You must kill the guards and take the collector home.
+수집가의 곤경
+골동품 수집가 발루딘이 경비대에게 체포되었다. 경비병들을 죽이고 수집가를 집으로 데려가야 한다.
 #subobj  1
-Reaching the collector's house
-The Collector's house is in the city. You will know it by the two small statues at the entrance.
+수집가의 집에 가기
+수집가의 집은 도시 안에 있다. 입구의 작은 석상 두 개로 알아볼 수 있다.
 #subobj  2
-Destroying the ambush
-Some of the guards are waiting in ambush in the house across the street to arrest anyone who tries to contact the collector.
+매복 처치
+일부 경비병이 길 건너편 집에 숨어, 수집가와 접촉하려는 사람을 체포하려고 기다리고 있다.
 #subobj  3
-Entering the guards' barracks
-The barracks are in the city, to the south west of the gates. To enter them, get the door open first.
+경비대 막사 들어가기
+막사는 도시 안, 성문 남서쪽에 있다. 들어가려면 먼저 문을 열어야 한다.
 #subobj  4
-Killing the guards
-The guards who hold Baluddin must be killed.
+경비병 처치
+발루딘을 붙잡고 있는 경비병들을 죽여야 한다.
 #subobj  5
-Approaching Baluddin
-Just approach Baluddin and ask him to go with you.
+발루딘에게 다가가기
+발루딘에게 다가가 함께 가자고 하면 된다.
 #subobj  6
-Taking Baluddin home
-Lead Baluddin to the entrance to his home.
+발루딘을 집으로 데려가기
+발루딘을 그의 집 입구까지 데려가라.

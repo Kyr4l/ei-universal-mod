@@ -1,0 +1,21 @@
+## Necromancer's Desert
+#zone z17q2 suslanger game
+#res
+zone17 zone17-LMP
+#maps
+12 12
+zone17map zone17questM
+#weather
+tornado
+#sky
+normal
+
+## To base
+#exit 2
+bz3mpg 1
+#deploy
+80 180 84 187
+#remove
+73 180 80 187
+#view
+26.6911

@@ -1,14 +1,14 @@
-No dragons! But the treasure is still there...
+용은 없었다! 하지만 보물은 그대로 있다...
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-I have been to that mountain and never saw any dragons there - young or old. So t'is all but fairy tales. The Chosen surely just made it up to appear a hero.
+그 산에 가 봤는데 용은 어린 것도 늙은 것도 없었습니다. 그러니 다 지어낸 이야기예요. 선택받은 자가 영웅처럼 보이려고 꾸며 낸 게 분명합니다.
 #phrase Nsheriff  2
-And the treasure - was that a tale as well?
+그럼 보물도 지어낸 이야기였나?
 #phrase Hero  3
-No, that was actually true, though the treasure turned out to be rather modest - only a rusty iron sword... The old dragon gave one to the Chosen also, but that one had a spell in it, while mine is but a rusty piece of iron... And nothing much can be done about it, because Babur does not know how to work with metals.
+아니요, 그건 사실이었습니다. 보물은 꽤 초라했지만요. 녹슨 철검 한 자루뿐이었어요... 늙은 용이 선택받은 자에게도 한 자루 줬다지만, 그건 마법이 깃든 것이었고, 제 건 그냥 녹슨 쇳덩이입니다... 바부르가 금속을 다룰 줄 모르니 어쩔 도리도 없고요.
 #phrase Nsheriff  4
-So you took risks for nothing?
+그럼 괜히 위험을 무릅쓴 건가?
 #phrase Hero  5
-Oh no! I gained experience, and as they say, you cannot drink that away, can you?
+아니요! 경험을 얻었잖습니까. 그건 술로 날려 버릴 수도 없는 거죠, 안 그래요?

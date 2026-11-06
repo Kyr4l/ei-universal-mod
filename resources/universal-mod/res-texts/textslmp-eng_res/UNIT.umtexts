@@ -3,7 +3,7 @@
 Royal banshee
 
 === UNIT Banshee_Mage1_J1
-Royal banshee mag
+Royal banshee mage
 
 === UNIT BoarDark_J1
 Black boar
@@ -55,118 +55,118 @@ Adult fox
 === UNIT Fox3_J1
 Old fox
 === UNIT HCityFemale1
-Baby armadillo
+Worker
 
 === UNIT HCityFemale2
-Baby armadillo
+Citizen
 
 === UNIT HCityMale1
-Baby armadillo
+Worker
 
 === UNIT HCityMale2
-Baby armadillo
+Citizen
 
 === UNIT HHAJ15
-Young khadaganian archer
+Young Khadaganian archer
 
 === UNIT HHAJ15bad
-Young khadaganian archer-betrayer
+Young Khadaganian traitor archer
 
 === UNIT HHAJ17
 Khadaganian archer
 
 === UNIT HHAJ17bad
-Khadaganian archer-betrayer
+Khadaganian traitor archer
 
 === UNIT HHAJ21
 Khadaganian archer
 
 === UNIT HHAJ21bad
-Khadaganian archer-betrayer
+Khadaganian traitor archer
 
 === UNIT HHAJ25
 Khadaganian archer
 
 === UNIT HHAJ25bad
-Khadaganian archer-betrayer
+Khadaganian traitor archer
 
 === UNIT HHAJ29
 Khadaganian archer
 
 === UNIT HHAJ29bad
-Khadaganian archer-betrayer
+Khadaganian traitor archer
 
 === UNIT HHFJ15
-Young khadaganian warrior
+Young Khadaganian warrior
 
 === UNIT HHFJ15bad
-Young khadaganian warrior-betrayer
+Young Khadaganian traitor warrior
 
 === UNIT HHFJ17
 Khadaganian fighter
 
 === UNIT HHFJ17bad
-Khadaganian fighter-betrayer
+Khadaganian traitor fighter
 
 === UNIT HHFJ21
 Khadaganian fighter
 
 === UNIT HHFJ21bad
-Khadaganian fighter-betrayer
+Khadaganian traitor fighter
 
 === UNIT HHFJ25
 Khadaganian fighter
 
 === UNIT HHFJ25bad
-Khadaganian fighter-betrayer
+Khadaganian traitor fighter
 
 === UNIT HHFJ29
 Khadaganian fighter
 
 === UNIT HHFJ29bad
-Khadaganian fighter-betrayer
+Khadaganian traitor fighter
 
 === UNIT HHJ15
 Royal banshee
 
 === UNIT HHJ15bad
-Royal banshee-betrayer
+Royal traitor banshee
 
 === UNIT HHJ25
-Khadaganian 
+Khadaganian
 
 === UNIT HHJ29
-Khadaganian 
+Khadaganian
 
 === UNIT HHMJ15
-Young khadaganian mage
+Young Khadaganian mage
 
 === UNIT HHMJ15bad
-Young khadaganian mage-betrayer
+Young Khadaganian traitor mage
 
 === UNIT HHMJ17
 Khadaganian mage
 
 === UNIT HHMJ17bad
--betrayerKhadaganian mage-betrayer
+Khadaganian traitor mage
 
 === UNIT HHMJ21
 Khadaganian mage
 
 === UNIT HHMJ21bad
-Khadaganian mage-betrayer
+Khadaganian traitor mage
 
 === UNIT HHMJ25
 Khadaganian mage
 
 === UNIT HHMJ25bad
-Khadaganian mage-betrayer
+Khadaganian traitor mage
 
 === UNIT HHMJ29
 Khadaganian mage
 
 === UNIT HHMJ29bad
-Khadaganian mage-betrayer
+Khadaganian traitor mage
 
 === UNIT Human_Gangster_M_J1
 Highwayman
@@ -190,7 +190,7 @@ Khadaganian mage
 Khadaganian recon
 
 === UNIT Human_Peasant_F_J1
-Peasant Woman
+Peasant woman
 
 === UNIT Human_Peasant_M_J1
 Peasant
@@ -223,13 +223,13 @@ Khadaganian gaoler
 Khadaganian gaoler
 
 === UNIT PrisonGuardF18
-Khadaganian gaoler-keykeeper
+Khadaganian key-keeper gaoler
 
 === UNIT PrisonGuardM17
 Khadaganian gaoler
 
 === UNIT PrisonLeaderF29
-Prison wander
+Prison warden
 
 === UNIT PrisonLeaderWifeM25
 Prison mage
@@ -290,7 +290,7 @@ Zombie warrior
 Zombie warrior
 
 === UNIT lmp_Human_Gipath_Fighter_2
-Unexperienced Brigand
+Inexperienced brigand
 
 === UNIT lmp_Spider_17
 Spider Queen

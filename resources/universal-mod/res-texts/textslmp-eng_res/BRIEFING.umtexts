@@ -48,7 +48,7 @@ I want to help Khadagan reclaim its greatness on Jigran and be a part of it.
 Excellent. I need the living. I already have enough of the dead.
 
 === briefing intro_m
-Salute the Marshall
+Salute the Marshal
 #show Hero
 #show Marshal
 #ANIMATION 24
@@ -61,13 +61,13 @@ Greetings, noble sir!
 The Empire needs people willing to act, not just talk. If you're looking for action, you'll find it.
 #CAMERA 2
 #phrase Hero 3
-I will try to affirm your hospitality, but now I need to get ready...
+I will try to prove worthy of your hospitality, but for now I need to get ready...
 #CAMERA 3
 #phrase Marshal 4
 At ease!
 
 === briefing intro_s
-Get to know the Master Sukro
+Get to know Master Sukro
 #show Hero
 #show Sukro
 #ANIMATION 5
@@ -77,7 +77,7 @@ Greetings. I am Master Sukro, an excellent blacksmith. It's always good to see n
 #ANIMATION 15
 #CAMERA 10
 #phrase Hero 2
-And I greet you, noble blacksmith. I hope you will do something for me as well?
+And I greet you, noble blacksmith. I hope you will make something for me as well?
 #phrase Sukro 3
-Of course. But since you're not in Hadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!
+Of course. But since you're not in Khadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!
 

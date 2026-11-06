@@ -1,14 +1,14 @@
-[Medium] Piggy Fivepence is missing!
+[Moyen] Le petit cochon Quatre-sous a disparu !
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-Why are you so unhappy? If you have any problem, just tell me - perhaps I can help!
+Pourquoi êtes-vous si malheureux ? Si vous avez un problème, dites-le-moi, je peux peut-être vous aider !
 #phrase Nsheriff  2
-I am definitely not happy... The Lizards living in the north of the Middle Mountains stole piggy Fivepence! I remember how the Chosen used to kick him, for no reason, really, and Fivepence did not like that at all! Ah, he is so clever and sweet, you see... And now he is no longer!
+C'est sûr que je ne suis pas heureux... Les hommes-lézards du nord des Montagnes du milieu ont volé le petit cochon Quatre-sous ! Je me souviens que l'Élu lui donnait des coups de pied, sans raison vraiment, et Quatre-sous n'aimait pas ça du tout ! Ah, il est si intelligent et si mignon, voyez-vous... Et maintenant il n'est plus là !
 #phrase Hero  3
-Wait, wait... What little piggy? I remember Fivepence - that is one huge pig! 
+Attendez, attendez... Quel petit cochon ? Je me souviens de Quatre-sous : c'est un énorme cochon !
 #phrase Nsheriff  4
-Well, he is still a tiny sweet little thing to us... But what is the point of talking about it! The Lizard took him away, in the ravines near the lake, and I fear that was the last we shall see of him!
+Eh bien, pour nous, il reste un adorable petit être... Mais à quoi bon en parler ! Les hommes-lézards l'ont emmené dans les ravins près du lac, et je crains de ne jamais le revoir !
 #phrase Hero  5
-OK, do not worry. Mayhap you shall see your precious little animal yet!
+D'accord, ne vous inquiétez pas. Vous reverrez peut-être votre précieux petit animal !

@@ -1,14 +1,14 @@
-[Easy] Magic pyramid
+[Facile] La pyramide magique
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Look, we have a big problem! You surely know how the Chosen disarmed the magic pyramid and forced the Orcs out of the eastern area of the Foothills?
+Écoutez, nous avons un gros problème ! Vous savez sûrement comment l'Élu a désactivé la pyramide magique et chassé les orques de l'est des Collines basses ?
 #phrase Hero  2
-Come on, everybody knows about that!
+Allons, tout le monde le sait !
 #phrase Nsheriff  3
-Right, well the Orcs managed to get the pyramid working again! Those swine! Now we can not fight them on equal terms, and I fear they will conquer all of the Foothills soon! I would like you to score another coup, like the one the Chosen did a while ago: could you go and switch the pyramid off again?
+Eh bien, les orques ont réussi à remettre la pyramide en marche ! Ces porcs ! Nous ne pouvons plus les combattre à armes égales, et je crains qu'ils ne conquièrent bientôt toutes les Collines basses ! J'aimerais que vous réussissiez un nouveau coup d'éclat, comme celui de l'Élu il y a quelque temps : pourriez-vous aller désactiver la pyramide une fois de plus ?
 #phrase Nsheriff  4
-It would be even more difficult now: you can not just use the magic obelisk the way he did, you will need a special key first. My spies report that the Seer who has the key lives in the Orc village. You may find him on the plateau in the east of the Foothills, across the river.
+Ce sera encore plus difficile maintenant : vous ne pourrez pas simplement utiliser l'obélisque magique comme il l'a fait, il vous faudra d'abord une clé spéciale. Mes espions rapportent que le prophète qui détient la clé vit dans le village orque. Vous le trouverez sur le plateau, à l'est des Collines basses, de l'autre côté de la rivière.
 #phrase Nsheriff  5
-Do that and your glory will equal that of the Chosen!
+Faites cela, et votre gloire égalera celle de l'Élu !

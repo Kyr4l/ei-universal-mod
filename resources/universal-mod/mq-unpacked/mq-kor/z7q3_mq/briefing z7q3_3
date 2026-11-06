@@ -1,8 +1,8 @@
-The Orcs are furious!
+오크들이 격분했다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Good work! My spies report that the Orcs are furious. Ha, they slaughter Goblins better than the Chosen ever did.
+잘했네! 첩자들이 오크들이 격분했다고 보고하는군. 하, 놈들은 선택받은 자보다도 고블린을 더 잘 도륙하는구먼.
 #phrase Nsheriff  2
-Have a rest, go to Babur, maybe buy something... meanwhile I shall try to figure out another clever plan!
+좀 쉬게. 바부르에게 가서 뭐라도 사고... 그동안 나는 또 다른 기막힌 계획을 짜 보겠네!

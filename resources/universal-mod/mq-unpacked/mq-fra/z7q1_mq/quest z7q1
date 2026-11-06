@@ -1,20 +1,20 @@
-Save GoGo
-The Goblin chief GoGo is not the most aggressive or dangerous of goblins. That is why the Orcs have decided to execute him and replace him with a more evil, Orc-subservient Goblin. GoGo must be saved.
+Sauver GoGo
+Le chef gobelin GoGo n'est pas le plus agressif ni le plus dangereux des gobelins. C'est pourquoi les orques ont décidé de l'exécuter et de le remplacer par un gobelin plus cruel et soumis aux orques. GoGo doit être sauvé.
 #subobj  1
-Central island
-The execution will take place on the central island in the river delta. To prevent it, you must get on to the island.
+L'île centrale
+L'exécution aura lieu sur l'île centrale du delta du fleuve. Pour l'empêcher, vous devez vous rendre sur l'île.
 #subobj  2
-Killing the Orcs
-All the Orcs who gathered on the central island must be killed.
+Tuer les orques
+Tous les orques rassemblés sur l'île centrale doivent être tués.
 #subobj  3
-Taking GoGo away
-After all the Orcs have been killed, approach GoGo and lead him away from the central island.
+Emmener GoGo
+Une fois tous les orques tués, approchez-vous de GoGo et emmenez-le loin de l'île centrale.
 #subobj  4
-Take GoGo to Barren Island
-GoGo can hide on Barren Island (located in the east); he'll be safe there.
+Emmener GoGo sur l'île Aride
+GoGo peut se cacher sur l'île Aride (à l'est) ; il y sera en sécurité.
 #subobj  5
-Find material to repair the bridge
-The material needed to repair the broken bridge can be found on the Barren Island. You should take it with you and attempt to repair the bridge.
+Trouver de quoi réparer le pont
+Le matériel nécessaire pour réparer le pont cassé se trouve sur l'île Aride. Prenez-le avec vous et tentez de réparer le pont.
 #subobj  6
-Repair the bridge
-The leader of the GoGo rescue mission must come to the broken bridge. If he has a plank, the bridge will be repaired.
+Réparer le pont
+Le chef de l'expédition de sauvetage de GoGo doit se rendre au pont cassé. S'il a une planche, le pont sera réparé.

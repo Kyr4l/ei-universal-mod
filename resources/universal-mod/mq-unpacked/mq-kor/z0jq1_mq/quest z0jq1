@@ -1,11 +1,11 @@
-Khadagan Recon
-The Khadagan empire has sent recon units through a portal.
+카다간 정찰병
+카다간 제국이 포탈을 통해 정찰병들을 보냈다.
 #subobj  1
-Kill the recon units
-Make sure none of them can escape the area.
+정찰병 처치
+한 놈도 이 지역을 빠져나가지 못하게 하라.
 #subobj  2
-Find the portal key
-You need this key to shut the portal off. In a chest that is probably guarded.
+포탈 열쇠 찾기
+포탈을 끄려면 이 열쇠가 필요하다. 아마 지켜지고 있는 상자 안에 있을 것이다.
 #subobj  3
-Close the portal
-Use the key to disable the portal and prevent reinforcements from coming.
+포탈 닫기
+열쇠로 포탈을 멈춰 증원군이 오지 못하게 하라.

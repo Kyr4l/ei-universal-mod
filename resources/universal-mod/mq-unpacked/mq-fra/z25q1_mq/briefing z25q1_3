@@ -1,10 +1,10 @@
-The path is now safe!
+Le chemin est sûr !
 #show Hero
 #show KMage
 #CAMERA 10
 #phrase KMage  1
-Thanks you very much. We can hopefully trade with the other islands soon!
+Merci beaucoup. Avec un peu de chance, nous pourrons bientôt commercer avec les autres îles !
 #phrase Hero  2
-But what if they decide to fight the Canian Empire ?
+Et si elles décidaient de combattre l'Empire canien ?
 #phrase KMage  3
-Well that's a fair point. Maybe we'll have to wait then...
+C'est juste. Il faudra peut-être attendre, alors...

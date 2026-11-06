@@ -1,10 +1,10 @@
-The mine is cleared!
+La mine est nettoyée !
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! You actually cleared Babur's mine. The old skinflint will be pleased.
+Bien joué ! Vous avez vraiment nettoyé la mine de Babur. Le vieux radin va être content.
 #phrase Hero  2
-I recovered the sack of gold from the west and a nice gold nugget from the north-east.
+J'ai récupéré le sac d'or à l'ouest et une belle pépite d'or au nord-est.
 #phrase Merc1  3
-Perfect. Here's your reward!
+Parfait. Voici votre récompense !

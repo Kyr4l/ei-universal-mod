@@ -1,12 +1,12 @@
-Invasion in Gipath is approaching!
+지페스 침공이 다가온다!
 #show Hero
 #show Rick
 #CAMERA 3 -10 3 1
 #phrase Rick  1
-I received very worrying news from Suslanger! General Iriskell will begin moving his troops to Gipath any day now.
+수슬랑게르에서 매우 걱정스러운 소식이 왔다! 이리스켈 장군이 곧 지페스로 군대를 이동시키기 시작할 것이다.
 #phrase Rick  2
-The only way to avoid trouble is to shut down the Suslanger portal. To achieve that, you must get near it, find General Iriskell and take the portal key from him.
+화를 피할 유일한 방법은 수슬랑게르 포탈을 닫는 것이다. 그러려면 포탈에 다가가 이리스켈 장군을 찾아 그에게서 포탈 열쇠를 빼앗아야 한다.
 #phrase Rick  3
-Then switch both magic obelisks near the portal entrance, and the way to Gipath will be closed to anyone except those I transfer personally.
+그다음 포탈 입구 근처의 마법 오벨리스크 두 개를 모두 작동시켜라. 그러면 내가 직접 보내는 이들 외에는 누구도 지페스로 오지 못할 것이다.
 #phrase Rick  4
-Keep in mind that General Iriskell earned his rank not so much by his military talents as by his ferocity, cruelty and great strength. You will need all your caution, cunning and skills ... and most importantly - your luck!
+이리스켈 장군은 군사적 재능보다는 흉포함과 잔혹함, 엄청난 힘으로 그 계급에 올랐다는 걸 명심해라. 너의 모든 신중함과 교활함과 기술이 필요할 것이다... 그리고 무엇보다 운이!

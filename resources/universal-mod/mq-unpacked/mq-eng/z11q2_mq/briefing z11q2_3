@@ -3,10 +3,10 @@ The treasure has been found!
 #show Huber
 #CAMERA 10
 #phrase Hero  1
-Your Excellency you can inform your Duke that there is now plenty gold in the city's treasury! I also saw an undead.
+Your Excellency, you can inform the Duke that there is now plenty of gold in the city treasury! I also saw an undead.
 #phrase Huber  1
-The living Dead?! Don't tell stories like that!
+The living dead?! Don't tell stories like that!
 #phrase Hero  2
 Believe it or not, an undead mage was guarding the treasure! Maybe the gold is cursed too...
 #phrase Huber  2
-There's no such thing as curses. Here take your promised share and celebrate your success!
+There's no such thing as curses. Here, take your promised share and celebrate your success!

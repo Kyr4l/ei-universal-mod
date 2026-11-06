@@ -1,12 +1,12 @@
-The treasure has been found!
+보물을 찾았다!
 #show Hero
 #show Huber
 #CAMERA 10
 #phrase Hero  1
-Your Excellency you can inform your Duke that there is now plenty gold in the city's treasury! I also saw an undead.
+각하, 이제 도시 금고에 금이 넘쳐난다고 공작께 전하셔도 됩니다! 그리고 언데드도 하나 봤습니다.
 #phrase Huber  1
-The living Dead?! Don't tell stories like that!
+살아 있는 시체?! 그런 이야기는 하지 말게!
 #phrase Hero  2
-Believe it or not, an undead mage was guarding the treasure! Maybe the gold is cursed too...
+믿거나 말거나, 언데드 마법사가 보물을 지키고 있었습니다! 어쩌면 금도 저주받았을지 모르죠...
 #phrase Huber  2
-There's no such thing as curses. Here take your promised share and celebrate your success!
+저주 같은 건 없네. 자, 약속한 몫을 받고 성공을 축하하게!

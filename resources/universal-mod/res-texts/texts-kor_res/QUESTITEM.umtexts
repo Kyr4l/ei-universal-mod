@@ -1,41 +1,41 @@
 # um-texts 1
 === QUESTITEM DoorKey00
-Prison gates key
-This key opens the prison gates.
+감옥 문 열쇠
+이 열쇠로 감옥 문을 연다.
 
 === QUESTITEM KKey01
-Key to the mine gates
-Will open the gates to the mine in the northern area of the mine.
+광산 문 열쇠
+광산 북쪽 구역의 문을 연다.
 
 === QUESTITEM KKey02
-Key to the mine
-This key is needed to enter the eastern part of the mine.
+광산 열쇠
+광산 동쪽 구역에 들어가려면 이 열쇠가 필요하다.
 
 === QUESTITEM KKey03
-Key from the ravine gate
-With this key, you can enter the ravine in the southeastern area of the city.
+협곡 문 열쇠
+이 열쇠로 도시 남동쪽의 협곡에 들어갈 수 있다.
 
 === QUESTITEM KKey04
-Key from the gate to the secret cave
-With this key you can open the entrance to a cave with an artifact.
+비밀 동굴 문 열쇠
+이 열쇠로 유물이 있는 동굴의 입구를 열 수 있다.
 
 === QUESTITEM KKey05
-The Gate Key
-With this key you can open the gate to a cave with a portal.
+문 열쇠
+이 열쇠로 포탈이 있는 동굴의 문을 열 수 있다.
 
 === QUESTITEM KKey06
-Key to Neglected Mines
-With this key you can open the gates to the neglected mines.
+버려진 광산 열쇠
+이 열쇠로 버려진 광산의 문을 열 수 있다.
 
 === QUESTITEM KKey07
-Key
-Such keys are used for levers in mines.
+열쇠
+이런 열쇠는 광산의 레버에 쓰인다.
 
 === QUESTITEM Ogrestuff
-Ogre's necklace
-Probably the ogre has discovered the loss of his necklace by now...will he figure out how he lost it?
+오우거의 목걸이
+오우거는 이제쯤 목걸이가 없어진 걸 알아챘을 것이다... 어떻게 잃어버렸는지도 알아낼까?
 
 === QUESTITEM TeleportKey01
-Portal Key
-This key activates the Portal.
+포탈 열쇠
+이 열쇠는 포탈을 작동시킨다.
 

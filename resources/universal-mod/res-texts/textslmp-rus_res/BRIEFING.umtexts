@@ -1,0 +1,83 @@
+# um-texts 1
+=== briefing intro_4k
+Познакомиться с мастером
+#show Hero
+#show Stark
+#ANIMATION 5
+#CAMERA 11
+#phrase Stark 1
+Так это вы - чужаки, что пришли через старый портал?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Не, мы просто тут появились, это же лобби для сетевой игры.
+#phrase Stark 3
+чё за фигня...
+
+=== briefing intro_c
+Поприветствовать торговку
+#show Hero
+#show Shemale
+#ANIMATION 39
+#CAMERA 0
+#phrase Hero 1
+Здравствуй, достойная женщина!
+#CAMERA 11
+#phrase Shemale 2
+Здравствуй.
+
+=== briefing intro_f
+Засвидетельствовать почтение лорду Фирезу
+#show Hero
+#show Firez
+#ANIMATION 26
+#CAMERA 0
+#phrase Hero 1
+Приветствую, ваше превосходительство! Как мне заслужить ваше доверие?
+#ANIMATION 57
+#CAMERA 11
+#phrase Firez 2
+Переживи первую неделю.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 3
+Я хочу помочь Хадагану вернуть былое величие на Джигране и стать частью этого.
+#ANIMATION 11
+#CAMERA 11
+#phrase Firez 4
+Отлично. Мне нужны живые. Мертвых у меня и так хватает.
+
+=== briefing intro_m
+Отдать честь маршалу
+#show Hero
+#show Marshal
+#ANIMATION 24
+#CAMERA 2
+#phrase Hero 1
+Приветствую, благородный господин!
+#ANIMATION 15
+#CAMERA 3
+#phrase Marshal 2
+Империи нужны люди дела, а не болтуны. Если ищешь дела, ты его найдешь.
+#CAMERA 2
+#phrase Hero 3
+Постараюсь оправдать ваше гостеприимство, но сейчас мне нужно подготовиться...
+#CAMERA 3
+#phrase Marshal 4
+Вольно!
+
+=== briefing intro_s
+Познакомиться с мастером Сукро
+#show Hero
+#show Sukro
+#ANIMATION 5
+#CAMERA 11
+#phrase Sukro 1
+Приветствую. Я мастер Сукро, отличный кузнец. Всегда рад новым лицам в нашем городе, особенно тем, кто готов помочь в эти трудные времена.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+И я приветствую тебя, благородный кузнец. Надеюсь, и для меня ты что-нибудь сделаешь?
+#phrase Sukro 3
+Конечно. Но раз ты не служишь Хадагану под началом лорда Фиреза, свою работу я тебе продам. Зато результат не разочарует!
+

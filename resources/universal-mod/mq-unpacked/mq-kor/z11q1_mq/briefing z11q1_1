@@ -1,14 +1,14 @@
-[Easy] Poachers in the Duke's hunting grounds!
+[쉬움] 공작의 사냥터에 나타난 밀렵꾼!
 #show Hero
 #show Huber
 #CAMERA 3 30 3 1
 #phrase Huber  1
-The Duke has ordered me to take care of a problem. Poachers hunting on the Duke's hunting grounds...this must stop!
+공작께서 문제 하나를 처리하라고 명하셨네. 밀렵꾼들이 공작의 사냥터에서 사냥을 하고 있다니... 이건 그만둬야 하네!
 #phrase Huber  2
-The city guards report that they discovered deer killed in the hunting area outside the city. It's best to look there first to find these poachers.
+도시 경비대가 도시 밖 사냥터에서 죽은 사슴들을 발견했다고 보고했네. 밀렵꾼을 찾으려면 그곳부터 살펴보는 게 좋겠지.
 #phrase Huber  3
-You must understand that the Duke's concerns are also mine, as the hunting grounds around the city also support us. We can't afford to share these grounds with any outsiders.
+공작의 걱정이 곧 내 걱정이라는 걸 이해해주게. 도시 주변의 사냥터는 우리 먹을거리이기도 하니까. 그 땅을 외부인과 나눌 수는 없네.
 #phrase Hero  1
-All right, I'll go and drive these poachers away. But there has to be something for me in it other than a warm soup once I return!
+좋습니다, 가서 밀렵꾼들을 쫓아내죠. 하지만 돌아와서 따뜻한 수프 한 그릇 말고 다른 것도 있어야 합니다!
 #phrase Huber  4
-Of course my friend, the Duke is kind and generous to his allies! As long as they serve him faithfully.
+물론이지, 친구. 공작께서는 동맹에게 친절하고 너그러우시다네! 충실히 섬기기만 한다면 말이야.

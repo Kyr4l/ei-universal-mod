@@ -1,18 +1,18 @@
-A good man is in trouble!
+선량한 사람이 곤경에 처했다!
 #show Hero
 #show Glav
 #CAMERA 3 20 3.5 1.5
 #phrase Glav  1
-There is a rule in the brotherhood of the Last Shelter: if a good man is in trouble and we can help, then we will. Now an antiques collector named Baluddin is in trouble, and I would like to help him.
+최후의 은신처 형제단에는 규칙이 있네. 선량한 사람이 곤경에 처했고 우리가 도울 수 있다면, 돕는다. 지금 발루딘이라는 골동품 수집가가 곤경에 처했는데, 나는 그를 돕고 싶네.
 #phrase Hero  2
-Hmmm... Is he really a good man?
+음... 그가 정말 선량한 사람입니까?
 #phrase Glav  3
-Do you doubt my word? There is nothing wrong with that: only doubts can lead you to the truth. I will tell you about Baluddin!
+내 말을 의심하나? 그건 나쁜 게 아니네. 의심만이 진실로 이끌어 주니까. 발루딘에 대해 말해 주지!
 #phrase Glav  4
-Brother Blondie told me that Baluddin gave shelter to an unknown man of very strange appearance, and he was very upset when that man was captured by the guards.
+블론디 형제가 말하길, 발루딘이 아주 이상한 모습의 낯선 사내를 숨겨 주었고, 그 사내가 경비병들에게 붙잡히자 몹시 괴로워했다더군.
 #phrase Glav  5
-I concluded that Baluddin was a noble man albeit in tight circumstances, so I sent him a message. Now Baluddin reports to us about the latest developments in the city, and we occasionally help him to extend his collection.
+그래서 나는 발루딘이 형편은 어려워도 고결한 사람이라고 판단하고 전갈을 보냈지. 이제 발루딘은 도시의 최근 소식을 우리에게 알려 주고, 우리는 가끔 그의 수집품을 늘리는 걸 돕는다네.
 #phrase Glav  6
-The commander of one of the guards' units found out about it and arrested Baluddin; he also set up an ambush near his home.
+경비대의 한 부대장이 그걸 알아내고 발루딘을 체포했네. 그의 집 근처에 매복까지 해 두었지.
 #phrase Glav  7
-We must kill the guards who know why the collector has been arrested and get him home; that way no one will know what actually happened!
+수집가가 왜 체포되었는지 아는 경비병들을 죽이고 그를 집으로 데려가야 하네. 그러면 실제로 무슨 일이 있었는지 아무도 모를 걸세!

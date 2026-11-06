@@ -1,14 +1,14 @@
-[Easy] Kadagan Recons
+[Facile] Éclaireurs de Khadagan
 #show Hero
 #show Marshal
 #CAMERA 11
 #phrase Marshal  1
-I've just received a report that indicates the other portal was turned on!
+Je viens de recevoir un rapport : l'autre portail a été activé !
 #phrase Hero  2
-What portal? There's more than this one in the city?
+Quel portail ? Il y en a plus d'un dans la cité ?
 #phrase Marshal  3
-There is an abandonned portal at the East, we thought it was broken but apparently someone has managed to turn it back on!
+Il y a un portail abandonné à l'est. Nous le pensions hors d'usage, mais quelqu'un a apparemment réussi à le réactiver !
 #phrase Marshal  4
-And apparently the Khadagan empire is preparing an invasion, they sent recon units to explore Jigran. If you can take them out and close the portal, that might earn enough time for us to prepare defenses. If they ever try to come back...
+Et il semble que l'Empire khadaganien prépare une invasion : il a envoyé des éclaireurs explorer Jigran. Si vous les éliminez et fermez le portail, cela nous laissera peut-être le temps de préparer nos défenses, au cas où ils voudraient revenir...
 #phrase Hero 5
-If these are recon units then I suppose they should not be that strong, I guess I can do it...
+Si ce ne sont que des éclaireurs, ils ne devraient pas être bien forts. Je pense pouvoir m'en charger...

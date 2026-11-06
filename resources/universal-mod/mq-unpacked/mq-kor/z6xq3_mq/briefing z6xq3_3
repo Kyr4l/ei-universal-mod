@@ -1,10 +1,10 @@
-Fivepence is back!
+다섯푼이가 돌아왔다!
 #show Hero
 #show NSheriff
 #show Pig
 #phrase Nsheriff  1
-Oh my little pink friend! Look how thin he is! You must have suffered a great deal, poor creature!
+오, 내 작은 분홍 친구! 이렇게 말랐다니! 고생 많았구나, 불쌍한 녀석!
 #phrase Hero  2
-Khm!... I'm sorry, are you not going to say something to me as well?
+흠흠!... 죄송한데, 저한테는 아무 말씀도 안 하십니까?
 #phrase Nsheriff  3
-Oh! Sorry. I am so glad that Fivepence is back, and of course I am very grateful!
+아! 미안하네. 다섯푼이가 돌아와서 너무 기뻐서. 물론 자네에게 정말 고맙네!

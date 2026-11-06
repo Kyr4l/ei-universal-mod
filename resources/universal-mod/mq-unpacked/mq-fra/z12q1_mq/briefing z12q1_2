@@ -1,8 +1,8 @@
-Alas, that's too difficult!
+Hélas, c'est trop difficile !
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-I am sorry, Your Excellency, but I can not ensure the safety of the old mines!
+Je suis désolé, Votre Excellence, mais je ne peux pas sécuriser les vieilles mines !
 #phrase Huber  2
-Oh, pity, pity ... I would like very much to fine you for that, but on the other hand you did not ask for a fee for this job, did you? So I will have to be fair and just accept your ineptitude!
+Oh, dommage, dommage... J'aimerais beaucoup vous mettre à l'amende pour cela, mais d'un autre côté, vous n'avez pas demandé de paiement pour ce travail, n'est-ce pas ? Je vais donc devoir être juste et accepter votre incompétence !

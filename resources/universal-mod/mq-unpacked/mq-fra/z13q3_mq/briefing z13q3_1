@@ -1,20 +1,20 @@
-[Medium] Governor is waiting for a present
+[Moyen] Le gouverneur attend un cadeau
 #show Hero
 #show Huber
 #CAMERA 3 0 3.5 1
 #phrase Huber  1
-Mayhap you heard that I collect exotic weapons and other rarities?
+Vous avez peut-être entendu dire que je collectionne les armes exotiques et autres raretés ?
 #phrase Hero  2
-Of course, Your Excellency. Everybody knows about your wonderful collection!
+Bien sûr, Votre Excellence. Tout le monde connaît votre magnifique collection !
 #phrase Huber  3
-Good, good ... And do you know that people who are called "Your Excellency" should occasionally receive some nice gifts? Mayhap you did not know that, but now I have enlightened you, so to speak, yes?
+Bien, bien... Et savez-vous que les personnes qu'on appelle "Votre Excellence" doivent recevoir de temps en temps de jolis cadeaux ? Vous ne le saviez peut-être pas, mais maintenant je vous ai éclairé, pour ainsi dire, n'est-ce pas ?
 #NOLIPS
 #CAMERA 10
 #phrase Hero  4
-Mmm... I think I know what you mean!
+Hum... Je crois que je vois ce que vous voulez dire !
 #phrase Hero  5
-Mmmm... Your Excellency!  I would like to make you a present; could you tell me what would be especially please you?
+Hum... Votre Excellence ! J'aimerais vous faire un cadeau ; pourriez-vous me dire ce qui vous ferait particulièrement plaisir ?
 #phrase Huber  6
-Of course I could! I would like to have that gold nugget which decorates the neck of the Royal Deer. The beast is very easy to find - he grazes in the wide valley north of the river, with the rest of his herd.
+Bien sûr ! J'aimerais avoir la pépite d'or qui orne le cou du Cerf royal. La bête est très facile à trouver : elle broute dans la large vallée au nord de la rivière, avec le reste de sa harde.
 #phrase Huber  7
-But please be careful. The Royal Deer, unlike common deer, can defend himself, so if you die, my collection will not gain a new exhibit! That would be very, very sad, don't you think?
+Mais soyez prudent, je vous prie. Le Cerf royal, contrairement aux cerfs ordinaires, sait se défendre, et si vous mourez, ma collection ne gagnera pas de nouvelle pièce ! Ce serait très, très triste, ne trouvez-vous pas ?

@@ -1,18 +1,18 @@
-[Medium] I've got a clever plan!
+[Moyen] J'ai un plan génial !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Frankly, I don't like to think too much, but since I'm the captain now, I guess I'll have to. So here's what I think...
+Franchement, je n'aime pas trop réfléchir, mais puisque je suis le capitaine maintenant, il va bien falloir. Alors voilà ce que je pense...
 #phrase Nsheriff  2
-Orcs are our enemies. And Goblins are our enemies. So if they quarrel, it will play right into our hands!
+Les orques sont nos ennemis. Et les gobelins sont nos ennemis. Donc s'ils se querellent, ça fera notre affaire !
 #phrase Hero  3
-Wow Rivar, you are a real thinker! A truly wise man! It never occurred to me ... such brilliant idea!
+Ouah, Rivar, vous êtes un vrai penseur ! Un véritable sage ! Je n'y avais jamais pensé... quelle idée brillante !
 #phrase Hero  4
-So cut the nonsense and say what is on your mind, do not beat around the bush.
+Alors arrêtez les bêtises et dites ce que vous avez en tête, sans tourner autour du pot.
 #phrase Nsheriff  5
-Well, it comes down to this: let us steal the Goblin totem and put it on the Orcs' Council mountain. As soon as the Orcs see that rotten skull at their sacred place, they will be furious and add at least three dozen other Goblin heads to it. More fresh ones, he-he…
+Eh bien, voilà : volons le totem des gobelins et posons-le sur la Montagne du Conseil des orques. Dès que les orques verront ce crâne pourri sur leur lieu sacré, ils seront furieux et y ajouteront au moins trois douzaines d'autres têtes de gobelins. Des plus fraîches, hé hé...
 #phrase Nsheriff  6
-I have been told that the Goblin totem is now on the easternmost island in the river delta. And the council mountain is always in the same place - on the northern river bank.
+On m'a dit que le totem des gobelins se trouve maintenant sur l'île la plus à l'est du delta. Et la Montagne du Conseil est toujours au même endroit : sur la rive nord du fleuve.
 #phrase Hero  7
-Not a bad idea. Come, let us see what we can do!
+Pas mauvaise, comme idée. Allons, voyons ce que nous pouvons faire !

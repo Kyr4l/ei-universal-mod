@@ -1,12 +1,12 @@
-Karansul managed on his own
+Karansul s'est débrouillé seul
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-It seems you are not as lucky as I thought?
+On dirait que vous n'avez pas autant de chance que je le pensais ?
 #phrase Hero  2
-Unfortunately, no. Karansul's domain proved to be difficult indeed!
+Hélas, non. Le domaine de Karansul s'est révélé vraiment difficile !
 #phrase Huber  3
-Yes, I know. Well all right, you may forget about it. Karansul has hired a team of serious people who have already dealt with this problem.
+Oui, je sais. Bon, d'accord, vous pouvez oublier cette affaire. Karansul a engagé une équipe de gens sérieux qui ont déjà réglé le problème.
 #phrase Huber  4
-So now you may start looking for some other occupation, more in line with your abilities!
+Vous pouvez donc chercher une autre occupation, plus à la mesure de vos capacités !

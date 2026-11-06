@@ -1,16 +1,16 @@
-One of the slaves is a traitor...
+노예 중 한 명이 배신자다...
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-My heart is filled with sorrow, sorrow and anger! Our Shelter has always been the last refuge for unfortunate slaves unable to perform merciless labor on the plantations. And now it turns out that one of them is willing to betray that refuge!
+내 마음은 슬픔으로, 슬픔과 분노로 가득하네! 우리 은신처는 언제나 농장의 무자비한 노동을 견디지 못한 불행한 노예들의 마지막 피난처였지. 그런데 그들 중 하나가 그 피난처를 배신하려 한다니!
 #phrase Glav  2
-This man is a slave not just by his status, but by spirit! He is willing to sell everything he knows about the Last Shelter for a bowl of soup!
+그자는 신분만이 아니라 정신까지 노예일세! 수프 한 그릇에 최후의 은신처에 대해 아는 모든 걸 팔아넘기려 하다니!
 #phrase Hero  3
-Are we going to do battle with the guards, then?
+그럼 경비병들과 싸워야 합니까?
 #phrase Glav  4
-Fortunately enough, not yet. The despicable traitor has a very high opinion of himself and refuses to talk to anybody else but high-ranking officers!
+다행히 아직은 아니네. 그 비열한 배신자는 자기 자신을 대단하게 여겨서 고위 장교가 아니면 아무와도 말하지 않겠다고 버틴다네!
 #phrase Glav  5
-If he is killed before the leaders arrive, our secrets will die with him.
+지휘관들이 도착하기 전에 그를 죽이면 우리의 비밀도 그와 함께 묻히겠지.
 #phrase Glav  6
-At this moment that dirty hyena stuffs his belly in the soldiers quarters to the south of the plantations. The building is usually full of slavedrivers and guards, but if you manage to sneak in there unnoticed, you can dispatch the traitor with no undue problems. 
+지금 그 더러운 하이에나는 농장 남쪽의 병사 숙소에서 배를 채우고 있네. 그 건물은 보통 노예 감독관과 경비병으로 가득하지만, 들키지 않고 숨어들 수 있다면 큰 어려움 없이 배신자를 처리할 수 있을 걸세.

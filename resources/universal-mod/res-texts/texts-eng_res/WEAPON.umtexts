@@ -1,7 +1,7 @@
 # um-texts 1
 === WEAPON Axe Alloy
 Alloy axe
-<placeholder>
+Cuts through meteorite armor as if it were leather.
 
 === WEAPON Bad_Axe Bronze
 Peasant's axe
@@ -17,7 +17,7 @@ You can use a knife like this to separate a hyena's ears from its head.
 
 === WEAPON Bad_Hammer Bronze
 Baton
-Perfect for shaking the dust out of carpets... ...and to beat reason into the heads of slaves.
+Perfect for shaking the dust out of carpets... and for beating reason into the heads of slaves.
 
 === WEAPON Bad_Short_Bow Bronze
 Old bow
@@ -33,11 +33,11 @@ You can't fight with a sword like that for very long!
 
 === WEAPON Battle_Axe Alloy
 Alloy battle axe
-<placeholder>
+No king's armory holds a better axe.
 
 === WEAPON Bone_Crossbow Burned_bones
 Bone crossbow (hard bone)
-If you're low on cash, it's fun to shoot yourself with this mechanical toy.
+If you're low on cash, this mechanical toy is fun to shoot with.
 
 === WEAPON Bone_Crossbow Decayed_bones
 Bone crossbow (thin bone)
@@ -92,7 +92,7 @@ With this dagger, don't be afraid to go after a black boar.
 
 === WEAPON Cheat_Dagger Alloy
 Ritual alloy knife
-<placeholder>
+A fortune in alloy, wasted on a ritual knife. Whoever ordered it is either mad or a very rich magician.
 
 === WEAPON Crash_Axe Bronze
 Sharpened axe
@@ -116,7 +116,7 @@ A good sword, if not for the fact that it is broken and hastily forged.
 
 === WEAPON Crossbow Alloy
 Alloy crossbow
-<placeholder>
+Its bolts pierce plate armor like an awl pierces cloth.
 
 === WEAPON Crystal_Axe Diamond
 Diamond axe
@@ -140,15 +140,15 @@ At least as valuable as royal jewels!
 
 === WEAPON Curved_Dagger Alloy
 Alloy dirk
-<placeholder>
+A small blade with a terrifying bite. And a terrifying price.
 
 === WEAPON Dagger Alloy
 Alloy dagger
-<placeholder>
+No blacksmith could make a better dagger - only a magician could improve it.
 
 === WEAPON Hammer Alloy
 Alloy battle hammer
-<placeholder>
+One blow, and the enemy's armor is fit only for the scrap heap.
 
 === WEAPON Komposite_Bow Adamantium
 Adamantite composite bow
@@ -164,7 +164,7 @@ Better than a longbow, but that's about it.
 
 === WEAPON Komposite_Bow Meteoric
 Meteorite composite bow
-This extremely powerful bow is even capable of penetrates plate armor.
+This extremely powerful bow can even penetrate plate armor.
 
 === WEAPON Komposite_Bow Mithrill
 Mithrill composite bow
@@ -206,43 +206,43 @@ One of the best diamond swords.
 
 === WEAPON Long_Bow Alloy
 Long alloy bow
-<placeholder>
+Better than the best meteorite bow - something nobody thought possible.
 
 === WEAPON Long_Crossbow Alloy
 Heavy alloy crossbow
-<placeholder>
+Its bolts cut through meteorite armor like paper.
 
 === WEAPON Long_Spear Alloy
 Long alloy spear
-<placeholder>
+Keeps any foe at a distance - permanently.
 
 === WEAPON Long_Sword Alloy
 Alloy long sword
-<placeholder>
+A legendary blade, forged by one of the few masters who know the secret of the alloy.
 
 === WEAPON Mace Alloy
 Alloy mace
-<placeholder>
+Every blow lands like a falling rock.
 
 === WEAPON Saber Alloy
 Alloy sabre
-<placeholder>
+In skilled hands, this blade all but guarantees victory.
 
 === WEAPON Short_Bow Alloy
 Short alloy bow
-<placeholder>
+Small, light, and deadlier than most long bows.
 
 === WEAPON Spear Alloy
 Alloy spear
-<placeholder>
+No armor can withstand this spear - not even meteorite.
 
 === WEAPON Spiked_Club Alloy
 Alloy heavy spiked mace
-<placeholder>
+The smiths have outdone themselves: even the magicians have nothing left to add.
 
 === WEAPON Spiked_Mace Alloy
 Alloy spiked mace
-<placeholder>
+Each spike is worth a small fortune - and so is each blow.
 
 === WEAPON Stone_Axe Corundum
 Corundum axe
@@ -253,7 +253,7 @@ Jade axe
 Not very sharp, but it can cast spells!
 
 === WEAPON Stone_Axe Malachite
-Obsidian axe 
+Obsidian axe
 Only stone axes made from corundum are better than this.
 
 === WEAPON Stone_Battle_Axe Corundum
@@ -300,7 +300,7 @@ Heavy jade hammer
 Try calling lightning with it.
 
 === WEAPON Stone_Battle_hammer Malachite
-Heavy obsidian hammer 
+Heavy obsidian hammer
 Only heavy stone hammers made from corundum are better than this.
 
 === WEAPON Stone_Dagger Corundum
@@ -317,7 +317,7 @@ Only stone daggers made from corundum are better than this.
 
 === WEAPON Stone_Hammer Corundum
 Corundum hammer
-Sufficient to break a Goblin's head with the first blow!
+Sufficient to break a goblin's head with the first blow!
 
 === WEAPON Stone_Hammer Jade
 Jade hammer
@@ -366,7 +366,7 @@ Obsidian sword
 Only stone swords made from corundum are better than this.
 
 === WEAPON Thief_Crossbow Bronze
-Thieving Crossbow
+Thieving crossbow
 With a crossbow like this, you can kill a troll by hitting it in the forehead!
 
 === WEAPON Thief_Dagger Bronze
@@ -377,7 +377,7 @@ Thief's bow
 Thief bows are used by the most experienced hunters.
 
 === WEAPON Thief_Spear Bronze
-Thieves' Spike
+Thieves' spike
 Although its damage is low, it can be used for support.
 
 === WEAPON Thief_Sword Bronze
@@ -386,7 +386,7 @@ With such a sword, you can prove to a young ogre that sometimes food is wormy.
 
 === WEAPON Sickle Bronze
 Bronze sickle
-A farmer's bronze sickle with a weapon's edge. It hooks well, but bends on armour.
+A farmer's bronze sickle with a weapon's edge. It hooks well, but bends on armor.
 
 === WEAPON Sickle Iron
 Iron sickle
@@ -398,7 +398,7 @@ A steel sickle: the curved edge reaches behind a shield.
 
 === WEAPON Sickle Mithrill
 Mithrill sickle
-Light and keen: the mithril blade sings as it sweeps.
+Light and keen: the mithrill blade sings as it sweeps.
 
 === WEAPON Sickle Adamantium
 Adamantite sickle
@@ -406,7 +406,7 @@ An adamantite sickle reaps shields as easily as wheat.
 
 === WEAPON Sickle Meteoric
 Meteorite sickle
-Meteorite steel in a sickle's curve: a harvest no armour survives.
+Meteorite steel in a sickle's curve: a harvest no armor survives.
 
 === WEAPON Sickle Alloy
 Alloy sickle
@@ -426,7 +426,7 @@ Steel, with a knuckle guard: it parries as well as it stabs.
 
 === WEAPON Guard_Dagger Mithrill
 Mithrill guard dagger
-A mithril blade behind a fine knuckle guard. Light and quick.
+A mithrill blade behind a fine knuckle guard. Light and quick.
 
 === WEAPON Guard_Dagger Adamantium
 Adamantite guard dagger
@@ -434,7 +434,7 @@ Adamantite: the guard turns a sword, the blade finds the gaps.
 
 === WEAPON Guard_Dagger Meteoric
 Meteorite guard dagger
-A meteorite guard dagger: the finest a duellist can own.
+A meteorite guard dagger: the finest a duelist can own.
 
 === WEAPON Guard_Dagger Alloy
 Alloy guard dagger
@@ -454,7 +454,7 @@ A steel royal sword, its guard and pommel richly worked.
 
 === WEAPON Royal_Sword Mithrill
 Mithrill royal sword
-Mithril and gilding: a sword for a prince's guard.
+Mithrill and gilding: a sword for a prince's guard.
 
 === WEAPON Royal_Sword Adamantium
 Adamantite royal sword
@@ -466,7 +466,7 @@ Meteorite steel in a king's sword. Its like is rarely seen.
 
 === WEAPON Royal_Sword Alloy
 Alloy royal sword
-A dark, ornate alloy royal sword, the pride of a royal armoury.
+A dark, ornate alloy royal sword, the pride of a royal armory.
 
 === WEAPON Hunter_Crossbow Bronze
 Bronze hunter crossbow
@@ -482,7 +482,7 @@ A steel prod gives this hunter's crossbow a hard, clean shot.
 
 === WEAPON Hunter_Crossbow Mithrill
 Mithrill hunter crossbow
-Mithril makes the hunter's crossbow light and quick to draw.
+Mithrill makes the hunter's crossbow light and quick to draw.
 
 === WEAPON Hunter_Crossbow Adamantium
 Adamantite hunter crossbow
@@ -510,7 +510,7 @@ A steel barbed spear, long enough to keep a charge at bay.
 
 === WEAPON Barbed_Spear Mithrill
 Mithrill barbed spear
-Light mithril barbs on a long shaft.
+Light mithrill barbs on a long shaft.
 
 === WEAPON Barbed_Spear Adamantium
 Adamantite barbed spear
@@ -522,5 +522,5 @@ A meteorite barbed spear: the hunters' dream.
 
 === WEAPON Barbed_Spear Alloy
 Alloy barbed spear
-Dark alloy barbs: a spear for the cruellest hunt.
+Dark alloy barbs: a spear for the cruelest hunt.
 

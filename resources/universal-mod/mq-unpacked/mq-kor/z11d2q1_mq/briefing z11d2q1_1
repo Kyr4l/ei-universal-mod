@@ -1,14 +1,14 @@
-[Medium] Armadillos in Babur's mine
+[보통] 바부르의 광산에 나타난 아르마딜로
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Armadillos have invaded Babur's mine. That old miser is furious and offering a decent reward to whoever clears them out.
+아르마딜로들이 바부르의 광산을 점령했어. 그 늙은 구두쇠가 잔뜩 화가 나서, 놈들을 쫓아내는 사람에게 두둑한 보상을 주겠다는군.
 #phrase Hero  2
-Armadillos? Since when do those creatures attack mines?
+아르마딜로라고? 그 녀석들이 언제부터 광산을 습격했지?
 #phrase Merc1  3
-Since they found a rich vein of gold apparently. Babur wants them all dead. He also forgot a big sack of gold in the western part of the mine.
+풍부한 금맥을 찾아낸 뒤부터라나. 바부르는 놈들이 전부 죽기를 바라. 그리고 광산 서쪽에 큰 금 자루를 두고 왔대.
 #phrase Merc1  4
-If you go deeper, there's also another chest with a gold nugget in the far north-east. Bring everything back.
+더 깊이 들어가면 북동쪽 끝에 금덩이가 든 상자도 하나 있어. 전부 가져와.
 #phrase Hero  5
-Very well, I'll take care of it.
+좋아, 내가 처리하지.

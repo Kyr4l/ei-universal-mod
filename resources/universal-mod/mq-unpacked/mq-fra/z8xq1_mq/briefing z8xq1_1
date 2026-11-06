@@ -1,12 +1,12 @@
-[Hard] Ogres in the Sands
+[Difficile] Des ogres dans les Sables
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Our ally the Shei-Var Clan of orcs, has asked us for help. They report that the three ogres living in the Sands have joined forces with their enemies!
+Notre allié, le clan orque de Shei-Var, nous a demandé de l'aide. Il rapporte que les trois ogres qui vivent dans les Sables se sont alliés à ses ennemis !
 #phrase Hero  2
-Let me guess... You're probably going to ask me to take care of it?
+Laissez-moi deviner... Vous allez sans doute me demander de m'en occuper ?
 #phrase Merc1  3
-Correct! We must stand by our allies. They keep the Sands under control for us.
+Exact ! Nous devons soutenir nos alliés. Ce sont eux qui tiennent les Sables pour nous.
 #phrase Merc1  4
-Be careful, these ogres are serious opponents! They are really tough and very strong. And while you're there you can also plunder the ogres' treasures!
+Soyez prudent, ces ogres sont de sérieux adversaires ! Ils sont vraiment coriaces et très forts. Et pendant que vous y êtes, vous pourrez aussi piller les trésors des ogres !

@@ -1,16 +1,16 @@
-The Khadaganians recruited Dragon Lord!
+Ä«´Ù°£ÀÌ ¿ëÀÇ ±ºÁÖ¸¦ ²ø¾îµé¿´´Ù!
 #show Hero
 #show Rick
 #CAMERA 3 0 3.5 1
 #phrase Rick  1
-The ability to see across vast distances does not always bring me joy! Today, for example, it poses a new problem ...
+¸Õ °÷±îÁö º¸´Â ´É·ÂÀÌ ´Ã ±â»İÀ» ÁÖ´Â °ÍÀº ¾Æ´Ï´Ù! ¿¹¸¦ µé¾î ¿À´ÃÀº »õ·Î¿î ¹®Á¦¸¦ ¾È°Ü ÁÖ´Â±º...
 #phrase Rick  2
-The commander of the invasion forces, General Iriskell, managed to recruit the Dragon Lord as an ally of his army!
+Ä§°ø±º »ç·É°üÀÎ ÀÌ¸®½ºÄÌ Àå±ºÀÌ ¿ëÀÇ ±ºÁÖ¸¦ ÀÚ±â ±º´ëÀÇ µ¿¸ÍÀ¸·Î ²ø¾îµé¿´´Ù!
 #phrase Hero  3
-One dragon is just one dragon, even if he is three times Lord!
+¿ë ÇÏ³ª´Â ±×³É ¿ë ÇÏ³ªÀÏ »ÓÀÔ´Ï´Ù. ¼¼ ¹ø ±ºÁÖ¶ó ÇØµµ¿ä!
 #phrase Rick  4
-I did not say he will be alone! Dragon Lord never goes anywhere without his escorts, and defeating them all will not be easy…
+È¥ÀÚ¶ó°í´Â ÇÏÁö ¾Ê¾Ò´Ù! ¿ëÀÇ ±ºÁÖ´Â È£À§ ¾øÀÌ´Â ¾îµğ¿¡µµ °¡Áö ¾Ê°í, ±×µéÀ» ¸ğµÎ ¹°¸®Ä¡±â´Â ½±Áö ¾ÊÀ» °ÍÀÌ´Ù...
 #phrase Hero  5
-But is it possible?
+ÇÏÁö¸¸ °¡´ÉÀº ÇÕ´Ï±î?
 #phrase Rick  6
-Yes, otherwise I would not send you against them. Try searching for the Dragon Lord in the desert to the east.
+±×·¸´Ù, ±×·¸Áö ¾Ê´Ù¸é ³Ê¸¦ º¸³»Áö ¾Ê¾Ò°ÚÁö. µ¿ÂÊ »ç¸·¿¡¼­ ¿ëÀÇ ±ºÁÖ¸¦ Ã£¾Æº¸¾Æ¶ó.

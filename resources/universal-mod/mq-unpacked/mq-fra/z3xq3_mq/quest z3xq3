@@ -1,23 +1,23 @@
-Magic pyramid
-The Orcs returned to the Foothills and even managed to put the pyramid back in working order again. It must be switched off, but t'will be even more difficult now...
+La pyramide magique
+Les orques sont revenus dans les Collines basses et ont même réussi à remettre la pyramide en état de marche. Elle doit être désactivée, mais ce sera encore plus difficile maintenant...
 #subobj  1
-Go to the northern ford
-To switch the pyramid off you need a special key; the Seer has it. The Seer can be found on the plateau in the eastern part of the Foothills. The only known way to get there is to ford the easternmost river. The ford is to the north, not far from the cave.
+Aller au gué du nord
+Pour désactiver la pyramide, il vous faut une clé spéciale ; c'est le prophète qui l'a. Le prophète se trouve sur le plateau, à l'est des Collines basses. Le seul chemin connu pour y aller est de passer à gué la rivière la plus à l'est. Le gué se trouve au nord, non loin de la grotte.
 #subobj  2
-Kill the ford's guards
-The ford is guarded by the Orcs. To cross it, you will have to kill the guards.
+Tuer les gardes du gué
+Le gué est gardé par les orques. Pour le traverser, vous devrez tuer les gardes.
 #subobj  3
-Find the Seer
-Look for the Seer at the south of the eastern plateau.
+Trouver le prophète
+Cherchez le prophète au sud du plateau de l'est.
 #subobj  4
-Kill the Seer
-To get the key, you must kill the Seer.
+Tuer le prophète
+Pour obtenir la clé, vous devez tuer le prophète.
 #subobj  5
-Take the key
-From the corpse of the Seer, take the key to the Magic Obelisk which controls the pyramid .
+Prendre la clé
+Sur le cadavre du prophète, prenez la clé de l'obélisque magique qui contrôle la pyramide.
 #subobj  6
-Find the obelisk
-The Obelisk which controls the pyramid is in the center of the Orc camp. But it is closely guarded.
+Trouver l'obélisque
+L'obélisque qui contrôle la pyramide se trouve au centre du camp orque. Mais il est étroitement gardé.
 #subobj  7
-Switch off the pyramid
-To switch the pyramid off, lower the Magic Obelisk. Use the key you took from the corpse of the Seer.
+Désactiver la pyramide
+Pour désactiver la pyramide, abaissez l'obélisque magique. Utilisez la clé prise sur le cadavre du prophète.

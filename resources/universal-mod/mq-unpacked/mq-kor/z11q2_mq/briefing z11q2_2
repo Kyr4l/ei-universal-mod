@@ -1,10 +1,10 @@
-The treasure is just a fairy tale...
+보물은 그저 동화였다...
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-And were you able to find the treasure?
+그래, 보물은 찾았나?
 #phrase Hero  1
-It looks like the whole thing was just a story. I couldn't locate the treasure.
+전부 그냥 이야기였던 것 같습니다. 보물을 찾을 수 없었어요.
 #phrase Huber  3
-What a pity! Well, we'll have to look elsewhere for gold.
+안타깝군! 뭐, 금은 다른 곳에서 찾아야겠지.

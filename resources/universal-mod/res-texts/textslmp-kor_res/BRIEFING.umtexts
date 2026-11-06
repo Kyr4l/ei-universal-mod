@@ -1,83 +1,83 @@
 # um-texts 1
 === briefing intro_4k
-Get to know the artisan
+장인과 인사하기
 #show Hero
 #show Stark
 #ANIMATION 5
 #CAMERA 11
 #phrase Stark 1
-So are you the strangers who came through the old portal?
+그래서 당신들이 낡은 포탈로 온 이방인들인가?
 #ANIMATION 15
 #CAMERA 10
 #phrase Hero 2
-Nah, we just spawned here cause it's a multiplayer lobby.
+아니, 그냥 여기서 스폰된 거야. 멀티플레이 로비거든.
 #phrase Stark 3
-bruh wtf...
+헐 뭐야...
 
 === briefing intro_c
-Greet the merchant
+상인에게 인사하기
 #show Hero
 #show Shemale
 #ANIMATION 39
 #CAMERA 0
 #phrase Hero 1
-Hello, great woman!
+안녕하세요, 훌륭한 부인!
 #CAMERA 11
 #phrase Shemale 2
-Hello.
+안녕하세요.
 
 === briefing intro_f
-Pay Homage to Lord Firez
+피레즈 경에게 예를 표하기
 #show Hero
 #show Firez
 #ANIMATION 26
 #CAMERA 0
 #phrase Hero 1
-Greetings, Your Excellency! How may I earn your trust?
+인사드립니다, 각하! 어떻게 하면 각하의 신뢰를 얻을 수 있겠습니까?
 #ANIMATION 57
 #CAMERA 11
 #phrase Firez 2
-Survive your first week.
+첫 주를 살아남아라.
 #ANIMATION 32
 #CAMERA 10
 #phrase Hero 3
-I want to help Khadagan reclaim its greatness on Jigran and be a part of it.
+카다간이 지그란에서 영광을 되찾도록 돕고, 그 일부가 되고 싶습니다.
 #ANIMATION 11
 #CAMERA 11
 #phrase Firez 4
-Excellent. I need the living. I already have enough of the dead.
+훌륭하군. 나는 산 자가 필요하다. 죽은 자는 이미 충분하니까.
 
 === briefing intro_m
-Salute the Marshall
+원수에게 경례하기
 #show Hero
 #show Marshal
 #ANIMATION 24
 #CAMERA 2
 #phrase Hero 1
-Greetings, noble sir!
+인사드립니다, 고귀하신 분!
 #ANIMATION 15
 #CAMERA 3
 #phrase Marshal 2
-The Empire needs people willing to act, not just talk. If you're looking for action, you'll find it.
+제국은 말만 하는 자가 아니라 행동하는 자를 원한다. 행동을 원한다면, 찾게 될 것이다.
 #CAMERA 2
 #phrase Hero 3
-I will try to affirm your hospitality, but now I need to get ready...
+환대에 걸맞은 사람이 되도록 노력하겠습니다. 하지만 지금은 준비를 해야 합니다...
 #CAMERA 3
 #phrase Marshal 4
-At ease!
+쉬어!
 
 === briefing intro_s
-Get to know the Master Sukro
+수크로 장인과 인사하기
 #show Hero
 #show Sukro
 #ANIMATION 5
 #CAMERA 11
 #phrase Sukro 1
-Greetings. I am Master Sukro, an excellent blacksmith. It's always good to see new faces in our town, especially those willing to lend a hand in these difficult times.
+반갑소. 나는 뛰어난 대장장이, 수크로 장인이오. 마을에서 새 얼굴을 보는 건 언제나 반가운 일이지. 특히 이 어려운 시기에 손을 보태려는 이들이라면 더더욱.
 #ANIMATION 15
 #CAMERA 10
 #phrase Hero 2
-And I greet you, noble blacksmith. I hope you will do something for me as well?
+저도 인사드립니다, 고귀한 대장장이님. 저를 위해서도 뭔가 만들어 주시겠지요?
 #phrase Sukro 3
-Of course. But since you're not in Hadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!
+물론이오. 하지만 당신은 피레즈 경 휘하에서 카다간을 섬기는 몸이 아니니, 내 솜씨는 돈을 받고 팔겠소. 그래도 결과물은 실망시키지 않을 거요!
 

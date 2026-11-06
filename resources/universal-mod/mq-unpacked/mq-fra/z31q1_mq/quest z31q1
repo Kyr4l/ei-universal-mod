@@ -1,14 +1,14 @@
-Khadagan patrols
-A recent report suggests that Khadaganians are roaming near the castle, take them out!
+Patrouilles de Khadagan
+Un rapport récent indique que des Khadaganiens rôdent près du château, éliminez-les !
 #subobj  1
-Kill the Northern patrols
-There should be 2 groups of Khadagan soldiers, they rarely leave the road.
+Tuer les patrouilles du nord
+Il devrait y avoir 2 groupes de soldats khadaganiens, ils quittent rarement la route.
 #subobj  2
-Kill the Southern patrols
-Two groups of roaming soldiers are coming from the south.
+Tuer les patrouilles du sud
+Deux groupes de soldats en maraude arrivent par le sud.
 #subobj  3
-Free the Western village
-A group of soldiers are blocking the path fo the Western village, free the villagers.
+Libérer le village de l'ouest
+Un groupe de soldats bloque le chemin du village de l'ouest, libérez les villageois.
 #subobj  4
-Deal with the captain
-The captain of these roaming soldiers is at the East of the castle, threatening the villagers.
+S'occuper du capitaine
+Le capitaine de ces soldats en maraude se trouve à l'est du château, où il menace les villageois.

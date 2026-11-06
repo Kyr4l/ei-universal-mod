@@ -1,10 +1,10 @@
-The Armadillo Mother is dead!
+La mère tatou est morte !
 #show Hero
 #show NSheriff
 #CAMERA 9
 #phrase NSheriff  1
-So the rumors were true?
+Les rumeurs étaient donc vraies ?
 #phrase Hero  2
-The entire cave is full of orcs and monsters. We should clean the whole tunnel.
+Toute la grotte est pleine d'orques et de monstres. Il faudrait nettoyer tout le tunnel.
 #phrase NSheriff  3
-For now the immediate threat is averted. There are other, more urgent threats.
+Pour l'instant, la menace immédiate est écartée. Il y a d'autres menaces, plus urgentes.

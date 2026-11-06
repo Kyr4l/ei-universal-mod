@@ -1,11 +1,11 @@
-Khadagan Recon
-The Khadagan empire has sent recon units through a portal.
+Éclaireurs de Khadagan
+L'Empire khadaganien a envoyé des éclaireurs à travers un portail.
 #subobj  1
-Kill the recon units
-Make sure none of them can escape the area.
+Tuer les éclaireurs
+Veillez à ce qu'aucun d'eux ne quitte la zone.
 #subobj  2
-Find the portal key
-You need this key to shut the portal off. In a chest that is probably guarded.
+Trouver la clé du portail
+Cette clé permet de fermer le portail. Elle se trouve dans un coffre, sans doute gardé.
 #subobj  3
-Close the portal
-Use the key to disable the portal and prevent reinforcements from coming.
+Fermer le portail
+Utilisez la clé pour désactiver le portail et empêcher l'arrivée de renforts.

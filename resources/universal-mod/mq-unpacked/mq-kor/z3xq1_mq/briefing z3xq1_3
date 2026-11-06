@@ -1,10 +1,10 @@
-Done!
+완료!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Good! I even pity the brigands a little - they lost almost all their loot!
+좋아! 도적들이 조금 안됐을 정도군. 약탈품을 거의 다 잃었으니!
 #phrase Hero  2
-But what if they decide after that to get more loot - from the village?
+그런데 놈들이 그다음엔 마을을 털어 약탈품을 채우려 들면요?
 #phrase Nsheriff  3
-In that case I would come to you again, you would complete another quest and we would all be very happy ... Except the Brigands, he-he ...
+그럼 내가 다시 자네를 찾아가고, 자네는 또 퀘스트를 완료하고, 우리 모두 아주 행복해지겠지... 도적들만 빼고, 헤헤...

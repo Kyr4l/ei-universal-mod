@@ -1,10 +1,10 @@
-Cyclopes are killed!
+키클롭스들을 처치했다!
 #show Hero
 #show Glav
 #CAMERA 2
 #phrase Hero  1
-Indeed the old saying is true: those who look scary are not always dangerous! The cyclops proved to be rather feeble opponents!
+옛말이 정말 맞군요. 무섭게 생긴 자가 늘 위험한 건 아니라더니! 키클롭스들은 꽤 약한 상대였습니다!
 #phrase Glav  2
-Excellent! I understand your pride and joy and I share it...
+훌륭하네! 자네의 자부심과 기쁨을 이해하고, 나도 함께 기뻐하네...
 #phrase Glav  3
-But remember: they may yet return...
+하지만 기억하게. 놈들은 다시 돌아올지도 모르네...

@@ -1,23 +1,23 @@
-Invasion in Gipath
-Khadagan is preparing to invade Gipath through the Portal located in Suslanger. You must switch the Portal off and make this invasion impossible.
+L'invasion de Gipath
+Khadagan se prépare à envahir Gipath par le portail situé à Suslanger. Vous devez désactiver le portail et rendre cette invasion impossible.
 #subobj  1
-Getting to the portal
-The portal is located in the south-east; the only way to get near it is via one of the hanging bridges.
+Atteindre le portail
+Le portail se trouve au sud-est ; le seul moyen de s'en approcher est d'emprunter l'un des ponts suspendus.
 #subobj  2
-Finding the Commander of the invading army
-The army headquarters is in a small house not far from the Portal.
+Trouver le commandant de l'armée d'invasion
+Le quartier général de l'armée se trouve dans une petite maison, non loin du portail.
 #subobj  3
-Killing the Commander
-The Commander of the invading army must be killed.
+Tuer le commandant
+Le commandant de l'armée d'invasion doit être tué.
 #subobj  4
-Taking the Portal key
-Take the key which locks the Portal leading to Gipath from the Commander's corpse.
+Prendre la clé du portail
+Prenez sur le cadavre du commandant la clé qui verrouille le portail menant à Gipath.
 #subobj  5
-Using the left magic stone
-To disable the Portal you must use the key on both the right and left Magic Obelisks.
+Utiliser l'obélisque magique de gauche
+Pour désactiver le portail, vous devez utiliser la clé sur les obélisques magiques de droite et de gauche.
 #subobj  6
-Using the right magic stone
-To disable the Portal you must use the key on both the right and left Magic Obelisks.
+Utiliser l'obélisque magique de droite
+Pour désactiver le portail, vous devez utiliser la clé sur les obélisques magiques de droite et de gauche.
 #subobj  7
-Switching off the portal
-When both Magic Obelisks have been used, the Portal will be switched off and the army cannot then invade Gipath.
+Désactiver le portail
+Une fois les deux obélisques magiques utilisés, le portail sera désactivé et l'armée ne pourra plus envahir Gipath.

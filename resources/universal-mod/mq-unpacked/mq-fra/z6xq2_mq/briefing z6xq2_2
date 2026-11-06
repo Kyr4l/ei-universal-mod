@@ -1,8 +1,8 @@
-The amulet is not dangerous now
+L'amulette n'est plus dangereuse pour l'instant
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-I am sorry. It seems I should not have panicked. The dragon amulet only works on certain days of the year, and we have to wait for quite a while yet.
+Je suis désolé. Il semble que je n'aurais pas dû m'affoler. L'amulette de dragon ne fonctionne que certains jours de l'année, et il faudra encore attendre un bon moment.
 #phrase Nsheriff  2
-We are in no hurry at the moment, so you can see to other business as you like.
+Rien ne presse pour l'instant, vous pouvez donc vaquer à vos autres affaires.

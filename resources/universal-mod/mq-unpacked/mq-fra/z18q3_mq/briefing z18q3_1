@@ -1,16 +1,16 @@
-One of the slaves is a traitor...
+L'un des esclaves est un traître...
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-My heart is filled with sorrow, sorrow and anger! Our Shelter has always been the last refuge for unfortunate slaves unable to perform merciless labor on the plantations. And now it turns out that one of them is willing to betray that refuge!
+Mon cœur est plein de chagrin, de chagrin et de colère ! Notre sanctuaire a toujours été le dernier refuge des malheureux esclaves incapables de supporter le travail impitoyable des plantations. Et voilà que l'un d'eux est prêt à trahir ce refuge !
 #phrase Glav  2
-This man is a slave not just by his status, but by spirit! He is willing to sell everything he knows about the Last Shelter for a bowl of soup!
+Cet homme n'est pas esclave que par son statut, il l'est aussi par l'esprit ! Il est prêt à vendre tout ce qu'il sait du Dernier sanctuaire pour un bol de soupe !
 #phrase Hero  3
-Are we going to do battle with the guards, then?
+Allons-nous donc devoir combattre les gardes ?
 #phrase Glav  4
-Fortunately enough, not yet. The despicable traitor has a very high opinion of himself and refuses to talk to anybody else but high-ranking officers!
+Heureusement, pas encore. Ce méprisable traître a une très haute opinion de lui-même et refuse de parler à qui que ce soit d'autre qu'à des officiers de haut rang !
 #phrase Glav  5
-If he is killed before the leaders arrive, our secrets will die with him.
+S'il est tué avant l'arrivée des chefs, nos secrets mourront avec lui.
 #phrase Glav  6
-At this moment that dirty hyena stuffs his belly in the soldiers quarters to the south of the plantations. The building is usually full of slavedrivers and guards, but if you manage to sneak in there unnoticed, you can dispatch the traitor with no undue problems. 
+En ce moment, cette sale hyène se remplit la panse dans les quartiers des soldats, au sud des plantations. Le bâtiment est d'ordinaire plein de contremaîtres et de gardes, mais si vous parvenez à vous y glisser sans être vu, vous pourrez vous débarrasser du traître sans trop de difficultés.

@@ -1,12 +1,12 @@
-[Easy] Brigands' loot
+[쉬움] 도적들의 약탈품
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-It looks like our village will never get rid of those Brigand neighbors! Whatever plans I make are good for nothing. We can never destroy them completely! But now I have an excellent new idea占�
+우리 마을은 영영 저 도적 이웃들을 떨쳐 내지 못할 것 같군! 내가 무슨 계획을 세워도 소용이 없어. 놈들을 완전히 없앨 수가 없다네! 하지만 이번엔 아주 훌륭한 새 생각이 있지...
 #phrase Hero  2
-Hmmm... Actually, when I hear the words "an excellent new idea" I always expect a catch!
+흠... 사실 "아주 훌륭한 새 생각"이라는 말을 들으면 늘 함정이 있더군요!
 #phrase Nsheriff  3
-Ah there is no catch! I merely want you to take the loot away from the Brigands. You need not even fight them. The main thing is to get the sack they keep in their camp.
+아, 함정 같은 건 없네! 그냥 도적들에게서 약탈품을 빼앗아 오기만 하면 돼. 놈들과 싸울 필요도 없어. 중요한 건 놈들 야영지에 있는 자루를 가져오는 거야.
 #phrase Nsheriff  4
-Of course, the approaches to the camp are well guarded, but you could cheat the guards...
+물론 야영지로 가는 길은 경비가 삼엄하지만, 경비병들을 속일 수도 있겠지...

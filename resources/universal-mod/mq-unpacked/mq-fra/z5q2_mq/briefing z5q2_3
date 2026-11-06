@@ -1,10 +1,10 @@
-I have recovered a dangerous magical artifact!
+J'ai récupéré un dangereux artefact magique !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Well done! We have weakened the orcs considerably.
+Bien joué ! Nous avons considérablement affaibli les orques.
 #phrase Hero  2
-Let's hope so, I'm getting tired of all this tension between the villagers and the orcs.
+Espérons-le, je commence à en avoir assez de toutes ces tensions entre les villageois et les orques.
 #phrase Nsheriff  3
-For now the situation is calm and you can rest. Thank you!
+Pour l'instant, la situation est calme et vous pouvez vous reposer. Merci !

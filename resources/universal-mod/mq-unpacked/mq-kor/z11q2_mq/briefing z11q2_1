@@ -1,14 +1,14 @@
-[Easy] The city treasury is empty!
+[쉬움] 도시 금고가 비었다!
 #show Hero
 #show Huber
 #CAMERA 3 30 3 1
 #phrase Huber  1
-My good friend, the city is short of money and if we don't get more gold we won't be able to pay people like you anymore.
+친구여, 도시에 돈이 모자라네. 금을 더 구하지 못하면 자네 같은 사람들에게 더는 보수를 줄 수 없어.
 #phrase Huber  2
-I heard there's a treasure far to the south. However, I don't believe in fairy tales and so far there has been no reason to risk the lives of my people.
+남쪽 먼 곳에 보물이 있다는 말을 들었네. 하지만 나는 동화를 믿지 않고, 지금까지는 부하들의 목숨을 걸 이유가 없었지.
 #phrase Huber  3
-You look adventurous to me. Maybe you would like to see if there is any truth to the stories? As a reward, I promise you a good share of the treasure if it really exists.
+자네는 모험을 좋아하는 사람으로 보이는군. 그 이야기에 진실이 있는지 확인해보지 않겠나? 보상으로, 보물이 정말 있다면 넉넉한 몫을 약속하지.
 #phrase Hero  1
-Well, that's a great... I'm going to walk around the area on a chance basis to find a fairytale treasure and then perhaps be rewarded?
+거참 좋군요... 그러니까 동화 속 보물을 찾을지도 모른다는 기대로 이 일대를 헤매고, 그다음에야 보상을 받을지도 모른다는 거죠?
 #phrase Huber  4
-I'm sorry my friend, I can't offer you another assignment at the moment! Now go, I have an important meeting with the city guards soon.
+미안하네, 친구. 지금은 다른 일을 줄 수가 없어! 이제 가보게, 곧 도시 경비대와 중요한 회의가 있으니.

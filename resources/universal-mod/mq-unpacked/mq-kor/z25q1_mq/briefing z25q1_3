@@ -1,10 +1,10 @@
-The path is now safe!
+이제 길이 안전하다!
 #show Hero
 #show KMage
 #CAMERA 10
 #phrase KMage  1
-Thanks you very much. We can hopefully trade with the other islands soon!
+정말 고맙네. 곧 다른 섬들과 교역할 수 있으면 좋겠군!
 #phrase Hero  2
-But what if they decide to fight the Canian Empire ?
+하지만 그들이 카니아 제국과 싸우기로 하면 어떡하죠?
 #phrase KMage  3
-Well that's a fair point. Maybe we'll have to wait then...
+음, 일리 있는 말이군. 그렇다면 기다려야 할지도...

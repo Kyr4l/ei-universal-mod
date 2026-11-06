@@ -1,18 +1,18 @@
-[Hard] Old opencast mines
+[Difficile] Les vieilles mines à ciel ouvert
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Your Excellency, you would not perchance have any assignments for me, would you? I shall not even ask for a fee. For me, the most important thing is to gain experience.
+Votre Excellence, n'auriez-vous pas, par hasard, une mission pour moi ? Je ne demanderai même pas de paiement. Ce qui compte pour moi, c'est d'acquérir de l'expérience.
 #phrase Huber  2
-Oh, I like your approach. Yes, yes, it is ideal when people are willing to take risks for free. Of course I have an assignment for you!
+Oh, votre attitude me plaît. Oui, oui, c'est idéal quand les gens acceptent de prendre des risques gratuitement. Bien sûr que j'ai une mission pour vous !
 #phrase Huber  3
-The budget of our province is a bit ... strained at the moment, and I decided to renew works at the old opencast mines. But the problem is, we must first clean them up from all the monsters which breed there!
+Le budget de notre province est un peu... serré en ce moment, et j'ai décidé de relancer l'exploitation des vieilles mines à ciel ouvert. Mais il faut d'abord les débarrasser de tous les monstres qui s'y reproduisent !
 #phrase Hero  4
-All right, just give me the key to the gates and I will do it!
+Très bien, donnez-moi seulement la clé des portes et je m'en charge !
 #phrase Huber  5
-Well, there's a problem here too... A while ago I ordered the key to be hidden in the valley which begins north-east of the military camp. But now apparently a herd of rabid tigers is roaming in the valley, and they will not let my servants go in and take the key. So you will have to get it yourself!
+Eh bien, là aussi il y a un problème... Il y a quelque temps, j'ai fait cacher la clé dans la vallée qui commence au nord-est du camp militaire. Mais une meute de tigres enragés rôde maintenant dans la vallée, et ils empêchent mes serviteurs d'aller chercher la clé. Il vous faudra donc la récupérer vous-même !
 #phrase Huber  6
-And while we are about it, why do you not kill those tigers as well? I ordered the soldiers from the camp to do it, but they dared to rebel - allegedly they have not been paid their wages! Oh, what a miserable attitude, would you not agree?
+Et tant que vous y êtes, pourquoi ne pas tuer ces tigres aussi ? J'ai ordonné aux soldats du camp de s'en charger, mais ils ont osé se rebeller, prétendument parce qu'on ne leur a pas versé leur solde ! Oh, quelle mentalité déplorable, n'est-ce pas ?
 #phrase Hero  7
-No ... Oh, I mean, yes, of course you are right, Your Excellency. And do not worry about the tigers and the old mines, everything will be done to your satisfaction!
+Non... Enfin, je veux dire, oui, bien sûr, vous avez raison, Votre Excellence. Et ne vous inquiétez pas pour les tigres et les vieilles mines, tout sera fait à votre entière satisfaction !

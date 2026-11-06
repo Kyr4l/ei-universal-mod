@@ -1,14 +1,14 @@
-Piggy Fivepence
-The Lizards took a piggy called Fivepence from the village and hid it in a cage. That piggy must be returned to the village.
+아기 돼지 다섯푼이
+도마뱀인들이 마을에서 다섯푼이라는 아기 돼지를 데려가 우리에 가두었다. 그 돼지를 마을로 데려와야 한다.
 #subobj  1
-Find the cage
-The cage where the Lizards keep the Piggy is somewhere in the ravines which lead to the north across the lake. Remember that the villagers call Fivepence "Piggy" as a term of endearment - this is in reality an enormous pig.
+우리 찾기
+도마뱀인들이 돼지를 가둬 둔 우리는 호수 건너 북쪽으로 이어지는 협곡 어딘가에 있다. 마을 사람들이 애정을 담아 다섯푼이를 "아기 돼지"라 부르지만, 사실은 엄청나게 큰 돼지라는 걸 기억하라.
 #subobj  2
-Open the cage
-To set Fivepence free, you must open the cage.
+우리 열기
+다섯푼이를 풀어 주려면 우리를 열어야 한다.
 #subobj  3
-Approaching Fivepence
-Approach the "Piggy" and he will follow his rescuer.
+다섯푼이에게 다가가기
+"아기 돼지"에게 다가가면 구해 준 사람을 따라올 것이다.
 #subobj  4
-Lead Fivepence away
-You must make sure that Fivepence reaches the exit from the Middle Mountains alive.
+다섯푼이 데려가기
+다섯푼이가 살아서 중부 산맥 출구에 도착하도록 해야 한다.

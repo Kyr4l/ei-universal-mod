@@ -1,20 +1,20 @@
-[Hard] Undeads are close to Dead City!
+[어려움] 언데드가 죽음의 도시 가까이에 있다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-I must have agreed to become the elder of our village on a bad day! For we have had no peace since then: Goblins, Orcs, Lizards and now those undeads near Dead City!
+마을 촌장을 맡겠다고 한 날이 하필 운수 나쁜 날이었나 보군! 그 뒤로 평화로운 날이 없었어. 고블린, 오크, 도마뱀인, 이제는 죽음의 도시 근처의 언데드까지!
 #show Hero
 #show Nsheriff
 #phrase Hero  2
-So what? Of course skeletons are not much fun, but they have been keeping themselves close to the ruins, have they not?
+그래서요? 물론 해골들이 반가울 리는 없지만, 놈들은 폐허 근처에만 머물지 않았나요?
 #phrase Nsheriff  3
-That is true, skeletons do not venture far away from their graves. But I am not talking about them: if there is no grave, the undeads can go anywhere! For example, right here into the village, know what I mean?
+그건 맞아. 해골들은 무덤에서 멀리 벗어나지 않지. 하지만 내가 말하는 건 그놈들이 아니야. 무덤이 없으면 언데드는 어디든 갈 수 있다네! 예를 들어 바로 여기, 우리 마을로도. 무슨 말인지 알겠나?
 #phrase Hero  4
-Hmm... And where did that wonder of the world come from?
+흠... 그런 세상의 경이는 대체 어디서 나타난 겁니까?
 #phrase Nsheriff  5
-From the same old place - it is all because of the Chosen's adventures! He told that in the Dead City land, north-west of the city, the skeletons attacked the Khadaganian expedition camp. And of course nobody bothered to bury the dead.
+늘 그렇듯 같은 곳이지. 다 선택받은 자의 모험 때문이야! 그가 말하길, 죽음의 도시 땅, 도시 북서쪽에서 해골들이 카다간 탐사대 야영지를 습격했다더군. 그리고 물론 아무도 죽은 자들을 묻어 주지 않았지.
 #phrase Nsheriff  6
-And it seems one of the dead was a Necromancer, so his magic still works even though he is gone! In a word, undeads are now wandering all around the camp, and they can come here any time.
+그런데 죽은 자 중 하나가 강령술사였던 모양이야. 그래서 그가 죽은 뒤에도 마법이 계속 작용하는 거지! 한마디로, 이제 언데드가 야영지 주변을 떠돌고 있고, 언제든 이곳에 올 수 있네.
 #phrase Hero  7
-So we must destroy them, and the sooner the better! I think I could deal with that.
+그럼 놈들을 없애야겠군요, 빠를수록 좋겠죠! 제가 처리할 수 있을 것 같습니다.

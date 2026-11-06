@@ -1,10 +1,10 @@
-Fivepence is back!
+Quatre-sous est de retour !
 #show Hero
 #show NSheriff
 #show Pig
 #phrase Nsheriff  1
-Oh my little pink friend! Look how thin he is! You must have suffered a great deal, poor creature!
+Oh, mon petit ami tout rose ! Regardez comme il est maigre ! Tu as dû beaucoup souffrir, pauvre bête !
 #phrase Hero  2
-Khm!... I'm sorry, are you not going to say something to me as well?
+Hum !... Pardon, vous n'allez rien me dire, à moi ?
 #phrase Nsheriff  3
-Oh! Sorry. I am so glad that Fivepence is back, and of course I am very grateful!
+Oh ! Pardon. Je suis si heureux que Quatre-sous soit de retour, et bien sûr je vous en suis très reconnaissant !

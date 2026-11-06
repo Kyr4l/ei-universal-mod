@@ -1,12 +1,12 @@
-[Easy] The orc artifact
+[쉬움] 오크의 유물
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-We have heard that the orcs in the mine are guarding an old artifact.
+광산의 오크들이 오래된 유물을 지키고 있다는 말을 들었네.
 #phrase Hero  2
-Why are they showing interest in such an antique piece of junk?
+그런 낡은 고물에 왜 관심을 보이는 걸까요?
 #phrase Nsheriff  3
-We should get a hold of it in case it has any remaining magical properties.
+마법의 힘이 남아 있을지도 모르니 우리가 손에 넣어야 하네.
 #phrase Nsheriff  4
-It might help us weaken the orcs if they ever plan to attack the village.
+오크들이 언젠가 마을을 공격하려 들면, 놈들을 약하게 만드는 데 도움이 될지도 몰라.

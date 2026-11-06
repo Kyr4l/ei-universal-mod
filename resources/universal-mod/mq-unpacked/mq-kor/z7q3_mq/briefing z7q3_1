@@ -1,18 +1,18 @@
-[Medium] I've got a clever plan!
+[º¸Åë] ±â¸·Èù °èÈ¹ÀÌ ÀÖ³×!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Frankly, I don't like to think too much, but since I'm the captain now, I guess I'll have to. So here's what I think...
+¼ÖÁ÷È÷ ³ª´Â »ı°¢ÇÏ´Â °É º°·Î ¾È ÁÁ¾ÆÇÏÁö¸¸, ÀÌÁ¦ ´ëÀåÀÌ µÆÀ¸´Ï ÇØ¾ß°ÚÁö. ±×·¡¼­ ³» »ı°¢Àº ÀÌ·¸³×...
 #phrase Nsheriff  2
-Orcs are our enemies. And Goblins are our enemies. So if they quarrel, it will play right into our hands!
+¿ÀÅ©´Â ¿ì¸®ÀÇ ÀûÀÌ¾ß. °íºí¸°µµ ¿ì¸®ÀÇ ÀûÀÌ°í. ±×·¯´Ï ³ğµé³¢¸® ½Î¿ì¸é ¿ì¸®¿¡°Ô µü ÁÁÀº ÀÏÀÌÁö!
 #phrase Hero  3
-Wow Rivar, you are a real thinker! A truly wise man! It never occurred to me ... such brilliant idea!
+¿Í, ¸®¹Ù¸£, Á¤¸» ´ë´ÜÇÑ »ç»ó°¡½Ã±º¿ä! ÁøÁ¤ÇÑ ÇöÀÚ¿¹¿ä! Àú´Â »ı°¢µµ ¸ø Çß½À´Ï´Ù... ÀÌ·± ±â¹ßÇÑ »ı°¢À»!
 #phrase Hero  4
-So cut the nonsense and say what is on your mind, do not beat around the bush.
+±×·¯´Ï Çê¼Ò¸®´Â ±×¸¸ÇÏ½Ã°í, ºùºù µ¹¸®Áö ¸»°í ÇÏ°í ½ÍÀº ¸»¾¸À» ÇÏ½ÃÁÒ.
 #phrase Nsheriff  5
-Well, it comes down to this: let us steal the Goblin totem and put it on the Orcs' Council mountain. As soon as the Orcs see that rotten skull at their sacred place, they will be furious and add at least three dozen other Goblin heads to it. More fresh ones, he-he…
+À½, ¿ä´Â ÀÌ°Å¾ß. °íºí¸°ÀÇ ÅäÅÛÀ» ÈÉÃÄ¼­ ¿ÀÅ©ÀÇ È¸ÀÇÀÇ »ê¿¡ ¿Ã·Á³õÀÚ´Â °ÅÁö. ¿ÀÅ©µéÀÌ ½Å¼ºÇÑ °÷¿¡ ±× ½âÀº ÇØ°ñÀÌ ÀÖ´Â °É º¸¸é °İºĞÇØ¼­ °íºí¸° ¸Ó¸®¸¦ Àû¾îµµ ¼­¸¥¿©¼¸ °³´Â ´õ °®´Ù ³õÀ» °É¼¼. ´õ ½Ì½ÌÇÑ ³ğÀ¸·Î, ÇìÇì...
 #phrase Nsheriff  6
-I have been told that the Goblin totem is now on the easternmost island in the river delta. And the council mountain is always in the same place - on the northern river bank.
+µèÀÚ ÇÏ´Ï °íºí¸° ÅäÅÛÀº Áö±İ °­ »ï°¢ÁÖÀÇ °¡Àå µ¿ÂÊ ¼¶¿¡ ÀÖ´Ù´õ±º. ±×¸®°í È¸ÀÇÀÇ »êÀº ´Ã °°Àº °÷, ºÏÂÊ °­±â½¾¿¡ ÀÖÁö.
 #phrase Hero  7
-Not a bad idea. Come, let us see what we can do!
+³ª»ÚÁö ¾ÊÀº »ı°¢ÀÔ´Ï´Ù. ÀÚ, ¹» ÇÒ ¼ö ÀÖ´ÂÁö º¾½Ã´Ù!

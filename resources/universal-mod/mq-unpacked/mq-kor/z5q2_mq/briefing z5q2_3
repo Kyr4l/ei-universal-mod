@@ -1,10 +1,10 @@
-I have recovered a dangerous magical artifact!
+위험한 마법 유물을 되찾았다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Well done! We have weakened the orcs considerably.
+잘했네! 오크들을 크게 약화시켰어.
 #phrase Hero  2
-Let's hope so, I'm getting tired of all this tension between the villagers and the orcs.
+그러길 바랍니다. 마을 사람들과 오크들 사이의 긴장에 이제 지쳐 가고 있거든요.
 #phrase Nsheriff  3
-For now the situation is calm and you can rest. Thank you!
+지금은 상황이 잠잠하니 쉬어도 되네. 고맙네!

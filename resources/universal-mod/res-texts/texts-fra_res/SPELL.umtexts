@@ -1,37 +1,37 @@
 # um-texts 1
 === SPELL detect_life
-Life Detection
-Allows the target to sense all creatures within a certain radius.
+Détection de la vie
+Permet à la cible de percevoir toutes les créatures dans un certain rayon.
 
 === SPELL ensorcell
-Charm
-The most powerful astral spell. It dopes a creature, causing it to fall in love with the caster.
+Charme
+Le plus puissant des sorts astraux. Il ensorcelle une créature et la rend amoureuse du lanceur.
 
 === SPELL fireraze
-Sacrifice to Fire
-Deals massive damage to everyone around the caster, including the caster.
+Sacrifice au feu
+Inflige d'énormes dégâts à tous ceux qui entourent le lanceur, lanceur compris.
 
 === SPELL lichdom
-Necrosis
-Allows the target to become less detectable by life.
+Nécrose
+Rend la cible plus difficile à détecter par la perception de la vie.
 
 === SPELL link
 Lien
-Permet de lier les rÃ©serves d'Ã©nergie magique de deux mages.
+Permet de lier les réserves d'énergie magique de deux mages.
 
 === SPELL necro
-Summon Undead
-Summons an undead to a specified location.
+Invocation de mort-vivant
+Invoque un mort-vivant à l'endroit désigné.
 
 === SPELL panic
-Charisma
-The target of this spell gains the ability to use more complex magic.
+Charisme
+La cible de ce sort acquiert la capacité d'utiliser une magie plus complexe.
 
 === SPELL possession
 Possession
-Focuses senses on a target so much that perceiving the world as it becomes possible.
+Concentre les sens sur une cible avec une telle intensité que le lanceur perçoit le monde comme elle.
 
 === SPELL stench
-Distortion
-The target affected by this spell becomes more visible to all types of perception.
+Distorsion
+La cible de ce sort devient plus visible pour tous les types de perception.
 

@@ -1,10 +1,10 @@
-The path is now safe!
+이제 길이 안전하다!
 #show Hero
 #show KMage
 #CAMERA 10
 #phrase KMage  1
-Thank you  so much! I will send workers to clear the rocks as soon as possible!
+정말 고맙네! 되도록 빨리 일꾼들을 보내 바위를 치우겠네!
 #phrase Hero  2
-What about the monsters?
+괴물들은요?
 #phrase KMage  3
-They can deal with it, hopefully...
+일꾼들이 알아서 처리하겠지, 아마도...

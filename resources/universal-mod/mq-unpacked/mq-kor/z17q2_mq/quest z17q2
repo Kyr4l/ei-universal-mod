@@ -1,14 +1,14 @@
-Zombie Magician
-The young Necromancer Taivo managed to create a Zombie Magician using his colleague's corpse. Taivo's enemy, old Kholai, could think of a way to fight those creatures, but to do that, he needs this Ghoul's head.
+좀비 마법사
+젊은 강령술사 타이보가 동료의 시체로 좀비 마법사를 만들어 냈다. 타이보의 적인 늙은 홀라이는 그런 괴물과 싸우는 방법을 찾아낼 수 있지만, 그러려면 이 구울의 머리가 필요하다.
 #subobj  1
-Finding the Zombie Magician
-Try looking for the Zombie Magician in the Necromancer's town.
+좀비 마법사 찾기
+강령술사들의 도시에서 좀비 마법사를 찾아보라.
 #subobj  2
-Killing the Zombie Magician
-Zombie Magician must be killed.
+좀비 마법사 처치
+좀비 마법사를 죽여야 한다.
 #subobj  3
-Cutting the head
-Getting the head of this Ghoul is the whole point of this quest.
+머리 베기
+이 구울의 머리를 얻는 것이 이 퀘스트의 핵심이다.
 #subobj  4
-Bringing the head to Kholai
-Old Kholai's tower is located north of the Necromancers' town. Kholai is still in disgrace, so the tower is heavily guarded. However, he simply must get the Zombie Magician head!
+홀라이에게 머리 전달
+늙은 홀라이의 탑은 강령술사들의 도시 북쪽에 있다. 홀라이는 여전히 실각한 처지라 탑은 삼엄하게 지켜지고 있다. 그래도 그는 반드시 좀비 마법사의 머리를 받아야 한다!

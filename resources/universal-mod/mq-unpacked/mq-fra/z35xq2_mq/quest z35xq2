@@ -1,14 +1,14 @@
-Confiscated Belongings
-A kind wealthy merchant asked me to recover several belongings of great importance to her friend, which are still being held by the prison guards. To avoid damaging my relations with Lord Firez and the Hadagan army, I must act with stealth and avoid harming the soldiers guarding the prison.
+Biens confisqués
+Une riche et gentille marchande m'a demandé de récupérer plusieurs biens très importants pour son amie, toujours détenus par les gardiens de la prison. Pour ne pas nuire à mes relations avec le seigneur Firez et l'armée khadaganienne, je dois agir discrètement et ne pas blesser les soldats qui gardent la prison.
 #subobj  1
-Find the prison
-The prison lies south of the town of Sadrok. According to the merchant's words, a paved road leading from Sadrok climbs straight up the mountain to it.
+Trouver la prison
+La prison se trouve au sud de la ville de Sadrok. D'après la marchande, une route pavée partant de Sadrok y monte tout droit dans la montagne.
 #subobj  2
-Find a way inside
-If the gate is locked, then one of the patrols must have the key... and, naturally, so does the prison warden.
+Trouver un moyen d'entrer
+Si la porte est fermée, l'une des patrouilles doit avoir la clé... et, bien sûr, le directeur de la prison aussi.
 #subobj  3
-Steal the belongings
-The belongings are kept inside a chest. The chest itself is unguarded, but the prison is filled with Hadagan soldiers.
+Voler les biens
+Les biens sont gardés dans un coffre. Le coffre lui-même n'est pas surveillé, mais la prison est pleine de soldats khadaganiens.
 #subobj  4
-Remain unseen
-Only by staying unseen I may return to the merchant with the belongings she needs.
+Rester invisible
+Ce n'est qu'en restant invisible que je pourrai rapporter à la marchande les biens dont elle a besoin.

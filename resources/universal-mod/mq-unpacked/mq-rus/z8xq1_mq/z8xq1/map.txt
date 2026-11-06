@@ -1,0 +1,36 @@
+#zone z8xq1 gipat game
+#res
+zone8x zone8x-lmp
+#maps
+16 12
+zone8xmap zone8xquest
+
+## To Orc-Delta
+#exit 1
+bz1mpg 1
+#deploy
+7 232 12 238
+#remove
+2 238 12 247.4
+#view
+230.386
+
+## To City of Dead
+#exit 2
+bz1mpg 2
+#deploy
+168 373 176 376
+#remove
+168 376 176 383
+#view
+192.876
+
+## To City of Dead
+#exit 3
+bz1mpg 3
+#deploy
+254 372 264 376
+#remove
+254 376 264 383
+#view
+192.876

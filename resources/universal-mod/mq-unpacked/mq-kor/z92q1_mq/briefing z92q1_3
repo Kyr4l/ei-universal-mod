@@ -1,10 +1,10 @@
-Done!
+완료!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! I'm glad you got through this safely!
+잘했어! 무사히 해내서 기뻐!
 #phrase Hero  2
-Well... this task was anything but easy. I hope the reward is great.
+음... 이 일은 결코 쉽지 않았어. 보상이 두둑하길 바라.
 #phrase Merc1  3
-Of course! Here take this pile of gold as your reward!
+물론이지! 자, 이 금 더미를 보상으로 받아!

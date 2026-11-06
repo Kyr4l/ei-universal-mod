@@ -1,10 +1,10 @@
-The treasure is just a fairy tale...
+Le trésor n'est qu'un conte de fées...
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-And were you able to find the treasure?
+Alors, avez-vous trouvé le trésor ?
 #phrase Hero  1
-It looks like the whole thing was just a story. I couldn't locate the treasure.
+On dirait que toute cette histoire n'était qu'une légende. Je n'ai pas trouvé le trésor.
 #phrase Huber  3
-What a pity! Well, we'll have to look elsewhere for gold.
+Quel dommage ! Eh bien, il faudra chercher de l'or ailleurs.

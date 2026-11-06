@@ -1,14 +1,14 @@
-[Easy] The city treasury is empty!
+[Facile] Le trésor de la cité est vide !
 #show Hero
 #show Huber
 #CAMERA 3 30 3 1
 #phrase Huber  1
-My good friend, the city is short of money and if we don't get more gold we won't be able to pay people like you anymore.
+Mon cher ami, la cité manque d'argent, et si nous ne trouvons pas plus d'or, nous ne pourrons plus payer des gens comme vous.
 #phrase Huber  2
-I heard there's a treasure far to the south. However, I don't believe in fairy tales and so far there has been no reason to risk the lives of my people.
+On m'a parlé d'un trésor loin au sud. Mais je ne crois pas aux contes de fées, et jusqu'ici rien ne justifiait de risquer la vie de mes hommes.
 #phrase Huber  3
-You look adventurous to me. Maybe you would like to see if there is any truth to the stories? As a reward, I promise you a good share of the treasure if it really exists.
+Vous me semblez aventureux. Peut-être voudriez-vous vérifier s'il y a du vrai dans ces histoires ? En récompense, je vous promets une bonne part du trésor, s'il existe vraiment.
 #phrase Hero  1
-Well, that's a great... I'm going to walk around the area on a chance basis to find a fairytale treasure and then perhaps be rewarded?
+Formidable... Donc je dois errer dans la région au petit bonheur pour trouver un trésor de conte de fées, et peut-être être récompensé ensuite ?
 #phrase Huber  4
-I'm sorry my friend, I can't offer you another assignment at the moment! Now go, I have an important meeting with the city guards soon.
+Désolé, mon ami, je ne peux pas vous proposer d'autre mission pour l'instant ! Allez, j'ai bientôt une réunion importante avec les gardes de la cité.

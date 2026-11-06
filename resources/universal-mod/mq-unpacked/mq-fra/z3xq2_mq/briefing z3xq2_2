@@ -1,8 +1,8 @@
-No way to beat that toad!
+Impossible de vaincre ce crapaud !
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-I cannot deal with that monster! And getting to the cave is not a very pleasant business either...
+Je ne peux pas venir à bout de ce monstre ! Et atteindre la grotte n'est pas une partie de plaisir non plus...
 #phrase Nsheriff  2
-Such a shame! Well, in that case somebody else will have to deal with the Ogre toad.
+Quel dommage ! Eh bien, quelqu'un d'autre devra s'occuper du crapaud ogre.

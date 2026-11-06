@@ -1,10 +1,10 @@
-[Hard] Queen of will-o'-the-wisps
+[어려움] 도깨비불의 여왕
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-If only you knew, Rivar, how fed up I am with those Will-o'-the-wisps! My burns are healing, but every time I must pay to repair my armor, and frankly, it does not come cheap!
+리바르, 제가 그 도깨비불들에게 얼마나 질렸는지 아십니까! 화상은 낫고 있지만, 매번 갑옷 수리비를 내야 하는데, 솔직히 싸지 않아요!
 #phrase Nsheriff  2
-Well, in that case you must find the Queen of the Will-o'-the-wisps - the one who breeds them. If you kill her, there will be far fewer of these creatures for a while.
+그렇다면 도깨비불의 여왕을 찾아야겠군. 그놈들을 낳는 존재지. 여왕을 죽이면 한동안 그놈들이 훨씬 줄어들 걸세.
 #phrase Nsheriff  3
-Try looking for the Queen in the mountain ravine north of the main gates to Dead City. There is a crystal site there, and the Queen lives somewhere near it. Good luck!
+죽음의 도시 정문 북쪽의 산 협곡에서 여왕을 찾아보게. 거기에 수정 채석장이 있고, 여왕은 그 근처 어딘가에 산다네. 행운을 비네!

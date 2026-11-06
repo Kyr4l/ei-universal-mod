@@ -1,10 +1,10 @@
-Dragon Lord is killed
+Le Seigneur des dragons est mort
 #show Hero
 #show Rick
 #CAMERA 2
 #phrase Hero  1
-Dragon Lord is finished! I even feel sorry for him: we could certainly have made some sort of deal …
+Le Seigneur des dragons n'est plus ! J'en ai presque pitié : nous aurions sûrement pu trouver un arrangement...
 #phrase Rick  2
-Yes, you may have pity on the Dragon Lord. But consider this - would those who have the misfortune of living close to his habitat have any pity?
+Oui, vous pouvez avoir pitié du Seigneur des dragons. Mais réfléchissez : ceux qui ont le malheur de vivre près de son repaire auraient-ils eu pitié ?
 #phrase Hero  3
-Hmmm.. You are right, I think I should not be too upset about Dragon Lord's premature demise!
+Hum... Vous avez raison, je ne devrais pas trop m'attrister de la fin prématurée du Seigneur des dragons !

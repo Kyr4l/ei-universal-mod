@@ -1,10 +1,10 @@
-The dragons are dead!
+용들이 죽었다!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-I knew that these young dragons were completely harmless!
+그 어린 용들은 전혀 해롭지 않을 줄 알았다니까!
 #phrase Hero  2
-Totally harmless?... Those dragons almost ate me for breakfast! I was very lucky to have escaped safely!
+전혀 해롭지 않다고?... 그 용들이 날 아침밥으로 먹을 뻔했다고! 무사히 빠져나온 게 천운이야!
 #phrase Merc1  3
-Please forgive, I didn't know that these monsters were so dangerous! We should be better prepared in the future!
+미안해, 그 괴물들이 그렇게 위험한 줄 몰랐어! 앞으로는 더 잘 대비해야겠군!

@@ -1,8 +1,8 @@
-No way to beat that toad!
+저 두꺼비는 이길 수 없다!
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-I cannot deal with that monster! And getting to the cave is not a very pleasant business either...
+저 괴물은 감당할 수 없습니다! 동굴까지 가는 것도 그리 즐거운 일은 아니고요...
 #phrase Nsheriff  2
-Such a shame! Well, in that case somebody else will have to deal with the Ogre toad.
+안타깝군! 뭐, 그렇다면 다른 누군가가 오우거 두꺼비를 처리해야겠지.

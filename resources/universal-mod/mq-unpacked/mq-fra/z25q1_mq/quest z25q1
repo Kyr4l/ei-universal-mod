@@ -1,14 +1,14 @@
-Clear the path to the cave
-You must get rid of these ogres guarding the path to the cave!
+Dégager le chemin de la grotte
+Vous devez vous débarrasser des ogres qui gardent le chemin de la grotte !
 #subobj  1
-Eliminate the ogres on the right side of the path
-There are 2 ogres guarding the right hand part of the path, kill them!
+Éliminer les ogres à droite du chemin
+2 ogres gardent la partie droite du chemin, tuez-les !
 #subobj  2
-Eliminate the ogres on the left side of the path
-Only one ogre is guarding this path, kill him!
+Éliminer les ogres à gauche du chemin
+Un seul ogre garde ce chemin, tuez-le !
 #subobj  3
-Kill the ogre guard
-This ogre is guarding the entrance, you know what to do.
+Tuer l'ogre de garde
+Cet ogre garde l'entrée, vous savez ce qu'il vous reste à faire.
 #subobj  4
-Open the entrance to the cave
-Use the lever next to the entrance to open the entrance.
+Ouvrir l'entrée de la grotte
+Utilisez le levier près de l'entrée pour l'ouvrir.

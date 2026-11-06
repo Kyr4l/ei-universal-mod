@@ -1,10 +1,10 @@
-Collector is at home!
+수집가가 집에 돌아왔다!
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-So the collector is safely at home now. But think carefully: are all of the guards dead? Did anyone manage to get away, by any chance?
+그래서 수집가는 이제 무사히 집에 있군. 하지만 잘 생각해 보게. 경비병들은 모두 죽었나? 혹시 누가 도망치지는 않았나?
 #phrase Hero  2
-Nobody, I swear!
+아무도 없습니다, 맹세합니다!
 #phrase Glav  3
-Good work, I am well pleased. Now no one will know what Baluddin has been accused of and what evidence existed against him!
+잘했네, 아주 만족스럽군. 이제 발루딘이 무슨 혐의를 받았는지, 어떤 증거가 있었는지 아무도 모를 걸세!

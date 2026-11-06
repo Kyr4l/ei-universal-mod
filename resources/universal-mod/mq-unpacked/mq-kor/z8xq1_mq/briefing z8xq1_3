@@ -1,11 +1,11 @@
-The three ogres are dead!
+오우거 셋이 죽었다!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! This should put us in a better position in the fight against the orcs.
+잘했어! 이걸로 오크들과의 싸움에서 우리가 더 유리해질 거야.
 #phrase Hero  2
-It wasn't easy either. It almost cost me my life!
+쉽지도 않았어. 하마터면 목숨을 잃을 뻔했다고!
 #phrase Merc1  3
-Well... fortunately that's not the case and you can continue to support us. Most of what you found is worthless. However, the Orc Alphabet is of great value to us!
-Here take this gold as your reward!
+음... 다행히 그러지 않았으니 계속 우리를 도와줄 수 있겠군. 네가 찾은 것 대부분은 쓸모없지만, 오크 글자표는 우리에게 아주 귀중해!
+자, 이 금을 보상으로 받아!

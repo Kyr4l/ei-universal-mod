@@ -1,10 +1,10 @@
-The territory around the mines is clean
+Les abords des mines sont nettoyés
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Your Excellency, I bring two pieces of news. One is bad: Captain Tilvar has been slain near the gates to the mines. The other is far better - the Wormheads have been killed!
+Votre Excellence, j'apporte deux nouvelles. La mauvaise : le capitaine Tilvar a été tué près des portes des mines. La bonne : les Tentacules ont été exterminés !
 #phrase Huber  2
-Yes, of course I shall honor Tilvar with a minute of silence. But first of all I must write to the capital and report that under my capable governorship the threat to Ingos has been eliminated!
+Oui, bien sûr, j'honorerai Tilvar d'une minute de silence. Mais avant tout, je dois écrire à la capitale pour annoncer que, sous ma sage administration, la menace qui pesait sur Ingos a été éliminée !
 #phrase Huber  3
-Actually, I think I shall mention your services in my report, so mayhap in about three months you shall receive an official citation!
+D'ailleurs, je pense mentionner vos services dans mon rapport, alors peut-être recevrez-vous une citation officielle d'ici trois mois environ !

@@ -1,12 +1,12 @@
-[Medium] Hermit's request
+[Moyen] La requête de l'Ermite
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-We have a chance to improve our relations with lizards, and I hope you'll play the main role in that one!
+Nous avons une chance d'améliorer nos relations avec les hommes-lézards, et j'espère que vous y jouerez le premier rôle !
 #phrase Hero  2
-So must I repeat the Chosen's expedition after the Big Shell?
+Dois-je donc refaire l'expédition de l'Élu pour la Grande conque ?
 #phrase Nsheriff  3
-No, no, it is not about that. Recently the Hermit Lizard came to the village and asked to free his people from the trap.
+Non, non, il ne s'agit pas de ça. Récemment, l'Ermite homme-lézard est venu au village et nous a demandé de libérer les siens d'un piège.
 #phrase Nsheriff  4
-The young and silly Lizards went to the Orc land west of the northern river bank and got themselves thrown in prison. Hermit promised that if the Lizards were set free, he would forbid the tribe to bother humans for a whole month!
+De jeunes hommes-lézards écervelés sont allés sur les terres des orques, à l'ouest de la rive nord du fleuve, et se sont fait jeter en prison. L'Ermite a promis que s'ils étaient libérés, il interdirait à sa tribu d'ennuyer les humains pendant un mois entier !

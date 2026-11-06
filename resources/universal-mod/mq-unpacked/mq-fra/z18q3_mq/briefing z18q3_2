@@ -1,10 +1,10 @@
-The traitor died a natural death
+Le traître est mort de mort naturelle
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-You can forget it. The treacherous slave died a natural death.
+Vous pouvez oublier cette affaire. L'esclave traître est mort de mort naturelle.
 #phrase Hero  2
-Natural?
+Naturelle ?
 #phrase Glav  3
-Oh yes! What can be more natural than death of poison added in his plate by the slave cook? As I said, our Shelter is the last hope for the ones who work at the plantations, and they do not want to lose that hope!
+Oh oui ! Quoi de plus naturel que de mourir du poison que l'esclave cuisinier a versé dans son assiette ? Comme je l'ai dit, notre sanctuaire est le dernier espoir de ceux qui travaillent dans les plantations, et ils ne veulent pas perdre cet espoir !

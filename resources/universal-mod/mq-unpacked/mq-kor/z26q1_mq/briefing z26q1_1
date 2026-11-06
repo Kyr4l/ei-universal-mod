@@ -1,18 +1,18 @@
-[Medium] Open the portal
+[보통] 포탈 열기
 #show Hero
 #show KMage
 #CAMERA 2
 #phrase Hero  1
-So, tell me about this secret cave!
+그래서, 그 비밀 동굴에 대해 말씀해 주시죠!
 #phrase KMage  2
-In this cave there's an ancient portal, we use it to travel across islands. However the main path has recently been blocked by falling rocks, the other path has been closed to prevent anyone from coming through the portal...
+그 동굴에는 고대 포탈이 있어서, 우리는 그걸로 섬과 섬 사이를 오가지. 그런데 얼마 전 낙석으로 큰길이 막혔고, 다른 길은 누구도 포탈로 넘어오지 못하게 닫아 두었네...
 #phrase Hero  3
-But why did you block the path ?
+그런데 왜 길을 막으셨습니까?
 #phrase KMage  4
-We have noticed that some monsters started paying attention to this cave and it is no longer safe for us. We can't send people to travel through the portal or even guard the cave, some monsters made this cave their hiding spot!
+괴물들이 이 동굴에 관심을 갖기 시작했고, 이제 우리에게 안전하지 않네. 사람을 보내 포탈로 여행시키지도, 동굴을 지키게 하지도 못해. 괴물들이 이 동굴을 은신처로 삼았거든!
 #phrase KMage  5
-You will need to open the gates and activate the portal. There are 2 keys you need to get in order to first open the gates, then activate the portal. Each key has been stored in a chest before my guards fled the area.
+문을 열고 포탈을 작동시켜야 하네. 열쇠가 2개 필요해. 하나는 문을 열고, 하나는 포탈을 작동시키는 열쇠지. 내 경비병들이 그곳을 떠나기 전에 각각 상자에 넣어 두었다네.
 #phrase Hero  6
-Sounds easy enough already! Anything else?
+꽤 쉬워 보이는군요! 다른 건요?
 #phrase KMage 7
-Well... If you are good enough with your hands however, the gates can be opened without a key, the mechanism is old. Good luck!
+음... 손재주가 좋다면 열쇠 없이도 문을 열 수 있네. 장치가 낡았거든. 행운을 비네!

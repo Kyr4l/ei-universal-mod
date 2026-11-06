@@ -1,10 +1,10 @@
-No way to get near Aiset-Bek...
+Impossible d'approcher Aiset-Bek...
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-Aiset-Bek's still alive?! Hm... Do you remember our little talk about trust and suspicions? Do you not think that now I must take a good look at you and your past?
+Aiset-Bek est toujours vivant ?! Hum... Vous souvenez-vous de notre petite conversation sur la confiance et les soupçons ? Ne pensez-vous pas que je doive maintenant examiner de près votre personne et votre passé ?
 #phrase Hero  2
-I swear I shall kill Aiset-Bek! Maybe not right now, but I will kill him allright ...  whatever it takes!
+Je jure que je tuerai Aiset-Bek ! Peut-être pas tout de suite, mais je le tuerai, je vous le promets... quoi qu'il en coûte !
 #phrase Glav  3
-OK, I believe you ... For now.
+D'accord, je vous crois... Pour l'instant.

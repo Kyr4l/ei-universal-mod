@@ -1,10 +1,10 @@
-No way to deal with those wormheads...
+Impossible de venir à bout de ces Tentacules...
 #show Hero
 #show Huber
 #CAMERA  2
 #phrase Hero  1
-I am sorry, Your Honor, I was unable to either help the captain or to accomplish your mission. Mayhap I shall in time, but right now I am simply not up to it …
+Je suis désolé, Votre Excellence, je n'ai pu ni aider le capitaine ni accomplir votre mission. Peut-être y parviendrai-je avec le temps, mais pour l'instant je n'en suis tout simplement pas capable...
 #phrase Huber  2
-Frankly, I was not too hopeful! If Tilvar himself could not manage that menace, what could one expect from you, adventurers!
+À vrai dire, je n'avais pas grand espoir ! Si Tilvar lui-même n'a pu venir à bout de cette menace, qu'attendre de vous autres aventuriers !
 #phrase Huber  3
-I suppose I will have to write to the capital and ask for troops! You cannot imagine how reluctant I am to do this!
+Je suppose que je vais devoir écrire à la capitale pour demander des troupes ! Vous n'imaginez pas à quel point cela me coûte !

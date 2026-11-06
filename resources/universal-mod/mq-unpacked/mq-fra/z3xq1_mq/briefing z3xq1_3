@@ -1,10 +1,10 @@
-Done!
+C'est fait !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Good! I even pity the brigands a little - they lost almost all their loot!
+Bien ! J'ai même un peu pitié des brigands : ils ont perdu presque tout leur butin !
 #phrase Hero  2
-But what if they decide after that to get more loot - from the village?
+Et s'ils décidaient ensuite de se refaire un butin... sur le village ?
 #phrase Nsheriff  3
-In that case I would come to you again, you would complete another quest and we would all be very happy ... Except the Brigands, he-he ...
+Dans ce cas, je reviendrais vous voir, vous accompliriez une autre quête et nous serions tous très heureux... Sauf les brigands, hé hé...

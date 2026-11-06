@@ -1,8 +1,8 @@
-Scientists have been transferred to another location.
+Les savants ont été transférés ailleurs
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I am extremely upset! The governor gave the order to move the killer scientists to another location, and now they are unreachable!
+Je suis extrêmement contrarié ! Le gouverneur a ordonné de transférer les savants assassins ailleurs, et ils sont désormais hors d'atteinte !
 #phrase Glav  2
-I dread to think what will happen when their research is completed! We only have one hope now: that the governor cancels his order and we can then destroy those killers...
+Je n'ose imaginer ce qui arrivera quand leurs recherches seront achevées ! Il ne nous reste qu'un espoir : que le gouverneur annule son ordre et que nous puissions alors éliminer ces assassins...

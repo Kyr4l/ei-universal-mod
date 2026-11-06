@@ -1,12 +1,12 @@
-They won't come back!
+놈들은 다시 오지 못할 겁니다!
 #show Hero
 #show Marshal
 #CAMERA 11
 #phrase Hero  1
-I got rid of these units! The portal is closed and they won't come back for a while hopefully.
+정찰병들을 처리했습니다! 포탈은 닫혔고, 한동안은 돌아오지 않을 겁니다.
 #phrase Marshal  2
-Do you know what they were preparing?
+놈들이 무엇을 준비하고 있었는지 알겠나?
 #phrase Hero  3
-They were preparing an exploration, or maybe an invasion. They seemed pretty scared of this place and attacked anything on sight!
+탐사, 어쩌면 침공을 준비하고 있었습니다. 이곳을 꽤 두려워하는 듯했고, 눈에 띄는 건 뭐든 공격했습니다!
 #phrase Marshal  4
-That makes sense, these recons are probably afraid of anything they aren't used to see. Typical Khadaganians...
+그럴 만도 하지. 그 정찰병들은 익숙하지 않은 건 뭐든 두려워할 테니까. 카다간 놈들답군...

@@ -1,10 +1,10 @@
-The dragons will not attack!
+용들은 공격하지 않을 것이다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Now the lizards will be unable to tell the dragons to attack our village!
+이제 도마뱀인들은 용들에게 우리 마을을 공격하라고 시킬 수 없을 걸세!
 #phrase Hero  2
-That is quite nice... But what if the dragons decide to attack the village all by themselves, without any orders?
+그거 좋군요... 하지만 용들이 명령 없이 스스로 마을을 공격하기로 하면요?
 #phrase Nsheriff  3
-Oh, do not worry about that. The dragons have enough food where they are, so they have no need to go anywhere else!
+아, 그건 걱정 말게. 용들은 지금 있는 곳에 먹이가 충분해서 다른 데로 갈 필요가 없다네!

@@ -1,8 +1,8 @@
-Present to the governor
+Un cadeau pour le gouverneur
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Governor! Would you accept this modest gift in appreciation of your ...mmm .... lack of self-interest and generosity!
+Gouverneur ! Accepteriez-vous ce modeste présent en remerciement de votre... hum... désintéressement et de votre générosité !
 #phrase Huber  2
-Oh dear! My problem is, you see, when a good man asks me something, I simply cannot refuse a favor! All right, all right, give me that nugget...
+Oh là là ! Mon problème, voyez-vous, c'est que lorsqu'un brave homme me demande quelque chose, je ne peux tout simplement pas refuser ! Bon, bon, donnez-moi cette pépite...

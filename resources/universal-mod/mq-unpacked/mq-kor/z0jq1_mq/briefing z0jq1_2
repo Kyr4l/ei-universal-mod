@@ -1,8 +1,8 @@
-Where are they?
+놈들은 어디 있지?
 #show Hero
 #show Marshal
 #CAMERA 11
 #phrase Hero  1
-I couldn't see any of these Khadaganian recons you mentionned earlier, your information might be outdated!
+말씀하신 카다간 정찰병은 하나도 보지 못했습니다. 정보가 오래된 것 같군요!
 #phrase Marshal  2
-I will send a few guards just to be sure...
+혹시 모르니 경비병 몇을 보내보지...

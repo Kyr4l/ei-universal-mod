@@ -5,7 +5,7 @@ Allows the target to sense all creatures within a certain radius.
 
 === SPELL ensorcell
 Charm
-The most powerful astral spell. It dopes a creature, causing it to fall in love with the caster.
+The most powerful astral spell. It bewitches a creature, causing it to fall in love with the caster.
 
 === SPELL fireraze
 Sacrifice to Fire
@@ -13,7 +13,7 @@ Deals massive damage to everyone around the caster, including the caster.
 
 === SPELL lichdom
 Necrosis
-Allows the target to become less detectable by life.
+Makes the target harder to detect by sensing life.
 
 === SPELL link
 Link
@@ -29,7 +29,7 @@ The target of this spell gains the ability to use more complex magic.
 
 === SPELL possession
 Possession
-Focuses senses on a target so much that perceiving the world as it becomes possible.
+Focuses the senses on a target so intensely that the caster perceives the world as the target does.
 
 === SPELL stench
 Distortion

@@ -1,10 +1,10 @@
-Factories are working again
+작업장이 다시 돌아간다
 #show Hero
 #show Huber
 #CAMERA 10
 #phrase Hero  1
-Your Excellency may tell your friend Karansul that everything is fine now: his people have returned to work.
+각하께서 친구 카란술에게 이제 모든 게 괜찮다고 전하셔도 됩니다. 그의 사람들이 일터로 돌아갔습니다.
 #phrase Hero  2
-And another thing: do you think you could perchance hint to him that such favours should actually be rewarded?
+그리고 하나 더, 이런 호의에는 원래 보상이 따른다고 넌지시 말씀해 주실 수 있을까요?
 #phrase Huber  3
-Ho-ho, what an excellent joke! Karansul would pay for something he already got for nothing! Oh my, what a fine sense of humor you have!
+호호, 정말 훌륭한 농담이군! 카란술이 이미 공짜로 얻은 것에 돈을 낸다니! 이런, 자네 유머 감각이 대단하군!

@@ -1,12 +1,12 @@
-[Easy] Giant toad
+[쉬움] 거대 두꺼비
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-What are those strange rumors circulating in the village? People are talking about some Ogre who learned how to change into a toad...
+마을에 도는 이상한 소문은 뭡니까? 두꺼비로 변하는 법을 익힌 오우거가 있다고들 하던데...
 #phrase Nsheriff  2
-Well, I never! You can not tell anything to anybody without them twisting it all around! Of course nobody has changed into anything; just the Orcs breeding another Ogre toad ...
+이런, 세상에! 누구에게 무슨 말을 하든 다 꼬아서 퍼뜨린다니까! 물론 무엇으로 변한 사람은 없네. 오크들이 또 오우거 두꺼비를 기르고 있을 뿐이야...
 #phrase Nsheriff  3
-The Seers make potage from some herbs, pour those over an ordinary poisonous toad and it grows huge! Every time the Orcs make themselves another ally like that, we search for brave men who are willing to go and deal with the toad.
+주술사들이 약초로 죽을 쑤어서 평범한 독두꺼비에게 부으면 거대해진다네! 오크들이 그런 동맹을 만들어 낼 때마다, 우리는 두꺼비를 처리하러 갈 용감한 사람들을 찾지.
 #phrase Nsheriff  4
-By the way, now that you know all about it, why not you have a try? You may find the toad in the north-east of the Foothills!
+그나저나, 이제 다 알았으니 한번 해 보지 않겠나? 두꺼비는 구릉지대 북동쪽에 있을 걸세!

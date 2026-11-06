@@ -1,20 +1,20 @@
-Zombie mage
+Le mage zombie
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I often remember brother Blondie who left us in as strange a way as he joined us. That young man had a common enough appearance, but he was very clever and cunning. Even now, when Blondie is no longer with us, his deeds live in our memories.
+Je repense souvent à frère Blondinet, qui nous a quittés de façon aussi étrange qu'il nous avait rejoints. Ce jeune homme avait l'air ordinaire, mais il était très intelligent et rusé. Même aujourd'hui, alors qu'il n'est plus parmi nous, ses actes restent dans nos mémoires.
 #phrase Glav  2
-For example, recently I received a communication from the disgraced Necromancer Kholai with whom Blondie had some sort of very mysterious business. But this time the interests of Kholai are very simple, and similar to our own.
+Par exemple, j'ai récemment reçu un message du nécromancien en disgrâce Kholai, avec qui Blondinet entretenait de bien mystérieuses affaires. Mais cette fois, les intérêts de Kholai sont très simples, et proches des nôtres.
 #phrase Glav  3
-Kholai's enemy, the young magician Taivo, managed to use the body of a dead Necromancer and made a zombie magician out of it. This creature never sleeps or rests, is stronger than an ordinary zombie, and it also uses combat magic!
+L'ennemi de Kholai, le jeune mage Taivo, a réussi à utiliser le corps d'un nécromancien mort pour en faire un mage zombie. Cette créature ne dort ni ne se repose jamais, elle est plus forte qu'un zombie ordinaire, et elle utilise en plus la magie de combat !
 #phrase Glav  4
-Kholai wants to teach us how to kill such enemies quickly and safely - he thinks that would be a blow to Taivo's authority. However, to achieve that Kholai needs the head of the zombie magician head.
+Kholai veut nous apprendre à tuer ce genre d'ennemis vite et sans risque - il pense que cela porterait un coup à l'autorité de Taivo. Mais pour cela, Kholai a besoin de la tête du mage zombie.
 #phrase Hero  5
-Are you going to order me to get it?
+Vous allez m'ordonner d'aller la chercher ?
 #phrase Glav  6
-Oh no! We all are brothers here, no one orders anyone else around. Everything is done on purely voluntary basis, because people understand the need for action!
+Oh non ! Nous sommes tous frères ici, personne ne donne d'ordres à personne. Tout se fait sur la base du volontariat, parce que chacun comprend la nécessité d'agir !
 #phrase Glav  7
-So when you realize it has to be done, keep in mind that the zombie magician is now in the Necromancers' city.
+Alors, quand vous comprendrez que cela doit être fait, sachez que le mage zombie se trouve en ce moment dans la cité des Nécromanciens.
 #phrase Glav  8
-And old Kholai's tower is located north of the town. But please be careful! The disgraced Necromancer's home is guarded as heavily as the town itself! 
+Et la tour du vieux Kholai se trouve au nord de la cité. Mais soyez prudent, je vous prie ! La demeure du nécromancien en disgrâce est aussi bien gardée que la cité elle-même !

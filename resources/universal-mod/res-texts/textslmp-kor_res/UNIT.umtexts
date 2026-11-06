@@ -1,293 +1,293 @@
 # um-texts 1
 === UNIT Banshee_Fighter1_J1
-Royal banshee
+왕실 밴시
 
 === UNIT Banshee_Mage1_J1
-Royal banshee mag
+왕실 밴시 마법사
 
 === UNIT BoarDark_J1
-Black boar
+검은 멧돼지
 
 === UNIT Cyclope_33
-Baby armadillo
+새끼 아르마딜로
 
 === UNIT Deer1J
-Young deer
+어린 사슴
 
 === UNIT Deer2J
-Adult deer
+성체 사슴
 
 === UNIT DeerC1J
-Sick young deer
+병든 어린 사슴
 
 === UNIT DeerC2J
-Sick adult deer
+병든 성체 사슴
 
 === UNIT DeerQ1J
-Crazy young deer
+미친 어린 사슴
 
 === UNIT DeerQ1Z
-Dead young deer
+죽은 어린 사슴
 
 === UNIT DeerQ2J
-Crazy adult deer
+미친 성체 사슴
 
 === UNIT DeerQ2Z
-Dead adult deer
+죽은 성체 사슴
 
 === UNIT Dog_J1
-Dog
+개
 
 === UNIT Dragon1J
-Ancient dragon
+고대 용
 
 === UNIT Dragon2J
-Ancient dragon
+고대 용
 
 === UNIT Dragon3J
-Ancient dragon
+고대 용
 
 === UNIT Fox1_J1
-Young fox
+어린 여우
 === UNIT Fox2_J1
-Adult fox
+성체 여우
 
 === UNIT Fox3_J1
-Old fox
+늙은 여우
 === UNIT HCityFemale1
-Baby armadillo
+노동자
 
 === UNIT HCityFemale2
-Baby armadillo
+시민
 
 === UNIT HCityMale1
-Baby armadillo
+노동자
 
 === UNIT HCityMale2
-Baby armadillo
+시민
 
 === UNIT HHAJ15
-Young khadaganian archer
+어린 카다간 궁수
 
 === UNIT HHAJ15bad
-Young khadaganian archer-betrayer
+어린 카다간 배신자 궁수
 
 === UNIT HHAJ17
-Khadaganian archer
+카다간 궁수
 
 === UNIT HHAJ17bad
-Khadaganian archer-betrayer
+카다간 배신자 궁수
 
 === UNIT HHAJ21
-Khadaganian archer
+카다간 궁수
 
 === UNIT HHAJ21bad
-Khadaganian archer-betrayer
+카다간 배신자 궁수
 
 === UNIT HHAJ25
-Khadaganian archer
+카다간 궁수
 
 === UNIT HHAJ25bad
-Khadaganian archer-betrayer
+카다간 배신자 궁수
 
 === UNIT HHAJ29
-Khadaganian archer
+카다간 궁수
 
 === UNIT HHAJ29bad
-Khadaganian archer-betrayer
+카다간 배신자 궁수
 
 === UNIT HHFJ15
-Young khadaganian warrior
+어린 카다간 전사
 
 === UNIT HHFJ15bad
-Young khadaganian warrior-betrayer
+어린 카다간 배신자 전사
 
 === UNIT HHFJ17
-Khadaganian fighter
+카다간 전사
 
 === UNIT HHFJ17bad
-Khadaganian fighter-betrayer
+카다간 배신자 전사
 
 === UNIT HHFJ21
-Khadaganian fighter
+카다간 전사
 
 === UNIT HHFJ21bad
-Khadaganian fighter-betrayer
+카다간 배신자 전사
 
 === UNIT HHFJ25
-Khadaganian fighter
+카다간 전사
 
 === UNIT HHFJ25bad
-Khadaganian fighter-betrayer
+카다간 배신자 전사
 
 === UNIT HHFJ29
-Khadaganian fighter
+카다간 전사
 
 === UNIT HHFJ29bad
-Khadaganian fighter-betrayer
+카다간 배신자 전사
 
 === UNIT HHJ15
-Royal banshee
+왕실 밴시
 
 === UNIT HHJ15bad
-Royal banshee-betrayer
+배신자 왕실 밴시
 
 === UNIT HHJ25
-Khadaganian 
+카다간인
 
 === UNIT HHJ29
-Khadaganian 
+카다간인
 
 === UNIT HHMJ15
-Young khadaganian mage
+어린 카다간 마법사
 
 === UNIT HHMJ15bad
-Young khadaganian mage-betrayer
+어린 카다간 배신자 마법사
 
 === UNIT HHMJ17
-Khadaganian mage
+카다간 마법사
 
 === UNIT HHMJ17bad
--betrayerKhadaganian mage-betrayer
+카다간 배신자 마법사
 
 === UNIT HHMJ21
-Khadaganian mage
+카다간 마법사
 
 === UNIT HHMJ21bad
-Khadaganian mage-betrayer
+카다간 배신자 마법사
 
 === UNIT HHMJ25
-Khadaganian mage
+카다간 마법사
 
 === UNIT HHMJ25bad
-Khadaganian mage-betrayer
+카다간 배신자 마법사
 
 === UNIT HHMJ29
-Khadaganian mage
+카다간 마법사
 
 === UNIT HHMJ29bad
-Khadaganian mage-betrayer
+카다간 배신자 마법사
 
 === UNIT Human_Gangster_M_J1
-Highwayman
+노상강도
 
 === UNIT Human_Gangster_M_J2
-Highwayman
+노상강도
 
 === UNIT Human_Gangster_M_J3
-Highwayman leader
+노상강도 두목
 
 === UNIT Human_Hadagan_Archer_J1
-Khadaganian archer
+카다간 궁수
 
 === UNIT Human_Hadagan_Fighter_J1
-Khadaganian fighter
+카다간 전사
 
 === UNIT Human_Hadagan_Mage_J1
-Khadaganian mage
+카다간 마법사
 
 === UNIT Human_Hadagan_Recon_J1
-Khadaganian recon
+카다간 정찰병
 
 === UNIT Human_Peasant_F_J1
-Peasant Woman
+농부 아낙
 
 === UNIT Human_Peasant_M_J1
-Peasant
+농부
 
 === UNIT KCityFemale1
-Worker
+노동자
 
 === UNIT KCityFemale2
-Citizen
+시민
 
 === UNIT KCityMale1
-Worker
+노동자
 
 === UNIT KCityMale2
-Citizen
+시민
 
 === UNIT Ogre2_J1
-Ogre
+오우거
 
 === UNIT Ogre3_J1
-Massive ogre
+거대한 오우거
 
 === UNIT Ogre_J1
-Ogre
+오우거
 
 === UNIT PrisonGuardA17
-Khadaganian gaoler
+카다간 간수
 
 === UNIT PrisonGuardF17
-Khadaganian gaoler
+카다간 간수
 
 === UNIT PrisonGuardF18
-Khadaganian gaoler-keykeeper
+카다간 열쇠지기 간수
 
 === UNIT PrisonGuardM17
-Khadaganian gaoler
+카다간 간수
 
 === UNIT PrisonLeaderF29
-Prison wander
+교도소장
 
 === UNIT PrisonLeaderWifeM25
-Prison mage
+감옥 마법사
 
 === UNIT Scrab0_J1
-Young armadillo
+어린 아르마딜로
 
 === UNIT ScrabField2_J1
-Armadillo
+아르마딜로
 
 === UNIT ScrabField3_J1
-Adult armadillo
+성체 아르마딜로
 
 === UNIT ScrabField4_J1
-Queen armadillo
+여왕 아르마딜로
 
 === UNIT ScrabField_J1
-Baby armadillo
+새끼 아르마딜로
 
 === UNIT Scrab_J1
-Adult armadillo
+성체 아르마딜로
 
 === UNIT Shadow_J1
-Shadow
+그림자
 
 === UNIT Skeleton_J1
-Armored skeleton
+갑옷 입은 해골
 
 === UNIT Succub_J1
-Adult harpy
+성체 하피
 
 === UNIT Tiger_J1
-Giant tiger
+거대 호랑이
 
 === UNIT Toad1_J1
-Little toad
+작은 두꺼비
 
 === UNIT Toad2_J1
-Giant toad
+거대 두꺼비
 
 === UNIT Toad3_J1
-Old giant toad
+늙은 거대 두꺼비
 
 === UNIT WolfBrown2_J1
-Brown wolf
+갈색 늑대
 
 === UNIT WolfBrown_J1
-Brown wolf
+갈색 늑대
 
 === UNIT Zombie_F2_J1
-Zombie warrior
+좀비 전사
 === UNIT Zombie_F_J1
-Zombie warrior
+좀비 전사
 === UNIT Zombie_M2_J1
-Zombie warrior
+좀비 전사
 
 === UNIT Zombie_M_J1
-Zombie warrior
+좀비 전사
 
 === UNIT lmp_Human_Gipath_Fighter_2
 풋내기 도적

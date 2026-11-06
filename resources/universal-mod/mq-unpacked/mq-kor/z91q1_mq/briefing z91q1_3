@@ -1,8 +1,8 @@
-Done!
+완료!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Good! This means we can still reach the Great Mage in an emergency.
-#phrase Merc1  1
-Not good! I barely survived! Ask someone else next time.
+좋아! 이제 급할 때도 위대한 마법사에게 갈 수 있겠군.
+#phrase Hero  2
+좋긴 뭐가 좋아! 겨우 살아남았다고! 다음엔 다른 사람에게 부탁해.

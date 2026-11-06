@@ -1,8 +1,8 @@
-The demon is too strong for me!
+Le démon est trop fort pour moi !
 #show Hero
 #show Rick
 #CAMERA 2
 #phrase Hero  1
-I'm sorry Tka Rik, I'm not ready for this yet.
+Je suis désolé, Tka-Rik, je ne suis pas encore prêt.
 #phrase Rick  2
-Well, in that case we'll wait until you get even stronger. We still have time.
+Eh bien, dans ce cas, nous attendrons que vous soyez plus fort. Nous avons encore le temps.

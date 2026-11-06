@@ -1,20 +1,20 @@
-[Hard] Undeads are close to Dead City!
+[Difficile] Des morts-vivants près de la Cité des Morts !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-I must have agreed to become the elder of our village on a bad day! For we have had no peace since then: Goblins, Orcs, Lizards and now those undeads near Dead City!
+J'ai dû accepter de devenir l'ancien du village un mauvais jour ! Car depuis, nous n'avons plus de paix : gobelins, orques, hommes-lézards, et maintenant ces morts-vivants près de la Cité des Morts !
 #show Hero
 #show Nsheriff
 #phrase Hero  2
-So what? Of course skeletons are not much fun, but they have been keeping themselves close to the ruins, have they not?
+Et alors ? Les squelettes ne sont pas drôles, bien sûr, mais ils restent près des ruines, non ?
 #phrase Nsheriff  3
-That is true, skeletons do not venture far away from their graves. But I am not talking about them: if there is no grave, the undeads can go anywhere! For example, right here into the village, know what I mean?
+C'est vrai, les squelettes ne s'éloignent guère de leurs tombes. Mais je ne parle pas d'eux : sans tombe, les morts-vivants peuvent aller n'importe où ! Par exemple, ici même, au village, vous voyez ce que je veux dire ?
 #phrase Hero  4
-Hmm... And where did that wonder of the world come from?
+Hum... Et d'où vient cette merveille du monde ?
 #phrase Nsheriff  5
-From the same old place - it is all because of the Chosen's adventures! He told that in the Dead City land, north-west of the city, the skeletons attacked the Khadaganian expedition camp. And of course nobody bothered to bury the dead.
+Du même endroit que d'habitude : tout ça, c'est à cause des aventures de l'Élu ! Il nous a raconté que sur les terres de la Cité des Morts, au nord-ouest de la cité, les squelettes avaient attaqué le camp d'une expédition khadaganienne. Et bien sûr, personne n'a pris la peine d'enterrer les morts.
 #phrase Nsheriff  6
-And it seems one of the dead was a Necromancer, so his magic still works even though he is gone! In a word, undeads are now wandering all around the camp, and they can come here any time.
+Et il semble que l'un des morts était un nécromancien : sa magie agit toujours, même s'il n'est plus ! Bref, les morts-vivants errent maintenant tout autour du camp, et ils peuvent venir ici à tout moment.
 #phrase Hero  7
-So we must destroy them, and the sooner the better! I think I could deal with that.
+Il faut donc les détruire, et le plus tôt sera le mieux ! Je pense pouvoir m'en charger.

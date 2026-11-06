@@ -1,14 +1,14 @@
-Wormheads menace
-There is news that the Wormheads have started to leave their dungeons and come up to the surface. Captain Tilvar and a unit of soldiers went to the mines to fight that menace but have not been heard of since. You must find Tilvar and if necessary provide him with assistance.
+벌레머리의 위협
+벌레머리들이 지하 감옥을 떠나 지상으로 올라오기 시작했다는 소식이다. 틸바르 대위와 병사 부대가 그 위협과 싸우러 광산으로 갔지만, 그 뒤로 소식이 없다. 틸바르를 찾아 필요하다면 도와야 한다.
 #subobj  1
-Finding the passage to the mines
-The passage to the mines is to the north, across the bridge over the river which flows into the lake from the east.
+광산으로 가는 길 찾기
+광산으로 가는 길은 북쪽, 동쪽에서 호수로 흘러드는 강의 다리를 건너면 있다.
 #subobj  2
-Opening the gates
-To get into the mines you must open the gates.
+문 열기
+광산에 들어가려면 문을 열어야 한다.
 #subobj  3
-Finding Captain Tilvar
-Captain Tilvar and his unit have been sent to kill the Wormheads who left the dungeons to go into the open. You must find the Captain.
+틸바르 대위 찾기
+틸바르 대위와 그의 부대는 지하에서 밖으로 나온 벌레머리들을 죽이러 파견되었다. 대위를 찾아야 한다.
 #subobj  4
-Killing Wormheads
-The Captain is dead, but his mission still lives: all Wormheads must be killed.
+벌레머리 처치
+대위는 죽었지만 그의 임무는 남아 있다. 벌레머리를 모두 죽여야 한다.

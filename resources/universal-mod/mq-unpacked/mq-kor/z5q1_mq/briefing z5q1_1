@@ -1,12 +1,12 @@
-[Easy] Subterranean creatures
+[쉬움] 지하의 생물들
 #show Hero
 #show NSheriff
 #CAMERA 9
 #phrase NSheriff  1
-Please help us, rumors are spreading that armadillos have been spotted near the old mine. But this is impossible! These monsters have been extinct for generations.
+도와주게. 오래된 광산 근처에서 아르마딜로를 봤다는 소문이 돌고 있어. 하지만 그럴 리가 없네! 그 괴물들은 몇 세대 전에 사라졌는데.
 #phrase Hero  2
-Hmmm... Is there anyway I can help you?
+흠... 제가 도울 수 있는 방법이 있을까요?
 #phrase NSheriff  3
-If these rumors are true, our village could be in danger. Please go and explore the old mine.
+그 소문이 사실이라면 우리 마을이 위험해질 수도 있네. 오래된 광산을 조사해 주게.
 #phrase NSheriff  4
-Be careful, strange creatures seem to be hanging around in tunnels that the orcs have settled in. Find out if the rumors are true and deal with the problem at once!
+조심하게. 오크들이 자리 잡은 터널에 이상한 생물들이 어슬렁거리는 것 같아. 소문이 사실인지 확인하고 당장 문제를 해결해 주게!

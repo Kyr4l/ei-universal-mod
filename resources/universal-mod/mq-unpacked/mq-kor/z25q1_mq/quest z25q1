@@ -1,14 +1,14 @@
-Clear the path to the cave
-You must get rid of these ogres guarding the path to the cave!
+동굴로 가는 길 확보
+동굴로 가는 길을 지키는 오우거들을 없애야 한다!
 #subobj  1
-Eliminate the ogres on the right side of the path
-There are 2 ogres guarding the right hand part of the path, kill them!
+길 오른쪽의 오우거 처치
+오우거 2마리가 길 오른쪽을 지키고 있다. 처치하라!
 #subobj  2
-Eliminate the ogres on the left side of the path
-Only one ogre is guarding this path, kill him!
+길 왼쪽의 오우거 처치
+이 길은 오우거 한 마리만 지키고 있다. 처치하라!
 #subobj  3
-Kill the ogre guard
-This ogre is guarding the entrance, you know what to do.
+경비 오우거 처치
+이 오우거가 입구를 지키고 있다. 무엇을 해야 할지 알 것이다.
 #subobj  4
-Open the entrance to the cave
-Use the lever next to the entrance to open the entrance.
+동굴 입구 열기
+입구 옆의 레버를 당겨 입구를 열어라.

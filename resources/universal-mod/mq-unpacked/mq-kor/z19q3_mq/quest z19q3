@@ -1,23 +1,23 @@
-Invasion in Gipath
-Khadagan is preparing to invade Gipath through the Portal located in Suslanger. You must switch the Portal off and make this invasion impossible.
+지페스 침공
+카다간이 수슬랑게르에 있는 포탈을 통해 지페스를 침공하려 한다. 포탈을 꺼서 침공을 불가능하게 만들어야 한다.
 #subobj  1
-Getting to the portal
-The portal is located in the south-east; the only way to get near it is via one of the hanging bridges.
+포탈에 도착하기
+포탈은 남동쪽에 있다. 포탈에 다가가는 유일한 길은 구름다리 중 하나를 건너는 것이다.
 #subobj  2
-Finding the Commander of the invading army
-The army headquarters is in a small house not far from the Portal.
+침공군 사령관 찾기
+군 사령부는 포탈에서 멀지 않은 작은 집에 있다.
 #subobj  3
-Killing the Commander
-The Commander of the invading army must be killed.
+사령관 처치
+침공군 사령관을 죽여야 한다.
 #subobj  4
-Taking the Portal key
-Take the key which locks the Portal leading to Gipath from the Commander's corpse.
+포탈 열쇠 가져오기
+사령관의 시체에서 지페스로 통하는 포탈을 잠그는 열쇠를 가져오라.
 #subobj  5
-Using the left magic stone
-To disable the Portal you must use the key on both the right and left Magic Obelisks.
+왼쪽 마법 오벨리스크 사용
+포탈을 끄려면 오른쪽과 왼쪽 마법 오벨리스크 모두에 열쇠를 사용해야 한다.
 #subobj  6
-Using the right magic stone
-To disable the Portal you must use the key on both the right and left Magic Obelisks.
+오른쪽 마법 오벨리스크 사용
+포탈을 끄려면 오른쪽과 왼쪽 마법 오벨리스크 모두에 열쇠를 사용해야 한다.
 #subobj  7
-Switching off the portal
-When both Magic Obelisks have been used, the Portal will be switched off and the army cannot then invade Gipath.
+포탈 끄기
+두 마법 오벨리스크를 모두 사용하면 포탈이 꺼지고, 군대는 더 이상 지페스를 침공할 수 없다.

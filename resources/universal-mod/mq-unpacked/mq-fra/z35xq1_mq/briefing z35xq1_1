@@ -1,18 +1,18 @@
-[Medium] Crazy animals
+[Moyen] Bêtes enragées
 #show Hero
 #show Marshal
 #CAMERA 3 0 3.5 1.5
 #phrase Marshal  1
-I see you've got nothing better to do. Get over here!
+Je vois que vous n'avez rien de mieux à faire. Approchez !
 #phrase Hero  2
-Huh?
+Hein ?
 #phrase Marshal  3
-Our men are out there holding back attacks from crazed beasts, while you're wandering around. And I can tell you've got the makings of a fine warrior. I'll put your name down. If none of our men fall, you'll earn yourself some gold.
+Nos hommes repoussent les attaques de bêtes enragées pendant que vous vous promenez. Et je vois que vous avez l'étoffe d'un bon guerrier. Je vous inscris. Si aucun de nos hommes ne tombe, vous gagnerez de l'or.
 #phrase Hero  4
-If only Lord Firez weren't conducting his disastrous experiments...
+Si seulement le seigneur Firez ne menait pas ses désastreuses expériences...
 #phrase Marshal  5
-That is none of your concern.
+Ça ne vous regarde pas.
 #phrase Hero  6
-I'll make sure our soldiers suffer no losses while repelling the attacks, sir.
+Je veillerai à ce que nos soldats ne subissent aucune perte en repoussant les attaques, mon général.
 #phrase Marshal  7
-At ease!
+Repos !

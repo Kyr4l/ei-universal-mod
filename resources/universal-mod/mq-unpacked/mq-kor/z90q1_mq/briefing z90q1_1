@@ -1,16 +1,16 @@
-[Hard] The truth and the tales about Dead City
+[어려움] 죽음의 도시에 얽힌 진실과 전설
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-Everybody knows the legend about the Chosen conversing with the dragon in Dead City, just as they know of the sword he brought back - a magical one and made of iron to boot!
+선택받은 자가 죽음의 도시에서 용과 이야기를 나눴다는 전설은 누구나 압니다. 그가 가져온 검도 마찬가지고요. 마법이 깃든 데다 무려 철로 만든 검이죠!
 #phrase Hero  2
-What do you think Rivar, what is real here and what is our imagination?
+어떻게 생각하십니까, 리바르? 어디까지가 사실이고 어디부터가 상상일까요?
 #phrase Nsheriff  3
-Frankly, I do not know. I saw the sword with my own eyes, but I never met the dragon. Maybe it was a tale. Are you going to try venturing into Dead City?
+솔직히 모르겠네. 그 검은 내 눈으로 봤지만, 용은 만난 적이 없어. 그냥 이야기였을지도 모르지. 죽음의 도시에 가 볼 생각인가?
 #phrase Hero  4
-Well... Actually, yes. They say there is a crypt in the old cemetery and one could find something valuable there.
+음... 사실, 그렇습니다. 오래된 묘지에 지하 묘실이 있는데, 거기서 값진 걸 찾을 수 있다더군요.
 #phrase Nsheriff  5
-It is up to you. I will not try to discourage you, but I will tell you this: before you go into the crypt, climb up the Lone Mountain. Who knows, perchance there really is an old dragon up there? And perchance he will not like it if you start prowling around his domain without even saying hello first?
+자네 마음이지. 말리지는 않겠지만, 이건 말해 두지. 묘실에 들어가기 전에 외로운 산에 올라가 보게. 누가 알겠나, 정말로 늙은 용이 거기 있을지? 그리고 인사도 없이 자기 영역을 헤집고 다니면 싫어하지 않겠나?
 #phrase Nsheriff  6
-In a word, just be careful, OK?
+한마디로, 조심하게, 알겠지?

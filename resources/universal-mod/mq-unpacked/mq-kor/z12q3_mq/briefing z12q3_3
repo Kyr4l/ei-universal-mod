@@ -1,10 +1,10 @@
-The territory around the mines is clean
+광산 주변이 정리되었다
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Your Excellency, I bring two pieces of news. One is bad: Captain Tilvar has been slain near the gates to the mines. The other is far better - the Wormheads have been killed!
+각하, 두 가지 소식이 있습니다. 나쁜 소식은 틸바르 대위가 광산 문 근처에서 전사했다는 것입니다. 좋은 소식은 벌레머리들을 모두 처치했다는 겁니다!
 #phrase Huber  2
-Yes, of course I shall honor Tilvar with a minute of silence. But first of all I must write to the capital and report that under my capable governorship the threat to Ingos has been eliminated!
+그래, 물론 틸바르를 위해 1분간 묵념하겠네. 하지만 먼저 수도에 편지를 써서, 나의 유능한 통치 아래 인고스의 위협이 제거되었다고 보고해야겠어!
 #phrase Huber  3
-Actually, I think I shall mention your services in my report, so mayhap in about three months you shall receive an official citation!
+사실 보고서에 자네의 공로도 적을 생각이네. 그러니 한 석 달쯤 뒤에는 공식 표창을 받을 수도 있을 걸세!

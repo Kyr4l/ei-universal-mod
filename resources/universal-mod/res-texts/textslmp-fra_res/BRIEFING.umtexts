@@ -1,83 +1,83 @@
 # um-texts 1
 === briefing intro_4k
-Get to know the artisan
+Faire connaissance avec l'artisan
 #show Hero
 #show Stark
 #ANIMATION 5
 #CAMERA 11
 #phrase Stark 1
-So are you the strangers who came through the old portal?
+C'est donc vous, les étrangers arrivés par le vieux portail ?
 #ANIMATION 15
 #CAMERA 10
 #phrase Hero 2
-Nah, we just spawned here cause it's a multiplayer lobby.
+Non, on vient juste d'apparaître ici, c'est un lobby multijoueur.
 #phrase Stark 3
-bruh wtf...
+sérieux, c'est quoi ce délire...
 
 === briefing intro_c
-Greet the merchant
+Saluer la marchande
 #show Hero
 #show Shemale
 #ANIMATION 39
 #CAMERA 0
 #phrase Hero 1
-Hello, great woman!
+Bonjour, grande dame !
 #CAMERA 11
 #phrase Shemale 2
-Hello.
+Bonjour.
 
 === briefing intro_f
-Pay Homage to Lord Firez
+Rendre hommage au seigneur Firez
 #show Hero
 #show Firez
 #ANIMATION 26
 #CAMERA 0
 #phrase Hero 1
-Greetings, Your Excellency! How may I earn your trust?
+Salutations, Votre Excellence ! Comment puis-je gagner votre confiance ?
 #ANIMATION 57
 #CAMERA 11
 #phrase Firez 2
-Survive your first week.
+Survivez à votre première semaine.
 #ANIMATION 32
 #CAMERA 10
 #phrase Hero 3
-I want to help Khadagan reclaim its greatness on Jigran and be a part of it.
+Je veux aider Khadagan à retrouver sa grandeur sur Jigran, et y prendre part.
 #ANIMATION 11
 #CAMERA 11
 #phrase Firez 4
-Excellent. I need the living. I already have enough of the dead.
+Parfait. J'ai besoin des vivants. Des morts, j'en ai déjà assez.
 
 === briefing intro_m
-Salute the Marshall
+Saluer le maréchal
 #show Hero
 #show Marshal
 #ANIMATION 24
 #CAMERA 2
 #phrase Hero 1
-Greetings, noble sir!
+Salutations, noble seigneur !
 #ANIMATION 15
 #CAMERA 3
 #phrase Marshal 2
-The Empire needs people willing to act, not just talk. If you're looking for action, you'll find it.
+L'Empire a besoin de gens qui agissent, pas de beaux parleurs. Si c'est l'action que vous cherchez, vous la trouverez.
 #CAMERA 2
 #phrase Hero 3
-I will try to affirm your hospitality, but now I need to get ready...
+Je tâcherai de me montrer digne de votre hospitalité, mais je dois d'abord me préparer...
 #CAMERA 3
 #phrase Marshal 4
-At ease!
+Repos !
 
 === briefing intro_s
-Get to know the Master Sukro
+Faire connaissance avec maître Sukro
 #show Hero
 #show Sukro
 #ANIMATION 5
 #CAMERA 11
 #phrase Sukro 1
-Greetings. I am Master Sukro, an excellent blacksmith. It's always good to see new faces in our town, especially those willing to lend a hand in these difficult times.
+Salutations. Je suis maître Sukro, un excellent forgeron. C'est toujours un plaisir de voir de nouveaux visages en ville, surtout prêts à donner un coup de main en ces temps difficiles.
 #ANIMATION 15
 #CAMERA 10
 #phrase Hero 2
-And I greet you, noble blacksmith. I hope you will do something for me as well?
+Je vous salue également, noble forgeron. J'espère que vous forgerez aussi quelque chose pour moi ?
 #phrase Sukro 3
-Of course. But since you're not in Hadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!
+Bien sûr. Mais comme vous n'êtes pas au service de Khadagan sous les ordres du seigneur Firez, je vous vendrai mon travail. Le résultat, en revanche, ne vous décevra pas !
 

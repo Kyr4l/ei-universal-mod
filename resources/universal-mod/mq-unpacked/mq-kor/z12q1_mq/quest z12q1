@@ -1,20 +1,20 @@
-Old opencast mines
-The governor wishes to open the old opencast mine workings. Everything which obstructs this must be eliminated! The quest also includes the extermination of the tigers in the valley where the hiding place with the key to the gates of the mines is located.
+오래된 노천 광산
+총독은 오래된 노천 광산을 다시 열기를 원한다. 이를 방해하는 것은 모두 제거해야 한다! 이 퀘스트에는 광산 문 열쇠가 숨겨진 골짜기의 호랑이를 처치하는 일도 포함된다.
 #subobj  1
-Entering the valley with the hiding place
-The entrance to the valley is somewhere between the low hills to the north west of the military camp. At this moment there is a mutiny in the camp, so try not to be seen by the soldiers.
+은신처가 있는 골짜기로 들어가기
+골짜기 입구는 군 야영지 북동쪽의 낮은 언덕들 사이 어딘가에 있다. 지금 야영지에 반란이 일어났으니 병사들 눈에 띄지 않도록 하라.
 #subobj  2
-Finding the hiding place with the key
-The key to the gates leading to the open cast mines is in the hiding place somewhere at the end of the valley. It will not be easy to find it because many savage tigers roam in the valley. And to kill them all is an important part of this quest!
+열쇠가 있는 은신처 찾기
+노천 광산 문 열쇠는 골짜기 끝 어딘가의 은신처에 있다. 골짜기에 사나운 호랑이가 많이 돌아다녀서 찾기 쉽지 않을 것이다. 그리고 놈들을 모두 처치하는 것이 이 퀘스트의 중요한 부분이다!
 #subobj  3
-Getting the key
-You must take it out of the hiding place.
+열쇠 손에 넣기
+은신처에서 열쇠를 꺼내야 한다.
 #subobj  4
-Finding the entrance to the old open cast mines
-The entrance to the old open cast mines is to the east, blocked by huge gates.
+오래된 노천 광산 입구 찾기
+오래된 노천 광산 입구는 동쪽에 있으며, 거대한 문으로 막혀 있다.
 #subobj  5
-Opening the gates
-To open the gates, use the key from the hiding place.
+문 열기
+은신처에서 찾은 열쇠로 문을 열어라.
 #subobj  6
-Ensuring the safety of the mine workings
-Normal work in the mines can only resume when all the evil creatures in the mines and in the valley with the hiding place are exterminated.
+광산의 안전 확보
+광산과 은신처가 있는 골짜기의 사악한 생물들을 모두 처치해야 광산 작업을 다시 시작할 수 있다.

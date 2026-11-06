@@ -1,11 +1,11 @@
-The three ogres are dead!
+Les trois ogres sont morts !
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! This should put us in a better position in the fight against the orcs.
+Bien joué ! Cela devrait nous mettre en meilleure position dans la lutte contre les orques.
 #phrase Hero  2
-It wasn't easy either. It almost cost me my life!
+Ça n'a pas été facile. J'ai failli y laisser la vie !
 #phrase Merc1  3
-Well... fortunately that's not the case and you can continue to support us. Most of what you found is worthless. However, the Orc Alphabet is of great value to us!
-Here take this gold as your reward!
+Eh bien... heureusement, ce n'est pas le cas, et vous pouvez continuer à nous soutenir. La plupart de ce que vous avez trouvé ne vaut rien. Mais l'alphabet orque a une grande valeur pour nous !
+Tenez, prenez cet or en récompense !

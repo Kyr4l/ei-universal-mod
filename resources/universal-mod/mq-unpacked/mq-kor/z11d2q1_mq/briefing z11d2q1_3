@@ -1,10 +1,10 @@
-The mine is cleared!
+광산을 정리했다!
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! You actually cleared Babur's mine. The old skinflint will be pleased.
+잘했어! 정말로 바부르의 광산을 정리했군. 그 늙은 짠돌이가 기뻐하겠어.
 #phrase Hero  2
-I recovered the sack of gold from the west and a nice gold nugget from the north-east.
+서쪽에서 금 자루를, 북동쪽에서 멋진 금덩이를 찾아왔어.
 #phrase Merc1  3
-Perfect. Here's your reward!
+완벽해. 여기 보상이야!

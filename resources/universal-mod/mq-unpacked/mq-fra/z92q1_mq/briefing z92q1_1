@@ -1,12 +1,12 @@
-[Hard] The treasure of the harpies
+[Difficile] Le trésor des harpies
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Our village is short of valuables due to the ongoing war with the orcs in the Sands. I heard that there are harpies in the remote mountains who have great treasure.
+Notre village manque d'objets de valeur à cause de la guerre contre les orques dans les Sables. J'ai entendu dire que des harpies des Montagnes lointaines possèdent un grand trésor.
 #phrase Hero  2
-Hmmm... To be honest, I'm expecting a lot of trouble! Harpies are serious opponents and they are unlikely to part with their treasure voluntarily.
+Hum... Pour être honnête, je m'attends à beaucoup d'ennuis ! Les harpies sont de sérieuses adversaires, et elles ne se sépareront sûrement pas de leur trésor de bon gré.
 #phrase Merc1  3
-There will be no difficulties! I just want you to take the harpies treasure. You don't even have to fight them... in theory.
-#phrase Merc1  4
-Of course, this is still a dangerous undertaking. Fine i'll do it! But I want part of the treasure as a reward!
+Il n'y aura aucune difficulté ! Je veux juste que vous preniez le trésor des harpies. Vous n'avez même pas à les combattre... en théorie.
+#phrase Hero  4
+Ça reste une entreprise dangereuse, bien sûr. Bon, d'accord, je m'en charge ! Mais je veux une part du trésor en récompense !

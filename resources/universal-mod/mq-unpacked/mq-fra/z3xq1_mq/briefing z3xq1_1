@@ -1,12 +1,12 @@
-[Easy] Brigands' loot
+[Facile] Le butin des brigands
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-It looks like our village will never get rid of those Brigand neighbors! Whatever plans I make are good for nothing. We can never destroy them completely! But now I have an excellent new ideaï¿½
+On dirait que notre village ne se débarrassera jamais de ces voisins brigands ! Tous mes plans ne valent rien. Nous ne pourrons jamais les détruire complètement ! Mais j'ai maintenant une excellente nouvelle idée...
 #phrase Hero  2
-Hmmm... Actually, when I hear the words "an excellent new idea" I always expect a catch!
+Hum... À vrai dire, quand j'entends les mots "une excellente nouvelle idée", je m'attends toujours à un piège !
 #phrase Nsheriff  3
-Ah there is no catch! I merely want you to take the loot away from the Brigands. You need not even fight them. The main thing is to get the sack they keep in their camp.
+Ah, il n'y a pas de piège ! Je veux simplement que vous repreniez le butin aux brigands. Vous n'aurez même pas à les combattre. L'essentiel est de récupérer le sac qu'ils gardent dans leur camp.
 #phrase Nsheriff  4
-Of course, the approaches to the camp are well guarded, but you could cheat the guards...
+Bien sûr, les abords du camp sont bien gardés, mais vous pourriez tromper les gardes...

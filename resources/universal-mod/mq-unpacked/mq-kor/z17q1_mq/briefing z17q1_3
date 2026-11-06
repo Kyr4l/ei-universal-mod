@@ -1,8 +1,8 @@
-The document is found!
+문서를 찾았다!
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I am very glad that the favor the noble man in the city did to us by obtaining that document, and the death of his messenger have not been in vain!
+도시의 그 귀족이 문서를 손에 넣어 준 호의와 그의 전령의 죽음이 헛되지 않아 정말 기쁘네!
 #phrase Glav  2
-This document describes the movements of the guards for the next few months, so now we shall be able to attack them, not just to hide from them!
+이 문서에는 앞으로 몇 달간의 경비병 이동이 적혀 있네. 이제 우리는 숨기만 하는 게 아니라 놈들을 공격할 수 있을 걸세!

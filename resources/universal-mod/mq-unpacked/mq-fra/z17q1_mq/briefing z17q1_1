@@ -1,12 +1,12 @@
-Messenger from the city is missing!
+La messagère de la cité a disparu !
 #show Hero
 #show Glav
 #CAMERA 2
 #phrase Hero  1
-I am told you wanted to see me, brother Khatul?
+On m'a dit que vous vouliez me voir, frère Khatul ?
 #phrase Glav  2
-I wanted something else, actually, but you will hear about it in a moment. A few days ago a noble man, a supporter of ours, managed to obtain a very important document in the city. This document describes the movements of the guards.
+Je voulais autre chose, en fait, mais vous allez l'apprendre dans un instant. Il y a quelques jours, un noble qui nous soutient a réussi à se procurer en ville un document très important. Ce document décrit les mouvements des gardes.
 #phrase Glav  3
-He sent a messenger to me, but the messenger never arrived. I suspect she is dead now, and I mourn that brave woman... If only to show respect to her memory, I would like to have that document here in the Last Shelter.
+Il m'a envoyé une messagère, mais elle n'est jamais arrivée. Je la crois morte, et je pleure cette courageuse femme... Ne serait-ce que par respect pour sa mémoire, j'aimerais avoir ce document ici, au Dernier sanctuaire.
 #phrase Glav  4
-The messenger was supposed to come from the south, so mayhap you should check that road first. It is not an order, you understand, but if the document is not found, I will nevertheless be most upset!
+La messagère devait arriver par le sud, alors vous devriez peut-être commencer par cette route. Ce n'est pas un ordre, comprenez-le bien, mais si le document reste introuvable, j'en serai tout de même fort contrarié !

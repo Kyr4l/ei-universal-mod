@@ -1,12 +1,12 @@
-[Hard] The treasure of the harpies
+[어려움] 하피들의 보물
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Our village is short of valuables due to the ongoing war with the orcs in the Sands. I heard that there are harpies in the remote mountains who have great treasure.
+모래 지대에서 오크들과 계속 전쟁 중이라 우리 마을에 값나가는 게 부족해. 먼 산맥에 큰 보물을 가진 하피들이 있다더군.
 #phrase Hero  2
-Hmmm... To be honest, I'm expecting a lot of trouble! Harpies are serious opponents and they are unlikely to part with their treasure voluntarily.
+흠... 솔직히 골치 아플 것 같은데! 하피는 만만치 않은 상대고, 순순히 보물을 내놓을 리가 없어.
 #phrase Merc1  3
-There will be no difficulties! I just want you to take the harpies treasure. You don't even have to fight them... in theory.
-#phrase Merc1  4
-Of course, this is still a dangerous undertaking. Fine i'll do it! But I want part of the treasure as a reward!
+어려울 건 하나도 없어! 하피들의 보물만 가져와 주면 돼. 싸울 필요도 없어... 이론상으로는.
+#phrase Hero  4
+물론 그래도 위험한 일이지. 좋아, 할게! 하지만 보상으로 보물의 일부를 원해!

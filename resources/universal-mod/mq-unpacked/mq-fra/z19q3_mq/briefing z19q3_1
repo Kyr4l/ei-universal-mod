@@ -1,12 +1,12 @@
-Invasion in Gipath is approaching!
+L'invasion de Gipath approche !
 #show Hero
 #show Rick
 #CAMERA 3 -10 3 1
 #phrase Rick  1
-I received very worrying news from Suslanger! General Iriskell will begin moving his troops to Gipath any day now.
+J'ai reçu des nouvelles très inquiétantes de Suslanger ! Le général Iriskell va commencer à déplacer ses troupes vers Gipath d'un jour à l'autre.
 #phrase Rick  2
-The only way to avoid trouble is to shut down the Suslanger portal. To achieve that, you must get near it, find General Iriskell and take the portal key from him.
+Le seul moyen d'éviter le désastre est de fermer le portail de Suslanger. Pour cela, vous devez vous en approcher, trouver le général Iriskell et lui prendre la clé du portail.
 #phrase Rick  3
-Then switch both magic obelisks near the portal entrance, and the way to Gipath will be closed to anyone except those I transfer personally.
+Ensuite, actionnez les deux obélisques magiques près de l'entrée du portail, et le chemin de Gipath sera fermé à tous, sauf à ceux que je transfère moi-même.
 #phrase Rick  4
-Keep in mind that General Iriskell earned his rank not so much by his military talents as by his ferocity, cruelty and great strength. You will need all your caution, cunning and skills ... and most importantly - your luck!
+Sachez que le général Iriskell doit son grade moins à ses talents militaires qu'à sa férocité, sa cruauté et sa grande force. Il vous faudra toute votre prudence, votre ruse et votre habileté... et surtout de la chance !

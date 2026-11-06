@@ -1,8 +1,8 @@
-No way to get through to the seer
+주술사에게 다가갈 방법이 없다
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-Mmmm, yes, it is not as easy as it seemed. I can not get through the settlement and reach the Seer. We must think of something else!
+음, 그래요, 생각만큼 쉽지 않군요. 정착지를 뚫고 주술사에게 닿을 수가 없습니다. 다른 방법을 생각해야 해요!
 #phrase Nsheriff  2
-OK, let us think, shall we ?  ... Perhaps I could bribe that Seer... But anyway it would be better if somebody would just kill him.
+좋아, 같이 생각해 보세... 어쩌면 그 주술사를 매수할 수도... 하지만 어쨌든 누가 그냥 죽여 주는 게 낫겠지.

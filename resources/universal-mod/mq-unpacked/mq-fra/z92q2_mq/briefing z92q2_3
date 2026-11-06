@@ -1,10 +1,10 @@
-The dragons are dead!
+Les dragons sont morts !
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-I knew that these young dragons were completely harmless!
+Je savais bien que ces jeunes dragons étaient totalement inoffensifs !
 #phrase Hero  2
-Totally harmless?... Those dragons almost ate me for breakfast! I was very lucky to have escaped safely!
+Totalement inoffensifs ?... Ces dragons ont failli me dévorer au petit-déjeuner ! J'ai eu beaucoup de chance de m'en sortir indemne !
 #phrase Merc1  3
-Please forgive, I didn't know that these monsters were so dangerous! We should be better prepared in the future!
+Pardonnez-moi, je ne savais pas que ces monstres étaient si dangereux ! Nous devrons être mieux préparés à l'avenir !

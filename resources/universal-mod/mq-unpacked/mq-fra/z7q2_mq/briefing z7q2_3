@@ -1,10 +1,10 @@
-Hermit is going to be happy!
+L'Ermite va être content !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Far as I know, Hermit always keeps his word. You set the lizards free, now his tribe will leave the village alone.
+Pour autant que je sache, l'Ermite tient toujours parole. Vous avez libéré les hommes-lézards, alors sa tribu laissera le village tranquille.
 #phrase Hero  2
-Hey, sounds good. If there was only one Lizard tribe on Gipath and Hermit were to control it, that would be simply marvellous!
+Eh, ça me plaît. S'il n'y avait qu'une seule tribu d'hommes-lézards à Gipath et que l'Ermite la dirigeait, ce serait tout simplement merveilleux !
 #phrase Elder  3
-I agree! But alas, we will just have to be content with what we have.
+Je suis d'accord ! Mais hélas, il faudra nous contenter de ce que nous avons.

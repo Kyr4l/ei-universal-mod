@@ -1,8 +1,8 @@
-Done!
+C'est fait !
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Good! This means we can still reach the Great Mage in an emergency.
-#phrase Merc1  1
-Not good! I barely survived! Ask someone else next time.
+Bien ! Nous pourrons donc toujours rejoindre le Grand mage en cas d'urgence.
+#phrase Hero  2
+Pas si bien ! J'ai failli y rester ! Demandez à quelqu'un d'autre la prochaine fois.

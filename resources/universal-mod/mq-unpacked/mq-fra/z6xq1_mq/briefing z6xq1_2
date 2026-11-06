@@ -1,8 +1,8 @@
-No way to get through to the seer
+Impossible d'atteindre le prophète
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-Mmmm, yes, it is not as easy as it seemed. I can not get through the settlement and reach the Seer. We must think of something else!
+Hum, oui, ce n'est pas aussi facile qu'il y paraissait. Je n'arrive pas à traverser la colonie pour atteindre le prophète. Il faut trouver autre chose !
 #phrase Nsheriff  2
-OK, let us think, shall we ?  ... Perhaps I could bribe that Seer... But anyway it would be better if somebody would just kill him.
+D'accord, réfléchissons, voulez-vous ?... Je pourrais peut-être soudoyer ce prophète... Mais de toute façon, il vaudrait mieux que quelqu'un le tue, tout simplement.

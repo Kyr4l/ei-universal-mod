@@ -1,10 +1,10 @@
-Undeads disappeared all by themselves
+언데드가 저절로 사라졌다
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Sorry if I scared you with my tale and put you at risk! I am told those undeads have simply disappeared, all by themselves.
+내 이야기로 겁을 주고 위험에 빠뜨렸다면 미안하네! 듣자 하니 그 언데드들은 그냥 저절로 사라졌다더군.
 #phrase Hero  2
-Forever?
+영원히요?
 #phrase Nsheriff  3
-I do not think so... But meanwhile you could do something else. Sadly, we have many other problems!
+그렇진 않을 거야... 하지만 그동안 다른 일을 해도 되네. 안타깝게도 우리에겐 다른 문제가 많거든!

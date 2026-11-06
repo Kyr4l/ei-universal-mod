@@ -1,10 +1,10 @@
-Collector is at home!
+Le collectionneur est chez lui !
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-So the collector is safely at home now. But think carefully: are all of the guards dead? Did anyone manage to get away, by any chance?
+Le collectionneur est donc rentré chez lui sain et sauf. Mais réfléchissez bien : tous les gardes sont-ils morts ? Quelqu'un aurait-il réussi à s'enfuir, par hasard ?
 #phrase Hero  2
-Nobody, I swear!
+Personne, je le jure !
 #phrase Glav  3
-Good work, I am well pleased. Now no one will know what Baluddin has been accused of and what evidence existed against him!
+Beau travail, je suis très satisfait. Désormais, personne ne saura de quoi Baluddin était accusé ni quelles preuves existaient contre lui !

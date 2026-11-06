@@ -1,0 +1,38 @@
+## Mountains
+#zone z6xq1 gipat game
+#res
+zone6x zone6x-lmp
+#maps
+8 16
+zone6xmap zone6xquest
+
+
+## SW exit
+#exit 1
+bz1mpg 1
+#deploy
+10 157 15 166
+#remove
+2 151 10 161
+#view
+293.346
+
+## NE exit
+#exit 2
+bz1mpg 2
+#deploy
+238 343 246 362
+#remove
+246 341 254 364
+#view
+136.269
+
+## E exit
+#exit 3
+bz1mpg 3
+#deploy
+247 143.5 254 151
+#remove
+243 151 250 157
+#view
+136.269

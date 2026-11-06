@@ -1,7 +1,7 @@
 # um-texts 1
 === INSTR Bone_Crossbow
-ArbalÃ¨te en os
-Le rÃ©sultat d'une technologie plus dÃ©veloppÃ©e, et de meilleurs matÃ©riaux...
+Arbalète en os
+Le résultat d'une technologie plus développée, et de meilleurs matériaux...
 
 === INSTR Bone_Dagger
 Dague en os
@@ -37,43 +37,42 @@ Une des meilleures épées en cristal.
 
 === INSTR Komposite_Bow
 Arc composite
-Plus de puissance et de dÃ©gats que les arcs longs.
-
+Plus de puissance et de dégâts que les arcs longs.
 === INSTR Light_Crystal_Axe
-Hache lÃ©gÃ¨re en cristal
+Hache légère en cristal
 Une des meilleures haches en cristal.
 
 === INSTR Light_Crystal_Bow
-Arc lÃ©ger en cristal
+Arc léger en cristal
 Un des meilleurs arcs en cristal.
 
 === INSTR Light_Crystal_Crossbow
-ArbalÃ¨te lÃ©gÃ¨re en cristal
-Une des meilleures arbalÃ¨tes en cristal.
+Arbalète légère en cristal
+Une des meilleures arbalètes en cristal.
 
 === INSTR Light_Crystal_Dagger
-Dague lÃ©gÃ¨re en cristal
-Une des meilleures dague en cristal.
+Dague légère en cristal
+Une des meilleures dagues en cristal.
 
 === INSTR Light_Crystal_Mace
-Masse lÃ©gÃ¨re en cristal
+Masse légère en cristal
 Une des meilleures masses en cristal.
 
 === INSTR Light_Crystal_Short_Bow
-Arc court lÃ©ger en cristal
-Un des meilleurs arcs en cristal.
+Arc court léger en cristal
+Un des meilleurs arcs courts en cristal.
 
 === INSTR Light_Crystal_Spear
-Lance lÃ©gÃ¨re en cristal
+Lance légère en cristal
 Une des meilleures lances en cristal.
 
 === INSTR Light_Crystal_Sword
-Ã‰pÃ©e lÃ©gÃ¨re en cristal
-Une des meilleures Ã©pÃ©es en cristal.
+Épée légère en cristal
+Une des meilleures épées en cristal.
 
 === INSTR Stone_Battle_Sword
-Combat stone sword
-This is a fearsome weapon in the hands of an experienced warrior.
+Épée de combat en pierre
+Une arme redoutable entre les mains d'un guerrier expérimenté.
 
 === INSTR Wand_10
 Baguette magique en cristal
@@ -81,7 +80,7 @@ Ce type de baguette peut abriter des sorts simples (sans qu'il faille une rune "
 
 === INSTR Wand_7
 Orbe magique en cristal
-Cette orbe peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
+Cet orbe peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
 
 === INSTR Wand_8
 Amulette magique en cristal
@@ -96,22 +95,22 @@ Faucille
 Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
 
 === INSTR Guard_Dagger
-Dague Ã  garde
-Une lame ondulÃ©e derriÃ¨re une garde de main : elle pare aussi bien qu'elle frappe.
+Dague à garde
+Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
 
 === INSTR Royal_Sword
-Ã‰pÃ©e royale
-Une longue lame richement ornÃ©e, digne d'un roi.
+Épée royale
+Une longue lame richement ornée, digne d'un roi.
 
 === INSTR Crown
 Couronne
-Une couronne sertie d'amÃ©thystes. Elle protÃ¨ge peu, mais chacun sait qui commande.
+Une couronne sertie d'améthystes. Elle protège peu, mais chacun sait qui commande.
 
 === INSTR Hunter_Crossbow
-ArbalÃ¨te de chasseur
-Une arbalÃ¨te lÃ©gÃ¨re Ã  la crosse de bois faÃ§onnÃ©e, faite pour les longs affÃ»ts de la chasse.
+Arbalète de chasseur
+Une arbalète légère à la crosse de bois façonnée, faite pour les longs affûts de la chasse.
 
 === INSTR Barbed_Spear
-Lance barbelÃ©e
-Une longue lance Ã  tÃªte barbelÃ©e : une fois plantÃ©e, elle ne ressort pas facilement.
+Lance barbelée
+Une longue lance à tête barbelée : une fois plantée, elle ne ressort pas facilement.
 

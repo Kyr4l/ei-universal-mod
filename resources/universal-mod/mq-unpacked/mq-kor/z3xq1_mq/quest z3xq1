@@ -1,8 +1,8 @@
-Brigands' loot
-The loot taken by the brigands must be returned to the village!
+도적들의 약탈품
+도적들이 빼앗아 간 약탈품을 마을로 되찾아 와야 한다!
 #subobj  1
-Finding the coffer
-The coffer with the loot stands in the middle of the Brigands' camp located in the northern part of the Foothills. Both the approaches to the camp and the coffer are guarded very well
+궤짝 찾기
+약탈품이 든 궤짝은 구릉지대 북쪽의 도적 야영지 한가운데에 있다. 야영지로 가는 길과 궤짝 모두 경비가 아주 삼엄하다.
 #subobj  2
-Take the loot
-To take the loot, you must open the coffer.
+약탈품 가져오기
+약탈품을 가져오려면 궤짝을 열어야 한다.

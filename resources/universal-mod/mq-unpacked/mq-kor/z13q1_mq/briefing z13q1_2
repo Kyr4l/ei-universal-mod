@@ -1,12 +1,12 @@
-Karansul managed on his own
+카란술이 스스로 해결했다
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-It seems you are not as lucky as I thought?
+자네는 내 생각만큼 운이 좋지는 않은 모양이군?
 #phrase Hero  2
-Unfortunately, no. Karansul's domain proved to be difficult indeed!
+안타깝게도 그렇습니다. 카란술의 영지는 정말 만만치 않더군요!
 #phrase Huber  3
-Yes, I know. Well all right, you may forget about it. Karansul has hired a team of serious people who have already dealt with this problem.
+그래, 알고 있네. 뭐, 좋아, 그 일은 잊어도 되네. 카란술이 제대로 된 사람들을 고용해서 이미 문제를 해결했으니까.
 #phrase Huber  4
-So now you may start looking for some other occupation, more in line with your abilities!
+그러니 이제 자네 능력에 더 맞는 다른 일을 찾아보게!

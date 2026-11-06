@@ -1,14 +1,14 @@
-Open the portal
-Find the keys to open the gates and activate the portal.
+포탈 열기
+열쇠를 찾아 문을 열고 포탈을 작동시켜라.
 #subobj  1
-Find the gates key
-You need a key to reach the other half of the cave. It should be in a chest not far from the entrance.
+문 열쇠 찾기
+동굴의 나머지 절반으로 가려면 열쇠가 필요하다. 입구에서 멀지 않은 상자에 있을 것이다.
 #subobj  2
-Open the gates
-Once you have the key, open both gates then look for the portal key.
+문 열기
+열쇠를 얻으면 두 문을 모두 열고 포탈 열쇠를 찾아라.
 #subobj  3
-Find the portal key
-The portal cannot be activated without the right key, it should be located in a chest
+포탈 열쇠 찾기
+맞는 열쇠 없이는 포탈을 작동시킬 수 없다. 상자 안에 있을 것이다.
 #subobj  4
-Activate the portal
-Use the portal key to activate the mechanism near the portal
+포탈 작동
+포탈 열쇠로 포탈 근처의 장치를 작동시켜라.

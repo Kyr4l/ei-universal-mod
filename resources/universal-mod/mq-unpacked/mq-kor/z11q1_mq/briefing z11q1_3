@@ -1,8 +1,8 @@
-The poachers won't bother anyone anymore!
+밀렵꾼들은 더는 누구도 괴롭히지 않을 겁니다!
 #show Hero
 #show Huber
 #CAMERA 10
 #phrase Hero  1
-Your Excellency you can inform your Duke that everything is now back to order: the bandits have been driven out and the deer population is healthy again.
+각하, 공작께 질서가 회복되었다고 전하셔도 됩니다. 밀렵꾼들은 쫓겨났고 사슴들도 다시 건강해졌습니다.
 #phrase Huber  1
-Hoho, what great news! Here you have the reward.
+호호, 정말 반가운 소식이군! 여기 보상일세.

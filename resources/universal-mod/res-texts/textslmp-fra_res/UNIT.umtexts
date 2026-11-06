@@ -1,300 +1,300 @@
 # um-texts 1
 === UNIT Banshee_Fighter1_J1
-Royal banshee
+Spectre royal
 
 === UNIT Banshee_Mage1_J1
-Royal banshee mag
+Spectre royal mage
 
 === UNIT BoarDark_J1
-Black boar
+Sanglier noir
 
 === UNIT Cyclope_33
-Baby armadillo
+Bébé tatou
 
 === UNIT Deer1J
-Young deer
+Jeune cerf
 
 === UNIT Deer2J
-Adult deer
+Cerf adulte
 
 === UNIT DeerC1J
-Sick young deer
+Jeune cerf malade
 
 === UNIT DeerC2J
-Sick adult deer
+Cerf adulte malade
 
 === UNIT DeerQ1J
-Crazy young deer
+Jeune cerf enragé
 
 === UNIT DeerQ1Z
-Dead young deer
+Jeune cerf mort
 
 === UNIT DeerQ2J
-Crazy adult deer
+Cerf adulte enragé
 
 === UNIT DeerQ2Z
-Dead adult deer
+Cerf adulte mort
 
 === UNIT Dog_J1
-Dog
+Chien
 
 === UNIT Dragon1J
-Ancient dragon
+Dragon ancien
 
 === UNIT Dragon2J
-Ancient dragon
+Dragon ancien
 
 === UNIT Dragon3J
-Ancient dragon
+Dragon ancien
 
 === UNIT Fox1_J1
-Young fox
+Jeune renard
 === UNIT Fox2_J1
-Adult fox
+Renard adulte
 
 === UNIT Fox3_J1
-Old fox
+Vieux renard
 === UNIT HCityFemale1
-Baby armadillo
+Ouvrière
 
 === UNIT HCityFemale2
-Baby armadillo
+Citoyenne
 
 === UNIT HCityMale1
-Baby armadillo
+Ouvrier
 
 === UNIT HCityMale2
-Baby armadillo
+Citoyen
 
 === UNIT HHAJ15
-Young khadaganian archer
+Jeune archer khadaganien
 
 === UNIT HHAJ15bad
-Young khadaganian archer-betrayer
+Jeune archer khadaganien traître
 
 === UNIT HHAJ17
-Khadaganian archer
+Archer khadaganien
 
 === UNIT HHAJ17bad
-Khadaganian archer-betrayer
+Archer khadaganien traître
 
 === UNIT HHAJ21
-Khadaganian archer
+Archer khadaganien
 
 === UNIT HHAJ21bad
-Khadaganian archer-betrayer
+Archer khadaganien traître
 
 === UNIT HHAJ25
-Khadaganian archer
+Archer khadaganien
 
 === UNIT HHAJ25bad
-Khadaganian archer-betrayer
+Archer khadaganien traître
 
 === UNIT HHAJ29
-Khadaganian archer
+Archer khadaganien
 
 === UNIT HHAJ29bad
-Khadaganian archer-betrayer
+Archer khadaganien traître
 
 === UNIT HHFJ15
-Young khadaganian warrior
+Jeune guerrier khadaganien
 
 === UNIT HHFJ15bad
-Young khadaganian warrior-betrayer
+Jeune guerrier khadaganien traître
 
 === UNIT HHFJ17
-Khadaganian fighter
+Guerrier khadaganien
 
 === UNIT HHFJ17bad
-Khadaganian fighter-betrayer
+Guerrier khadaganien traître
 
 === UNIT HHFJ21
-Khadaganian fighter
+Guerrier khadaganien
 
 === UNIT HHFJ21bad
-Khadaganian fighter-betrayer
+Guerrier khadaganien traître
 
 === UNIT HHFJ25
-Khadaganian fighter
+Guerrier khadaganien
 
 === UNIT HHFJ25bad
-Khadaganian fighter-betrayer
+Guerrier khadaganien traître
 
 === UNIT HHFJ29
-Khadaganian fighter
+Guerrier khadaganien
 
 === UNIT HHFJ29bad
-Khadaganian fighter-betrayer
+Guerrier khadaganien traître
 
 === UNIT HHJ15
-Royal banshee
+Spectre royal
 
 === UNIT HHJ15bad
-Royal banshee-betrayer
+Spectre royal traître
 
 === UNIT HHJ25
-Khadaganian 
+Khadaganien
 
 === UNIT HHJ29
-Khadaganian 
+Khadaganien
 
 === UNIT HHMJ15
-Young khadaganian mage
+Jeune mage khadaganien
 
 === UNIT HHMJ15bad
-Young khadaganian mage-betrayer
+Jeune mage khadaganien traître
 
 === UNIT HHMJ17
-Khadaganian mage
+Mage khadaganien
 
 === UNIT HHMJ17bad
--betrayerKhadaganian mage-betrayer
+Mage khadaganien traître
 
 === UNIT HHMJ21
-Khadaganian mage
+Mage khadaganien
 
 === UNIT HHMJ21bad
-Khadaganian mage-betrayer
+Mage khadaganien traître
 
 === UNIT HHMJ25
-Khadaganian mage
+Mage khadaganien
 
 === UNIT HHMJ25bad
-Khadaganian mage-betrayer
+Mage khadaganien traître
 
 === UNIT HHMJ29
-Khadaganian mage
+Mage khadaganien
 
 === UNIT HHMJ29bad
-Khadaganian mage-betrayer
+Mage khadaganien traître
 
 === UNIT Human_Gangster_M_J1
-Highwayman
+Bandit de grand chemin
 
 === UNIT Human_Gangster_M_J2
-Highwayman
+Bandit de grand chemin
 
 === UNIT Human_Gangster_M_J3
-Highwayman leader
+Chef des bandits de grand chemin
 
 === UNIT Human_Hadagan_Archer_J1
-ArchÃ¨re Khadaganienne
+Archer khadaganien
 
 === UNIT Human_Hadagan_Fighter_J1
-Combattant Khadaganien
+Guerrier khadaganien
 
 === UNIT Human_Hadagan_Mage_J1
-Mage Khadaganienne
+Mage khadaganien
 
 === UNIT Human_Hadagan_Recon_J1
-Ã‰claireur khadaganien
+Éclaireur khadaganien
 
 === UNIT Human_Peasant_F_J1
-Peasant Woman
+Paysanne
 
 === UNIT Human_Peasant_M_J1
-Peasant
+Paysan
 
 === UNIT KCityFemale1
-Worker
+Ouvrière
 
 === UNIT KCityFemale2
-Citizen
+Citoyenne
 
 === UNIT KCityMale1
-Worker
+Ouvrier
 
 === UNIT KCityMale2
-Citizen
+Citoyen
 
 === UNIT Ogre2_J1
 Ogre
 
 === UNIT Ogre3_J1
-Massive ogre
+Ogre massif
 
 === UNIT Ogre_J1
 Ogre
 
 === UNIT PrisonGuardA17
-Khadaganian gaoler
+Geôlier khadaganien
 
 === UNIT PrisonGuardF17
-Khadaganian gaoler
+Geôlier khadaganien
 
 === UNIT PrisonGuardF18
-Khadaganian gaoler-keykeeper
+Geôlier khadaganien porte-clés
 
 === UNIT PrisonGuardM17
-Khadaganian gaoler
+Geôlier khadaganien
 
 === UNIT PrisonLeaderF29
-Prison wander
+Directeur de la prison
 
 === UNIT PrisonLeaderWifeM25
-Prison mage
+Mage de la prison
 
 === UNIT Scrab0_J1
-Young armadillo
+Jeune tatou
 
 === UNIT ScrabField2_J1
-Armadillo
+Tatou
 
 === UNIT ScrabField3_J1
-Adult armadillo
+Tatou adulte
 
 === UNIT ScrabField4_J1
-Queen armadillo
+Reine tatou
 
 === UNIT ScrabField_J1
-Baby armadillo
+Bébé tatou
 
 === UNIT Scrab_J1
-Adult armadillo
+Tatou adulte
 
 === UNIT Shadow_J1
-Shadow
+Ombre
 
 === UNIT Skeleton_J1
-Armored skeleton
+Squelette en armure
 
 === UNIT Succub_J1
-Adult harpy
+Harpie adulte
 
 === UNIT Tiger_J1
-Giant tiger
+Tigre géant
 
 === UNIT Toad1_J1
-Little toad
+Petit crapaud
 
 === UNIT Toad2_J1
-Giant toad
+Crapaud géant
 
 === UNIT Toad3_J1
-Old giant toad
+Vieux crapaud géant
 
 === UNIT WolfBrown2_J1
-Brown wolf
+Loup brun
 
 === UNIT WolfBrown_J1
-Brown wolf
+Loup brun
 
 === UNIT Zombie_F2_J1
-Zombie warrior
+Guerrier zombie
 === UNIT Zombie_F_J1
-Zombie warrior
+Guerrier zombie
 === UNIT Zombie_M2_J1
-Zombie warrior
+Guerrier zombie
 
 === UNIT Zombie_M_J1
-Zombie warrior
+Guerrier zombie
 
 === UNIT lmp_Human_Gipath_Fighter_2
 Brigand sans expérience
 
 === UNIT lmp_Spider_17
-Reine AraignÃ©e
+Reine Araignée
 
 === UNIT lmp_Unique_Undead_Hadagan_Leader_12
-Chasseur de trÃ©sors mort-vivant
+Chasseur de trésors mort-vivant
 

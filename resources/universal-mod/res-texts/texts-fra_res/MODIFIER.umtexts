@@ -1,7 +1,7 @@
 # um-texts 1
 === MODIFIER a0
 Demi zone
-Augmente la zone de couverture initiale du sort de moitiÃ©.
+Augmente la zone de couverture initiale du sort de moitié.
 -Z+
 
 === MODIFIER d0
@@ -11,7 +11,7 @@ Augmente la durée initiale du sort de moitié.
 
 === MODIFIER e0
 Demi effet
-Augmente l'effet initial du sort de moitiÃ©.
+Augmente l'effet initial du sort de moitié.
 -E+
 
 === MODIFIER r0

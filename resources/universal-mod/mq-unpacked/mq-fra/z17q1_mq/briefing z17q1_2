@@ -1,8 +1,8 @@
-Messengers remains have not been found
+Les restes de la messagère restent introuvables
 #show Hero
 #show Glav
 #CAMERA 2
 #phrase Hero  1
-I shall have to apologize, brother Khatul. I can not go all the way down the southern road - there are too many dangerous creatures there, and they are too much for me!
+Je dois vous présenter mes excuses, frère Khatul. Je ne peux pas suivre la route du sud jusqu'au bout : il y a trop de créatures dangereuses, et elles sont trop fortes pour moi !
 #phrase Glav  2
-Apologize to me? You should apologize to the one who will have to go after that document now and will risk his life because of you!
+Des excuses, à moi ? C'est à celui qui devra maintenant aller chercher ce document, et risquer sa vie à cause de vous, qu'il faut les présenter !

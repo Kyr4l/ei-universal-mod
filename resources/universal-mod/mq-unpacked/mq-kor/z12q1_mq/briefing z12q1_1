@@ -1,18 +1,18 @@
-[Hard] Old opencast mines
+[어려움] 오래된 노천 광산
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Your Excellency, you would not perchance have any assignments for me, would you? I shall not even ask for a fee. For me, the most important thing is to gain experience.
+각하, 혹시 제게 맡기실 일이 없으십니까? 보수는 받지 않겠습니다. 제게 가장 중요한 건 경험을 쌓는 것이니까요.
 #phrase Huber  2
-Oh, I like your approach. Yes, yes, it is ideal when people are willing to take risks for free. Of course I have an assignment for you!
+오, 그 자세가 마음에 드는군. 그래, 그래, 공짜로 위험을 무릅쓰겠다는 사람이야말로 이상적이지. 물론 자네에게 맡길 일이 있네!
 #phrase Huber  3
-The budget of our province is a bit ... strained at the moment, and I decided to renew works at the old opencast mines. But the problem is, we must first clean them up from all the monsters which breed there!
+우리 지방의 예산이 지금 조금... 빠듯해서, 오래된 노천 광산을 다시 열기로 했네. 그런데 문제는, 먼저 그곳에서 번식하는 괴물들을 모조리 치워야 한다는 거야!
 #phrase Hero  4
-All right, just give me the key to the gates and I will do it!
+좋습니다, 문 열쇠만 주시면 제가 하겠습니다!
 #phrase Huber  5
-Well, there's a problem here too... A while ago I ordered the key to be hidden in the valley which begins north-east of the military camp. But now apparently a herd of rabid tigers is roaming in the valley, and they will not let my servants go in and take the key. So you will have to get it yourself!
+그런데 거기에도 문제가 있네... 얼마 전에 열쇠를 군 야영지 북동쪽에서 시작되는 골짜기에 숨겨두라고 명했지. 그런데 지금 그 골짜기에 미친 호랑이 떼가 돌아다녀서, 내 하인들이 열쇠를 가지러 들어가질 못해. 그러니 자네가 직접 가져와야 하네!
 #phrase Huber  6
-And while we are about it, why do you not kill those tigers as well? I ordered the soldiers from the camp to do it, but they dared to rebel - allegedly they have not been paid their wages! Oh, what a miserable attitude, would you not agree?
+그리고 간 김에 그 호랑이들도 죽여주지 않겠나? 야영지 병사들에게 시켰더니 감히 반란을 일으켰다네. 급료를 못 받았다나 뭐라나! 오, 이 얼마나 한심한 태도인가, 그렇지 않나?
 #phrase Hero  7
-No ... Oh, I mean, yes, of course you are right, Your Excellency. And do not worry about the tigers and the old mines, everything will be done to your satisfaction!
+아니요... 아, 제 말은, 네, 물론 각하 말씀이 옳습니다. 호랑이와 오래된 광산은 걱정 마십시오, 모두 만족하시도록 처리하겠습니다!

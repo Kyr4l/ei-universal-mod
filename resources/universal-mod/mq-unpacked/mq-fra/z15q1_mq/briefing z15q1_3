@@ -1,12 +1,12 @@
-The spider queen is dead!
+La reine des araignées est morte !
 #show Hero
 #show Glav
 #CAMERA 9
 #phrase Glav  1
-Well done, my friend! That should give us an advantage in the next battles.
+Bien joué, mon ami ! Cela devrait nous donner l'avantage dans les prochaines batailles.
 #phrase Hero  1
-However, this will not work again, the spider was heavily guarded. They'll definitely double their guards next time.
+Mais cela ne marchera pas deux fois, l'araignée était lourdement gardée. Ils doubleront sûrement la garde la prochaine fois.
 #phrase Glav  2
-For now, the queen is dead. I don't think the Khadaganians will find a new one anytime soon. You have to know that females are very rare in this species.
+Pour l'instant, la reine est morte. Je doute que les Khadaganiens en trouvent une autre de sitôt. Il faut savoir que les femelles sont très rares chez cette espèce.
 #phrase Hero  2
-I hope you are right...
+J'espère que vous avez raison...

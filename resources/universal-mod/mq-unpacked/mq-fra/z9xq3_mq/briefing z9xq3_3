@@ -1,8 +1,8 @@
-The Queen is finished!
+La reine est morte !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Congratulations! But did you know that the Will-o'-the-wisps are going to have another queen soon? Ha,  ha, does this mean you shall be forced to pay again to repair your armor!
+Félicitations ! Mais saviez-vous que les feux follets auront bientôt une nouvelle reine ? Ha ha, est-ce que ça veut dire que vous devrez encore payer pour réparer votre armure ?
 #phrase Hero  2
-Oh, never mind that! I know my way to the ravine now, so the new Queen shall not reign for long!
+Oh, peu importe ! Je connais le chemin du ravin maintenant, la nouvelle reine ne régnera pas longtemps !

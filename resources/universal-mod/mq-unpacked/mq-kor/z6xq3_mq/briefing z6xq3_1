@@ -1,14 +1,14 @@
-[Medium] Piggy Fivepence is missing!
+[보통] 아기 돼지 다섯푼이가 사라졌다!
 #show Hero
 #show Nsheriff
 #CAMERA 5
 #phrase Hero  1
-Why are you so unhappy? If you have any problem, just tell me - perhaps I can help!
+왜 그렇게 울적하십니까? 문제가 있으면 말씀만 하세요. 제가 도울 수 있을지도 모르니까요!
 #phrase Nsheriff  2
-I am definitely not happy... The Lizards living in the north of the Middle Mountains stole piggy Fivepence! I remember how the Chosen used to kick him, for no reason, really, and Fivepence did not like that at all! Ah, he is so clever and sweet, you see... And now he is no longer!
+울적하고말고... 중부 산맥 북쪽에 사는 도마뱀인들이 아기 돼지 다섯푼이를 훔쳐 갔네! 선택받은 자가 괜히 그 녀석을 걷어차곤 했던 게 생각나는군. 다섯푼이는 그걸 아주 싫어했지! 아, 그 녀석은 정말 영리하고 귀여운데... 이제 없어졌어!
 #phrase Hero  3
-Wait, wait... What little piggy? I remember Fivepence - that is one huge pig! 
+잠깐, 잠깐... 아기 돼지라고요? 다섯푼이라면 기억합니다. 엄청나게 큰 돼지잖아요!
 #phrase Nsheriff  4
-Well, he is still a tiny sweet little thing to us... But what is the point of talking about it! The Lizard took him away, in the ravines near the lake, and I fear that was the last we shall see of him!
+글쎄, 우리에겐 아직 작고 귀여운 녀석이라네... 하지만 이야기해서 뭐하겠나! 도마뱀인들이 호수 근처 협곡으로 데려갔으니, 다시는 못 볼 것 같아!
 #phrase Hero  5
-OK, do not worry. Mayhap you shall see your precious little animal yet!
+좋아요, 걱정 마세요. 그 소중한 녀석을 다시 보게 될지도 모릅니다!

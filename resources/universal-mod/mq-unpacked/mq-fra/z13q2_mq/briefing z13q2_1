@@ -1,14 +1,14 @@
-[Medium] Black unicorns appeared in Ingos!
+[Moyen] Des licornes noires sont apparues à Ingos !
 #show Hero
 #show Huber
 #CAMERA 2
 #phrase Hero  1
-Your Excellency, you look worried. What has happened?
+Votre Excellence, vous semblez inquiet. Que s'est-il passé ?
 #phrase Huber  2
-Do not even ask, you know very well what happened! Woodsfolk of the Black Clan learned to breed black unicorns, and everybody knew about it - every one that is, except me, until today!
+Ne m'en parlez pas, vous savez très bien ce qui s'est passé ! Le Clan Noir du Peuple des forêts a appris à élever des licornes noires, et tout le monde le savait - tout le monde, sauf moi, jusqu'à aujourd'hui !
 #phrase Hero  3
-And what is wrong with that?
+Et qu'y a-t-il de mal à cela ?
 #phrase Huber  4
-A fully grown black unicorn is much stronger and more vicious than an ordinary one! Neither a warrior nor a commoner would be able to go through woods infested with them!
+Une licorne noire adulte est bien plus forte et plus féroce qu'une licorne ordinaire ! Ni guerrier ni paysan ne pourrait traverser des bois qui en sont infestés !
 #phrase Huber  5
-But those horrible creatures are still young, they are not that strong, so I ask you to try and kill them all before it is too late!
+Mais ces horribles créatures sont encore jeunes et pas si fortes, alors je vous demande d'essayer de toutes les tuer avant qu'il ne soit trop tard !

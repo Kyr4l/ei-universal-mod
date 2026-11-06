@@ -1,20 +1,20 @@
-[Medium] Governor is waiting for a present
+[보통] 총독이 선물을 기다린다
 #show Hero
 #show Huber
 #CAMERA 3 0 3.5 1
 #phrase Huber  1
-Mayhap you heard that I collect exotic weapons and other rarities?
+내가 이국적인 무기와 진귀한 물건을 수집한다는 이야기를 들었겠지?
 #phrase Hero  2
-Of course, Your Excellency. Everybody knows about your wonderful collection!
+물론입니다, 각하. 각하의 훌륭한 수집품은 모두가 알지요!
 #phrase Huber  3
-Good, good ... And do you know that people who are called "Your Excellency" should occasionally receive some nice gifts? Mayhap you did not know that, but now I have enlightened you, so to speak, yes?
+좋아, 좋아... 그럼 "각하"라고 불리는 사람은 가끔 멋진 선물을 받아야 한다는 것도 알겠지? 몰랐을지도 모르지만, 이제 내가 일깨워 준 셈이지, 그렇지?
 #NOLIPS
 #CAMERA 10
 #phrase Hero  4
-Mmm... I think I know what you mean!
+음... 무슨 말씀인지 알 것 같습니다!
 #phrase Hero  5
-Mmmm... Your Excellency!  I would like to make you a present; could you tell me what would be especially please you?
+음... 각하! 선물을 드리고 싶은데, 특히 무엇을 받으시면 기쁘실지 말씀해 주시겠습니까?
 #phrase Huber  6
-Of course I could! I would like to have that gold nugget which decorates the neck of the Royal Deer. The beast is very easy to find - he grazes in the wide valley north of the river, with the rest of his herd.
+물론이지! 왕사슴의 목을 장식한 금덩이를 갖고 싶네. 그 짐승은 찾기 쉬워. 강 북쪽의 넓은 골짜기에서 무리와 함께 풀을 뜯고 있지.
 #phrase Huber  7
-But please be careful. The Royal Deer, unlike common deer, can defend himself, so if you die, my collection will not gain a new exhibit! That would be very, very sad, don't you think?
+하지만 부디 조심하게. 왕사슴은 보통 사슴과 달리 스스로를 지킬 줄 알거든. 자네가 죽으면 내 수집품에 새 전시품이 생기지 않을 거야! 그건 정말, 정말 슬픈 일이겠지, 그렇지 않나?

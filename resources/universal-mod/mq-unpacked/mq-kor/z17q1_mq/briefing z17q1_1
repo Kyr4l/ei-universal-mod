@@ -1,12 +1,12 @@
-Messenger from the city is missing!
+도시에서 온 전령이 사라졌다!
 #show Hero
 #show Glav
 #CAMERA 2
 #phrase Hero  1
-I am told you wanted to see me, brother Khatul?
+저를 찾으셨다고 들었습니다, 하툴 형제님?
 #phrase Glav  2
-I wanted something else, actually, but you will hear about it in a moment. A few days ago a noble man, a supporter of ours, managed to obtain a very important document in the city. This document describes the movements of the guards.
+사실 다른 일이었네만, 곧 듣게 될 걸세. 며칠 전 우리를 지지하는 한 귀족이 도시에서 아주 중요한 문서를 손에 넣었네. 경비병들의 이동을 적은 문서지.
 #phrase Glav  3
-He sent a messenger to me, but the messenger never arrived. I suspect she is dead now, and I mourn that brave woman... If only to show respect to her memory, I would like to have that document here in the Last Shelter.
+그가 내게 전령을 보냈는데, 전령은 끝내 도착하지 않았어. 아마 죽었을 테지. 그 용감한 여인을 애도하네... 그녀를 기리는 뜻에서라도, 그 문서를 이곳 최후의 은신처에 두고 싶네.
 #phrase Glav  4
-The messenger was supposed to come from the south, so mayhap you should check that road first. It is not an order, you understand, but if the document is not found, I will nevertheless be most upset!
+전령은 남쪽에서 올 예정이었으니, 그 길부터 살펴보는 게 좋겠지. 명령은 아니네, 알겠지만, 문서를 찾지 못하면 나는 무척 언짢을 걸세!

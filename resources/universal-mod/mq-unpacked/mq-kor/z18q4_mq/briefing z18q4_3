@@ -1,8 +1,8 @@
-The estate is rampaged
+저택을 쑥대밭으로 만들었다
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-It is really sad that you had to kill so many educated and intelligent people ...
+그렇게 많은 교양 있고 똑똑한 사람들을 죽여야 했다니 정말 슬픈 일이군...
 #phrase Glav  2
-But on the other hand, it was their own fault if they decided to use their knowledge for evil purposes. So if killer scientists ever appear near the Last Shelter again, they can expect the same treatment!
+하지만 한편으로는, 자기 지식을 사악한 목적에 쓰기로 한 건 그들 자신의 잘못이지. 그러니 살인마 학자들이 다시 최후의 은신처 근처에 나타난다면, 똑같은 대접을 받게 될 걸세!

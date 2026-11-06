@@ -1,37 +1,37 @@
 # um-texts 1
 === SPELL detect_life
-Life Detection
-Allows the target to sense all creatures within a certain radius.
+생명 감지
+대상이 일정 반경 안의 모든 생물을 감지할 수 있게 한다.
 
 === SPELL ensorcell
-Charm
-The most powerful astral spell. It dopes a creature, causing it to fall in love with the caster.
+매혹
+가장 강력한 아스트랄 주문. 생물을 홀려 시전자를 사랑하게 만든다.
 
 === SPELL fireraze
-Sacrifice to Fire
-Deals massive damage to everyone around the caster, including the caster.
+불의 제물
+시전자를 포함해 시전자 주변의 모든 대상에게 막대한 피해를 준다.
 
 === SPELL lichdom
-Necrosis
-Allows the target to become less detectable by life.
+괴사
+생명 감지로 대상을 찾아내기 어렵게 만든다.
 
 === SPELL link
-Link
-Allows two spellcasters to link their reserves of magic energy.
+연결
+두 시전자가 마력 보유량을 서로 연결할 수 있게 한다.
 
 === SPELL necro
-Summon Undead
-Summons an undead to a specified location.
+언데드 소환
+지정한 위치에 언데드를 소환한다.
 
 === SPELL panic
-Charisma
-The target of this spell gains the ability to use more complex magic.
+카리스마
+이 주문의 대상은 더 복잡한 마법을 쓸 수 있게 된다.
 
 === SPELL possession
-Possession
-Focuses senses on a target so much that perceiving the world as it becomes possible.
+빙의
+감각을 대상에게 강하게 집중시켜, 시전자가 대상의 눈으로 세상을 보게 한다.
 
 === SPELL stench
-Distortion
-The target affected by this spell becomes more visible to all types of perception.
+왜곡
+이 주문에 걸린 대상은 모든 종류의 감지에 더 잘 드러난다.
 

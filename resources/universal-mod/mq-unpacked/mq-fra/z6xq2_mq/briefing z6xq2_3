@@ -1,10 +1,10 @@
-The dragons will not attack!
+Les dragons n'attaqueront pas !
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Now the lizards will be unable to tell the dragons to attack our village!
+Désormais, les hommes-lézards ne pourront plus ordonner aux dragons d'attaquer notre village !
 #phrase Hero  2
-That is quite nice... But what if the dragons decide to attack the village all by themselves, without any orders?
+C'est plutôt bien... Mais si les dragons décidaient d'attaquer le village d'eux-mêmes, sans aucun ordre ?
 #phrase Nsheriff  3
-Oh, do not worry about that. The dragons have enough food where they are, so they have no need to go anywhere else!
+Oh, ne vous inquiétez pas pour ça. Les dragons ont assez à manger là où ils sont, ils n'ont aucune raison d'aller ailleurs !

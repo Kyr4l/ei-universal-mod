@@ -1,14 +1,14 @@
-Clear Babur's mine
-It is said that the harpies in the southeast of the remote mountains have a great treasure. Collect the treasure and bring it to the village!
+바부르의 광산 정리
+아르마딜로들이 바부르의 광산을 점령했다. 놈들을 처치하고 바부르가 두고 온 금을 가져오라.
 #subobj  1
-Find the western chest
-Locate the chest at the east of the mine. Its content might be well guarded.
+서쪽 상자 찾기
+광산 서쪽에 있는 상자를 찾아라. 내용물은 단단히 지켜지고 있을지도 모른다.
 #subobj  2
-Find the northern chest
-The second chest should be at the far end. In the north-east, dead end of the mine.
+북쪽 상자 찾기
+두 번째 상자는 광산 가장 안쪽, 북동쪽 막다른 곳에 있을 것이다.
 #subobj  3
-Kill the first group of armadillos.
-There should be five armadillos guarding the north-west part of the mine.
+첫 번째 아르마딜로 무리 처치
+아르마딜로 다섯 마리가 광산 북서쪽을 지키고 있을 것이다.
 #subobj  4
-Kill the second group of armadillos.
-There are five more armadillos guarding the north part of the mine
+두 번째 아르마딜로 무리 처치
+아르마딜로 다섯 마리가 더 광산 북쪽을 지키고 있다.

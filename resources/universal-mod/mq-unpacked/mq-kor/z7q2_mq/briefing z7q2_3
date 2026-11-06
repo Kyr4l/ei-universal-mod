@@ -1,10 +1,10 @@
-Hermit is going to be happy!
+은둔자가 기뻐할 것이다!
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-Far as I know, Hermit always keeps his word. You set the lizards free, now his tribe will leave the village alone.
+내가 알기로 은둔자는 늘 약속을 지키네. 자네가 도마뱀인들을 풀어 줬으니, 이제 그의 부족은 마을을 건드리지 않을 걸세.
 #phrase Hero  2
-Hey, sounds good. If there was only one Lizard tribe on Gipath and Hermit were to control it, that would be simply marvellous!
+오, 좋군요. 지페스에 도마뱀인 부족이 하나뿐이고 은둔자가 그 부족을 다스린다면, 정말 멋질 텐데요!
 #phrase Elder  3
-I agree! But alas, we will just have to be content with what we have.
+동감이네! 하지만 아쉽게도 가진 것에 만족해야겠지.

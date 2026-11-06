@@ -1,12 +1,12 @@
-Master of Shadows
+그림자의 군주
 #show Hero
 #show Rick
 #CAMERA 3 30 3 1
 #phrase Rick  1
-The army which shall invade Gipath includes not just humans, but also zombies and ghouls, and the most dangerous undeads of all -  the shadows.
+지페스를 침공할 군대에는 인간뿐 아니라 좀비와 구울, 그리고 가장 위험한 언데드인 그림자들까지 있다.
 #phrase Rick  2
-The sorcerer who can summon those from nonexistence lives in the city of Suslanger; if he is killed, the invasion army shall be weakened.
+그들을 무(無)에서 불러낼 수 있는 마술사가 수슬랑게르 시에 산다. 그가 죽으면 침공군은 약해질 것이다.
 #phrase Hero  3
-Hmm... If that sorcerer were anywhere near the portal I could try getting him. But if I have to go all the way from the portal to the city, I will simply be killed!
+흠... 그 마술사가 포탈 근처에 있다면 잡아 볼 수도 있겠지요. 하지만 포탈에서 도시까지 내내 걸어가야 한다면, 그냥 죽고 말 겁니다!
 #phrase Rick  4
-Of course I shall not send you there through the portal! You will be teleported directly to Suslanger. All you must do is enter the city and find the gates displaying two sculptures of eagles at its sides. That is the mansion belonging to the Master of Shadows - he is the one you must kill!
+물론 포탈로 보내지는 않겠다! 수슬랑게르로 바로 순간이동시켜 주지. 도시에 들어가서 양옆에 독수리 조각상 두 개가 서 있는 문을 찾기만 하면 된다. 그곳이 그림자의 군주의 저택이다. 네가 죽여야 할 자가 바로 그다!

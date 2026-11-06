@@ -1,11 +1,11 @@
-Missing messenger
-Brother Khatul expects a messenger with an important document stolen from the guards. But the messenger has not arrived - he is probably dead, but that document is very important, it must be recovered.
+사라진 전령
+하툴 형제는 경비병들에게서 훔친 중요한 문서를 가진 전령을 기다리고 있다. 하지만 전령은 오지 않았다. 아마 죽었겠지만, 그 문서는 매우 중요하니 반드시 되찾아야 한다.
 #subobj  1
-Finding the messenger's remains
-The messenger was supposed to approach the Last Shelter's entrance from the south. Try looking for his dead body somewhere there.
+전령의 유해 찾기
+전령은 남쪽에서 최후의 은신처 입구로 올 예정이었다. 그 근처에서 시신을 찾아보라.
 #subobj  2
-Taking the document
-Judging by the body, the messenger was killed either by banshees or by spiders. Neither of these creatures search dead bodies, so the document should be there!
+문서 가져오기
+시신을 보아하니 전령은 밴시나 거미에게 살해당했다. 둘 다 시체를 뒤지지 않으니, 문서는 그대로 있을 것이다!
 #subobj  3
-Bringing the document to Brother Khatul
-The document must be delivered to the Last Shelter and given to Brother Khatul.
+하툴 형제에게 문서 전달
+문서를 최후의 은신처로 가져가 하툴 형제에게 전해야 한다.

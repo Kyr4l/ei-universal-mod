@@ -1,10 +1,10 @@
-No way to get near Aiset-Bek...
+아이세트벡에게 접근할 방법이 없다...
 #show Hero
 #show Glav
 #CAMERA 3 20 3 1.5
 #phrase Glav  1
-Aiset-Bek's still alive?! Hm... Do you remember our little talk about trust and suspicions? Do you not think that now I must take a good look at you and your past?
+아이세트벡이 아직 살아 있다고?! 흠... 신뢰와 의심에 대해 나눈 짧은 대화를 기억하나? 이제 자네와 자네의 과거를 잘 살펴봐야 한다고 생각하지 않나?
 #phrase Hero  2
-I swear I shall kill Aiset-Bek! Maybe not right now, but I will kill him allright ...  whatever it takes!
+맹세코 아이세트벡을 죽이겠습니다! 지금 당장은 아니더라도, 반드시 죽이겠습니다... 무슨 수를 써서라도!
 #phrase Glav  3
-OK, I believe you ... For now.
+좋아, 믿겠네... 지금은.

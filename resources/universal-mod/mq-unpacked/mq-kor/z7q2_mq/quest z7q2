@@ -1,14 +1,14 @@
-Lizards in the trap
-The Orcs have caught a number of young Forest Lizards in a trap. Hermit Lizard has asked humans to set them free and in return has promised to convince his tribe not to attack the humans. The location where the Lizards are trapped is to the west of the northern river bank, where the Goblin settlement used to be.
+덫에 걸린 도마뱀인
+오크들이 어린 숲 도마뱀인 여럿을 덫으로 잡았다. 도마뱀인 은둔자는 인간들에게 그들을 풀어 달라고 부탁했고, 그 대가로 부족이 인간을 공격하지 않도록 설득하겠다고 약속했다. 도마뱀인들이 갇힌 곳은 북쪽 강기슭 서쪽, 옛 고블린 정착지가 있던 곳이다.
 #subobj  1
-Find the Orc with the key
-To open the trap you must have a key. This key is kept by the Orc Seer. Look for him in the south western sector of the camp.
+열쇠를 가진 오크 찾기
+덫을 열려면 열쇠가 필요하다. 그 열쇠는 오크 주술사가 가지고 있다. 야영지 남서쪽 구역에서 그를 찾아라.
 #subobj  2
-Take the key
-The main thing is to get that key. Whether the Seer is killed or not is no concern of yours.
+열쇠 가져오기
+중요한 건 열쇠를 손에 넣는 것이다. 주술사를 죽이든 말든 상관없다.
 #subobj  3
-Find the bar
-The trap is a hole in the earth with the exit blocked by the bar. You must open it.
+쇠창살 찾기
+덫은 땅에 판 구덩이이며, 출구는 쇠창살로 막혀 있다. 그것을 열어야 한다.
 #subobj  4
-Open the trap
-To set the Lizards free, you must open the trap. Use the key taken from the Orc.
+덫 열기
+도마뱀인들을 풀어 주려면 덫을 열어야 한다. 오크에게서 빼앗은 열쇠를 사용하라.

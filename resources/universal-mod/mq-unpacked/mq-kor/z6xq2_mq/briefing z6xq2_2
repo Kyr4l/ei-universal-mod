@@ -1,8 +1,8 @@
-The amulet is not dangerous now
+부적은 당분간 위험하지 않다
 #show Hero
 #show Nsheriff
 #CAMERA 9
 #phrase Nsheriff  1
-I am sorry. It seems I should not have panicked. The dragon amulet only works on certain days of the year, and we have to wait for quite a while yet.
+미안하네. 괜히 호들갑을 떤 것 같군. 용의 부적은 한 해 중 특정한 날에만 효과가 있어서, 아직 한참 기다려야 한다네.
 #phrase Nsheriff  2
-We are in no hurry at the moment, so you can see to other business as you like.
+지금은 서두를 일이 없으니, 원하는 대로 다른 일을 보게.

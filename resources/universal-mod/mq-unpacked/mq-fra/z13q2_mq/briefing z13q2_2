@@ -1,10 +1,10 @@
-Woodsfolk managed to kill unicorns on their own.
+Le Peuple des forêts a tué les licornes lui-même
 #show Hero
 #show Huber
 #CAMERA 3 20 3.5 1
 #phrase Huber  1
-I have wonderful news: the woodsfolk killed all their black unicorns themselves!
+J'ai une merveilleuse nouvelle : le Peuple des forêts a tué lui-même toutes ses licornes noires !
 #phrase Huber  2
-I am told that the Black clan seer saw a snowflake with thirteen ends, decided that it was a bad omen and o-la-la! - the danger is gone! Savages, you know ...
+On me dit que le voyant du Clan Noir a vu un flocon de neige à treize branches, qu'il y a vu un mauvais présage et oh là là ! - le danger a disparu ! Des sauvages, vous savez...
 #phrase Huber  3
-Oh, pity our brilliant magician Diera is no longer with us! I would ask her to make zillions of such snowflakes!
+Oh, quel dommage que notre brillante magicienne Diera ne soit plus parmi nous ! Je lui demanderais de faire des milliers de flocons comme celui-là !

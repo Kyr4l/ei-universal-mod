@@ -1,14 +1,14 @@
-[Hard] Baldie is up to his old tricks again!
+[Difficile] Le Chauve fait encore des siennes !
 #show Hero
 #show Huber
 #CAMERA 3 -10 3 1
 #phrase Huber  1
-What effrontery! That miserable thief Baldie dared to rob my house again!!! Those brigands know that my loyal captain Tilvar is no longer with us, so they do troll only knows what! What a shame I never ordered him to crush that brigands' nest on the western lake shore when I had a chance ...
+Quelle effronterie ! Ce misérable voleur de Chauve a encore osé cambrioler ma maison !!! Ces brigands savent que mon fidèle capitaine Tilvar n'est plus parmi nous, alors ils font les trolls seuls savent quoi ! Quel dommage de ne jamais lui avoir ordonné d'écraser ce nid de brigands sur la rive ouest du lac quand j'en avais l'occasion...
 #phrase Huber  2
-So here we are now, such are the fruits of my leniency: the key from the governor's arsenal is missing, and if we do not get it back, the brigands will have the most modern weapons!
+Et voilà où nous en sommes, voilà les fruits de ma clémence : la clé de l'arsenal du gouverneur a disparu, et si nous ne la récupérons pas, les brigands auront les armes les plus modernes !
 #phrase Hero  3
-What? Do you mean you have something there which can not be bought from Karansul?
+Quoi ? Vous voulez dire que vous avez là-dedans des choses qu'on ne peut pas acheter chez Karansul ?
 #phrase Huber  4
-If only I knew! Frankly, I never bothered to have a look in that arsenal, it was captain Tilvar's responsibility ...
+Si seulement je le savais ! À vrai dire, je n'ai jamais pris la peine de jeter un œil dans cet arsenal, c'était la responsabilité du capitaine Tilvar...
 #phrase Huber  5
-But anyway, we must have that key back!
+Quoi qu'il en soit, nous devons récupérer cette clé !

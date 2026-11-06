@@ -1,18 +1,18 @@
-[Medium] Open the portal
+[Moyen] Ouvrir le portail
 #show Hero
 #show KMage
 #CAMERA 2
 #phrase Hero  1
-So, tell me about this secret cave!
+Alors, parlez-moi de cette grotte secrète !
 #phrase KMage  2
-In this cave there's an ancient portal, we use it to travel across islands. However the main path has recently been blocked by falling rocks, the other path has been closed to prevent anyone from coming through the portal...
+Dans cette grotte se trouve un ancien portail, qui nous sert à voyager entre les îles. Mais le chemin principal a récemment été bloqué par un éboulement, et l'autre chemin a été fermé pour empêcher quiconque de passer par le portail...
 #phrase Hero  3
-But why did you block the path ?
+Mais pourquoi avoir bloqué le chemin ?
 #phrase KMage  4
-We have noticed that some monsters started paying attention to this cave and it is no longer safe for us. We can't send people to travel through the portal or even guard the cave, some monsters made this cave their hiding spot!
+Nous avons remarqué que des monstres commençaient à s'intéresser à cette grotte, et elle n'est plus sûre pour nous. Nous ne pouvons ni envoyer des gens voyager par le portail ni même garder la grotte : des monstres en ont fait leur repaire !
 #phrase KMage  5
-You will need to open the gates and activate the portal. There are 2 keys you need to get in order to first open the gates, then activate the portal. Each key has been stored in a chest before my guards fled the area.
+Vous devrez ouvrir les portes et activer le portail. Il vous faut 2 clés : l'une pour ouvrir les portes, l'autre pour activer le portail. Chaque clé a été rangée dans un coffre avant que mes gardes ne fuient les lieux.
 #phrase Hero  6
-Sounds easy enough already! Anything else?
+Ça m'a l'air assez simple ! Autre chose ?
 #phrase KMage 7
-Well... If you are good enough with your hands however, the gates can be opened without a key, the mechanism is old. Good luck!
+Eh bien... Si vous êtes habile de vos mains, les portes peuvent s'ouvrir sans clé, le mécanisme est vieux. Bonne chance !

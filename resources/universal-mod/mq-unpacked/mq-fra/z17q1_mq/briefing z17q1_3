@@ -1,8 +1,8 @@
-The document is found!
+Le document est retrouvé !
 #show Hero
 #show Glav
 #CAMERA 3 0 3.5 1.5
 #phrase Glav  1
-I am very glad that the favor the noble man in the city did to us by obtaining that document, and the death of his messenger have not been in vain!
+Je suis très heureux que le service que nous a rendu ce noble en se procurant le document, et la mort de sa messagère, n'aient pas été vains !
 #phrase Glav  2
-This document describes the movements of the guards for the next few months, so now we shall be able to attack them, not just to hide from them!
+Ce document décrit les mouvements des gardes pour les prochains mois : nous pourrons désormais les attaquer, et plus seulement nous cacher !

@@ -1,0 +1,17 @@
+## Orc Delta
+#zone z7q3 gipat game
+#res
+zone7 zone7-lmp
+#maps
+15 10
+zone7map zone7questM
+
+## To Base
+#exit 1
+bz1mpg 1
+#deploy
+152 302 161 307
+#remove
+152 307 161 318
+#view
+183.929

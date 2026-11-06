@@ -1,14 +1,14 @@
-Khadagan patrols
-A recent report suggests that Khadaganians are roaming near the castle, take them out!
+카다간 순찰대
+최근 보고에 따르면 카다간 병사들이 성 근처를 배회하고 있다. 처치하라!
 #subobj  1
-Kill the Northern patrols
-There should be 2 groups of Khadagan soldiers, they rarely leave the road.
+북쪽 순찰대 처치
+카다간 병사 2개 무리가 있을 것이다. 이들은 좀처럼 길을 벗어나지 않는다.
 #subobj  2
-Kill the Southern patrols
-Two groups of roaming soldiers are coming from the south.
+남쪽 순찰대 처치
+배회하는 병사 두 무리가 남쪽에서 오고 있다.
 #subobj  3
-Free the Western village
-A group of soldiers are blocking the path fo the Western village, free the villagers.
+서쪽 마을 해방
+병사 한 무리가 서쪽 마을로 가는 길을 막고 있다. 마을 사람들을 풀어 주어라.
 #subobj  4
-Deal with the captain
-The captain of these roaming soldiers is at the East of the castle, threatening the villagers.
+대장 처리
+배회하는 병사들의 대장이 성 동쪽에서 마을 사람들을 위협하고 있다.

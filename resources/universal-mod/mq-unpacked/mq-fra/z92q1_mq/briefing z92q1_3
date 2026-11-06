@@ -1,10 +1,10 @@
-Done!
+C'est fait !
 #show Hero
 #show Merc1
 #CAMERA 9
 #phrase Merc1  1
-Well done! I'm glad you got through this safely!
+Bien joué ! Je suis content que vous vous en soyez sorti sain et sauf !
 #phrase Hero  2
-Well... this task was anything but easy. I hope the reward is great.
+Eh bien... cette tâche était tout sauf facile. J'espère que la récompense est à la hauteur.
 #phrase Merc1  3
-Of course! Here take this pile of gold as your reward!
+Bien sûr ! Tenez, prenez ce tas d'or en récompense !

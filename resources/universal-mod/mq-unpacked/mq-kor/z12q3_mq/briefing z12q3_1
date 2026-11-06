@@ -1,14 +1,14 @@
-[Hard] Captain Tilvar is missing!
+[어려움] 틸바르 대위가 실종되었다!
 #show Hero
 #show Huber
 #CAMERA 3 20 3.5 1
 #phrase Huber  1
-I am very worried about captain Tilvar! There was no news at all from him since I sent him with a party to kill all those wormheads near the mines!
+틸바르 대위가 너무 걱정되네! 광산 근처의 벌레머리들을 모조리 죽이라고 부대와 함께 보낸 뒤로 소식이 전혀 없어!
 #phrase Huber  2
-I need a man who is prepared to go north across the lake and find out what happened to him. And I believe you may well be that man!
+호수를 건너 북쪽으로 가서 그에게 무슨 일이 있었는지 알아볼 사람이 필요하네. 그리고 자네가 바로 그 사람일 것 같군!
 #phrase Hero  3
-I would be honored, Your Excellency! But I would like to understand one thing: I thought Wormheads were subterranean creatures? Do you expect me to go underground and fight them down there?
+영광입니다, 각하! 하지만 한 가지만 여쭙겠습니다. 벌레머리는 지하에 사는 생물 아닙니까? 저더러 지하로 내려가 싸우라는 말씀입니까?
 #phrase Huber  4
-Oh no, let those nightmarish creatures live in their catacombs for as long as they might care! I only told Tilvar to kill the ones who dared to venture outside!
+아니, 아니. 그 악몽 같은 놈들은 원하는 만큼 지하 묘지에서 살게 두게! 틸바르에게는 감히 밖으로 나온 놈들만 죽이라고 했네!
 #phrase Huber  5
-And you might also take part in this enterprise - and if my worst fears are realized, you will have to do the job alone. I cannot promise you a reward, but the experience you gain will be priceless!
+자네도 이 일에 함께해도 좋네. 내 최악의 걱정이 현실이 된다면 혼자서 해내야 할 거야. 보상은 약속할 수 없지만, 얻게 될 경험은 값을 매길 수 없을 걸세!
