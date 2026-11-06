@@ -1,0 +1,537 @@
+# um-texts 1
+=== tutorial base
+it003_head
+#screen
+it003_head_screen1
+#position 60 50 740 22
+#text
+it003_text_screen1
+#screen
+it003_head_screen2
+#position 60 50 740 22
+#text
+it003_text_screen2
+#screen
+it003_head_screen3
+#position 60 50 740 22
+#text
+it003_text_screen3
+
+=== tutorial camp_item_constr
+it009_head
+#screen
+it009_head_screen0
+#position 60 50 740 22
+#text
+it009_text_screen0
+#screen
+it009_head_screen1
+#position 60 50 740 22
+#text
+it009_text_screen1
+#screen
+it009_head_screen2
+#position 60 50 740 22
+#text
+it009_text_screen2
+#screen
+it009_head_screen3
+#position 60 50 740 22
+#text
+it009_text_screen3
+
+=== tutorial camp_item_trade
+it008_head
+#screen
+it008_head_screen1
+#position 60 50 740 22
+#text
+it008_text_screen1
+
+=== tutorial camp_repair
+it012_head
+#screen
+it012_head_screen1
+#position 60 50 740 22
+#text
+it012_text_screen1
+
+=== tutorial camp_skills
+it007_head
+#screen
+it007_head_screen1
+#position 150 50 650
+#text
+it007_text_screen1
+#screen
+it007_head_screen2
+#position 240 50 700
+#rectangle 11 109 191 491
+#text
+it007_text_screen2
+#screen
+it007_head_screen3
+#position 207 275 700
+#rectangle 208 100 396 245
+#text
+it007_text_screen3
+#screen
+it007_head_screen5
+#position 20 20 400
+#rectangle 403 102 600 499
+#text
+it007_text_screen5
+#screen
+it007_head_screen4
+#position 412 10 790
+#rectangle 210 301 392 443
+#text
+it007_text_screen4
+#screen
+it007_head_screen6
+#position 110 100 700
+#rectangle 0 0 800 100
+#text
+it007_text_screen6
+
+=== tutorial camp_spell_constr
+it011_head
+#screen
+it011_head_screen1
+#position 100 50 700
+#rectangle 201 439 342 495
+#text
+it011_text_screen1
+#screen
+it011_head_screen2
+#position 60 50 740 22
+#text
+it011_text_screen2
+#screen
+it011_head_screen4
+#position 60 50 740 22
+#text
+it011_text_screen4
+#screen
+it011_head_screen5
+#position 60 50 740 22
+#text
+it011_text_screen5
+
+=== tutorial camp_spell_trade
+it010_head
+#screen
+it010_head_screen1
+#position 60 50 740 22
+#text
+it010_text_screen1
+
+=== tutorial camp_weapons
+it006_head
+#screen
+it006_head_screen1
+#position 60 50 740 23
+#text
+it006_text_screen1
+#screen
+it006_head_screen2
+#position 60 50 740 23
+#text
+it006_text_screen2
+
+=== tutorial global_map
+it002_head
+#screen
+it002_head_screen1
+#position 60 50 740 22
+#text
+it002_text_screen1
+#screen
+it002_head_screen2
+#position 60 50 740 22
+#text
+it002_text_screen2
+#screen
+it002_head_screen3
+#position 60 50 740 22
+#text
+it002_text_screen3
+#screen
+it002_head_screen4
+#position 60 50 740 22
+#text
+it002_text_screen4
+
+=== tutorial lmp
+it016_head
+#screen
+it016_head_screen1
+#position 60 50 740 22
+#text
+it016_text_screen1
+
+=== tutorial options
+it015_head
+#screen
+it015_head_screen1
+#position 60 50 740 22
+#text
+it015_text_screen1
+
+=== tutorial quest_global_map
+it005_head
+#screen
+it005_head_screen1
+#position 60 50 740 22
+#text
+it005_text_screen1
+
+=== tutorial quest_mission
+it004_head
+#screen
+it004_head_screen1
+#position 50 50 750
+#text
+it004_text_screen1
+#screen
+it004_head_screen2
+#position 50 50 750
+#text
+it004_text_screen2
+#screen
+it004_head_screen3
+#position 50 50 750
+#text
+it004_text_screen3
+
+=== tutorial zt1
+zt1_head
+#screen
+it001_head_screen1
+#position 155 34 645 22
+#text
+it001_text_screen1
+#screen
+it001_head_screen2
+#position 155 34 645 22
+#text
+it001_text_screen2
+#screen
+zt1_head_screen2
+#position 155 34 645 22
+#text
+zt1_text_screen2
+
+=== tutorial zt10
+zt10_head
+#screen
+zt10_head_screen1
+#position 199 34 601 21
+#rectangle 619 1 799 162
+#text
+zt10_text_screen1
+#screen
+zt10_head_screen2
+#position 199 34 601 21
+#rectangle 780 70 799 162
+#rectangle 778 1 799 26
+#text
+zt10_text_screen2
+#screen
+zt10_head_screen3
+#position 199 34 601 21
+#text
+zt10_text_screen3
+
+=== tutorial zt11
+zt11_head
+#screen
+zt11_head_screen1
+#position 155 110 645 21
+#rectangle 183 0 618 96
+#rectangle 385 1 412 19
+#text
+zt11_text_screen1
+#screen
+zt11_head_screen2
+#position 155 110 645 21
+#rectangle 183 0 618 96
+#rectangle 385 1 412 19
+#text
+zt11_text_screen2
+
+=== tutorial zt12
+zt12_head
+#screen
+zt12_head_screen1
+#position 199 34 601 21
+#rectangle 1 1 185 222
+#rectangle 1 1 23 29
+#text
+zt12_text_screen1
+#screen
+zt12_head_screen2
+#position 199 34 601 21
+#rectangle 1 99 23 222
+#text
+zt12_text_screen2
+
+=== tutorial zt13
+zt13_head
+#screen
+zt13_head_screen1
+#position 155 34 645 22
+#rectangle 1 516 83 599
+#text
+zt13_text_screen1
+#screen
+zt13_head_screen2
+#position 155 34 645 22
+#text
+zt13_text_screen2
+
+=== tutorial zt14
+zt14_head
+#screen
+zt14_head_screen1
+#position 155 34 645 22
+#rectangle 1 430 37 466
+#text
+zt14_text_screen1
+#screen
+zt14_head_screen2
+#position 155 34 645 22
+#text
+zt14_text_screen2
+#screen
+zt14_head_screen3
+#position 155 34 645 22
+#rectangle 1 430 37 466
+#text
+zt14_text_screen3
+
+=== tutorial zt15
+zt15_head
+#screen
+zt15_head_screen1
+#position 155 34 645 22
+#text
+zt15_text_screen1
+#screen
+zt15_head_screen2
+#position 155 34 645
+#text
+zt15_text_screen2
+#screen
+zt15_head_screen3
+#position 155 34 645 22
+#text
+zt15_text_screen3
+#screen
+zt15_head_screen4
+#position 155 34 645 22
+#text
+zt15_text_screen4
+
+=== tutorial zt16
+zt16_head
+#screen
+zt16_head_screen1
+#position 155 34 645 22
+#text
+zt16_text_screen1
+#screen
+zt16_head_screen2
+#position 155 34 645 22
+#text
+zt16_text_screen2
+
+=== tutorial zt17
+zt17_head
+#screen
+zt17_head_screen1
+#position 155 34 645 22
+#rectangle 74 491 321 599
+#text
+zt17_text_screen1
+
+=== tutorial zt18
+zt18_head
+#screen
+zt18_head_screen1
+#position 155 34 645 22
+#rectangle 452 484 709 599
+#text
+zt18_text_screen1
+
+=== tutorial zt19
+zt19_head
+#screen
+zt19_head_screen1
+#position 155 34 645 22
+#text
+zt19_text_screen1
+
+=== tutorial zt2
+zt2_head
+#screen
+zt2_head_screen1
+#position 155 34 645 22
+#text
+zt2_text_screen1
+#screen
+zt2_head_screen2
+#position 155 34 645 22
+#text
+zt2_text_screen2
+
+=== tutorial zt20
+zt20_head
+#screen
+zt20_head_screen1
+#position 155 34 645 22
+#rectangle 1 470 38 507
+#text
+zt20_text_screen1
+
+=== tutorial zt21
+zt21_head
+#screen
+zt21_head_screen1
+#position 155 34 645 22
+#text
+zt21_text_screen1
+
+=== tutorial zt22
+zt22_head
+#screen
+zt22_head_screen1
+#position 155 34 645 22
+#rectangle 1 432 39 469
+#text
+zt22_text_screen1
+
+=== tutorial zt23
+zt23_head
+#screen
+zt23_head_screen1
+#position 155 34 645 22
+#text
+zt23_text_screen1
+
+=== tutorial zt24
+zt24_head
+#screen
+zt24_head_screen1
+#position 155 34 645 22
+#text
+zt24_text_screen1
+
+=== tutorial zt3
+zt3_head
+#screen
+zt3_head_screen1
+#position 155 110 645 21
+#text
+zt3_text_screen1
+#screen
+zt3_head_screen2
+#position 155 110 645 21
+#rectangle 183 0 618 96
+#rectangle 385 1 412 19
+#text
+zt3_text_screen2
+#screen
+zt3_head_screen3
+#position 155 110 645 21
+#rectangle 770 568 799 599
+#text
+zt3_text_screen3
+
+=== tutorial zt4
+zt4_head
+#screen
+zt4_head_screen1
+#position 155 34 645 22
+#rectangle 720 519 799 599
+#text
+zt4_text_screen1
+#screen
+zt4_head_screen2
+#position 155 34 645 22
+#rectangle 720 519 799 599
+#text
+zt4_text_screen2
+
+=== tutorial zt5
+zt5_head
+#screen
+zt5_head_screen1
+#position 155 34 645 22
+#text
+zt5_text_screen1
+#screen
+zt5_head_screen2
+#position 155 34 645 22
+#text
+zt5_text_screen2
+
+=== tutorial zt6
+zt6_head
+#screen
+zt6_head_screen1
+#position 155 110 645 21
+#text
+zt6_text_screen1
+
+=== tutorial zt7
+zt7_head
+#screen
+zt7_head_screen1
+#position 155 34 645 22
+#rectangle 762 432 798 468
+#text
+zt7_text_screen1
+#screen
+zt7_head_screen2
+#position 155 34 645 22
+#text
+zt7_text_screen2
+#screen
+zt7_head_screen4
+#position 155 34 645 22
+#text
+zt7_text_screen4
+#screen
+zt7_head_screen3
+#position 155 34 645 22
+#text
+zt7_text_screen3
+
+=== tutorial zt8
+zt8_head
+#screen
+zt8_head_screen1
+#position 155 34 645 22
+#text
+zt8_text_screen1
+#screen
+zt8_head_screen2
+#position 155 34 645 22
+#text
+zt8_text_screen2
+
+=== tutorial zt9
+zt9_head
+#screen
+zt9_head_screen1
+#position 155 34 645 22
+#rectangle 1 567 36 599
+#text
+zt9_text_screen1
+#screen
+zt9_head_screen2
+#position 155 34 645 22
+#text
+zt9_text_screen2
+

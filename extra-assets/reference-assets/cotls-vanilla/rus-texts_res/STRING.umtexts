@@ -1,0 +1,1275 @@
+# um-texts 1
+=== string action_accel
+Быстрая скорость игры
+
+=== string action_camera1
+Камера в положении 1
+
+=== string action_camera2
+Камера в положении 2
+
+=== string action_camera3
+Камера в положении 3
+
+=== string action_camera4
+Камера в положении 4
+
+=== string action_camera_center
+Центрировать камеру на персонаже
+
+=== string action_camera_down
+Камеру назад
+
+=== string action_camera_left
+Камеру влево
+
+=== string action_camera_norm
+Сориентировать камеру на север
+
+=== string action_camera_right
+Камеру вправо
+
+=== string action_camera_track
+Следить камерой за персонажем
+
+=== string action_camera_up
+Камеру вперед
+
+=== string action_camera_zoom_in
+Приблизить камеру
+
+=== string action_camera_zoom_out
+Отодвинуть камеру
+
+=== string action_cancel_target
+Отказаться от действия
+
+=== string action_crawl
+Ползти
+
+=== string action_cs_body
+Прицельно ударить в тело
+
+=== string action_cs_head
+Прицельно ударить в голову
+
+=== string action_cs_lhand
+Прицельно ударить в лев. руку
+
+=== string action_cs_lleg
+Прицельно ударить в лев. ногу
+
+=== string action_cs_rhand
+Прицельно ударить в пр. руку
+
+=== string action_cs_rleg
+Прицельно ударить в пр. ногу
+
+=== string action_decel
+Нормальная скорость игры
+
+=== string action_follow
+Следовать за персонажем
+
+=== string action_item1
+Использовать предмет 1
+
+=== string action_item2
+Использовать предмет 2
+
+=== string action_item3
+Использовать предмет 3
+
+=== string action_item4
+Использовать предмет 4
+
+=== string action_obj
+Посмотреть задания
+
+=== string action_pause
+Включить/выключить режим "паузы"
+
+=== string action_quickload
+Загрузить быструю запись
+
+=== string action_quicksave
+Осуществить быструю запись
+
+=== string action_run
+Бежать
+
+=== string action_select1
+Выбрать персонажа 1
+
+=== string action_select2
+Выбрать персонажа 2
+
+=== string action_select3
+Выбрать персонажа 3
+
+=== string action_select_all
+Выбрать всех персонажей
+
+=== string action_sneak
+Красться
+
+=== string action_spell1
+Использовать заклинание 1
+
+=== string action_spell2
+Использовать заклинание 2
+
+=== string action_spell3
+Использовать заклинание 3
+
+=== string action_spell4
+Использовать заклинание 4
+
+=== string action_spell5
+Использовать заклинание 5
+
+=== string action_spell6
+Использовать заклинание 6
+
+=== string action_spell7
+Использовать заклинание 7
+
+=== string action_spell8
+Использовать заклинание 8
+
+=== string action_swarm
+Переключение "атака"/"защита"
+
+=== string action_tutorial_script
+Обучающий экран
+
+=== string action_use_science
+Взять, украсть, использовать
+
+=== string action_w_info1
+Инфоокно: общий вид
+
+=== string action_w_info2
+Инфоокно: повреждения
+
+=== string action_w_info3
+Инфоокно: характеристики
+
+=== string action_w_info4
+Инфоокно: заклинания
+
+=== string action_w_minimap
+Показать мини-карту
+
+=== string action_w_text1
+Текстовое окно: сообщения
+
+=== string action_w_text2
+Текстовое окно: трофеи
+
+=== string action_walk
+Идти
+
+=== string action_weapon1
+Использовать оружие 1
+
+=== string action_weapon2
+Использовать оружие 2
+
+=== string action_weapon3
+Использовать оружие 3
+
+=== string action_weapon4
+Использовать оружие 4
+
+=== string attack
+Атака
+
+=== string attack_desc
+Вероятность успешного удара по врагу этим оружием. Зависит от ловкости персонажа, его навыка и умений в использовании выбранного оружия и от свойств самого оружия.
+
+=== string brief_complete_quest
+Выполнено задание:
+
+=== string brief_get_exp
+Получено опыта:
+
+=== string brief_get_item
+Получено:
+
+=== string brief_get_money
+Получено денег:
+
+=== string brief_get_quest
+Получено задание:
+
+=== string brief_get_specials_1
+Увеличено: cила
+
+=== string brief_get_specials_2
+Увеличено: познания в магии чувств
+
+=== string brief_get_specials_3
+Увеличен навык: ловкость рук
+
+=== string brief_get_specials_4
+Увеличено: ловкость
+
+=== string brief_lost_item
+Отдано:
+
+=== string camp_current_exp
+Опыт персонажа:
+
+=== string camp_current_money
+Ваши деньги:
+
+=== string camp_damage
+Урон
+
+=== string camp_damage_desc
+Данное оружие при попадании нанесет врагу повреждение в пределах между минимальным и максимальным значениями параметра "урон". Если враг защищен броней, то вред, наносимый врагу, уменьшается на значение его брони. Если броня врага превышает максимальное значение урона оружия, это значит, что оно против такого врага бессильно.
+
+=== string camp_dismiss
+Исключить
+
+=== string camp_item_constr
+Цена сборки предмета:
+
+=== string camp_item_deconstr
+Цена разборки предмета:
+
+=== string camp_item_repair
+Цена ремонта:
+
+=== string camp_item_trade
+Цена торговли:
+
+=== string camp_level_up
+Цена поднятия навыка:
+
+=== string camp_repair_all
+Починить все вещи:
+
+=== string camp_spell_constr
+Цена сборки заклинания:
+
+=== string camp_spell_deconstr
+Цена разборки заклинания:
+
+=== string camp_spell_trade
+Цена торговли:
+
+=== string cant_use
+Этот предмет нельзя использовать здесь
+
+=== string combat_complete_quest
+Выполнено задание:
+
+=== string combat_complete_subobj
+Выполнено подзадание:
+
+=== string combat_crippled
+Сломалось:
+
+=== string combat_failed_quest
+Невозможно выполнение задания:
+
+=== string combat_failed_subobj
+Невозможно выполнение подзадания:
+
+=== string combat_get_quest
+Получено задание:
+
+=== string combat_get_subobj
+Получено подзадание:
+
+=== string combat_picked_up
+Вы взяли
+
+=== string consider_less1
+Чуть слабее
+
+=== string consider_less10
+Почти никакой
+
+=== string consider_less11
+Почти никакой
+
+=== string consider_less12
+Почти никакой
+
+=== string consider_less13
+Почти никакой
+
+=== string consider_less14
+Почти никакой
+
+=== string consider_less15
+Почти никакой
+
+=== string consider_less16
+Почти никакой
+
+=== string consider_less17
+Никакой
+
+=== string consider_less18
+Никакой
+
+=== string consider_less19
+Никакой
+
+=== string consider_less2
+Слабый
+
+=== string consider_less20
+Никакой
+
+=== string consider_less21
+Никакой
+
+=== string consider_less22
+Никакой
+
+=== string consider_less23
+Никакой
+
+=== string consider_less24
+Никакой
+
+=== string consider_less25
+Никакой
+
+=== string consider_less3
+Очень слабый
+
+=== string consider_less4
+Очень слабый
+
+=== string consider_less5
+Почти никакой
+
+=== string consider_less6
+Почти никакой
+
+=== string consider_less7
+Почти никакой
+
+=== string consider_less8
+Почти никакой
+
+=== string consider_less9
+Почти никакой
+
+=== string consider_more0
+Равный
+
+=== string consider_more1
+Чуть сильнее
+
+=== string consider_more10
+Смертоносный
+
+=== string consider_more11
+Смертоносный
+
+=== string consider_more12
+Смертоносный
+
+=== string consider_more13
+Смертоносный
+
+=== string consider_more14
+Смертоносный
+
+=== string consider_more15
+Смертоносный
+
+=== string consider_more16
+Непобедимый
+
+=== string consider_more17
+Непобедимый
+
+=== string consider_more18
+Непобедимый
+
+=== string consider_more19
+Непобедимый
+
+=== string consider_more2
+Достойный
+
+=== string consider_more20
+Непобедимый
+
+=== string consider_more21
+Непобедимый
+
+=== string consider_more22
+Непобедимый
+
+=== string consider_more23
+Непобедимый
+
+=== string consider_more24
+Непобедимый
+
+=== string consider_more25
+Непобедимый
+
+=== string consider_more3
+Грозный
+
+=== string consider_more4
+Опасный
+
+=== string consider_more5
+Опасный
+
+=== string consider_more6
+Очень опасный
+
+=== string consider_more7
+Очень опасный
+
+=== string consider_more8
+Очень опасный
+
+=== string consider_more9
+Очень опасный
+
+=== string damage_0
+колющий
+
+=== string damage_1
+рубящий
+
+=== string damage_2
+дробящий
+
+=== string damage_3
+огонь
+
+=== string damage_4
+кислота
+
+=== string damage_5
+молния
+
+=== string damage_6
+общий
+
+=== string defense
+Защита
+
+=== string defense_desc
+Возможность избежать удара врага с данным оружием в руках. Зависит от ловкости персонажа, его навыка и умений в использовании этого оружия и от свойств самого оружия.
+
+=== string delete
+Стереть запись
+
+=== string delete_msg
+Вы действительно хотите стереть запись?
+
+=== string difficulty_easy
+Легкий
+
+=== string difficulty_hard
+Тяжелый
+
+=== string dismiss_pers
+Исключить персонажа из команды
+
+=== string dismiss_pers_msg
+Вы действительно хотите исключить этого персонажа?
+
+=== string dmg_0
+колющ.
+
+=== string dmg_1
+рубящ.
+
+=== string dmg_2
+дробящ.
+
+=== string dmg_3
+огонь
+
+=== string dmg_4
+кисл.
+
+=== string dmg_5
+молн.
+
+=== string dmg_6
+Общий
+
+=== string end_of_game
+Примите поздравления!
+
+=== string end_of_game_msg
+Вы успешно прошли демо игры "Проклятые Земли". Жители Поселка, разбойники, гоблины, орки, людоеды, команда разработчиков и лично г-н Молодой Зеленый Тролль прощаются с вами. До встречи в полной версии!
+
+=== string failed_0
+Невозможно приручить
+
+=== string failed_1
+Нельзя сменить оружие
+
+=== string failed_10
+Сюда колдовать нельзя
+
+=== string failed_2
+Невозможно атаковать
+
+=== string failed_3
+Невозможно изменить позу
+
+=== string failed_4
+Путь не найден
+
+=== string failed_7
+Невозможно зачаровать
+
+=== string failed_8
+Телепортация невозможна
+
+=== string failed_9
+Невозможно колдовать
+
+=== string format_item1
+%s "%s"
+
+=== string format_item2
+%s "%s" (%d)
+
+=== string format_money
+деньги (%d)
+
+=== string game_over
+Ваш главный персонаж погиб!
+
+=== string game_over_msg
+Вы хотите загрузить игру заново?
+
+=== string game_paused
+Включен режим "паузы"!
+
+=== string hl_arm
+Рука
+
+=== string hl_arms
+Руки
+
+=== string hl_arms_desc
+Защищенность рук от разных видов вреда. Если здоровье хотя бы одной руки персонажа равно 0, значительно уменьшается скорость его ударов оружием и использования заклинаний.
+
+=== string hl_leg
+Нога
+
+=== string hl_legs
+Ноги
+
+=== string hl_legs_desc
+Защищенность ног от разных видов вреда. Если здоровье хотя бы одной ноги равно 0, уменьшается скорость передвижения персонажа.
+
+=== string hl_skull
+Голова
+
+=== string hl_skull_desc
+Защищенность головы от разных видов вреда. Если здоровье головы равно 0, персонаж гибнет.
+
+=== string hl_torso
+Тело
+
+=== string hl_torso_desc
+Защищенность тела от разных видов вреда. Когда здоровье тела становится равным 0, персонаж гибнет.
+
+=== string infoitem_0
+Вес:
+
+=== string infoitem_1
+Из:
+
+=== string infoitem_10
+Дальность:
+
+=== string infoitem_11
+Область действия:
+
+=== string infoitem_12
+Длительн.:
+
+=== string infoitem_13
+Цели:
+
+=== string infoitem_14
+Сложность:
+
+=== string infoitem_15
+Урон:
+
+=== string infoitem_16
+Навык:
+
+=== string infoitem_17
+Класс:
+
+=== string infoitem_18
+Школа:
+
+=== string infoitem_19
+Руны:
+
+=== string infoitem_2
+Энергия:
+
+=== string infoitem_20
+Показ. действий:
+
+=== string infoitem_21
+мгновенно
+
+=== string infoitem_22
+цель
+
+=== string infoitem_23
+Доп. защ.
+
+=== string infoitem_24
+Уязвим.
+
+=== string infoitem_25
+Броня:
+
+=== string infoitem_26
+м
+
+=== string infoitem_27
+с
+
+=== string infoitem_28
+пост.
+
+=== string infoitem_29
+Доп. к ловкости:
+
+=== string infoitem_3
+Надежность:
+
+=== string infoitem_30
+Навык:
+
+=== string infoitem_31
+Умение:
+
+=== string infoitem_32
+Оружие:
+
+=== string infoitem_33
+Итого:
+
+=== string infoitem_34
+Стрелковое оружие не дает защиты.
+
+=== string infoitem_35
+Макс. сложность
+
+=== string infoitem_36
+Макс. запас сил
+
+=== string infoitem_37
+Тип:
+
+=== string infoitem_38
+Изм. атаки:
+
+=== string infoitem_39
+Изм. защиты:
+
+=== string infoitem_4
+Показ. брони:
+
+=== string infoitem_40
+Магия огня
+
+=== string infoitem_41
+Магия молний
+
+=== string infoitem_42
+Магия кислот
+
+=== string infoitem_43
+Магия чувств
+
+=== string infoitem_44
+Магия астрала
+
+=== string infoitem_5
+Заклинание:
+
+=== string infoitem_6
+(<CTRL> - просмотр)
+
+=== string infoitem_7
+Запас сил:
+
+=== string infoitem_8
+Эффект:
+
+=== string infoitem_9
+Скорость:
+
+=== string infoskill_0
+Здоровье
+
+=== string infoskill_1
+Макс. нагрузка
+
+=== string infoskill_10
+Улучш. атаки
+
+=== string infoskill_11
+Познания
+
+=== string infoskill_12
+Ночное зрение
+
+=== string infoskill_13
+Дополнительно
+
+=== string infoskill_14
+Здоровье
+
+=== string infoskill_15
+Запас сил
+
+=== string infoskill_16
+Восстан. здоровья
+
+=== string infoskill_17
+Восстан. запаса сил
+
+=== string infoskill_18
+Стоимость (опыт)
+
+=== string infoskill_19
+Требует:
+
+=== string infoskill_2
+Запас сил
+
+=== string infoskill_20
+Связано:
+
+=== string infoskill_21
+(взят)
+
+=== string infoskill_22
+Увелич. yрона на
+
+=== string infoskill_23
+Повыш. x-ки на:
+
+=== string infoskill_24
+Цена заклинания:
+
+=== string infoskill_3
+Действия
+
+=== string infoskill_4
+Опыт
+
+=== string infoskill_5
+Навык
+
+=== string infoskill_6
+Атака
+
+=== string infoskill_7
+Урон
+
+=== string infoskill_8
+Познания
+
+=== string infoskill_9
+Ловкость рук
+
+=== string infounit_0
+Здоровье:
+
+=== string infounit_1
+Запас сил:
+
+=== string infounit_10
+Броня:
+
+=== string infounit_11
+Защита от:
+
+=== string infounit_12
+Уязвим.:
+
+=== string infounit_13
+м
+
+=== string infounit_14
+Выбранное оружие
+
+=== string infounit_15
+Действия
+
+=== string infounit_16
+Враг:
+
+=== string infounit_17
+Слишком тяжело!
+
+=== string infounit_2
+Скорость:
+
+=== string infounit_3
+Атака
+
+=== string infounit_4
+Защита
+
+=== string infounit_5
+Использ. магию
+
+=== string infounit_6
+Зрение:
+
+=== string infounit_7
+(выслеживание)
+
+=== string infounit_8
+Попадание:
+
+=== string infounit_9
+Урон
+
+=== string item_armor_lower
+легкий доспех
+
+=== string item_armor_shape_lower
+чертеж легк. доспеха
+
+=== string item_armor_shape_upper
+чертеж тяжел. доспеха
+
+=== string item_armor_upper
+тяжелый доспех
+
+=== string item_loot
+предмет для продажи
+
+=== string item_material
+материал
+
+=== string item_modifier
+руна
+
+=== string item_potion
+зелье
+
+=== string item_prototype
+основа заклинания
+
+=== string item_quest
+ключевой предмет
+
+=== string item_spell
+заклинание
+
+=== string item_wand
+жезл
+
+=== string item_wand_shape
+чертеж жезла
+
+=== string item_weapon
+оружие
+
+=== string item_weapon_shape
+чертеж оружия
+
+=== string key_already_mapped
+Клавиша уже используется!
+
+=== string key_already_mapped_msg
+Клавиша %s уже назначена на действие "%s". Хотите переназначить?
+
+=== string last_weapon
+Последнее оружие
+
+=== string last_weapon_msg
+Вы действительно хотите оставить этого персонажа вообще без оружия?
+
+=== string leave_zone
+Покинуть игровую зону
+
+=== string leave_zone_msg
+Вы хотите выйти из игровой зоны?
+
+=== string loot_item
+(Этот предмет нельзя использовать. Его можно только продать.)
+
+=== string magic_skills
+Познания в видах магии
+
+=== string magic_skills_desc
+Показывают макс. сложность заклинания данного вида, которое может использовать персонаж. Познания зависят от разума персонажа, его навыка и умений в заклинаниях данного вида.
+
+=== string mattype_bone
+кость
+
+=== string mattype_cloth
+ткань
+
+=== string mattype_crystal
+кристалл
+
+=== string mattype_fur
+мех
+
+=== string mattype_hide
+шкура
+
+=== string mattype_leather
+кожа
+
+=== string mattype_metal
+металл
+
+=== string mattype_stone
+камень
+
+=== string mode_itemconstr
+Конструктор предметов
+
+=== string mode_itemrepair
+Ремонт предметов
+
+=== string mode_itemtrade
+Магазин предметов
+
+=== string mode_spellconstr
+Конструктор заклинаний
+
+=== string mode_spells
+Навыки/Заклинания
+
+=== string mode_spelltrade
+Магазин заклинаний
+
+=== string mode_weapons
+Переодевание
+
+=== string move_0
+(Ходит)
+
+=== string move_1
+(Левитирует)
+
+=== string move_2
+(Стоит)
+
+=== string move_3
+(Летает)
+
+=== string no_disc_space
+Мало места на диске!
+
+=== string no_disc_space_msg
+Свободного места на диске недостаточно для нормальной работы игры.
+
+=== string no_way
+Мы не можем никого оставлять здесь!
+
+=== string no_zone
+Файла у вас нет
+
+=== string no_zone_msg
+У вас отсутствует файл MOB
+
+=== string notify_loading
+Загрузка игры...
+
+=== string notify_saving
+Запись игры...
+
+=== string obj_0
+Время перехода:
+
+=== string obj_1
+дней
+
+=== string obj_2
+часов
+
+=== string obj_completed
+(выполнено)
+
+=== string obj_cost_exp
+Выполнение увеличит опыт на:
+
+=== string obj_cost_money
+За выполнение обещано денег:
+
+=== string obj_failed
+(провалено)
+
+=== string option_autosave
+Автозапись
+
+=== string option_brightness
+Яркость
+
+=== string option_camera_reverse_x
+Инверт. управление камерой (поворот)
+
+=== string option_camera_reverse_y
+Инверт. управление камерой (наклон)
+
+=== string option_contrast
+Контрастность
+
+=== string option_difficulty
+Уровень сложности игры
+
+=== string option_footprints
+Показать следы
+
+=== string option_gamma
+Гамма-коррекция
+
+=== string option_group_actions
+Команды
+
+=== string option_group_camera
+Камера
+
+=== string option_group_cshots
+Боевые
+
+=== string option_group_game
+Игровые
+
+=== string option_group_items
+Предметы
+
+=== string option_group_select
+Выбор персонажа
+
+=== string option_group_sens
+Чувствительность
+
+=== string option_group_sound
+Звук
+
+=== string option_group_spells
+Заклинания
+
+=== string option_group_video
+Графика
+
+=== string option_group_windows
+Окна
+
+=== string option_marks
+Показать кровь
+
+=== string option_off
+Выкл.
+
+=== string option_on
+Вкл.
+
+=== string option_power_kbd
+Чувствительность клавиатуры
+
+=== string option_power_mouse
+Чувствительность мыши
+
+=== string option_reverse_stereo
+Реверс стереозвука
+
+=== string option_rubber_select
+Чувствительн. рамки выбора
+
+=== string option_scroll_border
+Чувствительн. границы скроллинга
+
+=== string option_select_type
+Выбор персонажа маркером
+
+=== string option_shadow_buildings
+Тени от объектов
+
+=== string option_shadow_flora
+Тени от растений
+
+=== string option_shadow_other
+Все тени
+
+=== string option_shadow_units
+Тени от персонажей
+
+=== string option_show_flying_hp
+Показывать результат удара
+
+=== string option_show_path
+Показывать путь
+
+=== string option_show_tutorial
+Показывать обучающие экраны
+
+=== string option_switch_filters
+Автофильтры в "обозе"
+
+=== string option_tooltip_time
+Задержка для всплывающей подсказки
+
+=== string option_volume_sfx
+Громкость звуковых эффектов
+
+=== string option_volume_stream
+Громкость музыки
+
+=== string option_volume_voice
+Громкость речи
+
+=== string overwrite
+Перезапись
+
+=== string overwrite_msg
+Вы действительно хотите перезаписать игру?
+
+=== string perk_level
+Ур.
+
+=== string perks
+Изученные умения
+
+=== string perks_av
+Доступные умения
+
+=== string quit
+Прервать игру
+
+=== string quit_msg
+Вы действительно хотите прервать игру?
+
+=== string reserved_00
+Зарезервировано
+
+=== string reserved_01
+Зарезервировано
+
+=== string reserved_02
+Игрок %s включил режим паузы
+
+=== string reserved_03
+Зарезервировано
+
+=== string reserved_04
+Подождите...
+
+=== string reserved_05
+Зарезервировано
+
+=== string reserved_06
+Зарезервировано
+
+=== string reserved_07
+Зарезервировано
+
+=== string reserved_08
+Зарезервировано
+
+=== string reserved_09
+Зарезервировано
+
+=== string reserved_10
+Зарезервировано
+
+=== string reserved_11
+Зарезервировано
+
+=== string reserved_12
+Зарезервировано
+
+=== string reserved_13
+Зарезервировано
+
+=== string reserved_14
+Зарезервировано
+
+=== string reserved_15
+Зарезервировано
+
+=== string reserved_16
+Зарезервировано
+
+=== string reserved_17
+Зарезервировано
+
+=== string reserved_18
+Зарезервировано
+
+=== string reserved_19
+Зарезервировано
+
+=== string reserved_20
+Дорогой друг!
+Если ты читаешь эту надпись - значит, ты залез в файл с текстовыми ресурсами. Вполне возможно, что после осмотра тебе захочется что-нибудь подправить здесь или в других ресурсах. Рыцари Круглого Стола в таких случаях говорили: "Имеете право атаковать"; а я от себя добавлю: весь последующий геморрой - из материала заказчика.
+С почтением, CMEPTHIK
+
+=== string save_auto_enter
+Автозапись (вход)
+
+=== string save_auto_exit
+Автозапись (выход)
+
+=== string save_camp
+Лагерь
+
+=== string save_day
+День
+
+=== string save_new
+НОВАЯ ЗАПИСЬ
+
+=== string save_quick
+БЫСТРАЯ ЗАПИСЬ
+
+=== string school_0
+Магия стихий
+
+=== string school_1
+Магия чувств
+
+=== string school_2
+Магия астрала
+
+=== string show_tutorial_key
+Вызов подсказки:
+
+=== string skills
+Навыки
+
+=== string topic_prefix
+-
+
+=== string tutorial
+Подсказка
+
+=== string version_name
+
+
+
+Версия игры
+1.07

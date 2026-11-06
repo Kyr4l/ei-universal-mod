@@ -1,0 +1,311 @@
+# um-texts 1
+=== string disconnect
+Сервер не отвечает!
+
+=== string disconnect_msg
+Игра прервана: сервер выключен или возникли проблемы с соединением.
+
+=== string lmp_allod_name_0
+Гипат
+
+=== string lmp_allod_name_1
+Ингос
+
+=== string lmp_allod_name_2
+Суслангер
+
+=== string lmp_allod_name_3
+Пещера
+
+=== string lmp_camping_abort
+Быстрый переход на базу невозможен!
+
+=== string lmp_camping_count
+До быстрого перехода на базу осталось % с
+
+=== string lmp_camping_start
+Вы начали готовиться к быстрому переходу на базу
+
+=== string lmp_cannot_connect
+Соединение не происходит!
+
+=== string lmp_cannot_connect_msg
+Возможно, у вас проблемы со связью с сервером.
+
+=== string lmp_connection_0
+Имя сервера:
+
+=== string lmp_connection_1
+Игроков:
+
+=== string lmp_connection_10
+Список
+
+=== string lmp_connection_11
+Добавить/Удалить
+
+=== string lmp_connection_12
+Имя
+
+=== string lmp_connection_13
+№
+
+=== string lmp_connection_14
+База
+
+=== string lmp_connection_15
+Пинг
+
+=== string lmp_connection_16
+Закрытый сервер
+
+=== string lmp_connection_17
+Пароль
+
+=== string lmp_connection_18
+Введите пароль
+
+=== string lmp_connection_19
+Введите IP-адрес сервера
+
+=== string lmp_connection_2
+Макс. количество игроков:
+
+=== string lmp_connection_20
+Обновляется список серверов
+
+=== string lmp_connection_21
+Требуется пароль
+
+=== string lmp_connection_3
+База:
+
+=== string lmp_connection_4
+Задание:
+
+=== string lmp_connection_5
+IP:
+
+=== string lmp_connection_6
+Пинг:
+
+=== string lmp_connection_7
+Новый сервер:
+
+=== string lmp_connection_8
+Соединение...
+
+=== string lmp_connection_9
+PK:
+
+=== string lmp_deletepers
+Удаление персонажа
+
+=== string lmp_deletepers_msg
+Персонаж будет удален без возможности восстановления. Вы уверены, что хотите удалить его?
+
+=== string lmp_exch_they_offer
+Обмен?
+
+=== string lmp_exch_we_offer
+Обмен!
+
+=== string lmp_female_voice
+Голос: женский
+
+=== string lmp_male_voice
+Голос: мужской
+
+=== string lmp_no_pers
+Нет персонажа для сетевой игры!
+
+=== string lmp_no_pers_msg
+У вас нет ни одного персонажа для сетевой игры. Чтобы принять участие в сетевой игре, вам надо создать нового персонажа.
+
+=== string lmp_pers_delete
+Удалить
+
+=== string lmp_pers_new
+Новый
+
+=== string lmp_pers_redress
+Просмотреть
+
+=== string lmp_pers_rename
+Изменить клан
+
+=== string lmp_pers_tall
+Рост
+
+=== string lmp_pers_tall_desc
+Ваш персонаж может иметь любой рост (пределы условно обозначены от 0 до 100). Рост персонажа не влияет на его характеристики.
+
+=== string lmp_pk_off
+запрещен
+
+=== string lmp_pk_on
+разрешен
+
+=== string lmp_player_banned
+Игроку %s запрещен вход в игру
+
+=== string lmp_player_connected
+Игрок %s присоединился к игре
+
+=== string lmp_player_disconnected
+Игрок %s покинул игру
+
+=== string lmp_player_kicked
+Игрок %s исключен из игры
+
+=== string lmp_player_lost_connection
+Игрок %s потерял связь с сервером
+
+=== string lmp_points_left
+Баланс
+
+=== string lmp_points_left_desc
+Характеристики персонажа должны быть сбалансированы: например, увеличение одного параметра обязательно влечет за собой уменьшение другого. Общий баланс характеристик должен быть равен нулю. Если баланс имеет другое значение, создание персонажа завершить нельзя.
+
+=== string lmp_quest_canceled
+Задание %s отменено
+
+=== string lmp_quest_completed
+Задание %s выполнено
+
+=== string lmp_quest_taken
+Взято задание: %s
+
+=== string lmp_select_voice
+Выбор голоса
+
+=== string lmp_select_voice_desc
+Вы можете выбрать для своего сетевого персонажа любой голос из доступных в списке. Щелкните мышкой на условном назвнии голоса для того, чтобы выбрать его.
+
+=== string lmp_server_full
+Подключение невозможно!
+
+=== string lmp_server_full_msg
+На сервере сейчас максимальное количество игроков.
+
+=== string lmp_status_base
+На базе
+
+=== string lmp_status_camp
+Торгует
+
+=== string lmp_status_connect
+Переход
+
+=== string lmp_status_zone
+На карте
+
+=== string lmp_trade_canceled
+Игрок %s отказывается от обмена с вами
+
+=== string lmp_trade_requested
+Игрок %s предлагает вам обмен
+
+=== string lmp_voices
+Выбрать голос
+
+=== string lmp_wrong_password
+Неправильный пароль
+
+=== string lmp_wrong_password_msg
+Соединение невозможно. Введите правильный пароль!
+
+=== string lmp_wrong_protocol
+Соединение не происходит!
+
+=== string lmp_wrong_protocol_msg
+Неправильная версия протокола соединения.
+
+=== string lmp_you_are_banned
+Вы отключены от игры
+
+=== string lmp_you_are_banned_msg
+IP-адрес вашего компьютера отключен от игры на данном сервере
+
+=== string lmp_zone_disabled
+Доступ в игровую зону запрещен
+
+=== string lmp_zone_enabled
+Доступ в игровую зону разрешен
+
+=== string reserved_02
+Игрок %s включил режим паузы
+
+=== string reserved_04
+Подождите...
+
+=== string reserved_05
+Зарезервировано
+
+=== string reserved_06
+Зарезервировано
+
+=== string reserved_07
+Зарезервировано
+
+=== string reserved_08
+Зарезервировано
+
+=== string reserved_09
+Зарезервировано
+
+=== string reserved_10
+Зарезервировано
+
+=== string reserved_11
+Зарезервировано
+
+=== string reserved_12
+Зарезервировано
+
+=== string reserved_13
+Зарезервировано
+
+=== string reserved_14
+Зарезервировано
+
+=== string reserved_15
+Зарезервировано
+
+=== string reserved_16
+Зарезервировано
+
+=== string reserved_17
+Зарезервировано
+
+=== string reserved_19
+Зарезервировано
+
+=== string reserved_20
+Зарезервировано
+
+=== string reserved_22
+Дорогой друг! Если вы сумели прочитать это сообщение - значит, вы сумели залезть непосредственно в ресурсы игры. Разработчики поздравляют вас с этим подвигом и предупреждают, что, если вы будете что-либо менять здесь своими шаловливыми ручонками, игра скорее всего будет глючить или же просто не будет запускаться. 
+С искренним приветом, ответственный за тексты в игре CMEPTHIK
+
+=== string xch_accept
+Подтвердить обмен
+
+=== string xch_current_money
+Ваши деньги:
+
+=== string xch_money_offer
+Вы предлагаете денег на обмен:
+
+=== string xch_money_remote
+Вам предлагают денег на обмен:
+
+=== string xch_remote_cancel
+не согласен
+
+=== string xch_remote_header
+Ваш партнер на предлагаемый обмен
+
+=== string xch_remote_ok
+согласен
+

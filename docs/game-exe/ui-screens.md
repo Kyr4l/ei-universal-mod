@@ -71,11 +71,12 @@ The in-zone "talk" mode: the player walks, clicks NPCs, picks topics, watches br
 
 | Build 0x6024B0 [V] | |
 |---|---|
-| art | figure "saveload"; text panel quads (200..600 x 430..570) + InitFrame16 frame; topic panel (155..416 x 580..645) |
+| art | figure "saveload"; text panel quad (200,430)-(600,570) (colour 0x80000000) + border strips (195,425)-(605,575); topic panel quad (155,416)-(645,580) (0xA0000000) + border (150,411)-(650,585) [V, deep read 2026-11-06; the old row had the topic rect garbled] |
 | surfaces | [0] text (200,0x1AE)-(600,0x23A), [1] topic list (0,0)-(0xFA,0x1E) |
 | controls | `+0x260` CScrollBar (0x248,0x1B8)-(0x252,0x230); `+0x25C` CTextListWin (0xA5,0x1AA)-(0x27B,0x23A) line 10 |
-| state | `+0x16C` mode = 0, `+0x168` = 1, `+0x164` = 0; camera distance g_0x79BD34 saved in `+0x268` and set to 4.0; CMusicZone::PlayBattle; `+0x27D` = zone record +0x44 (single-speaker zone); `+0x280` CLobbyStatusBar when Lobby_IsAlive; `+0x284` = the party hero ids |
-| children | a 0xC-byte camera link (vt 0x741154) and a UIControl740208 camera controller |
+| state | `+0x16C` mode = 0, `+0x168` = 1, `+0x164` = 0 (**never written again**, see Update); camera distance g_0x79BD34 saved in `+0x268` and set to 4.0; `CMusicSystem::PlayBriefing(zone record +4, or "gipat" when the zone has no record)` (was named CMusicZone::PlayBattle); `+0x27D` = zone record +0x44 (single-speaker zone); `+0x27E` = 1 only on a fresh build (UI stream g_0x7AFDF8 empty) when the client mode (connection `+0x1C +0x104`) is not 5; on a load the stream is emptied and `+0x27E` stays 0; `+0x280` CLobbyStatusBar when Lobby_IsAlive (then window slot 36(1)); `+0x284` = the ids of the client player's units that pass `IsHeroId` (1e9 <= id < 2e9) |
+| camera | when the zone record byte `+0x34` is set: `CCamera::SetLeash(point +0x38 / +0x3C, radius +0x40)`; camera flag 0x40 of g_0x79B2B0 cleared, 0x200 set, `FollowUnitId(-1)` |
+| children | a 0xC-byte camera link (vt 0x741154) and a `CamCtlFree` camera controller |
 
 Modes `+0x16C` [V]: 0 world, 1 topic list, 2 walking into place, 3 briefing text running, 4 line finished.
 
@@ -85,34 +86,95 @@ Modes `+0x16C` [V]: 0 world, 1 topic list, 2 walking into place, 3 briefing text
 | double click, mode 0 | same, but a terrain point runs (`Order_MoveTo(.., 1)`) (0x603360) |
 | L click, mode 1 | row i + page `+0x264` -> `+0x184` = topic, `SelectAnswer(0,1)` 0x6064E0 |
 | L click, mode 3 / 4 | 3 = `ParseDialogScript(0)` next phrase; 4 = `StartDialogLine` (end the briefing) |
-| keys (0x6034A0) | Esc: mode 0 pushes CEscMenu, 3 skip, 4 end, 2 `SelectAnswer(1,0)`, 1 -> 0; Space: 3 next phrase, 4 end; Enter: 3 skips the whole line; keyboard.ini actions in mode 0: 4 (obj) opens CQuestLogWin when a `q.<zone>.<x>` == 1 names the zone, 0xB camera to the player, 0x35 QuickSave("saveq"), 0x36 SaveGame_BeginLoad("saveq") |
-| mouse move (0x603D00) | hover unit with topics -> cursor frame 0xE and its name drawn at (x-0x7D, y-0x14); a zone exit whose `z.<target>` != 1 -> cursor 0xF; mode 1 hovered row -> `+0x188` + DrawTopicList |
+| keys (0x6034A0) [V, deep read 2026-11-06] | while the lobby modal flag `+0x2A0` is set only Esc does something (clears it). Esc: mode 0 pushes CEscMenu, 3 skip the rest (as Enter), 4 end (`EndBriefing`), 2 `SelectAnswer(1,0)` (stop walking, start at once), 1 -> mode 0; Space: 3 next phrase (`ParseDialogScript(0)`), 4 end, 2 `SelectAnswer(1,0)`; Enter (single player): 3 = click1.wav + `ParseDialogScript(1)` repeated while the mode stays 3 (the whole remaining text and the rewards appear at once), 4 end; lobby: Enter opens the chat, Backspace clears it. keyboard.ini actions in mode 0: 4 (obj) pushes CQuestLogWin `SetCaption(current map, 0, 0, allowTravel 1)` for the first variable `q.<zone>.<x>` (3 parts) == 1.0 whose zone record has the current zone's name (any zone in a lobby); 0xB camera follows the player unit; 0x35 QuickSave("saveq"); 0x36 SaveGame_BeginLoad("saveq") |
+| mouse move (0x603D00) [V, deep read 2026-11-06] | lobby modal -> cursor 0xD and forwarded to the box; mode 1: hovered row (button 0..4 + page `+0x264`, below the topic count) -> `+0x188` + DrawTopicList; mode 3 cursor 0xE, mode 4 cursor 0; mode 0 with no mouse button held: a living unit (vt+0xDC == 0, not the own lobby unit) whose server brain is idle (`+0x190` 0 / 0xB and `+0x1B4` == 9) -> `LoadSpeakersFor(id)` (its topics), cursor 0xE only when it has topics, its name (cached map `+0x1D8`: id -> vt+0x1C name) always drawn in beige at (x-0x7D, y-0x14); else a zone exit under the terrain point -> cursor 0xF when `z.<target of exit +0x164>` != 1 (the hovered exit's own index is computed and **ignored**: the test always uses exit `+0x164` = 0) |
 | OnCommand 0x606F40 | 0x10001 (leave-zone yes) = `Session_RequestMapChange(+0x164)`; 0x20001 = push CSaveLoadWin in save mode; 0x90001 / 0x100001 = leave the game (`CInterface +0x44` = 1, `LobbySession_ReleaseActive(2)`) |
 
-`SelectAnswer` 0x6064E0 [V]: "goodbye" -> mode 0; a "constr*" topic (the topic is lower-cased by `CString::MakeLower` 0x700EFE (was named MakeUpper) and its first 6 characters compared with "constr", 0x6078C0) -> `World_SetConstrCurrent(id)` + `Game_SendLeave(5)` (enter the camp
-/ constructor); else opens the text `briefing <topic>`, reads its `#show` lines to name the second (`+0x1A8`) and third (`+0x1AC`)
-speaker, computes the two facing poses 2.5 m + proto radius apart (`+0x1B0 / +0x1BC`, centre `+0x1C8`, dirs `+0x1D4..`), saves the
-pre-dialog poses (`+0x210 / +0x228`), `PlaceUnit` (walk, 0x6089D0: a 0x30-byte node in the `+0x240` list, `Order_MoveTo`; teleport after
-30 s) and mode = 2 (Update 0x604130 turns it into `StartBriefing` 0x608210 when everybody stands).
+`SelectAnswer(isBriefing, savePoses)` 0x6064E0 [V, deep read 2026-11-06]: `+0x27C` = isBriefing; no player unit `+0x1A4` -> mode 0.
+"goodbye" -> mode 0. A topic whose first 6 characters are "constr" (case-insensitive `_stricoll` of `CString::Left(6)`; the
+lower-casing `CString::MakeLower` 0x700EFE (was named MakeUpper) belongs to 0x6078C0, not here) -> merchant id = `atol(topic.Mid(7))`
+(so "constr_5" -> 5; 0x6FD9B4, named `CString::Left`, is `CString::Mid(nFirst)`); when `g_0x7AA5D8` has that merchant,
+`World_SetConstrCurrent(id)` + `Game_SendLeave(5)` (enter the camp); mode 0 either way. Otherwise the text `briefing <topic>` is
+opened (missing -> mode 0) and **every** `#show` line of it is scanned: the first live unit named there (`Game_FindUnitById(hash of
+the name)`) that is not the player's unit becomes the second speaker `+0x1A8`, any later different one the third `+0x1AC` (the last
+one wins). **No second speaker -> mode 0 and nothing happens** (a briefing needs at least one live non-player unit in its `#show`
+lines; NPC portraits do not count). Geometry, d = second speaker proto `+0x28` (radius) + 2.5 m: in a normal zone the player walks to
+the point d along the second speaker's forward axis from it (`+0x1BC`) and faces it (`+0x1B0` = the second speaker's position); in a
+single-speaker zone (`+0x27D`) the roles swap: the second speaker walks to d along the player's forward axis and faces the player.
+The third speaker's spot `+0x1C8` is the midpoint of the pair moved sideways by half the pair distance (the midpoint plus the
+half-vector rotated 90 deg), facing the midpoint. Unit vectors (z = 0): `+0x1D4` = `+0x1BC - +0x1B0`, `+0x1E0` the reverse,
+`+0x1EC` = midpoint - `+0x1C8`. With savePoses the third (and in a single-speaker zone the second) speaker's position and reversed
+forward axis are kept in `+0x210` / `+0x228`; a still pending walk node of those units is dropped and, when its byte `+0x28` is 0, its
+target is taken as the pose to restore. `PlaceUnit` 0x6089D0 (unit, pos, dir, waitFlag 1, teleport = isBriefing, run 0): a 0x30-byte
+node in `+0x240` (state 1) + `Order_MoveTo`, or an instant move. Mode = 2 (walk; Update starts the briefing) or, with isBriefing,
+`StartBriefing` 0x608210 at once. The topic-row click calls `SelectAnswer(0, 1)`, Esc / Space while walking `SelectAnswer(1, 0)`.
 
-`ParseDialogScript` 0x604C50 [V] reads the section line by line: `#nolips`, `#show <unit> [idx] [weapon]` -> `AddSpeaker` 0x605DE0
-(a live unit joins `+0x294`, `SendMsg19(unit, 1)`; a non-unit name = an NPC portrait "quitem%04d" on a quad at the slot table
-0x74111C/0x741138), `#hide <unit>` -> `RemoveSpeakerByName` 0x6062C0, `#animation <n>`, `#camera <shot> [yaw dist height]`, `#phrase
-<speaker> [voice]`: label = unit name or the `pers` map `+0x26C`, text appended to `+0x248` as "<label>: <text>\n" with the colour
-prefix 0x79349C, voice "<root>\briefing\<name>\<n>.mp3" (`PlaySound3D` -> `+0x250`, timer `+0x24C` = len * 0.05 s), camera
-`DialogCamera::SetShot` 0x607EC0 (shots 1..12: 1 both from 3 x d at 1.5 m, 2 player close-up -30 deg 4 m, 3 second +30, 4 third,
-5 both 2.7 d 15 deg h 3, 6 / 7 +-45 deg 3.5 m, 8 third 15 deg, 9 both 2.4 d -15 deg, 10..12 with the others sunk to -100 by
-`World_SetUnitHeight`) or `FocusOn` 0x607BB0 (= `SendMsg0F_Move(target, eye, target)`), speaker animation
-(`StartSpeakerAnimation` 0x607A60: entries 3 / 1 / 0..2 of the model, "unhuma" tables 0x7410FC / 0x74110C), mouth open. At the end of
-the section the briefing rewards of the quest record `g_0x7C87D4[topic]` are printed: exp +0xC "brief_get_exp", money +0x10
-"brief_get_money", items +0x14 "brief_get_item", lost +0x20 "brief_lost_item", quests +0x2C "brief_get_quest", completed +0x38
-"brief_complete_quest", specials +0x68 "brief_get_specials_%d". `StartDialogLine` 0x608450 ends it: `SendMsg19(unit, 2)` for every
-speaker, poses restored, every `b.<x>.<topic>` variable equal to the topic fires `Script::NamedEventSource(world, 0, name)`,
-`SendMsg19(0, 0)`, camera back (`SendMsg0F_Move(+0x204, +0x1F8)` or `SendMsg04_Position` after an auto briefing).
+`ParseDialogScript(skipToEnd)` 0x604C50 [V, deep read 2026-11-06 with the machine code] continues the open `briefing <topic>` text
+**up to and including the next `#phrase`** (one phrase per call; the caller calls again when the phrase is over). The directives
+are case-insensitive and apply to the phrase that follows them (their values are reset on every call):
+- `#nolips`: this phrase without lip movement, and its text in grey.
+- `#show <name> [index] [weapon]`: `AddSpeaker(name, index - 1)` 0x605DE0 (-1 without an index). The third argument is **never
+  read** by AddSpeaker, so `weapon` changes nothing (the line only makes a second, identical call). A live unit (by the hash of the
+  name) is appended to the speaker vector `+0x294` (an earlier entry of the same unit is removed first), `SendMsg19(1, unit id)` is
+  sent, `CUnit::SetVisibleToAll(0)` when it is the player's unit, brain `+0x978` = callback 0x6023F0. Any other name is an **NPC
+  portrait** and needs an index >= 0 (none = ignored): an older portrait of that name is removed, the name ('_' -> ' ',
+  lower-cased) is looked up in the name -> number table `g_0x7C8764` (no other code references it; unknown names give nothing), the
+  64x64 picture "quitem%04d" (number) is blitted into a 256x256 target on the quad "initqu%ditem" at slot (index mod 7) of the tables
+  0x74111C (x) / 0x741138 (y), depth 12, turned by pi; index < 7 adds a dark backdrop (centre +-60) and a border (+-65), index > 7
+  tints the quad 0x82FFFFFF.
+- `#hide <name> [x]`: `RemoveSpeakerByName(name, skipToEnd, 1 when a second argument exists)` 0x6062C0.
+- `#animation <n>`: the speaker plays model entry n (server unit `Stop`, done callback 0x6023F0, `QueueScriptOrder`); without it
+  (n < 1) the talk animation `StartSpeakerAnimation(unit, 1, 0)`.
+- `#camera <shot> [yaw-deg distance height]`: with all three numbers `FocusOn(unit, yaw * pi / 180, distance, height)` 0x607BB0 on
+  the player (shot 2), the second (3) or the third speaker (4), any other shot = the pair's midpoint (unit 0); with fewer arguments
+  `DialogCamera::SetShot(shot)` 0x607EC0 (shots 1..12: 1 both from 3 x d at 1.5 m, 2 player close-up -30 deg 4 m, 3 second +30,
+  4 third, 5 both 2.7 d 15 deg h 3, 6 / 7 +-45 deg 3.5 m, 8 third 15 deg, 9 both 2.4 d -15 deg, 10..12 with the others sunk to -100
+  by `World_SetUnitHeight`); no `#camera` (shot < 1): shot 1 for the first phrase of the briefing, else 2 when the speaker is the
+  player, 4 the third speaker, 3 anybody else.
+- `#phrase <name> [voice]`: the label is the name of the unit with that id (vt+0x1C), or, when that name is empty, the `pers` label
+  of `+0x26C` keyed by the unit `+0xC`, or the raw name when no unit has it. The text = the following lines up to the next `#`
+  (`ReadUntilHash`), appended to `+0x248` as `"\aC<FF B3 31>" <label> ":\n" "\aC<E4 D7 A7> " <text> "\n"` (golden label, beige
+  text; `#nolips` uses grey `\aC<A8 A8 A8>`). Voice: only when not skipping and `voice` > 0: `Play2D("<r>\briefing\<topic>\<voice>.mp3",
+  .., decompressMp3 1)` -> `+0x250`, where **r is "t" or "s" picked at random per phrase** (`(rand() * 2 / 32767) & 1` into the table
+  0x793378); timer `+0x24C` = text length * 0.05 s (+ 1 s on the first phrase). Update moves on when the voice ends, or, without a
+  voice, when the timer runs out.
+After the phrase the speaker heights are reset, the camera is set (above) and every speaker record whose name equals the phrase name
+gets the animation and the mouth flag (`+0x240 +mouthAnimActive` = not #nolips) and becomes `+0x254`; every other speaker goes idle
+with a closed mouth. When no further `#phrase` follows (`SeekSection("#phrase")` from here) the briefing is over: mode 4 and the
+**reward lines** of the briefing record `g_0x7C87D4[topic]` (the record `CWorldServer::OnNamedEvent` pays out at the end) in white
+`"\aC<FF FF FF> %s %d\n"` / `" %s %s\n"`: exp `+0xC` > 0 "brief_get_exp" (trunc), money `+0x10` > 0 "brief_get_money", one
+"brief_get_item" line per item name of `+0x14..+0x18` (`CreateItemByName` + item description), one "brief_lost_item" line per name of
+`+0x20..+0x24` and, **in a lobby when the topic starts with "z"**, one per quest item (typeId 0x14) of player 0 (the host hands all
+quest items in), "brief_get_quest" + the title (first line of "quest <c>") for every 3-part `a.b.c` name of `+0x2C..+0x30`,
+"brief_complete_quest" the same for `+0x38..+0x3C`, and the text "brief_get_specials_<n>" when the count `+0x68` = n > 0.
+`skipToEnd` (Enter / Esc in mode 3, called in a loop) skips the voice and the list refreshes, then at the end puts the whole text
+in the list (`SetText`, scrolled to the bottom), closes every mouth, idles every speaker and removes the NPC portraits.
 
-Update 0x604130 [V]: every `b.<unit>.<topic>` == 1 (topic not constr*) of a party unit keeps `CPlayerServer::SendMsg19(unit, 1 or 2)`
-(the "can talk" marker); when `+0x168` and the exit `+0x164` is allowed and `Game_CollectHeroesInZoneExit` finds the party inside ->
-`Session_RequestMapChange`. `OnPartyChanged` 0x602C90 auto-starts a briefing on zone entry when a `b.%s` key with 3 parts is 1.0
+`EndBriefing` 0x608450 (was named StartDialogLine; it ends the briefing) [V, deep read 2026-11-06]: stops the voice, `Music_FadeIn`,
+removes the NPC portraits; per speaker `SendMsg19(2, id)`, mouth closed, `SetVisibleToAll(1)`, height 0, done callback cleared,
+server unit `Stop`; the speaker vector is emptied; the third speaker (and in a single-speaker zone the second) walks back to its
+saved pose (`PlaceUnit`, no wait flag, no teleport; the player is not moved back). Then the `b.` variables of the host (or, in a
+lobby, the client) table are scanned and **only the first** 3-part `b.<x>.<topic>` whose third part equals the topic (any value)
+fires `CWorldServer::OnNamedEvent(player 0, name)` (in a lobby `Lobby_SendNamedEvent`; else the rewards of the briefing record, see
+world-server.md): two variables naming the same topic still fire once. Mode 0, `SendMsg19(0, 0)`, camera back:
+`SendMsg0F_CameraFromTo(+0x204, +0x1F8, +0x204)`, or after an automatic briefing (`+0x18C`) `SendMsg04_CameraAt(player position)` +
+camera flag 0x40 cleared + `+0x18C` = 0.
+
+Update 0x604130 [V, deep read 2026-11-06]: (1) every walk node of `+0x240` accumulates time `+0x2C`: state 1 (walking) becomes 2 when
+the unit is within 0.1 m (xy) of the target and gets `Brain::OrderTurnTo(dir)`; state 2 becomes 0 when the forward axis matches the
+direction (squared difference < 0.01); after 30 s the unit is moved there (`CollisionMap::MoveObjectAndRestamp`, yaw from the
+direction, `ResetOrdersAndStance`) and the node ends; ended nodes are freed. (2) mode 1 shows the topic surfaces / scroll bar
+(`GetChanged` -> `+0x264` + DrawTopicList) and then does mode 0's work; modes 0 / 1: the `b.` variables equal to 1.0 with 3 parts
+whose third part does not start with "constr" and whose second part is the hash of one of the hero ids `+0x284` give the "has a
+topic" set; every hero of `+0x284` that exists in the client world gets `SendMsg19(1, id)` when in the set, else `SendMsg19(2,
+id)`; then, when `+0x168` is set and the client party has heroes: exit `+0x164`'s target (not "none") with `z.<target>` != 1.0 ->
+when `Game_CollectHeroesInZoneExit(the party's first hero record, +0x164)` says every living hero stands in that exit: g_0x784750 = 0
+and `Session_RequestMapChange(+0x164)`. Because `+0x164` is only ever set to 0 (Build), **talk mode leaves a zone only through
+exit #0** [V: no other write in 0x6024B0..0x609D00; bug candidate or a design limit of the one-exit talk zones]. (3) mode 2 stays
+until no walk node with the wait flag `+0x28` is still running, then mode 3 + `StartBriefing`. (4) mode 3 shows the text list; no
+voice: the timer counts down and below 0 calls `ParseDialogScript(0)`; a voice: the next phrase starts when its channel is gone
+(`FindChannelById` and `HasPendingSound` both 0). (5) mode 4 only closes the speaking unit's mouth the same way; the briefing waits
+for a click / Space / Enter / Esc (`EndBriefing`). `OnPartyChanged` 0x602C90 auto-starts a briefing on zone entry when a `b.%s` key with 3 parts is 1.0
 (`+0x18C` = 1). `ShowGameOver` 0x608C70 = gameover.wav + CMessageBox("game_over", base 0x20000).
 
 **CLobbyStatusBar** 0x608D20 (0x170 bytes, multiplayer only): a strip (0x1D0,0)-(800,0xA0) with one portrait button per lobby player
@@ -416,7 +478,8 @@ Constructed inline by the callers (CEscMenu 0x62AE90, CMainMenu 0x632D70, Dialog
 | buttons | 0 load / save (0xA3,0x20E)-(0xED,0x23E) (tips 0xEAC5 / 0xEAC4), 1 cancel (0x233..0x27D, 0xEAC7), 2 delete (0x16B..0x1B5, 0xEAC6), 3..18 = 16 slot rows (0x6C..0x172 x 0x6C + 0x18 r) |
 | quads | 0 / 1 / 2 button art, 3 the screenshot (410,100)-(700,320), 4 cursor; frames list / shot / details |
 | controls | `+0x180` CScrollBar (0x6C,0x6C)-(0x180,0x1EC); figure "escMenu00" parts load + loadlabel / save + savelabel |
-| list | `ScanSaves` 0x655D40: every `saves\save*` directory -> a 0x44-byte `SaveSlotRecord` (label, folder, CTime, gtime, zone title, map; `+0x40` error = no info.sav "Error Save"), sorted newest first; save mode inserts a new slot 0 "save<n+1>" with the live screenshot (`CInterface +0x5C` thumbnail) |
+| list | `ScanSaves` 0x655D40: every `saves\save*` directory -> a 0x44-byte `SaveSlotRecord` (label, folder, CTime, gtime, zone title, map; `+0x40` error = no info.sav "Error Save"), sorted newest first; save mode inserts a new slot 0 "save<n+1>" with the live screenshot (`CInterface +0x5C` thumbnail) [V, deep read 2026-11-06 with the machine code: n = the largest `atol(folder.Mid(4))` of the folders with names longer than 4 characters (a separate variable, not the info.sav version); the version gates read the stream's own version field (time when > 1, label when > 2); an empty label gets `MakeLabel`; the new slot holds "gtime", the client map, that map's zone record `+4` as the title and a `MakeLabel` label; scroll range = slots - 16 when more than 16] |
+| layout [V, deep read 2026-11-06] | quads 0 / 1 / 2 button art (163..237 / 563..637 / 363..437 x 526..574), 3 the screenshot (410,100)-(700,320) with UVs (0,256)-(256,64) (192 rows, flipped), 4 the row cursor (moved to (239, 0x78 + 0x18 r) by `RefreshSaveList`), frames list (95,95)-(395,505) / shot (405,95)-(705,325) / details (405,335)-(705,505); figure "escMenu00" parts "load" + "loadlabel" or "save" + "savelabel" at (400,700) depth 4.8; load mode selects slot 0 (or -1 when there are no saves), save mode slot 0 with its label copied into the edit string; the tutorial only when not sliding in |
 
 `info.sav` [V] = `Stream_WriteHeader4(0x111, version 3)`, float gtime, string zone title, string map name, u32 time_t (v >= 2), string
 label (v >= 3) (`SaveSlotRecord::Serialize` 0x6539C0; `ScanSaves` reads it with the version gates). `shot.sav` = 0x18000 bytes =
@@ -428,7 +491,7 @@ read back into the scratch figure by `UpdateSaveScreenshot` 0x656E10, "Can't loc
 | select | row click / Up / Down / PgUp / PgDn (16) -> `+0x170`, the label copied into the edit string `+0x188`, list + shot refreshed (`ClampSelection` 0x655430) |
 | type a name (save mode) | `OnChar` 0x655050: a normal slot (not saveq / savea / saveb, `IsSpecialSlot` 0x657820) starts editing (`+0x18C`, text cleared), < 60 chars and < 0xB2 px wide (font 1); Backspace / Delete / Home / End / Left / Right in `OnKeyDown` 0x6548A0 |
 | confirm | button 0 / Enter / double click -> `OnConfirm` 0x655290: save: slot 0 -> `DoSave`, other -> box "overwrite" (0x20001 -> `DoSave`); load -> `OnLoad` 0x655A10: `ShowMessageBar("notify_loading")`, `Game_StopAllSounds`, `SessionRequest::SetLoadSave(g_0x7AFE20, folder, 0) 0x5816D0 (kind 2)` (the session loop loads it) |
-| DoSave 0x655550 | free space (`Disk_GetFreeBytes` vs `SavesCurrent_ScanSize`, else box "no_disc_space" 0x30001 -> close 0x100002), `ShowMessageBar("notify_saving")`, `Game_SaveToSlot_Wrap(folder)`, cursor frame 3, record label = `+0x188` (slot 0 unedited = empty -> MakeLabel), time = now, info.sav, shot.sav, close with 0x100002 |
+| DoSave 0x655550 | free space (`Disk_GetFreeBytes` vs `SavesCurrent_ScanSize`, else box "no_disc_space" 0x30001 -> close 0x100002), `ShowMessageBar("notify_saving")`, `Game_SaveToSlot_Wrap(folder)`, cursor frame 3, record label = `+0x188` (slot 0 unedited = empty -> MakeLabel), time = now, info.sav, shot.sav, close with 0x100002. [V, deep read 2026-11-06] The free-space test is skipped when `Disk_GetFreeBytes` returns 0, and a refusal only pushes the box (base 0x30000, OK) and returns. The game state goes to the **selected** slot's folder, but the info.sav written is always **record 0** (the new-slot record that ScanSaves filled with the current gtime / zone title / map), whose label becomes the edited name, else the overwritten slot's old label, else (slot 0 unedited) empty; so overwriting keeps the old name and stores the current game's details. shot.sav = the live figure `+0x184` locked under g_0x7AEE78 (0x18000 bytes); a lock failure closes 0x100002 without the shot |
 | delete | button 2 -> delete.wav + box "delete" (0x10001 -> `DeleteSelectedSave` 0x655B20: `saves\<folder>\*.*` DeleteFileA + RemoveDirectoryA, rescan); refused for the new slot |
 | cancel | Esc / button 1 -> close 0x100001 |
 
@@ -437,6 +500,18 @@ quicksave key (action 0x35, HUD / dialog / world map), "savea" by `CBattleHud::O
 g_0x79BE7C is on, "saveb" by `CWorldMapScreen::Build`. Labels: "save_quick" / "save_auto_enter" / "save_auto_exit" / zone title
 (`SaveSlotRecord::MakeLabel` 0x653A50, zone title = first line of "zone <map>" or "save_camp"). `SaveGame_BeginLoad(folder)` 0x6575B0 =
 the quickload key: `_access` the directory, "notify_loading", `SessionRequest::SetLoadSave`. Not in lobby games.
+`QuickSave` [V, deep read 2026-11-06]: does nothing in a lobby, and **silently skips the save** when the disk has less free space
+than the saves need (no box); otherwise renders a frame first when asked, copies the 800x600 back buffer, busy cursor,
+g_0x7C7DB0 (`CInterface +0x60`) = `Game_IsServerPaused()`, "notify_saving", `Game_SaveToSlot_Wrap(folder)`, then info.sav (header
+0x111 v3: "gtime", zone record `+4` of the client map as the title, the map name, now, an **empty label**, so the list shows the
+`MakeLabel` text) and shot.sav = the frame `StretchTo(256, 192)` (0x18000 bytes).
+`OnKeyDown` 0x6548A0 [V, deep read 2026-11-06]: Enter = `OnConfirm`, Esc = cancel.wav + close 0x100001, PgUp / PgDn -+16, Up / Down
+-+1 (save\select.wav, `ClampSelection`); other keys only in save mode: Backspace / Delete on a normal slot not yet edited start
+editing with an **empty** name, Home / End / Left / Right start editing with the slot's label; Backspace removes the character
+before the caret, Delete the one at it, Home / End / Left / Right move the caret; `RefreshSaveList`. `RefreshSaveList` 0x6567A0
+draws 16 rows from the scroll position: label (the edit text for the selected row while editing, with a golden caret line unless
+the slot is saveq / savea / saveb) at (0xC,0xB)-(0xBE,0x20) + 0x18 r and the time "%d/%m, %H:%M" (not for the new slot), and for a
+valid selected slot the allod name, the zone title, "save_day" "%s  %d,  %d:%02d" and the folder name.
 
 ## 8. The world map (CWorldMapScreen 0x740B3C, screen id 4)
 
@@ -498,19 +573,41 @@ dialog of the clock strip (`CHudClockStrip::OpenTimeDialog` 0x648F10) and the wo
 map `+0x178`). Build 0x64BE80: scrollbar `+0x1BC` (quests, step 3), a CTextListWin (0x3C,0xBE)-(0x180,0x1FE) for the objectives, art
 "saveload" + "cross", quads 0 OK art (163..237 global / 363..437 mission), 1 cancel art (global only), 2 cursor, 3 map picture, 14 / 15
 prev / next map arrows, 16..20 quest state markers; buttons 0 OK (0xA3..0xED global / 0x16B..0x1B5), 1 cancel (0x233..0x27D), 2 / 3
-prev / next map (0x19E..0x1BB / 0x2CD..0x2EA x 0x180..0x194), 4..8 quest rows (0x3C..0x168 x 0x1E + 0x18 i), 9.. exit arrows. With
-allowTravel the map list `+0x164` is every zone of the `z.` variables in the current allod (any zone in a lobby).
+prev / next map (0x19E..0x1BB / 0x2CD..0x2EA x 0x180..0x194), 4..8 quest rows (0x3C..0x168 x 0x1E + 0x18 i), 9.. exit arrows.
+[V, deep read 2026-11-06] Build also saves render state 0x18 in `+0x1EC` and sets it to 1, loads "obj_0..2" into `+0x1D8`, and
+lays out the panels: quest list (50,20)-(390,160), objectives (50,180)-(390,520), map (410,20)-(750,360), zone text
+(410,380)-(750,520), button strip (285,541)-(515,579); OK tip `tip 80102` (mission) / `tip 80100` (global map), cancel
+`tip 80101` only in global-map mode (its art is hidden in mission mode), quest rows `tip 80111`. Without the 4th SetCaption flag
+(`+0x17C`, called allowTravel) the window shows the caption map only (`ShowMap(caption)`). With it the **map list** `+0x164` is
+every zone that has an **open quest**: each 3-part variable `q.<zone>.<quest>` == 1.0 whose zone record exists and lies in the
+caption zone's allod (record `+4` equal; any allod in a lobby), each zone once (the old note said the `z.` variables: wrong, the
+prefix read is "q."); when none matched, the zone of the quest named in `CInterface +0xAC` (the last quest message) is used; still
+none -> the window closes. The map shown first is that last-message zone (else entry 0); the prev / next arrows (tips 80200 /
+80201) appear with more than one map. So the dialog screen's obj key browses every zone of the allod with an open quest, the HUD's
+obj key (flag 0) shows only the current zone.
 
-`ShowMap` 0x64CC10 [V]: zone record `+0x14` = map figure drawn at (580,190), 150 px for the larger zone size (sectors `+0x20 / +0x24`);
-every zone exit of the record (`+0x4C`, 0x3C bytes: rect `+4..+0x10`, target `+0x28`, "none" skipped) becomes a 0x1C-byte entry (enabled
-when a travel time is in `+0x178`, else when `z.<target>` != 1; time `+8`; screen pos 580 + dx * 300 / size, 190 - dy * 300 / size) with
-an arrow quad rotated towards the edge and a button; the nearest exit is pre-selected (`SelectExit` 0x64E990: 1.2x scale). Quests =
-every `q.<map>.<id>` variable != 0 (3 dot parts), sorted; selected = `g_0x7C8178` (last viewed) or `CInterface +0xAC` (the last named
-value of the zone). The "zone <map>" title / description go on surface [1]. `DrawQuestList` 0x64D9B0: 5 rows, title = first line of
-"quest <id>", marker quad coloured by `q.<map>.<id>` (2 done, 3 failed). `FillObjectives` 0x64DC60: the quest text (description after the
-title, rewards from the quest record `g_0x7C87B4` as "obj_cost_exp %d" / "obj_cost_money %d", then every `#subobj <n>` whose
-`q.<map>.<id>.<n>` != 0 with " obj_completed" / " obj_failed") into the CTextListWin, and the quest markers of `map.txt` section
-`#quest <id>` (first line = "x y x y ..." ints, `LoadQuestMarkers` 0x64EA80; lobby: the quest record `+0x20..+0x24`) as 20 px quads.
+`ShowMap` 0x64CC10 [V, deep read 2026-11-06]: drops the per-map textures / quads / buttons beyond the fixed 2 / 0x15 / 9; zone
+record missing -> close. Map picture = figure of zone record `+0x14` on quad 3 centred at (580,190), **300 px for the larger side**
+(half-sizes 150 * w / max and 150 * h / max of the sector counts `+0x20 / +0x24`, UVs cropped to match). Every zone exit of the
+record (`+0x4C`, 0x3C bytes: rect `+4..+0x10`, target `+0x28`; "none" skipped, but the exit index keeps counting them) becomes a
+0x1C-byte entry `+0x188`: `+4` exit index, `+0xC / +0x10` rect centre, enabled `+0` = (with travel times `+0x178`) a time stored for
+that exit index, else `z.<target>` != 1.0; `+8` time; screen position `+0x14 / +0x18` = 580 + (cx - W/2) * 300 / max(W, H), 190 -
+(cy - H/2) * 300 / max (W, H = sectors * 32 m); an arrow quad (UV 240..254) pointing to the nearer map edge (|dx| <= |dy|: up = no
+turn, down = turned pi; else +-pi/2 by g_0x7C8170) and a button 10 px outwards (tip `tip 80110`). **Only with travel times** the exit
+with the smallest time is pre-selected (`SelectExit` 0x64E990, 1.2x scale); otherwise nothing is selected (the old note said "the
+nearest exit"). In global-map mode with no reachable exit the OK art and tooltip are removed. Quests = every 3-part `q.<map>.<id>`
+!= 0, sorted by id; selected = the id equal to `g_0x7C8178` (last viewed, global) without the map-list flag, or to `CInterface +0xAC`
+with it; `g_0x7C8178` = the selection (cleared when the map has no quest); scroll range = count - 5. The "zone <map>" title
+(golden, (0,5)-(0x154,0x19)) and description (beige, (10,0x19)-(0x14A,0x8C)) go on surface [1]. `DrawQuestList` 0x64D9B0: 5 rows,
+title = first line of "quest <id>", marker quad coloured by `q.<map>.<id>` (2 done, 3 failed).
+`FillObjectives` 0x64DC60 [V, deep read 2026-11-06] (only when the selection changed): `g_0x7C8178` = id; text "quest <id>": the
+description after the title (`SkipToSectionEnd` + `ReadUntilHash`) as `"\aC<E4 D7 A7>" <description> "\n "`, then from the quest
+record `g_0x7C87B4[id]` in white `"\aC<FF FF FF> "` the lines "obj_cost_exp %d" (exp `+0xC` > 0, trunc) and "obj_cost_money %d"
+(money **`+0x14`** > 0); then the sections of the same text up to the next `#quest`: every `#subobj <n>` whose `q.<map>.<id>.<n>`
+(trunc) != 0 adds its first line in golden + " " + (value 2: green `\aC<74 DC 01>` "obj_completed"; 3: red `\aC<FF 60 48>`
+"obj_failed"; other values: nothing) + "\n \n" + its text in beige + "\n \n". `CTextListWin::SetText`; then the quest markers of
+`map.txt` section `#quest <id>` (first line = "x y x y ..." ints, `LoadQuestMarkers` 0x64EA80; lobby: the quest record
+`+0x20..+0x24`) as 20 x 20 quads (texture 1) + buttons (tip `tip 80112`) at the same map projection.
 
 OK (button 0 / Enter, 0x64E330 / 0x64E5A0) [V]: global-map mode with an exit selected -> `World_AddGameTime(hours)` +
 `Game_SendString(map, exitIndex)` = travel; otherwise close. Esc closes; the obj key closes in mission mode. Up / Down / PgUp / PgDn
@@ -554,6 +651,16 @@ gamma, stereo); shadows set `+0x410`. A double click or Enter on a key row sets 
 shadows changed, close 0x110001; cancel (button 1 / Esc) restores the previewed volumes / gamma from the globals and closes 0x110001.
 Persisting them (`config\keyboard.ini` and the options ini) is the framework's job [I]. Up / Down move between filled rows, Left /
 Right nudge the slider, PgUp / PgDn change the tab.
+Details [V, deep read 2026-11-06, the key switch checked in the jump tables 0x651308 / 0x65132C]: `Build` 0x6503C0 lays the tab
+buttons at (100, 0x9C + 0x18 i)-(0xFA, ..) with icon quads (110..240), the tab tooltip is the text "tip option_group_<name>" (read
+with `ReadUntilHash`, not a tip id), OK / Cancel tips `tip 70100` / `tip 70101`, frame (95,95)-(705,505), figure "escMenu00" at
+(400,700) depth 4.8; the tutorial is shown only when the screen does not slide in. `OnKeyDown` 0x650E40: while waiting for a key, Esc
+stops waiting; a scancode (& 0x1FF) missing from the key-name table plays cancel.wav and **keeps waiting**; a known one ends the wait,
+plays ok.wav and, when some other key-action row's action is the one the working table `+0x164` maps this scancode to, pushes
+CMessageBox "key_already_mapped" (base 0x10000, OK + Cancel, the text "key_already_mapped_msg" formatted), else `ApplyPendingKey` at
+once. Outside the wait only Enter (a key row starts the wait, a list row cycles its `CListBoxWin` to the next value; ok.wav), Esc
+(restore the previewed volumes and gamma from the globals, cancel.wav, close 0x110001), PgUp / PgDn, Left / Right and Up / Down
+(save\select.wav) do something; every other key is ignored.
 
 ## 11. Tutorial (CTutorialScreen 0x740E28, 0x194 bytes)
 
@@ -666,8 +773,8 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | CHudAbilityList 0x63F300 | rows: 0 follow ("skill0009"), 1 Science ("skill0011") -> `SelectAbilityRow` |
 | CHudMainPanel 0x63FE70 | the portrait strip (0x78-byte records `+0x158`); click = portrait unit as the click target (lobby: `SendNamedEvent("%d")`). [V, deep read 2026-11-06] `BuildUnitPortraits` 0x6407E0 (selected flag): one portrait per controlled unit (`+0x16C` of the HUD): face picture "infa<m/f><me/fa/th><n>face" (m = model "unhuma", f = "unhufe"; **th when the unit's build `+0xC8` < 0.2, fa when > 0.8, else me**; n = proto `+0xC`) or "face%s%02d"; selected units get a tilted portrait (rotation about -x by g_0x7C8144 / 7); record `+0` = HP (`+0x17E`), `+0x40` face name, `+0x50` "infa<sex>", `+0x54` "<n>face", `+0x58` build, `+0x74` -1; tooltip = `UnitLabel` with the select1-3 key (actions 0x37..0x39) for the first three (none in a lobby); in a lobby every player record without a live unit in the zone gets a **grey portrait without bars** (face of its hero prototype, tooltip = player name, `+0x74` = record `+0x30`). `BuildPortraitSlot` 0x640060 (picture, alt name, selected, absent): faces blitted 4 per 256x256 render target (128-px quadrants); single player slots 56 px wide centred on x 400 ((x, 510)-(x + 56, 600)), lobby 40 px (+16 for the selected one); face quad 510..580, HP bar 587..592 and mana bar 592..597 (hidden for absent players), frame, selection overlay, button (x, 0x1FE)-(x + w, 600); at most 6 slots (index mod 6). `Update` 0x641080 (slot 24) per portrait: HP bar = `+0x17E / +0x180`, mana bar = `+0x182 / +0x184` (UV fill 9 + 64 * ratio of 256); **an HP drop** (below record `+0`) starts a red flash (alpha fades over 1 s) and face variant 2 for 2 s (variant 1 lasts 4 s); otherwise variant 3 while `+0x184` == 0 or `+0x182 / +0x184` < 0.25 [? which pair this is: live row], else 0 (`BuildFaceArt` 0x640670 on a change); a build change swaps the me / fa / th face; random idle moves (chance dt / 3 per frame while not paused: a random tilt of up to pi/12 about y and x, eased with a cosine at speed 1..2), nod (1) / shake (2) animations of 0.63 s; the tilt eases to the selected / unselected pose at 2 dt; quad 0 is a marker 60 px above the portrait of the unit whose id == g_0x79B3C4. |
 | CHudMinimap 0x645060.. | 0 sling toggle (scroll direction), 1 / 2 map click -> `CCamera::SetCarrierId(-1)` + `SetTarget(world point)`, 5 reset yaw; wheel = zoom `+0xD8`. [V, deep read 2026-11-06] `Build` 0x641F20 (was named `CHudMainPanel::Build`; details in its batch row): window (0x267,0)-(800,0xA5), map size = zone record `+0x20 / +0x24` sectors x 32 m, texture = zone record `+0x18` ("battle00" without a record), `+0x168` = 2 / size, zoom `+0x16C` = min(1, size * 0.05), 7 buttons (0 (0x30C,0)-(800,0x1E) with the w_minimap key, 1 the 16-point disc, 2 (0x26C,0)-(0x30C,0xA0), 3 / 4 / 5 the three right-edge buttons (0x30C,100..0x82 / 0x82..0xA0 / 0x46..100), 6 the whole window), disc (700,80) r 64, ring r 66, frame. `Init` 0x642E80: centre `+0x14C / +0x150` = the camera point (g_0x79B388 / 38C), the map turns with the camera (angle atan2 of the camera's up axis), the 16-point disc UVs = centre + offset / zoom / (2 / size), clipped against the map edges (x, y >= 0 and <= size: Sutherland-Hodgman). `DrawMinimapUnits` 0x643DC0: markers in disc units (offset * 2 / size * zoom): **units** of the client's visible list (connection `+0x50D8`, count `+0x50DC`), not dead, within r^2 <= 0.56: an arrow along the unit's facing (tip 0.07, wings 0.04), colour 0 for the player's controlled units, 2 when the player's bit (player `+0x24`) is set in both unit masks `+0x244` and `+0x248` (hostile), else 1; the unit with id 0xA2C2A is forced to 2 on zone gz20g; **lights** of the light manager g_0x7AF748 (renderer.md) as colour-3 squares of 0.06; **zone exits** whose target is not "none" as colour-1 squares at `GetZoneExitCenter`; both squares shown inside r^2 <= 0.6, or at their unzoomed position on the rim (0.68 <= r^2, abs(x), abs(y) <= 0.97); in a lobby also the other players (connection `+0x50EC`). |
-| CHudUnitInfoPanel 0x6456E0 | sliding panel (0.3 s): 0 slide toggle (sling.wav), 1..4 tabs (w_info keys): figure with damaged parts, bars, body parts "skull/torso/arm/leg" (0x647B70), stats "move_%d", "dmg_%d", "consider_more%d / less%d" (0x647040: d = level of the shown unit - level of the first selected unit, clamped to +-25; d >= 0 -> `consider_more<d>`, d < 0 -> `consider_less<|d|>`: 51 texts, e.g. more0 "Equal", more25 "Invincible", less25 "Feeble" [V machine code + texts 2026-11-03]), spell info (0x646B90) |
-| CHudClockStrip 0x648520 | (0x2D0,0x208)-(800,600): 0 pause (clock.wav, `Game_SendLeaveFlag(!paused)`), 1 normal (g_0x78FF34 = 0x37), 2 fast (0x1B, single player), 3 the time dialog (CQuestLogWin); clock hands from "gtime" (0x6488E0); lobby: no speed buttons |
+| CHudUnitInfoPanel 0x6456E0 | sliding panel (0.3 s): 0 slide toggle (sling.wav), 1..4 tabs (w_info keys): figure with damaged parts, bars, body parts "skull/torso/arm/leg" (0x647B70), stats "move_%d", "dmg_%d", "consider_more%d / less%d" (0x647040: d = level of the shown unit - level of the first selected unit, clamped to +-25; d >= 0 -> `consider_more<d>`, d < 0 -> `consider_less<|d|>`: 51 texts, e.g. more0 "Equal", more25 "Invincible", less25 "Feeble" [V machine code + texts 2026-11-03]), spell info (0x646B90). [V, deep read 2026-11-06] `Build(tab, shown)` 0x6456E0: panel (0,0)-(0xB9,0xE1), slide distance `+0x174` = 0xB4, offset `+0x170` = 0xB4 when shown else 0, state `+0x178` = shown, direction `+0x17C` = +1 / -1; buttons 0 slide (0,0)-(20,30) tip `tip 10100`, 1..4 the tabs (0,100 + 30 i)-(20,130 + 30 i) tips 10101..10104 with the w_info1-4 keys (0x2E..0x31), 5 the whole panel; quads 0 the figure holder, 1 the tab strip, 2 the arrow, 3..6 the tab icons (1.0 for the current tab `+0x180`, 0.5 others), 7 border (-5,-5)-(185,225), 8 a ruler grid (20,0)-(25,220), 9 a "more" marker (164,204)-(180,220), 10..13 two bars + frames (40..140 x 190..195 / 205..210), 14..25 six bar + frame pairs at the table 0x742434 (x 50 50 95 5 95 5) / 0x74244C (y 35 105 70 70 140 140) + (25..75 x 15..20) (the body-part bars), 26..31 six 24-px icon cells (28, 38 + 30 k); blit surface (20,0)-(180,220); texts "infounit_0..17" `+0x19C`, hl_skull / hl_torso / hl_leg / hl_arm `+0x1B0`; icon cache `+0x184..+0x198` = -1. `Draw` 0x6462A0 (slot 20): the shown unit is the hover unit `+0x150` (label `+0x168`) or else the selected one `+0x14C` (`+0x164`), only while the panel is out (`+0x178` < 1); except on tab 2 the unit's own model is drawn into the panel viewport (after a depth clear, unit moved to x = ((100 - offset) * 0.0025 - 1) * 0.4816 * 9, z 9, turned by the HUD tilt, scaled by 1 / the panel height factor, parts white on tab 0, grey 0xFF808080 on the others, flag 0x100 on the parts and 0x800 on the unit while drawing; pose and scale restored afterwards); the label wrapped in (5,5)-(155,20), font 2, beige; tab 0 = `DrawBar` + the ruler scaled 15 / (proto size `+0x15C` or `+0x160` x unit scale vt 0x518D30), tab 1 = `DrawParts` + `DrawBar`, tab 2 = `DrawStats`, tab 3 = `DrawSpellInfo`. `DrawSpellInfo` 0x646B90: the unit's **active effects** (`CUnit +0x198` records of 0x14 bytes, count `+0x19C`, at most 6 shown; > 6 shows quad 9): per effect two 15-px lines from (40,35)-(155,50): the title (first line of "spell <name>", name = spell proto `g_0x7C8510[record byte +0]` `+4`) and "%d" = record `+4` / 15 (the remaining time in seconds [I: 15 ticks per second]); icon "spell%04d" (proto `+0x60`) cached in one of six 64x64 cells of texture [1] ((0,128) (0,192) (64,0) (64,64) (64,128) (64,192)) and shown on icon quad 26 + i |
+| CHudClockStrip 0x648520 | (0x2D0,0x208)-(800,600): 0 pause (clock.wav, `Game_SendLeaveFlag(!paused)`), 1 normal (g_0x78FF34 = 0x37), 2 fast (0x1B, single player), 3 the time dialog (CQuestLogWin); lobby: no speed buttons. `Update` 0x6488E0 [V, deep read 2026-11-06 with the machine code]: copies the speed mode `+0x154` to `CInterface +0x94`; game hour h = fmod(client tick g_0x7AF61C x hours per tick (CWorld `+0x20`) + CWorld `+0x1C`, 24) (not the "gtime" variable); the dial (quad 0) turns about z by (h + 15) x pi / 12 (one turn per day); pulse f = 0.7 + 0.3 cos(g_0x7C8140 x phase), phase `+0x14C` cycling 0..1 per second; the speed pointer (quad 1) sits at (800 + 73 cos a, 600 - 73 sin a) with a = 165 deg paused (blinking: shown in the second half of each second, dial scaled 1.4 - f), 135 deg normal, 105 deg fast; the four gear teeth (quads 2..5) at radius 30 turn with `+0x150` (+0.5 rad / s normal, +1 rad / s fast, still when paused; wraps at pi/6); the quest-log button (quad 6) pulses with f while `+0x158` (new quest message) is set, else scale 1 |
 | CHudStanceStrip 0x649190 | (0,0x208)-(0x50,600): 0 = the battle button (`OnSelect` 0x649810: if every selected unit has `CUnit +0x438` == 1 -> 0 else 1, `SendMsg3B_SetField438(unit, v)`; the "battle mode" / Regroup of `unit-ai.md`), 1..4 crawl / sneak / walk / run = `SendMsg35_SetStance`; marker from `CUnit +0x268` |
 | CHudMessagePanel 0x649AF0 | (0xB4,0)-(0x26C,100): 0 slide, 1 / 2 tabs (w_text keys); the combat log text `+0x164` (`AddCombatMessage` "combat_picked_up" / "combat_crippled", `AddMoneyMessage` "format_money", `FlushCombatMessages` 0x64A7A0) via `CTextListWin::Refresh` |
 
@@ -714,8 +821,8 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   `AppSettings::ReadFromRegistry` 0x45B210 at start and written back by `AppSettings::WriteToRegistry` 0x45C560 (127 `CWinRegistry`
   set calls) once, at exit from `main`, under `HKCU\Software\Nival Interactive\EvilIslands` (ui-framework.md 2). keyboard.ini is
   written by `KeyBindings_Save` at exit.
-- `CSaveLoadWin::ScanSaves`: the number parsed from the folder names (the next "save<n>") and the info.sav version share one decompiler
-  variable; the version gates (time at v >= 2, label at v >= 3) are [I].
+- ~~`CSaveLoadWin::ScanSaves` version gates~~ settled [V] from the machine code (0x656063 / 0x656089: `cmp [stream + 8], 1 / 2`): the
+  version is the stream's own field, the folder number is a separate local (0x656128); time at v >= 2, label at v >= 3.
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.
 - ~~CCampScreen2 +0x1A0..+0x220~~ settled [V]: the full CCampScreen2 layout (+0x164..+0x21C, 33 fields) is in structs.tsv (struct
   completion 2026-11-02). ~~CCampScreen +0x168..+0x18F~~ settled 2026-11-03: `+0x168` is the hovered item (recomputed by `Draw`

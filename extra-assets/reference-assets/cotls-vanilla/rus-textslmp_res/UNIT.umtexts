@@ -1,0 +1,517 @@
+# um-texts 1
+=== UNIT GolemHorizontalF20
+Голем
+
+=== UNIT LMP_Unique_Undead_Hadagan_BMZombie_17
+Маг-зомби
+
+=== UNIT lmp_Banshee_Gipath_Fighter_2
+Слабая баньши
+
+=== UNIT lmp_Banshee_Gipath_Fighter_4
+Баньши
+
+=== UNIT lmp_Banshee_Gipath_Fighter_6
+Сильная баньши
+
+=== UNIT lmp_Banshee_Gipath_Fighter_8
+Очень сильная баньши
+
+=== UNIT lmp_Banshee_Gipath_Mage_2
+Слабая баньши
+
+=== UNIT lmp_Banshee_Gipath_Mage_4
+Баньши
+
+=== UNIT lmp_Banshee_Gipath_Mage_6
+Сильная баньши
+
+=== UNIT lmp_Banshee_Gipath_Mage_8
+Очень сильная баньши
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_13
+Песчаная баньши
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_15
+Сильная песчаная баньши
+
+=== UNIT lmp_Banshee_Hadagan_Mage_13
+Песчаная баньши
+
+=== UNIT lmp_Banshee_Hadagan_Mage_15
+Сильная песчаная баньши
+
+=== UNIT lmp_Bat_Gipath_1
+Детеныш летучей мыши
+
+=== UNIT lmp_Bat_Gipath_3
+Молодая летучая мышь
+
+=== UNIT lmp_Bat_Gipath_5
+Взрослая летучая мышь
+
+=== UNIT lmp_Bat_Gipath_7
+Старая летучая мышь
+
+=== UNIT lmp_Beholder_Red_Ingos_11
+Взрослый злобоглаз
+
+=== UNIT lmp_Beholder_Red_Ingos_9
+Молодой злобоглаз
+
+=== UNIT lmp_Boar_Black_5
+Молодой черный кабан
+
+=== UNIT lmp_Boar_Black_7
+Взрослый черный кабан
+
+=== UNIT lmp_Boar_Red_1
+Молодой кабан
+
+=== UNIT lmp_Boar_Red_3
+Взрослый кабан
+
+=== UNIT lmp_Cyclops_14
+Циклоп-детеныш
+
+=== UNIT lmp_Cyclops_16
+Циклоп-подросток
+
+=== UNIT lmp_Decorative_Cow
+Корова
+
+=== UNIT lmp_Decorative_Deer
+Олень
+
+=== UNIT lmp_Decorative_Hare_Red
+Заяц
+
+=== UNIT lmp_Decorative_Hare_White
+Заяц
+
+=== UNIT lmp_Decorative_Horse_Red
+Лошадь
+
+=== UNIT lmp_Decorative_Horse_White
+Лошадь
+
+=== UNIT lmp_Decorative_Pig
+Свинья
+
+=== UNIT lmp_Dog_Ingos_11
+Натасканная собака
+
+=== UNIT lmp_Dog_Ingos_9
+Собака
+
+=== UNIT lmp_Dragonkin_2
+Очень молодой ящер
+
+=== UNIT lmp_Dragonkin_4
+Молодой ящер
+
+=== UNIT lmp_Dragonkin_6
+Взрослый ящер
+
+=== UNIT lmp_Dragonkin_8
+Старый ящер
+
+=== UNIT lmp_Driad_Black_Archer_11
+Меткий стрелок-лесовик (Белый клан)
+
+=== UNIT lmp_Driad_Black_Archer_9
+Стрелок-лесовик (Белый клан)
+
+=== UNIT lmp_Driad_Black_Mage_11
+Умелый маг-лесовик (Белый клан)
+
+=== UNIT lmp_Driad_Black_Mage_9
+Маг-лесовик (Белый клан)
+
+=== UNIT lmp_Driad_Blue_Archer_11
+Меткий стрелок-лесовик (Черный клан)
+
+=== UNIT lmp_Driad_Blue_Archer_9
+Стрелок-лесовик (Черный клан)
+
+=== UNIT lmp_Driad_Blue_Mage_11
+Умелый маг-лесовик (Черный клан)
+
+=== UNIT lmp_Driad_Blue_Mage_9
+Маг-лесовик (Черный клан)
+
+=== UNIT lmp_Elemental_Ice_10
+Элементаль снега (маленький)
+
+=== UNIT lmp_Elemental_Ice_12
+Элементаль снега (большой)
+
+=== UNIT lmp_Goblin_Archer_1
+Молодой гоблин
+
+=== UNIT lmp_Goblin_Archer_3
+Гоблин
+
+=== UNIT lmp_Goblin_Archer_5
+Умелый гоблин
+
+=== UNIT lmp_Goblin_Archer_7
+Опытный гоблин
+
+=== UNIT lmp_Goblin_Fighter_1
+Молодой гоблин
+
+=== UNIT lmp_Goblin_Fighter_3
+Гоблин
+
+=== UNIT lmp_Goblin_Fighter_5
+Умелый гоблин
+
+=== UNIT lmp_Goblin_Fighter_7
+Опытный гоблин
+
+=== UNIT lmp_Human_Gipath_Archer_2
+Неопытная разбойница
+
+=== UNIT lmp_Human_Gipath_Archer_4
+Разбойница
+
+=== UNIT lmp_Human_Gipath_Archer_6
+Меткая разбойница
+
+=== UNIT lmp_Human_Gipath_Archer_8
+Очень меткая разбойница
+
+=== UNIT lmp_Human_Gipath_Fighter_2
+Неопытный разбойник
+
+=== UNIT lmp_Human_Gipath_Fighter_4
+Разбойник
+
+=== UNIT lmp_Human_Gipath_Fighter_6
+Опытный разбойник
+
+=== UNIT lmp_Human_Gipath_Fighter_8
+Закоренелый разбойник
+
+=== UNIT lmp_Human_Gipath_Mage_2
+Неопытная разбойница-колдунья
+
+=== UNIT lmp_Human_Gipath_Mage_4
+Разбойница-колдунья
+
+=== UNIT lmp_Human_Gipath_Mage_6
+Опытная разбойница-колдунья
+
+=== UNIT lmp_Human_Gipath_Mage_8
+Закоренелая разбойница-колдунья
+
+=== UNIT lmp_Human_Hadagan_Archer_14
+Стрелок
+
+=== UNIT lmp_Human_Hadagan_Archer_16
+Опытный стрелок
+
+=== UNIT lmp_Human_Hadagan_Archer_20
+Стрелок-ветеран
+
+=== UNIT lmp_Human_Hadagan_Archer_24
+Императорский гвардеец-стрелок
+
+=== UNIT lmp_Human_Hadagan_Archer_28
+Сержант императорской гвардии
+
+=== UNIT lmp_Human_Hadagan_Fighter_14
+Воин
+
+=== UNIT lmp_Human_Hadagan_Fighter_16
+Опытный воин
+
+=== UNIT lmp_Human_Hadagan_Fighter_20
+Воин-ветеран
+
+=== UNIT lmp_Human_Hadagan_Fighter_24
+Императорский гвардеец-воин
+
+=== UNIT lmp_Human_Hadagan_Fighter_28
+Сержант императорской гвардии
+
+=== UNIT lmp_Human_Hadagan_Mage_14
+Боевой маг
+
+=== UNIT lmp_Human_Hadagan_Mage_16
+Опытный боевой маг
+
+=== UNIT lmp_Human_Hadagan_Mage_20
+Боевой маг-ветеран
+
+=== UNIT lmp_Human_Hadagan_Mage_24
+Боевой маг императорской гвардии
+
+=== UNIT lmp_Human_Hadagan_Mage_28
+Сержант императорской гвардии
+
+=== UNIT lmp_Human_Ingos_Archer_10
+Стрелок
+
+=== UNIT lmp_Human_Ingos_Archer_12
+Меткий стрелок
+
+=== UNIT lmp_Human_Ingos_Fighter_10
+Боец
+
+=== UNIT lmp_Human_Ingos_Fighter_12
+Опытный боец
+
+=== UNIT lmp_Human_Ingos_Mage_10
+Маг
+
+=== UNIT lmp_Human_Ingos_Mage_12
+Опытный маг
+
+=== UNIT lmp_Hyena_13
+Молодая гиена
+
+=== UNIT lmp_Hyena_15
+Взрослая гиена
+
+=== UNIT lmp_Octopus_10
+Червелицый-прислужник
+
+=== UNIT lmp_Octopus_12
+Червелицый-страж
+
+=== UNIT lmp_Ogre_Hadagan_14
+Молодой песчаный людоед
+
+=== UNIT lmp_Ogre_Hadagan_16
+Взрослый песчаный людоед
+
+=== UNIT lmp_Orc_Archer_2
+Молодой орк-стрелок
+
+=== UNIT lmp_Orc_Archer_4
+Орк-стрелок
+
+=== UNIT lmp_Orc_Archer_6
+Взрослый орк-стрелок
+
+=== UNIT lmp_Orc_Archer_8
+Опытный орк-стрелок
+
+=== UNIT lmp_Orc_Fighter_2
+Молодой орк-боец
+
+=== UNIT lmp_Orc_Fighter_4
+Орк-боец
+
+=== UNIT lmp_Orc_Fighter_6
+Взрослый орк-боец
+
+=== UNIT lmp_Orc_Fighter_8
+Опытный орк-боец
+
+=== UNIT lmp_Orc_Mage_2
+Молодой шаман
+
+=== UNIT lmp_Orc_Mage_4
+Шаман
+
+=== UNIT lmp_Orc_Mage_6
+Опытный шаман
+
+=== UNIT lmp_Orc_Mage_8
+Старый шаман
+
+=== UNIT lmp_Shadow_21
+Тень шамана
+
+=== UNIT lmp_Shadow_25
+Тень ведьмы
+
+=== UNIT lmp_Shadow_29
+Тень мага
+
+=== UNIT lmp_Skeleton_7
+Скелет простолюдина
+
+=== UNIT lmp_Skeleton_8
+Скелет воина
+
+=== UNIT lmp_Spider_13
+Молодой паук
+
+=== UNIT lmp_Spider_15
+Взрослый паук
+
+=== UNIT lmp_Succubus_Hadagan_13
+Молодая гарпия
+
+=== UNIT lmp_Succubus_Hadagan_15
+Взрослая гарпия
+
+=== UNIT lmp_Tiger_Red_2
+Молодой тигр
+
+=== UNIT lmp_Tiger_Red_4
+Взрослый тигр
+
+=== UNIT lmp_Tiger_Red_6
+Старый тигр
+
+=== UNIT lmp_Tiger_Red_8
+Матерый тигр
+
+=== UNIT lmp_Tiger_White_11
+Взрослый снежный тигр
+
+=== UNIT lmp_Tiger_White_9
+Молодой снежный тигр
+
+=== UNIT lmp_Toad_1
+Молодая ядовитая жаба
+
+=== UNIT lmp_Toad_3
+Взрослая ядовитая жаба
+
+=== UNIT lmp_Toad_5
+Старая ядовитая жаба
+
+=== UNIT lmp_Toad_7
+Матерая ядовитая жаба
+
+=== UNIT lmp_Troll_Black_14
+Молодой черный тролль
+
+=== UNIT lmp_Troll_Black_16
+Взрослый черный тролль
+
+=== UNIT lmp_Troll_Blue_10
+Молодой синий тролль
+
+=== UNIT lmp_Troll_Blue_12
+Взрослый синий тролль
+
+=== UNIT lmp_Unique_Cyclops_Leader_20
+Циклоп - глава семейства
+
+=== UNIT lmp_Unique_Deer_King_13
+Король-олень
+
+=== UNIT lmp_Unique_Dragon_Plague_Ancient_30
+Дракон-Повелитель
+
+=== UNIT lmp_Unique_Dragon_Plague_Soldiers_24
+Дракон - прислужник Повелителя
+
+=== UNIT lmp_Unique_Dragon_Plague_Wingmans_26
+Дракон - приближенный Повелителя
+
+=== UNIT lmp_Unique_Dragonkin_Amulet_7
+Ящер - охранник амулета
+
+=== UNIT lmp_Unique_Goblin_Gogo
+Вождь гоблинов
+
+=== UNIT lmp_Unique_Human_Aizet-Bek_17
+Айзет-Бек
+
+=== UNIT lmp_Unique_Human_Betrayer_Slave
+Раб-предатель
+
+=== UNIT lmp_Unique_Human_Betrayer_Soldiers
+Охранник
+
+=== UNIT lmp_Unique_Human_Captain_15
+Капитан Тильвар
+
+=== UNIT lmp_Unique_Human_Jun_Scientists_13
+Ученый-историк
+
+=== UNIT lmp_Unique_Human_Junophile_Friend_13
+Друг ученого-историка
+
+=== UNIT lmp_Unique_Human_Messanger_20
+Гонец
+
+=== UNIT lmp_Unique_Human_Pleshivy_15
+Плешивый
+
+=== UNIT lmp_Unique_Human_Portal_Warlord_32
+Генерал Ирискелль
+
+=== UNIT lmp_Unique_Human_Summoner_24
+Властелин Теней
+
+=== UNIT lmp_Unique_Octopus_Magister_15
+Червелицый-повелитель
+
+=== UNIT lmp_Unique_Orc_Enchanted_Followers_4
+Орк-охранник
+
+=== UNIT lmp_Unique_Orc_Enchanted_Shaman_7
+Шаман-вождь
+
+=== UNIT lmp_Unique_Pig_Boryka_1
+Пятачок
+
+=== UNIT lmp_Unique_Tiger_Rampaging_12
+Тигр-убийца
+
+=== UNIT lmp_Unique_Toad_Cannibal_5
+Жаба-людоед
+
+=== UNIT lmp_Unique_Undead_Hadagan_8
+Неупокоенный воин
+
+=== UNIT lmp_Unique_Undead_Hadagan_Leader_11
+Неупокоенный некромант
+
+=== UNIT lmp_Unique_Unicorn_Corrupted_13
+Молодой черный единорог
+
+=== UNIT lmp_Unique_Willowisp_Mother_11
+Матка блуждающих огоньков
+
+=== UNIT lmp_Willowisp_1
+Слабый блуждающий огонек
+
+=== UNIT lmp_Willowisp_3
+Блуждающий огонек
+
+=== UNIT lmp_Willowisp_5
+Горячий блуждающий огонек
+
+=== UNIT lmp_Willowisp_7
+Обжигающий блуждающий огонек
+
+=== UNIT lmp_Wolf_Gray_2
+Молодой волк
+
+=== UNIT lmp_Wolf_Gray_4
+Взрослый волк
+
+=== UNIT lmp_Wolf_White_5
+Старый волк
+
+=== UNIT lmp_Wolf_White_7
+Матерый волк
+
+=== UNIT lmp_Zombie_Female_20
+Зомбированная разбойница
+
+=== UNIT lmp_Zombie_Female_24
+Зомбированная охранница
+
+=== UNIT lmp_Zombie_Female_28
+Зомбированная наемница
+
+=== UNIT lmp_Zombie_Male_20
+Зомбированный воин
+
+=== UNIT lmp_Zombie_Male_24
+Зомбированный опытный воин
+
+=== UNIT lmp_Zombie_Male_28
+Зомбированый воин-ветеран
+
