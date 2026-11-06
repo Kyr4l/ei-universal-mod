@@ -367,7 +367,7 @@ Per page:
   cursor frames settled 2026-11-06); `CamCtlClassic` / `CamCtlSimple` are dead.
 - ui-screens.md: nothing open offline (settled 2026-11-06: NPC portraits are quest item icons, shops re-roll after each
   `QuestComplete`, `Exchange(a, b, c)` = partner offer / our offer / our party, the hero creation limits, the master request id,
-  one exit per talk zone, the battle HUD branches); live: a possible sun square on the minimap rim, a fresh addrbook id.
+  one exit per talk zone, the battle HUD branches, the minimap squares = quest lights); live: a fresh addrbook id.
 - net-transport.md: the delta codec bases are settled (A = creation state, B = last sent state); the master server's reply is
   untestable (no master exists).
 - script-vm.md / gs-functions.md: nothing open (no `CArchive` is ever made, so every MFC `Serialize` path is dead;

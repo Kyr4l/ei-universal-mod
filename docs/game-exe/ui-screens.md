@@ -850,15 +850,13 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   the unit 0xA2C2A special case, 0x6440F7).
 - ~~Portrait face variant 3 tests `CUnit +0x182 / +0x184`~~ settled live 2026-11-07: the hero's shorts `+0x17E..+0x184` read 30 / 39 / 50 / 50
   = HP, max HP, **mana, max mana**: the tired face follows mana. The red flash and hurt face on an HP drop seen on the portrait at the same time.
-- The minimap colour-3 squares (settled 2026-11-06 except the sun [V]): `DrawMinimapUnits` walks the light manager's whole object
-  list `g_0x7AF748 +0xD4` (a `CBaseManager`) with no kind or flag filter (0x6442C9..0x644470) and puts a square at each light's
-  position `+0x1C / +0x20`. The lights in it: the object lights of heroes and quest items (`ObjLight_Create`, `SetQuestLight`), torch
-  lights (`CTorchObjectClientSpecific::SetLight`), effect point lights (`CEffectPointLight::Activate`: spells, fires) and **the sun**,
-  which `I3DFigureImpl::InitRenderer` creates through the same manager (`CreateObject(0x2E)` + `CLight::InitDirectional`, which never
-  sets a position; live 2026-11-06: the sun's `+0x1C..+0x24` = (0, 0, 0)). Placement [V, 0x644465..0x6444E0]: a light inside the
-  zoomed disc (r^2 <= 0.6) is drawn there; any other light is drawn on the rim only when its unzoomed position (offset x 2 / map
-  size) has r^2 >= 0.68 and |x|, |y| <= 0.97, else it is hidden. So the sun's square appears on the rim only for camera points
-  whose offset to world (0, 0) falls in that band (not at zone1's start, checked live: no square). [live] left: see it once.
+- ~~The minimap colour-3 squares~~ settled 2026-11-06 [V code + live, corrected the same day]: `DrawMinimapUnits` walks the list
+  `g_0x7AF748 +0xD4` and puts a square at each listed light's position `+0x1C / +0x20`. That list is not the manager's object list but
+  the **quest-light list**: `CMapObjectClientSpecific::SetQuestLight(1)` 0x511A00 appends the object light's id (0x511A9F) and
+  `SetQuestLight(2)` takes it out, so the squares mark the objects that carry a quest light (quest items), nothing else; the sun
+  (`+0x1C` = (0, 0, 0), live) and the ordinary lights are never in it. Live in zone1: the list is empty, no squares. Placement
+  [V, 0x644465..0x6444E0]: inside the zoomed disc (r^2 <= 0.6) at the zoomed position, else on the rim only when the unzoomed
+  position has r^2 >= 0.68 and |x|, |y| <= 0.97, otherwise hidden.
 - ~~The labels of the HUD spell tooltip and their values~~ settled 2026-11-06 [V]: the texts are `string infoitem_N` of texts.res
   (7 Stamina, 18 School, 8 Effect, 9 Speed, 10 Range, 11 Area, 12 Duration, 13 Targets, 21 Immediately, 22 Target, 26 m, 27 s,
   28 Constant; ui-framework.md 5.9); the value of each line is in section 12 (`CHudSpellList`).
