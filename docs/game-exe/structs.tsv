@@ -585,7 +585,7 @@ UnitProto			0x78	int	naturalAttackKind
 UnitProto			0x80	float[2]	naturalDamage	min, spread
 UnitProto			0x88	float[3]	skillBases	skills / science / ? bytes
 UnitProto			0x98	float[6]	perceptionBases	sight, night sight, hearing ...
-UnitProto			0xb0	float[6]	detectionBases	FLD26 Detections sight / infra / sense life / hearing / smell / tracking (tag 0x1a) -> UnitStats +0xE0 detection pairs. CORRECTION: was resistanceBases
+UnitProto			0xb0	float	detectSight	Detections[0] (Sight); also read by UpdateAnimSounds (0x535080) as the footprint strength (x0.5 crawl, x0.75 sneak)
 UnitProto			0x108	pointer	spellsCapacity	CORRECTION: was bloodKind "1..4 blood print": the end-of-storage word of the spells vector +0x100 (the blood print kind is UdbRaceModel +0x108, data-sound.md 3.2)
 UnitProto			0x114	pointer	wearsCapacity	CORRECTION: was hitEffectFlag "strike effect 0x4a allowed": the end-of-storage word of the wears vector +0x10c (operator_assign 0x542830, InsertN 0x540B80)
 UnitProto		0x120	0x0	CString	name	Monsters FLD0 (tag 0); the prototype name looked up by Units_FindProtoByName (map UnitsDb +0xc)
@@ -597,7 +597,7 @@ UnitProto			0x14	float[3]	complection	FLD5..7 (tags 5..7): morph x y z (CObject3
 UnitProto			0x20	float	infoWindowScale	FLD34 (tag 0x22)
 UnitProto			0x28	float	dialogCameraDistance	FLD37 (tag 0x25)
 UnitProto			0x2c	float	dialogCameraHeight	FLD38 (tag 0x26)
-UnitProto			0x30	float	detonation	CORRECTION: was int. "Detonation" column read as a float: the camera shake strength of the unit footsteps / hit frame (UpdateAnimSounds 0x534B60, CCamera::AddShake when > 0)
+UnitProto			0x30	float	detonation	CORRECTION: was int: Monsters FLD40 Detonation = camera-shake strength (CUnitClientSpecific::UpdateAnimSounds: CCamera::AddShake(pos, 5.0, value, 0.25) on footsteps and step events when > 0); shipped 0 .. 2.5
 UnitProto			0x34	CString	field_34	FLD8 Unk8 (tag 8), unused string
 UnitProto			0x5c	float	actionsTuning	FLD12 Tuning Actions (tag 0xc)
 UnitProto			0x7c	int	realWeaponTypeId	FLD39 Attack Real Weapon Type Id (tag 0x27)
@@ -855,7 +855,7 @@ Buff			0x1	byte	level	client visual scale: ftol(16 * (pow(clamp(power / protoEff
 Buff			0x4	int	duration	server ticks left; -- every tick (CMapObjectServer::TickBuffs), removed at 0
 Buff			0x8	float	power	the spell power (CSpell +0x24): the value the stat readers use (GetBuffValue = max over the kind)
 Buff			0xc	float	radius	the spell radius (CSpell +0x28); not read by the buff code
-Buff			0x10	byte	flag	zeroed by Buff_Clear, replicated in net section 3; not read by the code seen
+Buff			0x10	byte	quiet	CORRECTION: was flag (no reader): the cast's quiet flag CSpellEffect +0xA4 (1 = passive item cast) copied by CSpellEffect::Start; 0 for the teleport freeze; replicated, read by nobody
 SpellProto		0x84	0x0	pointer	name	CString: display name (FLD0, e.g. "Fireball")
 SpellProto			0x4	pointer	code	CString: the code (FLD1, "fireball"): key of the code map g_0x7C851C and of the script / item syntax code{rune;rune}
 SpellProto			0x8	pointer	subtypeName	CString: school name (FLD2 "fire", "divination" ...)
@@ -1016,10 +1016,10 @@ CEffectShowVisibility			0x16c	int	gridH
 CEffectMoshka	CEffect	0x16c	0x14c	pointer	bird	client object (model unmobi, anim bird00)
 CEffectMoshka			0x150	pointer	particle	particle 0x203C
 CEffectMoshka			0x154	int	targetUnitId	
-CEffectMoshka			0x158	int	startTick	
-CEffectMoshka			0x15c	int	timer	
+CEffectMoshka			0x158	float	lastTime	client time (tick + frame fraction) of the previous UpdateFlight; dt = clamp(time - this, 0, 5)
+CEffectMoshka			0x15c	float	timer	state timer in ticks (float bits: 200 approach, 100 circling, 150 leaving); -= dt per frame
 CEffectMoshka			0x160	float	angle	
-CEffectMoshka			0x164	float	radius	
+CEffectMoshka			0x164	float	radius	circling: z offset of the escape probe (starts 30, +0.5 per failed visibility test)
 CEffectMoshka			0x168	int	state	0 approach 1 circle 2 fly to a point
 CEffectTornado	CEffect	0x15c	0x14c	pointer	particle	particle 0x200A
 CEffectTornado			0x150	int	soundHandle	-1
@@ -3311,16 +3311,16 @@ UnitsDb			0x4c	StrHash	raceModelMap	string -> UdbRaceModel*
 UnitsDb			0x60	pointer[3]	hitLocations	vector<UdbHitLocation 0x44> (tag 1 HitLocations); g_0x7AF3B8
 UnitsDb			0x6c	StrHash	hitLocationMap	string -> UdbHitLocation*
 Quest		0x38	0x0	byte[12]	name	std::string (tag 0): quest id as named in quest.reg [quest] / "quest <id>" text key
-Quest		0x38	0xc	float	exp	CORRECTION: was int: quest.reg "exp" stored with fstp (QuestsDb::ParseQuestReg 0x6AEA1D), read as float by CQuestLogWin::FillObjectives; qdb tag 1
-Quest		0x38	0x10	int	field_10	CORRECTION: was money: qdb tag 2, never written by the quest.reg parser (0) and not read by the quest log [?]
-Quest		0x38	0x14	float	money	CORRECTION: was zone index: quest.reg "money" (fstp at 0x6AEA38), shown by the quest log (+0x14 > 0); qdb tag 5
-Quest		0x38	0x18	int	zoneIndex	CORRECTION: was order: quest.reg "zone index" (0x6AEA62); qdb tag 3
-Quest		0x38	0x1c	int	order	CORRECTION: was unnamed: quest.reg "order" (0x6AEA6E); qdb tag 6
+Quest		0x38	0xc	float	exp	CORRECTION: was int: quest.reg exp / quests.qdb tag 1, float (quest log tests > 0.0)
+Quest		0x38	0x10	int	unused10	quests.qdb tag 2 only: never written by ParseQuestReg nor read
+Quest		0x38	0x14	float	money	CORRECTION: was zoneIndex int: quest.reg money / tag 5, float (quest log obj_cost_money)
+Quest		0x38	0x18	int	zoneIndex	CORRECTION: was order: quest.reg 'zone index' / tag 3
+Quest		0x38	0x1c	int	order	quest.reg 'order' / tag 6
 Quest			0x20	pointer[3]	questPlaces	tag 7: vector<float> x, y pairs (quest.reg questplaces "{x;y}")
 Quest			0x2c	byte[12]	field_2c	std::string, tag 4
 Briefing		0x6c	0x0	byte[12]	name	std::string (tag 0): briefing id ("briefing receive/reject/complete" name)
-Briefing		0x6c	0xc	float	exp	CORRECTION: was int: fstp 0x6AED61; OnNamedEvent passes it as the float xp of GiveExperience
-Briefing		0x6c	0x10	float	money	CORRECTION: was int: fstp 0x6AED79; OnNamedEvent adds ftol(money) to CParty +0x50
+Briefing		0x6c	0xc	float	exp	CORRECTION: was int
+Briefing		0x6c	0x10	float	money	CORRECTION: was int; added to CParty +0x50
 Briefing			0x14	pointer[3]	giveItems	tag 3: vector<CString> item names created with CItemManager::CreateItemByName and given (brief_get_item)
 Briefing			0x20	pointer[3]	removeItems	tag 5: vector<CString> items taken from the party (brief_lost_item)
 Briefing			0x2c	pointer[3]	giveQuests	tag 6: vector<CString> quest ids set to 1 (brief_get_quest)
@@ -3582,11 +3582,11 @@ CSoundManager			0x108	pointer	musicStream	open ASI stream handle (0 none)
 CSoundManager			0x10c	pointer	musicStreamVtable	decoder sample + 0x144: +4 read, +8 seek, +0xc close
 CSoundManager			0x110	pointer[3]	musicBuffers	three AIL buffers of +0x11c bytes
 CSoundManager			0x11c	int	musicBufferSize	2 * AIL_minimum_sample_buffer_size
-CSoundManager			0x120	int	musicBytesPerBuffer	play position step per buffer
+CSoundManager			0x120	int	musicFramesPerBuffer	CORRECTION: was bytes per buffer: +0x11c / +0x13c sample frames; MusicThreadProc adds it to the play position +0x130
 CSoundManager			0x124	int[3]	musicBufferIndex	rotating indices 0 / 1 / 2 (MusicThreadProc)
 CSoundManager			0x130	int	musicPlayPosition	bytes streamed so far (+ +0x120 = the next buffer position)
 CSoundManager			0x134	int	musicSwitchPosition	MusicPlayTrack: position at which the pending track starts (marker / end / now)
-CSoundManager			0x140	byte	musicSilenceByte	pad value for the buffer tail
+CSoundManager			0x140	byte	musicSilenceByte	0 for 16-bit tracks, 0x7f otherwise: padding of the music buffers
 CSoundManager			0x144	SoundVolume	musicVolume	SetMusicVolume; fades by MusicStartFadeOut / In (step 1/60)
 CSoundManager			0x160	CString	musicCurrentTrack	
 CSoundManager			0x164	CString	musicPendingTrack	
@@ -3647,6 +3647,8 @@ CSoundManager			0x864	pointer	cacheFree	free node chain of the cache list
 CSoundManager			0x868	pointer	cachePlex	CPlex block chain (List_FreeChain in the dtor)
 CSoundManager			0x86c	int	cacheBlock	10 nodes per block
 CSoundManager			0x89c	int	unk_0x89c	zeroed by InitFields between initialised +0x898 and reverbEnabled +0x8a0; no other reader or writer in the typed decompiles
+CSoundManager			0x138	int	musicLoopPoint	Markers2[0] in sample frames (INT_MAX without it): MusicFillBuffer seeks to 0 when the play position reaches it
+CSoundManager			0x13c	int	musicFrameBytes	bits * channels / 8 of the current track
 StrHash		0x14	0x0	pointer	vtable	name -> record hash (0x14: the hash tables of the data managers; IdHash is the 0x18 variant)
 StrHash			0x4	pointer	buckets	
 StrHash			0x8	int	bucketCount	

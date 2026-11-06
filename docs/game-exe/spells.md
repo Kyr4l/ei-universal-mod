@@ -63,11 +63,14 @@ Tags: **[V]** read directly in the decompile, **[I]** inferred from several func
 
 ## 2. The spell database (`spells.sdb`)
 
-`SpellsDb::Load` 0x684550 opens `spells.sdb` from the database `.res` (`CMappedResource`) and reads a tagged archive: tag 1 = the
-`SpellPrototypes` rows, tag 2 = `SpellModifiers`, then a second archive with tags 3/4/5 = `S_Spells`, `S_Armors`, `S_Weapons` (the shop
-sets, `SpellSetRecord` 0x34: prototype code, required runes, optional runes, power rune, shop bits). Both proto vectors get a code -> row map
-(**keyed by the code column, not the name**; `CreateSpellByName` therefore takes `fireball{e1;r1}`, and `GiveUnitSpell` / `CastSpellPoint` in
-scripts use codes). Field tags = the `FLD` numbers of the xlsx dump (`resources/universal-mod/xlsx-dump/databaselmp.md`):
+`SpellsDb::Load` 0x684550 opens `<res dir><res name>` (`CMappedResource`; FatalError "Can't open database file '%s'") and its member
+`spells.sdb` (FatalError "Can't open spells database"), copies it into a CMemStream and makes **three** archive passes over the same
+stream [V, deep-read 2026-11-06]: pass 1 tag 1 = the `SpellPrototypes` rows, pass 2 tag 2 = `SpellModifiers`, pass 3 tags 3/4/5 =
+`S_Spells`, `S_Armors`, `S_Weapons` (the shop sets, `SpellSetRecord` 0x34: prototype code, required runes, optional runes, power rune,
+shop bits). Both proto vectors get a code -> row map (**keyed by the code column, not the name**; `CreateSpellByName` therefore takes
+`fireball{e1;r1}`, and `GiveUnitSpell` / `CastSpellPoint` in scripts use codes); the map is filled row by row with find-or-insert +
+assign, so a **duplicate code maps to its last row**, and the spell kind of `Finalize` (the row index found through that map) is then the
+last row's index too. Field tags = the `FLD` numbers of the xlsx dump (`resources/universal-mod/xlsx-dump/databaselmp.md`):
 
 ### 2.1 `SpellProto` (0x84) [V] (`SpellProto::SerializeFields` 0x683B80)
 
@@ -103,7 +106,7 @@ scripts use codes). Field tags = the `FLD` numbers of the xlsx dump (`resources/
 | 1 | lightning (Lightning Arc) | lightning | u | instant electrical hit, `CEffectLightning` |
 | 2 | acid_ray | acid | u | arrow 0x2012 -> chemical hit |
 | 3 | fireball | fire | t | particle 0x2000 flies at `speed`, thermal area hit |
-| 4 | inv_lit (Invoke Lightning) | lightning | t | bolt from z+30, instant electrical area hit (radius) |
+| 4 | inv_lit (Invoke Lightning) | lightning | t | bolt from 30 m above the point, instant electrical area hit (radius) |
 | 5 | acid_column | acid | t | particle 0x200C, chemical area hit 15 ticks after the start |
 | 6 | firewall | fire | t | `CEffectWall` 0x2010, thermal beam hit every 4 ticks for `duration`, blocks the passability map |
 | 7 | litnwall (Smtg Lightning) | lightning | t | lightning wall, electrical beam hit every 4 ticks |
@@ -111,25 +114,25 @@ scripts use codes). Field tags = the `FLD` numbers of the xlsx dump (`resources/
 | 9 / 10 / 11 | prot_fire / prot_electro / prot_acid | fire / lightning / acid | u | buff: placement armor +0x3C / +0x4C / +0x44 += power (thermal / electrical / chemical) |
 | 12 / 13 / 14 | eagle_sight / infravision / detect_life | divination | u | buff: senses `stats +0xB4 / +0xBC / +0xC4` += power |
 | 15 / 16 / 17 | invisibility / silence / lichdom | illusion | u | buff: `stats +0xE4 / +0xFC / +0xF4` -= power (visibility / noise radius / third detectability); 15 sets the client flag 0x10000 |
-| 0x12 | fireworks | illusion | t | particle 0x2009 + sound seq; every tick activates the objects around and `AiMemory::UpdateLastSeen` for units in the radius (lure) |
+| 0x12 | fireworks | illusion | t | particle 0x2009 + sound seq; every tick activates the objects around and `AiMemory::SetNoticed` for units in the radius (lure) |
 | 0x13 | stench | illusion | u | buff: `stats +0x104` += power; hostile |
 | 0x14 | clairvoyence | divination | t | particle 0x2018; the units in the radius enter the caster player's known list |
-| 0x15 | possession | divination | u | target and its neighbours join the caster's known list, target flag 0x2000000; needs game mode 1 or no caster |
+| 0x15 | possession | divination | u | target and its neighbours join the caster's known list, target flag 0x2000000; **never cast in vanilla**: `CastSpellMulti` refuses 0x15 / 0x1B / 0x24 for every caller (SpellAddon `possessioncharmlink=1` lifts it) |
 | 0x16 | shapechange | illusion | s | no script: phase 3 at once (nothing happens) |
 | 0x17 | vision_fog | divination | u | `CEffectShowVisibility(caster, target)`: the caster sees the target's sight map while it lives |
 | 0x18 | healing | healing | u | `CUnitServer::Heal(power)` (slot 21), particle 0x2006 |
 | 0x19 | stun | domination | u | buff 0x19: slot 46 freeze (unit flag 0x1000000) while present |
 | 0x1A | antimagic | enchantments | u | buff: its power is max-ed into all three protections (+0x3C / +0x44 / +0x4C) [V]; counts as offensive for the AI |
-| 0x1B | link | enchantments | u | `CEffectWall` 0x2014 between caster and target until one dies; refused (msg 0x18) when either is busy |
-| 0x1C | teleport | enchantments | t | after `max(1, duration)` ticks the caster is moved to the point (`CanUnitBeAt` / `MoveUnit`), buff 0x1C freezes it, msg 0x10 when blocked |
+| 0x1B | link | enchantments | u | `CEffectWall` 0x2014 between caster and target; refused (msg 0x18) when either is walking or the target is dead; ends when either walks, dies or is removed (msg 0x19). Visual only (no hit, no buff), never cast in vanilla (see 0x15) |
+| 0x1C | teleport | enchantments | t | 30 ticks (2 s) after the cast the caster is moved to the point (`CanUnitBeAt` / `MoveObjectAndRestamp`), then buff 0x1C freezes it for `duration` ticks; msg 0x10 when blocked |
 | 0x1D / 0x1E | strength / weak | enchantments | u | buff: damage and ranges x `(1+0.003 s)/(1+0.003 w)`, max HP/mana x `(1+0.005 s)/(1+0.005 w)`, scale +-0.4 |
 | 0x1F | regeneration | healing | u | buff: HP regeneration rate x power |
 | 0x20 | feeblemind | domination | u | buff: unit flag 0x10000000 (cannot cast) |
 | 0x21 / 0x22 | speed / slow | enchantments | u | buff: action speed `+ power` / `- power` |
 | 0x23 | comprehend | domination | u | no script |
-| 0x24 | charm | domination | u | `CUnitServer::OnProvoked(caster, power + target +0x200)` until the target's player matches; msg 0x1A when resisted |
+| 0x24 | charm | domination | u | `CUnitServer::OnProvoked(caster, caster's intelligence + power)` until the target's player matches; msg 0x1A when resisted; never cast in vanilla (see 0x15) |
 | 0x25 / 0x26 | enlarge / shrink | enchantments | u | buff: morph scale +-0.4 (`ApplyBuffKinds`) |
-| 0x27 | campfire | fire | t | thermal "hit" every 4 ticks in the radius for `duration` (the hit record of kind 0x27), blocks the map |
+| 0x27 | campfire | fire | t | thermal "hit" every 4 ticks on the live units in the radius (the hit record of kind 0x27), blocks the map; **never ends**: its phase-2 countdown counts up, so the fire stays for the life of the zone [V] (the cast list is written into the zone save, so it also survives a save / load [I]) |
 | 0x28 / 0x29 | rick_magic / curse_magic | fire / lightning | u | the arrow (0x204E) / lightning (style 1) variants used by scripts |
 
 ### 2.3 `PerkProto` (runes, 0x24) [V] (`PerkProto::SerializeFields` 0x683AF0)
@@ -147,18 +150,25 @@ m1 -20 mana, m2 -40; ff/fe/fh/fg/fo/fl filters; it / ic item runes; ee1..ee5 (0.
 | +0x18 | id | `kind << 16` | sequence from the registry |
 | +0x1C / +0x1D | buff kind byte / level | kind, 0x10 | - (the level is recomputed at cast time) |
 | +0x20 | duration | Duration | `d`: `+= trunc(v * protoDuration)`, clamped >= 0 (objdump-verified `fild [proto+0x38]; fmul [perk+0x14]; call ftol`) |
-| +0x24 | power | Effect | `e`: `+= v * protoEffect` |
-| +0x28 | radius | Area | `a`: area `+= v * protoArea`, then `radius = sqrt(area / pi)` when > 0 |
+| +0x24 | power | Effect | `e`: `+= v * protoEffect`, clamped >= 0 |
+| +0x28 | radius | Area | `a`: area `+= v * protoArea`, clamped >= 0; after all runes `radius = sqrt(area / pi)` when > 0 (the field holds the area until then; the proto's Area column is an area, not a radius) |
 | +0x30 | speed | Speed | - |
-| +0x34 | range | Range | `r`: `+= v * protoRange` |
-| +0x38 | targets | Targets | `t`: `+= trunc(v * protoTargets)` (verified) |
+| +0x34 | range | Range | `r`: `+= v * protoRange`, clamped >= 0 |
+| +0x38 | targets | Targets | `t`: `+= trunc(v * protoTargets)` (verified; not clamped) |
 | +0x3C | flags | 'u' 0x10000000 / 't' 0x20000000 | `ff` 1, `fe` 2, `fh` 4, `fg` 8, `fo` 0x10, `fl` 0x20, `it` 0x10000, `ic` 0x20000 |
-| +0x40 | mana | Mana | `m`: `+= v * protoMana`; every rune `+= perk mana`; final `= max(protoMana, mana)` |
+| +0x40 | mana | Mana | `m`: `+= v * protoMana`, clamped >= 0; then (every rune, `m` included) `+= perk mana` unclamped; final `= max(protoMana, mana)`, so no rune set makes a spell cheaper than its prototype |
 | +0x44 | slots | Slots | `+1` per rune |
 | +0x48 | price | Price | `+= perk price` per rune |
 | +0x4C | cast actions | Actions | - |
 | +0x50 | required skill | Complex | `+= perk complex` per rune |
-| +0x54 | perks[8] | 0 | perk index + 1 per rune, sorted ascending, 0-terminated |
+| +0x54 | perks[8] | 0 | perk index + 1 per rune, sorted ascending as **signed** bytes, 0-terminated, only the first 8 kept |
+
+`Finalize` 0x68BF60 [V, deep-read 2026-11-06] first re-runs the proto copy (speed, range, target flag, targets, mana, slots, price,
+actions, level 0x10, kind = the row found by `SpellProto_FindByCode(proto code)` or 0xFF, power, area, duration, complex, id = kind << 16),
+then walks the rune list in order and switches on the code's first letter (`a d e r t m`, `f` + second letter, `i` + `c`/`t`); any
+other letter (the mod's `c1..c5` colours) changes no value but still pays its slot, complex, mana and price. Runes whose code starts
+with `e` (the mod's `ee1..ee5` too) are power runes. A rune whose code is not in the perk map stores index -1, i.e. a 0 byte, which ends
+the perk list early.
 
 `CSpell::GetProto` 0x68BA20 = `g_0x7C8510[id >> 16]`. `IsValidTarget` 0x68B4C0 applies the filter bits: `ff` needs a non-enemy
 (player masks `+0x244/+0x248/+0x250`), `fe` an enemy, `fh/fg/fo/fl` a model name `unhuma|unhufe / unmogo / unorma|unorfe / unmoli`; any
@@ -215,12 +225,16 @@ replaced, or when the unit dies; a hit reaction does not interrupt it (combat.md
 
 ### 4.3 Target selection (`CastSpellMulti` 0x58E850) [V]
 
-* possession 0x15 / link 0x1B / charm 0x24 need `world +0x12D64 == 1` (game mode) or no caster;
+* every spell needs zone kind `world +0x12D64 == 1` (a playable zone) **or** no caster (scripts, traps); and possession 0x15 / link
+  0x1B / charm 0x24 are refused for **every** caller [V, re-read 2026-11-06]: `CastSpell` 0x58E670 has no other caller, so these three
+  never run in vanilla (SpellAddon `possessioncharmlink=1` lifts the lock, docs/SpellAddonInfo.en.md);
 * no filter bits and `targets < 2` -> one `CastSpell` on the given target / point;
-* otherwise: an explicit unit target gets the first cast (skipped for `ic` spells), then `CollisionMap::FindUnitsNear(casterPos, range +0x34)`;
-  the live units are taken nearest-first to the target point, each must be visible to the caster (player: the known list `player +0x510C`;
-  monsters: the side mask `+0x12C64` or its neighbour list `+0xA94`), pass `ComputeCastTarget` and `IsValidTarget`; one `CastSpell` per
-  unit until the count is used (a `t2` fireball therefore explodes on the explicit point and on up to two more units).
+* otherwise: a **point** spell (flag 0x20000000) that is not `ic` gets one cast on the explicit point first (count - 1); then
+  `CollisionMap::FindUnitsNear(casterPos (the point when there is no caster), range +0x34)`; an explicit unit target is moved to the head
+  of the candidates and is taken first; the others are taken nearest-first to the target point (dead ones, `vt[55]`, dropped), each must
+  be visible to the caster (player: the known list `player +0x510C`; monsters: its neighbour list `+0xA94`, else the side mask
+  `+0x12C64`; no check without a caster), pass `ComputeCastTarget` and `IsValidTarget`; one `CastSpell` per unit until the count is used
+  (a `t2` fireball therefore explodes on the explicit point and on up to two more units).
 
 `CastSpell` 0x58E670: point-target spells (`0x20000000`) drop the unit; the point's z = terrain height; `new CSpellEffect` (0xA8),
 `Init(world, spell, target, pos, caster, point, quiet)`, `Update()` once (= `Start`); when still alive the cast is linked into the world's cast
@@ -266,28 +280,35 @@ does not re-trigger aggro every 4 ticks), `ApplyHitArea` 0x683600 (every hittabl
 0x681B80 = `+0x324 != 0` or proto `+0x24 < 0.5`), `ApplyHitBeam` 0x683730 (units within 0.5 m of the wall line). Nothing else is special:
 `TakeHit` (combat.md 4.4) applies the element to the placement armor (where the protection buffs live) and the body parts.
 
-### 5.2 The scripts (`Start` 0x67F870 / `TickFlight` 0x681BB0 / `TickActive` 0x682650) [V]
+### 5.2 The scripts (`Start` 0x67F870 / `TickFlight` 0x681BB0 / `TickActive` 0x682650) [V, deep-read 2026-11-06]
+
+Conventions of the three switches: `PF` = `PowerFactor`; "light" = `CreatePointLight` with the proto colour `+0x64..+0x6C` and radius
+`+0x70`; "rising" = light velocity `(0, 0, protoRadius / max(1, protoFadeout +0x74))` per tick; sounds are volume 10 radius 50 unless
+noted; `CreateParticleEffect(keep, type, pos, scale, intensity, velocity, attachUnit)`. Heights: `ground` = world slot 27 (the AI-map
+terrain height), `surface` = world slot 28 (ground + water depth of the AI cell, see the correction table). Every countdown is tested
+**before** its decrement (`old = c--; if (old < 0) ...`), so "countdown n" lasts n + 1 ticks. `Start` always ends with
+`UpdateVolumes(kind, place)`; phase 3 removes the volumes and the three effect objects.
 
 | kind | Start (phase 0) | flight (1) | active (2) |
 |---|---|---|---|
-| 0, 0x28, 2 arrows | needs a unit target; `CreateArrow` from the caster's attach point (type 0x2011 / 0x204E / 0x2012, intensity `PowerFactor` (x0.4 acid)), start sound, countdown 150 | the `CEffectArrow` flies 0.667 m/tick toward the target centre; on `arrived`: hit, hit particle 0x2041/0x2042 + end sound + light x1.5 at the target, countdown 0x23 | countdown, then done |
-| 1, 0x29 lightning | `CreateLightningToUnit` (width `5 * PowerFactor`), start sound, light; **hit applied at once**; countdown 7 | - | at 0 the bolt is removed and the light drifts up |
-| 3 fireball | particle 0x2000 (scale `0.3 * PowerFactor`) from the caster to the point, speed `+0x64` m/s (5 when <= 0), countdown `round(dist / speed * 15) - 2`; far casts loop `Fireball\circle.wav`, near ones play `start.wav`; light; the particle's `+0x17C` = caster | countdown; at < 0: pos = point, `ApplyHitArea`, blast 0x2002 (scale `min(PowerFactor, AreaFactor)`), end sound, light x1.5, `StimulusMap::HearSound(caster, 5.0)`, countdown 0x23 | countdown, done |
-| 4 invoke lightning | lightning from `z + 30` down to the point (width `-7 * factor`), particle 0x2030 at the point, `InvokeLight\start.wav` (volume 1000), light, **instant `ApplyHitTo` on every live unit within the radius**, countdown 7 | - | at countdown 5 a second bolt, then done |
-| 5 acid column | particle 0x200C, start sound, light, countdown 30 | - | at countdown 15 `ApplyHitTo` every live unit within the radius; done at < 0 |
-| 6 fire wall | `CEffectWall` 0x2010 at the point with direction = perpendicular of (point - caster) scaled to the radius, `Firewall\circle.wav` loop, light (radius + proto radius), countdown = duration, volumes | - | every 4 ticks `ApplyHitBeam(direction)`; at -1 the volumes / wall / loop end (`end.wav`), light drifts; done at -0x50 |
-| 7 lightning wall | a `CEffectLightning` between the two wall ends (terrain + 1), `Lightwall\circle.wav`, light, countdown = duration | - | like 6 along the bolt |
-| 8 acid fog | particle 0x2007 (scale radius), `poison\circle.wav`, light, countdown = duration, volumes | - | every 4 ticks `ApplyHitTo` every live unit within the radius; `end.wav` at -1 |
-| 9..0x11, 0x13, 0x19, 0x1A, 0x1D..0x22, 0x25, 0x26 buffs | the buff block `+0x50` copied, `level = trunc(16 * PowerFactor)` (objdump: `fsub 0.2; fmul 16.0; call ftol`), `target->vt[45] AddBuff(buff, quiet)`; **done at once** | - | - |
-| 0x12 fireworks | particle 0x2009, light, `Firework\1..5.wav`, countdown = duration | - | every tick: `World_ActivateObjectsAround(radius + 5)` and `AiMemory::UpdateLastSeen` of the units in the radius; `end.wav` at -1, done at -0x51 |
-| 0x14 clairvoyance | particle 0x2018 (scale radius) at the point, light, start sound, countdown = duration | - | every tick the units within the radius are inserted into the caster player's known objects (`player +0x20 + 0x50F8`) and the objects activated; at countdown 10 the end particle / sound |
-| 0x15 possession | start sound at the target | - | the target and its neighbour lists (`+0xA90 / +0xAAC`) join the caster player's known list, `target +0x8 \|= 0x2000000`, player `+0x24 = target id`, activation radius `2 * sight + 20`; countdown = duration |
-| 0x17 vision fog | `CEffectShowVisibility(caster id, target id)`, start sound; countdown = duration | - | runs while the target is alive (`vt[55]`) |
-| 0x18 healing | `target->CUnitServer vt[21] Heal(power)` (0x5543B0: `UnitStats` heal, recompute, net 0/4), particle 0x2006 on the target; sound and light unless quiet and already at full HP; countdown 30 | - | countdown, done |
-| 0x1B link | both must be idle units (`vt[54]` / `vt[55]` clear) and different, else player message 0x18; `CEffectWall` 0x2014 from the caster toward the target, `Link\circle.wav`; countdown = duration | - | ends with `end.wav` + message 0x19 when either dies / is removed, or at the end of the duration |
-| 0x1C teleport | particles 0x2019 at the caster (scale 1) and the point (scale -1, z - 0.2), start sound, light; countdown = `max(1, duration) + 30` | - | at countdown == `max(1, duration)`: `CAIMap::CanUnitBeAt(caster, point)` -> `CollisionMap::MoveUnit`, caster gets buff 0x1C (frozen for the duration), `ResetOrdersAndStance`; blocked -> message 0x10 |
-| 0x24 charm | needs two units; `CUnitServer::OnProvoked(target, caster, power + target +0x200)` repeated until the target's player == the caster's player; a refusal -> message 0x1A; charm start sound | - | - |
-| 0x27 campfire | pos = point (terrain + 1), countdown = duration, volumes | - | every 4 ticks `ApplyHitTo` every unit in the radius (the hit record of kind 0x27: thermal, direction 1) |
+| 0, 0x28, 2 arrows | needs a unit target (typeId 0x50), else done; `CreateArrow` (the arrow starts at the caster's attach point) (types 0x2011 / 0x204E / 0x2012, intensity `PF` (`0.4 * PF` acid), circle sound `Firearrow` (also 0x28) / `Acidray`, light colour + radius), start sound, countdown 150 | position follows the `CEffectArrow`; on `arrived` (+0x14C): hit, all three objects removed, then at the target (xy, z = ground + unit height): hit particle 0x2041 (fire, 0x28) / 0x2042 (acid) attached to the unit, scale `0.7 * PF`; `end.wav`; light radius x1.5 rising x1.5; countdown 0x23; an arrow that has not arrived after 150 ticks ends without a hit | countdown, done |
+| 1, 0x29 lightning | `CreateLightningToUnit` (width `5 * PF`, style 1 for 0x29), start sound, light at the target; **hit applied at once** (unit targets only); countdown 7 | - | at countdown 0 the bolt and the sound are removed and the light rises; done when the countdown passes -0x50 (~88 ticks of fading light) |
+| 3 fireball | velocity = the xy direction to the point x `speed / 15` per tick (speed `+0x64`, 5 when <= 0), particle 0x2000 (keep, scale `0.3 * PF`) at the caster, `+0x17C` = caster id, target z = surface + 1; countdown `round(distXY / speed * 15) - 2` (the blast falls on tick `round(distXY / speed * 15)`); `distXY >= 1.25 * speed` -> `Fireball\circle.wav` loop moving with it, else `start.wav`; a light moving with it | countdown; at old < 0: pos = point, `ApplyHitArea`, objects removed, blast 0x2002 (scale `min(PF, AreaFactor)`, then intensity `PF` / radius), `end.wav`, light x1.5 rising x1.5, `StimulusMap::HearSound(caster, 5.0)` (unit casters), countdown 0x23 | countdown, done |
+| 4 invoke lightning | point z = surface - 3, pos = point; bolt from 30 m above the point down to it (width `-7 * PF`), particle 0x2030 (scale = radius, intensity `PF`), `InvokeLight\start.wav` volume 1000 radius 1000, light at point + 5 rising, **instant `ApplyHitTo` on every live unit within the radius**, countdown 7 | - | every tick the current bolt is removed (so it lives one tick); at countdown 5 a second bolt (width -7, not scaled), done after old < 0 |
+| 5 acid column | particle 0x200C (scale 1) at the point, start sound, rising light, countdown 30 | - | when the countdown reaches 15 `ApplyHitTo` every live unit within the radius; done at old < 0 (31 ticks) |
+| 6 fire wall | particle wall 0x2010 (keep, scale and intensity `PF`) at the point; direction = the xy perpendicular of (point - caster), length = radius (half the wall); light at ground + 1 with radius `radius + proto radius`; `Firewall\circle.wav` loop; countdown = duration; volumes | - | while countdown >= 0 and `countdown & 3 == 0`: `ApplyHitBeam(direction)` and flag bit 0; at -1: `end.wav` where the loop was, volumes / loop / wall removed, light rises; done after -0x50 |
+| 7 lightning wall | the same two wall ends (surface + 1) joined by a `CEffectLightning` (width 0), light (radius + proto radius), `Lightwall\circle.wav`, countdown = duration | - | like 6 with the beam = bolt end - bolt start; at -1 light rises, volumes / loop / bolt removed, **no** `end.wav` |
+| 8 acid fog | point z = ground + 1; particle 0x2007 (keep, scale = radius, intensity `PF`), `poison\circle.wav`, light (radius + proto radius), countdown = duration, volumes | - | every 4 ticks `ApplyHitTo` every live unit within the radius; at -1 `end.wav` at the point, light rises, objects removed; done after -0x50 |
+| 9..0x11, 0x13, 0x19, 0x1A, 0x1D..0x22, 0x25, 0x26 buffs | with a target: the buff block `+0x50` copied, `level = trunc(16 * PF)` (objdump: `fsub 0.2; fmul 16.0; call ftol`), buff `+0x10` = quiet, `target->vt[45] AddBuff(buff)`; **done at once** | - | - |
+| 0x12 fireworks | point z = ground + 1; particle 0x2009 (keep, scale `PF`), light, `Firework\%i.wav` (5 files), countdown = duration | - | each tick, while the decremented countdown >= 0: `World_ActivateObjectsAround(radius + 5)` and `AiMemory::SetNoticed(pos)` (the brain memory at `CUnitServer +0xA50`) for every unit within the radius (lure); at -1 `end.wav`, particle and loop removed, light rises; done at -0x51 |
+| 0x14 clairvoyance | pos = point (ground + 1); particle 0x2018 (scale = radius) at the point, light (radius = spell radius), start sound at the point; countdown = duration | - | with a player-owned unit caster: the units within the radius are inserted into the caster player's known objects (`player +0x20 + 0x50F8`); any unit caster: `World_ActivateObjectsAround(radius + 5)`; when the decremented countdown hits 10 the end particle 0x2018 (scale `-radius`) and `end.wav`; done below 0 or when the caster is gone |
+| 0x15 possession | start sound at the target; countdown = duration | - | unit caster with a player and unit target: the target and its neighbour lists (`+0xA90 / +0xAAC`) join the caster player's known list, `target +0x8 \|= 0x2000000`, player `+0x24 = target id`, objects activated within `2 * max(sightMult +0x904 x sight, life sense stats +0xC4) + 20` |
+| 0x17 vision fog | `CEffectShowVisibility(caster id, target id)` (both needed), start sound at the target; countdown = duration | - | runs while the target exists and is not dead (`vt[55]`) |
+| 0x18 healing | unit target only: `target->CUnitServer vt[21] Heal(power)` (0x5543B0: `UnitStats` heal, recompute, net 0/4), particle 0x2006 attached (scale `PF`); unless quiet with full HP (`+0x17E == +0x180`): start sound and a fading light (negative radius) rising at the target point; countdown 30 | - | countdown, done |
+| 0x1B link | two different units, neither walking (`vt[54]` = `CUnit +0x278`), target not dead (`vt[55]` = `+0x274`), else message 0x18 to the caster; particle wall 0x2014 (scale 1) at the caster, direction = target - caster; `Link\circle.wav`; countdown = duration | - | a unit gone, walking or dead -> `end.wav` + message 0x19, done; at the end of the duration `end.wav` only |
+| 0x1C teleport | particles 0x2019 at the caster (keep, scale 1) and at the point (scale -1, z = ground - 0.2), start sound and light at the point; countdown = `max(1, duration) + 30` | - | while the caster lives: at countdown == `max(1, duration)` (30 ticks after the cast) the point takes the caster's z, `CAIMap::CanUnitBeAt(caster, point)` -> `CollisionMap::MoveObjectAndRestamp`, caster particle and sound removed, the caster gets buff 0x1C (frozen for `duration` ticks), `ResetOrdersAndStance`, light rises; blocked -> message 0x10 |
+| 0x24 charm | two units, else the phase stays 0 and `Start` re-runs every tick (a leak, reachable only with SpellAddon's unlock); `CUnitServer::OnProvoked(target, caster, caster's intelligence (`CUnitServer +0x200` = `UnitStats +0x20`) + power)` repeated (each call raises the tame stage, unit-ai.md 6.9) until the target's player == the caster's player; a refusal -> message 0x1A; else charm start sound; done | - | - |
+| 0x27 campfire | pos = point (ground + 1), countdown = duration, volumes | - | the countdown is **incremented**: every 4 ticks `ApplyHitTo` every live unit in the radius (the hit record of kind 0x27: thermal, direction 1), forever |
 | 0x16, 0x23 and unknown | phase 3 at once | | |
 
 ## 6. Buffs
@@ -295,13 +316,15 @@ does not re-trigger aggro every 4 ticks), `ApplyHitArea` 0x683600 (every hittabl
 ### 6.1 The record and the list [V]
 
 `Buff` (0x14): `+0 kind` (proto index), `+1 level` (client scale), `+4 duration` ticks, `+8 power` (`CSpell +0x24`), `+0xC radius`,
-`+0x10 flag byte`. `CMapObject +0x194` is a CArray of them (`+0x198` data, `+0x19C` count, `+0x1A0` capacity), saved by
-`CMapObject::Read/Write` (`Buff_Read/Write` 0x688550/0x6885A0) and replicated in net section 3.
+`+0x10 flag byte` = the cast's quiet flag (`CSpellEffect +0xA4`: 1 for a passive item cast; written by `Start`, 0 for the teleport
+freeze) [V, 2026-11-06], replicated but read by nobody. `CMapObject +0x194` is a CArray of them (`+0x198` data, `+0x19C` count, `+0x1A0`
+capacity), saved by `CMapObject::Read/Write` (`Buff_Read/Write` 0x688550/0x6885A0) and replicated in net section 3.
 
-* `AddBuff` 0x50F1E0 (slot 45, `(buff, applyScale)`): append (no duplicate check), net section 3 dirty, `vt[33](scaleKind)` (CUnit:
-  specific slot 19 `RecomputeFromPlacement`), stun 0x19 / teleport 0x1C -> `vt[46](1)` (flag 0x1000000 frozen: the unit's `Update` skips
+* `AddBuff` 0x50F1E0 (slot 45, **one** argument `(buff)`: machine code `ret 4`): append (no duplicate check), net section 3 dirty,
+  `scale = kind in {0x1D, 0x1E, 0x25, 0x26}` (kept in the argument's stack slot), `vt[33](scale)` (CUnit: specific slot 19
+  `RecomputeFromPlacement`), stun 0x19 / teleport 0x1C -> `vt[46](1)` (flag 0x1000000 frozen: the unit's `Update` skips
   Think/TickState), `vt[28]` (= `CUnitServer::v49_UpdateFeeblemind` 0x553220: flag 0x10000000 when a 0x20 buff exists and the natural
-  attack kind is not 0x10), and `vt[27] ApplyBuffKinds` when `applyScale`.
+  attack kind is not 0x10), and `vt[27] ApplyBuffKinds` only when `scale` (the four morph kinds).
 * `CMapObjectServer::TickBuffs` 0x515820 (slot 6, every server tick): `--duration`; expired records are removed (memmove), section 3 dirty,
   `vt[33]`, `vt[28]`, and `vt[46](0)` when no stun / teleport buff is left. Dying clears everything (`ClearBuffs` 0x50F5B0 from
   `OnDamaged` and `CMapObjectServer::TakeHit`).
@@ -370,11 +393,22 @@ their Reset / ReadDelta / Activate through the same slot numbers of their own vt
 | 0x5B | `CEffectArrowFigure` (0x19C) | projectile base + +0x158 figure, +0x15C shooter, +0x160 the resolved `Hit` (15 dwords) | as the arrow at 1.333 m/tick; **on arrival `target->vt[31](hit, shooter, shooter)`**, then removed | figure object kind 0x38, model `efar1` / anim `arrow01`, aligned to the velocity (`UpdateAttached` 0x67BEF0) |
 | 0x5E | `CEffectShowVisibility` (0x170) | +0x14C viewer, +0x150 watched unit, +0x154 CVisibilityFog, +0x160 cell grid | `SightMap_Build(watched, viewer, grid)` every tick, dirty; removed when a unit is gone | `CVisFogManager::CreateAndRegister`, `RebuildCells` from the grid |
 | 0x63 | `CEffectSoundSeq` (0x174) | +0x14C folder, +0x150 file list, +0x164 volume, +0x168 radius, +0x170 slot handle | moves | `PlayOnSlot` sequences (the `circle.wav` loops, `Firework\1..5.wav`) |
-| 0x64 | `CEffectMoshka` (0x16C) | the hero's fly (model `unmobi`): not a spell, client only (`SetNamedObjectState` 2.0) | | `CreateBird` / `UpdateFlight` 0x67CEF0 |
+| 0x64 | `CEffectMoshka` (0x16C) | the hero's fly (model `unmobi`): not a spell, client only (`SetNamedObjectState` 2.0); +0x14C bird, +0x154 unit id, +0x158 last time, +0x15C timer (float), +0x160 angle, +0x164 radius, +0x168 state | | `CreateBird` / `UpdateFlight` 0x67CEF0 (below) |
 | 0x65 | `CEffectTornado` (0x15C) | weather (`UpdateEnvironment` mode 3): particle 0x200A, sound, +0x154 age | after 20 ticks every 8 ticks: every unit within 5 m takes a hit of 100 damage (location 6) | particle + `nature\tornado\circle.wav` |
 
 The ranged attack of combat.md (`FireAttack` 0x54F450) uses kind 0x5B: the hit is resolved when the shot starts and carried in the
 object; the client only animates the figure.
+
+**The fly** (`CEffectMoshka::UpdateFlight(time)` 0x67CEF0, every rendered frame from the client world's draw-list build 0x56AFE0 with
+`time` = client tick + frame fraction) [V, deep-read 2026-11-06]: `dt = clamp(time - last, 0, 5)` ticks, `timer -= dt`; the unit is
+looked up by id each frame (nothing happens when it is gone). State 0 (approach, timer 200 from `CreateBird`): goal = the unit + 1.5 m
+to the side of the bird's approach direction, z + 3.2; within 5 m (xy) -> state 1, timer 100, radius 30, angle = `atan2 - time * 0.2 -
+1.5`; timer out -> a visible point around the unit (`Effect_FindVisiblePointAround`), state 2, timer 150. State 1 (circling): goal =
+the unit + 1.5 m at angle `time * 0.2 + angle`, z + 3.2; timer out -> a probe 50 m away (angle + `g_0x7C8430`) at the bird's z + radius;
+`TraceVisibility(bird, probe) > 0.5` -> state 2 toward it, timer 150; else `radius += 0.5` and retry next frame. State 2 (leaving): when
+the timer runs out or the bird sits exactly on the goal, slot 18 (Reset) ends it. Movement: goal z >= floor height (client world slot
+28, then `CBridgeManager::GetHeightAt`) + 0.5; step length `(sqrt(sqrt(distance to the unit)) * 0.03 + 0.3) * dt` (so it flies faster far
+from the hero), `ObjGrid_MoveObject`, `AlignToDirection(step)`, animation clock `+= dt`.
 
 ### 7.3 `CSpellEffect` -> effect objects
 
@@ -404,9 +438,16 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
   `0x40000001`, the single file once). Counts above 5 fall back to the count-1 callback.
 * ~~CEffectArrow vtable size~~ settled [V]: one 25-slot vtable at 0x7436F0; classes.tsv had split it into 18 slots + a 7-slot "vtable" at 0x743738 (= 0x7436F0 + 18 x 4), which holds ReadDelta 0x67B690 (slot 21) and Activate 0x67B4E0 (slot 23), same 25 slots as the projectile base.
 * Shapechange (0x16) and comprehend (0x23): no server script and no literal `GetBuffValue` reader (only kinds 0x1D / 0x1E are read through it) [V]; they are not sold and no monster has them [V, data 2026-11-03]: both have prototype rows (SpellPrototypes), but no shop set (S_Spells) and no Monsters row lists them, and no shipped map script hands one out either (`GiveUnitSpell` has 0 calls in the campaign and LostInAstral, gs-functions.md 4.1); its cast would do nothing (phase 3 at once). Charm, possession and link are not sold either. Note: the particle types 0x2039..0x203B with the "ShapeChange" texture are NOT this spell: 0x2039 / 0x203A draw the move-path preview of message 0x0E, and only with the debug flag `g_0x79BE70` (`CPlayerClient::OnMsg0E_MovePath` 0x669FA0).
-* The buff `+0x10` flag byte: its only typed access is a copy (0x5ED710) besides the replication; never tested [I] (no reader found).
-* `AddBuff`'s second argument (`applyScale`) is read from the stack by the decompiler as a register leftover; the call sites pass
-  `CSpellEffect +0xA4` (quiet) in that position [I].
+* ~~The buff `+0x10` flag byte~~ settled 2026-11-06 [V]: `Start` writes the quiet flag there (6.1); still no reader (0x5ED710 is an
+  unrelated `ItemLink::Clone`).
+* Bug candidates from the 2026-11-06 deep read (not in docs/SpellAddonInfo.en.md):
+  - campfire 0x27 (`TickActive` 0x682650, `case 0x27: this->countdown = uVar7 + 1`): the only phase-2 script that counts up, so the
+    fire never ends and hits every 4 ticks for the life of the zone. Could be intended for script-placed permanent fires [?]; live row.
+  - charm 0x24 (`Start` 0x67F870): a non-unit target or a missing caster jumps past `phase = 3`, so `Start` re-runs every tick and the
+    cast record never dies. Unreachable in vanilla (`CastSpellMulti` refuses charm); reachable with SpellAddon's unlock and a script
+    charm without a caster.
+* ~~`AddBuff`'s second argument~~ settled 2026-11-06 [V, machine code]: there is none (`ret 4`); the "applyScale" byte is a local
+  (is the kind one of the four morph kinds) stored in the argument's stack slot, which Ghidra showed as `unaff_retaddr`.
 
 ## 10. Corrections to earlier notes
 
@@ -427,6 +468,29 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
    nodes `{next, prev, item ref, countdown, keep}` of the `ic` items.
 7. `hierarchy.md` "24-slot effects": `CEffectArrowFigure` / projectile base have 25 (slot 24 `UpdateAttached`); `CEffectMoshka` and
    `CEffectTornado` are not spell effects (hero fly, weather).
+
+Deep-read round 2026-11-06 (`Start`, `TickFlight`, `TickActive`, `Finalize`, `SpellsDb::Load`, `UpdateFlight`; plus the ws cross-note):
+
+8. This page 4.3 / 2.2: "possession / link / charm need game mode 1 or no caster" -> `CastSpellMulti` refuses those three for every
+   caller and the "zone kind 1 or no caster" rule applies to **every** spell; `CastSpell` has no other caller, so their scripts never run
+   in vanilla. Also "an explicit unit target gets the first cast (skipped for `ic`)" -> a point spell's explicit **point** gets the first
+   cast (skipped for `ic`); an explicit unit is only put first among the unit candidates.
+9. This page 2.2 / 5.2 charm: "`OnProvoked(caster, power + target +0x200)`" -> the value is the **caster's** `CUnitServer +0x200` =
+   its intelligence (`UnitStats +0x20`) + power.
+10. This page 2.2 teleport: "after `max(1, duration)` ticks the caster is moved" -> it moves 30 ticks after the cast and is then frozen for
+    `duration` ticks; `CollisionMap::MoveUnit` is `MoveObjectAndRestamp`.
+11. This page 2.2 / 5.2 campfire: "for `duration`" -> the campfire never ends (`TickActive` increments its countdown).
+12. This page 6.1 / 9 / 5.2: `AddBuff(buff, applyScale)` / `AddBuff(buff, quiet)` -> one argument; `ApplyBuffKinds` runs for the four
+    morph kinds only; the quiet flag travels as buff `+0x10`.
+13. This page 5.2 link: "both must be idle units (`vt[54]` / `vt[55]` clear)" -> `vt[54]` = walking (`CUnit +0x278`), `vt[55]` = dead
+    (`+0x274`); the walking test applies to both units, the dead test to the target only at the start and to both later; message 0x19
+    only when the link breaks, not at the normal end. Lightning wall (7): no `end.wav` (only the fire wall and the fog play one).
+14. This page 5.2 fireworks: `AiMemory::UpdateLastSeen` is now named `AiMemory::SetNoticed`; possession's radius uses
+    `max(sightMult x sight, stats +0xC4)`, not the sight alone; invoke lightning's first bolt lives one tick (every `TickActive` tick
+    removes the main effect) and the second bolt has a fixed width -7.
+15. `functions.tsv` `CAIMap::GetCell` 0x5BBB20 / `CWorldServer::GetTerrainCell` 0x58A390 (world slot 28, "Passability"): they return a
+    **float height** = (cell u16 `+4` + water depth `+6 & 0x3F`) / `CAIMap +0x120` (0 outside the map), i.e. the water surface or ground
+    height, not a cell pointer (machine code 0x5BBB9C..0x5BBBCC: `fild; fdiv [ecx+0x120]`). Slot 27 is the ground height alone.
 
 ## 11. Function index
 

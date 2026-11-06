@@ -117,17 +117,17 @@ The field ids below are the sheet's `FLDx-y` (= the tag byte x, list index y); t
 | 19 / 20 | Damage Min / Max | +0x80 / +0x84 | float[2] | natural damage min, spread |
 | 21 / 22 / 23 / 24 | Skills General / Steal / Tame / Peripheral | +0x88 / +0x8c / +0x90 / +0x94 | float | skill bases |
 | 25 | Senses Sight Infra SenseLife Hearing Smell Tracking | +0x98 | float[6] | perception bases -> `UnitStats +0xb0` pairs |
-| 26 | Detections (same six) | +0xb0 | float[6] | detectability bases -> `UnitStats +0xe0` pairs |
+| 26 | Detections (same six) | +0xb0 | float[6] | detectability bases -> `UnitStats +0xe0` pairs; the first (Sight, +0xb0) is also the **footprint strength** of `CUnitClientSpecific::UpdateAnimSounds` 0x534B60 (x0.5 crawling, x0.75 sneaking; machine code 0x535080 on the `GetProto` 0x530930 record) [V, 2026-11-06] |
 | 27 / 28 | Common / Rare loot Probability Mask Min Max | +0xc8 / +0xd8 | float[4] | TypeList(21) sub-tags 0..3: the **money of a corpse**. `CHoover::CollectUnitLoot` 0x461CB0 reads them [V, disassembly 2026-11-05: `fcomp [ebx+0xc8]` at 0x461E78, `[ebx+0xd0]` / `[ebx+0xd4]` at 0x461DBE..0x461DE9, `[ebx+0xd8]` at 0x461F47, `[ebx+0xe0]` / `[ebx+0xe4]` at 0x461E8A..0x461EB5]: money = rand(Min..Max) when rand % 100 + 1 <= Probability, for each of the two rows, summed, clamped >= 0. Mask (+0xcc / +0xdc) is not read there. (The apparent use in the old `UnitProto::ApplyTo` was a type mix-up, that function works on the .mob stats block.) |
 | 29 | Items | +0xe8 | vector<CString> | "proto.material[count]" (`Unit_GiveProtoEquipment`) |
 | 30 | Skills Elemental Senses Astral | +0xf4 | float[3] | magic skill bases |
 | 31 | Spells | +0x100 | vector<CString> | "code{mods}" (`MobUnitStats_ApplyTo` 0x477B00 adds them) |
 | 32 | Equipment Wears | +0x10c | vector<CString> | armor names |
-| 33 / 42 | Weapon 1 / 2 | +0x118 / +0x11c | CString | weapons; `+0x118` also selects the animation set (`CUnitClientSpecific::PlayAnimation` 0x537500) |
+| 33 / 42 | Weapon 1 / 2 | +0x118 / +0x11c | CString | weapons (the `+0x118` read of 0x537500 is not this field but the RaceModel's Skin Type, see 3.2) |
 | 34 | Info Window Scale | +0x20 | float | unit info window |
 | 35 | Altitude | +0x24 | float | flying height (>= 1.5: not meleeable) |
 | 37 / 38 | Dialog Camera Distance / Height | +0x28 / +0x2c | float | dialog camera |
-| 40 | Detonation | +0x30 | int | |
+| 40 | Detonation | +0x30 | **float** | camera-shake strength of the unit's footsteps and step / hit animation events (`UpdateAnimSounds`: `CCamera::AddShake(pos, 5.0, value, 0.25)` when > 0; shipped values 0, 0.1 .. 2.5) [V] |
 | 41 | Base Level | +0x50 | int | `CUnit::GetLevel` 0x532D40 for monsters |
 | 43 | Exp | +0x54 | float | experience given to the killer |
 
@@ -155,7 +155,7 @@ Gap `+0x38..+0x44` is never written or read [V]. The record is exactly 0x120 byt
 | 37 / 38 | Sounds Probability Idle / Attack | +0x150 / +0x154 | int | voice chance |
 | 39 | Defence Piercing .. General | +0x6c | float[7] | |
 | 40 / 41 / 42 / 43 | Blood Type / Cast Type / Footprint Type / Leg Segments | +0x108 / +0x114 / +0x10c / +0x110 | int | prints.db kinds |
-| 44 / 45 / 46 | Skin Type / First Step Right / Head Height | +0x118 / +0x11c / +0x120 | CString / byte / float | |
+| 44 / 45 / 46 | Skin Type / First Step Right / Head Height | +0x118 / +0x11c / +0x120 | CString / byte / float | Skin Type = the **hit-sound material** of `CUnitClientSpecific` slot 46 0x537500 (through `CUnit::GetProto` 0x530970, the race record): `Crystal` / `Bone` / `Stone` -> `stone`, `Metal` -> `Metal`, anything else -> `leather` (`weapons\<kind>\<material>\1.wav`); heroes use the material of the armour covering the hit part first. Shipped: 79 Leather, 6 Stone. First Step Right swaps the left / right foot of the footprints |
 | 47..50 | Unk47..50 | +0x158.. | int[4] | unused |
 
 `+0x128..+0x134` is not serialised (copied by `operator=` only) [V]; `+0x144` is the runtime step-sound count vector.
@@ -192,8 +192,8 @@ fraction [I].
 
 `Unit_InitStatsFromProto` 0x5136D0 (stats, combat.md 5), `Unit_ApplyPrototype` 0x513B60 (model, offset, morph, equipment),
 `MobUnitStats_ApplyTo` 0x477B00 (the `.mob` UNIT_STATS block `CUnitDesc +0x210`, 0xac bytes = a packed stats record, applied over the
-prototype), `CUnit::GetProto` 0x530930 / `GetProto2` 0x5309E0 (43 callers), `CUnit::SetProtoIndex` 0x5308A0 (`+0x23c = (proto -
-base) / 0x120`), `CUnitClientSpecific::PlayAnimation` / `GetStepSoundName` / `BuildSkinTextures` 0x536670 / `GetAnimSoundName`
+prototype), `CUnit::GetProto` 0x530930 (the Monsters record of `CUnit +0x18`, 43 callers) / the second `CUnit::GetProto` 0x530970 (its race: Monsters `+8` -> RaceModels, 12 callers) / `GetProto2` 0x5309E0 (Monsters by `+0x23c`), `CUnit::SetProtoIndex` 0x5308A0 (`+0x23c = (proto -
+base) / 0x120`), `CUnitClientSpecific::v46_PlayHitEffect` 0x537500 (race Skin Type) / `UpdateAnimSounds` 0x534B60 (Detonation, footprints) / `GetStepSoundName` / `BuildSkinTextures` 0x536670 / `GetAnimSoundName`
 0x534760 (client), `CWorldClient::CreateHeroUnits` 0x566F70, `CPlayerClient::OnMsg40_UnitCreate` 0x667EC0, `CParty::InitHeroFromProto`,
 `UIUnitPreview::PickFaceFigure` 0x5ED7B0 ('unhuma' / 'unhufe' -> face figures), `CUnit::PlayAck` 0x6D8430 (was CAcksDb::PlayUnitHitSound; the unit event code -> acks.db sound, combat.md 9).
 
@@ -216,12 +216,12 @@ from text by `QuestsDb::ParseQuestReg` 0x6AE8E0 (was QuestsDb_ParseIni; `this` =
 | tag | quest.reg key ([quest] section) | off | type |
 |---|---|---|---|
 | 0 | name | +0 | std::string: the quest id (`q.<zone>.<id>` state key, "quest <id>" text section) |
-| 1 | exp | +0xc | int |
-| 2 | money | +0x10 | int |
-| 3 | order | +0x18 | int |
+| 1 | exp | +0xc | **float** (`quest.reg` GetNumber, stored as a float; the quest log tests `> 0.0`) |
+| 2 | - | +0x10 | dword: serialized only, never written by `quest.reg` nor read [V] |
+| 3 | zone index | +0x18 | int |
 | 4 | - | +0x2c | std::string (not read from quest.reg) |
-| 5 | zone index | +0x14 | int |
-| 6 | - | +0x1c | int |
+| 5 | money | +0x14 | **float** (quest log `obj_cost_money`) |
+| 6 | order | +0x1c | int |
 | 7 | questplaces "{x;y}{x;y}" | +0x20 | vector<float> (tag-1 items; pairs) |
 
 ### 4.2 Briefing (0x6c) [V]
@@ -229,14 +229,14 @@ from text by `QuestsDb::ParseQuestReg` 0x6AE8E0 (was QuestsDb_ParseIni; `this` =
 | tag | quest.reg key ([briefing receive] / [briefing reject] / [briefing complete]) | off | type | `CWorldServer::OnNamedEvent` 0x592090 / `DialogScreen` |
 |---|---|---|---|---|
 | 0 | name | +0 | std::string | the briefing id (`StringHash_GetOrInsert g_0x7C87D4`) |
-| 1 / 2 | exp / money | +0xc / +0x10 | int | party exp / money += ("brief_get_exp" / "brief_get_money") |
+| 1 / 2 | exp / money | +0xc / +0x10 | **float** | party exp / money += ("brief_get_exp" / "brief_get_money"); the money goes to `CParty +0x50` |
 | 3 | give items | +0x14 | vector<CString> | `CItemManager::CreateItemByName` -> `CPlayer::AddItems` ("brief_get_item") |
 | 4 | - | +0x5c | std::string | |
-| 5 | remove items | +0x20 | vector<CString> | items released from the party ("brief_lost_item"; quest items 0x14 by script id) |
+| 5 | remove items | +0x20 | vector<CString> | each name is created as an item and **only quest items (typeId 0x14)** are removed (`CPlayer::RemoveQuestItemById(item +0x4C)`); other names do nothing ("brief_lost_item") |
 | 6 | give quests | +0x2c | vector<CString> | quest ids set (`q.*` = 1, "brief_get_quest") |
 | 7 | complete quests | +0x38 | vector<CString> | quest ids completed (= 2, "brief_complete_quest") |
-| 8 | available zones | +0x44 | vector<CString> | zones made reachable (`z.<zone>` = 2) |
-| 9 | complete zones | +0x50 | vector<CString> | zones completed |
+| 8 | available zones | +0x44 | vector<CString> | zones made reachable (named value = **1.0**) |
+| 9 | complete zones | +0x50 | vector<CString> | zones completed (named value = 2.0) |
 | 10 | - | +0x68 | int | specials text: when > 0 the briefing dialog (`DialogScreen` 0x604C50, at 0x605862) prints the text key `brief_get_specials_<N>` [V]; display only, the server never reads it [I] |
 
 ParseQuestReg appends a quest / briefing only when its name is new (`BriefingTable_AddUnique` 0x6B0600; quests: map lookup first), so
@@ -358,12 +358,12 @@ Particle records (0x64) come from the manager pool `+0xb4` (`AllocParticle` 0x49
 
 | off | field | meaning |
 |---|---|---|
-| +8 | flags | 1 emitting, 2 emit only while attached, 4 keep alive when detached (`Mute` 0x485440 = `(f & ~1) \| 4`, `Unmute` 0x485450 = `f \| 5`, `Stop` 0x485360 = `f & ~5` + detach), 8 removable, 0x10 use the carrier attach offset, 0x40 hidden |
-| +0x1c / +0x94 / +0x13c | position / carrier / attach mode | position is relative to the carrier's attach point: `GetCarrierOffset` 0x484C00: mode 0 = `CUnit::GetAttachPoint2`, 1.. = the part "body0N" (`FindPartByNameStart`), non-units `Carrier_GetAttachPoint` 0x484B40 |
+| +8 | flags | 1 emitting, 2 emit only while attached, 4 keep alive when detached (`Mute` 0x485440 = `(f & ~1) \| 4`, `Unmute` 0x485450 = `f \| 5`, `Stop` 0x485360 = `f & ~5` + detach), 8 removable, 0x10 use the carrier attach offset (`Init` clears 8 and 0x10 first), 0x20 freeze off-screen (`Update` returns at once while `+0xe8 > 56`; only the rain 0x2038 sets it), 0x40 hidden |
+| +0x1c / +0x94 / +0x13c | position / carrier / attach mode | position is relative to the carrier: `GetCarrierOffset` 0x484C00 [V, deep-read 2026-11-06]: without flag 0x10 the carrier position; with it, for units (typeId 0x50) by mode: 0 `CUnit::GetAttachPoint2`, 1 part `hd` (head), 2 `hd` + 1 m up, 3 `lh2`, 4 `rh2`, 5 `ll2`, 6 `rl2`, 7 `bd` (each: the part's `TransformSpecificPoint`, else part `bd`, else position + height `+0x14c`), 8..12 `Carrier_GetAttachPoint` 0x484B40 with `body00`..`body04`; non-units and other modes: position with z + (`+0x134 * 1.6` when byte `+0x124 & 1`, else `+0x14c - +0x140`) |
 | +0x98 / +0xa4 / +0xc8 / +0xb0 / +0xbc | world pos / delta / speed / side / up | recomputed every Update from the carrier; the emitters use them for trails |
 | +0xcc / +0xd0 / +0xd4 / +0xd8 | spawn probability % / min tries / distance per extra try / max live | `tries = max(round(speed / +0xd4), +0xd0)`; each try spawns with `rand % 100 < +0xcc`; one forced when `+0xcc > 50` and none spawned; nothing while `+0x1c0 >= +0xd8` |
 | +0xdc / +0xe0 / +0x1d0 | frames / columns / uv rects | atlas of `+0xdc` frames, `+0xe0` per row; rect `i` = `{(i % c) / c, 1 - (i / c) / c, ..}` inset 1/512 |
-| +0xe4 / +0xec | interval / life | per-type counters copied into the records (`+0x4c`, `+0x50`) |
+| +0xe4 / +0xe8 / +0xec | interval / frames since drawn / life | interval and life are copied into the records (`+0x4c`, `+0x50`); `+0xe8` = 0 when `Render` draws the system, +1 each time it is frustum-culled (flag 0x20) |
 | +0xf0 / +0xfc / +0x10c / +0x110 / +0x114 | spawn box min / max / size / growth / damping | the per-type constants (table below); `ScaleParams` 0x485480 multiplies the box, size, `+0x110`, `+0x128`, `+0xd4` |
 | +0x118 / +0x11c / +0x130 | intensity / radius / direction | from the effect (power factor, area radius, wall direction) |
 | +0x150 | additive | 1 = additive blend |
@@ -378,6 +378,16 @@ velocity / parameter / velocity2 triples, `+0x44` frame, `+0x48` render frame, `
 colour, `+0x5c` prev colour, `+0x60` dead [V]. `Update` copies pos -> prev pos, size -> prev size, colour -> prev colour, frame -> render
 frame **before** the step callback, and restores them when the step returns 0 (the particle is drawn one last time unchanged) [V].
 
+`Update` 0x496EB0 details [V, deep-read 2026-11-06]: flag 0x20 and `+0xe8 > 56` -> returns 1 untouched (frozen off-screen). Bounds
+reset; a carrier flagged dying (`+8 & 1`) is detached; world position = carrier offset + `+0x1c` (or `+0x1c` alone), `+0xa4` = its
+change, `+0xc8` = speed, side axis = `(vy, -vx, 0)` normalised (a fallback cross product when vertical), up = velocity x side; the tick
+callback on every `+0x154` record; the live loop: a record flagged dead is unlinked and returned to the pool **but the loop goes on with
+it** (prev copy and one more step call on the pooled record: harmless, `InitParticleRecord` resets it); spawning: `tries =
+max(round(speed / +0xd4), +0xd0)`, each `rand % 100 < +0xcc` calls `emit(record, successes so far)` with `ecx` = the system (emitters
+that read the index use it to seed their record arrays on 0), a 0 return gives the record back; when no try succeeded and `+0xcc > 50`
+one more forced call with index 0. Return: detached systems live while flag 4 or particles remain; attached ones die when not emitting
+and empty.
+
 ### 7.3 The type table (`CParticle::Init` 0x485540) [V]
 
 Common prologue: `Reset`, bounds empty, `+0xe0 = 4`, `+0xcc = 100`, `+0xd8 = 500`, `+0xdc = 16`, flag 1. Then per type (only the values
@@ -390,27 +400,27 @@ the type sets; the `LAB_` callbacks were code without a function symbol: since 2
 | 0x2001 rain, 0x2003 fog, 0x2004 snow, 0x2010 fire wall | TendriSmoke | `ParticleEmit_Cloud` 0x48E9E0 / `ParticleStep_Pulse` 0x48EC20 (0x2010: LAB_48ED60 + `ParticleTick_SetCount` 0x48EE20, one 0x38 record, min 20, max 1500) | box -0.2..0.2, size 0.8, growth 0.3, damping 0.85, prob 88, min 6, frames 15, life 32, interval 1 |
 | 0x2002 blast | Explosion | LAB_48C090 / `ParticleStep_Grow` 0x48C590 | box -0.02..0.02, size 0.6, growth 1, damping 0.8, min 60, max 600, 15 records, life 15 |
 | 0x2005 volcano | Vulkan | `ParticleEmit_Burst` 0x48BD50 / LAB_48C010 | box (0.2, 0.5, 0)..(0.3, 4, 0), size 2.5, growth intensity/64, damping 0.99, min 2, max 400, life 16 |
-| 0x2006 healing | Healing | `ParticleEmit_Healing` 0x48B630 ("Particle effect Healing without carrier") / LAB_48BBE0 | min inf, life 8, size 0.5, additive |
-| 0x2007 acid fog, 0x2008 poison cloud | PoisonCloud | `ParticleEmit_GridFill` 0x48B080 / `ParticleStep_FadeColour` 0x48B570 | prob 50, min 1, max inf, frames 15, life 3236, grid of spacing 1 over `+0x11c` |
+| 0x2006 healing | Healing | `ParticleEmit_Healing` 0x48B630 ("Particle effect Healing without carrier": a silent trace stub, the emit returns 0) / LAB_48BBE0 | min inf, life 8, size 0.5, additive, flags 3. First call: `n = round(size * 6 + 2)` ring records around the carrier extent (`GetCarrierExtent`, angle step 360/n, z jitter +-0.2 x 2r), growth `+0x110 = 2.2r / 36`, damping `(size + 1) / 144`, then min tries `= 3n`; the next n emissions put one rising head particle per ring point (life 36, size `(size + 1) * 0.1`), then sparkles at random ring points (frame 8, life 8, size `(size + 1) * 0.07`) [V] |
+| 0x2007 acid fog, 0x2008 poison cloud | PoisonCloud | `ParticleEmit_GridFill` 0x48B080 / `ParticleStep_FadeColour` 0x48B570 | prob 50, min 1, max inf, frames 15, life 3236. `GridFill` [V, deep-read 2026-11-06] ignores the record it is given (returns 0) and, only while the live list is empty, inserts one particle per cell of the grid `-n..n` (`n = trunc(size +0x10c)`, i.e. the scale = the spell radius; spacing 1, jitter +-0.25) inside the circle of radius `+0x10c`: size 0.75..1.25, z = client terrain height + size, white with alpha `min(255, round(intensity * 160))` (0x2008: opaque white), random frame, life `+0xec` |
 | 0x2009 fireworks | Fireworks | LAB_48A8F0 / LAB_48ADA0 | box -0.1..0.1 (z -0.02..0.02), growth 0.3, min 20, interval 100, 3 records, additive |
 | 0x200a tornado | Tornado | `ParticleEmit_Sparks` 0x489F70 / `ParticleStep_Trail` 0x48A310 | min 4, max 800, growth 0.2, 6 records, interval = packed colour |
 | 0x200b | FireSmoke | LAB_489320 / LAB_489A50 | min inf, life -1 |
 | 0x200c acid column | AcidRay | LAB_488F90 / `ParticleStep_Bounce` 0x489190 / `ParticleTick_Decay` 0x4892E0 | min 128, max 400, growth 1, 1 record |
 | 0x200d banshee | Banshee | LAB_489BE0 / LAB_489EF0 | min inf, no records |
 | 0x200e change hero, 0x2052 explosion | ChangeHero / Explosion | LAB_4889D0 / LAB_488DB0 / `ParticleTick_Explosion` 0x488F00 (camera shake) | min 10, max 4000, growth 1 |
-| 0x200f rain streams, 0x2031..0x2033 | RainSnow | `ParticleEmit_Streams` 0x48EEA0 / LAB_48F300 | box -0.2..0.2, min 10, max 300, interval 15, life 6, attach 7, 1 record |
+| 0x200f, 0x2031..0x2033 **blood spurts** (race Blood Type 1/5, 2/6, 3/7, 4/8; `v46_PlayHitEffect` 0x537500, world-client-players.md) | RainSnow (atlas frames 12 / 13 / 14 / 15 by type) | `ParticleEmit_Streams` 0x48EEA0 / LAB_48F300 / tick LAB_48F380 | box -0.2..0.2, min 10, max 300, interval 15, life 6, attach 7 (`bd`), flags 0x13. First emission: `max(1, round(intensity * 8))` random unit directions (stored in the records), min tries = 10 x that; each particle: a random direction + jitter +-0.03, times size, velocity = that normalised x `size / 6` (x1.5 one time in 8), start at the system position + rand(0..1) x velocity, size = `+0x11c` [V, 2026-11-06] |
 | 0x2011 fire arrow, 0x204e | FireArrowSmoke / RikArrowSmoke | LAB_48CBA0 / `ParticleStep_Respawn` 0x48CED0 | box -0.2..0.2, size 0.3, damping 1.03, dist 0.06, frames 15, life 15, `+0x12c = 0` |
 | 0x2012 acid ray | AcidRay | LAB_48D050 / LAB_48D330 | box -1..1, size 0.3, dist 0.06, frames 15, life 15 |
 | 0x2013 stench | Stench | LAB_48D420 / LAB_48D7F0 | box -1..1, size 1, prob 80, min 5, interval 3, life 45 |
-| 0x2014 link | (none) | LAB_48D8D0 ("Particle effect Link without carrier" in `ParticleEmit_Link` 0x48E070 for the protections) / `ParticleStep_Vortex` 0x48DE30 | box -0.2..0.2, size 1, min 10, interval 3, life 45, `+0x130 = -10` |
-| 0x2015 .. 0x2017, 0x201a protections / antimagic | ProtectionA / E / F, AntiMagic | `ParticleEmit_Link` 0x48E070 / `ParticleStep_Orbit` 0x48E7C0 | box -0.2..0.2 (z -1..0), size 1, prob 90, min 1, frames 15, life 4 / 15, additive |
+| 0x2014 link | Link | LAB_48D8D0 / `ParticleStep_Vortex` 0x48DE30 / tick LAB_48E040 | box -0.2..0.2, size 1, prob 80, min 10, frames 15, interval 3, life 45, `+0x130 = -10` (the "Particle effect Link without carrier" string belongs to the protections' emitter below, a copy-paste) |
+| 0x2015 .. 0x2017, 0x201a protections / antimagic | ProtectionA / E / F, AntiMagic | `ParticleEmit_Shield` 0x48E070 (the shell emitter; was ParticleEmit_Link) / `ParticleStep_Orbit` 0x48E7C0 | box -0.2..0.2 (z -1..0), size 1, prob 90, min 1, frames 15, life 4 / 15, additive, flags 3. Each tick's first emission: shell radius = 1.2 x carrier extent and centre height, both smoothed `0.9 old + 0.1 new`; min tries `round(size * 24)` (antimagic) / `size * 6`; a motion vector `0.7 old + carrier delta`. Each particle: speed factor 0.7..1.3, or one time in 11 2.5..3.5 (antimagic) / 3.5..4.5 (0x2016) / 1.5..2.5; a random point of the unit ball scaled to `0.65 r`, minus its component along the motion (particles trail), frame rand % 11, size = `table[life] * factor * r` (0x73CB38; antimagic 0x73CB78; x2 fire 0x2017, x1.6 acid 0x2015) [V] |
 | 0x2018 clay ring | ClayRing | LAB_48F7F0 / LAB_48FAB0 | min 80, interval 2, life 15, 10 records, additive |
 | 0x2019 teleport | Teleport | `ParticleEmit_Ring` 0x48FDB0 / LAB_490060 | min 20, max 320, life 14, 1 record |
-| 0x201b .. 0x2026 modifiers (12 types) | (none) | `ParticleEmit_Modifier` 0x490130 ("Particle effect Modifier without carrier") / LAB_490990 | min 80, interval 2, life 14 |
+| 0x201b .. 0x2026 modifiers (12 types) | (none) | `ParticleEmit_Modifier` 0x490130 ("Particle effect Modifier without carrier") / LAB_490990 | min 80, interval 2, life 14, flags 3. First call: `max(1, trunc(abs(size)))` records on a ring of radius 2 x carrier extent (x 1/23 when size < 0) perpendicular to z (0x201B..0x201E; height +0.8 extent for 0x201C / 0x201D, -0.8 for 0x201E) or to the carrier's forward axis (0x201F..0x2022); the first emissions put one icon per record (frame = type - 0x201B, i.e. 0..11 of the atlas; life 25, size 0.125 or 0.2), later ones sparkles (frames 12..15, life 5) between a record's previous and current position [V] |
 | 0x2027 .. 0x202a casting 4 / 7 / fire / 8 | Casting4 / Casting7 / FireSmoke / Casting8 | LAB_4918E0 / LAB_492030 | min 20 (6 for 0x202a), interval 5 / 1, life 5, attach 0 / 2, additive |
 | 0x202b .. 0x202e casting 1 / 2 / 3 / 6 | Casting3 / 2 / 6 / 1 | LAB_490C10 / LAB_491230 | box -0.04..0.04, min 10, max 600, life 1 / 2 |
 | 0x202f | Teleport | LAB_491420 / LAB_491830 | min 25, life 14 |
-| 0x2030 invoke lightning / storm | TendriLight | `ParticleEmit_Weather` 0x4923B0 / LAB_492B80 | box -0.2..0.2, size 1, prob 88, min 250, max 600, frames 15, life 15, additive, 10 wind-band records |
+| 0x2030 invoke lightning / storm | TendriLight | `ParticleEmit_Weather` 0x4923B0 / LAB_492B80 | box -0.2..0.2, size 1, prob 88, min 250, max 600, frames 15, life 15, additive. `ParticleEmit_Weather` (the name is historical) [V, 2026-11-06]: 10 **impact points** = random points of a disk of radius `0.3 x size` around the system (the first at the centre) on the terrain + 0.3, each with an outward-up direction; the first 20 emissions put a core and a spark (frames 12..15, size `(0.5..1) x size x 0.2`, 0.4 x size for the centre) on each point (life 10); then, while fewer than 200 live and record 0 `+0x34 < 5`, debris thrown outward (alpha 0x40, frame 8, life `round(9 - 3k)`, k = 1 - rand^2) and otherwise sparks along a point's path (frame 1, life 6) |
 | 0x2034 .. 0x2037 rain / snow fall | RainSnow | LAB_48F3B0 / `ParticleStep_Fall` 0x48F670 / `ParticleTick_RandomDrift` 0x48F6F0 | box -0.2..0.2, min 45, max 300, interval 15, life 6, attach 7, records = intensity |
 | 0x2038 rain | (none) | `ParticleEmit_Rain` 0x492D30 / LAB_492F40 | min 10, max 600, box `+0x118 x +0x11c` (5 x 5) |
 | 0x2039 | ShapeChange | LAB_492FC0 / `ParticleStep_RampAlpha` 0x493280 (ramp `g_0x78AA78`) | min 2500, max 2500 |
@@ -465,7 +475,7 @@ min / max range, `+0x50` id [V].
 | `Play2D` 0x6B8250 (was PlaySound3D) | name, priority, volume %, pan -100..100, loop, heightAttenuate, category, variant | is2D = 1; raw = `volume * categoryVolume * 1.27` (x the height curve when heightAttenuate); then as above. UI: priority 1000 volume 100 (`UI_PlaySound` 0x5F7E60); voices: priority 1, category 1 (`PlayVoice` 0x5380D0); ambient slots: priority 1, volume 50..100, pan 0..100 |
 | `FindChannelSlot` 0x6B7D10 | priority | the channel with the **lowest** priority (free = none); `-1` when `priority <= lowest` (so equal priority never steals); a stolen **looping** channel is saved as a `SoundPendingRecord` (0x48: all parameters + `AIL_sample_position`) in `+0x884` under its id; `Play*` without a channel also create a pending record for looping requests (returned id) |
 | `UpdateChannel3D` 0x6B7FC0 | channel | `d = \|(pos - listener).xy\|`: `d > max` -> 0; `d >= min` -> `100 * (1 - (d - min) / (max - min))`; else 100; x the camera-height curve (`listener z < 30`: 1, 30..70: linear to 0, > 70: 0) x category volume x 1.27 -> `+0x10`; pan from `acos(dot(listener right, dir) / d)` mapped to +-100 **but then forced to 0** (3D sounds are centred) |
-| `LoadSample` 0x6B89F0 (was LoadSoundGroup) | channel, name, decompressMp3 | sample cache: map `+0x870` name -> `SampleCacheNode` (0x1c: data, name, last tick, size, refcount), LRU list `+0x854` (head = most recent); miss: file through the archives (`vt[5] OpenFile`), eviction while `+0x850 + size > 8 MB` or a node is unreferenced and 60 s old, copied into AIL memory (`AIL_decompress_ASI` for mp3), `AIL_set_named_sample_file`; `+0x2c = Wav_GetDuration` 0x6B96E0, `+0x20 = 1`, `+0x50 = +0x268++` |
+| `LoadSample` 0x6B89F0 (was LoadSoundGroup) | channel, name, decompressMp3 | sample cache [V, deep-read 2026-11-06]: map `+0x870` name -> `SampleCacheNode` (0x1c: +0 data, +4 name, +0x10 last tick (`GetTickCount`), +0x14 size, +0x18 refcount), LRU list `+0x854` (head = most recent). **Hit**: the node moves to the head, tick refreshed, refcount++, duration from `AIL_WAV_info` (IMA ADPCM 0x11: samples / rate, else `len * 8 / (bits * channels) / rate`), `AIL_set_named_sample_file`. **Miss**: the first archive of `+0xe8` whose `vt[5] OpenFile` finds the name (none -> fail); eviction walks from the **oldest** node: it stops at the first node when `+0x850 + size < 8 MB` **and** that node is younger than 60 s, otherwise frees it if its refcount < 1 (referenced nodes are skipped) and goes on; the bytes are copied into `AIL_mem_alloc_lock` memory, a node (refcount 1) is put at the head and `AIL_set_named_sample_file`; `+0x2c = Wav_GetDuration` 0x6B96E0. With `decompressMp3` (only `Play2D`'s last argument, passed by the dialog speech of `DialogScreen` 0x604C50): miss -> `AIL_decompress_ASI(.mp3)`, no eviction pass, the node goes to the **tail**, `AIL_set_sample_file`; **hit -> nothing is attached** to the freshly `AIL_init_sample`d channel (bug candidate, 9). Always: name copied, `+0x20 = 1`, `+0x50 = +0x268++` |
 | `SetChannelPosition` 0x6B92F0 / `SetChannelVolume` 0x6B9100 (was Stop3DSound) | id, pos / ranges; id, volume % | move / re-attenuate a playing channel (`CEffectSound::Update`, `CEffectSoundSeq`) |
 | `StopSound` 0x6B94A0 | id | `AIL_end_sample`, cache refcount--, id -1; the pending record of that id dropped (25 callers) |
 | `SetListener` 0x6B9750 | float[3] pos, float[3] right | `+0x250` / `+0x25c` (normalised xy), every loaded channel re-attenuated (`CCamera::Update`) |
@@ -477,25 +487,32 @@ takes the pending record with the **highest priority** from `+0x884` and resumes
 (3) the 8 `StreamSlot`s (`+0x5f0`, 0x4c: a wav list played file after file in 3D; `StartStreamSlot` 0x6BA2D0 / `StreamSlot_PlayNext`
 0x6BA140 / `StopStreamSlot` 0x6BA7C0; `CEffectSoundSeq`, buff loops) start their next file when the current id is gone; (4) every 100 ms
 the 16 `AmbientSlot`s (`+0x26c`, 0x38: name list, pos, min / max distance, min / max interval; `StartAmbientSlot` 0x6B9950,
-`CEffectAmbientSound`): beyond max distance silent; between min and max the intervals shrink by `(max - min) / (max - d)`; past the min
-interval a `1 / ((max - min) / 100)` chance per step, then `Play2D(random name, 1, 50..100, 0..100)` [V].
+`CEffectAmbientSound`) [V, deep-read 2026-11-06]: `d` = xy distance to the listener; `d > max - 0.001` -> nothing; for `d >= min` both intervals
+are **multiplied** by `f = (max - min) / (max - d)` (>= 1, so far sounds are rarer; nothing when `f > 255`); with `e` = ms since the
+slot last played: `e < minInterval` -> nothing; `minInterval <= e < maxInterval` -> a 1-in-`n` chance per 100 ms step with `n = (maxI -
+minI) / 100` (sure when `n <= 1`); `e >= maxInterval` -> sure; then `Play2D(random name of the list, priority 1, volume 50 + rand % 51,
+pan rand % 101, no loop)`. The pan is **0..100 only**, so ambient one-shots are never placed on the left half of the stereo field
+(right half with the default `+0x8a4` sign) [V; bug candidate, 9]. Step (2) restores every saved field of the pending record (loop =
+1), re-attenuates (3D: `UpdateChannel3D`, 2D: the camera-height curve and the category volume), `LoadSample`, keeps the record's id,
+`AIL_set_sample_position(saved byte offset)` and starts it.
 
 ### 8.3 Music: the stream player (`CSoundManager +0x100..+0x1c8`) and the director (`CMusicSystem` 0x58) [V]
 
 The player block is addressed through the manager (`this` = CSoundManager in every function): state `+0x100` (0 stopped, 1 playing,
 2 switching), output sample `+0x104`, stream `+0x108` / decoder vtable `+0x10c` (read `+4`, seek `+8`, close `+0xc`), buffers `+0x110`
-x 3 of `+0x11c` bytes, `+0x120` bytes per buffer, play position `+0x130`, switch position `+0x134`, `SoundVolume +0x144` (fade step
-1/60 per 100 ms = 6 s), current / pending names `+0x160` / `+0x164`, `Markers1` / `Markers2` float vectors `+0x168` / `+0x178`, mode
+x 3 of `+0x11c` bytes, `+0x120` sample frames per buffer (`+0x11c / +0x13c` bytes per frame), play position `+0x130` and switch position `+0x134` in frames, loop point `+0x138`, silence byte `+0x140`, `SoundVolume +0x144` (+0 percent, +4 raw
+0..127, +8 scale, +0xc step, +0x10 fade mode, +0x14 faded-out flag, +0x18 deadline; every fade uses step **1/96 per 100 ms = 9.6 s**
+from full to silent; past the deadline the scale snaps back to 1), current / pending names `+0x160` / `+0x164`, `Markers1` / `Markers2` float vectors `+0x168` / `+0x178`, mode
 `+0x1a0`, critical sections `+0x188` (names) / `+0x1b0` (stream), stop flag `+0x248`.
 
 | function | behaviour |
 |---|---|
-| `MusicPlayTrack` 0x6BB020 (name, mode) | mode 1 switch now, 2 fade out (6 s) then switch at the end, 3 switch at the first `Markers1` entry >= the play position, 4 switch when the current track ends; same name -> keeps playing (fade in if it was fading out); a pending switch with a lower mode is not overridden; sets state 2, `+0x164`, `+0x134` |
+| `MusicPlayTrack` 0x6BB020 (name, mode) | [V, re-read 2026-11-06 with `MusicFillBuffer`] music volume 0 -> ignored. Same name while playing -> state 1 (fade in when the last mode was 2). The same pending name with a mode <= the pending one -> ignored. Then by mode (positions in sample frames, `+0x120` frames per buffer): **1** = switch when the current track's data runs out (`+0x134 = INT_MAX`); **2** = fade out (step 1/96) and switch once faded out (`+0x134 = INT_MAX`); **3** = switch at the first `Markers1` entry >= play position + one buffer (none after it -> the first entry; no `Markers1` at all -> mode 1); **4** = switch at the start of the next buffer (`+0x134 = position + buffer`), i.e. almost at once. While stopped (state 0) every request is treated as mode 4. Sets state 2, `+0x1a0` mode, `+0x164` name, `+0x134` |
 | `MusicSetMode` 0x6BB240 (mode) | 4 = stop (close the stream, state 0, fade out with a 2 s deadline); other modes = `MusicPlayTrack("", mode)` = switch to silence |
 | `MusicThreadProc` 0x6BB910 | every 100 ms: `SoundVolume::Update` + `AIL_set_sample_volume`; for each ready AIL buffer: rotate the three indices, `+0x130 += +0x120`, `AIL_load_sample_buffer`, `MusicFillBuffer` |
-| `MusicFillBuffer` 0x6BB3A0 (was StartStream) | fills the next buffer from the decoder stream; at the switch position opens the pending track (`CResourceBase::OpenFile(+0x24, musicPath + name)`), loads its markers (`MusicLoadMarkers` 0x6BBA00: registry `+0xcc` "Markers1" / "Markers2" per track name), state 1, fade in; pads with the silence byte `+0x140`; loops at `Markers2` / stops at the end depending on the mode |
+| `MusicFillBuffer` 0x6BB3A0 (was StartStream) | [V, deep-read 2026-11-06] state 0: the buffer is filled with the silence byte. Otherwise the buffer of `N` frames is split at the first event inside it: the loop point `+0x138` (= `Markers2[0]`, `INT_MAX` without it) -> seek to 0, play position 0, the rest read from the start; the switch position `+0x134` (state 2) -> the rest comes from the new track; state 2 + mode 2 once the fade-out flag is set (or no stream at all) -> the whole buffer is the new track and the fade deadline is set to now + 4 s (the new track starts at the faded-out volume and jumps back to full at the deadline). A short read (end of file): state 2 + mode 1 -> switch there; otherwise the track **loops** from its start, silence-padded. Opening the new track: an empty name or `CResourceBase::OpenFile(+0x24, musicPath + name)` failing -> silence, state 0, stream closed, current name ""; else state 1, current = pending, `Markers1` / `Markers2` from the registry `+0xcc` (section = the track name), loop point, switch position -1, the decoder opened (`vt[0](manager, Mp3Stream_ReadCallback)`), rate / channels / bits queried -> `AIL_set_sample_type` (16-bit / stereo flags), playback rate, volume 127, pan 64, frame size `bits * channels / 8`, frames per buffer, silence byte 0 (16-bit) or 0x7f. No fade-in is started here. Markers are a float array in the registry but are compared as integer frame positions; the shipped `music.reg` has no `Markers1` / `Markers2` keys, so mode 3 = mode 1 and every track loops at its end |
 | `MusicGetCurrentTrack` 0x6BAEA0 | the current name when state 1 / 2 (the director polls it) |
-| `MusicStartFadeOut` 0x6BAFA0 / `MusicStartFadeIn` 0x6BAFE0 | fade mode 2 / 1, step 1/60 |
+| `MusicStartFadeOut` 0x6BAFA0 / `MusicStartFadeIn` 0x6BAFE0 | fade mode 2 / 1, step 1/96 per 100 ms (9.6 s), no deadline |
 | `SequenceThreadProc` 0x6BBCB0, `SequenceRestart` 0x6BBB80 | an XMIDI sequence player (`+0x1cc..+0x22c`, `AIL_*_sequence`) with the same marker registry. **Dead** [V]: the thread procs are entered through two undefined 3-instruction trampolines
 (`mov ecx,[esp+4]; call; xor eax,eax; ret`): 0x6B6A10 -> `MusicThreadProc` (pushed by `CSoundManager::Open` at 0x6B6B71) and
 0x6B6A20 -> `SequenceThreadProc`; a byte search of the whole file finds no pointer to 0x6B6A20 nor to `SequenceStart` 0x6BBC70,
@@ -503,10 +520,10 @@ so no XMIDI sequence ever plays |
 
 `CMusicSystem` (vt_CMusicSystem, a CBaseObject created with the world; `Init` 0x6B4710 reads `<g_0x7AF45C>music.reg`: `[Common]
 Credits / MainMenu`, then per zone section two `MusicZoneRecord`s (0x38: name, dungeon flag, Briefing, Constructor, CalmOpen or
-CalmDungeon list `+0x10`, Combat list `+0x24`)). `SetZone` 0x6B4E30 (zone, dungeon) selects the record (fatal when missing) and
+CalmDungeon list `+0x10`, Combat list `+0x24`)). `Init` [V, deep-read 2026-11-06]: FatalError "CMusicSystem::Create(): Unable to ...music.reg" when missing; the section name is compared with `common` case-insensitively; missing keys are ""; both records of a zone share the name, Briefing, Constructor and the Combat list, the second (dungeon flag 1) takes `CalmDungeon` instead of `CalmOpen`. `SetZone` 0x6B4E30 (zone, dungeon) selects the record (fatal when missing) and
 stops the music; `Update` 0x6B5350 (slot 6, every tick): combat = `g_0x7AFC9C == 2` (the battle state): entering -> a random Combat
-track with mode 3 (switch at the next marker), leaving -> `MusicSetMode(2)` (fade out) and a silence timer `+0x54 = now + 120 s +
-rand 60 s`; while calm and silent, when the timer expires a random calm track plays with mode 4 then `MusicSetMode(1)`.
+track with mode 3 (= mode 1 with the shipped data: it waits for the end of the calm track being played, at once when silent), leaving -> `MusicSetMode(2)` (fade out) and a silence timer `+0x54 = now + 120 s +
+rand 60 s`; while calm and silent, when the timer expires a random calm track plays with mode 4 then `MusicSetMode(1)` (= silence once that track ends: each calm track plays once).
 `PlayBriefing` 0x6B4F90 (dialogs), `PlayConstructor` 0x6B5080 (camp), `PlayMainMenu` 0x6B51F0, `PlayCredits` 0x6B5170 play the named
 track + ".mp3" with mode 4 after `MusicSetMode(4)`; `PlayForcedTrack` 0x6B5270 (server message 0x0D, script music) replaces the zone
 playlist until the track ends; `Stop` 0x6B4F70 [V].
@@ -523,6 +540,16 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 * ~~3D pan zeroed~~ settled [V] from the machine code (0x6B8215..0x6B8243): `pan +0x18 = round(...)`, then `neg` when the cross product is negative, then `ret`: there is NO zeroing (decompiler artefact). 3D sounds are panned +-100.
 * Reverb `+0x8a8..+0x8b0`: set by `CSoundManager::SetReverbParams` 0x6B69E0, whose only caller is `CWorldClient::LoadZone` 0x567AB0 (per zone) [V]. The XMIDI sequence player (`+0x1cc..`): never started by the code read [I].
 * `CSoundDesc +0x70` and the use of SOUND_RANGE2 / MIN / MAX by `CEffectSound` (spells.md gives `+0x24c` volume / `+0x250` radius).
+* Bug candidates from the 2026-11-06 deep read (not fixed; not in docs/SpellAddonInfo.en.md):
+  - `LoadSample` 0x6B89F0 with `decompressMp3` (dialog speech, `DialogScreen` 0x604C50 -> `Play2D(.., 1)`): on a cache **hit** the
+    function jumps straight to its common tail (`if (param_5 != 0) goto LAB_006b904a`) without `AIL_set_sample_file`, after `Play2D`
+    has `AIL_init_sample`d the channel: a speech line replayed while its decoded copy is still cached should play nothing [V code, I
+    effect; live row]. The decoded copy also bypasses the 8 MB eviction pass.
+  - Ambient slots (`Update` 0x6B9B10): `Play2D(.., pan = rand % 101)` -> pan 0..100 of -100..100: ambient one-shots only ever come
+    from the centre to one side [V code; audible check in the live list].
+* Music markers (`Markers1` / `Markers2`) are read with `CFileRegistry::GetFloatArray` but compared as integers with the frame
+  positions [V]; harmless today (no shipped track has them), but a modder adding markers must write the raw float bits of the frame
+  number, or the switch / loop points never trigger [I].
 
 ## 10. Corrections to earlier notes
 
@@ -542,6 +569,15 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 | `functions.tsv` | `CSoundManager::ctor` 0x6B6040 | the constructor (the slot-2 `Init` is 0x6B6D70); `CSoundManager::SetEffectsVolume` 0x6B7740 is the effects volume, `CSoundManager::SetVoiceVolume` 0x6B78A0 the voice volume |
 | `functions.tsv` | `UnitLogicRecord_*` = "guard point", `GuardPointDesc_*` = "unit logic guard point" | 0xBBBD0000 = the patrol / guard point (`MobLogicPoint`), 0xBBBE0000 = its look-at / action record (`MobLookAtRecord`) |
 | `findings.md` 0x6AE000 | quests.qdb "TODO: SerializeFields live in the items module" | 0x6AD7D0 / 0x6AD900 read above; and quests.qdb is loaded **once** by main, the per-map `quest.reg` is merged by `ParseQuestReg` |
+| this page 4.1 (ws cross-note, checked 2026-11-06 in `Quest::SerializeFields` 0x6AD7D0 / `ParseQuestReg` / `FillObjectives`) | tag 1 exp +0xc int, 2 money +0x10, 3 order +0x18, 5 zone index +0x14, 6 unknown +0x1c | tag 1 exp +0xc **float**, 2 = +0x10 unused (never written by quest.reg nor read), 3 zone index +0x18, 5 money +0x14 **float**, 6 order +0x1c |
+| this page 4.2 (ws cross-note, checked in `OnNamedEvent` 0x592090) | briefing exp / money int; available zones `= 2`; remove items "released from the party" | exp / money floats; available zones = 1.0 (complete zones 2.0); remove items only removes quest items (typeId 0x14), by the created item's id |
+| this page 3.1 (wcp-net cross-note, checked in the machine code) | Weapon 1 `+0x118` "also selects the animation set (`PlayAnimation` 0x537500)"; Detonation `+0x30` int | 0x537500 is slot 46 `v46_PlayHitEffect` and reads **RaceModel** +0x118 Skin Type through the second `CUnit::GetProto` **0x530970** (Monsters `+8` -> RaceModels; 0x530930 returns the Monsters record itself; both carry the same name in functions.tsv); Detonation is a float = camera-shake strength; Detections Sight `+0xb0` doubles as the footprint strength |
+| this page 8.2 (`Update` 0x6B9B10) | ambient "between min and max the intervals shrink by `(max - min) / (max - d)`" | the intervals are **multiplied** by that factor (>= 1: rarer with distance), skipped above 255; the 1-in-n chance only applies between the two intervals |
+| this page 8.3 / `functions.tsv` `MusicPlayTrack` | "mode 1 switch now ... 4 switch when the current track ends"; fade step 1/60 = 6 s; `MusicFillBuffer` "fade in" and "loops at Markers2 / stops at the end depending on the mode" | mode 1 = at the end of the current track's data, 4 = at the next buffer (almost at once; also forced while stopped); step 1/96 per 100 ms = 9.6 s; `MusicFillBuffer` starts no fade (a mode-2 switch sets a 4 s deadline that snaps the volume back); a track loops at `Markers2[0]` or at its end in every mode except a pending mode-1 switch |
+| this page 8.2 `LoadSample` | "eviction while `+0x850 + size > 8 MB` or a node is unreferenced and 60 s old" | from the oldest node, stop at the first node that is younger than 60 s while the cache fits; unreferenced visited nodes are freed; decoded mp3s skip eviction and go to the LRU tail |
+| this page 7.2 `GetCarrierOffset` | "mode 0 = `GetAttachPoint2`, 1.. = the part body0N, non-units `Carrier_GetAttachPoint`" | modes 1..7 = parts `hd`, `hd` + 1 m, `lh2`, `rh2`, `ll2`, `rl2`, `bd`; only 8..12 use `body00..04` (through `Carrier_GetAttachPoint`); non-units take position + height, not `Carrier_GetAttachPoint` |
+| this page 7.3 | 0x200F / 0x2031..0x2033 "rain streams"; 0x2030 "10 wind-band records"; 0x2014 texture "(none)"; acid fog "grid over `+0x11c`" | blood spurts by race Blood Type; 10 impact points; texture `Link` (prob 80, frames 15); the grid radius is the scaled size `+0x10c` |
+| `functions.tsv` `ParticleEmit_Link` 0x48E070 | the link emitter | the protection / antimagic shell emitter (types 0x2015..0x2017, 0x201A); the link 0x2014 uses LAB_48D8D0; its trace string was copy-pasted |
 
 ## 11. Function index (address, name, one line)
 

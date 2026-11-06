@@ -506,8 +506,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00485540 | 12920 | CParticle::Init | slot 2 (type +0x10 = 0x2000 + k): Reset, bounds = empty, columns +0xe0 = 4, probability +0xcc = 100, max live +0xd8 = 500, frames +0xdc = 16, flag 1 set; then the per-type constant table (texture name, spawn box +0xf0..+0x104, siz... |
 | 0x00490130 | 2051 | ParticleEmit_Modifier | (this, particle, arg): colour -1, +0x50 = +0xec, +0x4c = +0xe4; "Particle effect Modifier without carrier" (FatalError without +0x94); record array +0x154 sized by the carrier extent; particles orbiting the carrier (0x40F560 rotat... |
 | 0x00496EB0 | 2045 | CParticle::Update | slot 6 -> bool (alive): copies g_0x7AF5DC..+0xc (world wind / time block) into +0x140, resets the bounds, Attach(0) when the carrier has flag 1 (dying); +0xa4 = world pos delta since the last tick, +0x98 = world pos, +0xc8 = /delt... |
-| 0x004923B0 | 1986 | ParticleEmit_Weather | (this, particle): invoke-lightning / storm (0x2030): 10 records in +0x154 (grown like a CArray, 0x38 each) describing wind bands {height, direction, speed}; particles spawn in the band and drift with it; the texture TendriLight |
-| 0x0048E070 | 1871 | ParticleEmit_Link | (this, particle, t): "Particle effect Link without carrier"; 2 records in +0x154 (carrier extent * 1.2), particles along the link between the two endpoints (0x410770 lerp, Isaac_RandRange) |
+| 0x004923B0 | 1986 | ParticleEmit_Weather | (this = CParticle, record) invoke-lightning impact 0x2030: 10 records = impact points on a disk of radius 0.3 x size around +0x98 (first at the centre) at client terrain height + 0.3 with an outward-up direction; first 20 emission... |
+| 0x0048E070 | 1871 | ParticleEmit_Shield | (this = CParticle, record, index) emitter of the protection / antimagic auras 0x2015..0x2017 and 0x201A (not the link 0x2014): needs a carrier ('Particle effect Link without carrier' trace, copy-pasted string); index 0: shell radi... |
 | 0x004918E0 | 1864 | ParticleEmit_2027Casting | particle types 0x2027..0x202A casting 4 / 7 / fire / 8: emit callback |
 | 0x00489320 | 1827 | ParticleEmit_200B | particle type 0x200B (FireSmoke): emit callback |
 | 0x00484C00 | 1600 | CParticle::GetCarrierOffset | (out xyz, carrier): without flag 0x10: the carrier position; units (type 0x50) by attach mode +0x13C: 0 CUnit::GetAttachPoint2 (the default attach point); 1..7 = FindPartByNameStart with one of six short part-name prefixes (1..6: ... |
@@ -516,7 +516,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0048B630 | 1456 | ParticleEmit_Healing | (this, particle): "Particle effect Healing without carrier" (FatalError 0x44C470 without +0x94); record array +0x154 sized round(+0x10c * 6 + 2) (0x497EB0), ring of particles around the carrier (GetCarrierExtent) rising upward |
 | 0x0048D8D0 | 1368 | ParticleEmit_2014Link | particle type 0x2014 link: emit callback |
 | 0x0048C090 | 1278 | ParticleEmit_2002Blast | particle type 0x2002 blast (Explosion): emit callback |
-| 0x0048B080 | 1262 | ParticleEmit_GridFill | (this): poison cloud / acid fog (0x2007 / 0x2008): when the live list +0x1b8 is empty fills it with records on a (-n..n)^2 grid of spacing 1 (jittered 0.3) around the emitter at the terrain height, n from the radius +0x11c; each r... |
+| 0x0048B080 | 1262 | ParticleEmit_GridFill | (this = CParticle) acid fog / poison cloud 0x2007 / 0x2008: only while the live list +0x1b8 is empty: one particle per cell of the grid -n..n (n = trunc(size +0x10c), spacing 1, jitter +-0.25) inside radius +0x10c: size 0.75..1.25... |
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
