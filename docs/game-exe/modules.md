@@ -986,8 +986,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00579830 | 841 | MpFile::ReadContainer | (ecx out CMemStream, edx expected head word 0x102, u32 newest version g_0x790260 0x74, u32 oldest g_0x790268 0x42, source stream) ret 0xc; compressed above g_0x790264 (0x64); checksum test; this +8 = version |
-| 0x00579B80 | 734 | MpFile::WriteContainer | (ecx out IStream, edx head word 0x102, u32 version g_0x790260 = 0x74, CMemStream* body) ret 8: Stream_WriteHeader4, version > 0x6b checksum, u8 1, u32 size, LzCompress image |
+| 0x00579830 | 841 | MpFile::ReadContainer | (ecx out CMemStream, edx expected head word 0x102, u32 newest version g_0x790260 0x74, u32 oldest g_0x790268 0x42, source stream) ret 0xc; compressed above g_0x790264 (0x64): checksum test, then the flag byte: non-zero -> LzDecomp... |
+| 0x00579B80 | 734 | MpFile::WriteContainer | (ecx out IStream, edx head word 0x102, u32 version g_0x790260 = 0x74, CMemStream* body) ret 8: Stream_WriteHeader4, version > 0x6b checksum; LzCompress the body, LzDecompress the result again and compare it with the body: equal ->... |
 | 0x005791C0 | 400 | World_XorStats | (player manager, withUnits, key): for every player: +0xc0 (money) ^= key, every hero record (+0xa0, count +0xa4, 0x784 each) dwords +0x20..+0x724 ^= key, and when withUnits every tracked unit (hash +0x40) UnitStats +0x1e0..+0x8e4 ... |
 | 0x00579E60 | 323 | Session_ReadMissionSave | (CFileStream): CSoundManager::StopAll; MpFile::ReadContainer (max 2e9 bytes, flags 0x80); version < 0x52: CCamera::Read; < 0x47: CInterface::ReadFlags + the embedded UI stream g_0x7AFDF8 (version g_0x7AFE00); then CWorldServer::Lo... |
 | 0x005790E0 | 210 | World_SetStatScramble | (active): main calls it with 1 while the window is active and 0 when not; acts only when the flag g_0x79026C changes: on 1 -> 0 (deactivation) a fresh key is drawn from the ISAAC pool g_0x7A9D40[g_0x7A9D44] into g_0x7AFECC and Wor... |

@@ -717,8 +717,10 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 - `MpFile::WriteContainer` 0x579B80 = (ecx out IStream, edx head word 0x102, stack: u32 version `g_0x790260` (0x74), CMemStream* body),
   `ret 8`; `MpFile::ReadContainer` 0x579830 = (ecx out CMemStream, edx expected head word 0x102, stack: u32 newest version
   `g_0x790260` 0x74, u32 oldest version `g_0x790268` 0x42, source stream), `ret 0xc`; the compressed form starts above `g_0x790264`
-  (0x64) [V] (call sites 0x57A01D..0x57A028, 0x579EC2..0x579EDD). The "same as previous image" shortcut has no caller-side buffer in
-  these signatures: [?] left as read in the decompile.
+  (0x64) [V] (call sites 0x57A01D..0x57A028, 0x579EC2..0x579EDD). ~~The "same as previous image" shortcut~~ was a misreading
+  (settled 2026-11-06, machine code 0x579C29..0x579D81) [V]: `WriteContainer` compresses the body, **decompresses its own result** and
+  compares it with the body (size, then `repe cmpsb`); equal -> flag byte 1 + the compressed data, different -> flag byte 0 + the raw
+  body. `ReadContainer` tests the flag (0x579908): non-zero -> `LzDecompress`, 0 -> raw copy (mp-format.md).
 
 ## 7. Corrections to earlier notes
 

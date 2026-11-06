@@ -15,10 +15,14 @@ It was reverse-engineered from game.exe (`EIStarter OBT-1/Engine`):
 u32 0x114 (the file kind: 0x114 a character; 0x102 a zone state, 0xDEAD the campaign in a save: sav-format.md)          (same in every file; meaning unknown)
 u32 version        0x74
 u32 checksum       of the decompressed data: u = 0; for each u32 w: x = u ^ w; u = x * ((x & 0xFC) | 3)
-u8  1
+u8  1              1 = compressed (always in the shipped files); 0 = the raw data follows instead (no size)
 u32 size           of the decompressed data
 compressed data
 ```
+
+The flag byte is the game's safety check (`MpFile::WriteContainer` 0x579B80): it compresses the data, decompresses the result
+again and compares it with the original; only when they match it writes 1 and the compressed form, otherwise 0 and the data
+uncompressed. The reader (`MpFile::ReadContainer` 0x579830) accepts both.
 
 The compression is LZ-style:
 - **Bits:** one byte stream holds both the bits (LSB first, one byte at a time) and whole literal bytes. Bit 0 means
