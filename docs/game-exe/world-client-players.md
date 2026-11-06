@@ -389,7 +389,7 @@ restarts `lastAnimTime +0x2c` at 0; nothing when the time did not move. The clip
   0x040000, 0 for 0x200000);
 - `0x080000` swing / hit (skipped when the local player's mode is 3): the loop sound `+0x88` stopped; when the time crosses the clip's hit
   frame `entry +0x40` a camera shake of strength `UnitProto +0x30` (the "Detonation" column, read as a float; 5.0, 0.25) at the unit;
-  heroes (kind 0x32) with `CUnit +0x256` set also play the hit / miss event sound; then the clip's sound as the **voice** `+0x90`, not
+  heroes (kind 0x32) with the miss flag `CUnit +0x256` set also play `weapons\miss.wav`; then the clip's sound as the **voice** `+0x90`, not
   restarted while the previous voice is still playing or pending;
 - `0x100000` / `0x140000` steps: up to four step frames `entry +0x30..+0x3c` (stored + 1, 1 ends the list). When one is crossed: the step
   sound for the terrain material under the unit (`GetStepSoundName`) unless the unit has buff 0x10 (silence); then, unless the stance
@@ -460,9 +460,15 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 
 Open after the T5 deep read (2026-11-06):
 
-* `UnitProto +0xb0` (the first "Detections" float of data-sound.md 3.1) is the footprint strength in `UpdateAnimSounds`; whether the
-  column order of data-sound.md is off by one there or the designers reused the detectability is not settled [?].
-* `CUnit +0x256` (anim flags byte) gates the hero hit / miss event sound of class-0x080000 clips; its bit meanings beyond "miss" are [?].
+* ~~`UnitProto +0xb0` footprint strength: column order off by one?~~ Settled 2026-11-06 [V]: no. `UnitProto::SerializeFields` 0x52D740
+  writes tag 0x18 Peripheral, 0x19 the six Senses `+0x98`, 0x1A the six Detections `+0xb0`, in the same order as the database
+  spreadsheet columns (`... Skills Peripheral | Senses Sight .. Tracking | Detections Sight .. Tracking | ...`); the footprint strength
+  is the unit's **Detections Sight** value, reused by the designers' code.
+* ~~`CUnit +0x256` bit meanings~~ Settled 2026-11-06 [V]: it is a 0 / 1 **miss flag**, not a bit field. `CUnit::SetAnim(anim, sub,
+  start, flag)` 0x52EA90 stores the head entry's byte `+2`; that byte is 1 only when `CUnitServer::StartAction` 0x5494D0 gets miss = 1
+  from `ExecuteCombatOrder` (its `ResolveHitChance` missed; `DispatchQueuedOrder` passes 0), every queue builder writes 0
+  (`AnimQueue_AddEmpty` / `AddByte`) and the camp screens pass 0. The client tests it only for non-zero: heroes then play
+  `weapons\miss.wav` (`GetAnimSoundName` 0x534760 returns it for any non-zero flag).
 * The duplicate receiver triangles of a bridge owner with several walkable quads (8, `BuildShadowReceiverMesh`) should darken a unit
   shadow / a print twice where they overlap: **[live]** (`live-t5-wcp-net.tsv`).
 

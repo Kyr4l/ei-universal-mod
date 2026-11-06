@@ -66,7 +66,7 @@ CUnit			0x24c	pointer	player	CORRECTION: was field_24c: owning CPlayer (0 = AI u
 CUnit			0x250	byte	side	the .mob player number
 CUnit			0x254	sbyte	animCurrent	.adb index of the clip playing (-1 none, -2 default idle)
 CUnit			0x255	sbyte	animQueued	.adb index of the next clip
-CUnit			0x256	byte	animFlags	
+CUnit			0x256	byte	missFlag	CORRECTION: was animFlags: 0 / 1 miss flag of the current animation (SetAnim's fourth argument = the head queue entry's byte +2, 1 only when ExecuteCombatOrder's ResolveHitChance missed); the client plays weapons\miss.wav for heroes when non-zero
 CUnit			0x258	uint	animStart	world time the clip started
 CUnit			0x264	int	stance	applied: 0 crawl 1 sneak 2 walk 3 run 4 sit
 CUnit			0x268	int	stanceWanted	the stance the player asked for (0 crawl 1 sneak 2 walk 3 run 4 sit); CUnitServer::RequestStance
@@ -585,7 +585,7 @@ UnitProto			0x78	int	naturalAttackKind
 UnitProto			0x80	float[2]	naturalDamage	min, spread
 UnitProto			0x88	float[3]	skillBases	skills / science / ? bytes
 UnitProto			0x98	float[6]	perceptionBases	sight, night sight, hearing ...
-UnitProto			0xb0	float	detectSight	Detections[0] (Sight); also read by UpdateAnimSounds (0x535080) as the footprint strength (x0.5 crawl, x0.75 sneak)
+UnitProto			0xb0	float[6]	detectionBases	Detections Sight..Tracking (units.udb tag 0x1A); the first (Sight) is also the footprint strength of CUnitClientSpecific::UpdateAnimSounds
 UnitProto			0x108	pointer	spellsCapacity	CORRECTION: was bloodKind "1..4 blood print": the end-of-storage word of the spells vector +0x100 (the blood print kind is UdbRaceModel +0x108, data-sound.md 3.2)
 UnitProto			0x114	pointer	wearsCapacity	CORRECTION: was hitEffectFlag "strike effect 0x4a allowed": the end-of-storage word of the wears vector +0x10c (operator_assign 0x542830, InsertN 0x540B80)
 UnitProto		0x120	0x0	CString	name	Monsters FLD0 (tag 0); the prototype name looked up by Units_FindProtoByName (map UnitsDb +0xc)
