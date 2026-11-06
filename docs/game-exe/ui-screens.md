@@ -118,8 +118,10 @@ are case-insensitive and apply to the phrase that follows them (their values are
   name) is appended to the speaker vector `+0x294` (an earlier entry of the same unit is removed first), `SendMsg19(1, unit id)` is
   sent, `CUnit::SetVisibleToAll(0)` when it is the player's unit, brain `+0x978` = callback 0x6023F0. Any other name is an **NPC
   portrait** and needs an index >= 0 (none = ignored): an older portrait of that name is removed, the name ('_' -> ' ',
-  lower-cased) is looked up in the name -> number table `g_0x7C8764` (no other code references it; unknown names give nothing), the
-  64x64 picture "quitem%04d" (number) is blitted into a 256x256 target on the quad "initqu%ditem" at slot (index mod 7) of the tables
+  lower-cased) is looked up in `g_0x7C8764` = `ItemsDb +0x8C`, the **quest items' name map** (filled by `ItemsDb::Load` through its
+  own members, which is why no other code names the global) [V, 2026-11-06]; unknown names give nothing. The number is the quest
+  prototype's model number `+0x18` (TTI), so an NPC portrait is the icon of the quest item of that name: the 64x64 picture
+  "quitem%04d" (the same file as the item's inventory icon) is blitted into a 256x256 target on the quad "initqu%ditem" at slot (index mod 7) of the tables
   0x74111C (x) / 0x741138 (y), depth 12, turned by pi; index < 7 adds a dark backdrop (centre +-60) and a border (+-65), index > 7
   tints the quad 0x82FFFFFF.
 - `#hide <name> [x]`: `RemoveSpeakerByName(name, skipToEnd, 1 when a second argument exists)` 0x6062C0.
@@ -202,7 +204,7 @@ again. Mode titles `+0x240`: "mode_weapons", "mode_spells" (the skills tab), "mo
 (spell trade) with the spell shop, else 0; `OnButton(tab)` + `EnterMode`; music `CMusicSystem::PlayConstructor(zone record +4, or
 "gipat")`. A first visit (`CGSPlayer +0x38` set) computes per magic school 0..7 the
 party's min and max `UnitStats_MagicSkill`, `CGSPlayer::SetShopLimits(min[8], max[8])`, `GenerateSpellShop`, `GenerateItemShop`
-and clears `+0x38`. The flag is set on a new merchant and, [I], again for every merchant by `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0, which the script `QuestComplete` calls: the shops would be re-rolled (`items.md` 6) on the first camp visit after each completed quest. `FillConstructorStock` 0x612CF0 (slot 39) has **no
+and clears `+0x38`. The flag is set on a new merchant (`CGSPlayer::ctor` 0x4A6580) and again for every merchant by `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0, which the script `QuestComplete` calls [V, 2026-11-06: its vector `g_0x7AA5A0 +0x38` is the merchant list that `Session_ResetPlayers_Single / Multi` 0x4A88A0 / 0x4A88C0 fill with `GSPlayers_CreateDefaults`]: the shops are re-rolled (`items.md` 6) on the first camp visit after each completed quest. `FillConstructorStock` 0x612CF0 (slot 39) has **no
 caller** (no direct call; no virtual `+0x9C` call on a camp screen found) [V]: a leftover developer stock that clears both stocks and fills them
 with everything: per weapon proto an "Instruction Weapon" (`+0x54` = row, count 10) plus one finished weapon per material whose
 name equals the proto's M.Type `+0x10`; the same for armor protos whose name does not contain "prototype"; an "Instruction Quick
@@ -465,8 +467,13 @@ click 0x62D100 (slot 42, every drop allowed by slot 43 0x62D200): kind 1 moves t
 `Party_TransferItem` count 8), kind 5 takes one of our offer back; both re-upload (`FillParty`). `Exchange` 0x62D210 (slot 37,
 reached through `CInterface::OnLobbyRef` 0x5F8310 from the confirmed-pair update handler, code at 0x41F270 that has no function entry
 in the database) (a, b, c): `CParty::ReleaseItems` on the client party, moves every item of c and then of a into it, party money
-= a.money - b.money + c.money, then `Game_SendEnterWorld` [V]; which party is a / b / c is in the caller [I: a = a copy of our party,
-b = our offer, c = the remote offer].
+= a.money - b.money + c.money, then `Game_SendEnterWorld` [V]. Which party is which [V, machine code 2026-11-06]: when we confirm,
+`LobbyClient::ConfirmPair` 0x41E0A0 (from `OnLButtonDown`, argument `Game_GetClientParty()`) stores a node in the list `+0x2614`
+with `+0x10` = our offer `+0x2620`, `+0x80` = the partner's offer `+0x2690` and `+0xF0` = a copy of our party; the confirmed-pair
+handler 0x41F270 (a `LobbyClient` method with no function entry) finds that node by the pair's two ids and calls
+`OnLobbyRef(node +0x80, node +0x10, node +0xF0)`. So **a = the partner's offer, b = our offer, c = our party**: we keep our
+party's items, receive the partner's offered items, and the money becomes ours - what we offered + what the partner offered
+(the old [I] guess had a and c swapped).
 
 ## 6. Main menu, esc menu, boxes, credits, intro
 
@@ -822,15 +829,15 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 
 ## 14. What is not known
 
-- Shop re-roll [I]: `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0 sets byte `+0x38` on every object of a vector of the party
-  record after `QuestComplete`; that these objects are the `CGSPlayer` merchants (so every completed quest re-rolls the shops on the
-  next camp visit) is inferred from the offset only (live row in live-t5-scr-a.tsv).
+- ~~Shop re-roll [I]~~ settled 2026-11-06 [V]: the vector `MarkChildrenChanged` walks is `g_0x7AA5A0 +0x38`, the `CGSPlayer`
+  merchants built by `GSPlayers_CreateDefaults` (called with `this + 0x38` by `Session_ResetPlayers_Single / Multi`); so every
+  `QuestComplete` (single player) re-rolls the shops on the next camp visit (section 4).
 - New multiplayer hero limits: `CUnitInfoWin::Redraw` greys "-" at 15 and "+" at 35 / no points left; whether the click handler
   (not read in the 2026-11-06 round) refuses the same values, or only the grey colour stops the player, is not checked.
 - The addrbook.ini dword that `CLobbyScreen::Build` replaces by `GetTickCount() ^ ISAAC` when 0 is probably the client id. Live 2026-11-07: the file is not written by the character / lobby screens (deleted, two visits, no file), only when
   a game is hosted; a rewrite keeps the dword (identical bytes in two installs and after a hosted session).
-- `CExchangeScreen::Exchange` 0x62D210 (a, b, c): which party is which comes from the confirmed-pair update code at 0x41F270, which
-  has no function entry in the database (live row in live-t5-scr-b.tsv).
+- ~~`CExchangeScreen::Exchange` 0x62D210 (a, b, c): which party is which~~ settled from the machine code 2026-11-06 [V]: a = the
+  partner's offer, b = our offer, c = our party (section 6).
 - The decompiles of `CBattleHud::IssueCommandAt` 0x638EF0, `SetCursorTarget` 0x639EF0 and `CHudMinimap::DrawMinimapUnits` 0x643DC0
   lost most branch targets (empty `if` bodies): the order / cursor / marker conditions in section 12 are [I] where marked; a
   machine-code read would settle them.
@@ -861,8 +868,8 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   Russian exe finds no briefing voice** (a Russian `speech.res` with two voice sets `t\` / `s\` is what it expects). bugs.md #24.
 - Talk mode and zone exits (live row): `DialogScreen +0x164` is only ever 0, so Update / OnMouseMove / the leave box always use exit
   #0. Whether every talk zone has exactly one exit (a design limit) or this is a latent bug is not known.
-- The NPC portrait table `g_0x7C8764` (name -> "quitem%04d" number) of `AddSpeaker` has no other reference in the decompiles; who
-  fills it is not known (live row).
+- ~~The NPC portrait table `g_0x7C8764`: who fills it~~ settled 2026-11-06 [V]: it is `ItemsDb +0x8C`, the quest items' name map
+  (`ItemsDb::Load`); the portrait number is the quest prototype's TTI `+0x18` (section 3, `#show`).
 - The active-effect line of the unit info panel prints record `+4` / 15; that `+4` is a tick count at 15 per second is inferred
   (live row).
 - `COptionsScreen::GetTutorialKey` 0x650900 returns "options" only while waiting for a key — as coded, probably a bug of the original.
