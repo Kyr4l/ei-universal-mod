@@ -855,8 +855,10 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   position `+0x1C / +0x20`. The lights in it: the object lights of heroes and quest items (`ObjLight_Create`, `SetQuestLight`), torch
   lights (`CTorchObjectClientSpecific::SetLight`), effect point lights (`CEffectPointLight::Activate`: spells, fires) and **the sun**,
   which `I3DFigureImpl::InitRenderer` creates through the same manager (`CreateObject(0x2E)` + `CLight::InitDirectional`, which never
-  sets a position). Unless something moves the sun, it shows as a square at world (0, 0), i.e. on the disc rim toward the map's
-  (0, 0) corner: [live] look at the minimap rim.
+  sets a position; live 2026-11-06: the sun's `+0x1C..+0x24` = (0, 0, 0)). Placement [V, 0x644465..0x6444E0]: a light inside the
+  zoomed disc (r^2 <= 0.6) is drawn there; any other light is drawn on the rim only when its unzoomed position (offset x 2 / map
+  size) has r^2 >= 0.68 and |x|, |y| <= 0.97, else it is hidden. So the sun's square appears on the rim only for camera points
+  whose offset to world (0, 0) falls in that band (not at zone1's start, checked live: no square). [live] left: see it once.
 - ~~The labels of the HUD spell tooltip and their values~~ settled 2026-11-06 [V]: the texts are `string infoitem_N` of texts.res
   (7 Stamina, 18 School, 8 Effect, 9 Speed, 10 Range, 11 Area, 12 Duration, 13 Targets, 21 Immediately, 22 Target, 26 m, 27 s,
   28 Constant; ui-framework.md 5.9); the value of each line is in section 12 (`CHudSpellList`).
