@@ -478,7 +478,10 @@ call, `DrawFigure` (slot 14 = `Render`) with constant colours.
   squared length (so `(p - corner3) . AU` is the u coordinate of the parallel projection along L), D = L / |L.z|, offsets
   `-corner3 . AU / AV`, and the cap plane distance `-((pos - 0.33 * a * L) . L)` (a = the caster radius argument).
 - **Invisibility**: `SetMaterialsAlphaByHour` 0x51CC20 sets every material's alpha `+0x2C` to `0.2 + ramp(time) / 30` (a shimmer),
-  `SetMaterialsOpaque` 0x51CCA0 ends it. **Stun**: `SetMaterialsEmissiveByHour` 0x51CCD0 pulses the emissive `+0x40` and flag 0x10,
+  `SetMaterialsOpaque` 0x51CCA0 ends it. **Stun**: `SetMaterialsStunPulse` 0x51CCD0 (was SetMaterialsEmissiveByHour) sets `+0x40` = 0.2 + 0.5 * tri(time) (a 30-unit triangle wave,
+  0.2..0.7) and `+0x44 / +0x48` = 0 plus material flag 0x10 on every material: `+0x40` is the red of the D3DMATERIAL7 **specular**
+  block (CMaterial `+0x20` diffuse, `+0x30` ambient, `+0x40` specular, `+0x50` emissive; `CLight::PrecomputeMaterialTerms` 0x68D280
+  feeds `+0x40` to the light kernel as specular), so the stun glow is a red specular pulse,
   `ClearMaterialsEmissive` 0x51CD60 ends it. **Colour push / pop**: `SaveRestoreMaterialColors` 0x51C9F0 pushes the diffuse `+0x50..+0x5C` of
   every material on a per-material deque and resets it to 1.0; pop restores (the death fade of `CUnitClientSpecific`).
 - **Scale**: `GetScale` 0x51AD20 returns `+0xF0..+0xF8`; `Draw` pushes a diagonal matrix when they are not 1 (the only true scaling in the
@@ -719,6 +722,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | `functions.tsv` (0x503A40), `flows.md` | `DrawArrow3D` "a debug arrow ... of 18 line-list indices" | the `SelectionType` 1 selection marker, 6 triangles (a triangle list) |
 | `functions.tsv` (0x6FD026 / 0x6FD060) | `pow` / "pow(x, y) core" | `_hypot` / `_hypothlp` (the CRT operation code passed is 0x18 = OP_HYPOT; pow is 0x1D) |
 | `functions.tsv` (0x5ACE80) | `Menus_GetNewGameRect` reads "the MainMenu / NewGame rect" | `Menus_LoadRects`: 11 main / escape menu button rects from `menus.reg` into `g_0x7C8048` |
+| this page 3.6 Stun | `SetMaterialsEmissiveByHour` pulses the emissive `+0x40` | `+0x40` is the specular red of the material's D3DMATERIAL7 block (emissive is `+0x50`); the pulse is 0.2..0.7 with green / blue 0. Open: the colour push / pop and `RenderLit` treat `+0x50` as the part's base colour, so the custom light kernel may use the emissive slot as a colour multiplier |
 | `functions.tsv` (0x505CB0) | `AnimNodeOld_ReadFromData` "+0xe4 / +0xec two doubles rounded to int64" | a raw 16-byte copy of the rest rotation quaternion (the FPU qword-copy idiom) |
 | `structs.tsv` `EffectRecord` | `+0x8` "vector<EffectPassRecord>", `+0x14` passCount | `+0x8` = the vector of state-block handles (one per pass), `+0x14` = stages bound by the first pass |
 | `figure-format.md` (older format table) | bounds "244 B" at 8, count at 0xF8 | 240 bytes (3 x 0x48 corner groups + 6 radius floats = 0xF0); 8 + 0xF0 = 0xF8 |

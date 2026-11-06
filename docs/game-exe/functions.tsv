@@ -5049,7 +5049,7 @@ addr	size	name	status	purpose
 0x0051CBD0	34	StaticInit_Static16_g7AF208	named	zeroes the 4 dwords of the static object g_0x7AF208..+0xc (CObject3DClientSpecific TU) and registers its destructor (0x51CC00) with atexit: a 16-byte static container (unread by named code)
 0x0051CC20	114	CObject3DClientSpecific::SetMaterialsAlphaByHour	named	(dt): +0xE8 += dt; alpha +0x2C of every material of +0x38 = 0.2 + ramp(hour, mirrored after 15) / 30: the invisibility shimmer (buff 0x2B) [I]
 0x0051CCA0	35	CObject3DClientSpecific::SetMaterialsOpaque	named	alpha +0x2C = 1.0 on every material of +0x38 (invisibility ends)
-0x0051CCD0	138	CObject3DClientSpecific::SetMaterialsEmissiveByHour	named	(dt): +0xE8 += dt; emissive +0x40 = 0.2 + ramp / 30, +0x44 / +0x48 = 0 and flag 0x10 on every material of +0x38: the stun glow (red emissive pulse)
+0x0051CCD0	138	CObject3DClientSpecific::SetMaterialsStunPulse	named	(dt): +0xE8 += dt; on every material of +0x38: specular red +0x40 = 0.2 + 0.5 * tri(fmod(time, 30)) (0.2..0.7), specular green / blue +0x44 / +0x48 = 0, material flag 0x10: the stun glow (red specular pulse). Was SetMaterialsEmissiveByHour (it is the specular block, not emissive)
 0x0051CD60	54	CObject3DClientSpecific::ClearMaterialsEmissive	named	emissive +0x40..+0x48 = 0 and flag 0x10 cleared on every material of +0x38 (stun ends)
 0x0051CDA0	34	StaticInit_Static16_g7AF1F8	named	zeroes the 4 dwords of the static object g_0x7AF1F8 (CObject3DClientSpecific TU) and registers its destructor (0x51CDD0) with atexit
 0x0051CE00	34	StaticInit_Static16_g7AF1E0	named	zeroes the 4 dwords of the static object g_0x7AF1E0 (CObject3DClientSpecific TU) and registers its destructor (0x51CE30) with atexit
