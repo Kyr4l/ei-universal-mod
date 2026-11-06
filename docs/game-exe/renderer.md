@@ -726,7 +726,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   blocks blended as in 3.3 / the old format, vt[7] `ComputeBounds` into the entry's bounds, then `CRenderScene::ReplaceVertices`
   0x4F3800 (was `GetEntryValue`) copies min(new, existing) blocks over the part's range; normals, uvs, components, indices, texture
   and material kind are untouched. This is the in-place re-morph of 3.2.
-- The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.
+- The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check (2026-11-07: a breakpoint on it saw no call while the multiplayer base or a new game's zone1 loaded).
 - ~~CMapObject +0x178 / +0x1A8~~ settled [V]: `+0x178` is the **animation playback rate** (`animRate`):
   `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
   `CUnitClientSpecific::ReplayMove` 0x535850 sets it from the distance moved this frame divided by the clip's stride (clip
