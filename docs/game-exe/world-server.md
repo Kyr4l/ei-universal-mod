@@ -185,6 +185,12 @@ player's own units); `CWorldClient::CreateHeroUnits` 0x5699C0 is the camp / menu
 | campaign | `scenario.sav` = party store (`ObjPartyRecord_Write`), `CInterface::WriteSaveState`, the embedded UI stream (`CInterface::OnSaveToSlot` fills `g_0x7AFDF8`), `CCamera::Write`, in one `MpFile` (head 0xDEAD, verified at 0x57B974) | - |
 | zone | record kind 0 / 2: `mission.sav` = `WriteSave` inline (head 0x102 at 0x57BB05) **without** `ResetUnitEffects`; log "Saved <name>" | kind not 0 / 2: `Game_EnterZone(zone, 0)` (camp); else `Session_ReadMissionSave` + `SetZoneExits`; log "Loaded <name>" (no `mission.sav` -> return 0) |
 
+Why `bz7g` [V, vanilla `.mob` scripts and map.txt]: it is "Rick-Briefing" (Rick's cave on Gipat), the campaign's hub between the
+allods and the only zone the story comes back to from another allod: `bz11k` (Ingos) and `gz19h` (Suslanger, the Portal, files
+`zone19`) both run `LeaveToZone(0, "bz7g", 0)`, and `bz7g` sends the party on to `gz11k` (Ingos), `bz13h` (Suslanger, the Hadagan
+hero alone) and `gz20g` (the last Gipat zone); it also holds the young-hero scene (`JunParty`). Its state must survive the allod
+changes, so it is exempt from the filter.
+
 Consequences [V]: a slot keeps only the zone files of the current allod (and `bz7g`); the zones of an allod left behind are
 forgotten at the next save or load (their `zs.` flag is cleared, so a later visit would be a first visit). A slot's `mission.sav`
 keeps the units exactly as they are, while a `<zone>.sav` written on a zone change first goes through `ResetUnitEffects`, which
@@ -510,8 +516,12 @@ Before reading, `LoadSave` zeroes `+0x138 mode` and `+0x160`, and when a player 
 `CPlayer::ClearAll` on every player (then every player's `+0x130 = -1`); `CAIMap::BeginBatch`, `+0x100 = +0x172 = 0`. The map is
 rebuilt by `NewZone(mpr, mob, AIGRAPH stream, fromSave = 1)` ("CWorldServer::LoadSave() Can't load map" -> FatalError), and
 `Movie_PlayIntro` pumps the loading video between the blocks. After reading, it sets the zone name, applies `vt[32]` / `vt[31]`
-(rate, hour), `+0x100 = 1`, `CAIMap::EndBatch`, `+0x172 = 1`, collects the units standing on cells without a passable neighbour
-(`CAIMap::HasPassableNeighbour`; the list is built and not used [?]) and calls `ReleaseAllObjects` on the four managers;
+(rate, hour), `+0x100 = 1`, `CAIMap::EndBatch`, `+0x172 = 1`, then frees stuck units [V machine code 0x597825..0x5979CE]: it
+walks the object hash `+0x12d70`, keeps the ids of the units (`vt[12]` type 0x50) whose cell has no passable neighbour
+(`CAIMap::HasPassableNeighbour`) in a local array, and then for each id: a unit found by `FindUnitById` with an id above
+100,000,000 (the player characters, ids ~1e9) is taken out of the collision map, moved to `CAIMap::FindNearestReachableCell`, put
+back (`AddObjectAndStamp`) and reset (`CUnitServer::ResetOrdersAndStance`); any other id (a `.mob` unit) goes to
+`CWorldServer::RemoveObject` - a map unit saved on a closed-in cell is deleted on load. It then calls `ReleaseAllObjects` on the four managers;
 `Session_EnterZoneFromParty` runs the catch-up afterwards. `WriteSave` starts with `BroadcastGameTime` in zone kinds 1 / 3 and
 `ReleaseAllObjects` on the managers. The limb-HP refill `ResetUnitEffects` 0x5956E0 runs only in
 `Session_SaveZoneToCurrent` (zone change), not in `WriteSave` itself nor in `Session_SaveToSlot` (2.5). The zone kind **is** saved
@@ -531,7 +541,8 @@ focused and scrambled with a random key while it is not (an anti-ArtMoney measur
 
 Arguments: `(CPlayer* or 0, HeroRecord* CArray, arrival pos, arrival quaternion x / y / z / w, previous-state CArray or 0)`
 (`PlayerIn` passes the exit centre and angle; the previous states are the 0x28-byte records `DetachHeroes` left on a zone change:
-`{id, pos[3], quat[4], stance +0x20, weapon +0x24}` [I from the reads]). One script text is built:
+`{unit id +0, pos[3] +4 (CUnit +0x1c), quat[4] +0x10 (CUnit +0x34), stanceWanted +0x20 (CUnit +0x268), weaponSlot +0x24
+(CUnit +0x26c)}`, written by `DetachHeroes` at 0x58FE55..0x58FEAF, one per hero found in the zone, before the record is refilled [V]). One script text is built:
 `WorldScript(` + one `AddObject( Heroes, GetObjectByID( "<id>" ) )` per hero + `)`. Per record `i`:
 
 1. A `CUnitDesc` is filled: kind 5, proto `+0x14`, model = record `+8` (the race figure mask, "unhuma"), morph = `+0x724`,
@@ -615,6 +626,12 @@ current zone `+0x120` equals merc i's base (table `g_0x7907AC`: 1 bz1g, 2 bz1g, 
 | not in the party, amerc != 0, others >= 2 | n9 = 1 (party full: 3 live heroes), n1 = n3 = n8 = n2 = 0 |
 | not in the party, amerc == 0, n8 != 1 | n11 = 1 |
 
+Each switch enables the camp dialog of the same name, the text section `briefing nK_<i>` of texts.res (English titles for merc 1,
+Rowdy) [V data]: n1 "Take Rowdy on" (the first hire), n2 "Leave Rowdy in the village" (he is in the party and the party is at his
+base), n3 "Take Rowdy back" (a hire after he was left behind: amerc != 1), n8 "Meeting the soldier" (the first meeting, his
+introduction), n9 the refusal when the party already has three heroes, n10 "Say goodbye to Rowdy" (the hero leaves alone; it
+also clears amerc), n11 "Sorry, but I am busy now!" (not available yet: amerc == 0).
+
 ### 4.14 Briefing completion (`OnNamedEvent` 0x592090) [V deep read 2026-11-06]
 
 `(player index, "a.b.c")`, from `DialogScreen::EndBriefing` and `CPlayerServer::OnMsg_NamedEvent` (the client finished a
@@ -637,8 +654,10 @@ briefing / dialog line). With a lobby alive: only `Lobby_SendNamedEvent(b)` when
 alive -> 0. Unit flag `+8 & 0x20000000` clear: `CHoover::CollectUnitLoot(world, unit, items, ..., money)` (0 -> return 0); with a
 lobby alive the quest items (type 0x14) of the haul go to player index 0 (the host) through their own `AddItems`; the looter gets
 `+0xc0 money += money` and `AddItems(rest)`; returns 1 when an item or money changed hands. Flag set (the body was looted for
-someone else): the first loot record `+0x12e60` with the unit id `+0xc` is handed over whole (money + items) to **whoever loots
-now** - the record's lobby index is not compared - and freed; returns 1; no record -> 0.
+someone else): the first loot record `+0x12e60` with the unit id `+0xc` is handed over whole (money + items) to whoever loots
+now and freed; returns 1; no record -> 0. LootUnit itself does not compare the record's lobby index, but the owner check is done
+earlier: every pick-up order passes `CUnitServer::ExecuteCombatOrder` -> `IsAggroTarget` -> `HasLootRecordFor` (lobby index ==
+the looter's or -1), so another player's order on the body is dropped (bugs.md #4, refuted) [V].
 
 ## 5. Resource files (CResourceBase / CResourceFile / CMappedResource / CMappedFile / CObjectManager) [V]
 
@@ -669,16 +688,9 @@ index -> entry, "Index out of range / No entry"), `Reset` 0x674810.
 
 ## 6. What is not known
 
-Open after the T5 deep read (2026-11-06):
-
-- `LoadSave` builds a list of the units standing on a cell without a passable neighbour and nothing visible uses it [?]
-  (Ghidra lost the array); a fix-up of stuck units may hide behind it.
-- The 0x28-byte previous-state records `SpawnPartyHeroes` reuses (`{id, pos, quat, stance +0x20, weapon +0x24}`) are inferred from
-  the reads only; `DetachHeroes` 0x58FD90 writes them [I].
-- `Quest +0x10` (qdb tag 2) is never written by the quest.reg parser and not read by the quest log [?].
-- The meaning of the mercenary switches n1 / n2 / n3 / n8 / n9 / n10 / n11 is only what the dialogs test; the dialog side is not read.
-- A stored loot record goes to whoever loots the flagged body (4.15): design or a multiplayer bug, not tested [?].
-- `Session_LoadSaveSlot` / `Session_SaveToSlot` keep `bz7g` across allods; why that zone is special is not known.
+Nothing is open. The last T5 items were settled on 2026-11-06: the `LoadSave` stuck-unit fix-up (4.8), the previous-state records
+(4.10), `Quest +0x10` (data-sound.md 4.1: never read, 0 in all shipped quests), the loot owner check (4.15, bugs.md #4), the
+mercenary dialogs (4.13) and why `bz7g` is kept (2.5).
 
 Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
 

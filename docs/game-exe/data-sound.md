@@ -217,9 +217,9 @@ from text by `QuestsDb::ParseQuestReg` 0x6AE8E0 (was QuestsDb_ParseIni; `this` =
 |---|---|---|---|
 | 0 | name | +0 | std::string: the quest id (`q.<zone>.<id>` state key, "quest <id>" text section) |
 | 1 | exp | +0xc | **float** (`quest.reg` GetNumber, stored as a float; the quest log tests `> 0.0`) |
-| 2 | - | +0x10 | dword: serialized only, never written by `quest.reg` nor read [V] |
+| 2 | - | +0x10 | dword: serialized only, never written by `quest.reg` nor read; 0 in all 109 shipped quests [V] |
 | 3 | zone index | +0x18 | int |
-| 4 | - | +0x2c | std::string (not read from quest.reg) |
+| 4 | - | +0x2c | std::string: the designers' Russian quest title ("Дойти до деревни" for q0g); not read from quest.reg, never read by the game [V] |
 | 5 | money | +0x14 | **float** (quest log `obj_cost_money`) |
 | 6 | order | +0x1c | int |
 | 7 | questplaces "{x;y}{x;y}" | +0x20 | vector<float> (tag-1 items; pairs) |
