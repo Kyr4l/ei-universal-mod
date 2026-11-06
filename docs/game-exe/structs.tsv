@@ -1387,15 +1387,24 @@ BridgeQuad			0x2c	float[3]	vAxis	(p2 - p0) normalised
 BridgeQuad			0x38	float[3]	normal	face normal (z >= 0.8 required)
 BridgeQuad			0x44	float	uLength	
 BridgeQuad			0x48	float	vLength	
-CWeather	CObject	0xc8	0x1c	pointer	ref1c	refcounted object released by the dtor
+CWeather	CObject	0xc8	0x1c	pointer	texture	the RainSnow texture holder (CTextureHolder, kind 6, SetRain 0x4E3FC0); bound on stage 0 by CEffectSoundObj::Update. CORRECTION: was "refcounted object released by the dtor"
 CWeather			0x20	pointer	world	the CWorldClient (set by Init: +0x714 = this)
-CWeather			0x28	pointer	array28	aligned array (freed by the dtor)
-CWeather			0x38	pointer	array38	aligned array
-CWeather			0x48	pointer	map48	MFC map (vt 0x746560)
-CWeather			0x5c	pointer	map5c	MFC map (vt 0x746560)
-CWeather			0x70	pointer	array70	aligned array
-CWeather			0x80	pointer	map80	MFC map (vt 0x745F78)
-CWeather			0x94	pointer	array94	aligned array
+CWeather			0x28	pointer	dropTransformed	transformed positions (16 B {x, y, z, w} per drop vertex, pipeline vt[9] output) of DrawRain / DrawSnow. CORRECTION: was "aligned array (freed by the dtor)"
+CWeather			0x38	pointer	dropVertices	SoA vertex blocks of the drops (0x40 B per 4 vertices, 0x8000 blocks reserved), count +0x3C, capacity +0x40. CORRECTION: was "aligned array"
+CWeather			0x48	pointer	dropCodes	MFC byte array (vt 0x746560, data +0x4C): the outcode bytes of the transformed drop vertices (CArray_SetSize_C). CORRECTION: was "MFC map (vt 0x746560)" [I]
+CWeather			0x5c	pointer	dropColumns	MFC byte array (vt 0x746560, data +0x60): the per-drop texture column bytes (n & 3) [I]. CORRECTION: was "MFC map (vt 0x746560)"
+CWeather			0x70	pointer	dropVertsTL	the finished VertexTL (FVF 0x1C4) of the kept drops, count +0x74, capacity +0x78. CORRECTION: was "aligned array"
+CWeather			0x80	pointer	dropIndices	MFC array (vt 0x745F78, data +0x84): the 16-bit index array given to DrawIndexedPrimitive by DrawRain / DrawSnow [I]. CORRECTION: was "MFC map (vt 0x745F78)"
+CWeather			0x94	pointer	cellOffsets	int[81]: the cell offsets of the 81 x 81 weather grid around the camera. CORRECTION: was "array94 aligned array"
+CWeather			0x24	uint	rainSoundId	looping nature\rain_circle.wav of mode 1 (CSoundManager id), stopped by SetRain / StopSound
+CWeather			0xa4	int	vertexCount	number of drop vertices generated this frame
+CWeather			0xa8	float	windX	wind x (units per time unit) added to the drop positions (SetWind 0x564190) [I]
+CWeather			0xac	float	windY	wind y
+CWeather			0xb0	float	fallBase	fall speed base: rain vz = +0xB0 - 0.5, snow vz = +0xB0 - 0.1
+CWeather			0xb4	int	mode	current weather drawn: 0 none, 1 rain (DrawRain), 2 snow (DrawSnow)
+CWeather			0xb8	int	targetMode	mode requested by SetRain (message 0x70); +0xB4 takes it when 0
+CWeather			0xbc	int	density	drops exist when (n & 63) < density (0..64), stepped by the fade [I]
+CWeather			0xc0	float	changeTime	world time (+0x64 of the world) of the last SetRain
 ZoneExit		0x3c	0x14	float[4]	leaveRect	'#deploy' or a later '#remove' 4 numbers; CORRECTION: was only "exit rectangle" (+0x14 xMin..): '#remove' writes only this copy
 ZoneExit			0x18	float	yMin	
 ZoneExit			0x1c	float	xMax	
@@ -1642,7 +1651,7 @@ CRenderDevice			0xf8	pointer	currentVb2	always 0
 CRenderDevice			0x12c	pointer[8]	stageTextures	the CDXDirectDrawSurface bound to stage 0..7 (SetTextureStage caches them)
 CRenderDevice			0x14c	pointer	material	the current RenderMaterial (SetMaterial; the TextureBlend of the object being drawn)
 CRenderDevice			0x150	uint	defaultDiffuse	0xFF000000; DrawMeshBatch flag 4 fills the diffuse array with it
-CRenderDevice			0x158	int	postProcessOn	when set the pipeline vt[35] runs on every vertex batch before the draw [?]
+CRenderDevice			0x158	int	postProcessOn	pipeline vt[35] runs on every finished VertexTL batch when set: the per-vertex fog [I]; CWorldClient::Render clears it around the sky and the floating hit numbers. CORRECTION: was "[?]"
 CRenderDevice			0x15c	int[4]	lastRect	screen RECT of the last DrawMeshBatch with flag 1 (Mesh_ComputeBounds2D); copied into CFigureClientSpecific +0x20 / the scene entry
 CRenderDevice			0x16c	int	statVertices	per frame (BeginFrame resets)
 CRenderDevice			0x170	int	statTriangles	
