@@ -376,7 +376,7 @@ advance: an entry mid-cycle (frame != 0) or with chance >= 1000 always, an entry
 (the animation frames are the next cells of the same texture). Retail chance table 0x796960 by tile type: 1000 (continuous) for
 types 0..13, **5** for 14 (swamp) and **9** for 15, i.e. swamp tiles rest at frame 0 and start a cycle with 0.5 % per 3 ticks.
 
-### 5.4 The stripes of docs/water.md [I from 5.3]
+### 5.4 The stripes of docs/water.md [V: code 5.3 + the rig bursts of 2026-10-25]
 The specular highlight is a plane wave along the wind, travelling with `+0x288 * amplitude`, and it is drawn only where `s >= 0`:
 a crest band appears, moves, and vanishes every half cycle. The cycle length is `2 pi / (|+0x28C| * material amplitude)` ticks:
 with the retail wind strength 0.4 (`DefaultWindForce`), `|+0x28C| = 0.06`, and amplitude 1 one cycle is 105 ticks (5.8 s at 55 ms)
@@ -384,9 +384,9 @@ and a band is visible for half of it; a stronger wind or a larger material ampli
 cell per 3 ticks = 165 ms; a 5-frame loop = 0.8 s) is the other periodic change (the earlier "every 3rd frame at 60 FPS" was wrong:
 it runs on ticks). Both change only every tick, so at a high frame rate the water steps 18 times per second. The user saw a
 0.8 s pop with everything else off, which matches the **tile cycle** better than the sine band; the band is what moves
-diagonally. Not settled from the code alone: whether the water textures' animation frames differ enough to "pop" (they are
-texture cells; the random start frame per tile desynchronises neighbours). A test: `EnableWaterWaves = 0` removes the sine band
-(flag 1), terrain flag 2 the tile cycle.
+diagonally. Settled by the rig bursts of 2026-10-25: the stripes stayed with `EnableWaterWaves = 0` (no sine band), with every um-engine patch
+off and without D7VK, on the same 0.82 s cycle (two of the five water states show the long diagonal dark stripes): they are the
+**tile cycle**, i.e. the water texture's own animation frames (data), not the sine band and not um-engine.
 
 ### 5.5 Draw
 `CTerrain::RenderWater` (passes `textureCount + 2 ..`, after `RenderObjects`), the water records' DIFFUSE alpha = the material's
@@ -589,8 +589,8 @@ repeated until the highest ground vertex of the new box no longer rises) [V, dee
 round): with `objects = 1` it walks the walkable bridge quad list (`CWorldClient +0x1F4` = bridges +0x20), takes each quad's owner
 object (world vt[40] by id), and when the owner's bounding sphere meets the prism (`ShadowProjector::SphereVsPrism` 0x4D7F60) clips
 the owner's part triangles in (`ClipTriangleB` 0x4D85F0), so prints and unit shadows lie on bridges too. There is no de-duplication
-per owner: a building with several walkable quads has its parts clipped once per quad, which would stack the print / shadow there
-(darker) [I, live row].
+per owner: a building with several walkable quads has its parts clipped once per quad, which stacks the print / shadow geometry there
+(duplicate triangles confirmed live 2026-11-06, world-client-players.md 8; whether it looks darker was not checked).
 `CBitmapDib` (0x48, vt 0x744288) is the BMP / DIB helper of the BMP texture path and the screenshot code (`LoadFile` 0x6D4D40 maps a
 `.bmp`, `LoadStream` 0x6D5910, `LoadMmpMipLevel` 0x6D5BF0 decodes one DXT1..5 mip of an MMP into a 16-bit 565 DIB (deep read 2026-11-06: the DXT alpha blocks are skipped, DXT1 3-colour blocks give black for index 3, 4444 is repacked to 555 without alpha, PNT2 becomes a 32-bit DIB with masks 0xFF / 0xFF00 / 0xFF0000, `AfxMessageBox "read error 1"` / `"wrong level for mipmap"`; **dead in this build**: its only caller `CBitmapDib::LoadMmpLevelFromStream` 0x6D6800 has no caller and no vtable slot), `FromSurface` 0x6D6D40,
 `WriteBmp` 0x6D5AC0).
@@ -673,7 +673,7 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
   it on the next build to reuse the cached `textures\<name>.mmp` (corrected 2026-11-06; shipped archive files have none).
 * ~~The sun object's `+0x24` in the under-water sun attenuation (4.2)~~ settled live 2026-11-07: 0.
 * ~~`TraceSunRay`'s double slope~~ settled from the machine code (4.3), 2026-11-03; retail never runs the trace.
-* Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
+* ~~Which of the two periodic water changes the 0.8 s stripes are~~ settled (5.4): the tile cycle (the water texture frames).
 * The water pass's blend (5.5), narrowed 2026-11-06 [V code]: `TerrainSector_Draw` 0x6BFF40 sets only `SPECULARENABLE` (on before, restored after its `DrawIndexedTriangles`), and `CWorldClient::Render` sets only `ALPHATESTENABLE` 0 and the texture-stage block `g_0x7AEDD0` (colour = texture x diffuse, alpha = the vertex diffuse alpha) before `RenderWater` (0x56A0E9..0x56A0FE). `ALPHABLENDENABLE` / `SRCBLEND` / `DESTBLEND` are inherited: `RenderObjects` sets 1 / SRCALPHA / INVSRCALPHA (0x56B480..0x56B49A), then its material, shadow and selection-arrow draws may change them and nothing resets them, so the water blends with the state of the last of those draws. Which one that is in a given frame: [live].
 * ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. ~~The second colour array (+0x148)~~ settled 2026-11-06: a sun glow (section 7, `CSkyObject::Recolour`) [V].
 * ~~`CTextureManager::LoadTextureFromRegistry` 0x691BF0~~ settled 2026-11-06 [V], renamed `TakeFromReleaseCache`: it creates
