@@ -343,7 +343,7 @@ CBridgeManager `+0x20`): its owner (`vt[40]` by id) is tested with a coarse sphe
 its mesh fetched by part name (`+0xf0` slot 6), transformed by the device into the 16-byte vertex buffer `g_0x7AF478` and its triangles
 clipped with `ClipTriangleB`; `ClipBuf::Finish`. Callers: `CPrintDecal::Render` (bridge check 1, objects 1: a print on a bridge is laid on
 the bridge parts instead of the terrain) and `CObject3DClientSpecific::RenderShadow` (no bridge check; objects unless one of the caster's parts has bounds flag 0x400, i.e. the caster is itself a bridge owner).
-The walk is per quad, so an owner with several walkable quads has its parts clipped once per quad (duplicate receiver triangles) [I].
+The walk is per quad, so an owner with several walkable quads has its parts clipped once per quad (duplicate receiver triangles) [V live 2026-11-06: zone1 has 6 quads, owner 299 (5 parts) has two; with the hero next to it, 128 calls made 768 quad visits, 256 fine sphere tests and 1280 part-mesh fetches = 5 parts x 2 quads per call].
 
 **Picking** [V]: the object renderers append `{RECT, object id}` to `+0xf0`; `PickObjectsAt` 0x565790 / `PickObjectsAtPrecise` 0x5659D0
 (`ScreenRects_CollectAt` 0x571800 / 0x5718B0 with the stats `vt[22]` / `vt[24]` point test) fill `+0xf4` (0x18-byte records), sort by view depth
@@ -469,8 +469,8 @@ Open after the T5 deep read (2026-11-06):
   from `ExecuteCombatOrder` (its `ResolveHitChance` missed; `DispatchQueuedOrder` passes 0), every queue builder writes 0
   (`AnimQueue_AddEmpty` / `AddByte`) and the camp screens pass 0. The client tests it only for non-zero: heroes then play
   `weapons\miss.wav` (`GetAnimSoundName` 0x534760 returns it for any non-zero flag).
-* The duplicate receiver triangles of a bridge owner with several walkable quads (8, `BuildShadowReceiverMesh`) should darken a unit
-  shadow / a print twice where they overlap: **[live]** (`live-t5-wcp-net.tsv`).
+* ~~The duplicate receiver triangles of a bridge owner with several walkable quads~~ confirmed live 2026-11-06 (section 8: parts
+  clipped once per quad); whether the doubled triangles look darker on screen was not checked.
 
 ## 10. Corrections to earlier notes
 
