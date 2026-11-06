@@ -32,7 +32,7 @@ int32   vertBlocks         // number of 4-point vertex blocks
 int32   normalBlocks       // number of 4-point normal blocks
 int32   uvCount            // number of UV coordinate pairs
 int32   indexCount         // number of triangle-list indices (uint16 each)
-int32   vertexComponentCount // number of {normalIdx, vertexIdx, uvIdx} triples
+int32   vertexComponentCount // number of {vertexIdx, normalIdx, uvIdx} triples
 int32   morphingComponentCount // always == vertBlocks * 4 (see "Unread Trailer" below)
 int32   unknown            // 0 in all 3564 vanilla meshes
 int32   materialKind       // 17..25: the material kind resolved with CWorldClient::FindMaterial (game-exe/renderer.md; was "unknown2 / render flags")
@@ -85,7 +85,9 @@ Read in this exact order, immediately after the 40-byte header (signature + 9 wo
    Normals are **not** morph-varying (one value per vertex, not per corner) — the `w` component's role is unconfirmed (possibly padding/handedness).
 7. **UVs**: `uvCount` × `vec2<float>` (flat list, one per unique UV, referenced by index below).
 8. **Indices**: `indexCount` × `uint16` — a flat triangle list (every 3 indices = 1 triangle) into the **vertex-component** array below, not directly into vertices/normals/UVs.
-9. **Vertex components**: `vertexComponentCount` × `{normalIndex: uint16, vertexIndex: uint16, uvIndex: uint16}` — this is the actual "combined vertex" used for rendering: `finalVertex = {position: vertex[vertexIndex] (after morph blend), normal: normal[normalIndex], uv: uv[uvIndex]}`. Multiple vertex-components can share the same `vertexIndex` while differing in `uvIndex` (standard UV-seam duplication).
+9. **Vertex components**: `vertexComponentCount` × `{vertexIndex: uint16, normalIndex: uint16, uvIndex: uint16}` (the game's
+   `DrawMeshBatch` 0x4E9010 indexes the positions with the first word and the per-normal colours with the second; game-exe
+   deep read 2026-11-06. The two are equal in every vanilla file, so the older `{normal, vertex, uv}` label never showed) — this is the actual "combined vertex" used for rendering: `finalVertex = {position: vertex[vertexIndex] (after morph blend), normal: normal[normalIndex], uv: uv[uvIndex]}`. Multiple vertex-components can share the same `vertexIndex` while differing in `uvIndex` (standard UV-seam duplication).
 
 ### Unread Trailer (Known Quirk)
 
@@ -127,7 +129,7 @@ exactly their size with the layout below (`_cpr/claude-re/full/tools/oldfig.py` 
 |---|---|---|
 | 0 | u32 | render flags (17-23, as in `FIG8`'s word before the texture number) |
 | 4 | u32 | texture number (3 or 8) |
-| 8 | 244 B | per-corner bounds data (centre, min, max, radius per corner; not needed to draw) |
+| 8 | 240 B | per-corner bounds data (centre, min, max, radius per corner; not needed to draw) |
 | 0xF8 | u32 | `n`: vertex blocks |
 | 0xFC | n x 288 B | vertex blocks: 3 vec4 of the output vertex (position, ...), each blended from **6 vec4** (24 floats) of morph corners: with the three complection weights `a`, `b`, `c`: `lerp(lerp(lerp(v0,v1,a), v2, b), lerp(lerp(v3,v4,a), v5, b), c)` (exactly the game's 24-float expression; the fourth vec4 of the output is 1,1,1,1) |
 | next | u32 `a`, a x 64 B | the "normals" array (64 bytes per element, as `FIG8`'s second block) |

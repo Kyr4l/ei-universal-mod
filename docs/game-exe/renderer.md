@@ -27,7 +27,7 @@ Addresses are VAs in game.exe; offsets are bytes; "stack n" = matrix stack n of 
    "enlarges" a unit only changes the coefficients (`ApplyBuffKinds` 0x50F2D0 adds 0.4): nothing is ever scaled by a matrix.
 4. **A part is a `CFigure` (0x220) drawn by a `CFigureClientSpecific`** (`RenderLit` 0x5A7A70): cull box in clip space, lights transformed
    into figure space, the pipeline's light kernel (`vt[40]`) writes one colour per *normal* into `+0x138`, the `.anm` per-vertex deltas
-   are added, `DrawMeshBatch` 0x4E9010 expands the `{normalIdx, vertexIdx, uvIdx}` components into `VertexTL`s and draws. Lighting is cached
+   are added, `DrawMeshBatch` 0x4E9010 expands the `{vertexIdx, normalIdx, uvIdx}` components into `VertexTL`s and draws. Lighting is cached
    per object (flag 0x400) until a light moves. The texture comes from the `.fig` header's `textureNumber` (texture set), the material from
    the header word 17..25 (`AttachPart` 0x51B050).
 5. **Animation = one key per world tick.** `CUnitClientSpecific::SetAnimation` 0x5352B0 hands the `.adb` entry of the replicated clip to
@@ -96,6 +96,19 @@ Addresses are VAs in game.exe; offsets are bytes; "stack n" = matrix stack n of 
    `SetFog(FogDensity 0x79BED4, FarClipDistance 0x79BE54)` (vt[5]); the render states of 2.4 are set; the frame stats are reset; the default
    sun (`CLight` kind 0x2E, direction (5, 5, -8), white, range 1e6) is registered (`SetSunLight` 0x500800); `SetFogColor(0xFF323232)`;
    `new CStateBlockSet` (0x118) 0x4FCA60 compiles the 9 default effects (2.4).
+   Deep read 2026-11-06 [V]: the device is `new CRenderDevice` (0x17C) with (hwnd, driver GUID `+0x10` of the driver node, FullScreen
+   AppSettings `+0x44`, width `+0x30`, height `+0x34`, bpp `+0x38`, 0, 1, z depth `+0x3C`, 0); `FindHw3dDriver` runs first, then any `DrawingTarget` (`+0x2C`, default 0) other than -1 **replaces** it by that index of the driver list (driver 0 = the primary display driver, whether or not it has HW 3D); an index
+   that is not in the list falls back to `FindHw3dDriver`. Device `+0xAC` = the CD3DLibrary. The start-up projection uses the camera
+   `g_0x79B2A8`'s near / far / fov with a **fixed 4:3 aspect** (1.3333334; `SetupCamera` later uses the rect's w / h). Every stack is
+   filled by pushes, so the depths after init are 3 (stacks 0, 1: V, W, P), 2 (stacks 2, 5: W, P), 1 (6 P, 7 W, 8 V). `SetWindowSize`
+   gets the device rect's width / height as floats. The render states are set in this order: ZENABLE = device `+0x60` (1),
+   ZWRITEENABLE 1, FILLMODE 3, SHADEMODE 2; `IDirect3DDevice7::GetCaps` ("Can't get device description" on failure) and
+   `IDirectDraw7::GetCaps` (for the mip bit); the per-stage filters; then the blend / test / cull / fog block of 2.4. The sun is made
+   by the light manager's slot 23 `(0x2E, -1)`, `CLight::InitDirectional(colour (1, 1, 1), dir (5, 5, -8))`, radius 1e6, radius^2 1e12,
+   attenuation 1e-12, and stored in `+0x1C` directly (not through `SetSunLight`, so pipeline vt[2] is not called here). Frame
+   stats: `+0x34` frame ms 0, min 0x80000000, max / total / frames / average 0, `+0x38` last time = `timeGetTime()`; flag 2 of
+   `+4`. `SetFogColor` is the renderer's slot 7. The `CStateBlockSet` ctor gets `(D3D device, DrawingTarget != 0)` (the default
+   `DrawingTarget` 0 gives 0: multi-texture passes; a secondary adapter gives 1: one texture per pass, see 2.4) and replaces `+0x24` (refcounted).
 
 `SetupCamera` 0x5015A0 (slot 25, from `CWorldClient::Render` and the UI 3D widgets) repeats the stack set-up for a rect and fov:
 P = perspective(fov of `g_0x79B2A8` or the given one, rect aspect, near, far), V = viewport(rect), identity W.
@@ -107,7 +120,7 @@ P = perspective(fov of `g_0x79B2A8` or the given one, rect aspect, near, far), V
 | 1 | InitRenderer, SetupCamera | `SetWindowSize(w, h)` |
 | 2 | SetSunLight 0x500800 | `SetDirectionalLight(CLight*)` (0 to clear) |
 | 3 | SetAmbientColor 0x500740 | `SetAmbient(r, g, b)` floats |
-| 4 | InitRenderer, SetupCamera | `SetProjection(matrix)` (the projection with row 0 columns 1..3 from the viewport; the 2D library gets the transpose) |
+| 4 | InitRenderer, SetupCamera | `SetProjection(matrix)`: the **transpose** of P (the top of stack 6), i.e. P in column-major order (InitRenderer [V] 2026-11-06: a plain 6-pair swap, nothing taken from the viewport) |
 | 5 | InitRenderer | `SetFog(density, farClip)` [I] |
 | 7 | BuildFigureMesh, LoadFig8 | `ComputeBounds(BoundsRecord*, VertexSoABlock*, blocks)`: sphere + box of a blended mesh |
 | 9 | DrawMeshBatch (flag 2), TransformForDraw | `TransformClipCodes(stack-2 top, SoA, outXYZW (g_0x7AEE10), outCodes (g_0x7AEE30), blocks)` -> 0 / 1 / 2 |
@@ -152,7 +165,7 @@ Set once by `InitRenderer` (never changed by the module except where noted):
 | SPECULARENABLE 29 / DITHERENABLE 26 / TEXTUREPERSPECTIVE 4 / ANTIALIAS 2 | AppSettings `Specular` +0x64 / `Dithering` +0x60 / `PerspectiveCorrection` +0x78 / `Antialiasing` +0x68 ? 2 : 0 | |
 | FOGENABLE 28 / FOGVERTEXMODE 140 / FOGCOLOR 34 | TRUE / LINEAR / 0 | the fog factor is in the vertex (specular alpha / rhw from the pipeline); `SetFogColor` 0x501AB0 |
 | EXTENTS 138, CLIPPING 136, LIGHTING 137, AMBIENT 139 | 0 | the fixed pipeline neither lights nor clips: the CPU does |
-| per stage MAGFILTER 16 / MINFILTER 17 | 1 point or 2 linear by `Filtering` +0x74 (0 point, 1 / 2 linear) | MIPFILTER 18 = LINEAR when `Mipmapping` +0x70 (cleared when the caps lack the mip bit) |
+| per stage MAGFILTER 16 / MINFILTER 17 | 1 point or 2 linear by `Filtering` +0x74 (0 point, 1 / 2 linear) | MIPFILTER 18 = **2 = D3DTFP_POINT** (nearest mip level, no trilinear) when `Mipmapping` +0x70, else 1 = NONE; Mipmapping is cleared when the DirectDraw caps lack DDSCAPS_MIPMAP (0x400000); stages 0 .. `wMaxSimultaneousTextures` - 1; a `Filtering` value other than 0..2 leaves MIN / MAG at the D3D default [V] 2026-11-06 (byte read of 0x5011D4..0x5012D0) |
 
 Four global texture-stage state blocks are recorded by the ctor (handles `g_0x7AEDDC`, `D8`, `D4`, `D0`): COLOROP MODULATE with
 COLORARG1 TEXTURE and COLORARG2 CURRENT / DIFFUSE / DIFFUSE / DIFFUSE, ALPHAOP SELECTARG1 (texture alpha) / MODULATE / SELECTARG1 /
@@ -162,7 +175,19 @@ SELECTARG1 of DIFFUSE. [V] 0x4E5E50
 from `EffectPassRecord`s (0x28: stage op / args, blend enable, src / dest): 0 and 8 plain; 1 = second pass MODULATE texture x current with
 blend DESTCOLOR / ZERO (a multiply pass); 2 = MODULATE with arg 0x22 (texture alpha replicate), ZERO / SRCALPHA; 3 = ADD, ONE / ONE (additive);
 4 = BLENDTEXTUREALPHA, SRCALPHA / INVSRCALPHA; 5 = three passes (ONE / ZERO, ADD ONE / ONE, MODULATE2X DESTCOLOR / SRCCOLOR); 6 / 7 =
-BUMPENVMAP 0x16 / BUMPENVMAPLUMINANCE 0x17 then ADD. A material's effect record `{handles per pass, stages per pass}` is what
+BUMPENVMAP 0x16 / BUMPENVMAPLUMINANCE 0x17 then ADD.
+`RegisterEffect(records, id, onePerPass)` 0x4FD2A0 (deep read 2026-11-06 [V], loop bytes checked): the first pass takes
+min(record count, the device's `wMaxSimultaneousTextures` (caps `+0xBA`)) records, or at most 1 when `onePerPass` (the ctor's flag =
+`DrawingTarget != 0`); inside one state block each enabled record (byte `+0`) sets on stage i COLOROP `+4`, COLORARG1 `+8`,
+COLORARG2 `+0xC`, ALPHAOP `+0x10`, ALPHAARG1 `+0x14`, ALPHAARG2 `+0x18`, and the stage after the last gets COLOROP and ALPHAOP
+DISABLE; a record whose COLOROP or ALPHAOP value has no common bit with the caps' `dwTextureOpCaps` (`+0xB4`; the op **value** is
+ANDed with the caps mask, not `1 << (op - 1)`) ends the first pass at that stage, and it and the rest become extra passes. Each
+extra pass is its own state block holding only SRCBLEND `+0x20` / DESTBLEND `+0x24` when its blend byte `+0x1C` is set (no stage
+ops, no ALPHABLENDENABLE: `DrawIndexedWithMaterial` forces blending on and binds the pass's texture to stage 0, so stage 0 keeps the
+ops of the first pass). The effect object (0x1C, vt 0x73D880): refcount `+4`, handles vector `+8..+0x10` (pass 0 first),
+`+0x14` stages in the first pass, `+0x18` id; ids < 9 also go to `defaultHandles +0x10C[id]` ("Can't register default effect %d
+Already exist" when taken); the hash `+0xF8` keeps {copy of the records, effect} under the id. A failed Begin / EndStateBlock is
+`FatalErrorHr` ("Can't begin / end state block") and returns. A material's effect record `{handles per pass, stages per pass}` is what
 `DrawIndexedWithMaterial` 0x4EB550 applies (deep read 2026-11-06 [V]). The current material is `device +0x14C` (`SetMaterial` 0x4EB170);
 without one the call is a plain locked `DrawIndexedPrimitive`. With one (material +8 byte blend enable, +0xC SRCBLEND, +0x10 DESTBLEND,
 +0x14 the effect: pass handles vector +8..+0xC, stages per pass +0x14; +0x18 the `TextureStageRecord`s, 0x14 each: +0 TEXCOORDINDEX,
@@ -211,6 +236,33 @@ All of them end in `IDirect3DDevice7::DrawIndexedPrimitive(TRIANGLELIST, 0x1C4, 
 `+0x16C` vertices, `+0x170` triangles, `+0x174` calls, `+0x178` texture changes. Textures are bound per stage through `SetTextureStage` 0x4EB300
 (cache `+0x12C[8]`, `SetTexture` only on change). `SetAlphaBlendModes` 0x501C60 is the only blend switch the effect passes use.
 
+The three renderer-built primitives (deep read 2026-11-06 [V]):
+
+- **`DrawTexturedPolyline`** 0x501D90 (slot 16; points {Vec3*, n}, width, mode, uLength, v0, vSize): a screen-space ribbon. Mode 0 =
+  pipeline vt[13] transforms the points with stack 1's top (no clipping); any other mode = vt[8] with outcodes into `g_0x7AF040`,
+  result 2 = nothing drawn, then vt[34] finishes them. Each point becomes a `VertexTL` {x, y, z, rhw, diffuse 0xFFFFFFFF, specular
+  0xFF000000}, except the first and the last whose diffuse is 0x00FFFFFF (alpha 0: the ribbon fades at both ends). Per segment two
+  vertices are emitted at each end, displaced by `+-(width * rhw * 15 / |d|) * (d.y, -d.x)` (d = the screen-space direction; the
+  call Ghidra names `pow` 0x6FD026 is `_hypot`, see section 7), so the half-width is `15 * width` pixels at rhw 1 and shrinks with
+  distance; the start pair of a segment is emitted only when the previous segment was not (the pairs are shared), the end pair
+  uses the direction to the next point (`Keys20_GetDirection` mode 2) or, at the last point, from the previous (mode 1). uv: u starts
+  at 0 and grows by `uLength / (n - 1)` per point (`uLength` 0 = constant u 0.875), v = v0 on one side and v0 + vSize on the other.
+  Two triangles per segment; in the clipped mode a segment is drawn when at least one end has outcode 0. Drawn by
+  `CRenderDevice::DrawIndexedTriangles` with SRCBLEND SRCALPHA / DESTBLEND ONE (**additive**), the previous blend states restored.
+- **`DrawParticleQuads`** 0x502CA0 (slot 17; additive flag, points {0x10-byte xyz + size, n}, records {colour, uv rect*}): batches of
+  at most 511 points; pipeline vt[24] with the **transpose** of stack 2's top builds four corners per point (size scaled by w [I]),
+  with outcodes; each corner: diffuse = the record's colour, specular 0xFF000000, uv = the rect `{u0, v0, u1, v1}` corners (u0 v0,
+  u1 v0, u1 v1, u0 v1). Quads whose first corner has a negative z are dropped, the rest **sorted by that z** (float bits as integers:
+  merge sort up to 128 quads, ascending (`MergeSortPass` takes the first run while `a <= b`), 4-pass byte radix sort above, its direction assumed the same [I]: near quads first, harmless for additive blending). vt[24] result 0 = indices (0 2 1, 0 3 2) per quad,
+  1 = every triangle clipped in 2D against the render surface size by the game's `ClipTriangle`, 2 = batch skipped; vt[35] when
+  `device +0x158`; then `CRenderDevice::DrawIndexedPrimitive` 0x503680. With the flag: SRCBLEND SRCALPHA / DESTBLEND ONE around the
+  batches (additive), restored at the end.
+- **`DrawArrow3D`** 0x503A40 (slot 18; pos, size, dir, right): the **selection marker** of `SelectionType` 1 (`world-client-players.md`
+  section 8: size 0.5 at the "hp" part), not a debug draw. With s = size / 3, six vertices 0.3 above `pos` (a flat arrow: shaft
+  `+-3 s` along dir and `2 s` along right, head points `5 s`, `1.4 s`, `4 s` along -right), 6 triangles (18 indices
+  0 4 3, 0 1 4, 1 5 4, 1 2 5, 2 3 5, 2 0 3, a triangle list, not lines) in 2 SoA blocks, uv 0, drawn by `DrawTrianglesTransformed`
+  with diffuse 0x8000FF00 (half-transparent green), specular 0xFF000000, no bounds (always the clip path), zScale 1.
+
 ## 3. The figure pipeline
 
 ### 3.1 Objects and parts (`CObject3D`, 0x170) [V]
@@ -230,13 +282,18 @@ pending parts (`+0xE0`) on the first `Draw`.
 from the `.fig` bounds (`LoadPartBounds` 0x5AC010) and the node positions, name prefixes `BASE` (0x400: walkable, the bridge quads),
 `CROWN` (0x90), `EMPTY` (0x890) set flags, and the skeleton is released again.
 
-`SetMorphParams` 0x517700 (new s, d, h): a new scene from the cache (or a fresh blend), every part's bounds re-copied, the animation nodes'
+`SetMorphParams` 0x517700 (new s, d, h): a new scene from the cache (or a fresh blend; an unshared scene is re-blended in place, 3.2), every part's bounds re-copied, the animation nodes'
 rest offsets rebuilt (`SetNodeRestOffset` 0x5ACB80), the object box recomputed. It is reached by `ReadNetState` section 1 and `ApplyBuffKinds`.
 
 ### 3.2 The render manager and the scene cache [V]
 
 `CRenderManager` (0x38, vt 0x73D808, built with "figures.res" and "menus.res" opened as `CMappedResource2` archives in `+0xC`; more archives
-through `OpenResourceFile` 0x4F6D30) is the world's figure loader behind `CFigureManager`:
+through `OpenResourceFile` 0x4F6D30) is the world's figure loader behind `CFigureManager`. (`CFigureManager::Init` 0x5AA510 opens "menus.res" through slot 16 and
+then `Menus_LoadRects` 0x5ACE80 [V] 2026-11-06 reads `menus.reg` from it: 11 int[4] rects, each FatalError "Can't get rect for MM / EM
+<name>" unless exactly 4 values, stored with `SetRect` into `g_0x7C8048` (0x10 each): MainMenu NewGame, LoadGame, ExitGame, Options,
+Credits, Multiplayer, then EscMenu SaveGame, LoadGame, Options, ResumeGame, ExitMM (`g_0x7C80A8..0x7C80E8`, the escape menu's five
+buttons, `0x62AB20`); a missing file = FatalError "Can't open file "menus.reg" with the main/esc menu rects". The decompile hides all of
+this behind "unreachable" blocks.) Its functions:
 
 - `GetModel` 0x4FAB00 (name) -> `FigureModel` (0x20: `.mod`, `.bon`, `.anm` resources, a hash of opened clip archives) cached in `+0x10`;
   0 when there is no `.mod` (a plain `.fig` figure). `CFigureManager::GetModel` 0x5AA5F0 is the same cache on the manager side (`+0xBC`) used by
@@ -246,6 +303,12 @@ through `OpenResourceFile` 0x4F6D30) is the world's figure loader behind `CFigur
   `.mod` entries or `<name><part>.fig`, `LoadFigFile` 0x4F7D20) or `CreateSceneFromLink` 0x4F77C0 (part list from the `.mod`'s own entry or
   `<name>.lnk`). Scenes are refcounted by their objects; nothing evicts them in this module (the world drops them with the zone).
 - `BuildFigureMesh` 0x4F7F00 (FIG8) / `BuildFigureMeshOld` 0x4F87D0 (the 6-corner format) blend one part into the scene (3.3).
+- **Re-morph** (deep read 2026-11-06 [V], `GetOrCreateFigure` 0x4F75E0 = manager slot 6, called by `CObject3D::SetMorphParams`
+  0x517700 with the object's current scene): when the scene's refcount `+4` is below 3 (in practice: no other object shares it [I])
+  the scene is **re-blended in place**: `CRenderScene::SetMorphParams` 0x4F2F90 stores the new (s, d, h), the scene's slot 3 lists its
+  part names, `GetModel(name)`, and `LoadFigFile2` 0x4F9E50 per part rewrites only the vertex blocks (`BuildFigureMeshB / C`,
+  section 6); the same scene is returned. Otherwise (shared) slot 4 = `FindOrCreateScene(name, s, d, h, 0)` gives a cached or new
+  scene. So a buff on a unique unit re-blends its own mesh; a shared complection gets a separate scene.
 - **Complection quantisation** (cross-note from the script round, checked 2026-11-06 [V]): when the registry option
   `AutomaticQuantization` (AppSettings `+0x84`, `g_0x79BCF4`) is non-zero, `MobFile_Load` 0x481660 groups the descriptors of kind 1
   (`CObjectDesc +0x48`), except types 0x32..0x34 (`+0x50`), by model name (`+0x54`), runs `PointSet_ClusterCentroids` 0x49BEA0 with 2
@@ -279,10 +342,30 @@ v = lerp(lo, hi, h)                                                // per axis, 
 ```
 
 into `VertexSoABlock {4 x, 4 y, 4 z, 4 w = 1}`. The pipeline's `ComputeBounds` (vt[7]) fills the entry's record from the blended vertices.
-Normals (4 floats per point, one value per vertex, no morph), uvs, indices, components `{normalIdx, vertexIdx, uvIdx}` and the morph-component
+Normals (4 floats per point, one value per vertex, no morph), uvs, indices, components `{vertexIdx, normalIdx, uvIdx}` (the game reads [0] as the position, [1] as the colour = normal index; equal in every sampled vanilla file) and the morph-component
 trailer are copied as they are. `LoadFig8` does the same into a figure's own arrays (`+0x1C0` vertices, `+0x1D0` normals, `+0x1E0`
 components, `+0x1F0` morph components, `+0x200` indices, `+0x210` uvs; `BindRawBuffers` 0x5A6D40 points the draw pointers `+0x9C..+0xC8` at
-them and sizes the colour arrays `+0x138 / +0x148` to 4 x normal blocks). The kinds: 0x41 "A" (0x1E0, only vertices / normals: the parts of
+them and sizes the colour arrays `+0x138 / +0x148` to 4 x normal blocks).
+Deep read 2026-11-06 [V]: file order after the vertex blocks is normals (0x40 B per block), uvs (8 B), **indices** (2 B), components
+(6 B), morph components (4 B); `BuildFigureMesh` passes them to `AddMesh` in that order and the cursor ends at the file end. A file
+whose signature is not `FIG8` takes the one-corner branch of the same function (header + 0x28 bytes of raw centre / min / max /
+radius, then 0x30-byte blocks {4 x, 4 y, 4 z} copied with w = 1, no blend); no vanilla file uses it (`figure-format.md`). The
+header words: `+0x20` -> `SceneEntry +4` (material kind), `+0x24` -> `SceneEntry +0` (texture number). **`LoadFig8` 0x5A5C70
+(slot 20) copies only the blended vertices and the normals into the own arrays** (`+0x1C0` / `+0x1D0`); the uv, index, component and
+morph-component draw pointers `+0xAC / +0xC4 / +0xB4 / +0xBC` point **into the loaded file data** (so that data must stay mapped), the
+colour arrays `+0x138 / +0x148` are sized 4 x normal blocks, flag 0x20 (loaded; a second call does nothing) is set; it does not call
+`BindRawBuffers` (that is the `ReadParts` / `ParseFIG` path, whose data are copied). `ReadBoundsHeader` 0x5A18E0 [V]: FIG8 = three
+groups of 8 corner vec3 (centre, min, max; 0x60 B each) and 8 radius floats (0x20 B), each blended with the same corner order and
+weights into `+0x160 / +0x16C / +0x178 / +0x184`, then copied into the `BoundsRecord +0x188` with flags 1 | 2; any other signature =
+one raw centre, min, max, radius (0x28 B). The four figure loaders [V] 2026-11-06: slot 19 (`CFigure::LoadFigHeader` 0x5A4CF0,
+`CI3DFigure` 0x5A2490) tests the first three bytes for "FIG" and calls slot 20 (FIG8) or slot 21 (the old 6-corner format of
+`figure-format.md`), then sets flag 0x20. `CFigure` slot 20 = `LoadFig8` 0x5A5C70 and slot 21 = `LoadFigOld` 0x5A4D60 keep the
+uvs / components / morph components / indices **in the file data** (`LoadFigOld` skips the 52-byte records, fills the specular
+array with 0xFF000000 and binds the same way); the `CI3DFigure` (0x43, UI) twins slot 20 0x5A2500 (was `ParseFIG`) and slot 21
+0x5A3800 (was `BuildMorphed`; it is the **6-corner** loader, not an 8-corner one) **copy every array** into the own vectors
+`+0x1C0..+0x210` and bind them, so a UI figure does not depend on the mapped file. The old format's bounds: centre, min, max as
+6 corner vec3 each (0x48 B) and 6 radius floats, blended `lerp(lerp(lerp(c0, c1, s), c2, d), lerp(lerp(c3, c4, s), c5, d), h)`.
+The kinds: 0x41 "A" (0x1E0, only vertices / normals: the parts of
 a scene-backed object), 0x42 "B" (0x220, own full mesh), 0x43 `CI3DFigure` (0x284, UI figure with a scale matrix `+0x23C`, ambient
 `+0x224`, texture `+0x280`), 0x44 `CSkyObject` (`CFigureManager::CreateByKind` 0x5AA8E0).
 
@@ -320,7 +403,20 @@ textures); `ReplaceTexture` 0x51B630 swaps one of the same kind.
 3. Colours: flag 0x100 -> constants `+0xD4 / +0xD8` (UI figures, `Render` path); flag 0x10 -> cached; else the lights and the negated sun
    direction are transformed into figure space with the inverse of stack 3's top (light `+0x28`, sun `+0x108`), `CLight::PrecomputeMaterialTerms`
    with the material and `g_0x79BE9C`, then pipeline vt[40] `LightVertices` (or, for a scene part, the scene's slot 8) writes `+0x138`; "crown"
-   parts pull their colours 60 % toward the mean; `+0x148` = ambient << 24 unless the material flag 0x10; flag 0x10 set.
+   parts pull their colours 60 % toward the mean; `+0x148` = edge alpha << 24 unless the material flag 0x10; flag 0x10 set.
+   Deep read 2026-11-06 [V] (`RenderLit` 0x5A7A70): the figure-space transform is the inverse of the 3x4 affine part of stack 3's top
+   (cofactors / determinant; a zero determinant leaves the inverse uninitialised). A point light's **position** `+0x1C..+0x24` goes
+   through the full inverse into `+0x28..+0x30`; the sun's direction `+0xD4..+0xDC` is negated and only rotated into `+0x108..+0x110`,
+   then `PrecomputeMaterialTerms(sun)` and pipeline **vt[2]** `SetDirectionalLight(sun)`. The colour triple handed to vt[40] (the
+   "ambient rgb" of 2.2) is the material's `+0x50..+0x58` (the emissive slot of its D3DMATERIAL7 block). A part whose owner has a scene
+   (`figure +0x98 -> +0xF0`, i.e. every world-object part) is lit by the scene's vt[8] `(part name, lights, material, alpha, colours,
+   specular)`; vt[40] runs only for scene-less figures. The "crown" rule runs only when the registry option **`FloraSpecialLight`**
+   (AppSettings `+0xB8`, `g_0x79BD28`, registry section Shadow, default 1) is non-zero and the part name equals "crown" case-insensitively (not a prefix): the mean r, g, b
+   over all `+0x13C` colours, then each channel `c + 0.6 * (mean - c)` rounded, alpha kept. The specular array `+0x148` is filled with
+   the **alpha argument << 24** (the edge-fade alpha of 3.4 step 4, not an ambient value) unless the material byte `+8` has flag 0x10.
+   With flag 0x100: a scene-less figure sizes `+0x138 / +0x148` to 4 x normal blocks and fills them with `+0xD4 / +0xD8`; a scene part
+   asks the scene's vt[7] `(name, +0xD4, +0xD8, colours, specular)`. Draw flags: 2 when `CullBox` said 1, 1 when an out RECT is passed,
+   8 when the material flag 0x10.
 4. The `.anm` morph deltas `+0x128` are added into the static SoA copy `g_0x7C2E48` (`g_0x7C2E60` for `Render`).
 5. `DrawMeshBatch(device, vertices, blocks, normals, normalBlocks, diffuse, specular, uvs, uvCount, components, compCount, -, -, indices,
    indexCount, uOffset, vOffset, alpha, flags)` (deep read 2026-11-06 [V]): the SoA positions are transformed into the scratch `g_0x7AEE10`
@@ -337,6 +433,16 @@ textures); `ReplaceTexture` 0x51B630 swaps one of the same kind.
    which turn `SPECULARENABLE` on around their call. (If vt[14] ever returned 1 the clip path would read stale outcodes; the game only
    relies on `CullBox` having said "inside" [?].)
 6. The rect is copied to `+0x20` of the specific and the out RECT; flag 0x40; `DrawBoundsDebug` 0x5A7290 (world flag 0x4000).
+   Deep read 2026-11-06 [V]: flag 0x40 is cleared on entry (in `RenderLit` before the hidden test, in `Render` after it). Scene-less
+   figures in `RenderLit` copy the morph deltas (12 B xyz per vertex, count `+0x12C`) onto a copy of the SoA vertices in `g_0x7C2E48`, call
+   `DrawMeshBatch` (or `DrawMeshBatchBlended` when both blend textures are given) and get flag 0x40 **only when an out RECT was passed**
+   and the draw was not culled (result 2 = both rects emptied). Scene parts call the scene's vt[10] `DrawMesh(name, flags, colours,
+   specular, uOff, vOff)` / vt[12] blended without morph deltas, vt[9] / vt[11] with `+0x128`; their rect comes from the scene entry
+   (`+0x5C` of the entry in the map `+0x14`) and flag 0x40 is set unless culled. `Render` 0x5A7640 (unlit) has no scene path: flag 0x100
+   = the constants, flag 0x10 = the arrays as they are, else draw flag 4 (the device's constant colours); morph copy in `g_0x7C2E60`;
+   flag 0x40 whenever the draw was not culled. Both always end in `DrawBoundsDebug`. The texture-frame step runs for texture kinds 0xD..
+   0x10 with time = integer world time `g_0x7AF61C` + fraction `g_0x7AFCA8` and sets specific flag 0x200; kind 0xF has no rule in
+   `AnimateTextureFrame` (no animation); 0xD frames 4..7 use v = 0.5, frames 0..3 v = 0; 0xE / 0x10 use v = 1 - row / 4.
 
 With blend textures (`CreateWoundsTexture` 0x51C3D0 made `+0xD8` and the `textureBlend +0xDC`) the draw goes through
 `DrawMeshBatchBlended` 0x4E9A50: the same mesh twice, the second pass with the wounds texture alpha-blended (`DrawIndexedTwoPassBlend`).
@@ -458,6 +564,18 @@ entry the per-file fallback `LoadNodeTrack` 0x5ACA60 (`<model><node><clip>` + ex
 `AnimNodeOld_*` 0x505410-0x508D30, `CAnimationSystemOld::ReadNodes` 0x508D30, `CFigureManager::MakeAnimationNode / LoadAnimationFile /
 LoadSkeletonOld` 0x5AC400-0x5AC770 read the `.ani` double-precision keys of the 3ds tool chain (`CFakeFigure`, `Scene3ds_BuildFigures`).
 Nothing in the unit / object draw calls them.
+Deep read 2026-11-06 [V]: `AnimNodeOld_ReadFromData` 0x505CB0 reads one node record of that chain: the rest rotation quaternion
+(16 B raw into `+0xE4`; the decompile shows it as "two doubles rounded to int64", which is only the FPU 8-byte copy idiom), the
+pivot Vec3 `+0xF4`, u32 n + n Vec3 base morph vertices (`+0x100`, also copied to the working array `+0xD4`), u32 frame count
+`+0x40`, u32 + rotation keys `+0x44` (0x28: start frame, end frame, quaternion, axis Vec3, angle), u32 + position keys `+0x58`
+(0x20: start, end, position, delta per frame), u32 + morph frames `+0x84` (0x18 each). `AnimNodeOld_AdvanceTime` 0x507530 (dt as a
+double): fraction `+0x38` += dt; on reaching 1 the frame `+0x34` advances and each key index (`+0x98` morph, `+0x68` position,
+`+0x54` rotation, `+0x80`) steps past a key whose end frame is reached; at the clip end a queued clip is loaded
+(`CAnimationSystemOld::NextQueued`, `CFigureManager::LoadAnimationFile`), a looping clip (entry flags `+0x14 & 0xC0000000 ==
+0x80000000`) wraps the frame, resets the morph vertices to the base and re-adds every morph frame up to the frame. Pose: position =
+key position + fraction * delta (the last key's position past the end); rotation = key quaternion * `Quat_FromAxisAngle(axis,
+fraction * angle)` (an incremental rotation, not a slerp) [I: the decompile's last block that copies a key quaternion looks like a
+mis-structured else for "past the last key"].
 
 ### 4.5 The 3ds import / figure export chain (editor leftover, dead in practice) [V] deep read 2026-11-06
 
@@ -476,10 +594,24 @@ angle) and +0x58 (0x20: position), morph frames +0x88 (0x18) interpolated betwee
 `AnimNode_WriteAniAstFiles` 0x44B060 -> `AnimNode_WriteAniAst` 0x44A7B0 (`<node>.ani` / `<node>.ast` per node: rest rotation, position,
 morph vertices, frame count, the key records). `Material_ParseName` (name -> texture kind, material kind) is the authoring rule behind
 the `.fig` header words of 3.3: the name is split at '.' and only the parts **before** a dot are kept, so it needs the form
-`<name>.<TEX>.<MAT>.<rest>` (exactly three dots); part 2 maps through 16 short upper-case strings to texture kinds 1..0x10 / 0 (no 0xB;
-unknown = FatalError "ParseMaterialName. Unknown texture type" and 1), part 3 through 9 strings to material kinds 0x11..0x19 (unknown =
-FatalError and 0x15); any other form gives texture 1 / material 0x15. (The string values live at 0x7844F4..0x784530 and 0x784490..
-0x7844B0 of the Russian exe; not dumped here.)
+`<name>.<tex>.<mat>.<rest>` (exactly three dots); parts 2 and 3 are **lower-cased** (the call Ghidra names `CString::MakeUpper`
+0x700EFE is really MakeLower, see section 7) and compared with lower-case strings (byte read 2026-11-06 [V]):
+
+| part 2 | um | uw | tm | hm | hs | spm | sm | om | wtm | wts | sps | at1 | at2 | at3 | at4 | nn |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| texture kind | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0xA | 0xC | 0xD | 0xE | 0xF | 0x10 | 0 |
+
+| part 3 | le | wo | me | cl | sk | st | mg | wt | cr |
+|---|---|---|---|---|---|---|---|---|---|
+| material kind | 0x11 | 0x12 | 0x13 | 0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 |
+| `materials.res` template (table 0x743BF8) | leather.mat | wood.mat | metal.mat | cloth.mat | skin.mat | stone.mat | magic.mat | none | metal.mat |
+
+(strings at 0x784530 down to 0x7844F4 and 0x7844B0 down to 0x784490). No texture string maps to 0xB. The four `at1..at4` are the
+animated texture kinds 0xD..0x10 of 3.5 (0xF has no frame rule, so `at3` does not animate). Kind 0x18 (`wt`) has no template in the
+material manager's table (8 entries: 0x11..0x17 and 0x19, which reuses metal.mat) [V]. An unknown part 2 = FatalError
+`ParseMaterialName.\n Unknown texture type "%s" in material "%s"` and kind 1; an unknown part 3 = the "Unknown material type" twin
+and 0x15 (skin); any name without exactly three dots gives texture 1 / material 0x15. The meaning of the texture abbreviations
+beyond the obvious (um / uw = unit main / weapon?, nn = none) is a guess [?].
 
 ## 5. `CMapObject`: net state and buff visuals
 
@@ -526,8 +658,11 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   archive or 0, name, s, d, h)` opens `<prefix><name>.fig` from the given archive, or searches every archive of `+archives` when none is
   given; a file starting with the bytes `FIG` (`& 0xFFFFFF == 0x474946`) goes to `BuildFigureMeshB` = the FIG8 eight-corner trilinear
   blend of `BuildFigureMesh` 0x4F7F00 (3.3), anything else to `BuildFigureMeshC` = the six-corner blend of `BuildFigureMeshOld`
-  0x4F87D0. Both write into the scene entry of that name (`CRenderScene::FindOrCreateEntry`). They duplicate the two builders for
-  this second entry point; no new format.
+  0x4F87D0. ~~Both write into the scene entry of that name; they duplicate the two builders~~ corrected 2026-11-06 [V]: they only
+  **re-blend the vertex positions** of an existing part: header skipped (B: 0x168 bytes, no signature test; C: count at 0xF8), the
+  blocks blended as in 3.3 / the old format, vt[7] `ComputeBounds` into the entry's bounds, then `CRenderScene::ReplaceVertices`
+  0x4F3800 (was `GetEntryValue`) copies min(new, existing) blocks over the part's range; normals, uvs, components, indices, texture
+  and material kind are untouched. This is the in-place re-morph of 3.2.
 - The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check.
 - ~~CMapObject +0x178 / +0x1A8~~ settled [V]: `+0x178` is the **animation playback rate** (`animRate`):
   `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
@@ -537,6 +672,9 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   prototype comes separately from the descriptor): `CreateObjectFromDesc` sets it from `CObjectDesc +0x4c` through
   `CMapObject_SetName` 0x50F150, a non-empty name registers the object in the named hash `+0x12dd0`, `Read` / `Write` serialise
   it, `CWorldClient::SetNamedObjectState` 0x565380 matches script object names against it.
+- (2026-11-06, ren-b) Open: the reader of `CFigureClientSpecific +8` bit 0x200 (set for animated textures); who holds the other two
+  references that make `GetOrCreateFigure` re-blend only below refcount 3 [I, live row]; the radix-sort direction of
+  `DrawParticleQuads` above 128 quads; what pipeline vt[24] does exactly (four corners per point from xyz + size) [needs 3DfpFPU.dll].
 
 ## 7. Corrections to earlier notes
 
@@ -566,6 +704,24 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | `renderer.md` 3.4 step 6 | "the union rect -> owner `+0x100`" every draw | only when a rect pointer is passed: `CMapObject` slot 23 (levers, units); slot 22 (buildings, trees, the rest) passes none. `+0xEC` is `timeGetTime()` and is written, with specific flag 8, only after a real relight |
 | `functions.tsv` (`Mesh_ComputeBounds2D_C` 0x4E8900) | "projected 32-byte vertices" | the 16-byte transformed positions {x, y, z, rhw} of `g_0x7AEE10` |
 | `structs.tsv` `CWeather` | `+0x48 / +0x5C / +0x80` "MFC map", `+0x1C` "refcounted object" | MFC arrays: outcodes (data `+0x4C`), texture columns (`+0x60`), indices (`+0x84`); `+0x1C` = the RainSnow texture holder; `CRenderDevice +0x158` = the per-vertex fog switch [I] |
+| `renderer.md` 3.5 step 3 (deep read 2026-11-06, ren-b) | "`+0x148` = ambient << 24" | the specular array is the **edge-fade alpha argument** << 24 (unless material flag 0x10); the colour triple given to vt[40] is the material's `+0x50..+0x58`; the "crown" rule needs `FloraSpecialLight` (AppSettings `+0xB8`, default 1) and an exact name match |
+| `renderer.md` 3.5 step 6 | flag 0x40 after every draw | a scene-less part in `RenderLit` gets flag 0x40 only when an out RECT is passed; scene parts and `Render` set it whenever not culled |
+| `renderer.md` 4.5 (ren-a), `modules.md` / `functions.tsv` (0x44A2A0) | `Material_ParseName` parts are "upper-cased" and compared with "upper-case strings" | they are **lower-cased**: `CString::MakeUpper` 0x700EFE is really `MakeLower` (it calls 0x6EC8A8 = `_mbslwr`, LCMAP_LOWERCASE 0x100) and `MakeLower` 0x700EEC is `MakeUpper`; the 25 strings are lower-case (table in 4.5). Every one of the 35 "MakeUpper" callers lower-cases |
+| `renderer.md` 1 / 3.3, `figure-format.md` (`.fig` components) | components `{normalIdx, vertexIdx, uvIdx}` | `DrawMeshBatch` reads [0] as the position index and [1] as the colour (= normal) index; in the 89 sampled files both are equal, so the swap never shows |
+| `renderer.md` 3.3 | `LoadFig8` copies uvs, components, morph components, indices into the own arrays and calls `BindRawBuffers` | only the blended vertices and the normals are copied; the other four draw pointers point into the loaded file data; `BindRawBuffers` is not called (the CI3DFigure loaders 0x5A2500 / 0x5A3800 do copy everything) |
+| `renderer.md` 6, `functions.tsv` (0x4F9FD0 / 0x4FA670 / 0x4F3800) | `BuildFigureMeshB / C` "duplicate the two builders ... write into the scene entry"; `GetEntryValue` "the dword at entry[index]" | they re-blend only the vertex blocks of an existing part and `CRenderScene::ReplaceVertices` 0x4F3800 copies them over its range (the in-place re-morph of `GetOrCreateFigure` when the scene refcount < 3) |
+| `functions.tsv` (0x5A3800) | `CI3DFigure::BuildMorphed` "vertices / normals / bones from the 8 corners" | the UI-figure loader of the **old 6-corner** format (slot 21), copying every array |
+| `functions.tsv` (0x59F8F0 / 0x59F710) | `CFigure::ReadParts` "reads the part tree", `CollectParts` "builds temporary lists" | slot 17 `ReadFromStream` / slot 16 `WriteToStream`: one figure's mesh, bounds and header words through the stream's Read / Write |
+| `functions.tsv` (0x59FDF0) | `AccumulateWorldBounds` "skipped for figures farther than 1e9" | skipped when the local position's squared length exceeds 1e8 |
+| `renderer.md` 2.4, `functions.tsv` (0x500B70) | "MIPFILTER 18 = LINEAR when Mipmapping" | MIPFILTER = 2 = **D3DTFP_POINT** (nearest mip level) when Mipmapping, else 1 NONE; Filtering 1 and 2 are the same (byte read 0x5011D4..) |
+| `renderer.md` 2.2 slot 4 | `SetProjection` gets "the projection with row 0 columns 1..3 from the viewport" | the plain transpose of P (stack 6's top); the start-up P has a fixed 4:3 aspect |
+| `renderer.md` 2.1 step 4 | the default sun "is registered (`SetSunLight` 0x500800)" | `InitRenderer` stores it in `+0x1C` directly; pipeline vt[2] is not called there (RenderLit calls vt[2] per lit part) |
+| `functions.tsv` (0x503A40), `flows.md` | `DrawArrow3D` "a debug arrow ... of 18 line-list indices" | the `SelectionType` 1 selection marker, 6 triangles (a triangle list) |
+| `functions.tsv` (0x6FD026 / 0x6FD060) | `pow` / "pow(x, y) core" | `_hypot` / `_hypothlp` (the CRT operation code passed is 0x18 = OP_HYPOT; pow is 0x1D) |
+| `functions.tsv` (0x5ACE80) | `Menus_GetNewGameRect` reads "the MainMenu / NewGame rect" | `Menus_LoadRects`: 11 main / escape menu button rects from `menus.reg` into `g_0x7C8048` |
+| `functions.tsv` (0x505CB0) | `AnimNodeOld_ReadFromData` "+0xe4 / +0xec two doubles rounded to int64" | a raw 16-byte copy of the rest rotation quaternion (the FPU qword-copy idiom) |
+| `structs.tsv` `EffectRecord` | `+0x8` "vector<EffectPassRecord>", `+0x14` passCount | `+0x8` = the vector of state-block handles (one per pass), `+0x14` = stages bound by the first pass |
+| `figure-format.md` (older format table) | bounds "244 B" at 8, count at 0xF8 | 240 bytes (3 x 0x48 corner groups + 6 radius floats = 0xF0); 8 + 0xF0 = 0xF8 |
 
 ## 8. Function index (one line each; full purposes in the batch file)
 
@@ -600,16 +756,16 @@ DeleteEffects; 0x4FDB00 EraseEffect; 0x4FDB50 FindEffect; 0x4FDBA0 GetDefaultEff
 
 **Render manager / scene** — 0x4F68C0 CRenderManager ctor; 0x4F6D30 OpenResourceFile; 0x4FAB00 GetModel; 0x4F7B10 CreateScene; 0x4F77C0
 CreateSceneFromLink; 0x4F7150 FindOrCreateScene; 0x4F75E0 GetOrCreateFigure; 0x4F7480 LoadFigure; 0x4F7D20 LoadFigFile; 0x4F7370 MakeFigureName;
-0x4F7F00 BuildFigureMesh; 0x4F87D0 BuildFigureMeshOld; 0x4F9FD0 / 0x4FA670 BuildFigureMeshB / C; 0x4F7E70 LoadAnimatedPicture; 0x4F2C00
+0x4F7F00 BuildFigureMesh; 0x4F87D0 BuildFigureMeshOld; 0x4F9FD0 / 0x4FA670 ReblendFigureVertices / Old (were BuildFigureMeshB / C); 0x4F7E70 LoadAnimatedPicture; 0x4F2C00
 CRenderScene ctor; 0x4F30F0 AddMesh; 0x4F3C60 DrawMesh; 0x4F3FA0 DrawMesh2; 0x4F42D0 DrawMeshBlended; 0x4F4150 DrawMeshBlended2; 0x4F3780
-GetMeshRange; 0x4F3800 GetEntryValue; 0x4F3040 HasMesh; 0x4F3530 RemoveMesh; 0x4F45E0 RecomputeScreenRect; 0x4F4680 MorphAndProjectEntry;
+GetMeshRange; 0x4F3800 ReplaceVertices (was GetEntryValue); 0x4F3040 HasMesh; 0x4F3530 RemoveMesh; 0x4F45E0 RecomputeScreenRect; 0x4F4680 MorphAndProjectEntry;
 0x4F4850 RasterizeEntry2D; 0x4F4B50 EstimateTriangles; 0x4F4B90 FindOrCreateEntry; 0x4F4CE0 AddEntry; 0x4F3870 / 0x4F3AD0 AddQuads / Ex (UI
 quads); 0x5A9A50 FigureModel ctor; 0x5A9C90 FigureModel::Destroy; 0x5A9EF0 GetAnimationResource.
 
 **CFigure** — 0x5AABC0 ctor; 0x59F030 dtor; 0x59F210 Init; 0x59F2B0 Done; 0x5A6C70 InitMesh; 0x5A6C80 DoneMesh; 0x5A4CF0 LoadFigHeader; 0x5A5C70
-LoadFig8; 0x5A4D60 LoadFigOld; 0x5A2490 Load (CI3DFigure); 0x5A2500 CI3DFigure::ParseFIG; 0x5A3800 CI3DFigure::BuildMorphed; 0x5A18E0
+LoadFig8; 0x5A4D60 LoadFigOld; 0x5A2490 Load (CI3DFigure); 0x5A2500 / 0x5A3800 CI3DFigure::LoadFig8 / LoadFigOld (were ParseFIG / BuildMorphed); 0x5A18E0
 ReadBoundsHeader; 0x5A1210 ReadBoundsFIG6; 0x5AAE60 / 0x5AB9A0 PartRecord_ReadBoundsFIG8 / 6; 0x5A37C0 ComputeBounds; 0x5A6D40 BindRawBuffers;
-0x5A0B10 SetMorphDeltas; 0x5A0CD0 MorphAndProjectVertices; 0x5A0E80 RasterizeSilhouette2D; 0x59FDF0 AccumulateWorldBounds; 0x59F3F0
+0x5A0B10 SetMorphDeltas; 0x5A0CD0 MorphAndProjectVertices; 0x5A0E80 RasterizeSilhouette2D; 0x59FDF0 AccumulateWorldBounds; 0x59F8F0 / 0x59F710 ReadFromStream / WriteToStream (were ReadParts / CollectParts); 0x5ACE80 Menus_LoadRects; 0x59F3F0
 SetRotationQuat; 0x59F510 UpdateWorldTransform; 0x59F0F0 CopyFrom; 0x5A4B30 NegateQuats; 0x59F3D0 SetOwner; 0x59F390 BindClientSpecific; 0x453440
 GetName; 0x5A7010 CFigureClientSpecific ctor; 0x5A70E0 Init; 0x5A7640 Render; 0x5A7A70 RenderLit; 0x5A7160 AnimateTextureFrame; 0x5A7290
 DrawBoundsDebug; 0x5A9310 DrawProjected64; 0x5A8B00 / 0x5A8E60 / 0x5A8FB0 ComputeScreenRect / 2 / 3; 0x5E6C60 CI3DFigure::Init; 0x5E6D90

@@ -1694,7 +1694,7 @@ EffectPassRecord			0x24	uint	destBlend
 CStateBlockSet		0x118	0x0	pointer	vtable	0x73D840 (ctor goes through 0x73D860)
 CStateBlockSet			0x4	int	refcount	
 CStateBlockSet			0x8	pointer	device	IDirect3DDevice7 (AddRef'd)
-CStateBlockSet			0xc	byte[236]	caps	D3DDEVICEDESC7 (wMaxSimultaneousTextures at +0xC + 0xB2 bounds the stages of a pass)
+CStateBlockSet			0xc	byte[236]	caps	CORRECTION: was "wMaxSimultaneousTextures at +0xC + 0xB2": D3DDEVICEDESC7 from GetCaps; RegisterEffect reads dwTextureOpCaps at caps +0xB4 (this +0xC0) and wMaxSimultaneousTextures at caps +0xBA (this +0xC6) (byte read of 0x4FD3A6..)
 CStateBlockSet			0xf8	byte[20]	effectHash	id -> effect record (RegisterEffect / FindEffect)
 CStateBlockSet			0x10c	pointer	defaultHandles	vector of 9 state-block handles (effects 0..8: BuildDefaultEffect)
 CRenderManager		0x38	0x0	pointer	vtable	0x73D808; the world's figure loader behind the figure manager (slots 3 CreateScene, 4 FindOrCreateScene, 5 ClearNamedMap, 6 GetOrCreateFigure)
@@ -1789,7 +1789,7 @@ CFigure			0x124	pointer	modelName	CString
 CFigure			0x128	pointer	morphDeltas	Vec3[] per vertex from the .anm track (SetMorphDeltas; count +0x12C, cap +0x130, grow +0x134); added to the SoA vertices at draw
 CFigure			0x138	pointer	diffuseColors	uint[] one per normal (4 * normal blocks; count +0x13C, cap +0x140, grow +0x144): the light kernel output
 CFigure			0x148	pointer	specularColors	uint[] (count +0x14C ...): alpha << 24
-CFigure			0x158	int	materialKind	.fig header +0x20 (17..25)
+CFigure			0x158	int	materialKind	header word at file +0x20 (FIG8) or +0 (old format): CMaterial kind 0x11..0x19 = leather, wood, metal, cloth, skin, stone, magic, (0x18 no template), metal (Material_ParseName strings le wo me cl sk st mg wt cr; materials.res table 0x743BF8)
 CFigure			0x15c	int	textureNumber	.fig header +0x24 (0..0x10; 0xD / 0xE / 0x10 = animated uv grids)
 CFigure			0x160	float[3]	boundsCentre8	ReadBoundsHeader scratch (blended centre / min / max / radius of the 8 corners)
 CFigure			0x16c	float[3]	boundsMin8	
@@ -4052,11 +4052,12 @@ CCampScreen2			0x218	int	voiceSelected	selected voice row (OnLButtonDown rows 9.
 CCampScreen2			0x21c	int	voiceChannel	UI_PlaySound handle of the voice sample LoadSlotSounds plays (a random sample of the hero's voice set from the sound registry g_0x7AF364); stopped and set to -1 before the next
 EffectRecord		0x1c	0x0	pointer	vtable	vt 0x73D880 (base EffectRecord_Base 0x73D888); refcounted render effect built by CStateBlockSet::RegisterEffect (generic sweep A 2026-11-01)
 EffectRecord			0x4	int	refcount	
-EffectRecord			0x8	pointer[3]	passes	std::vector<EffectPassRecord 0x28> begin / end / capacity
-EffectRecord			0x14	int	passCount	
+EffectRecord			0x8	pointer[3]	passHandles	CORRECTION: was "std::vector<EffectPassRecord 0x28>": a vector of D3D state-block handles (dwords), one per pass: [0] = the stage-state block of the first pass, [k] = the SRCBLEND / DESTBLEND block of extra pass k (CStateBlockSet::RegisterEffect 0x4FD2A0; DrawIndexedWithMaterial applies them)
+EffectRecord			0x14	int	stagesInFirstPass	CORRECTION: was passCount: the number of texture stages (records) the first pass binds = min(records, wMaxSimultaneousTextures) or 1 with onePerPass; the pass count is the handle vector's size (RegisterEffect 0x4FD2A0)
 EffectRecord			0x18	int	effectId	returned by slot 1 GetEffectId
 CTextManager			0x1c	pointer	archiveListHead	the .res archive list (TextArchiveList: head pointer at +0 of the embedded list; entries {next, prev, name std::string, CResourceBase*}); texts.res / textsLmp.res
 CFigureSpecific	CObject	0x20	0x1c	pointer	figure	owner figure (abstract base of CFigureClientSpecific, vt 0x73FB44: pure slots 2, 3, 11, 12); CFigure (CFigure::BindClientSpecific)
+CFigureSpecific			0x8	uint	flags	bit 0x200 (g_0x790C0C) set by Render / RenderLit whenever the part has an animated texture kind 0xD..0x10 (before AnimateTextureFrame); Init 0x5A70E0 clears the word; no reader found in this round [?]
 AiTileMaterial		0x118	0x0	char[256]	name	tileDesc.reg material name (16 records at CAIMap +0xFC materials, index = the section name as a number)
 AiTileMaterial		0x118	0x100	int	speed	tileDesc.reg Speed (default -1)
 AiTileMaterial		0x118	0x104	int	costMul	tileDesc.reg CostMul (default -1 from the reg; record default 1)
