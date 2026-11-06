@@ -341,33 +341,35 @@ quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip 
 
 ## Known gaps
 
-State on 2026-11-06, after the offline pass that closed the pages' "What is not known" lists. What is left is either a **live**
-check (the behaviour on screen or on the network; rows in `_cpr/claude-re/full/live-checklist.tsv`) or **untestable** (no code
-path reaches it in the shipped game).
+State on 2026-11-06, after the offline pass that closed the pages' "What is not known" lists and the live sessions that
+settled every row of `_cpr/claude-re/full/live-checklist.tsv` (the results are tagged `[V live ...]` on the pages). What is left
+is **untestable** (no code path reaches it in the shipped game) or a field that no code reads.
 
 Per page:
 
 - world-server.md: nothing open (settled 2026-11-06: the `LoadSave` stuck-unit fix-up, the previous-state records, `Quest +0x10`,
   the loot owner check, the mercenary dialogs, why `bz7g` is kept, the `.mp` flag byte).
-- world-client-players.md: nothing open offline (`CUnit +0x256` is a 0 / 1 miss flag, `UnitProto +0xB0` is Detections Sight);
-  live: the bridge receiver triangles drawn once per walkable quad.
-- combat.md / unit-ai.md: nothing open offline; live: online kill XP, the floating damage colour on monsters, the alarm wait on a
-  map with a set Wait.
-- pathfinding.md: live: the `FindUnitsNear` corner miss for radii 16..32 m (the arithmetic is verified).
+- world-client-players.md: nothing open (`CUnit +0x256` is a 0 / 1 miss flag, `UnitProto +0xB0` is Detections Sight; live: a
+  bridge owner with several walkable quads is clipped once per quad, the fog of war, HideObject only in the base scenes).
+- combat.md / unit-ai.md: nothing open (live: the online kill XP split, the green damage numbers on monsters, the alarm countdown
+  of 75 whatever the slot Wait).
+- pathfinding.md: nothing open (live: the `FindUnitsNear` corner miss for radii 16..32 m).
 - spells.md: the buff `+0x10` flag byte is never read; shapechange and comprehend have no server script; the campfire that never
   ends is design (bugs.md #16).
 - items.md: nothing open (`CloneItem` settled).
 - renderer.md: nothing open offline (settled 2026-11-06: rain / snow vertex colours are never written, the figure flag 0x200 is
   write-only, particles are sorted back to front, the alternate animation tracks can never load, the scene refcount holders, the
-  texture kinds); live: the stun pulse, the in-place re-morph, the rain / snow colours on screen.
-- terrain-lighting.md: live: which water change makes the 0.8 s stripes, the water pass blend. (Settled 2026-11-06: the visible
+  texture kinds; live: the stun pulse is invisible, the re-morph is in place, the rain vertices are white from `CVertexScratch::Reserve`).
+- terrain-lighting.md: nothing open (live: the 0.8 s water stripes are the tile cycle, the water pass draws with SRCALPHA /
+  INVSRCALPHA blending). (Settled 2026-11-06: the visible
   terrain is a +-100 m square around the camera's ground point (`SetVisibleArea`; `SetVisibleQuad` is dead), the sky's second
   colour is a sun glow, the released-texture cache.)
 - ui-framework.md: nothing open (the info panels' `Format` arguments, the font sizes, the cursor compose operands and square
   cursor frames settled 2026-11-06); `CamCtlClassic` / `CamCtlSimple` are dead.
 - ui-screens.md: nothing open offline (settled 2026-11-06: NPC portraits are quest item icons, shops re-roll after each
   `QuestComplete`, `Exchange(a, b, c)` = partner offer / our offer / our party, the hero creation limits, the master request id,
-  one exit per talk zone, the battle HUD branches, the minimap squares = quest lights, the addrbook id).
+  one exit per talk zone, the battle HUD branches, the minimap squares = quest lights, the addrbook id; live: a sold prototype
+  joins the merchant's allowed list, combat music waits for the calm track).
 - net-transport.md: the delta codec bases are settled (A = creation state, B = last sent state); the master server's reply is
   untestable (no master exists).
 - script-vm.md / gs-functions.md: nothing open (no `CArchive` is ever made, so every MFC `Serialize` path is dead;
