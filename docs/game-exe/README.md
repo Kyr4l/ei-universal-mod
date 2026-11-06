@@ -394,6 +394,14 @@ Global:
   the script decompiler `GSWorld::Decompile` 0x4D53C0 and the five one-list `Compiler_*` entry points, the dead vertex-buffer path
   of the renderer, `CamCtlClassic` / `CamCtlSimple`, `OnMsg38_Unused` and the ten script ids with no `Run` case.
 
+## Exception-handling code (eh-funclets.tsv)
+
+The compiler's C++ exception code is listed separately in `eh-funclets.tsv` (generated from the exe's own tables by
+`_cpr/claude-re/full/tools/ehmap.py`, 2026-11-06): 2,963 handler stubs (`mov eax, FuncInfo; jmp __CxxFrameHandler`, FuncInfo magic
+0x19930520), 12,657 unwind funclets (each destroys one local or member when an exception leaves its owner function between two
+states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 237 KB in all. Every row names its owner function
+(the function whose prologue registers the stub), the unwind state and the code. These blocks are not in `functions.tsv`.
+
 ## Coverage
 
 Coverage (15770 functions): named 15770.
