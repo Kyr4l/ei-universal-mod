@@ -294,25 +294,29 @@ updated / removed on the receiving side.
 | kind | class (size, vtable) | wire payload | sent by -> list | receiver handlers (created / updated / removed) |
 |---|---|---|---|---|
 | 1 | `TwoStringMessage` 0x3c 0x73BC70 player record | `name\0, unit\0, u32 state, u8 isHost, u32 heroId, u32 playerId` | S `+0x2590` -> every peer | C `OnPlayerRecordAdded` 0x41E490 / UI refresh 0x41E510 / `OnPlayerRecordRemoved` 0x41E520 |
-| 2 | `IdStringMessage` 0x20 0x73BC88 chat line | `u32 lineId, text` | S `+0x2594` -> everyone or the addressed peer (`+0x1c`), only lines newer than the player's watermark | C `OnChatLine` 0x41E5D0 (`CInterface::AddChatLine`) / - / `OnChatLineRemoved` 0x41E690 |
-| 3 | `StringPairMessage` 0x24 0x73BCA0 quest host line | `"ip:8000", zone` | S `+0x25a0` while a quest runs | C 0x41E730 (`+0x25ec`; `RequestMpMapChange` takes the zone from it) / - / 0x41E760 |
+| 2 | `IdStringMessage` 0x20 0x73BC88 chat line | `u32 lineId, text\0` | S `+0x2594` -> everyone or the addressed peer (`+0x1c`), only lines newer than the player's watermark | C `OnChatLine` 0x41E5D0 (`CInterface::AddChatLine`) / - / `OnChatLineRemoved` 0x41E690 |
+| 3 | `StringPairMessage` 0x24 0x73BCA0 quest host line | `"ip:8000"\0, zone\0` | S `+0x25a0` while a quest runs | C 0x41E730 (`+0x25ec`; `RequestMpMapChange` takes the zone from it) / - / 0x41E760 |
 | 4 | `TwoRefMessage2` 0x14 0x73BCB8 peer record | `ref playerRecord` | S `+0x25a4`, each peer gets only its own | C `OnOwnPeerRecord` 0x41E430 (`+0x25f0`) / - / 0x41E460 |
 | 5 | `JoinMessage` 0x34 0x73BBF8 | `name\0, unit\0, u32 state (4 created / 1 lobby / 3 loading / 0 in quest), u8 hostFlag, u32 heroId (-1 none)` | C `+0x2600`, always; version ++ on every field change | S `OnJoin` 0x41ADB0 / `OnJoinUpdate` 0x41AD80 / `OnLeave` 0x41B0C0 |
-| 6 | `ChatMessage` 0x18 0x73BC28 | `text` | C via `QueueTimedObject` 0x41D1A0 (60 s) | S `OnChat` 0x41B1C0 -> `PostChat` "^%i%s^7: %s" |
-| 7 | `NamedEventMessage` 0x1c 0x73BC40 | `u32 kind, name` (0 set map name, 1 quest event `<quest>_1/_2/_3`, 2 / 3 kick / ban by name, 4 / 5 by id) | C `SendNamedEvent` 0x41D260 (timed, 60 s) | S `OnNamedEvent` 0x41B2A0 (host only; 3..5 need `IsPeerHost`) |
-| 8 | `StringMessage` 0x18 0x73BCD0 quest state | `"<quest>_1"` (available) / `_2` (zone open) / `_3` (completed) | S `+0x25ac` -> the host player only | C `OnQuestStateAdded` 0x41E790 (`Briefing_SetNamedFloat`) / - / `OnQuestStateRemoved` 0x41E850 |
-| 9 | `StringMessage2` 0x18 0x73BD00 current map | `"<quest>"` | S `+0x25a8` -> everyone | C 0x41E900 (`+0x25f4`; without a local server `Lobby_QueueMapFileTransfer(name)` + `QuestFiles_Scan`) / - / 0x41E960 |
-| 10 | `StringDwordsMessage` 0x20 0x73BCE8 variable | `name, f32 value, u32 serial` | S `+0x25b0` -> everyone (`SetVariable` 0x419730, `MaxVariable` 0x4197D0, value 0 removes) | C `OnVariableAdded` 0x41E990 (`Campaign_AdvanceMission`) / 0x41EA10 / `OnVariableRemoved` 0x41EA20 |
-| 11 | `ListStringMessage` 0x2c 0x73BD18 file transfer | `u16 chunkCount, u32 size, name` | S `+0x2598` -> everyone (`AddFileTransfer` 0x419A00) | C `OnFileTransferAdded` 0x41EAC0 / - / `OnFileTransferRemoved` 0x41EBF0 |
+| 6 | `ChatMessage` 0x18 0x73BC28 | `text\0` | C via `QueueTimedObject` 0x41D1A0 (60 s) | S `OnChat` 0x41B1C0 -> `PostChat` "^%i%s^7: %s" |
+| 7 | `NamedEventMessage` 0x1c 0x73BC40 | `u32 kind, name\0` (0 set map name, 1 quest event `<quest>_1/_2/_3`, 2 / 3 kick / ban by name, 4 / 5 by id) | C `SendNamedEvent` 0x41D260 (timed, 60 s) | S `OnNamedEvent` 0x41B2A0 (host only; 3..5 need `IsPeerHost`) |
+| 8 | `StringMessage` 0x18 0x73BCD0 quest state | `"<quest>_1\0"` (available) / `_2` (zone open) / `_3` (completed) | S `+0x25ac` -> the host player only | C `OnQuestStateAdded` 0x41E790 (`Briefing_SetNamedFloat`) / - / `OnQuestStateRemoved` 0x41E850 |
+| 9 | `StringMessage2` 0x18 0x73BD00 current map | `"<quest>\0"` | S `+0x25a8` -> everyone | C 0x41E900 (`+0x25f4`; without a local server `Lobby_QueueMapFileTransfer(name)` + `QuestFiles_Scan`) / - / 0x41E960 |
+| 10 | `StringDwordsMessage` 0x20 0x73BCE8 variable | `name\0, f32 value, u32 serial` | S `+0x25b0` -> everyone (`SetVariable` 0x419730, `MaxVariable` 0x4197D0, value 0 removes) | C `OnVariableAdded` 0x41E990 (`Campaign_AdvanceMission`) / 0x41EA10 / `OnVariableRemoved` 0x41EA20 |
+| 11 | `ListStringMessage` 0x2c 0x73BD18 file transfer | `u16 chunkCount, u32 size, name\0` | S `+0x2598` -> everyone (`AddFileTransfer` 0x419A00) | C `OnFileTransferAdded` 0x41EAC0 / - / `OnFileTransferRemoved` 0x41EBF0 |
 | 12 | `RefBlobMessage` 0x54 0x73BD30 file chunk | `ref transfer, u16 index, byte[64]` | S (group 1) -> only the peers that requested that transfer | C `OnChunkReceived` 0x41ECC0 / - / `OnChunkRemoved` 0x41EF10 |
 | 13 | `TwoRefMessage` 0x14 0x73BC58 chunk request | `ref transfer` | C `+0x25e8` | S `OnChunkRequest` 0x41B690 / - / `OnChunkRequestRemoved` 0x41B720 |
-| 14 | `RefDwordsStringMessage` 0x24 0x73BD48 player event | `ref player, u32 kind (0 experience, 1 money, 2 give item, 3 take item, 4 clear kind-0x14 items), u32 value, text` | S `+0x25b4` (60 s) -> the addressed player | C `OnPlayerEventReceived` 0x41EF90 -> `ApplyPlayerEvents` 0x41CD80 |
+| 14 | `RefDwordsStringMessage` 0x24 0x73BD48 player event | `u32 kind (0 experience, 1 money, 2 give item, 3 take item, 4 clear kind-0x14 items), u32 value, text\0` (the `ref player` +0xc only routes it on the server, it is not written) | S `+0x25b4` (60 s) -> the addressed player | C `OnPlayerEventReceived` 0x41EF90 -> `ApplyPlayerEvents` 0x41CD80 |
 | 15 | `ObjListMessage` 0x34 0x73BDD0 swap offer | `u32 n, n x ref item blob, u32 money, u8 confirmed, u32 partnerNonce, u32 nonce, ref owner, ref partner` | C `+0x260c` (`CreateExchangeRecord` 0x41E270, `FillParty` 0x41DA50) | S `OnPairRecordAdded` 0x41B7A0 / `ConfirmPlayerPair` 0x41B970 / `OnPairRecordRemoved` 0x41BA30; C (the partner's) `OnExchangeRecordAdded` 0x41EFF0 / 0x41F090 / `OnExchangeRecordRemoved` 0x41F0D0 |
 | 16 | `BlobMessage` 0x34 0x73BD78 offered item | `u16 size, bytes` (the item's own serializer, 72 bytes for a .mp item) | C, one per item on the counter | S no-op 0x41BA20; C 0x41F150 / 0x41F180 / 0x41F1B0 (`LoadPartnerParty`) |
 | 17 | `ObjPairMessage` 0x28 0x73BD60 swap pair | `ref recordA, ref recordB, u8 confirmed, u32 nonceA, u32 nonceB` | S `+0x25bc` -> the two players | C `OnExchangePairAdded` 0x41F1E0 / 0x41F270 (confirmed -> `CInterface::OnLobbyRef` opens the exchange screen) / 0x41F3A0 |
 
 The `Reset` / `Clone` slots and the ctors of every class are at 0x413350-0x4177A0 (batch rows); `ServerInfo` 0x48 0x73BB28 (parent
 `NetPeerInfo` 0x73BB40) is the type-5 payload, not a replicated object.
+Every string field is sent with its NUL: each `Write` copies `strlen + 1` bytes and each `Read` advances by `strlen + 1` [V] (t7 g02).
+Copy semantics of the object refs: a ref slot that takes an object already marked shared (byte `+6` bit 0) stores a `vt[3] Clone` of it,
+and dropping an owning ref of an object that others still hold sets the dead bit (byte `+7` bit 7) and runs `vt[2] Reset` on it first
+(`ObjRef_Assign` 0x418BE0, `ObjRef_ReleaseExt6` 0x417A30 and its copies) [V].
 
 ### 4.3 Join, leave, host, kick / ban [V]
 
@@ -599,6 +603,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | `functions.tsv` (merged by the caller) | `LzCompress` "rewrites the buffer in place"; `Scene3ds_ConvertToModel` | `(compressor, input view, output buffer)`; `Scene3ds_ReadBinaryScene` (a binary scene reader, dead in practice) (batch-t5-wcp-net rows) |
 | `structs.tsv` | `LzCompressor +0 byte[10256] "1 KB ring window and the Huffman / bit writer"`; `DeltaCodec +0 byte[160] streams`; `DeltaCodecSet +0x22 inStream` | the LZ coder has no Huffman part (window, window copy, chain, hash heads, bit writer, pos, match); four named CMemStreams; `+0x1c` (batch CORRECTION rows) |
 | `functions.tsv` (merged by the caller, t7 2026-11-06) | `BitWriter_PutByte` 0x4357C0; `BitReader::GetRemaining` 0x441640; `RbTree_RotateRight` 0x43E300 / `RotateLeft` 0x43E350; `HashTable_ClearNodes` 0x439BB0; `NetItem_Ctor / Dtor` | `BitWriter_PutBit` (one bit per call, LSB first, used by `NetWriter::WriteRef`); `GameBuffer::Length` (validEnd - data + bias); the two rotations are swapped (0x43E300 rotates LEFT: left +8, right +0xc); `RbTree18_Clear` (an rb-tree); the 0x2c-byte record is `NetServerRecord` [V] |
+| this page 4.2 / `structs.tsv` (t7 g02) | kind 6 / 7 / 8 / 9 strings "no NUL on the wire"; kind 14 payload starts with `ref player` | every string is written with its NUL (`ChatMessage::Write` 0x413B10 etc.: `strlen + 1`); `RefDwordsStringMessage::Write` 0x416C00 writes only `u32 kind, u32 value, text\0`, the player ref is server-side routing [V] |
 
 ## 8. Function index
 

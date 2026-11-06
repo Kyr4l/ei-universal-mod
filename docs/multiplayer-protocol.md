@@ -147,7 +147,7 @@ read); 0x4355B0 writes a `ref`.
 | 11 | quest of the session | u16 index, u32, str file ("z3xq1.mq") | server, the quest list at join | client |
 | 12 | file chunk | ref transfer, u16 index, 64 bytes | server, only to the peers that requested that transfer | client: a 64-byte chunk of a map file transfer (rows 12 / 14 / 17 decoded in game-exe/net-transport.md) |
 | 13 | | ref | client | server 0x41B690: sets the sender's ref to the current world (0x79B924), then 0x420610 / 0x4229B0 |
-| 14 | player event | ref player, u32 kind (0 experience, 1 money, 2 give item, 3 take item, 4 clear the kind-0x14 items), u32 value, str | server (kept 60 s), to the addressed player | client: applied to that player's party |
+| 14 | player event | u32 kind (0 experience, 1 money, 2 give item, 3 take item, 4 clear the kind-0x14 items), u32 value, str (the addressed player ref only routes it on the server and is not sent: game-exe t7 2026-11-06) | server (kept 60 s), to the addressed player | client: applied to that player's party |
 | 15 | party | u32 n, n refs (the kind-16 members), u32, u8, u32, u32, ref, ref | client (client+0x260C, filled by 0x41DA50) | server: the heroes' list |
 | 16 | hero blob | u16 len, bytes (the member's own serializer, vtable +0x28: NOT the .mp format) | client, one per party member | server |
 | 17 | exchange pair | ref record A, ref record B, u8 confirmed, u32 nonce A, u32 nonce B | server, to the two players | client: a hero swap between two players; confirmed opens the exchange screen |

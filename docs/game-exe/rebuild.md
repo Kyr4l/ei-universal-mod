@@ -26,7 +26,7 @@ Result: `build/game_rebuilt.exe`, **md5-identical** to the original, runs to the
 | `void`-typed function whose asm returns `this` in eax | callers read garbage | `fixvoid.py` returns `this` (507 functions) |
 | hidden register parameter (edx / ecx not in Ghidra's prototype) | callee reads garbage | `regs.py` finds them, callers and callee are denied |
 | one buffer split into several locals | gcc reorders them, a callee overruns | `fixlocals.py` puts the frame locals into one packed struct at the original offsets, `fixtail.py` pads it |
-| indirect call through a register keeps ecx | `this` lost (`CallN`) | denied |
+| indirect call through a register keeps ecx | `this` lost (`VectorCtorIterator` 0x40CE30, was `CallN`) | denied |
 | Ghidra value casts `(int)f` / `(float)i` that are really raw dword moves | wrong numbers | `fixcasts.py`: bit reinterpretation where the asm has no fild/fistp, or in bit-operator statements |
 | globals typed `undefined4` but only used as x87 floats | integer conversion of a float | `globtypes.py` + `build.py ctype()` declare them float/double, `fixglobals.py` fixes integer-style accesses |
 | imports named `_AIL_xxx_8` have no header | C assumes cdecl, stack popped twice | declared `stdcall` in the generated `proto.h` |

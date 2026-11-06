@@ -396,4 +396,4 @@ Global:
 
 ## Coverage
 
-Coverage (13881 functions): named 13881.
+Coverage (15770 functions): named 15770.

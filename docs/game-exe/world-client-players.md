@@ -55,7 +55,8 @@ Addresses are VAs; offsets are bytes; "tick" = `CWorld +0x64` (18/s on the serve
 
 **Client side** (`CPlayerClient`): `SendClientState` 0x667680 (slot 6, every frame from `CWorldClient::Update`): state 0 and the net stream
 ready -> when `+0x85` (upload pending) writes `0x08` + `MpFile::Write(party +0x70, full)`, then `0x00` + the identity block, state = 1; state 2
--> `0x40` + the active camera position (x, y as two floats, `CObject3D::GetActiveTransformPtr(g_0x7AF7C8)`); both end with `FlushSendStream`.
+-> `0x40` + the camera focus point (x, y as two floats, `CCamera::GetFocusPoint` 0x40FB20 on `g_0x7AF7C8`: the look-at target `+0xE0`, or the
+eye `+0x1C` while the camera is free / playing a .cam, flags `+8 & 0x60`) [V]; both end with `FlushSendStream`.
 `Update` 0x667A30 (slot 23): `netStream vt[6]`, `vt[9](packet)`, inflate into `+0x34`, `DispatchPackets`; returns 0 on a parse error and
 `CWorldClient::Update` then `FatalError("CWorldClient::Segment... Disconnected")`. The receive stream's ok byte `+0x39` is cleared by a short
 read: every handler that returns 0 ends the session with `NetFatalError` 0x664B70 ("Error during parsing update prevID %x curID %x"). [V]
@@ -432,7 +433,8 @@ seven inline 4-byte names: head `hr hd`, body `bd rh1 rh2 rh3 lh1 lh2 lh3`, legs
 in this round.
 
 **Camera** [V]: `+0x210` (`SetCamera` 0x565670) is the CCamera whose position bounds the terrain window and the grid window; `CameraLookAt`
-0x5662B0 (message 04) moves it to a point; the view-point message `40` carries the active transform of `g_0x7AF7C8` (the camera controller).
+0x5662B0 (message 04) moves it to a point; the view-point message `40` carries the focus point of `g_0x7AF7C8` (the CCamera: its target
+`+0xE0`, or its eye `+0x1C` when free / playing a .cam; `CCamera::GetFocusPoint` 0x40FB20) [V].
 
 ## 9. What is not known
 
@@ -500,6 +502,7 @@ Open after the T5 deep read (2026-11-06):
 | `terrain-lighting.md` 10.3 | "the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code"; "A print centred on a bridge quad gets no mesh" | `+0x1F4` is the CBridgeManager quad list (filled by `AddQuad`); prints (objects = 1) and unit shadows (objects unless the caster has walkable parts) are clipped onto the bridge-owner parts; a print on a bridge gets no TERRAIN mesh but does get the bridge mesh (page not owned by this round: reported) |
 | `data-sound.md` 3.1 row 33 / `functions.tsv` | "`+0x118` also selects the animation set (`CUnitClientSpecific::PlayAnimation` 0x537500)" | 0x537500 is slot 46 `PlayHitEffect`; the field it reads is `RaceModel +0x118` Skin Type (hit-sound material), not `UnitProto +0x118` Weapon 1 (reported) |
 | `functions.tsv` | `CUnitClientSpecific::BuildArmorModelNames` 0x535CB0; `CMapObject::PickTest_v22` / `GetScreenRect_v23` | `UnitProto::BuildModelPartNames` (`this` = the 0x120 row); slot 22 = `Draw` without a rect, slot 23 = `Draw` recording the screen rect (batch-t5-wcp-net) |
+| this page 2 / 8 (t7 g02) | message `0x40` = "the active camera position" (`CObject3D::GetActiveTransformPtr`) | `CCamera::GetFocusPoint` 0x40FB20: the camera's look-at target `+0xE0`, or the eye `+0x1C` only while the camera is free / playing a .cam [V] |
 
 ## 11. Function index
 

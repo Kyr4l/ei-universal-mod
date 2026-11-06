@@ -3754,11 +3754,11 @@ IdStringMessage			0x10	byte[12]	text	std::string, already colour-coded ("^%i%s^7
 IdStringMessage			0x1c	pointer	targetPeer	server only: NetPeer the line is addressed to (0 = everyone)
 TwoRefMessage2	NetMessage	0x14	0xc	pointer	playerRecord	kind 4 peer record: ref to the TwoStringMessage of the player
 TwoRefMessage2			0x10	pointer	peer	server only: the NetPeer; a client receives only its own record (LobbyClient +0x25f0)
-ChatMessage	NetMessage	0x18	0xc	byte[12]	text	std::string (kind 6, client -> server, no NUL on the wire)
+ChatMessage	NetMessage	0x18	0xc	byte[12]	text	std::string (kind 6, client -> server), sent WITH its NUL (Write 0x413B10 copies strlen + 1); CORRECTION: was 'no NUL on the wire'
 NamedEventMessage	NetMessage	0x1c	0xc	int	kind	0 set map name, 1 quest event "<quest>_1/_2/_3", 2 kick by name, 3 ban by name, 4 kick by id, 5 ban by id
-NamedEventMessage			0x10	byte[12]	name	std::string (kind 7, no NUL on the wire)
-StringMessage	NetMessage	0x18	0xc	byte[12]	text	std::string: quest state "<quest>_1" (map list, kind 8); no NUL on the wire
-StringMessage2	NetMessage	0x18	0xc	byte[12]	text	std::string: the current map / quest name (kind 9); no NUL on the wire
+NamedEventMessage			0x10	byte[12]	name	std::string (kind 7), sent with its NUL after u32 kind (Write 0x413F00); CORRECTION: was 'no NUL on the wire'
+StringMessage	NetMessage	0x18	0xc	byte[12]	text	std::string: quest state "<quest>_1" (map list, kind 8), sent with its NUL (Write 0x415800); CORRECTION: was 'no NUL on the wire'
+StringMessage2	NetMessage	0x18	0xc	byte[12]	text	std::string: the current map / quest name (kind 9), sent with its NUL (Write 0x415FE0); CORRECTION: was 'no NUL on the wire'
 StringPairMessage	NetMessage	0x24	0xc	byte[12]	hostAddress	std::string "ip:8000" (kind 3: LobbyServer +0x25a0 current quest line)
 StringPairMessage			0x18	byte[12]	zoneName	std::string
 StringDwordsMessage	NetMessage	0x20	0xc	byte[12]	name	std::string (kind 10 variable: "q.<quest>.<quest>", script names)
@@ -3773,7 +3773,7 @@ RefBlobMessage			0x10	ushort	index	chunk index
 RefBlobMessage			0x12	byte[64]	data	64 bytes of the file (the last chunk is padded)
 TwoRefMessage	NetMessage	0x14	0xc	pointer	transfer	kind 13 chunk request: ref to the ListStringMessage
 TwoRefMessage			0x10	pointer	peer	server only: the requesting NetPeer
-RefDwordsStringMessage	NetMessage	0x24	0xc	pointer	player	ref to the TwoStringMessage (kind 14 player event)
+RefDwordsStringMessage	NetMessage	0x24	0xc	pointer	player	ref to the TwoStringMessage (kind 14 player event); server-side routing only: Write 0x416C00 does not send it, Read 0x416C60 does not set it
 RefDwordsStringMessage			0x10	int	kind	0 experience, 1 money, 2 give item, 3 take item, 4 clear kind-0x14 items
 RefDwordsStringMessage			0x14	int	value	
 RefDwordsStringMessage			0x18	byte[12]	text	std::string (item name / experience string)
@@ -4091,3 +4091,9 @@ BitWriter			0x8	uint	acc	bit accumulator, LSB first
 BitWriter			0xc	byte	nbits	bits in acc; BitWriter_Flush 0x442570 stores the pending byte when != 0
 DebugText			0x4	byte[12]	entries	std::map<string, string> (header +4, count +8) rendered by DebugText::Render: key left half, value right half
 DebugText			0x2c	int[4]	scaledRect	the SetRect rect scaled to screen pixels (UiScale::ScaleRect) and clamped (width 100..screen, height 15..screen); +0x1c..+0x28 = its unscaled copy (window rect)
+PartyListEntry		0x158	0x0	int	key	compared with the record's +0x24 nonce in LoadPartnerParty (older entries erased); the list node (0x160) = {next, prev, entry}
+PartyListEntry			0x4	int	unk_0x4	copied by PartyNode_Create 0x4267A0
+PartyListEntry			0x8	CParty	partyA	0x70 bytes (CParty::CopyCtor / dtor)
+PartyListEntry			0x78	CParty	partyB	0x70 bytes
+PartyListEntry			0xe8	CParty	partyC	0x70 bytes; PartyListEntry_Dtor 0x424DB0 destroys +0xE8, +0x78, +8
+StlNamedException	exception	0x10c	0xc	char[256]	name	STLport __Named_exception message (strncpy 0x100, +0x10B = 0); vt 0x73B994; logic_error 0x73B98C, length_error 0x73B984 (ThrowInfo 0x749CE8), out_of_range 0x73BE8C (ThrowInfo 0x74C640)
