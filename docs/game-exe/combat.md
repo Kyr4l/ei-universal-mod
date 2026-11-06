@@ -103,7 +103,16 @@ versions [V]. `UpdateStanceFlags` 0x54A620 derives them every Think: combat mode
 otherwise (monsters keep it); run wanted (`+0x175 bit 1`) when the order's run byte (`+0x1B0`) is set and the unit stands.
 `ApplyPendingStance` 0x54A150: wanted != current -> the new stance is tested on the passability map (refused: message 0xD), walking units
 stop, the transition clip (`BuildTransitionAnim` 0x5516D0) plays in state 3 and the current order is pushed back to the queue; returns 1 while
-the transition runs. `UpdateStance` 0x548520 (from `BeginMoveTo`) turns running on when wanted, standing, on walkable ground and not
+the transition runs. [V, deep-read 2026-11-06, precise:] nothing to do when stance and combat mode both match (returns 0). Otherwise the unit is
+lifted off the collision map, the old cell's passability is noted, the wanted block is applied (stance, combat mode, running, `+0x16E` word), `CUnit
++0x264 = 3` when the running bit is set else the stance, `UpdateMoveParams` (new move class). A **stance** change is tested: the new class must find
+the unit's cell passable, or, when the old class already stood on an impassable cell, only one passable neighbour (`HasPassableNeighbour`). Refused
+-> everything restored, wanted := current (`stancePending` cleared unless the stance is 2), `CUnit +0x268` re-derived, message 0xD to the owner,
+return 0. Accepted (net section 6): a walking unit whose stance changed stops (mover reset, stand facing forward, side 0, state 6); a walking unit with
+only a combat-mode / run change skips the clip; for any order other than an attack (kind 3) `BuildTransitionAnim(old block -> new)` and, when it
+yields clips, the unit stops and `PlayOneShotAnim` plays them (state 3), so **an attack order changes stance instantly**. Then, when the queue is
+empty (kind 9), the current order is copied back into it (kind, param, target, pos, exact, extra, run) to be dispatched again. Returns 1 for every
+applied change (Think then ends its step), not only while a clip runs. `UpdateStance` 0x548520 (from `BeginMoveTo`) turns running on when wanted, standing, on walkable ground and not
 crippled/overloaded (`UnitStats_EffectLevel` 0x5241C0: 1 = leg ratio < 0.5, 2 = carried > carry max -> messages 0x14/0x15), writes
 `+0x264 = 3` and sets `+0x146` (the path is re-planned). A player's stance message (`CPlayerServer::OnMsg35_SetStance` 0x6709D0 ->
 `RequestStance` 0x555270, was "SetAttackMode"): `StanceAllowedHere` 0x54A5A0, run refused when `EffectLevel(1) != 0`, message 9 on success.
@@ -118,7 +127,7 @@ non-silent spell), night visibility `+0x904 = world+0x88 * ((1-night) + night * 
 | off | field | use |
 |---|---|---|
 | +0 | kind | 0 stand, 1 move to, 2 turn to, 3 attack, 4 cast at point, 5 cast on object, 6 interact, 7 script animation, 8 looping script animation, 9 none, 10 use quick item, 11 sit |
-| +4 | param | 1: group flag (`CollectPartyFollowers`); 3: hit location 0..5, 6 any; 4/5: spell item id (bit 31 set = weapon-slot quick item `id & 0x7FFFFFFF`); 6: 0 use, 1/2 skills (science / stealing), 0x18A95 loot a corpse (QueueOrderTalk, dead target only); 10: slot |
+| +4 | param | 1: group flag (`CollectPartyFollowers`); 3: hit location 0..5, 6 any; 4/5: spell item id (bit 31 set = weapon-slot quick item `id & 0x7FFFFFFF`); 6: 0 use an item with the science skill, 1 steal, 2 tame (does nothing, 3.3), 0x18A95 loot a corpse (QueueOrderTalk, dead target only); 10: slot |
 | +8 | target | refcounted object |
 | +0xC | pos[3] | 1: goal, z = max path length; 2: direction; 4: cast point |
 | +0x18 | exact | position-locked: reach 0.2 (`OrderReachDistance`), 1e10 in `PlanActionApproach`, no path validation |
@@ -193,7 +202,8 @@ start-tick field, copied from the clip builder), **`+0xDC` the tick the action s
 `+0xE0 end tick = start + duration D` (the hit is applied at the end, section 4), `+0xE4 face target id` (-1 for points and for point-cast
 spells), `+0xE8 reach^2` (default 1e38), `+0xEC` spell flag (1 for kinds 4 / 5), `+0xF0` hit location, `+0xF4` called shot (order location
 != 6), `+0xF8` damage kind (8 none; spell 0x28 -> 1, 0x29 -> 0, else proto +0x14), `+0xFC` direction. D: attacks `ChooseAttackAnim`, spells
-`round(castActions x 15 / actionSpeed)` (`CSpell +0x4C`), others `BuildActionAnimQueue`; at least 1. An exact-position order (`+0x18`) out of
+the duration `BuildSpellAnimQueue` returns for the cast time `round(castActions x 15 / actionSpeed)` (`CSpell +0x4C`; corrected 2026-11-06: D is
+not the cast time itself, section 7), others `BuildActionAnimQueue`; at least 1. An exact-position order (`+0x18`) out of
 reach fails at once. It tries ticks `t = 0 .. round(pi / turnRate) + 3`: the target's predicted position `vt[52](now + D + t + lead)` must be
 within reach (moving targets: `(reach + 0.5)^2`, or `(0.5 * targetSpeed * (window/2 + D) + reach + 0.5)^2` when it approaches); **lead** = the
 flight time of a point-cast spell (flag 0x20000000) with a projectile speed (`+0x30`), so casts at a moving unit aim ahead; the bearing within
@@ -206,6 +216,19 @@ range, 0.6 (0.2 between party members)); spells = the spell's range `+0x34` (10 
 facing the target; at `+0xE0`: `CompleteOrder(+0xF0)` 0x549EC0, record reset, state 5 -> 3 (the recovery plays out), mover settled.
 `CompleteOrder`: 3 -> `FireAttack(target, +0x108)`; the order stays unless the part is dead (then location 6) — the next swing is planned at the
 next Think; 4/5 -> `CastOrderSpell` 0x54EE10; 6 -> `ExecuteInteraction` 0x54F000; 10 -> consume the quick item; 4..6/10 clear the order.
+`ExecuteInteraction(target)` 0x54F000 [V, deep-read 2026-11-06] (order kind 6 at the action's end tick):
+* param **0x18A95** (loot) on a unit (type id 0x50): `CWorldServer::LootUnit(target, own player)` when the looter has a player, then **the body is removed
+  from the world** (`RemoveObject`, also for an AI looter) and a sound `HearSound(noise x 1.5, delay 26)`; a non-unit target: nothing.
+* params **0 and 1**: own skill `s = UnitStats_AttrSkillWithWeapons(stats, 0)`, the target's the same (0 for a non-unit), logged "is using skill
+  science / stealing his_skill = .. target_skill = ..". Param 1 (steal) **fails when `s <= target skill`**: `DeclareHostile(us, target, 10)` and return.
+  Param 0 (use / science, `QueueOrderUseOn`): the record `{1, 0, 0}` or the item's vt[21] triple of the object whose id is the order's `+0x1AC`, its
+  third value `+= round(s)`, handed to `target->vt[41](record, us)`; refused -> player message 0x11 (SciFail). Param 1 success: only a unit target
+  without a player; `CUnit::PopRandomQuickItem` -> `CPlayer::AddItems` to our player ("Item has been stolen from"); no quick item -> `LootUnit`
+  (living target); nothing to take -> message 0x22 (StealEmp). A target with a player is silently ignored.
+* param **2** (`QueueOrderInteract2`, the tame clip 0x4C40000): the branch exists (`OnProvoked(us, s)`, message 0x16 when refused) but the outer test
+  only admits params 0 and 1, so **it is unreachable**: an interaction of param 2 plays its clip and does nothing. Taming happens only through the
+  spell path (`CSpellEffect` 0x67F870 -> `OnProvoked`, unit-ai.md 6.9).
+
 `CancelAction` 0x549690 (was FinishDying): before the action start tick `+0xDC` -> state 6; after it -> the recovery is spliced and state 3; called by
 `TickState` (target out of reach: `TargetInRange` tests `|target - us|^2 < +0xE8` at the end tick), `TickCombatOrder` (order failed) and
 `Update` (a move order arrived while acting).
@@ -298,6 +321,16 @@ player unit's kill of a non-player unit gives `CWorldServer::GiveExperience(play
 heroes, or by `sqrt(exp)` weighting when no player). A miss / absorbed hit returns 0 and only records aggression (`AggroTable_Add`,
 `UnitAI_OnAttackedBy`). The corpse: `Update` sinks it 0.01 m/tick^2; the client plays "mo_dw" wound textures and effect 0x2043.
 
+[V, deep-read 2026-11-06] Details of `TakeHit` that matter for a re-implementation: the "already dead" test (vt[55]) is taken **before** the hit, so a
+corpse is not activated or logged, and `OnDamaged` / experience only run for a unit that was alive when the hit arrived. The experience condition is:
+the victim had no player at entry, the hit killed it, and the attacker **object** (third argument: the shooter for arrows, the caster object for spells)
+belongs to a player. **Online** (`Lobby_IsAlive`, a lobby client exists) the kill is credited as `GiveExperience(0, exp)`: every player's first hero
+gets a share weighted by `sqrt` of its experience, whoever made the kill; offline (single player / LAN without the lobby) the killer's player gets it,
+split among its live heroes. Death kind `CUnit +0x350`: 7 without an attacker unit or for a spell hit; a humanoid attacker (kind 0x32): its equipped
+weapon's damage kind, else its natural kind `CUnitServer +0x28C`; **any other attacker (monsters 0x33 / 0x34 and objects): its `+0x18` value + 0x10**.
+The miss path declares hostility only for a unit attacker (type id 0x50), with weight 10, then `Brain::OnAttackedBy` (also for a null attacker). A hit on
+a god-mode player unit or one from another player's unit skips everything (no aggression record either) and returns 0.
+
 `FireAttack` 0x54F450 also triggers the weapon's embedded spell (`TriggerWeaponSpell` 0x54F850: `item +0x44`, flag bit 16, cost <= charge
 `+0x28`) and makes noise (`StimulusMap::HearSound`, radius `stats +0xFC * 2`, kind 0x1A) unless the hit is a backstab.
 **Ranged**: `CEffectArrowFigure` (kind 0x5B) gets the owner's attach point, `+0x150` target id, `+0x15C` shooter, the 15-dword hit at
@@ -330,6 +363,23 @@ crossbow), other stances 0xD400000 (0x5800000 with a bow / crossbow) plus the we
 Origin: `Unit_InitStatsFromProto` 0x5136D0 (placement, stats, proto name) from the units database record (`UnitProto`, 0x120 bytes,
 `g_0x7AF358`) and its "udb" entry (0x168 bytes, `g_0x7AF398`, index `proto +8`); heroes also from the party record (attributes, skill bytes,
 experience, perk names). The full field list is in `batch-combat-structs.tsv`; the ones that matter:
+
+[V, deep-read 2026-11-06] `Unit_InitStatsFromProto(placement, stats, name)`: no prototype of that name -> `Object_InitDefaultStats`. Placement: HP =
+max HP = `proto +0x48`, HP regen `udb +8`, mana = max = `proto +0x4C`, mana regen `udb +0xC`, the 7 armor pairs `{base, current} = udb +0x6C[i] x
+proto +0x58` (an armor scale per prototype); `stats +0x6FC` = max HP. Monsters: str = HP / 3, dex = MP / 3, int = 25; heroes (a hero record of that
+name exists): str / dex / int from the record `+0xC / +0x10 / +0x14`, skill bytes `+0x6C8..+0x6CA` and `+0x6CB..+0x6D2` from record `+0x18..+0x22`;
+monsters get every skill byte `round(proto +0x88)`, then `+0x6C8 / +0x6C9 = round(proto +0x8C)`, `+0x6CA = round(proto +0x90)` and three more
+converted values in `+0x6CE..+0x6D0` (the decompile lost their source). Senses / detections bases `+0xB0 + 8i = proto +0x98 + 4i`, `+0xE0 + 8i = proto
++0xB0 + 4i`; `+0x44 = cos(udb +0x18 / 2)`, `+0x48 = proto +0x94`, `+0x4C = cos 90 deg = 0`, `+0x60` move type `udb +0x14`, `+0x64 udb +0x44`, u16
+`+0x68 = udb +0x48`, u16 `+0x6C = +0x6E = udb +0x4C`. Body parts from `udb +0x8C` (4 dwords per part: kind index into the 0x44-byte part-kind table
+`g_0x7AF3B8`, fraction, rate, -): **fraction 0 = the part does not exist** (state 0); else part kind = table `+4`, cripple mask = table `+0x40`,
+fraction `+0xEC`, rate `+0xF0`, tier states cleared, state 3. `+0x2C` starts at 15 (monsters) / dex / 2 (heroes) and is replaced by `dex x 0.2 + 10`
+at the first recompute. `expSpent +8 = 0`; heroes then get the record's experience (`UnitStats_AddExperienceScaled`), learn the record's perks by
+name, and `expSpent = experience` (the starting experience counts as spent).
+`Hero_InitStatsFromProto(stats, name)` 0x513DA0 (a new hero, no placement) is the same body for the stats only, writing **both** halves of every pair
+(attributes, speed `+0x24/+0x28`, action speed `+0x2C/+0x30`, senses, detections), then `UnitStats_Recompute(1.0)`, `UnitStats_FillParts`,
+`Recompute(1.0)`; a missing hero record only traces (monster formulas), a missing prototype is meant to be `FatalError` "Can't find prototype .. for
+new HERO" but the code reads `proto +8` before that null test (an access violation first; harmless in practice: every hero name exists).
 
 | off | field | source / formula |
 |---|---|---|
@@ -382,6 +432,16 @@ id, -1 none); the passive spell list `+0x91C` (count + {id, countdown}); chain l
 (0x10), > 0x53 idle voice counter `+0x938`, > 0x68 pending hit `+0x108` (0x3C), > 0x72 `lastOrderTick +0x93C`. **Game bug**: `Read` fetches
 that last field through the stream's slot +8 (write) on a local copy instead of slot +4 (read), so `lastOrderTick` is never restored from a save.
 
+The `CUnit` part around it [V, deep-read 2026-11-06]: `CUnit::Write` 0x5321C0 / `CUnit::Read` 0x531A80 (slots 10 / 9 of both the CUnit and the
+CFakeUnit vtables; the functions.tsv names "CFakeUnit::Write / Read" are the inherited CUnit methods): `CMapObject::Write`, the specific's Write
+(the `CUnitServer` record above on the server), the player name (string), `alarmMask`, the owner player's id (`CPlayer +0x24`, -1 none), side (4),
+clip `+0x254` (1), next clip `+0x255` (1), clip start tick, animLoop, animPaused, stance, wanted stance, weapon id, wanted weapon, dead, walking,
+`MoveCurve::Write`, fly height, anim speed class, `moveRadius2`, the weapon id again, then object ids (-1 = empty) of the 4 weapon, 4 quick,
+8 spell and 7 armor slots, the 5 detection factors, `attackableMask`, the quick-item count and ids, the radius `+0x32C`, [save version >= 0x49] the
+battle button, [>= 0x4D] the units-db name of the unit and [>= 0x6A] its prototype name (older saves take the prototype from the same name). `Read`
+clears flag 0x800000, resolves the owner player only on a world whose kind is 8 (`CWorldServer::FindPlayerById`; else none) and re-tracks it, and
+refcounts every item it finds by id.
+
 ## 6. Items in combat
 
 `CUnit +0x440[4]` weapon slots, `+0x450[4]` quick slots, `+0x460[8]` inventory (spells: item `+0x44`), `+0x480[7]` armor (slot = `CItem::GetType`).
@@ -400,7 +460,13 @@ embedded spells of the `+0x920` list on self on a countdown (`spell +0x20 - 3`, 
 ## 7. Spells cast by units (entry points only)
 
 `QueueCastAt/On` -> order 4/5 -> `PlanActionApproach` uses `BuildSpellAnimQueue` 0x550620 with cast time `spell +0x4C * 15 / actionSpeed`
-(a hold entry pads a short clip) -> `StartAction` -> `CompleteOrder` -> `CastOrderSpell` 0x54EE10: mana `placement +0x34 -= cost * 25/int`
+(a hold entry pads a short clip) [V, deep-read 2026-11-06]: the clip key for humanoids (kind 0x32) is `mask | 0xC0000` with `mask = 1 << weapon damage
+kind` (natural kind < 7, else 0): sneaking (stance 1) `mask | 0x28E0000`; otherwise `| 0x10000` in combat mode and randomly (ISAAC bit 0) `| 0x2800000`
+(middle) or `| 0x1800000` (high); every other unit uses `0x2890000` (its middle attack clip). No clip -> duration 0 (then 1). With `A` = the clip's
+duration (frames `+0x20` x `AnimDurationFor`), `H` = the duration up to its action frame (`+0x40`) and `C` = the cast time: `A >= C` -> the clip alone,
+**D = A** (the cast time is ignored, a long clip sets the pace); `A < C` -> **D = H + (C - A)**, the queue is `clip for H`, a looping hold `0xFF` for
+`C - A`, then `0xFF` for `A - H` (units with move type `stats +0x60 == 2`: the hold first, then the whole clip), so the spell is released `A - H`
+ticks before the queue ends. -> `StartAction` -> `CompleteOrder` -> `CastOrderSpell` 0x54EE10: mana `placement +0x34 -= cost * 25/int`
 (player units) or the quick item's charge, `CWorldServer::CastSpellMulti` 0x58E850 (spell, caster, caster pos, target, target pos), noise
 unless `spellProto +0x10 == 1` (silent). Range / line of sight: `OrderReachDistance` (spell `+0x34`), `CanCastAt` 0x54C2F0 ->
 `ComputeCastTarget` 0x54BBC0 (`CAIMap::TraceVisibility`). Interrupt: a hit reaction does not cancel state 5 (`RestartIdleAnim` only runs in
@@ -420,6 +486,48 @@ voices `+0x9C` queue), hit effects (`v48_SpawnBlood` 0x5373D0 blood prints by `p
 `GetBodyPartDamageLevels` 0x536EA0 from the packed parts: 0 >= 75 %, 1 >= 33 %, 2 below, 3 dead), the HUD numbers (`CUnit +0x17E/+0x180/+0x182`
 HP / max / mana shorts, `GetDamage7` 0x54BA30 displayed damage, `HitChanceVs` estimate, `GetLevel` 0x539160 from `+0x334`), weapon figure
 attachment (`v25_SetWeaponFigure` 0x535590, `Equip/Unequip` 0x5381B0/0x5385A0). Nothing on the client rolls or damages.
+
+`CUnit::ReadNetState(mode)` 0x52EF90 (mode 0 full, 1 delta) [V, deep-read 2026-11-06] is the client's reader of those sections, in the order 0-3
+(`CMapObject::ReadNetState`), 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, then 3 again (`specific` vt[13] Show(full)). Section 4: the six part ratios (`short
++0x18 / u16 +0x1A` of each 0x1C packed part) and the HP ratio (`+0x17E / +0x180`) are kept before the packed stats are read; in delta mode on a
+living unit every part whose ratio moved by more than 0.0001 calls the client `PlayAnimation(part, delta, packed +0x107 flags)` (vt[46]) and any change
+`ApplyWoundTextures` (vt[31]; full mode: always); an HP ratio that dropped, or flag 0x10 of `packed +0x107`, calls the placement's vt[16] hit effect with
+the HP lost and the bits 1 / 2 / 4 of +0x107, and bit 4 the death effect (vt[47]). Section 5: `DropAllItems`, then 4 weapon and 7 armor ids, applied
+at the end (vt[32] armor, vt[33] weapons). Section 6: stance `+0x264`, wanted `+0x268`, weapon id (changed -> vt[25] SetWeaponFigure), `+0x270 =
++0x26C`. **Section 7 is one byte**: bits 0-2 `animLoop +0x25C`, bits 3-5 `animPaused +0x260` (both sign-extended 3-bit fields), bit 6 `dead +0x274`,
+bit 7 `walking +0x278` (these two read back as -1 / 0, not 1 / 0). Section 8: clip `+0x254`, next `+0x255`, start tick `+0x258` (minus 1 while
+`animLoop == 1`), flags `+0x256`, then vt[14] SetAnimation(world tick). Section 10: the move request (pathfinding.md 5.1; `ShiftTimes(-1)` while
+`animPaused == 1`), speeds, curve rebuilt, vt[41] replay. Section 11: `alarmMask`, side (byte), the owner player id (-1 = none -> untracked; an id
+equal to the local connection's player, or any id when the connection's `+0x84` flag is set, -> that player, tracked, hero light vt[18]). 12: the
+five detection factors; 13: the battle button `+0x438`. The return value is 1 only when every variable-size section ended exactly where its delta
+base said (stream check `g_0x7A9794` vt[5] == vt[4]).
+
+**Buff visuals** `CMapObjectClientSpecific::UpdateBuffEffects(silent)` 0x510B80 [V, deep-read 2026-11-06; client only]: the owner's buff list
+(`+0x198`, 0x14-byte records `{u8 kind, u8 level, ..}`) is reduced to one entry per kind with the highest level for the kinds 9..0xE, 0x10, 0x13,
+0x19, 0x1A, 0x1D..0x22 (other kinds keep every entry); every effect record (`+0x28`, 0x10 bytes `{kind, level, particle, alive}`) still matching
+kind and level survives, a matching kind with a new level is rescaled (`level / 16`), a new kind gets: 0xF invisibility -> unit flag 0x10000; 0x19
+stun -> flag 0x40000; 0x11 -> one-shot particle 0x2018 at `+level/16`, 0x1D / 0x1E (strengthen / weaken) -> one-shot 0x201B at `+-level/16` (none
+when `silent`); 0x1C, 0x25, 0x26 -> nothing; the rest a looping particle attached to the unit (9 0x2017, 0xA 0x2016, 0xB 0x2015, 0xC 0x2044, 0xD
+0x2045, 0xE 0x2046, 0x10 0x204C, 0x13 0x2013, 0x1A 0x201A, 0x1F 0x2048, 0x20 0x2049, 0x21 0x204B, 0x22 0x204A, unknown kinds traced and given
+0x2013), scaled `level / 16` and, when `silent`, pre-run 30 steps. Records whose buff vanished: invisibility / stun flags cleared (and the materials
+made opaque / non-emissive) once no other record of that kind remains, 0x11 / 0x1D / 0x1E play the reverse one-shot (living units only), the
+particle is stopped and released.
+
+**Floating damage numbers** `CFlyingHitPoints::Draw(renderer)` 0x5E18E0 [V, deep-read 2026-11-06; client only, pure display]: entries `{unit id +8,
+value, flags +0x10, timeGetTime ms +0x14}` older than **3000 ms** are dropped; nothing is drawn unless the option `g_0x79BE74` is on. For each entry
+of age `t` (0..3000 ms) whose unit exists with flags 0x20 set, 0x40 clear and 0x400000 set: the anchor is the screen box of a head part found by
+name prefix (three names tried; a part with flag 0x40 uses its own box) or else the unit's box; x = its centre, y = half its top plus a value
+derived from `t` (the number rises). Flag bit 31 = a single 32 x 10 marker quad and the entry is deleted after that frame. Otherwise the value is
+formatted as text, each digit an 8 x 12 quad from a 4-column digit texture (u = `(c - '0') & 3) x 0.125`, v = `1 - ((c - '0') >> 2) x 0.15625`),
+plus one 64 x 10 label strip per flag 1, 2 and 8 (three different rows of the texture); colour `0x40FFFF` with flag 8, else `0x40FF40` or `0xFF4040`
+by a unit field (probably the owning player: monsters green, player units red [I]), alpha from the age. Off-screen boxes are skipped
+("CFlyingHitPoints::Draw. SetTexture failed" is fatal).
+
+`CFakeUnit` (kind 0x39, a `CUnit` with the old animation system at `+0x4E0`) is never created in the shipped game (world-server.md). Its
+`LoadModelFromScene` 0x446C10 [V, deep-read 2026-11-06, kept short]: opens a 3DS scene (`AfxMessageBox` "Can't open file %s"), converts it,
+requires exactly one top-level object (`FatalError` "Scene %s have more then one top-level object"), derives an `Ini\..` name for files under
+`scenes\`, resolves the AMF nodes (`FatalError` "Model File Name: %s"), welds / normals / indexed components / bounds, builds the texture sets and
+materials, adds every figure as a part, binds the old animation system and parks the unit at (0, 0, 2000). It shares `CUnit::Read / Write` (5.x).
 
 ## 9. What is not known
 
@@ -472,6 +580,19 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
    `+0x16C/+0x174`.
 7. `AttackParams_NaturalSkills` 0x52E0D0 writes the natural attack/defence skills into the attack-params array, not unit ids.
 
+Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
+
+8. This page 3.3: the spell action duration "D = `round(castActions x 15 / actionSpeed)`" -> D is what `BuildSpellAnimQueue` returns for that cast
+   time: the clip length when the clip is longer, else the time to the clip's action frame plus the padding (section 7).
+9. This page 3.1 and `full/functions.tsv` (`ExecuteInteraction`: "talk (0x18A95): world dialog start", params "0 use, 1/2 science / stealing") ->
+   0x18A95 loots and **removes** the body, 0 = use an item with the science skill, 1 = steal, 2 = tame, and the tame branch is unreachable (3.3).
+10. This page 2.2: "`ApplyPendingStance` returns 1 while the transition runs" -> it returns 1 for every applied change; attack orders change stance
+    without the transition clip.
+11. This page 4.4: the death kind "natural kind of a unit" -> only humanoid attackers (kind 0x32) give their weapon / natural kind; monsters and
+    objects give `+0x18 + 0x10`; and kill experience online goes to every player's first hero (`Lobby_IsAlive`), not to the killer's player.
+12. `full/functions.tsv`: `CFakeUnit::Read` 0x531A80 / `CFakeUnit::Write` 0x5321C0 are `CUnit::Read / Write` (slots 9 / 10 of both vtables).
+13. `full/structs.tsv` `UnitStats +0x4C` "cos 45" (functions.tsv purpose of 0x5136D0) -> `cos 90 deg` = 0.
+
 ## 11. Function index
 
 Tick: Update 0x552300, Think 0x54B390, TickState 0x5499F0, TickAnimation 0x546F30, SetState 0x547090, AdvanceAnimQueue 0x546B40, SetAnimQueue
@@ -499,6 +620,6 @@ AddArmorModifiers 0x5230C0, RebuildFromArmor 0x523300, ComputeEffective7 0x52302
 WeaponSkill 0x526C70, SkillValue 0x527050, AttrSkill 0x525E10, AttrSkillWithWeapons 0x525E90, MagicSkill 0x527EB0, PerkBonus 0x5282D0, LearnPerk 0x526450,
 RaiseSkill 0x528AB0, Perk_ComputeCost 0x528050, GetLevel 0x556760, ManaCostFactor 0x523CD0, ApplyRangeBuffs 0x523D30, AddExperience 0x523920.
 CUnit: GetSpeeds 0x52F920, UpdateMoveParams 0x530570, UpdatePackedStats 0x532A20, SetAnim 0x52EA90, AnimDurationFor 0x5327D0, FindAnimRecord 0x5301B0,
-SpellUsability 0x52F820, QuickItemUsability 0x52F8B0, EquipArmor 0x530730, DropBrokenItems 0x532AC0, GetCarriedWeight 0x5307B0, WriteNetState 0x52EC70, ReadNetState 0x52EF90.
+SpellUsability 0x52F820, QuickItemUsability 0x52F8B0, EquipArmor 0x530730, DropBrokenItems 0x532AC0, GetCarriedWeight 0x5307B0, WriteNetState 0x52EC70, ReadNetState 0x52EF90, Read / Write 0x531A80 / 0x5321C0 (save), Hero_InitStatsFromProto 0x513DA0.
 Client: Update 0x5341A0, SetAnimation 0x5352B0, ApplyWeaponAnimMask 0x535480, PlayAnimation 0x537500, UpdateAnimSounds 0x534B60, GetBodyPartDamageLevels 0x536EA0,
-v48_SpawnBlood 0x5373D0, v47_DeathEffect 0x537C00, v31_ApplyWoundTextures 0x537360, UpdateArrowVisibility 0x538C20, GetLevel 0x539160, ReplayMove 0x535850.
+v48_SpawnBlood 0x5373D0, v47_DeathEffect 0x537C00, v31_ApplyWoundTextures 0x537360, UpdateArrowVisibility 0x538C20, GetLevel 0x539160, ReplayMove 0x535850, UpdateBuffEffects 0x510B80, CFlyingHitPoints::Draw 0x5E18E0.

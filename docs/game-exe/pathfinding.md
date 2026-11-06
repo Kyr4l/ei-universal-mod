@@ -64,7 +64,7 @@ client UI click                                   (client sends the "move to" me
    CollectPartyFollowers 0x5468D0; CUnit+0x43C = IsCellWater(unit); CUnitServer::BeginMoveTo 0x548700
     CMover::Reset; CAIMap::FindPath 0x5BB350  (unit, goal, &moveState = CUnitServer +0x3C, maxLen, 0)   <- THE PATH
      FindFreeCellNear 0x5BAC10 -> short: PathFinder x2 + MeetLocalSearches 0x5B9690 | long: FindLongPath 0x5B9C90
-     ChooseExitDirection 0x5C46C0 (start smoothing) -> StepAlongPath 0x5BB190 (first <= 32 cells -> MoveRequest kind 2)
+     SmoothPathStart 0x5C46C0 (corridor re-plan) -> DeliverPathChunk 0x5BB190 (first <= 32 cells -> MoveRequest kind 2)
     CUnit::ResetMover 0x52E9D0 -> CMover::BuildPath 0x5C67D0 (MoveCurve at CUnit +0x27C), MarkNetDirty(10) = replicate
     state = 0 (walking), move anim set
  every tick: CUnitServer::TickState 0x5499F0 -> TickMovement 0x547890
@@ -104,6 +104,29 @@ tables (`rows[y] -> first cell of row y`); each grid object is `{+0 data, +4 row
 | **NavGrid (AIGRAPH)** | +0x22F8, size 0x29C | see section 4.2 | `NavGrid_Read` 0x5B1180 from the `.mob` (and `NavGrid_Build` 0x5AFC70 on dynamic changes) | `NavGrid_FindPath` 0x5B0D90, `DominantRegion`, `IsCellInRegion` |
 | **StimulusMap** | +0x26C8 | | hearing / vision (module 0x5C8000) | not movement |
 
+### 3.0 `CAIMap::Load(name)` 0x5B43C0: how the grids are filled [V, deep-read 2026-11-06]
+
+The terrain files are the renderer's (`.mp` header and one `.sec` per sector inside the zone's `.mpr`; byte layout in terrain-lighting.md 2.1 / 2.2);
+the AI reads them again on its own:
+1. `.mp`: magic `0xCE4AF672` and size `0x26 + 4 x (11 x materials + tileTypes + animated)` ("Unable to open file", "Wrong file format" -> `FatalError`);
+   `heightScale (+0x120) = 511 / maxHeight`; the water materials (11 dwords each) and the `tileId -> tile type` table are kept for step 4.
+2. Slope tables (0x3FF entries each, index `dh + 511`, dh in height steps): `a = atan(|dh / heightScale| / 0.5 m)` in degrees,
+   `s = (1 + sin^2 a)`; walkers `dh >= 0` -> `round(s^2 x 1024)`, `dh < 0` -> `round(1024 / s)`, -1 above 40 deg; class 0: 0x400, -1 above 60 deg.
+3. Materials: `aiinfo.res` (work dir) -> `tileDesc.reg`; 16 records of 0x118 bytes (defaults: name "", Speed -1, CostMul 1, the three step floats
+   1.0); every section is a material whose **index is the section name read as a number**; keys: a name string -> +0, `CostMul` (int, default -1)
+   +0x104, `Speed` (int, -1) +0x100, `StepLook` / `StepSmell` / `StepSound` (ints / 100, default 100) +0x108 / +0x10C / +0x110 ("Can't open
+   aiReg", "Can't open file tileDesc.reg", "Unable to read file aiinfo.res").
+4. Per sector `"%s%03i%03i.sec"` (magic `0xCF4BF774`, size 0x240D / 0x4815 (water layer) + 0x200 when `flags & 3`; "Unable to locate resource",
+   "Wrong format resource"); each 1 m vertex cell gives 2 x 2 tiles. **Height** of a tile = `0.5 x its nearest corner + 0.25 x the two corners
+   adjacent to that corner` (the far corner does not count), vertex `z = u16 x maxHeight / 65535`, stored `round(h x heightScale)`. **Water depth**
+   (water layer only) = the same blend of the water vertices minus the tile's ground height, `round(x heightScale)` clamped 0..0x3F into bits 0-5.
+   **Material** (flags bits 0-4, per 2 m texture tile = 4 x 4 AI tiles) = the tile type of `tileId & 0x3FFF` (15 when `tileId >= textureCount x 64`).
+   **Water bit** 0x80 = the tile's water material is set (not 0xFFFF) and its type (dword 0) is **2 or 3**, and the depth is non-zero (else cleared);
+   such tiles then take the material of the **water layer's** tile word instead of the ground's.
+5. `loaded = 1`, `navGridOn = 0`, `PackMaterialCosts`, `InitCostTables`, the obstacle grid (w x h bytes) zeroed, `PathFinder::Init` forward (0) and
+   backward (1), `NavGrid::Init`, `StimulusMap::Load(w / 2, h / 2 metres)`, `CollisionMap::Resize(w, h)`, then `UpdatePassability` over the whole map
+   (or the dirty rectangle while batching). Returns 1 (0 when the resource does not open; the `FatalError` paths return its value).
+
 ### 3.1 The terrain cell (9 bytes) [V]
 
 | byte | meaning |
@@ -117,7 +140,8 @@ The border: `UpdatePassability` forces the 3 outermost rows / columns to nibble 
 
 ### 3.2 How the nibbles are computed (`UpdatePassability` 0x5B8FA0, `GetCellStepCost` 0x5B8BA0, `MarkSteepCells` 0x5B8710) [V]
 
-Called for a rectangle (+3 margin) after load and after every object change. For each of the 8 classes k:
+Called for a rectangle (+3 margin) after load and after every object change [V, deep-read 2026-11-06: the scratch step costs are computed over the
+rectangle + 3 (clamped to the map), the nibbles written and eroded only inside the rectangle itself, so the erosion sees the margin]. For each of the 8 classes k:
 
 1. per tile `GetCellStepCost(k, thr = round(T[k] * heightScale), x, y)` into the scratch grid. `T = {2.0, 0.4, 1.0, 1.6, 2.2, 1.7, 3.0, 6.0}` (table 0x7912BC, metres of
    head-room / step). Empty dry tiles use the material's pre-packed nibble (`PackMaterialCosts` 0x5B8620, record +0x114). Otherwise: `lo` = ground (+ water depth
@@ -133,7 +157,8 @@ Called for a rectangle (+3 margin) after load and after every object change. For
 3. `MarkSteepCells`: cells whose largest height difference to the neighbours exceeds the slope tables' limit are cleared (all classes for > 60 deg; > 40 deg keeps class 0
    only) and the neighbours' classes 5-7 are cleared by lists `+0x240 / +0x254 / +0x268`.
 4. When `CAIMap +0x02` (`navGridOn`) is set: units in the area are taken out of the collision map, `NavGrid_Build` rebuilds the nav cells of the rectangle (+1 cell
-   margin), the units are put back. `navGridOn` is `CWorldServer +0x172`; set after a zone/save is loaded, cleared during loading (`CWorldServer::BeginPaint/EndPaint` 0x595A90/0x595A70,
+   margin), the units are put back (the units come from `FindUnitsNear(centre of the margin rectangle, 0.5 x sqrt((w + 1)^2 + (h + 1)^2))` with w, h its size in metres, so the 16 m sector
+   rounding of 7 applies). `navGridOn` is `CWorldServer +0x172`; set after a zone/save is loaded, cleared during loading (`CWorldServer::BeginPaint/EndPaint` 0x595A90/0x595A70,
    misnamed: now `EndAIMapBatch` / `BeginAIMapBatch`, and neither has any reference in the exe: dead editor code [V]) and for the duration of `ApproachTarget` / `ValidateQueuedOrder`.
 
 The class an individual unit uses (`CUnitServer::ComputeMoveClasses` 0x552FB0, [V]): size `S = CUnit::GetSize`, speed `s = proto[+0x120] * field14C`:
@@ -159,8 +184,24 @@ S <= 0.85: class 1 if s < 0.6, 2 if < 1.2, 3 if < 1.9, else 4; S <= 1.5: class 5
   target so a group does not block itself.
 * `PathFinder::SaveFreeRadius` 0x5C33F0 / `WriteFreeRadius` 0x5C3530 clear the byte +8 of the window for nav-level work (so nav connectivity ignores units) and restore it.
 * Static objects do **not** use stamps: they become volumes (`cell-object records`) via `StampObject`: each body part (`OBJ_BODYPARTS`; part flags: bits 3-5 type, 6-9 flag, 0x400 bridge,
-  0x800 skip) box faces are sampled ~3 per tile and merged per tile (`CellObjectRecords::AddTopSample` 0x5B2D10 keeps the highest top sample, `CellObjectRecords::AddBottomSample` 0x5B2E10 the lowest bottom/side sample);
+  0x800 skip) box faces are sampled and merged per tile (`CellObjectRecords::AddTopSample` 0x5B2D10 keeps the highest top sample, `CellObjectRecords::AddBottomSample` 0x5B2E10 the lowest bottom/side sample);
   `BASE` parts are floors (tile height raised, material ROAD, bit 6 set via `SetBridgeCells`), `CROWN` ignored. Exact rules: aigraph.md "Objects".
+  [V, deep-read 2026-11-06] `StampObject(obj, remove)` in detail: both record sets are emptied first. The part names come from the object's prototype list
+  (`specific +0x80`, when its count `+0x88` is non-zero) else the object's own list (`+0x110`); a name missing from the model is a `FatalError` ("Bodypart %s
+  for object %s not found"). Per part (0x38-byte record at `obj +0x160`: flags +0, two offsets +4 and +0x2C added to the box, box min +0x14 / max +0x20)
+  the 8 box corners are moved by the offsets, rotated by the object's matrix (from its quaternion) and placed at `obj pos + (0, 0, ground z)` (ground =
+  the bridge hash height when the object's tile is a bridge). The corners are ordered so that each consecutive triple spans one face (6 faces); a face
+  with edges `u`, `v` is sampled on a grid of `round(3 |u_xy|) + 2` x `round(3 |v_xy|) + 2` points at the cell centres (`|.|` in metres, so ~3 samples per
+  metre = 1.5 per tile, plus 2), each sample's z quantised to `round(z * heightScale)` clamped 0..0x3FC; faces whose rotated normal points up give top
+  samples, all others (bottom and sides) bottom samples; samples on the face's outer rows / columns set the tile record's border byte (+0x12). Then
+  `SetBridgeCells` (when a bridge part exists), `AddCellObjects(floors, remove)` and the union of both record bounds + 3 goes to `UpdatePassability` (or
+  the dirty rectangle while batching). The nav grid is rebuilt for it only when `navGridOn` and the object's vt[43] agree (`navGridOn` is restored after).
+  Units return at once (1) after the stamp; objects return `AddCellObjects`' result.
+  The part records come from `CObject3D::BuildFromAnimation(model)` 0x5179E0 [V, deep-read 2026-11-06]: one 0x38-byte record per skeleton node,
+  box from `CFigureManager::LoadPartBounds` (morphed by the object's three morph parameters), `+0x2C..+0x34` = the node's world position in the bind
+  pose, flag 4; the name prefix sets the AI flags: **`BASE` -> 0x400** (floor / bridge), **`CROWN` -> 0x90** (type bits 3-5 = 2, which the step cost
+  ignores: tree crowns never block), **`EMPTY` -> 0x890** (the same + 0x800 = skipped by `StampObject`). The object box (`+0x128` centre, `+0x138` /
+  `+0x144` min / max, `+0x134` radius) is the union of the part boxes, except that humanoid units (kind 0x32) get a fixed +-0.5 m box in x / y.
 
 ### 3.4 Dynamic changes
 
@@ -188,7 +229,13 @@ Node (0x14): `{i32 cost (0x7FFFFFFF = unreached), next, prev, i16 x, i16 y, u8 p
   `+0x94` = **speed** factors (not costs) `-1, 0x200, 0x266, 0x2CC, 0x266, 0x2CC, 0x333, 0x2CC, 0x333, 0x399, 0x400, 0x333, 0x399, 0x400, 0x400, 0x4CC` (used by `RateFootprintPath`).
 * Slope tables (`Load`): indexed by height difference `dh` in height steps (-511..511); `a = atan(|dh / heightScale| / 0.5)` degrees, `g = (1 + sin^2 a)^2`; walkers (classes 1-7): `dh >= 0` -> `g` x 1024,
   `dh < 0` -> `1/sqrt(g)` x 1024, blocked (-1) above 40 deg; class 0: always 0x400, blocked above 60 deg. (uphill up to 2.0x at 40 deg, downhill down to 0.71x.)
-* `ShiftWindow` 0x5C25D0 slides the window (< 31 tiles) keeping costs: border-crossing nodes are re-opened; `keepReached` decides whether already-closed nodes stay closed.
+* `ShiftWindow(x0, y0, x1, y1, reopen)` 0x5C25D0 [V, deep-read 2026-11-06]: `SetWindow` for the new pair (fails unless both points are within 31 tiles), the 34
+  terrain row pointers re-based, and a failure when the origin moved by >= 31 tiles in x or y. The nodes of the overlap keep cost, reached flag and back
+  direction (copied from a snapshot of the old grid); the newly exposed nodes get cost INF, not reached, back direction 0; all list links are dropped. Then
+  the lists are rebuilt: `reopen == 0` -> the reached nodes go to the closed list and every unreached node with a finite cost is re-queued; `reopen == 1`
+  -> `m` = the cheapest cost among the copied nodes that sat on the old window's outer interior ring (rows / columns 1 and 32, the ones whose expansion
+  the closed border had cut), nodes cheaper than `m` stay closed, every other finite node is re-opened. Current = the cheapest head of the 4 open lists.
+  `FindLongPath` passes 0 after a waypoint was reached and 1 after a substitute waypoint and for the final run to the goal.
   `WriteOccupancy` writes the reached nodes' back-direction into the global direction grid (only where still 0). `RunUntil` 0x5C31A0 / `RunToEnd` 0x5C30E0 / `GetCost` 0x5C3090 /
   `ExtractPath` 0x5C3200 (list order start -> end, built by pushing at the front while following back-links) / `Reset` 0x5C35F0.
 
@@ -210,36 +257,67 @@ alternates `ExpandCurrent` on both until the current node of one is closed by th
 
 `FindPath(unit, goal*, mover, maxLength, minDist)`; `mover` is the unit's `CMover` (CUnitServer +0x3C):
 
-1. reject if `goal.x^2 + goal.y^2 > 1e8`; store the requested goal in the mover (`+0x60..+0x68`).
-2. `CollisionMap::RemoveUnit(self)`. `FindFreeCellNear(unit, goal, checkRegion = 0, minDist)` 0x5BAC10: if the unit can stand at the goal tile (nibble != 0, `CanUnitStandAt`) it stays, else a search along the 8 rotated
-   directions of the unit->goal line with growing distance (from `minDist*2 - 1`, up to the line's length) for a tile it can stand on (and, with `checkRegion`, that `IsCellInRegion` accepts); the result is the tile centre
-   nudged 0.49 toward the original goal. Stored as the snapped goal (`+0x58/+0x5C`).
-3. same tile as the unit -> one-cell path (flag 0x200; only if the unit can stand there and its nibble != 0). Octile distance `|dx - dy| + 1.414 * min < 25` tiles and both `PathFinder::BeginForUnit` succeed -> `MeetLocalSearches` 0x5B9690 (forward from the unit, backward from the goal,
-   alternate `Expand` until one's current node is reached by the other; extract, reverse, join, de-duplicate).
-4. otherwise (or on a miss) `FindFreeCellNear(checkRegion = 1)` again, then `FindLongPath` 0x5B9C90 with `allowRetry = (mover.+0x6E || mover.+0x6F)` (AI units, or the first request after a reset).
-5. `CAIMap::SmoothPathStart` 0x5C46C0 (see 4.5) with the unit's facing direction (8 directions); `CAIMap::DeliverPathChunk` 0x5BB190; `CollisionMap::AddUnit(self)`; on failure mover `+0x6D = 1`; `+0x6F = 0`.
+[V, deep-read 2026-11-06]
+1. reject if `goal.x^2 + goal.y^2 > 1e8` (metres); store the requested goal **x, y and z** in the mover (`+0x60..+0x68`; section 5.2 calls the z slot "max
+   length" because every order puts the length into the goal's z, and the re-plans read it back as such).
+2. `CollisionMap::RemoveUnit(self)`. `FindFreeCellNear(unit, goal, checkRegion = 0, minDist)` 0x5BAC10 (works in tile units, converts the goal in place):
+   * with `checkRegion == 0`, a non-unit or a unit that can stand on the goal tile (`CanUnitStandAt` and its class nibble != 0) keeps the exact goal;
+   * else: `v` = the unit->goal tile vector normalised so its larger component is +-1, and its +-45 deg rotations `r1 = 0.707 (vx - vy)`, `r2 = 0.707 (vx + vy)`
+     (all four rescaled when a rotated component exceeds 1). For `d` from `max(0, round(2 minDist) - 1)` up to the Chebyshev unit-goal distance, the candidates
+     are `goalTile - round(d * w)` with `w` in the order `v, (r1, r2), (r2, -r1), (vy, -vx), (-vy, vx), (-r2, r1), (-r1, -r2), -v`: first the tile **back toward
+     the unit**, then rotated by +45, -45, -90, +90, +135, -135 and last the tile beyond the goal (only `d = 0` = the goal tile itself at distance 0). A candidate
+     must pass the stand test above and, with `checkRegion`, the region test: the unit tile's `NavGrid::DominantRegion` is taken first, the occupancy grid of
+     the unit-goal bounding box (+1) is cleared and used as a cache (1 = in region, 2 = not, else `NavGrid::IsCellInRegion`);
+   * the accepted tile `c` gives the snapped goal `c + 0.01` on an axis where `c >= goalTile`, `c + 0.99` where `c < goalTile` (0.01 tile inside the
+     candidate's edge facing the goal); `d = 0` keeps the exact goal. No candidate -> `FindPath` fails (unit put back).
+   Stored as the snapped goal (`+0x58/+0x5C`). A snapped goal within `sqrt(0.001)` tile of the unit's exact position -> **failure** (no path, and the `+0x6D` flag is
+   not set).
+3. same tile as the unit -> a one-cell path, the cell's speed factor (+0xC) = 0x200 (only if the unit can stand there and its nibble != 0; non-units always); no
+   smoothing. Octile distance `|dx - dy| + (min * 0x5A8 >> 10) < 25` tiles (the pending list is cleared) and both `PathFinder::BeginForUnit` succeed ->
+   `MeetLocalSearches` 0x5B9690 (forward from the unit, backward from the goal, alternate `Expand` until one's current node is reached by the other; extract,
+   reverse, join, de-duplicate).
+4. otherwise (or on a miss) `FindFreeCellNear(original goal, checkRegion = 1)` again (failure -> fail); the snapped tile equal to the unit's tile -> a one-cell
+   path as in 3; else `FindLongPath` 0x5B9C90 with `allowRetry = (mover.+0x6E || mover.+0x6F)` (AI units, or the first request after a reset) and
+   `maxLen = round(maxLength * 2 - 0.5)` tiles.
+5. `CAIMap::SmoothPathStart` 0x5C46C0 (see 4.5) with the facing code `((6 - round(atan2(-fwd.y, -fwd.x) * 4/pi)) mod 8) + 1` and the "straightness"
+   `2 |snapped.x - round(snapped.x)|` (the code computes this twice from the **x** coordinate and takes the minimum: a copy-paste slip, y never counts); its
+   result (the corridor cost) goes to mover `+0x84`. `CAIMap::DeliverPathChunk` 0x5BB190; `CollisionMap::AddUnit(self)`; on failure mover `+0x6D = 1`; `+0x6F = 0`.
 
 ### 4.4 `FindLongPath` 0x5B9C90 [V]
 
 `NavGrid_FindPath(class, start tile, goal tile, blocked cells)`; if it fails -> fail. If `navCells * 8 > maxLength` (in tiles) -> fail. Else clear the direction grid around the nav path (`ClearOccupancyAround`),
 turn every nav cell into its representative tile (B nibbles) and append the goal tile; walk the chain with **one** `PathFinder`: `BeginForUnit(start, wp1)`, `RunUntil(wp1)`, `WriteOccupancy`, then `ShiftWindow(prev wp, next wp)`
-for each further waypoint. If a waypoint is not reached the 21 x 21 neighbours (sorted by distance, `CellOffsets_Build` 0x5BF8F0) are tried; at the last waypoint the search is run to the end if the goal is still unreached.
-The tile path is read back with `ExtractOccupancyPath` 0x5B9A20 (follows the direction grid from the goal to the 0 start cell). If the walk dies **within 15 tiles** of the start and `allowRetry`: the failing nav cell is appended to the mover's
-blocked list (`+0x70..`) and the whole function recurses (a unit-blocked corridor is routed around). If it dies farther away: the path to the last reached tile is kept, the mover's snapped goal becomes that tile and
-`+0x6D = 1` ("partial, continue later"). The nav search ignores units; the tile windows see the standing ones.
+for each further waypoint (waypoints equal to the current position are skipped). [V, deep-read 2026-11-06] If `RunUntil` does not reach a waypoint, the
+offset table (`GetCellOffsetsForRadius(1e20)`: all 21 x 21 offsets sorted by distance, `CellOffsets_Build` 0x5BF8F0) is scanned around the waypoint for the
+**nearest tile the search already reached** (finite cost); that tile becomes the substitute position and the chain continues from it (none -> failure handling
+below). When the last waypoint (the goal) has not been reached: `WriteOccupancy`, `ShiftWindow(current, goal, reopen 1)`, `RunToEnd`, and the goal must have a
+finite cost. After each successful leg `WriteOccupancy`. At the end the start tile's direction byte is zeroed and the tile path is read back with
+`ExtractOccupancyPath` 0x5B9A20 (follows the direction grid from the goal to the 0 start cell) into the mover's pending list; a path that does not begin at the
+start tile is a failure.
+On a failed leg the **octile distance from the start to the last reached waypoint** decides: <= 15 tiles and `allowRetry` -> a nav cell is appended to the
+mover's blocked list (`+0x70..`) and the whole function recurses (a unit-blocked corridor is routed around; no depth limit, each level blocks one more cell).
+The cell is the one linked from the failing waypoint's record (`+0x10`), i.e. the nav cell **before** the waypoint's own cell (the first waypoint links its own
+cell). <= 15 without `allowRetry` -> failure. Farther: the path to the last reached waypoint is kept, the mover's snapped goal becomes that tile's centre and
+`+0x6D = 1` ("partial, continue later"). The nav search ignores units; the tile windows see the standing ones. The blocked list is not cleared here (only by
+the mover reset).
 
 ### 4.5 Start smoothing, chunking, speeds
 
 * `CAIMap::SmoothPathStart` 0x5C46C0 (for paths of >= 3 cells; the name undersells it): a **corridor re-plan of the whole path** [V for the
   loop structure, I for the table meaning]. The state is 9 `{cost, back-link}` slots = the positions of the 3 x 3 window around the current
   path cell. Start: the 8 neighbours of the start cell cost the step (passability x slope from `walkCostTable`, x 1.414 on diagonals) plus a
-  turn penalty from the unit's facing `lastDir` (`(|dir - lastDir| folded to 0..4) - 1`, min 0, x `walkCostTable +0x10` x 60). Then for every
+  turn penalty from the unit's facing `lastDir` (`(|dir - lastDir| folded to 0..4) - 1`, min 0, x `walkCostTable +0x10` x 60). [V, deep-read 2026-11-06]
+  The step query's `+0x10` is the constant 10.0 (`InitStepQueryForUnit`), so the penalty is **600 per 45 deg beyond the first** (90 deg 600, 135 deg 1200,
+  reversing 1800; a straight step on the best ground costs 1024). A start neighbour is blocked unless its stamp byte is `<= R` or below the start cell's, its
+  nibble cost is >= 0 and the slope factor > 0. The ninth slot (the start cell itself) starts at cost 0 with no back-link; `this` is the CAIMap's scratch
+  object (`exitScratch`), not the map. Then for every
   following path cell (the whole list, head to tail) `NavGraph::RelaxPortal` moves the 9 slots to the next window through the table entry
   `g_0x7C3058[inDir][outDir]` (0x3C bytes, 9 x 9 entries, built once by `NavPortalTables_Build` 0x5C42B0 from
   `NavPortalSet_BuildForDirection` / `NavPortalPair_Build`): the positions shared by the two windows copy their cost, the entry and exit
   edges are relaxed with `PathFinder::RelaxNeighbour` (real terrain cost). At the goal the 8 approach slots get `(1 - straightness) * 2048`
   on the diagonals and the cheapest wins; when it beats the previous total the path list is rebuilt from the goal backwards along the
-  back-links (`Cell_Neighbour` per stored direction, `AddHead`), and the whole pass repeats until the cost stops improving. Net effect: the
+  back-links (`Cell_Neighbour` per stored direction, `AddHead`), and the whole pass repeats until the cost stops improving (the first pass always rewrites
+  the path when any approach slot is finite; the returned cost is stored at mover `+0x84`). Net effect: the
   path may shift by one cell sideways anywhere along its length to cut corners, follow the facing and avoid diagonal arrival.
 * `CAIMap::DeliverPathChunk` 0x5BB190: `MoveRequest::Clear`, `SetRect(unit pos, facing, tick - 1)`, moves **up to 32 cells** (`0x20`) from the pending list (`CMover +0x3C`) into the request's list (`+0x20`). All delivered ->
   `flags[0] (+0x6C) = 1` and the request target is the exact snapped goal; else `flags[0] = 0`, the last cell is pushed back to the front of the pending list (so the next chunk starts there) and the request target is that cell's centre.
@@ -285,7 +363,7 @@ bits 4-5 = flags & 3, bits 6-15 = speedFactor clamped to 0x3FF` plus the explici
 
 +0x3C pending cell list (vtable, head +0x40, tail +0x44, count +0x48, free +0x4C, plex +0x50, block +0x54), **+0x58/+0x5C snapped goal** (tile units, f32), **+0x60/+0x64 requested goal x, y (metres)**, **+0x68 max path length** (the order's z),
 flags **+0x6C "whole path delivered"**, **+0x6D "partial / no path: re-plan from the stored goal when the chunk ends"**, **+0x6E "AI unit" (no player)**, **+0x6F "first request after reset"**, +0x70 blocked nav-cell list (CArray of `{x, y}` pairs: vtable +0x70, data +0x74,
-count +0x78, cap +0x7C), +0x84 int. In CUnitServer terms: goal `+0x9C`, length `+0xA4`, delivered `+0xA8`, partial `+0xA9`, AI `+0xAA`. `Reset` 0x5B23A0, `ResetForUnit` 0x5B2190, `ResetWithTarget*` 0x5B1DE0 / 0x5B1F10 / 0x5B2050
+count +0x78, cap +0x7C), +0x84 the corridor cost returned by the last `SmoothPathStart` (written by `FindPath`). In CUnitServer terms: goal `+0x9C`, length `+0xA4`, delivered `+0xA8`, partial `+0xA9`, AI `+0xAA`. `Reset` 0x5B23A0, `ResetForUnit` 0x5B2190, `ResetWithTarget*` 0x5B1DE0 / 0x5B1F10 / 0x5B2050
 (reset + request kind 1 / 3 / 4), `CMover::ExportFullPath` 0x5B22C0 (request + all cells incl. pending, speed factors forced to 0x200, for the report message), `ReadState/WriteState` (save games).
 
 ### 5.3 `MoveCurve` (0xA4 at CUnit +0x27C) [V from `BuildPath` / `Evaluate` / `Predict`]
@@ -296,9 +374,15 @@ with 100 a turn of pi takes a small fraction of a tick, i.e. effectively instant
 segment start / end time, +0xA0 cached segment index (`CUnit +0x31C`, -1 = none).
 
 `CMover::BuildPath` 0x5C67D0(request):
-* kind 0 / 3: nothing; kind 1 / 4: turn delta = wrapped (angle - heading), turn speed from the request or `+0x40`.
-* kind 2: **points**: start position first; for each cell the current run's counter is incremented and the cell's speed factor appended; direction `D` of the step to the next cell via table 0x791988; a corner point is inserted
-  when the direction changes by >= 2 steps (>= 90 deg) (positions at cell edge midpoints / corners depending on `D`), otherwise the run continues; the request goal (`+0x14/+0x18`) is the last point. `BuildSegments` 0x5C66C0 /
+* kind 0 / 3: nothing; kind 1: turn delta = wrapped (`atan2(sin a, cos a)` - heading) into [-pi, pi], turn speed = the request's `+0x18` or, when 0,
+  `+0x40`; kind 4: the same delta, but always the unit's `+0x40` turn rate (the request's speed is ignored here) [V, deep-read 2026-11-06].
+* kind 2 (and any kind above 4): **points**: start position first; for each cell the run counter of the last point is incremented and the cell's speed
+  factor appended; `D` = direction of the step to the next cell via table 0x791988 [V, deep-read 2026-11-06, corrected]: a **diagonal** step always
+  appends the corner it cuts (`D` 2 NW -> `(x, y)`, 4 SW -> `(x, y + 1)`, 6 SE -> `(x + 1, y + 1)`, 8 NE -> `(x + 1, y)`, cell coordinates); a
+  **straight** step appends the midpoint of the edge it leaves through (1 N `(x + 0.5, y)`, 5 S `(x + 0.5, y + 1)`, 7 E `(x + 1, y + 0.5)`, 3 W
+  `(x, y + 0.5)`) only when its direction differs by >= 90 deg (2 codes) from the previous step or from the next one; otherwise the run continues.
+  The request goal (`+0x14/+0x18`) is the last point. So straight runs become one segment group and diagonal stretches pass exactly through the tile
+  corners. `BuildSegments` 0x5C66C0 /
   `AddSegmentsBetween` 0x5C6370: between consecutive points, `count` segments at fractions `(i + 0.5 + off0) / (count + off0 - off1)` (`off0 = -0.5` at the path start, `off1 = +0.5` at its end), all with the run's unit direction and
   `speed = cellSpeed[i] * baseSpeed / 512`; a one-run path is just two end points. `LimitSegmentSpeeds` 0x5C6290: a segment's speed is capped so traversing it takes at least `turnAngle / turnRate`.
   `CopySegmentCells` 0x5C6750 copies the request cells' x / y into the segments.
@@ -306,8 +390,14 @@ segment start / end time, +0xA0 cached segment index (`CUnit +0x31C`, -1 = none)
 
 `MoveCurve::EvalPath` 0x5C6FC0 (t = ticks since `startTick`): before the turn ends -> heading only (`turning = 1`); otherwise find the segment (cached), `MoveCurve::HermiteInit` 0x5C73B0 builds the cubic `p(s) = p0 + d0 s + a2 s^2 + a3 s^3` with
 `p(len) = p1`, `p'(len) = d1` (Hermite in **distance**, `s = (t - t0) * segmentSpeed`, `t0` accumulating `len / speed`), position = `(Poly3_Eval(X), Poly3_Eval(Y))`, direction = the derivative; returns the *next* segment's cell as "the
-cell being entered"; past the last segment: the end point, speed 0, cell = the last segment's. `Mover::Predict` 0x5C7430 switches on the request kind (kind 3: heading interpolated from the start heading to the target's bearing between
-start and end tick, or the bearing; position fixed) and clamps `t` to `startTick`. Speed units: tile units per tick (walk ~0.2 -> ~1.9 m/s at 18 ticks/s; docs/game-memory.md's "x 10 = m/s" is ~10 % high) [I].
+cell being entered"; past the last segment: the end point, speed 0, cell = the last segment's. `Mover::Predict` 0x5C7430 switches on the request kind and clamps `t` to `startTick`
+[V, deep-read 2026-11-06]: defaults position = the request start, direction z 0, speed 0.1, both cells -1, turning 0. Kind 0: direction = the start heading.
+Kinds 1 / 4: turn time `T = |turnDelta / turnRate|` ticks; after `T` the heading is `start + delta`, before it `start + sign(delta) x (t - startTick) x
+turnRate`; kind 1 reports `turning = 1` throughout (also after the turn), kind 4 only while turning. Kind 2: `EvalPath`. Kind 3 (track a unit): the
+target looked up by id (world vt[40]; gone -> as kind 0); aim point = its predicted position at the request's `+0x18` tick (vt[52]) while `t <= +0x18`,
+its live position (vt[53]) afterwards, in tile units; until the `+0x1C` tick the heading moves linearly from the start heading to that bearing
+(`start + wrapped(bearing - start) x (t - startTick) / (+0x1C - startTick)`), then it is the bearing itself (normalised vector; a zero vector leaves
+(0, 0)). Position never changes for kinds 0 / 1 / 3 / 4. Speed units: tile units per tick (walk ~0.2 -> ~1.9 m/s at 18 ticks/s; docs/game-memory.md's "x 10 = m/s" is ~10 % high) [I].
 
 ### 5.4 Per-tick server update `CUnitServer::TickMovement` 0x547890 (states 0 walking / 1 turning) [V unless marked]
 
@@ -403,13 +493,32 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 4. `full/structs.tsv` `CMover` (size 0xA4) merged the server move state (0x88) with the curve (0xA4); `batch-pathfinding-structs.tsv` separates them.
 5. Moving units are invisible to the planner; only standing units (and the units' own removal) matter, which explains units "walking through" each other until they collide and wait.
 
+Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
+
+6. This page 4.3 (`FindFreeCellNear`): "searches along the 8 rotated directions ... the tile centre nudged 0.49 toward the goal" -> the candidates are
+   `goalTile - round(d x w)` (first back toward the unit, then +-45, +-90, +-135, 180 deg), and the result sits 0.01 tile inside the candidate's edge
+   facing the goal tile (`c + 0.01` / `c + 0.99`).
+7. This page 4.3: "one-cell path (flag 0x200)" -> 0x200 is the cell's speed factor (1.0); a snapped goal on the unit's exact position is a failure;
+   the mover `+0x60..+0x68` hold the goal's x, y **and z** (`+0x68` is "the max length" only because orders store it in the z).
+8. This page 4.4: "If a waypoint is not reached the 21 x 21 neighbours are tried" -> the nearest **already reached** tile around it is taken as a
+   substitute waypoint; the 15-tile retry test is the octile distance start -> last reached waypoint; the blocked nav cell is the one before the
+   failing waypoint's cell.
+9. This page 4.1: "`ShiftWindow` ... border-crossing nodes are re-opened; `keepReached` decides whether already-closed nodes stay closed" -> flag 0
+   keeps every closed node closed and re-queues the open ones; flag 1 re-opens every node at least as costly as the cheapest node of the old window's
+   edge ring; the shift fails when the origin moves >= 31 tiles.
+10. This page 3.3: object faces "sampled ~3 per tile" -> `round(3 x edge length in metres) + 2` samples per edge (~1.5 per tile).
+11. This page 5.3: "a corner point is inserted when the direction changes by >= 90 deg" -> every diagonal step adds the corner it cuts; straight steps
+    add their exit-edge midpoint only next to a >= 90 deg change; kind 4 turns ignore the request's speed.
+12. This page 2 / 9: `ChooseExitDirection 0x5C46C0` -> `SmoothPathStart` (one function, the corridor re-plan); the mover's `+0x84` "int" is its
+    returned cost, and that cost is what `AiLogicFear::Evaluate` and `FindRandomReachableSpot` compare with `10000 x d` (unit-ai.md 6.8 / 8.4).
+
 ## 9. Function index (addresses)
 
 CAIMap data: Ctor 0x5B3C30, Load 0x5B43C0, Dtor 0x5B5E10, InitCostTables 0x5B6070, InitStepTables 0x5B4150, PackMaterialCosts 0x5B8620, AddCellObject 0x5B61B0, RemoveCellObject 0x5B6380, SetBridgeCells 0x5B6740, StampObject 0x5B6A80,
-PlaceObjectVolumes 0x5B7820, RemoveObjectVolumes 0x5B78F0, UpdatePassability 0x5B8FA0, GetCellStepCost 0x5B8BA0, MarkSteepCells 0x5B8710, ClearPassabilityClass 0x5B89F0. Queries: CanUnitStandAt 0x5B80F0, CanUnitMoveTo 0x5B81B0, CanUnitBeAt 0x5B7A40,
+PlaceObjectVolumes 0x5B7820, RemoveObjectVolumes 0x5B78F0, CObject3D::BuildFromAnimation 0x5179E0 (part flags), UpdatePassability 0x5B8FA0, GetCellStepCost 0x5B8BA0, MarkSteepCells 0x5B8710, ClearPassabilityClass 0x5B89F0. Queries: CanUnitStandAt 0x5B80F0, CanUnitMoveTo 0x5B81B0, CanUnitBeAt 0x5B7A40,
 FindOverlappingUnit 0x5B7BB0, IsUnitPositionWalkable 0x5BA5A0, IsUnitCellPassable 0x5BA6E0, IsCellPassableClass 0x5BA790, HasPassableNeighbour 0x5BA830, IsCellWater 0x5BBC70, HasObjectType3At(Pos) 0x5BBD10 / 0x5BBDB0, GetMaxSlopeAt 0x5BC2A0, TraceVisibility 0x5BC3E0.
 Stamps: StampMap Ctor 0x5B4110, AddStamp 0x5B36B0, RemoveOwner 0x5B3890, appliers 0x5B39D0 / 0x5B3A70 (terrain) and 0x5B3B20 / 0x5B3B90 (obstacle), FootprintStamp Ctor 0x5B3440, GetCached 0x5B8350, StampUnitFootprint 0x5B7EF0.
 Collision map: Ctor 0x5C02E0, Resize 0x5C06F0, AddUnit 0x5C0DF0, RemoveUnit 0x5C1010, MoveUnit 0x5C11D0, FindUnitsNear 0x5C0BD0. Path: FindPath 0x5BB350, FindLongPath 0x5B9C90, MeetLocalSearches 0x5B9690, StepAlongPath 0x5BB190,
-ContinueMove 0x5BB900, RateFootprintPath 0x5BA400, FindFreeCellNear 0x5BAC10, FindNearestReachableCell 0x5BA9D0, ChooseExitDirection 0x5C46C0. PathFinder 0x5C1D50-0x5C35F0; NavGrid / PathSearch 0x5AED60-0x5B1380 (Build 0x5AFC70, FindPath 0x5B0D90, Read 0x5B1180, Write 0x5B1380).
+ContinueMove 0x5BB900, RateFootprintPath 0x5BA400, FindFreeCellNear 0x5BAC10, FindNearestReachableCell 0x5BA9D0, SmoothPathStart 0x5C46C0. PathFinder 0x5C1D50-0x5C35F0; NavGrid / PathSearch 0x5AED60-0x5B1380 (Build 0x5AFC70, FindPath 0x5B0D90, Read 0x5B1180, Write 0x5B1380).
 Movement: MoveRequest 0x5C7B00-0x5C7D50, wire 0x5C7DB0 / 0x5C7FC0, CMover 0x5B1DE0-0x5B2570, MoveCurve 0x5C6270-0x5C79B0. Server: BeginMoveTo 0x548700, TickMovement 0x547890, DispatchQueuedOrder 0x54A900, ApproachTarget 0x54D140, MoveToWithParty 0x554830,
 QueueOrderMoveTo 0x554740, OnMoveFinished 0x54EB30, UpdateStance 0x548520; unit: CUnit::ResetMover 0x52E9D0, GetSpeeds 0x52F920, UpdateMoveParams 0x530570, ComputeAnimSpeedClasses 0x552FB0; client: ReplayMove 0x535850, ReadNetState 0x52EF90.

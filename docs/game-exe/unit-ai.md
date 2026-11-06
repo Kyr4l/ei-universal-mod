@@ -255,7 +255,8 @@ callForHelpRadius / alarmCondition from the slot, `AiSpellInfos_Build`, and `CWo
 
 For the observer O (CUnit, server S) and every neighbour T (server TS), unless T is already in the seen list (or a seen corpse):
 * AI observers (`O.player == 0`, witness flag 0x2000000 off) only test **enemies** (`IsPlayerInMask(O, T)`) and units that belong to a player; a player's
-  unit tests everyone.
+  unit tests everyone. [V, deep-read 2026-11-06] The witness flag is cleared at the start of every `SeeUnits` call, so a murder witness gets exactly one
+  all-units pass. T's point is its vt[48] position; units already in the seen list (corpses: in the corpse list) are skipped.
 * eye = O position + terrain height + `CUnit +0x14c x 1.8 + +0x158 + +0x130` (model height), direction = -forward axis of the quaternion.
 * `d` = **2D** distance eye -> T, `R = TS.visibilityMult(+0x900) x S.sightMult(+0x904) x TS.visibility(+0x2c4) x S.sight(+0x294)`.
 * **seen** when `d <= R` and `dot(T - eye, eyeDir) >= viewConeCos x d` (3D dot; heroes have -2 = always) and `CAIMap::TraceVisibility(eye, T) x R > d`
@@ -437,17 +438,23 @@ Never current (-1000, no Update). Each tick it pops the first corpse of a friend
 * `Evaluate` 0x5D2960: jitter `+0xc = (2 j + 3) / 3`; an attacker `+0x30` -> `SetNoticed(its pos, 1000, -2)` and `radius = max(radius, 1.5 x distance)`.
   **Kiting** (ranged units: `CUnitServer::IsRangedAttacker` (no weapon: natural range > 1; weapon kind 5 / 6), animSpeedClass < 6, no spell in slot 0,
   `UnitStats_EffectLevel == 0`, `+0x238 > 0.6`): the nearest seen enemy within `RangedAttackDist` 7 (`RangedRunDist` 4 while Aggression is current):
-  already moving -> **15000**; else a retreat point 5 m further away from the enemy (+-3 m jitter) whose `FindPath(budget 3 d + 10, slope 3)` cost is <= 2 x 5000 x d [V, deep-read 2026-11-03] and from which the enemy can be
+  already moving -> **15000**; else a retreat point 5 m further away from the enemy (+-3 m jitter) whose `FindPath(budget 3 d + 10, minDist 3 m)` cost is <= 2 x 5000 x d [V, deep-read 2026-11-03;
+  2026-11-06: the "cost" is the mover's `+0x84` = the corridor cost `SmoothPathStart` returned (0 for paths under 3 cells; ~2048 per metre of straight best
+  ground), and the third argument is `FindPath`'s minDist, not a slope] and from which the enemy can be
   attacked (`CanReachOrderTargetFrom`) and within 1 m of the path end -> stored in `+0x1c` -> **15000**. Else `enemySeen` -> **3000**. Else standing in a spell
   area (`CAIMap::HasObjectType3AtPos`, moving or a non-idle prototype) -> remembers the spot -> **350**; the remembered spot still in an area -> 350. `playerFear`:
   the nearest *player-owned seen* unit within the radius -> `SetNoticed(its pos, 1000, -2)`. Then: interest > 50 and (Fear is current or the unit is within the
   radius of the noticed pos) -> **interest / 6**; else `radius = (30 r + 10) / 31` (decays to 10) and -1000.
 * `Begin` 0x5D3650: `fighting = 1`, target released, kind 0. `End` 0x5D3680: `fighting = 0`.
-* `Update` 0x5D30A0: origin = the nearest seen enemy when `enemySeen` (+ `CallForHelp` there), else the own position when inside a spell area, else the remembered
-  spot when that is in an area, else the noticed position (interest zeroed unless playerFear with interest >= 501). Within `radius` of the origin and not moving:
-  target = the kiting spot, or a point 5 m away from the origin with jitter +-`+0xc` (doubled every flee, capped at 2.5 r); `CAIMap::FindPath(3 d + 10)` ok -> kind 1
-  `QueueOrderMoveTo`. When idle: `ChooseTarget(empty candidates, filter 1, direct 1)` + `ApplyCastOrder` (support spells, cast from where it stands), else turn to
-  face the origin.
+* `Update` 0x5D30A0 [V, deep-read 2026-11-06]: origin = the nearest seen enemy when `enemySeen` (+ `CallForHelp` there; with no such unit the origin stays the
+  noticed position), else the own position when inside a spell area, else the remembered spot when that is in an area, else the noticed position (AiMemory
+  +0x10, z 0) and the interest and decay are zeroed unless playerFear with interest >= 501. Flee when the unit is within `radius` of the origin (3D) and neither
+  its current nor its queued unit order is a move (kind 1): target = the kiting spot (`+0x1c/+0x20`, with `+0x24` as its z **and** validity flag, cleared on use),
+  else `jitter = min(jitter, 2.5 r)` and the point **5 m from the unit, straight away from the origin**, plus a uniform `[-jitter, jitter)` offset on x and y
+  (ISAAC); `CAIMap::FindPath(unit, target, scratch mover, 3 d + 10, minDist 3)` ok -> brain kind 1 + `QueueOrderMoveTo(target, 0, 0, 1e6)`; `jitter *= 2`
+  after every attempt (also a failed one). Then, when the brain order is 0: `ChooseTarget(empty candidates, filter 1, direct 1)` + `ApplyCastOrder`
+  (support spells, cast from where it stands); still 0 -> face the origin: `BuildIdleActions(own pos, half unit vector to the origin, stay -1 = 40 ticks)`,
+  target released, brain kind 2, timer -10000, `QueueOrderMoveTo(own pos)`.
 So Fear is three behaviours: the ranged kite (priority 15000 beats Aggression's 10000: an archer with an enemy inside 7 m steps back, then Aggression shoots
 again), the flee from a seen enemy at 3000 (used by AggrMode 2 / 3 units that have no Aggression; with Aggression present 10000 wins), and leaving spell areas.
 
@@ -470,7 +477,8 @@ Evaluate 10 (Tamed 100000000: a tamed unit keeps this logic over any reaction). 
   `CanReachOrderTarget` accepts, else 0x1C (the "cannot reach" message the order reports if it fails).
 * `MoveTo`, `MoveToNow` 0x5D39E0, `AttackTarget` 0x5D3C30, `CastOn`, `CastAt`, `Interact`, `SetLeader` 0x5D3DE0 (no leader cycles) are the entry points of the
   player messages (`CPlayerServer::OnMsg_*`, `WorldServer::On*Order`); AI-owned units may only be ordered to attack units passing `IsFriendOrSeen`.
-Taming: `CUnitServer::OnProvoked` 0x551AE0 escalates `+0x908` per big hit from another player's unit: 1 = the tamer's side removed from `attackableMask` (stops
+Taming: `CUnitServer::OnProvoked` 0x551AE0 (callers: the taming spell in `CSpellEffect` 0x67F870 with its power, and the interaction param 2 branch of
+`ExecuteInteraction`, which is unreachable: combat.md 3.3 [V, 2026-11-06]) escalates `+0x908` per big hit from another player's unit: 1 = the tamer's side removed from `attackableMask` (stops
 fighting back), 2 = the unit's side changed to the tamer's, 3 = `SetPlayer(tamer)` + an `AiLogicTamed` logic; `StopFollowing` / `OnAttackedBy` undo it.
 
 ### 6.10 Script commands (`docs/game-exe/gs-functions.md`, all verified there) [V]
@@ -554,7 +562,8 @@ more than `FollowMaxDist` from the own goal; else `ClearQueuedOrder`. Target dea
 
 ### 8.4 `Brain::FindRandomReachableSpot` 0x5D7F80 [V]
 Backoff `+0x68` (decremented per call); a random point in the square (up to 10 re-rolls to be inside the circle); rejected when `CAIMap::GetMaxSlopeAt > 0.3` or a
-friend-side unit (including itself) stands within `2.5 x CUnit +0x32c` of it; `CAIMap::FindPath(unit, spot, 3 d + 10)` must succeed with a cost <= 10000 d, else
+friend-side unit (including itself) stands within `2.5 x CUnit +0x32c` of it; `CAIMap::FindPath(unit, spot, 3 d + 10)` must succeed with a cost <= 10000 d (the cost =
+mover `+0x84`, the `SmoothPathStart` corridor cost, pathfinding.md 4.5; 0 for paths under 3 cells), else
 `+0x68 = min(10, d / 3)` ticks.
 
 ## 9. Saving and replication [V]
@@ -613,6 +622,20 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 15. `docs/game-exe/gs-functions.md` UMFear: "flag != 0 is the always afraid variant" -> player-fear (6.10).
 16. `full/structs.tsv`: `CUnitServer +0x980 brain` is embedded (0x190 bytes), not a pointer; `+0x174` is used as a byte "fighting" flag by the AI; `CUnit +0x24c`
     is the owning player, `+0x248` the attackable-sides mask.
+
+Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
+
+17. This page 6.8 (`AiLogicFear::Update`): "a point 5 m away from the origin with jitter" -> 5 m from the **unit**, straight away from the origin, plus
+    a uniform x / y jitter; "not moving" = neither the current nor the queued unit order is a move.
+18. This page 6.8 (`Evaluate`) and 8.4: "`FindPath(budget 3 d + 10, slope 3)` cost" -> the third argument is `FindPath`'s minDist (3 m), and the cost
+    is the mover's `+0x84` corridor cost from `SmoothPathStart` (0 for paths of fewer than 3 cells), not the Dijkstra path cost.
+19. `full/structs.tsv` `AiLogicFear +0x24 kiteSpotValid = 1.0` -> the kiting spot's z, doubling as the validity flag.
+
+Non-AI code in this module's address range (0x5DA000-0x5E2000, deep-read 2026-11-06, documented on their own pages): `Movie_PlayIntro` 0x5DA400 is
+really the loading-video **step** (`Movies\progres.bik`, proposed `Movie_StepProgress`), `Movie_PlayProgress` 0x5DA880 the looping loading video,
+`Movie_PlayFile` 0x5DB3F0, `Cursors_Register` 0x5DAEA0 (the called-shot cursors `cursor_attack_hd/bd/lh/rh/ll/rl`), the console 0x5DC620-0x5E00D0
+(ui-framework.md 4.7; `filter` sets the log mask `g_0x7C7B68`: 1 AI, 2 EVENT, 4 GRAPHICS, 8 RPG, 0x10 UNITACKS, 0x20 NET) and
+`CFlyingHitPoints::Draw` 0x5E18E0 (combat.md 8).
 
 ## 12. Function index
 Perception: StimulusMap::Load 0x5C9310, ExpireBucket 0x5C9530, Add 0x5C9630 (dead), EmitFootstep 0x5C9770, RemoveByOwner 0x5C97B0, HearSound 0x5C98C0,

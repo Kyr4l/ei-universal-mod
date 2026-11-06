@@ -125,7 +125,7 @@ UnitStats			0x28	float	speed	= baseSpeed * legFactor (+0x58); packed to CUnit +0
 UnitStats			0x34	float[4]	stanceSpeedMult	run, walk, sneak, crawl multipliers (udb +0x1c..); packed * 127.5 to CUnit +0x340..+0x343
 UnitStats			0x44	float	viewConeCos	-2 heroes (all round); monsters from the race table; stats +0x44: cos of the half view angle (-2 = all round for heroes)
 UnitStats			0x48	float	peripheralRange	Skills Peripheral; stats +0x48 (Skills Peripheral)
-UnitStats			0x4c	float	cos45	cos(45 deg) constant
+UnitStats			0x4C	float	cos90	cos(90 deg) = ~0 written by Unit_InitStatsFromProto / Hero_InitStatsFromProto
 UnitStats			0x50	float	carriedWeight	sum of item weights (+0x34) of the 23 item slots (CUnit::GetCarriedWeight 0x5307B0)
 UnitStats			0x60	int	moveType	udb +0x14: 1 walker (legs matter), 2 flying (CUnit +0x33f, CUnitServer +0x240); = stats +0x60 (2 flying)
 UnitStats			0x64	float	reachFactor	udb +0x44; natural reach = (this + 1) * radius (ChooseAttackAnim); = stats +0x64
@@ -277,7 +277,7 @@ CMover			0x58	float	goalX	snapped goal x * 2 (tile units); after a partial path 
 CMover			0x5c	float	goalY	
 CMover			0x60	float	reqX	requested goal x in metres
 CMover			0x64	float	reqY	
-CMover			0x68	float	maxLength	the order z: maximum path length in metres (1e6)
+CMover			0x68	float	goalZ	CORRECTION: was maxLength: FindPath stores the requested goal's z here (+0x60..+0x68 = goal xyz); every order carries the max path length in that z, so it doubles as the length re-used by TickMovement / ContinueMove
 CMover			0x6c	byte	pathDelivered	1 = whole path handed to the request (reset 1)
 CMover			0x6d	byte	needReplan	1 = no path / partial path: FindPath again from the stored goal when the chunk ends
 CMover			0x6e	byte	aiUnit	1 for units without a player (allows FindLongPath retries)
@@ -287,7 +287,7 @@ CMover			0x74	pointer	blockedData
 CMover			0x78	int	blockedCount	
 CMover			0x7c	int	blockedCap	
 CMover			0x80	int	blockedGrow	
-CMover			0x84	int	field_84	cleared on reset; use unknown
+CMover			0x84	int	corridorCost	CORRECTION: was field_84 "use unknown": the cost SmoothPathStart returns, written by CAIMap::FindPath; read as the "path cost" by AiLogicFear::Evaluate (<= 10000 d) and Brain::FindRandomReachableSpot (<= 10000 d)
 MoveCurve		0xa4	0x0	pointer	segVtbl	segment CArray: 0x1C-byte MoveSegment {x, y, dirx, diry, speed, cellx, celly}
 MoveCurve			0x4	pointer	segData	
 MoveCurve			0x8	int	segCount	
@@ -751,7 +751,7 @@ AiLogicFear	AiLogic	0x2c	0x8	float	radius	flee radius; max(r, 1.5 x attacker dis
 AiLogicFear	AiLogic	0x2c	0xc	float	jitter	flee point jitter, 3; doubled per flee, max 2.5 r
 AiLogicFear	AiLogic	0x2c	0x10	float[3]	rememberedSpot	-1313 none; a spell area the unit stood in
 AiLogicFear	AiLogic	0x2c	0x1c	float[2]	kiteSpot	retreat point of a ranged unit
-AiLogicFear	AiLogic	0x2c	0x24	float	kiteSpotValid	1.0
+AiLogicFear	AiLogic	0x2c	0x24	float	kiteSpotZ	CORRECTION: was kiteSpotValid 1.0: the kiting spot's z, also tested as the "spot valid" flag (non-zero) by Update and cleared to 0 when used
 AiLogicFear	AiLogic	0x2c	0x28	byte	playerFear	afraid of player-owned seen units (mob AggrMode 3 / UMFear flag)
 AiAcknowledge		0x10	0x0	int	heardLevel	max level a neighbour is currently voicing (reset per tick)
 AiAcknowledge		0x10	0x4	int	pending	Request(level)
@@ -4043,3 +4043,10 @@ EffectRecord			0x14	int	passCount
 EffectRecord			0x18	int	effectId	returned by slot 1 GetEffectId
 CTextManager			0x1c	pointer	archiveListHead	the .res archive list (TextArchiveList: head pointer at +0 of the embedded list; entries {next, prev, name std::string, CResourceBase*}); texts.res / textsLmp.res
 CFigureSpecific	CObject	0x20	0x1c	pointer	figure	owner figure (abstract base of CFigureClientSpecific, vt 0x73FB44: pure slots 2, 3, 11, 12); CFigure (CFigure::BindClientSpecific)
+AiTileMaterial		0x118	0x0	char[256]	name	tileDesc.reg material name (16 records at CAIMap +0xFC materials, index = the section name as a number)
+AiTileMaterial		0x118	0x100	int	speed	tileDesc.reg Speed (default -1)
+AiTileMaterial		0x118	0x104	int	costMul	tileDesc.reg CostMul (default -1 from the reg; record default 1)
+AiTileMaterial		0x118	0x108	float	stepLook	tileDesc.reg StepLook / 100 (default 1.0)
+AiTileMaterial		0x118	0x10C	float	stepSmell	tileDesc.reg StepSmell / 100 (default 1.0)
+AiTileMaterial		0x118	0x110	float	stepSound	tileDesc.reg StepSound / 100 (default 1.0); footstep loudness factor (StimulusMap::EmitFootstep)
+AiTileMaterial		0x118	0x114	int	packedCosts	pre-packed nibbles for empty dry tiles (PackMaterialCosts)
