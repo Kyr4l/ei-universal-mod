@@ -457,7 +457,7 @@ A missing section leaves name and description untouched (no fallback text); the 
 * ~~ShopStock +8 / +0x14~~ settled [V] (guess sweep 2026-11-01): `ItemsDb_ListArmorNames` feeds `+8` -> `GenerateArmors`, the weapon list feeds `+0x14`; `ShopStock::AddArmorProto` 0x699080 / `AddWeaponProto` 0x6990E0. The S_* table assignment above stands.
 * `CInventory` (typeId 0x17): no creator and its hash set is never filled: dead class in this build [V] (no `new` site of its vtable). [untestable]
 * ~~Model name arguments~~ settled [V]: `"%s_%.2d.%s.%d"` (`WeaponProto_FormatModelName` 0x6A0BF0, `Armor_FormatModelName` 0x6A3480) = model + type prefix (`unhufe` + `ax`), proto variant (`01`), material code (`co`), texture index (`0`): real file `redress.res/unhufeax_01.co.0.mmp`. ~~`Weapon_GetAttachBones` not re-read~~ read 2026-11-06 (section 4, weapon figure parts).
-* `CWorldServer::CloneItem`'s `desc[10] / desc[11]` (mana / max of the source) [I]; the update list `+0x12e44` is ticked by `CWorldServer::TickActiveObjects` 0x58D670 [V] (world-server.md 4.3).
+* ~~`CWorldServer::CloneItem`'s `desc[10] / desc[11]`~~ settled 2026-11-06 [V, machine code 0x594CE0]: the clone is `CItemManager::CreateItem(kind +0x10, id +0x18 split in high / low word, -1)` + the source's `vt[15] CloneInto`; then the clone's current mana `+0x28` = the source's, and when the source's `manaMax +0x2C` is above that mana the clone is appended once to the regenerating list `+0x12E44` (ticked by `CWorldServer::TickActiveObjects` 0x58D670, world-server.md 4.3).
 * ~~UnitProto +0x50~~ settled [V] (data-sound.md 3): `+0x50` is the Base Level (FLD41), not a natural skill.
 
 ## 9. Corrections to earlier notes

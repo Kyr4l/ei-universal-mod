@@ -205,8 +205,13 @@ Earlier notes called the four groups "LOD strip groups": they are the four **qua
 
 ### 3.3 Per frame: visibility, LOD, transform (`CTerrain::RenderSectors` 0x6C6460) [V]
 
-`CWorldClient::Render` sets the visible sector rows / column ranges (+0xAA4 / +0xAAC / +0xAA8 / +0xAB8: `CTerrain::SetVisibleQuad`
-0x6C98F0, the sectors whose centre lies inside the ground quadrilateral of the view) and calls `CTerrain::RenderOpaque` 0x6C6230
+`CWorldClient::Render` sets the visible sector rows / column ranges (+0xAA4 / +0xAAC / +0xAA8 / +0xAB8) with
+`CTerrain::SetVisibleArea(ground point, 100)` 0x6CA260 [V, corrected 2026-11-06]: the camera's ground point (`CCamera::GetGroundPoint`,
+the forward ray at height 0) and every sector overlapping the square of +-100 m around it (columns / rows `floor((p -+ 100 - 0.5) /
+32)` clamped to the map; the same column range on every row). `SetVisibleQuad` 0x6C98F0 (a test of the grid corners against the
+4 edge lines of the view's ground quadrilateral) is **dead code**: its only caller is the wrapper 0x6CA170 (2 points + half widths ->
+quad, missing from the function database), which nothing calls; it would also store its columns relative to the first visible
+column (latent, never run). Render then calls `CTerrain::RenderOpaque` 0x6C6230
 (passes `0 .. textureCount + 1`) before the objects and `CTerrain::RenderWater` 0x6C6330 (passes `textureCount + 2 .. 2 * textureCount
 + 3`) after them (call sites 0x56A06B / 0x56A112). Both push the terrain matrix (+0x54, identity + position) on the context's world
 and view stacks and run `RenderSectors(ctx, first, last)`:
@@ -671,11 +676,15 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
 * Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass: [live] (live-checklist.tsv).
 * ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. The second colour array (+0x148, "specular") beyond the per-hour colours stays open.
-* `CTextureManager::LoadTextureFromRegistry` 0x691BF0 (searches the list by kind and name, then creates): its name is kept, its
-  second half was not read.
-* The `TerrainSector +0x390` field (reset to 0, never read in this module) and `CTerrain +0x218`'s initial value 1.
-* `CTerrain::SetVisibleQuad`'s exact inclusion rule for sectors on the edge (centre test only: thin visible slivers of a sector
-  whose centre is outside are not drawn?).
+* ~~`CTextureManager::LoadTextureFromRegistry` 0x691BF0~~ settled 2026-11-06 [V], renamed `TakeFromReleaseCache`: it creates
+  nothing. It looks in the released-texture cache list `+0xC0` for a texture of that kind and name; a hit is unlinked, its size
+  `+0x28` leaves the cached-bytes counter, it gets a new id (`RegisterWithNewId`) and `IDirectDrawSurface7::SetPriority(100)`; a
+  miss returns 0 and `FindOrLoad` 0x692D30 loads the file.
+* ~~The `TerrainSector +0x390` field and `CTerrain +0x218`'s initial value 1~~ settled 2026-11-06 [V]: `+0x390` is written only
+  (ctor, `ResetFields`), never read: dead. `+0x218` is the tick counter (`CTerrain::Tick` 0x6CB25B ++); it starts at 1 so that a
+  new sector, whose stamp `+0x384` the ctor sets to 0, is always "older" on its first `GetSector` lookup and gets restamped.
+* ~~`CTerrain::SetVisibleQuad`'s exact inclusion rule on the edge~~ settled 2026-11-06 [V]: the function is dead code; the game
+  uses `SetVisibleArea` (a +-100 m square around the camera's ground point, 3.3).
 
 ## 13. Corrections to earlier notes
 

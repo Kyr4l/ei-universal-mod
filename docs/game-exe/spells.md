@@ -442,7 +442,7 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
   unrelated `ItemLink::Clone`).
 * Bug candidates from the 2026-11-06 deep read (not in docs/SpellAddonInfo.en.md):
   - campfire 0x27 (`TickActive` 0x682650, `case 0x27: this->countdown = uVar7 + 1`): the only phase-2 script that counts up, so the
-    fire never ends and hits every 4 ticks for the life of the zone. Could be intended for script-placed permanent fires [?]; live row.
+    fire never ends and hits every 4 ticks for the life of the zone. Settled as **design** (bugs.md #16) [V]: the only user is the map fire object (`CTorchDesc::Spawn` 0x46B310 -> the fire with the campfire spell), which must burn for the life of the zone; no item casts it.
   - charm 0x24 (`Start` 0x67F870): a non-unit target or a missing caster jumps past `phase = 3`, so `Start` re-runs every tick and the
     cast record never dies. Unreachable in vanilla (`CastSpellMulti` refuses charm); reachable with SpellAddon's unlock and a script
     charm without a caster.

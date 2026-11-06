@@ -482,7 +482,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   scan is only guaranteed to reach `16 * (int(radius / 32) + 1)` m: radii in [16, 32) m (and [48, 64), ...) can miss units in the far
   corner of the scanned square [V the arithmetic, I the effect]. `RefreshNearbyUnits` scales correctly (`radius * 2 * 0.03125`, tile
   units). Live check in `live-checklist.tsv`.
-* Stamp rule: dead units are not stamped (+0x274) [V]; units removed from the world are not in the collision map at all [I].
+* Stamp rule: dead units are not stamped (+0x274) [V]; units removed from the world are taken out of it: `CWorldServer::RemoveObject` 0x5935C0 calls `CollisionMap::RemoveObjectAndUnstamp` (0x59364D) for units [V, 2026-11-06].
   `BeginPaint / EndPaint` (now `BeginAIMapBatch` / `EndAIMapBatch`) have no reference in the exe: the editors' use is [untestable].
 
 ## 8. Corrections to earlier notes
