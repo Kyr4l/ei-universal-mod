@@ -311,7 +311,11 @@ The three renderer-built primitives (deep read 2026-11-06 [V]):
   at most 511 points; pipeline vt[24] with the **transpose** of stack 2's top builds four corners per point (size scaled by w [I]),
   with outcodes; each corner: diffuse = the record's colour, specular 0xFF000000, uv = the rect `{u0, v0, u1, v1}` corners (u0 v0,
   u1 v0, u1 v1, u0 v1). Quads whose first corner has a negative z are dropped, the rest **sorted by that z** (float bits as integers:
-  merge sort up to 128 quads, ascending (`MergeSortPass` takes the first run while `a <= b`), 4-pass byte radix sort above, its direction assumed the same [I]: near quads first, harmless for additive blending). vt[24] result 0 = indices (0 2 1, 0 3 2) per quad,
+  **descending** = far quads first, back to front [V, corrected 2026-11-06]: up to 128 quads a strided bottom-up merge sort
+  (`MergeSortPass` 0x5037D0, width = the largest power of two below n, halved each pass; it keeps the left item while `left >= right`,
+  0x503864 `cmp / jge`), above 128 a 4-pass byte radix sort (`RadixSortPass` 0x503710: each item is pushed at the head of its byte's
+  bucket list, the buckets are read 0..255 or 255..0 by the pass flag, passes (shift, flag) = (0, 1), (8, 0), (16, 1), (24, 0); the
+  head insertion reverses the ties every pass, so the four passes together are a stable descending sort). Both paths agree). vt[24] result 0 = indices (0 2 1, 0 3 2) per quad,
   1 = every triangle clipped in 2D against the render surface size by the game's `ClipTriangle`, 2 = batch skipped; vt[35] when
   `device +0x158`; then `CRenderDevice::DrawIndexedPrimitive` 0x503680. With the flag: SRCBLEND SRCALPHA / DESTBLEND ONE around the
   batches (additive), restored at the end.
@@ -362,7 +366,10 @@ this behind "unreachable" blocks.) Its functions:
   `<name>.lnk`). Scenes are refcounted by their objects; nothing evicts them in this module (the world drops them with the zone).
 - `BuildFigureMesh` 0x4F7F00 (FIG8) / `BuildFigureMeshOld` 0x4F87D0 (the 6-corner format) blend one part into the scene (3.3).
 - **Re-morph** (deep read 2026-11-06 [V], `GetOrCreateFigure` 0x4F75E0 = manager slot 6, called by `CObject3D::SetMorphParams`
-  0x517700 with the object's current scene): when the scene's refcount `+4` is below 3 (in practice: no other object shares it [I])
+  0x517700 with the object's current scene): when the scene's refcount `+4` is below 3 = no other object shares it [V: a new scene
+  starts at 0 (`CRenderScene` ctor 0x4F2C00), the cache multimap node keeps 1 (`CreateScene` 0x4F7B10 / `CreateSceneFromLink`: node copy
+  0x4FC6E0 adds 1, the temporaries add and drop theirs), and every `CObject3D` using it keeps 1 (`RcObj_Assign` in `LoadModel` /
+  `SetMorphParams`, the direct `+1` in `LoadModel`'s link path); `SetMorphParams` passes its pointer without a temporary reference])
   the scene is **re-blended in place**: `CRenderScene::SetMorphParams` 0x4F2F90 stores the new (s, d, h), the scene's slot 3 lists its
   part names, `GetModel(name)`, and `LoadFigFile2` 0x4F9E50 per part rewrites only the vertex blocks (`BuildFigureMeshB / C`,
   section 6); the same scene is returned. Otherwise (shared) slot 4 = `FindOrCreateScene(name, s, d, h, 0)` gives a cached or new
@@ -488,8 +495,8 @@ textures); `ReplaceTexture` 0x51B630 swaps one of the same kind.
    `ClipTriangles(vertices, codes, indices, outIndices, &vertCount, &indexCount)`; when both counts are non-zero: vt[34], vt[35] (when
    `+0x158`), flag 1 -> `Mesh_ComputeBounds2D_B` 0x4E86B0, draw; return 1 even when the clipper removed everything. `DrawMeshBatch` reads
    only flags 1, 2, 4: flag 8 (set by `RenderLit` for a material with flag 0x10) is honoured only by `CRenderScene::DrawMesh / DrawMesh2`,
-   which turn `SPECULARENABLE` on around their call. (If vt[14] ever returned 1 the clip path would read stale outcodes; the game only
-   relies on `CullBox` having said "inside" [?].)
+   which turn `SPECULARENABLE` on around their call. (If vt[14] ever returned 1 the clip path would read stale outcodes; it never does:
+   vt[14] always returns 0 (2.2a), so this path is unreachable and only `CullBox`'s "inside" answer matters [V].)
 6. The rect is copied to `+0x20` of the specific and the out RECT; flag 0x40; `DrawBoundsDebug` 0x5A7290 (world flag 0x4000).
    Deep read 2026-11-06 [V]: flag 0x40 is cleared on entry (in `RenderLit` before the hidden test, in `Render` after it). Scene-less
    figures in `RenderLit` copy the morph deltas (12 B xyz per vertex, count `+0x12C`) onto a copy of the SoA vertices in `g_0x7C2E48`, call
@@ -576,8 +583,12 @@ between frames: every frame the drops are regenerated from a hash of the grid ce
 - Draw: SoA blocks in the scratch `+0x38` (0x8000 blocks reserved), pipeline vt[9] on stack 2 into `+0x28` with codes `+0x4C`, the
   kept `VertexTL`s in `+0x70`, pipeline vt[32] over them (the clip-to-screen step: the snow offsets are applied before it) [I], vt[35]
   when `device +0x158`, then one locked `DrawIndexedPrimitive(TRIANGLELIST, 0x1C4, ..., indices +0x84, 3 per triangle)` straight on the
-  D3D device (no material, no `DrawIndexedWithMaterial`), with the same stats. The diffuse / specular dwords are not written by these
-  functions (left to vt[32] or stale) [?]. At most 81 x 81 = 6561 drops per frame.
+  D3D device (no material, no `DrawIndexedWithMaterial`), with the same stats. The diffuse / specular dwords `+0x10 / +0x14` are
+  **never written** [V]: the copy loops (rain 0x4E4A48..0x4E4B02, snow 0x4E53D4..0x4E54E3) copy the xyzw and write the uv `+0x18 / +0x1C`
+  only, vt[32] only maps to the screen (2.2a), and vt[35] (vertex fog) only lowers the specular alpha (`min(old, 255 - f)`). The buffer
+  `+0x70` comes from `AlignedAlloc32_Elem32_B` 0x4E5710 = a bare `operator new` (not cleared) of 81 x 81 x 3 VertexTLs (~630 KB) and is
+  kept between frames, so the colours are whatever that heap block held; a block that large normally gets fresh zeroed pages (0 = black
+  diffuse, fog alpha 0) [I; live row]. At most 81 x 81 = 6561 drops per frame.
 
 ## 4. The animation system
 
@@ -674,8 +685,13 @@ the `.fig` header words of 3.3: the name is split at '.' and only the parts **be
 animated texture kinds 0xD..0x10 of 3.5 (0xF has no frame rule, so `at3` does not animate). Kind 0x18 (`wt`) has no template in the
 material manager's table (8 entries: 0x11..0x17 and 0x19, which reuses metal.mat) [V]. An unknown part 2 = FatalError
 `ParseMaterialName.\n Unknown texture type "%s" in material "%s"` and kind 1; an unknown part 3 = the "Unknown material type" twin
-and 0x15 (skin); any name without exactly three dots gives texture 1 / material 0x15. The meaning of the texture abbreviations
-beyond the obvious (um / uw = unit main / weapon?, nn = none) is a guess [?].
+and 0x15 (skin); any name without exactly three dots gives texture 1 / material 0x15. What the kinds are used for, from the
+`textureNumber` of all 3564 vanilla FIG8 meshes (figure-format.md "Header fields") [V data]: 1 `um` = unit and creature parts drawn
+with the body texture (the composed skin), 2 `uw` = parts with an item's own texture (weapons, helmets, quivers, ground armour),
+3 `tm` = plants, 4 `hm` = buildings, 6 `spm` = wings, 7 `sm` = stones, 8 `om` = items and props, 0 `nn` = water (no texture set).
+The kind only chooses the texture set of the part (`AttachPart` -> `GetOrCreateTextureSet(kind)` -> `CWorldClient::FindTexture`).
+`hs` (5), `wtm` / `wts` (9 / 0xA), `sps` (0xC) and the animated `at1..at4` are used by no vanilla mesh; reading the letters as
+unit / weapon / tree / house / special / stone / object map is only the natural guess for the names themselves.
 
 ## 5. `CMapObject`: net state and buff visuals
 
@@ -713,7 +729,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   returns 1 (its caller would read stale outcodes) [I, needs the DLL]. vt[32] vs vt[34] (both look like "clip space -> screen") and who
   fills the diffuse / specular dwords of the weather vertices are open.~~ Settled 2026-11-07 (2.2a): vt[9] returns 0 only after it projected
   the vertices to the screen itself; vt[14] always returns 0; vt[32] / vt[34] are the same step (34 two at a time with a `w == 0` guard).
-  Still open: who fills the weather vertices' colours (game side).
+  ~~Who fills the weather vertices' colours~~: nobody (3.7, 2026-11-06): uninitialised heap; the value on screen is a live row.
 - ~~CFigureClientSpecific +0x30 / CI3DFigure +0x27C~~ settled: `CI3DFigure +0x27C` is a **CMaterial** [V], handed to the
   renderer's DrawFigure (vt[14]) by `CI3DFigure::Draw` 0x5E6D90; the UI quad figures get the widget's `+0xEC quadMaterial`
   (kind 0x16, colour 0,0,0) from `AddQuadMesh` / `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10. The three 1.0 floats at
@@ -729,7 +745,12 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   blocks blended as in 3.3 / the old format, vt[7] `ComputeBounds` into the entry's bounds, then `CRenderScene::ReplaceVertices`
   0x4F3800 (was `GetEntryValue`) copies min(new, existing) blocks over the part's range; normals, uvs, components, indices, texture
   and material kind are untouched. This is the in-place re-morph of 3.2.
-- The alternate node tracks `+0x54 / +0x58`: `SetTrackAnimationC` 0x50C060 is reached from `CFigureManager::LoadNodeTrack` 0x5ACA60 [V]; which objects load such tracks is a [live] check (2026-11-07: a breakpoint on it saw no call while the multiplayer base or a new game's zone1 loaded).
+- ~~The alternate node tracks `+0x54 / +0x58`: which objects load them~~ settled 2026-11-06 [V]: **none**. Every loader of these tracks is
+  unreferenced code (no call, no jump, no pointer anywhere in the exe): `CAnimationNode::SetTrackAnimation` 0x50C100 (main track `+0x50`),
+  `SetTrackAnimationB` 0x50C170 (`+0x54`), `SetTrackAnimationC` 0x50C060 (`+0x58`), the per-node `+0x54` loop 0x50CB30 (a
+  `CAnimationSystem2` method Ghidra missed) and the track's own `SetClip(name)` 0x50AAA0; the live `LoadNodeTrack` 0x5ACA60 callers are
+  only `CAnimationSystem2::SetAnimation` 0x50CA50 and `SetTime` 0x50D600 (the main tracks). The live breakpoint agreed (no call in the
+  multiplayer base or zone1).
 - ~~CMapObject +0x178 / +0x1A8~~ settled [V]: `+0x178` is the **animation playback rate** (`animRate`):
   `CUnitClientSpecific::AdvanceTime` 0x535B30 multiplies the animation dt by it while the unit is in move mode (`+0x25C == 2`);
   `CUnitClientSpecific::ReplayMove` 0x535850 sets it from the distance moved this frame divided by the clip's stride (clip
@@ -738,9 +759,12 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   prototype comes separately from the descriptor): `CreateObjectFromDesc` sets it from `CObjectDesc +0x4c` through
   `CMapObject_SetName` 0x50F150, a non-empty name registers the object in the named hash `+0x12dd0`, `Read` / `Write` serialise
   it, `CWorldClient::SetNamedObjectState` 0x565380 matches script object names against it.
-- (2026-11-06, ren-b) Open: the reader of `CFigureClientSpecific +8` bit 0x200 (set for animated textures); who holds the other two
-  references that make `GetOrCreateFigure` re-blend only below refcount 3 [I, live row]; the radix-sort direction of
-  `DrawParticleQuads` above 128 quads; ~~what pipeline vt[24] does exactly~~ (2.2a: square pixel quads with clip codes).
+- (2026-11-06, ren-b) Settled: ~~who holds the references behind `GetOrCreateFigure`'s "refcount below 3"~~: the scene cache (1) and
+  each object using the scene (1 each), so below 3 = only the calling object (3.2) [V]; ~~the reader of `CFigureClientSpecific +8` bit 0x200~~: there is none [V]: the bit is OR-ed in by `Render` /
+  `RenderLit` from the constant `g_0x790C0C` (= 0x200) for animated textures, and by the unreferenced wrapper 0x5A7140 (dead code);
+  `Init` / `Done` clear the word; no code tests it (no other use of 0x790C0C, no `+8` read in the class's vtable 0x73FB10, none
+  through `CFigure +0x94`): a write-only flag. ~~The radix-sort direction of `DrawParticleQuads`~~: descending, back to front, like
+  the merge sort (2.6). ~~What pipeline vt[24] does exactly~~ (2.2a: square pixel quads with clip codes).
 
 ## 7. Corrections to earlier notes
 
