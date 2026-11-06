@@ -2524,14 +2524,14 @@ CSoftCursor		0xB8	0x94	uint	animTime	timeGetTime base of the 125 ms animation
 CSoftCursor		0xB8	0x98	pointer	thread	CWinThread* of ThreadProc or 0
 CSoftCursor		0xB8	0x9c	int	stopRequest	
 CSoftCursor		0xB8	0xa0	byte[24]	lock	CRITICAL_SECTION
-CSoftCursorFrame		0x20	0x0	pointer	surface	CDXDirectDrawSurface with the frame strip (width = 0x7C * n?)
-CSoftCursorFrame		0x20	0x4	int	frameWidth	pixels of one animation frame
-CSoftCursorFrame		0x20	0x8	int	frameHeight	0x7C (surface rows)
-CSoftCursorFrame		0x20	0xc	int	frameCount	
+CSoftCursorFrame		0x20	0x0	pointer	surface	CDXDirectDrawSurface with the frame strip (CreateFromPicture of the .mmp): square frames side by side
+CSoftCursorFrame		0x20	0x4	int	frameWidth	strip width / frameCount
+CSoftCursorFrame		0x20	0x8	int	frameHeight	CORRECTION: was "0x7C (surface rows)": the strip height from GetSurfaceDesc (0x7C was the DDSURFACEDESC2 dwSize)
+CSoftCursorFrame		0x20	0xc	int	frameCount	strip width / strip height (square frames)
 CSoftCursorFrame		0x20	0x10	int	animIndex	current animation column (advanced every 125 ms)
 CSoftCursorFrame		0x20	0x14	int	hotX	hot spot (cursor size * hx / 32)
 CSoftCursorFrame		0x20	0x18	int	hotY	
-CSoftCursorFrame		0x20	0x1c	pointer	andMask	AND mask bits used by ComposeFrame
+CSoftCursorFrame		0x20	0x1c	pointer	andMask	AND mask, bpp x w x h / 8 bytes: all ones where the strip pixel is black (0 / RGB 0, transparent), 0 elsewhere; ComposeFrame: dst = background & mask | cursor
 ScreenFade		0x14	0x0	float	rate	255 / duration ms
 ScreenFade		0x14	0x4	float	value	0..255 alpha of the black overlay
 ScreenFade		0x14	0x8	byte	active	

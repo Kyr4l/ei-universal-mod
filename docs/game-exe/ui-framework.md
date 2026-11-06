@@ -210,7 +210,7 @@ the end of the text:
   and each of the name's words equals the line's word **lower-cased** (0x700EFE, misnamed MakeUpper until 2026-11-06; so callers
   pass lower-case names and the file side is case-insensitive); mismatching lines are skipped the same way.
 
-The two token strings are too short for the strings dump ([?]: `#` and `//` would fit every caller seen). DBCS lead bytes are
+The two token strings are `#` (`0x78DCFC`) and `##` (`0x78DCF8`) [V, bytes read 2026-11-06]. DBCS lead bytes are
 honoured (`GetMbChar`, `_mbsinc`).
 
 `CSysInfo::CollectInfo` 0x4DDF28 (`CSysInfo::Init`, vt 0x73D644 slot 2): `GetOsInfo`, `GetSystemInfo` (+0x50), `GetMemoryStatus`
@@ -275,11 +275,17 @@ The mouse is acquired / unacquired with the window activation.
   destination are the same surface. On exit it signals the event `+0x1C` (`Stop` waits for it).
 - `ComposeFrame(frame, dstRect, srcRect)` 0x5E5C40: locks the frame's strip surface at `srcRect`, the 64x64 scratch at `dstRect`
   and the 32x32 scratch at (0, 0, w, h) (`IDirectDrawSurface7::Lock`, "Can't lock surface." / "Can't unlock surface." fatal) and
-  writes `background & mask | cursor pixel` per pixel for 16 and 32 bpp surfaces only (any other depth composes nothing) [V for
-  the operation and the depths; which locked pointer feeds which operand is garbled in the decompile [I]].
+  writes `background & mask | cursor pixel` per pixel for 16 and 32 bpp surfaces only (any other depth composes nothing). Operands
+  [V, machine code 0x5E5E9F..0x5E5EC6 / 0x5E5F8B..0x5E5FAE, 2026-11-06]: `scratch64 +0x64` at `dstRect` (written) =
+  `scratch32 +0x60` from (0, 0) (the saved background) AND the frame's in-memory mask `andMask +0x1C` (indexed like the strip:
+  `(srcRect.top * stripWidth + srcRect.left)` pixels in) OR the frame's strip surface pixel at `srcRect` (the cursor).
 - Frames: `Cursors_Register` 0x5DAEA0 adds 25 `cursor_*.mmp` (or `sm_cursor_*`) strips with `AddFrame` 0x5E63F0 ->
-  `CSoftCursorFrame::CreateFromMmp` 0x5E4EB0 (0x20-byte frame: surface strip of 0x7C-px frames, count = width / 0x7C, hot spot,
-  AND-mask buffer). `SetFrame(i)` 0x5E5200 indices: 0 default, 1 attack, 2 spell, 3 wait, 4 use, 5..12 scroll
+  `CSoftCursorFrame::CreateFromMmp` 0x5E4EB0 (0x20-byte frame) [V, machine code 2026-11-06]: the `.mmp` becomes a surface
+  (`CDXDirectDrawSurface::CreateFromPicture`); `GetSurfaceDesc` gives the strip size: **square frames**, frameHeight `+8` = the
+  strip height, frameCount `+0xC` = width / height, frameWidth `+4` = width / count (the old "0x7C-px frames" was the
+  `DDSURFACEDESC2` size 0x7C); hot spot `+0x14 / +0x18` = cursor size (`g_0x7C7C90 / 94`) x hx / hy / 32; the AND mask `+0x1C`
+  (bpp x w x h / 8 bytes) is made from colour key black: a pixel that is 0 (16 bpp) or has RGB 0 (32 bpp) gives an all-ones mask
+  (transparent, the background shows), any other pixel 0 (the cursor pixel is ORed onto a cleared background). `SetFrame(i)` 0x5E5200 indices: 0 default, 1 attack, 2 spell, 3 wait, 4 use, 5..12 scroll
   u / ur / r / dr / d / dl / l / ul, 13 cancel, 14 talk, 15 move, 16..21 attack_hd / bd / lh / rh / ll / rl, 22 camera, 23
   spellcancel, 24 steal.
 - `UpdateState` 0x5E52E0: animation column advances every 125 ms, position from `GetCursorPos` (or `+0x80/+0x84` in software
@@ -376,8 +382,10 @@ quat[4]}` into `+0x2F0`; `cutIndex > 1` cuts the file at the first gap > 500 tim
 `Init` 0x5F4990 (device) [V, deep-read 2026-11-06]: device `+8`; screen size `+0 / +4` = the primary surface's width / height
 (device `+0x18` -> `+0x14 / +0x18`, only when a primary surface exists); fonts: a 75 pt Times New Roman probe
 (`CreatePointFont(750)`, `GetObject` -> `|lfHeight| * 0.01`) then three Times New Roman fonts `+0x70 / +0x74 / +0x78` whose
-point sizes are `ftol` of an FPU expression built from `screenWidth * 0x68 / 0x70 / 0x90` and the probe (the exact divisor is
-hidden on the FPU stack) - "CInterface3D::Create. Cannot create font." is fatal; keyboard layout: every installed HKL
+point sizes (tenths of a point, `CreatePointFont`) are `ftol(screenWidth * k * 0.00125 / probe)` with k = 0x68 / 0x70 / 0x90
+(104 / 112 / 144) and probe = the 75 pt font's `|lfHeight| / 100` = DPI / 96 [V, machine code 0x5F4A7F..0x5F4B7F, 2026-11-06]: at
+800 px wide and 96 DPI 10.4 / 11.2 / 14.4 pt, at 1024 px 13.3 / 14.3 / 18.4 pt; the probe cancels the DPI, so the fonts scale with
+the screen width only - "CInterface3D::Create. Cannot create font." is fatal; keyboard layout: every installed HKL
 (`GetKeyboardLayoutList`, max 16) is activated in turn and its `GetKeyboardLayoutName` parsed as hex; the first whose low word
 equals `Keyboard_Layout` (`g_0x79BE98`, e.g. 0x419 Russian) wins, else the 0x409 one, else the layout active at start, and it
 stays activated; `KeyBindings_Load`; console `+0x14` (`CUIConsole`, 0x7C, `g_0x7C7D64`), `DebugText::Init(g_0x79B930)`, message
@@ -640,8 +648,20 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 `DrawPerkDetail(record)` 0x5F1590 is the skills window's 26-case detail text. Ctrl toggles the spell view
 (`UIInventoryWin::OnKeyDown / OnKeyUp` 0x5EE640 / 0x5EE680 -> `Refresh`).
 
-Deep-read 2026-11-06 [V] (the `CString::Format` arguments are lost in the decompiles, so which number fills which `%d` is
-mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
+Deep-read 2026-11-06 [V]; "label n" = `infoitem_n` (the array `+0x1CC`, entry = offset / 4) or `infoskill_n` (`+0x1E0`). The
+`CString::Format` arguments, lost in the decompiles, were read from the machine code (2026-11-06, every call site) [V]:
+
+| panel | lines (label: value) |
+|---|---|
+| generic (`Refresh` 0x5EE760, item `CItem`) | 37 Type: the kind text; 1 Material: `matshort` text x proto `+0x4C` Components; **0 Weight: item `+0x34`** (not the price); 2 Energy: item `+0x2C` manaMax (the spell's `+0x50` when enchanted); 14 Complexity: `+0x40` slots used / total; 3 Durability: `+0x20` / `+0x24`; weapons: 15 Damage: `+0x50` - `+0x50 + +0x54` + the `damage_%d` type; 20 Actions: proto `+0x6C`; 38 Attack change / 39 Defense change: the proto values via `ItemId_GetProto`; 10 Range: `+0x58` (ranged kinds) |
+| `DrawWeaponArmorInfo` 0x5F0370 (prototype) | 37 Type; mattype text x proto `+0x4C`; 0 Weight: `+0x38`; 2 Energy: `+0x40`; 14 Complexity: `+0x44`; 3 Durability: `+0x48`; 15 Damage: `+0x90 * 10` - `(+0x90 + +0x94) * 10`; 20 Actions: `+0x6C`; 38 Attack change: `+0x84`; 39 Defense change: `+0x88`; 10 Range: `+0x8C` |
+| `DrawMaterialInfo` 0x5EFD90 (material record) | 37 Type; 0 Weight: `+0x14`; 2 Energy: `+0x18` Mana; 14 Complexity: `+0x1C` Slots; 3 Durability: `+0x20`; 15 Damage: `+0x28` as `%.1f` (a factor) |
+| `DrawSpellInfo` 0x5F0B90 (spell prototype) and `DrawSpellItemInfo` 0x5EF5D0 (a spell with its runes) | 37 Type; 7 Stamina: `+0x18` mana; 14 Complexity: `+0x44`; `school_%d` of `+0x10`; 8 Effect: `+0x2C` or label 28 "Constant"; 9 Speed: `+0x20` or label 21 "Immediately"; 10 Range: `+0x24` + label 26 "m"; 11 Area: label 22 "Target" when the flag `+0x3C & 0x10000000` is set, else `%.1f` + "m" (the prototype shows `+0x28`, the rune-built spell `pi * r * r` of its radius `+0x28`); 12 Duration: "Immediately" or `ticks / 15` as `%.1f` + label 27 "s"; 13 Targets: `+0x34` |
+| `DrawPerkInfo` 0x5F1130 | 37 Type; 7 Stamina: `+0x10`; 14 Complexity: `+0x18` |
+| `DrawPerkDetail` 0x5F1590 kind 0 (attributes) | strength: s0 Health: `StrengthRatio` %, s1 Encumbrance: `CarryWeight`; dexterity: s2 Stamina: `DexterityRatio` %, s3 Actions: `MoveSpeed`; intelligence: s4 Experience: `pow(1.04, int - 25) * 100` % (Ghidra showed it as `atan2`), s24 Stamina points: `ManaCostFactor` % |
+| `DrawPerkDetail` kinds 1 / 2 (skills) | kind 1: s5 Skill: `GetByteStat6CB(id)`, then id 0 / 1: s6 Attack: `SkillValue(id)`, id 2: s7 Damage: `PerkBonusA * 100` %; kind 2: s5 Skill: `GetByteStat6C8(id)`, id 0: s9 Use/Steal: `AttrSkill(0)` |
+| `DrawPerkDetail` kind 3 (a perk family, value v = the level's perk `+0x34`; byte table 0x5F28F4 -> 11 handlers) | families 0..6: s10 Attack bonus: v; 7..14: s11 Knowledge: v; 15: s12 Night vision: (v + 100) / 2 %; 16: s14 Health: v + 100 %; 17: s15 Stamina: v + 100 %; 18: s16 Regeneration v + 100 %; 19: s17 Restoration v + 100 %; 20: s3 Actions: v + 100 %; 21: s1 Encumbrance: v + 100 %; 22: s22 Backstab multiplier v + 300 %; 23..25: s23 Additional points: v; then s18 Cost (experience): `Perk_ComputeCost` (0x7FFFFFFF when negative) |
+
 
 - `Refresh` order of tests: 0x3007 cat 1 -> material; 0x3007 cat 2 sub 0..2 -> weapon / armour; 0x3007 cat 2 sub 3 -> spell
   scroll; sub 4 -> perk; 0x3006 with proto subtype 8 -> `DrawItemOrSpellInfo`; **Ctrl (`CInterface +0x7C`) held and the item has
@@ -649,8 +669,8 @@ mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
   material record `g_0x7C86D8 + (objectId & 0xFFFF) * 0x50`, its name with spaces -> `_` and lower-cased gives the
   `matshort <NAME>` text ("Unknown" default); name (2 wrapped lines, white 0xFFFFFF, 17 px), `%s %s` line, then: 0x3006 whose proto
   `+0x10` is not `none` and every kind other than 0x3006 / 0x3007 / 0x3009 -> `%s %s x %d` material + count; all but 0x3009 ->
-  `%s %d` price; weapons / armour / 0x3006 subtype 5 -> `%s %d` (value of the item's spell `+0x50` when enchanted) and `%s
-  %d/%d`; weapons / armour -> durability `%s %d/%d` (0 when `<= 0`); weapons -> the first non-zero of the 7 damage proportions
+  `%s %d` **weight** (`+0x34`, label 0; the panel shows no price); weapons / armour / 0x3006 subtype 5 -> `%s %d` energy (the item's
+  spell `+0x50` when enchanted) and `%s %d/%d` complexity; weapons / armour -> durability `%s %d/%d` (0 when `<= 0`); weapons -> the first non-zero of the 7 damage proportions
   names the type (`damage_%d`), `%s %d-%d %s`, then three `%s %d` lines (labels 38 / 39; ranged kinds 5 / 6 of
   `CItemWeapon::GetDamageKind` print a different value on the last); armour -> `FormatResistLists(item +0x4C[7])`: label 25 +
   list 1, label 24 + list 2 when not empty; 0x3007 -> description + `loot_item` text (7 lines), others the description (4
@@ -709,13 +729,12 @@ mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
   `#view` / `#deployangle` fill the 0x3C exit records. The allod record's "CObject" at +0x18 is a **CDWordArray of zone indices**:
   each `#zone` line appends its index to the allod named by its second word. `#position` is not read by this loader. Full rows:
   `structs.tsv` MapZoneRecord / ZoneRecord (same record).
-- `CSoftCursorFrame::CreateFromMmp`: settled as far as needed [I]: the per-pixel copy loops are compiler-eliminated in the
-  decompile; the surface comes from `CDXDirectDrawSurface::CreateFromPicture`.
+- ~~`CSoftCursorFrame::CreateFromMmp`~~ settled from the machine code (3.3) [V]: square frames, the AND mask from colour key black.
 - ~~(2026-11-06) Short strings below the strings-dump threshold~~ settled the same day by a byte read of the exe: `0x787BE8` = "7",
   `0x78DCFC` = "#", `0x78DCF8` = "##".
-- (2026-11-06) The `CString::Format` arguments of the `UIItemInfoWin` panels and of `CInterface::Init`'s font sizes are lost
-  in the decompiles (FPU / varargs); which value fills which line needs the disassembly or a live look at the panels.
-- (2026-11-06) `CSoftCursor::ComposeFrame`: which locked surface feeds which operand of `background & mask | cursor` [I].
+- ~~(2026-11-06) The `CString::Format` arguments of the `UIItemInfoWin` panels~~ settled from the machine code (the table in 5.9
+  above) [V]. `CInterface::Init` has no `Format` call; its font sizes are settled too (`screenWidth * 104 / 112 / 144 / 800 / (DPI / 96)` tenths of a point, `Init` above) [V].
+- ~~(2026-11-06) `CSoftCursor::ComposeFrame` operands~~ settled from the machine code (3.3 `ComposeFrame`) [V].
 
 ## 7. Corrections to earlier notes
 
