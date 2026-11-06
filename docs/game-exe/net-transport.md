@@ -511,10 +511,21 @@ inStream, `+0x20` state 0 full-write / 1 delta-write / 2 read vs A / 3 read vs B
 objects own (`CMapObject +0x1C4`): `SetMode` 0x47FD50 (0 -> changedMask 0xffff), `BeginSlot(slot)` 0x47FBF0 (0 when the slot's bit is clear:
 the field is skipped; else begins its codec in the current mode), `Pack` 0x47FE90 (`packedA = u16 maskA | changed` + delta A of every
 accumulated slot, `packedB = u16 changed` + delta B of the slots changed now; state 4), `BeginRead(which, IStream)` 0x47FD80 (reads the u16
-mask), `Reset` 0x47FB70. Semantics [I]: base A = the object as of its last **full** pack, base B = as of the last pack of any kind; so
-`packedA` holds everything changed since the last full state and `packedB` only what changed since the last send; a full pack
-(`CMapObject::PackFullNetState` 0x50EA40 -> the 0x50 / 0x40 payloads) is read against empty bases (um-bot decodes creations from zero), a
-delta pack (`PackDeltaNetState` 0x50EA70 -> 0x51 / 0x41) against the receiver's previous state. Which form each receiver gets is decided
+mask), `Reset` 0x47FB70. Semantics [V, settled 2026-11-06 from the machine code]:
+- **Base A = the object's creation state.** `PackFullNetState` 0x50EA40 (mode 0: both base-update flags on, then `Pack` empties
+  packedA / packedB and the masks) sends nothing: it only **rebases**, and it runs once, when the object is made: on the server in
+  `CreateObjectFromDesc` / `ReadSaveObjects`, on a client in `OnMsg40_UnitCreate` (0x668678, right before `UnpackNetState(0)`) and
+  `CWorldClient::CreateHeroUnits`. The server's later delta packs (mode 1: base A flag off) never touch base A.
+- **packedA** (`+0x24`, sent in **0x40** from `+0x1E8`, `SendMsg40_UnitCreate` 0x66D9DD after its own `PackDeltaNetState`) = u16 maskA
+  (every field changed since creation) + each field's latest delta against the creation state. A client reads it with
+  `UnpackNetState(which 0)` against its own base A, i.e. the creation state it just computed from the 0x40 header.
+- **Base B = the last sent / received state.** The server's base B is rewritten by every pack; **packedB** (`+0x4C`, sent in **0x41**
+  from `+0x210`, `SendMsg41_UnitUpdate` 0x66DC24) = u16 of the fields changed since the previous pack + their deltas against it. A
+  client reads 0x41 with `which 1` (0x66880D). `DeltaReader::Read` 0x47E000 writes every decoded (changed) value into **base B**
+  whatever base is active (0x47E0F7..0x47E115: `this + 0x28`), so after a 0x40 the client's base B holds the full current state
+  (= the server's base B at that send) and each 0x41 keeps them in step.
+- um-bot decodes a 0x40 against zeros instead of the creation state; that is exact for every byte the creation state holds as 0.
+Which form each receiver gets is decided
 by `CPlayerServer` (`world-client-players.md`). Users: `CMapObject::WriteNetState` 0x50EAF0 / `ReadNetState` 0x50EC30 (sections 0-3),
 `CUnit::WriteNetState` 0x52EC70 (4-13, `MoveRequest::WriteNet` 0x5C7DB0 = section 10), `CLeverObject` 0x52B560 (5), `CTorchObject` 0x52C180
 (4), `CEffect::WriteNetStateA/B` 0x675B40 / 0x675B70 (own codec `+0xA8`), `CEffectShowVisibility`, and stack codecs in
@@ -549,8 +560,8 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   (3.4) [V].
 - `Game_MapFileExists` 0x5812F0 tests the specific file `maps\<name>` (FindFile on `World_MapPath() + name`) [V]; the name is misleading
   (batch-t3b renames it `Game_MapFileExists`).
-- The base A / B semantics of the delta codec stay [I] (5.6): **[live]** (`live-checklist.tsv`: log `DeltaCodecSet::BeginRead` /
-  the base lengths on a client for a 0x40 and a following 0x41 of the same unit).
+- ~~The base A / B semantics of the delta codec~~ settled offline 2026-11-06 (5.6) [V]: base A = the creation state (0x40 is read
+  against it), base B = the last sent / received state (0x41); every decoded value is written into base B.
 - `NetPeer +0x1108` / `+0x1114` are the empty `less<>` comparator bytes of the STLport maps `+0x1100` / `+0x110c` (the `_Rb_tree` ctor
   stores the comparator byte at map + 8 after the node count, 0x432EC9 / 0x432EF5): no flag, never read [V].
 - `ServerInfo.gameKind` = `LobbyServer +0x25e4` = the ctor argument = the lobby screen's allod tab `CLobbyScreen +0x19c` (0..3,
