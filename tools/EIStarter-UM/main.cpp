@@ -29,13 +29,14 @@
 #include "options_ui.hpp"
 #include "platform.hpp"
 #include "regsync.hpp"
+#include "renderer.hpp"
 #include "skin.hpp"
 #include "softrender.hpp"
 #include "update.hpp"
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.9";
+static constexpr const char* kVersion = "0.3.0";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -238,6 +239,8 @@ struct App {
         SyncResult r = SyncRegistry(cfg, dir, CurrentMod()->folder, cfg.debugLog ? +[](const std::string& line) { self->Log("  " + line); } : nullptr);
         if (!r.ok) { message = r.error; Log(message); return; }
         ApplyBorderless();
+        ApplyRenderer(dir, CurrentMod(), cfg.renderer, [this](const std::string& line) { Log(line); });
+        Save(); // a check run by Auto is kept
         std::string error;
         if (!platform::Start(exe, dir / "Engine", proc, error)) { failure = error; phase = Phase::Failed; Log("start failed: " + error); return; }
         Log("game started");
@@ -526,7 +529,14 @@ static void DrawMain(App& app, GLFWwindow* window) {
         }
         // Utils > Pull / Push: the registry's game settings to / from EIStarter-UM-reg.cfg.
         const OptionsWindow::Request req = app.options.TakeRequest();
-        if (req != OptionsWindow::Request::None) {
+        if (req == OptionsWindow::Request::CheckD7vk) { // Renderer > Check: run now, keep the result (the edited copy gets it too)
+            const fs::path d7vk = FindD7vk(app.dir, app.CurrentMod());
+            app.Log("renderer: check of " + (d7vk.empty() ? std::string("(no d7vk.dll)") : d7vk.string()));
+            RunD7vkCheck(app.dir, d7vk, app.cfg.renderer);
+            app.Log("renderer: check result " + std::to_string(app.cfg.renderer.checkCode) + ": " + app.cfg.renderer.checkText);
+            app.options.D7vkChecked(app.cfg.renderer);
+            app.Save();
+        } else if (req != OptionsWindow::Request::None) {
             const bool pull = req == OptionsWindow::Request::Pull;
             const std::string file = RegBackupPath(app.dir);
             const int n = pull ? PullGameSettings(app.cfg, file) : PushGameSettings(app.cfg, file);

@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // um-window.asi: the BORDERLESS feature of um.dll (um_window.cpp) as a plugin of its own, for mods that do not use um.dll. addon.dll loads
-// the *.asi files of Engine\. EIStarter-UM writes Engine\um-window.ini ([Window] Borderless=1, Scale=1) when "Borderless window" is chosen in its Options.
-// When um.dll is loaded it does the same job (um.cfg BORDERLESS), so this one stays out of the way.
+// the *.asi files of Engine\. EIStarter-UM writes Engine\um-window.ini ([Window] Borderless=1, Scale=1) when "Borderless window" is chosen in its Options,
+// and [Renderer] D7VK=<path> when its renderer choice is D7VK for such a mod. When um.dll is loaded it does the same jobs (um.cfg BORDERLESS,
+// the launcher's renderer through the environment), so this one stays out of the way.
 #ifndef UM_WINDOW_STANDALONE
 #define UM_WINDOW_STANDALONE
 #endif
@@ -58,15 +59,71 @@ bool PatchImportedFunction(HMODULE module, const char* functionName, ULONG_PTR r
     return patched;
 }
 
+// The renderer EIStarter-UM chose for a mod without um.dll ([Renderer] D7VK=<path of d7vk.dll> in um-window.ini; empty = the game's own DirectDraw):
+// the game's DirectDraw calls go to that file, loaded at the first call (not inside DllMain). If it cannot be loaded or cannot create its
+// DirectDraw (no Vulkan), the call goes to the game's own ddraw.dll. For a mod with um.dll the launcher leaves the key empty: um.dll loads D7VK.
+typedef HRESULT (WINAPI *DirectDrawCreateFn)(GUID*, void**, IUnknown*);
+typedef HRESULT (WINAPI *DirectDrawCreateExFn2)(GUID*, void**, REFIID, IUnknown*);
+static char g_d7vkPath[MAX_PATH];
+static DirectDrawCreateFn g_gameCreate, g_d7vkCreate;
+static DirectDrawCreateExFn2 g_gameCreateEx, g_d7vkCreateEx;
+
+static bool LoadD7vk() {
+    static int state = 0; // 0 not tried, 1 loaded, 2 failed
+    if (state) return state == 1;
+    state = 2;
+    HMODULE module = LoadLibraryExA(g_d7vkPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+    if (!module) { LogLine("ERROR", "renderer: %s could not be loaded (error %lu); the game's own DirectDraw is used", g_d7vkPath, GetLastError()); return false; }
+    FARPROC create = GetProcAddress(module, "DirectDrawCreate"), createEx = GetProcAddress(module, "DirectDrawCreateEx");
+    if (!create || !createEx) { LogLine("ERROR", "renderer: %s lacks DirectDrawCreate / DirectDrawCreateEx; the game's own DirectDraw is used", g_d7vkPath); return false; }
+    g_d7vkCreate = reinterpret_cast<DirectDrawCreateFn>(reinterpret_cast<void*>(create));
+    g_d7vkCreateEx = reinterpret_cast<DirectDrawCreateExFn2>(reinterpret_cast<void*>(createEx));
+    LogLine("INFO", "renderer: DirectDraw comes from %s", g_d7vkPath);
+    state = 1;
+    return true;
+}
+
+static HRESULT WINAPI RendererDirectDrawCreate(GUID* guid, void** directDraw, IUnknown* outer) {
+    if (LoadD7vk()) {
+        const HRESULT r = g_d7vkCreate(guid, directDraw, outer);
+        if (SUCCEEDED(r)) return r;
+        LogLine("ERROR", "renderer: D7VK's DirectDrawCreate failed (0x%08lX); the game's own DirectDraw is used", static_cast<unsigned long>(r));
+    }
+    return g_gameCreate(guid, directDraw, outer);
+}
+
+static HRESULT WINAPI RendererDirectDrawCreateEx(GUID* guid, void** directDraw, REFIID iid, IUnknown* outer) {
+    if (LoadD7vk()) {
+        const HRESULT r = g_d7vkCreateEx(guid, directDraw, iid, outer);
+        if (SUCCEEDED(r)) return r;
+        LogLine("ERROR", "renderer: D7VK's DirectDrawCreateEx failed (0x%08lX); the game's own DirectDraw is used", static_cast<unsigned long>(r));
+    }
+    return g_gameCreateEx(guid, directDraw, iid, outer);
+}
+
+static void InstallRenderer(const char* ini) {
+    GetPrivateProfileStringA("Renderer", "D7VK", "", g_d7vkPath, sizeof g_d7vkPath, ini);
+    if (!g_d7vkPath[0]) return;
+    HMODULE process = GetModuleHandleA(NULL);
+    ULONG_PTR create = 0, createEx = 0;
+    const bool a = PatchImportedFunction(process, "DirectDrawCreate", reinterpret_cast<ULONG_PTR>(RendererDirectDrawCreate), &create);
+    const bool b = PatchImportedFunction(process, "DirectDrawCreateEx", reinterpret_cast<ULONG_PTR>(RendererDirectDrawCreateEx), &createEx);
+    g_gameCreate = reinterpret_cast<DirectDrawCreateFn>(create);
+    g_gameCreateEx = reinterpret_cast<DirectDrawCreateExFn2>(createEx);
+    if (a || b) PluginLog("INFO", "um-window.asi: the game's DirectDraw calls go to D7VK"); // game.exe imports only one of the two
+    else PluginLog("WARN", "um-window.asi: could not hook DirectDrawCreate / DirectDrawCreateEx: the game's own DirectDraw is used");
+}
+
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID) {
     if (reason != DLL_PROCESS_ATTACH) return TRUE;
     DisableThreadLibraryCalls(instance);
     GetModuleFileNameA(instance, g_dir, sizeof g_dir);
     char* slash = strrchr(g_dir, '\\');
     if (slash) slash[1] = '\0'; else g_dir[0] = '\0';
-    if (GetModuleHandleA("um.dll")) return TRUE; // um.dll's BORDERLESS does it
+    if (GetModuleHandleA("um.dll")) return TRUE; // um.dll's BORDERLESS and DDRAW_DLL do it
     char ini[MAX_PATH];
     snprintf(ini, sizeof ini, "%sum-window.ini", g_dir);
+    InstallRenderer(ini); // before the window hooks: the scale hook then wraps this one
     if (GetPrivateProfileIntA("Window", "Borderless", 0, ini) == 0) return TRUE;
     g_enableBorderless = true;
     g_enableScale = GetPrivateProfileIntA("Window", "Scale", 0, ini) != 0; // the monitor-sized, letterboxed window (um_window.cpp)

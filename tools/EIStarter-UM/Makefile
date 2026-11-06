@@ -1,7 +1,7 @@
 # Makefile for EIStarter-UM (C++17): the mod launcher that replaces EIStarter (see docs/EIStarter-UM.md).
 #
 #   make win    - EIStarter-UM.exe: 32-bit, GLFW 3.3 (runs on Windows XP and newer, and under Wine), the build to ship
-#   make window - window/um-window.asi (the borderless-window plugin)
+#   make window - window/um-window.asi (the borderless-window and renderer plugin) and window/d7vk-check.exe (the D7VK test)
 #   make all    - all of them
 #   ./package.sh - dist/EIStarter-UM-<version>.zip, the package users get
 #   make test   - the file-handling and software-renderer tests against a real EIStarter folder (make test STARTER=/path/to/EIStarter)
@@ -34,9 +34,13 @@ EIStarter-UM.exe: $(SRCS) $(HDRS) EIStarter-UM-res.o
 	$(WIN_CXX) $(WIN_FLAGS) -o $@ $(SRCS) EIStarter-UM-res.o $(WIN_LIBS)
 
 # um-window.asi: the borderless-window plugin (resources/universal-mod/um-dll/um_window.cpp built on its own); addon.dll loads it from Engine\.
-window: window/um-window.asi
+window: window/um-window.asi window/d7vk-check.exe
 window/um-window.asi: window/um_window_plugin.cpp window/um_window_standalone.hpp ../../resources/universal-mod/um-dll/um_window.cpp
 	$(WIN_CXX) -shared -DUM_WINDOW_STANDALONE -o $@ window/um_window_plugin.cpp ../../resources/universal-mod/um-dll/um_window.cpp -Iwindow -std=c++17 -O2 -static -static-libgcc -s -Wall -Wextra -lgdi32
+
+# d7vk-check.exe: whether D7VK runs on this PC (Options > Renderer > Auto); 32-bit like the game.
+window/d7vk-check.exe: window/d7vk_check.cpp
+	$(WIN_CXX) -o $@ $< -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -s -Wall -Wextra -mwindows -ldxguid -luuid
 
 STARTER ?= .
 test: tests/launcher_tests tests/softrender_test
@@ -48,6 +52,6 @@ tests/launcher_tests: tests/launcher_tests.cpp $(HDRS)
 	$(CXX) -std=c++17 -O1 -Wall -Wextra -pthread -I. -I../um-multitool -o $@ $<
 
 clean:
-	rm -f EIStarter-UM.exe EIStarter-UM-res.o window/um-window.asi tests/launcher_tests tests/softrender_test
+	rm -f EIStarter-UM.exe EIStarter-UM-res.o window/um-window.asi window/d7vk-check.exe tests/launcher_tests tests/softrender_test
 
 .PHONY: all win window test clean

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // The Options window: everything EIStarter's Options dialog offered (Graphics, Addon, Multiplayer, Camera, Paths, Utils), plus the window mode
-// (fullscreen / windowed / borderless windowed) and the launcher's own options. It edits a copy of the configuration; OK keeps it.
+// (fullscreen / windowed / borderless windowed), the renderer (D7VK or the game's own DirectDraw, renderer.hpp) and the launcher's own options. It edits a copy of the configuration; OK keeps it.
 #pragma once
 
 #include <imgui.h>
@@ -21,7 +21,6 @@ public:
     // Opens the window on a copy of `cfg`; `pathsTab`: start on the Paths tab (the game folder is missing).
     void Open(const LauncherConfig& cfg, bool pathsTab, const std::string& hint, const std::string& modCfg = {}) {
         edit_ = cfg;
-        modMsaa_ = !modCfg.empty() && LowerAscii(GetCfgLine(modCfg, "MSAA")) == "true";
         modBorderless_ = !modCfg.empty() && !GetCfgLine(modCfg, "BORDERLESS").empty();
         open_ = true; requestTab_ = pathsTab ? 4 : 0; hint_ = hint;
         note_.clear(); pushArmed_ = false;
@@ -36,13 +35,15 @@ public:
     void SetBackupFile(const std::string& path) { backupFile_ = path; }
 
     // Utils > Pull / Push: done by the caller (main.cpp, regsync.hpp), which then calls Done.
-    enum class Request { None, Pull, Push };
+    enum class Request { None, Pull, Push, CheckD7vk };
     Request TakeRequest() { const Request r = request_; request_ = Request::None; return r; }
     // After a pull or a push: the game settings now in memory (a push replaces them) and the line shown under the buttons.
     void Done(const LauncherConfig& cfg, const std::string& note, bool ok) {
         edit_.game = cfg.game; edit_.gameBase = cfg.gameBase;
         note_ = note; noteOk_ = ok;
     }
+    // After Renderer > Check (run by the caller): the result.
+    void D7vkChecked(const RendererOptions& r) { edit_.renderer.checkKey = r.checkKey; edit_.renderer.checkCode = r.checkCode; edit_.renderer.checkText = r.checkText; }
 
     enum class Result { None, Ok, Cancel };
     // Draws the window (inside an ImGui frame); on OK `out` receives the edited configuration.
@@ -58,6 +59,7 @@ public:
             const float footer = ImGui::GetFrameHeightWithSpacing() + 4;
             if (ImGui::BeginTabBar("##tabs")) {
                 Tab(tx, "tabGraphics", "Graphics", 0, footer, [&] { Graphics(tx); });
+                Tab(tx, "tabRenderer", "Renderer", 6, footer, [&] { Renderer(tx); });
                 Tab(tx, "tabAddon", "Addon", 1, footer, [&] { Addon(tx); });
                 Tab(tx, "tabMultiplayer", "Multiplayer", 2, footer, [&] { Multiplayer(tx); });
                 Tab(tx, "tabCamera", "Camera", 3, footer, [&] { Camera(tx); });
@@ -154,7 +156,7 @@ private:
         bool b;
         b = g.GetBool("general settings", "mipmapping"); if (Check(tx, "cbMipMapping", "Mip-Mapping", b)) g.SetBool("general settings", "mipmapping", b);
         b = g.GetBool("general settings", "antialiasing"); if (Check(tx, "cbAntialiasing", "Antialiasing", b)) g.SetBool("general settings", "antialiasing", b);
-        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true. Keep this off.");
+        if (edit_.renderer.msaa && edit_.renderer.mode != 2 && ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", "tipAntialiasingMsaa", "MSAA is on in the Renderer tab (D7VK). Keep this off.").c_str());
         b = g.GetBool("general settings", "dithering"); if (Check(tx, "cbDithering", "Dithering", b)) g.SetBool("general settings", "dithering", b);
         b = g.GetBool("general settings", "FPSIndependentCursor"); if (Check(tx, "cbFPSCursor", "FPS-independent cursor (not recommended)", b)) g.SetBool("general settings", "FPSIndependentCursor", b);
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("Flickers with D7VK.");
@@ -178,6 +180,43 @@ private:
         Freq(tx, "Shadowing freq.", "lbShadowingFreq", "cbbShadowing", "SHADOWINGFREQ");
         ImGui::EndTable();
         }
+        labelWidth_ = 150; comboWidth_ = 170;
+    }
+    void Tip(const Texts& tx, const char* key, const char* english) { if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", key, english).c_str()); }
+    void Renderer(const Texts& tx) {
+        RendererOptions& r = edit_.renderer;
+        labelWidth_ = 110; comboWidth_ = 150;
+        Combo(tx, "Renderer", "lbRenderer", "cbbRenderer", {"Auto", "D7VK", "Native"}, r.mode);
+        Tip(tx, "tipRenderer", "Auto: D7VK when it runs on this PC, else the game's own.\nD7VK: DirectDraw on Vulkan: faster, MSAA, anisotropy, Universal Mod's sun shadows.\nNative: the game's own DirectDraw.");
+        // The last check's result, and a button to run it now.
+        if (r.checkCode == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "d7vkWorks", "D7VK works here.").c_str());
+        else if (r.checkCode < 0) ImGui::TextDisabled("%s", tx.Get("Options", "d7vkUnchecked", "D7VK not checked yet.").c_str());
+        else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "%s", (tx.Get("Options", "d7vkFails", "D7VK does not run here:") + " " + r.checkText).c_str());
+        ImGui::SameLine();
+        if (ImGui::SmallButton((tx.Get("Options", "btD7vkCheck", "Check") + "##d7vkCheck").c_str())) request_ = Request::CheckD7vk;
+        Tip(tx, "tipD7vkCheck", "Tries D7VK now (a few seconds).");
+        ImGui::Separator();
+        ImGui::BeginDisabled(r.mode == 2);
+        Check(tx, "cbMsaa", "MSAA", r.msaa);
+        Tip(tx, "tipMsaa", "Multisampling, up to 4x: smooth edges without blur.");
+        static const int kAniso[] = {0, 2, 4, 8, 16};
+        int a = 0;
+        for (int k = 0; k < 5; ++k) if (kAniso[k] == r.anisotropy) a = k;
+        if (Combo(tx, "Anisotropy", "lbAnisotropy", "cbbAnisotropy", {"Off", "2x", "4x", "8x", "16x"}, a)) r.anisotropy = kAniso[a];
+        Tip(tx, "tipAnisotropy", "Sharper ground and walls at a distance.");
+        Combo(tx, "V-sync", "lbVsync", "cbbVsync", {"Default", "On", "Off"}, r.vsync);
+        Tip(tx, "tipVsync", "Default: Engine\\dxvk.conf decides.");
+        const float x0 = ImGui::GetCursorPosX();
+        ImGui::AlignTextToFramePadding(); ImGui::TextUnformatted(tx.Get("Options", "lbFpsLimit", "FPS limit").c_str());
+        ImGui::SameLine(0, 0); ImGui::SetCursorPosX(x0 + labelWidth_); ImGui::SetNextItemWidth(comboWidth_);
+        ImGui::InputInt("##fpsLimit", &r.fpsLimit, 10, 30); r.fpsLimit = std::max(0, std::min(1000, r.fpsLimit));
+        Tip(tx, "tipFpsLimit", "0 = no limit.");
+        int l = r.frameLatency;
+        if (Combo(tx, "Latency", "lbLatency", "cbbLatency", {"Default", "1", "2", "3"}, l)) r.frameLatency = l;
+        Tip(tx, "tipLatency", "Frames prepared ahead. 1 = least input lag.");
+        Check(tx, "cbFpsOverlay", "FPS overlay", r.fpsOverlay);
+        Tip(tx, "tipFpsOverlay", "D7VK's frame rate counter, top left.");
+        ImGui::EndDisabled();
         labelWidth_ = 150; comboWidth_ = 170;
     }
     void Freq(const Texts& tx, const char* label, const char* key, const char* items, const char* name) {
@@ -341,7 +380,7 @@ private:
         if (!note_.empty()) ImGui::TextColored(noteOk_ ? ImVec4(0.5f, 0.85f, 0.5f, 1) : ImVec4(1, 0.5f, 0.4f, 1), "%s", note_.c_str());
     }
 
-    bool modMsaa_ = false, modBorderless_ = false;
+    bool modBorderless_ = false;
     float labelWidth_ = 150, comboWidth_ = 170;
     LauncherConfig edit_;
     bool open_ = false;

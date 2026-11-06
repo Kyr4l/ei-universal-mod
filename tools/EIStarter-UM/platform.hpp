@@ -222,6 +222,45 @@ inline bool HasWindow(const Process& p) {
 #endif
 }
 
+// Runs a helper program (the D7VK check) and waits for it: its exit code, or -1 when it could not start or ran longer than `timeoutMs` (it is then ended).
+inline int RunWait(const fs::path& exe, const std::vector<fs::path>& args, const fs::path& workDir, unsigned timeoutMs, std::string& error) {
+#ifdef _WIN32
+    STARTUPINFOW si = {};
+    si.cb = sizeof si;
+    PROCESS_INFORMATION pi = {};
+    std::wstring cmd = L"\"" + exe.wstring() + L"\"";
+    for (const fs::path& a : args) cmd += L" \"" + a.wstring() + L"\"";
+    std::wstring dir = workDir.wstring();
+    if (!CreateProcessW(nullptr, &cmd[0], nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, dir.c_str(), &si, &pi)) {
+        error = "CreateProcess failed, error " + std::to_string(GetLastError());
+        return -1;
+    }
+    CloseHandle(pi.hThread);
+    int result = -1;
+    if (WaitForSingleObject(pi.hProcess, timeoutMs) == WAIT_OBJECT_0) { DWORD code = 0; GetExitCodeProcess(pi.hProcess, &code); result = static_cast<int>(code); }
+    else { TerminateProcess(pi.hProcess, 1); error = "no answer within " + std::to_string(timeoutMs / 1000) + " s"; }
+    CloseHandle(pi.hProcess);
+    return result;
+#else
+    (void)exe; (void)args; (void)workDir; (void)timeoutMs;
+    error = "needs Windows or Wine";
+    return -1;
+#endif
+}
+
+// Sets an environment variable of the launcher, which the game inherits (an empty value removes it).
+inline void SetEnv(const char* name, const std::string& value) {
+#ifdef _WIN32
+    SetEnvironmentVariableA(name, value.empty() ? nullptr : value.c_str());
+#else
+    if (value.empty()) unsetenv(name); else setenv(name, value.c_str(), 1);
+#endif
+}
+inline std::string GetEnv(const char* name) {
+    const char* v = std::getenv(name);
+    return v ? v : std::string();
+}
+
 // Runs a mod's script (the Info window's plugin button) through the command interpreter.
 inline void RunScript(const fs::path& script) {
 #ifdef _WIN32

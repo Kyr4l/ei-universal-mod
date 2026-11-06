@@ -389,7 +389,8 @@ static bool ModuleHasText(HMODULE module, const char* text) {
 static HRESULT WINAPI HookedDirectDrawCreateExScale(const GUID* guid, void** directDraw, const GUID& iid, IUnknown* outer) {
     HRESULT result = g_originalDirectDrawCreateEx(guid, directDraw, iid, outer);
     if (SUCCEEDED(result) && directDraw && *directDraw && g_scaleActive) {
-        HMODULE ddraw = GetModuleHandleA("ddraw.dll");
+        HMODULE ddraw = GetModuleHandleA("d7vk.dll"); // loaded by the plugin's renderer choice (um_window_plugin.cpp), else the game folder's ddraw.dll
+        if (!ddraw) ddraw = GetModuleHandleA("ddraw.dll");
         WindowScaleDirectDrawCreated(*directDraw, ddraw && (ModuleHasText(ddraw, "D7VK") || ModuleHasText(ddraw, "DXVK")));
     }
     return result;

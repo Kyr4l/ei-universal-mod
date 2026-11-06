@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # package.sh: builds dist/EIStarter-UM-<version>.zip, the launcher as users get it: EIStarter-UM.exe next to the files EIStarter OBT-1 brings
 # (taken from ../eistarter-obt-1.zip, which this repository already ships): addon.dll, Engine/ (dinput.dll loader, the game's exe and its
-# helper DLLs, mp3dec.asi, SpellAddonX.asi; not EI_Plugin.asi / EI_Plugin.ini, EIStarter's docs or its whatsnew), design/ (skins), lang/ (texts), mods/.0 (the "no mods" entry), plus um-window.asi (borderless window for
-# every mod). The mods (Universal-Mod ...) are unpacked into its mods/ folder by the user.
+# helper DLLs, mp3dec.asi, SpellAddonX.asi; not EI_Plugin.asi / EI_Plugin.ini, EIStarter's docs or its whatsnew), design/ (skins), lang/ (texts), mods/.0 (the "no mods" entry), plus um-window.asi (borderless window and the renderer choice for
+# every mod), d7vk.dll (Universal Mod's patched D7VK, for the mods that do not bring their own) and d7vk-check.exe (Options > Renderer > Auto). The mods (Universal-Mod ...) are unpacked into its mods/ folder by the user.
 # Usage: ./package.sh        (needs 7z, unzip; EIStarter-UM.exe and window/um-window.asi built: make win; make window)
 set -euo pipefail
 cd "$(dirname "$0")"
 VERSION=$(grep -o 'kVersion = "[^"]*"' main.cpp | head -1 | sed 's/.*"\(.*\)"/\1/')
 STARTER_ZIP=../eistarter-obt-1.zip
-[ -f EIStarter-UM.exe ] && [ -f window/um-window.asi ] || { echo "build first: make win window"; exit 1; }
+[ -f EIStarter-UM.exe ] && [ -f window/um-window.asi ] && [ -f window/d7vk-check.exe ] || { echo "build first: make win window"; exit 1; }
+D7VK_DLL=../../resources/universal-mod/d7vk/d7vk.dll
+[ -f "$D7VK_DLL" ] || { echo "$D7VK_DLL not found"; exit 1; }
 [ -f "$STARTER_ZIP" ] || { echo "$STARTER_ZIP not found"; exit 1; }
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 unzip -q "$STARTER_ZIP" -d "$TMP"
@@ -34,7 +36,8 @@ cp "$SRC/docs/how to make translation.txt" "$OUT/docs/"
 rm -f "$OUT/Engine/EI_Plugin.asi" "$OUT/Engine/EI_Plugin.ini" # its comfort features are not needed by Universal Mod
 cp ../../docs/EIStarter-UM.md "$OUT/docs/EIStarter-UM.md"
 cp EIStarter-UM.exe "$OUT/"
-cp window/um-window.asi "$OUT/Engine/"
+cp window/um-window.asi window/d7vk-check.exe "$OUT/Engine/"
+cp "$D7VK_DLL" "$OUT/Engine/d7vk.dll"
 cat > "$OUT/README.txt" <<TXT
 EIStarter-UM $VERSION - starts Evil Islands with a mod (a replacement of EIStarter).
 

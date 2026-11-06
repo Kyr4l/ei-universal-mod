@@ -8,6 +8,7 @@
 #include "../config.hpp"
 #include "../mods.hpp"
 #include "../regsync.hpp"
+#include "../renderer.hpp"
 #include "../update.hpp"
 
 using namespace launcher;
@@ -209,6 +210,28 @@ int main(int argc, char** argv) {
         CHECK(platform::SupportedResolution("2560x1440", scr) == "1920x1080");
         CHECK(platform::SupportedResolution("2560x1440", {"1024x768", "1600x900", "1280x720"}) == "1600x900");
         CHECK(platform::SupportedResolution("2560x1440", {}) == "2560x1440");
+    }
+    {   // Options > Renderer: D7VK's options as DXVK_CONFIG, which d7vk.dll a mod gets, the config round trip
+        RendererOptions r;
+        CHECK(D7vkConfig(r) == "ddraw.emulateFSAA = forced;ddraw.alternatePixelCenter = true;d3d9.samplerAnisotropy = 16");
+        r.msaa = false; r.anisotropy = 0;
+        CHECK(D7vkConfig(r).empty());
+        r.vsync = 2; r.fpsLimit = 144; r.frameLatency = 1;
+        CHECK(D7vkConfig(r) == "d3d9.presentInterval = 0;dxvk.maxFrameRate = 144;d3d9.maxFrameLatency = 1");
+        const fs::path z = fs::temp_directory_path() / "eistarter-um-renderer-test";
+        std::error_code ec; fs::remove_all(z, ec);
+        fs::create_directories(z / "Engine"); fs::create_directories(z / "mods/A"); fs::create_directories(z / "mods/B");
+        ModInfo a, b; a.path = (z / "mods/A").string(); b.path = (z / "mods/B").string();
+        CHECK(FindD7vk(z, &a).empty());
+        { std::ofstream(z / "Engine/d7vk.dll") << "engine"; std::ofstream(z / "mods/A/d7vk.dll") << "mod"; }
+        CHECK(FindD7vk(z, &a) == z / "mods/A/d7vk.dll");   // the mod's own first
+        CHECK(FindD7vk(z, &b) == z / "Engine/d7vk.dll");   // else Engine's
+        CHECK(D7vkCheckKey(z, z / "Engine/d7vk.dll").empty()); // no d7vk-check.exe: no key, so Auto checks again
+        LauncherConfig c; c.renderer.mode = 1; c.renderer.anisotropy = 8; c.renderer.fpsOverlay = true; c.renderer.checkCode = 4; c.renderer.checkText = "no DirectDraw object";
+        CHECK(SaveConfig(z, c));
+        const LauncherConfig back = LoadConfig(z);
+        CHECK(back.renderer.mode == 1 && back.renderer.anisotropy == 8 && back.renderer.fpsOverlay && back.renderer.checkCode == 4 && back.renderer.checkText == "no DirectDraw object");
+        fs::remove_all(z, ec);
     }
     std::printf(g_fail ? "%d FAILED\n" : "all passed\n", g_fail);
     return g_fail != 0;

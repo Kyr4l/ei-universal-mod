@@ -134,8 +134,30 @@ static VOID WINAPI HookedExitProcessCrt(UINT code) {
 // DDRAW_DLL: loads that DirectDraw wrapper by its full path and makes the game's DirectDrawCreate / DirectDrawCreateEx calls (already routed through
 // um.dll's hooks) go to it. Runs before the game's first DirectDrawCreate; any failure keeps the ddraw.dll of the game folder.
 // MSAA: D7VK reads DXVK_CONFIG (semicolon separated options, merged over dxvk.conf) when it creates its device, so this must run before the game's first DirectDrawCreate.
+// EIStarter-UM's renderer choice (Options > Renderer), set in the environment at Play: UM_RENDERER = d7vk | native, UM_D7VK = the d7vk.dll to load.
+// It replaces DDRAW_DLL, and the launcher writes D7VK's options (MSAA, anisotropy ...) into DXVK_CONFIG itself, so um.cfg MSAA is not added.
+static bool g_launcherRenderer = false;
+static void ApplyLauncherRenderer() {
+    char renderer[16] = "";
+    const DWORD n = GetEnvironmentVariableA("UM_RENDERER", renderer, sizeof(renderer));
+    if (n == 0 || n >= sizeof(renderer)) return;
+    g_launcherRenderer = true;
+    if (_stricmp(renderer, "d7vk") != 0) {
+        g_ddrawDll[0] = '\0'; g_enableMsaa = false;
+        LogLine("INFO", "Renderer: the game's own DirectDraw (EIStarter-UM's choice)");
+        return;
+    }
+    char path[MAX_PATH] = "";
+    const DWORD p = GetEnvironmentVariableA("UM_D7VK", path, sizeof(path));
+    lstrcpynA(g_ddrawDll, p > 0 && p < sizeof(path) ? path : "d7vk.dll", sizeof(g_ddrawDll));
+    char config[1024] = "";
+    const DWORD c = GetEnvironmentVariableA("DXVK_CONFIG", config, sizeof(config));
+    g_enableMsaa = c > 0 && c < sizeof(config) && strstr(config, "emulateFSAA") != NULL; // the pixel-center shift of um_ddraw.cpp follows the launcher's MSAA
+    LogLine("INFO", "Renderer: D7VK from %s (EIStarter-UM's choice); DXVK_CONFIG=%s", g_ddrawDll, config);
+}
+
 static void ApplyMsaa() {
-    if (!g_enableMsaa) return;
+    if (!g_enableMsaa || g_launcherRenderer) return;
     char current[1024] = "";
     const DWORD length = GetEnvironmentVariableA("DXVK_CONFIG", current, sizeof(current));
     if (length >= sizeof(current)) return;
@@ -201,6 +223,7 @@ void InstallFileIoHooks() {
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
     InstallWindowHooks();
+    ApplyLauncherRenderer();
     ApplyMsaa();
     ChainloadDirectDraw();
     if (!hooked) {

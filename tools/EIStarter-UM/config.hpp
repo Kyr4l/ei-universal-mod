@@ -29,6 +29,20 @@ struct AddonOptions {
     int consoleLogLevel = 1;
 };
 
+// Options > Renderer: which DirectDraw the game gets (renderer.hpp) and D7VK's own options (passed in DXVK_CONFIG).
+struct RendererOptions {
+    int mode = 0;               // 0 auto (D7VK when the check says it runs here, else the game's own), 1 D7VK, 2 native (the game's own DirectDraw)
+    bool msaa = true;           // ddraw.emulateFSAA = forced (multisampling, up to 4x)
+    int anisotropy = 16;        // d3d9.samplerAnisotropy: 0 off, 2 / 4 / 8 / 16
+    int vsync = 0;              // 0 the game's / dxvk.conf's, 1 on, 2 off
+    int fpsLimit = 0;           // dxvk.maxFrameRate, 0 none
+    int frameLatency = 0;       // d3d9.maxFrameLatency, 0 D7VK's default
+    bool fpsOverlay = false;    // DXVK_HUD=fps
+    std::string checkKey;       // the d7vk.dll / d7vk-check.exe the last check ran on (size and time), so it runs again when they change
+    int checkCode = -1;         // its result: 0 works, > 0 the step that failed, -1 never checked
+    std::string checkText;      // its line
+};
+
 struct LauncherConfig {
     std::string mod;               // the folder name under mods/
     std::string language = "en";
@@ -40,6 +54,7 @@ struct LauncherConfig {
     bool borderless = false;       // windowed game without a frame (needs fullscreen off)
     bool borderlessScale = false;  // with borderless: the window covers the monitor and the game picture is scaled up to it (black bars keep the aspect ratio)
     AddonOptions addon;
+    RendererOptions renderer;
     GameSettings game;
     GameSettings gameBase;         // not saved: the game settings as last read from / written to the registry (Play writes what differs)
     bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
@@ -96,6 +111,17 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         a.mpConsole = ini.GetBool("Addon", "MPConsole", true);
         a.logLevel = ini.GetInt("Addon", "LogLevel", 1);
         a.consoleLogLevel = ini.GetInt("Addon", "ConsoleLogLevel", 1);
+        RendererOptions& r = c.renderer;
+        r.mode = std::max(0, std::min(2, ini.GetInt("Renderer", "Mode", 0)));
+        r.msaa = ini.GetBool("Renderer", "MSAA", true);
+        r.anisotropy = ini.GetInt("Renderer", "Anisotropy", 16);
+        r.vsync = std::max(0, std::min(2, ini.GetInt("Renderer", "VSync", 0)));
+        r.fpsLimit = std::max(0, ini.GetInt("Renderer", "FPSLimit", 0));
+        r.frameLatency = std::max(0, std::min(16, ini.GetInt("Renderer", "FrameLatency", 0)));
+        r.fpsOverlay = ini.GetBool("Renderer", "FPSOverlay", false);
+        r.checkKey = ini.Get("Renderer", "CheckKey");
+        r.checkCode = ini.GetInt("Renderer", "CheckCode", -1);
+        r.checkText = ini.Get("Renderer", "CheckText");
         legacy.Load(ini);
     } else {
         c.firstRun = true;
@@ -158,6 +184,17 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Addon", "MPConsole", a.mpConsole);
     ini.SetInt("Addon", "LogLevel", a.logLevel);
     ini.SetInt("Addon", "ConsoleLogLevel", a.consoleLogLevel);
+    const RendererOptions& r = c.renderer;
+    ini.SetInt("Renderer", "Mode", r.mode);
+    ini.SetBool("Renderer", "MSAA", r.msaa);
+    ini.SetInt("Renderer", "Anisotropy", r.anisotropy);
+    ini.SetInt("Renderer", "VSync", r.vsync);
+    ini.SetInt("Renderer", "FPSLimit", r.fpsLimit);
+    ini.SetInt("Renderer", "FrameLatency", r.frameLatency);
+    ini.SetBool("Renderer", "FPSOverlay", r.fpsOverlay);
+    ini.Set("Renderer", "CheckKey", r.checkKey);
+    ini.SetInt("Renderer", "CheckCode", r.checkCode);
+    ini.Set("Renderer", "CheckText", r.checkText);
     return ini.Save(ConfigPath(dir), {"EIStarter-UM settings. The game's own options live in the registry; EIStarter-UM-reg.cfg is their backup (Options > Utils)."});
 }
 
