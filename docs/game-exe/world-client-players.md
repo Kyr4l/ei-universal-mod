@@ -362,8 +362,11 @@ built by `AddBoxFaces` 0x560820 (the six faces of a part box, normals with z >= 
 0x560E70. Slots 29 / 30 of the world (`HeightWithBridges` 0x5618E0 / 0x561930) combine it with the terrain height: this is why units walk on
 bridges and stairs on the client.
 
-**Day light** [V]: `LoadDayLightTable` 0x563930 reads `config/lights[cave]<world>.ini` sections "sunlight", "ambient" and a third (sky / fog):
-keys = hours, values r g b / 255, interpolated into 24 rgba entries at `+0x22c / +0x3ac / +0x52c`. `UpdateDayLight` 0x566360 (every
+**Day light** [V]: `LoadDayLightTable` 0x563930 reads `config/lights[cave]<world>.ini` sections "sunlight", "ambient" and "sky" (the
+string at 0x790064; its table `+0x52c` feeds the sky / fog colour): keys "hourNN" (characters 4..5 are the hour), values r g b / 255,
+alpha 1, filled linearly from the previous listed hour to this one into 24 rgba entries at `+0x22c / +0x3ac / +0x52c`. The hours
+must be listed in ascending order: the fill only runs while the previous hour is below the new one, so a key out of order sets its
+own entry and leaves the gap before it unfilled (deep read 2026-11-06, ws round). `UpdateDayLight` 0x566360 (every
 `Render`; deep read 2026-11-06): nothing when render globals flag 1 is clear; `UpdateZoneExitEffectStates`; hour `h` = fmod of the world
 hour. Indoor: the hour-0 entries, light direction (0.5, 0.5, -0.7071), fog density `g_0x79BED4`, the sky recoloured black. Outdoor: fog
 density `g_0x79BED4` (day) over 6..18 h, `g_0x79BED0` (night) over 22..2 h, linear in between (2..6 h, 18..22 h); `+0x6dc = 0x80`; the
