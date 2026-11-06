@@ -957,8 +957,8 @@ DeltaCodec			0x78	CMemStream	deltaB	delta against base B
 CEffectSound	CEffect	0x264	0x14c	char[256]	name	wav path ("magic\Fireball\start.wav")
 CEffectSound			0x24c	float	volume	10 for spell sounds
 CEffectSound			0x250	float	radius	50 (slot 19 GetRadius)
-CEffectSound			0x254	int	oneShot	1 = removed when the sound ends
-CEffectSound			0x258	int	loop	1 = loops (Play3D 1000)
+CEffectSound			0x254	int	loops	CORRECTION: was oneShot: the AIL loop flag passed as Play3D's loop argument (loop count 0 = endless); while it is set CEffectSound::Update keeps the effect alive. 1 for CreateFXSource (ctor default), 0 for CreateFX
+CEffectSound			0x258	int	highPriority	CORRECTION: was loop: only picks the Play3D priority (1000 when set, else 0); the script handlers never set it
 CEffectSound			0x25c	int	handle	sound channel (-1 none)
 CEffectSound			0x260	byte	keepTick	per-tick keep-alive byte read by Update
 CEffectSoundSeq	CEffect	0x174	0x14c	pointer	folder	CString folder / base name

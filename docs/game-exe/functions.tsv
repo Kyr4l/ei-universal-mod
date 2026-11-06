@@ -10538,8 +10538,8 @@ addr	size	name	status	purpose
 0x00676080	30	CEffectSound::~CEffectSound	named	slot 0: deleting destructor (root layout)
 0x006760A0	346	CEffectSound::dtor	named	Reset (stops the sound handle +0x25C via the sound system g_0x7AF784), destroys the delta streams, CEffect dtor
 0x00676200	233	CEffectSound::Reset	named	slot 18: CEffect reset; stops the playing handle +0x25C when +0x254; +0x25C = -1, +0x254 = 1 (one-shot), name +0x14C = '', volume +0x24C / radius +0x250 = 0, +0x258 = 0, +0x260 = 1
-0x006762F0	164	CEffectSound::Update	named	slot 6: moving (+0xA4): pos += velocity and CSoundManager::SetChannelPosition(handle +0x25C, pos, volume, radius); returns 0 (removed) once the one-shot flag +0x254 is clear and the per-tick byte +0x260 was 0. Was v6
-0x006763A0	142	CEffectSound::Play	named	slot 23 (update flag): start: +0x25C = CSoundManager::Play3D(name +0x14C, 1000 when looping (+0x258) else 0, pos, volume +0x24C, radius +0x250, +0x254, 0); update: SetChannelPosition
+0x006762F0	164	CEffectSound::Update	named	slot 6: moving (+0xA4): pos += velocity and CSoundManager::SetChannelPosition(handle +0x25C, pos, volume, radius); returns 1 (kept) while the loop flag +0x254 is set or the per-tick byte +0x260 is set, else 0 (removed: a one-shot that ended)
+0x006763A0	142	CEffectSound::Play	named	slot 23 (update flag): start: +0x25C = CSoundManager::Play3D(name +0x14C, priority 1000 when +0x258 else 0, pos, volume +0x24C as min range, radius +0x250 as max range, loop = +0x254, category 0); update: SetChannelPosition
 0x00676430	274	CEffectSound::ReadNet	named	CEffect slot 21 (stream, reader): decodes the effect from a net message: 0x47E930(reader); DeltaReader::Read(+0x254, 4); string +0x14c (0x47E340, max 0xff); 0x47F3D0 x2, 0x47F7F0 (floats: +0x24c, +0x250, pos); DeltaReader::Read(+0x258, 1); +0xa4 = (+0x98..+0xa0 velocity != 0); position from the camera/world g_0x7A9794 vt[5]/vt[4] -> +0x1c..
 0x00676550	28	CEffectSound::WriteNet	named	CEffect slot 22 (writer): 0x47E3A0(writer, pos +0x1c); 0x47DCA0(+0x254, 4); string +0x14c (0x47E2D0); 0x47F1E0(+0x24c), 0x47F1E0(+0x250); 0x47F4D0(+0x98 velocity); 0x47DCA0(+0x258, 1)
 0x0067656C	123	EHBlock_67656C	named	EH: exception-handling block (funclet) inside of CEffectSound::WriteNet (0x00676550)
@@ -13526,7 +13526,7 @@ addr	size	name	status	purpose
 0x007085AF	78	CArchive::SerializeStringRange	named	for n entries: ReadWideString (read) or WriteString (write)
 0x007085FD	139	CArchive::ReadClassName	named	reads a schema and a class name (up to 0x40 chars) and resolves it under the global lock
 0x00708688	56	CArchive::WriteClassInfo	named	writes the class schema WORD + name length + name
-0x007086C0	220	CArchive::ReadObject	named	CArchive::ReadObject-like: virtual slot 6 to read a class, allocates the object; 220 bytes
+0x007086C0	220	CArchive::CArchive	named	MFC CArchive ctor (CFile*, nMode, nBufSize, lpBuf): m_nMode, buffer at least 128 bytes (allocated when lpBuf is 0), m_nGrowSize 0x40 (load) / 0x10, m_nHashSize 0x89; NO caller and no pointer in the exe: no CArchive is ever made, every MFC Serialize path is dead. CORRECTION: was CArchive::ReadObject
 0x0070879C	70	CArchive::~CArchive	named	archive destructor: flush when writing, destroy buffers, EH frame
 0x007087E2	66	CMemFile::Reset	named	frees the buffer (+0x2C) and resets positions
 0x00708824	14	CArchive::Flush	named	FillBuffer then reset the position (+0x20)

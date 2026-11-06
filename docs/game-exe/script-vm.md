@@ -609,10 +609,13 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
   `Compiler_CompileText` and drop the result. A broken `.mob` script fails silently: the map runs with everything compiled before
   the first error and nothing after it (useful for mod authors: check scripts with the console or the multitool checker).
 - ~~`+0x6C`~~ settled [V]: `nextAutoId2` is the id of script sound sources created without one: `GSWorld::CreateSoundSource` 0x4BD310 (CreateFXSource / CreateRandomizedFXSource) takes it when the given id is < 0 and decrements it (-2, -3, ...); reset by `GSWorld::Reset` 0x4BE6E0, saved.
-- The MFC `Serialize` slots of all script containers (vt slot 2) are present but no `CArchive` path into them was found; the save uses the explicit
-  `Write` / `Read` pairs. Taken as dead code.
+- ~~The MFC `Serialize` slots of all script containers (vt slot 2)~~ settled 2026-11-06 [V]: dead code in the whole exe. No `CArchive`
+  is ever made: the MFC constructor `CArchive::CArchive(CFile*, mode, bufSize, buf)` 0x7086C0 (minimum buffer 128, grow size 0x40 /
+  0x10, hash size 0x89; Ghidra had named it `ReadObject`) and the destructor `CArchive::~CArchive` 0x70879C have no call, jump or
+  pointer anywhere. So none of the ~150 `*::Serialize` methods (and the archive helpers they call) can run; the save uses the explicit
+  `Write` / `Read` pairs.
 - `GSWorld::Decompile` and the five `Compiler_*` one-list entry points have no callers: editor leftovers [untestable].
-- The sound-source respawn inversion (gs-functions.md section 5): `Tick` serves records with `randomized == 0` [V]; whether randomized sources ever play is a [live] check.
+- ~~The sound-source respawn inversion: whether randomized sources ever play~~ settled (gs-functions.md section 5, machine code 0x4BF156..0x4BF2D8) [V]: they never do in the shipped game (the `Tick` test is inverted and nothing else starts them); um-engine's byte patch `GSWorld::RandomizedSoundSources` fixes it; no shipped map calls `CreateRandomizedFXSource`.
 - `GSPlayerLayer::dtor` (0x4A6840, was `CompiledScript_Destroy`, then `Destroy?`): the member destructor called from the `CGSPlayer` ctor / dtor EH funclets (guess sweep 2026-11-01); `CGSPlayer` / `GSPlayers_*`
   (0x4A6580..0x4A7630) are the session's player / shop records and have nothing to do with the script VM despite the "GS" prefix.
 
