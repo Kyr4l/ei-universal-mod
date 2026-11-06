@@ -358,7 +358,8 @@ Per page, the open items that matter most for the mod work:
   sequence "modes" are random next-file pickers; no fresh sequence numbers are generated; `SpellProto +0x48 / +0x54 / +0x60`.)
 - items.md: nothing open (the proto runtime `CStringArray`s are never filled). Dead / unread: `CItemWeapon +0x4C`,
   the material Skill column, several proto byte fields, `CInventory`.
-- renderer.md: pipeline slots 5 and 35 and the clipper live inside `3DfpFPU.dll` (only the call shapes are known);
+- renderer.md: `3DfpFPU.dll` reversed 2026-11-07 (2.2a: the 45 pipeline slots, clip codes, the clipper, fog, particle quads, the
+  six lighting kernels; the game never computes specular); 28 unused slots only classified;
   which objects load the alternate node tracks is a live check. (`LoadFigFile2` and `BuildFigureMeshB / C` read 2026-11-03: copies
   of the two mesh builders.)
 - terrain-lighting.md: which periodic water change the 0.8 s

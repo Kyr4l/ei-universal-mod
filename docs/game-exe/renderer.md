@@ -121,17 +121,51 @@ P = perspective(fov of `g_0x79B2A8` or the given one, rect aspect, near, far), V
 | 2 | SetSunLight 0x500800 | `SetDirectionalLight(CLight*)` (0 to clear) |
 | 3 | SetAmbientColor 0x500740 | `SetAmbient(r, g, b)` floats |
 | 4 | InitRenderer, SetupCamera | `SetProjection(matrix)`: the **transpose** of P (the top of stack 6), i.e. P in column-major order (InitRenderer [V] 2026-11-06: a plain 6-pair swap, nothing taken from the viewport) |
-| 5 | InitRenderer | `SetFog(density, farClip)` [I] |
+| 5 | InitRenderer | `SetFog(start, end)` [V, 2.2a]: stores start, end and `255 / (end - start)` for slot 35 |
 | 7 | BuildFigureMesh, LoadFig8 | `ComputeBounds(BoundsRecord*, VertexSoABlock*, blocks)`: sphere + box of a blended mesh |
-| 9 | DrawMeshBatch (flag 2), TransformForDraw | `TransformClipCodes(stack-2 top, SoA, outXYZW (g_0x7AEE10), outCodes (g_0x7AEE30), blocks)` -> 0 / 1 / 2 |
-| 14 | DrawMeshBatch, TransformForDraw | `Transform(stack-1 top, SoA, outXYZW, blocks)` -> 0 all inside / 1 / 2 all outside |
-| 29 | MorphAndProjectVertices 0x5A0CD0 | project to the light plane (shadow caster) |
-| 30 | DrawProjected64 0x5A9310 | transform by a given matrix into 2D |
-| 32 | CWeather::DrawRain / DrawSnow 0x4E4240 / 0x4E4C80 | over the finished drop `VertexTL`s (clip-space xyzw from vt[9]): the clip-to-screen step [I] (the snow flake offsets are added in clip space before it) |
-| 34 | DrawMeshBatch / Blended, DrawTrianglesTransformed (clipped) | finish the clipped vertices (`g_0x7AEE00`, count) |
-| 35 | DrawMeshBatch / Blended, DrawIndexedTriangles 0x502A20 when device +0x158 | a post-process over the finished VertexTL batch: almost certainly the per-vertex fog factor [I]: `CWorldClient::Render` 0x569E40 clears `+0x158` only around the sky and the floating hit numbers (the two things drawn without fog) and sets it back to 1 |
-| 37 | DrawMeshBatch (clipped) | `ClipTriangles(vertices, codes, indices, outIndices, &vertCount, &indexCount)` |
+| 9 | DrawMeshBatch (flag 2), TransformForDraw | `TransformClipCodes(stack-2 top, SoA, outXYZW (g_0x7AEE10), outCodes (g_0x7AEE30), blocks)` -> 2 all outside one plane / 1 some outside (clip space kept) / 0 all inside: **then already projected to the screen** [V, 2.2a] |
+| 14 | DrawMeshBatch, TransformForDraw | `Transform(stack-1 top, SoA, outXYZW, blocks)`: projective transform with the divide, no clip codes, **always 0** [V, 2.2a] |
+| 24 | DrawParticleQuads | `PointsToQuads`: each {x y z size} point -> 4 screen corners, square in pixels, with clip codes [V, 2.2a] |
+| 29 | MorphAndProjectVertices 0x5A0CD0 | project to the light plane (shadow caster): affine, rows 0 / 1, float2 + bounding rect [V] |
+| 30 | DrawProjected64 0x5A9310 | transform by a given matrix into 2D: affine, column-major, rounded to int2 [V] |
+| 32 | CWeather::DrawRain / DrawSnow 0x4E4240 / 0x4E4C80 | over the finished drop `VertexTL`s (clip-space xyzw from vt[9]): the clip-to-screen step [V, 2.2a] (the snow flake offsets are added in clip space before it) |
+| 34 | DrawMeshBatch / Blended, DrawTrianglesTransformed (clipped) | the same clip-to-screen step on the clipped vertices, two at a time, `w == 0` -> `rhw = 1e6` [V] |
+| 35 | DrawMeshBatch / Blended, DrawIndexedTriangles 0x502A20 when device +0x158 | the per-vertex **fog** [V, 2.2a] over the finished VertexTL batch: `CWorldClient::Render` 0x569E40 clears `+0x158` only around the sky and the floating hit numbers (the two things drawn without fog) and sets it back to 1 |
+| 37 | DrawMeshBatch (clipped) | `ClipTriangles(vertices, codes, indices, outIndices, &vertCount, &indexCount)`: Sutherland-Hodgman per triangle [V, 2.2a] |
 | 40 | RenderLit 0x5A7A70 | `LightVertices(SoA vertices, blocks, outColours, +0xBC, +0xC0, CLight** lights, count, ambient rgb)`: the light kernel `min(1, emissive + max(ambient, N.(-D) sun, point lights))` (um-engine `fp_light.cpp` replaces it) |
+
+### 2.2a Inside 3DfpFPU.dll (reverse 2026-11-07) [V]
+
+The DLL (md5 a4da0fa6a7ad140ebad827a2e065ff1a, loaded from the game folder; the Russian and the western installs carry the same
+file) exports only `GetTLPipeline` 0x1000F200, which returns the static object 0x100204C0. Its vtable 0x1001F220 has **45 slots**;
+the game calls 15 of them (the table above). Names and one-line algorithms: `_cpr/claude-re/dll/3dfpfpu-names.tsv`; typed decompiles
+`dll/dec2/3dfpfpu/` (Ghidra project `_cpr/claude-re/ghidra-dll/3dfpfpu`, script `tools/gh_dll.py`). The object: `+4` the sun light
+(refcounted), `+0x1C..+0x28` the ambient rgb (the lighting floor), `+0x2C / +0x30` half the window height / width, `+0x34 / +0x38`
+fog start / end, `+0x3C` `255 / (end - start)`, `+0x40..+0x7C` the projection (as passed by slot 4).
+
+- **Clip codes** (slots 9 and 24): `1 x < -w`, `2 x > w`, `4 y < -w`, `8 y > w`, `0x10 z < 0`, `0x20 z > w` (the D3D clip volume).
+  Slot 9 ANDs and ORs the codes of all vertices: AND != 0 -> 2 (nothing visible), OR != 0 -> 1 (clip-space xyzw left for the
+  clipper), else it does the clip-to-screen step itself and returns 0, so `DrawMeshBatch` can draw its output directly.
+- **Clip to screen** (slots 31 / 32 / 33 / 34 and inside 9 / 24): `rhw = 1 / w` (`w == 0` -> 1e6 in the "safe" pair 33 / 34),
+  `x = (x * rhw + 1) * halfW`, `y = (1 - y * rhw) * halfH`, `z *= rhw`, `w := rhw`. Slots 31 / 33 work on 16-byte xyzw records,
+  32 / 34 on 32-byte VertexTLs.
+- **Clipper** (slot 37 -> slot 36 per triangle): all three codes share a bit -> the triangle is dropped; none set -> kept; else
+  Sutherland-Hodgman against each crossed plane in the order near, far, left, right, bottom, top (codes 0x10, 0x20, 1, 2, 4, 8; six
+  helpers 0x10001050..0x10001A40) into a polygon at `+8` (count `+0x18`); a cut edge gets a new vertex from slot 38 (xyzw and uv
+  linear, diffuse / specular per byte, rounded) appended at the vertex count; the polygon goes back as a fan `(0, i-1, i)`.
+- **Fog** (slot 35, after the screen step): the eye depth is rebuilt from the screen z, `d = P[14] / (z * P[11] - P[10])`; when
+  `d >= start`: `f = min(255, (d - start) * 255 / (end - start))` and the specular alpha byte becomes `min(old, round(255 - f))`
+  (255 = no fog: D3D's vertex fog factor).
+- **Particles** (slot 24): each point `{x, y, z, size}` gives 4 VertexTLs: the projected centre +- `s` with `s = size * rhw * halfW`
+  on both axes (square in pixels whatever the aspect), corners top-left, top-right, bottom-right, bottom-left, z / rhw shared,
+  colours and uv left to the caller, clip codes per corner.
+- **Lighting**: six kernels, {sun only, sun + point lights} x {diffuse, specular, both}: slots 43 (sun diffuse), 44 (sun specular:
+  `R = 2 (N.L) N - L`, `s = R . normalize(eye - p)`, above a threshold `(1 - power (1 - s))` times the light's specular colour
+  `+0x124..+0x12C`), 42 (sun both), 40 (sun + points, diffuse: the one the game uses, um-engine's `fp_light.cpp`), 41 / 39 (with
+  points: specular / both) [41 / 39 / 42 from their arguments and fields, I]. **The game calls only slot 40, which never reads the
+  specular colour**: the specular term `CLight::PrecomputeMaterialTerms` writes (`+0x124`, from the material's specular `+0x40`) is
+  never used, and the game has no per-vertex specular highlight [V]. The other 28 slots (6, 8, 10..23, 25..28) are unused transform /
+  bounds variants for other vertex layouts (16-, 32- and 64-byte strides, with and without the divide) [I, not read line by line].
 
 ### 2.3 The matrix stacks (CD3DLibrary +0x14 + 8n: {buffer of 16 x 0x40, depth}) [V]
 
@@ -481,7 +515,10 @@ call, `DrawFigure` (slot 14 = `Render`) with constant colours.
   `SetMaterialsOpaque` 0x51CCA0 ends it. **Stun**: `SetMaterialsStunPulse` 0x51CCD0 (was SetMaterialsEmissiveByHour) sets `+0x40` = 0.2 + 0.5 * tri(time) (a 30-unit triangle wave,
   0.2..0.7) and `+0x44 / +0x48` = 0 plus material flag 0x10 on every material: `+0x40` is the red of the D3DMATERIAL7 **specular**
   block (CMaterial `+0x20` diffuse, `+0x30` ambient, `+0x40` specular, `+0x50` emissive; `CLight::PrecomputeMaterialTerms` 0x68D280
-  feeds `+0x40` to the light kernel as specular), so the stun glow is a red specular pulse,
+  feeds `+0x40` into the light's specular term `+0x124`), so the stun pulse is a red specular colour. **It probably shows nothing**
+  [I, 2026-11-07]: the only lighting kernel the game calls (pipeline slot 40, 2.2a) never reads the specular term, and with material
+  flag 0x10 `RenderLit` sets draw flag 8 (`DrawMesh` turns SPECULARENABLE on) but skips refilling the part's specular array, whose
+  RGB stays 0; only the optional per-part colour provider of `RenderLit` (the `+0x1C / +0x20` calls) could fill it [live row].
   `ClearMaterialsEmissive` 0x51CD60 ends it. **Colour push / pop**: `SaveRestoreMaterialColors` 0x51C9F0 pushes the diffuse `+0x50..+0x5C` of
   every material on a per-material deque and resets it to 1.0; pop restores (the death fade of `CUnitClientSpecific`).
 - **Scale**: `GetScale` 0x51AD20 returns `+0xF0..+0xF8`; `Draw` pushes a diagonal matrix when they are not 1 (the only true scaling in the
@@ -646,11 +683,13 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 
 ## 6. What is not known
 
-- Pipeline slots 5 (`SetFog`?) and 35 (the `+0x158` post-process) and the clipping algorithm live inside `3DfpFPU.dll`, outside game.exe [untestable here: needs a reverse of that DLL].
-- (2026-11-06) The vt[9] output is clip space (the snow flakes are offset in it before vt[32]), yet `DrawMeshBatch` and
+- ~~Pipeline slots 5 and 35 and the clipping algorithm~~ settled 2026-11-07 by the DLL reverse (2.2a): `SetFog(start, end)`, the vertex fog, Sutherland-Hodgman.
+- ~~(2026-11-06) The vt[9] output is clip space (the snow flakes are offset in it before vt[32]), yet `DrawMeshBatch` and
   `DrawTrianglesTransformed` draw it directly when vt[9] returns 0; so vt[9] probably never returns 0 (only 1 or 2), and vt[14] never
   returns 1 (its caller would read stale outcodes) [I, needs the DLL]. vt[32] vs vt[34] (both look like "clip space -> screen") and who
-  fills the diffuse / specular dwords of the weather vertices are open.
+  fills the diffuse / specular dwords of the weather vertices are open.~~ Settled 2026-11-07 (2.2a): vt[9] returns 0 only after it projected
+  the vertices to the screen itself; vt[14] always returns 0; vt[32] / vt[34] are the same step (34 two at a time with a `w == 0` guard).
+  Still open: who fills the weather vertices' colours (game side).
 - ~~CFigureClientSpecific +0x30 / CI3DFigure +0x27C~~ settled: `CI3DFigure +0x27C` is a **CMaterial** [V], handed to the
   renderer's DrawFigure (vt[14]) by `CI3DFigure::Draw` 0x5E6D90; the UI quad figures get the widget's `+0xEC quadMaterial`
   (kind 0x16, colour 0,0,0) from `AddQuadMesh` / `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10. The three 1.0 floats at
@@ -677,7 +716,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   it, `CWorldClient::SetNamedObjectState` 0x565380 matches script object names against it.
 - (2026-11-06, ren-b) Open: the reader of `CFigureClientSpecific +8` bit 0x200 (set for animated textures); who holds the other two
   references that make `GetOrCreateFigure` re-blend only below refcount 3 [I, live row]; the radix-sort direction of
-  `DrawParticleQuads` above 128 quads; what pipeline vt[24] does exactly (four corners per point from xyz + size) [needs 3DfpFPU.dll].
+  `DrawParticleQuads` above 128 quads; ~~what pipeline vt[24] does exactly~~ (2.2a: square pixel quads with clip codes).
 
 ## 7. Corrections to earlier notes
 
@@ -726,6 +765,8 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | `functions.tsv` (0x505CB0) | `AnimNodeOld_ReadFromData` "+0xe4 / +0xec two doubles rounded to int64" | a raw 16-byte copy of the rest rotation quaternion (the FPU qword-copy idiom) |
 | `structs.tsv` `EffectRecord` | `+0x8` "vector<EffectPassRecord>", `+0x14` passCount | `+0x8` = the vector of state-block handles (one per pass), `+0x14` = stages bound by the first pass |
 | `figure-format.md` (older format table) | bounds "244 B" at 8, count at 0xF8 | 240 bytes (3 x 0x48 corner groups + 6 radius floats = 0xF0); 8 + 0xF0 = 0xF8 |
+| this page 2.2 (slots 5, 9, 14, 35) and 6 | `SetFog(density, farClip)` [I]; vt[9] "never returns 0", vt[14] returns 0 / 1 / 2; slot 35 "almost certainly fog" | `SetFog(start, end)`; vt[9] returns 0 after projecting to the screen itself; vt[14] always 0; slot 35 is the vertex fog (DLL reverse 2026-11-07, 2.2a) |
+| this page 3.6 Stun (2026-11-06) | "the stun glow is a red specular pulse" | the specular term is written but the game's lighting kernel never reads it: probably no visible pulse [I, live row] |
 
 ## 8. Function index (one line each; full purposes in the batch file)
 
