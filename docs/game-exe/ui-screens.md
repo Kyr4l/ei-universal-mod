@@ -372,19 +372,37 @@ the selected row (marker quad at x 239) fills the detail panel: row 0 = the host
 option texts), a server = name, "%s %d / %d" players, allod, the wrapped description, the address (`NetAddress::ToStringDefault`)
 and the ping; sort arrows by `+0x258`; separators with `CDC::LineTo`.
 
-**CExchangeScreen** 0x62C250 (screen id 9): offer parties `+0x190 / +0x194 / +0x198`, money edit `+0x1A8` (its dirty flag pushes
-`+0x50` + `LobbyClient::FillParty`), buttons 0 accept (`LobbyClient::ConfirmPair` when the remote money <= ours), 1 retract, 2 leave;
-item click 0x62D100 moves between party and offer; `Exchange` 0x62D210 (slot 37) swaps the parties and `Session_LeaveGame`.
+**CExchangeScreen** 0x62C250 (screen id 9) [V, deep read 2026-11-06; protocol in net-transport.md 4.7]: figure "campinfo"; buttons
+0 accept (0xC,0x1C2)-(0x34,0x1EA), 1 retract (0x94..0xBC), 2 leave (0x2E4,0x1CC)-(0x30C,0x1EA) (tips 0xA028 / 0xA029 / 0xA02B); quads
+0 / 1 the accept / retract art, 2 a hidden frame, 3 the leave art (scale 0.5); `+0x190` a fresh scratch `CParty`, `+0x198` own offer
+= `LobbyClient +0x2620` (cleared), `+0x194` the remote offer = `LobbyClient +0x2690`; children: `UIItemInfoWin` `+0x164` (600,100),
+the party inventory `CCampBar2` `+0x19C` (mode 0, kind 1), a `CCampFaceBar` `+0x1A0`, a `CCampTradeWin` `+0x1A4` (kind 5) whose top
+grid (250,150) shows the **remote** offer and the bottom grid (250,350) **ours**, the money `CEditWin` `+0x1A8` (0,0x15E)-(200,0x16E)
+(mask 1 = **digits only**, 9 characters, text 0xFFFFFF, caret 0x31B3FF) and 4 text surfaces. `Draw` 0x62C9C0: "xch_current_money"
+"%s %d" (party money) + "xch_accept"; "xch_money_offer"; when the partner record exists and is live (bit 31 of `+4` clear)
+"xch_money_remote" + its money "%d" and "xch_remote_header" + "xch_remote_ok" (partner `+0x1C` confirmed) or "xch_remote_cancel";
+once we confirmed, the accept art shrinks to 0.5 and the retract art grows to 1.0 (the reverse before); the hovered item of the party
+bar or offer grid goes to the info window. `Update` 0x62C930: while the pair record `LobbyClient +0x2618` lives, a dirty money edit
+sets own offer `+0x50` = atol(text) and `FillParty` re-uploads it; when the pair vanishes, the own offer goes back to the party and
+`Game_SendEnterWorld`. Click 0x62CF70: **accept** only when our record is live and not yet confirmed and **our offered money <= our
+party money** (`+0x198 +0x50` <= party `+0x50`; the partner's money is not checked here) -> buy.wav + `ConfirmPair` (cancel.wav is
+played after it in every case); retract only when confirmed (`RetractExchange`); leave = transit.wav + `ReleaseExchangeRecord`. Item
+click 0x62D100 (slot 42, every drop allowed by slot 43 0x62D200): kind 1 moves the item party -> own offer (basket limit 8 entries,
+`Party_TransferItem` count 8), kind 5 takes one of our offer back; both re-upload (`FillParty`). `Exchange` 0x62D210 (slot 37,
+reached through `CInterface::OnLobbyRef` 0x5F8310 from the confirmed-pair update handler, code at 0x41F270 that has no function entry
+in the database) (a, b, c): `CParty::ReleaseItems` on the client party, moves every item of c and then of a into it, party money
+= a.money - b.money + c.money, then `Game_SendEnterWorld` [V]; which party is a / b / c is in the caller [I: a = a copy of our party,
+b = our offer, c = the remote offer].
 
 ## 6. Main menu, esc menu, boxes, credits, intro
 
 | Screen | Build / buttons [V] |
 |---|---|
-| CMainMenu 0x6326B0 (id 2) | `Databases_Reload`, version text (0x6335E0 "version_name" + build), 6 buttons from the rect table g_0x7C80A8: 0 new game -> CDifficultyBox (base 0x20000; 0x20001 = `Databases_Reload`, Movies\Intro.bik, new-game start 0x5816C0), 1 load -> CSaveLoadWin(load, no slide), 2 quit -> Movies\Exit.bik + `App_PostQuit`, 3 options, 4 credits (CCreditsScreen "Titles"), 5 multiplayer -> CCampScreen2; camera "MainMenu.cam"; hovering animates the menu figure (stone.wav 0x633400); Esc = quit box (0x10001 = quit) |
+| CMainMenu 0x6326B0 (id 2) | `Databases_Reload`, version text (0x6335E0 "version_name" + build), 6 buttons from the rect table g_0x7C80A8: 0 new game -> CDifficultyBox (base 0x20000; 0x20001 = `Databases_Reload`, Movies\Intro.bik, new-game start 0x5816C0), 1 load -> CSaveLoadWin(load, no slide), 2 quit -> Movies\Exit.bik + `App_PostQuit`, 3 options (`+0x3F5` = 0, no slide), 4 credits (`Game_StopAllSounds`, the menu's text surfaces cleared, CCreditsScreen "Titles" pushed without the fade), 5 multiplayer -> "reserved_04" message bar, `Game_SetServerPaused(1)`, CCampScreen2 (0x220) [V, `OnLButtonDown` 0x632D70 deep read 2026-11-06; every button plays menu\ok.wav except quit]; camera "MainMenu.cam"; hovering animates the menu figure (stone.wav 0x633400); Esc = quit box (0x10001 = quit) |
 | CEscMenu 0x62AB20 | figure "escMenu00" / "escMenu00labels" at (400,700) depth 4.8 tilted by g_0x7C7FB0; 5 buttons (g_0x7C80A8): 0 save -> CSaveLoadWin(save, slide) (not in a lobby), 1 load, 2 continue (close), 3 quit -> box "quit" (0x10001 = `LobbySession_ReleaseActive2`), 4 options -> COptionsScreen(slide); hover plays stone.wav and switches the figure animation 2..6 (0x62AD10); 0x100001 / 0x110001 from a child closes the menu too (0x62ACC0) |
-| CDifficultyBox 0x6337B0 | "tip option_difficulty", choices "difficulty_easy" / "difficulty_hard" (buttons 2 / 3), OK writes g_0x79BEC0 (0x633DD0) |
-| CMessageBox 0x634650 | (ui, titleKey, textKey, base, flags, align): flags 1 OK, 2 Cancel, 4 edit (15 chars, copied into `+0x17C` on OK), 0x10 align; `Build` 0x634790 measures the texts, OK (0x107,y+0x1A)-(0x151,y+0x4A) + Cancel (0x1CF..0x219) or OK alone (0x16B..0x1B5); Enter / Esc = OK / Cancel; base -0x10000 (the fatal quit box) plays Exit.bik and quits |
-| CCreditsScreen 0x62B7D0 (id 8) | `Movies_PlayIniList(ini)` + a `CRichEditSurface` scroller fed from "outro.res" (`StreamInFromResource` 0x65EF30, "#scroll <speed>" entries, `RichEditScroller::Start`), screensaver disabled (SPI 0x4A / 0x4B), Bink frames in Draw 0x62BD80; a click / Esc / Space skips (`LobbySession_ReleaseActive2`) |
+| CDifficultyBox 0x6337B0 | [V, deep read 2026-11-06] a CMessageBox (0x184; ctor args title "option_difficulty", empty text, base 0x20000, flags 3) whose own Build lays out: the title, the first paragraph of the text "tip option_difficulty" (`OpenText` + `ReadUntilHash`, right-trimmed), the two choices "difficulty_easy" / "difficulty_hard" centred one under the other (rows of 0x18 px, buttons 2 / 3 over them, marker quads 0 / 1), the panel 200..600 vertically centred on the 0x226-px text block, OK (0x107..0x151) / Cancel (0x1CF..0x219) buttons 0 / 1 (tips 0xC3B4 / 0xC3B5). The choice `+0x180` starts at **0 = hard** (the hard row is marked); button 2 = easy (1), 3 = hard (0); OK (0x633DD0) writes **g_0x79BEC0 = choice (1 easy, 0 hard**, the same order as the options list "difficulty_hard" / "difficulty_easy"), ok.wav, closes 0x20001; Cancel closes 0x20002; Enter / Esc the same (0x633EC0) |
+| CMessageBox 0x634650 | (ui, titleKey, textKey, base, flags, align): flags 1 OK, 2 Cancel, 4 edit, 0x10 align. `Build` 0x634790 [V, deep read 2026-11-06]: blit surface (200,0x32)-(600,500); the text font is 2, or 1 for the fatal box (base -0x10000); the block (title + text or edit + 0x3C) is centred vertically in 0x226 px; title golden 0x31B3FF centred, text beige 0xA7D7E4 with `align | 0x10`; flag 4 replaces the text line by a `CEditWin` (0xD7,y)-(0x249,y + line height) with **mask 0xF (any character), 50 characters**, the text font, seeded from the caller's char buffer `+0x17C`; dark panel (200..600) + border; buttons: 1 and 2 = OK (0x107,y+0x1A)-(0x151,y+0x4A) + Cancel (0x1CF..0x219), 1 alone = OK (0x16B..0x1B5), 2 alone = an empty button 0 + Cancel at (0x16B..0x1B5) so Cancel stays index 1. OK (0x634D20 / Enter): base -0x10000 plays Exit.bik and quits; flag 4 strcpy's the edit text into the caller's buffer (the two lobby callers pass `CLobbyScreen +0x1A0`, a 0x9C-byte char buffer, so 50 characters fit); closes base \| (button + 1); Esc = Cancel |
+| CCreditsScreen 0x62B7D0 (id 8) | [V, deep read 2026-11-06] name `+0x1D4` = "Crdt" (screen id 8, the end of the campaign, `+0x1F4` = 0) or "Titles" (main menu button 4, `+0x1F4` = 1). Build: end of game only: `CSoundManager::StopAll` + music stop; `Movies_PlayIniList("<name>fin")` (movie.ini section played before), **font smoothing saved in `+0x16C` and switched off** (SPI 0x4A / 0x4B = SPI_GET / SETFONTSMOOTHING, restored by OnClose 0x62BD00), the archive `<root>outro.res` (`CMappedResource` `+0x170`) entry "credits.scr" parsed line by line (space separated): "[#scroll] <seconds or speed> <rtf entry> [title]" -> 0x18-byte nodes of the list `+0x1C8` (`+8` scroll flag, `+0xC` float, `+0x10` title, `+0x14` rtf entry); vanilla holds one line "#scroll 25 outro.rtf"; a `CRichEditSurface` (10,0x96)-(0x316,0x1C2) `+0x164` and a title surface (10,0x6E)-(0x316,0x8C) `+0x168`, both hidden; from the main menu `Game_SetServerPaused(0)`; render globals `+0x14` saved in `+0x1F8` and zeroed; background video `Movies\<name>.bik` (`CBinkVideo` `+0x1D8`, no sound). `Draw` 0x62BD80: when the timer `+0x1CC` has passed and the scroller is idle, the next node is streamed in (`StreamInFromResource`): a plain node is a still page shown for `+0xC` seconds, a `#scroll` node scrolls up from the bottom at speed `+0xC` (`RichEditScroller::Start(speed, 1)`) with its title drawn above (font 2, 0xFEFEFE); after the last node and the end of the Bink, `Movies_PlayIniList("<name>fout")` and either pop (main menu) or `LobbySession_ReleaseActive2` (back to the main menu after the campaign). A click / Esc / Space skips the same way |
 | CIntroScreen 0x602050.. | plays Movies\<name>.bik or the autoplay.apl camera flights (clip list `+0x1A3`, .cam files, "Can't find camera file %s"); Esc ends, Space = next clip |
 
 ## 7. Save / load (CSaveLoadWin 0x741388, 0x194 bytes)
@@ -422,18 +440,55 @@ the quickload key: `_access` the directory, "notify_loading", `SessionRequest::S
 
 ## 8. The world map (CWorldMapScreen 0x740B3C, screen id 4)
 
-`Build` 0x62D350 [V]: current zone (`Records5C_FindByName(g_0x79BF00)`) -> allod record -> figures "Map<allod>" / "MapG<allod>" and the
-zone's `map.txt` position (`MapTxt_LoadZonePosition` 0x630E00: section `#zone <id>` then `#position` "x y z" ints; `MapTxt_LoadQuestPosition`
-0x630CC0: section `#quest <id>`, first line "x y z"); 0x10-byte entries `+0x190` (figure, zone index or -1, name): visited zones
-(`z.<zone>` == 1), quests (`q.<zone>.<quest>` == 1, label from "quest <id>"), reachable zones (`z.` value 2 and zone record +0x28 == 2)
-with click buttons; three map layer quads 700..100 x 0..600, a picking surface `+0x210` (entry id in pixel bits 4..7), the game-time
-panel "save_day" "%s  %d,  %d:%02d" at (20,20)-(170,70), the zone table `+0x1A4` (0x18 rows: name, travel time) of the allods ingos /
-suslanger / gipat, FlameNoise `+0x214`, wind.wav loop, and the autosave "saveb". Buttons: 0 / 1 rotate (0x2E1,0x219)-(0x311,0x249) /
-(0x2B1..0x2E1), 2 camp (0xF,0x20D)-(0x6B,0x249) = `World_SetConstrCurrent(0)` + `Game_SendLeave(5)` unless i.nocamp, 3.. = zone
-buttons. `OnLButtonDown` 0x62F950: a picked zone entry when travelling is allowed (`+0x1DC`) -> `World_AddGameTime(travel time)` +
-`Game_SendString(zone name, 0)` (the travel order); a quest entry or non-travel mode -> CQuestLogWin with `SetCaption(name, +0x1E0
-zone points, 1, ..)`. Right drag rotates the map (`+0x168` of the sub-object, dx / 300), `Update` 0x62F050 re-projects the entry
-figures and buttons; Esc = CEscMenu; 0x35 / 0x36 quick save / load. Tutorial key "global_map" / "global_map_nocamp" (0x62EE70).
+`Build` 0x62D350 [V, deep read 2026-11-06]: current zone (`MapZoneRecords_FindByName(g_0x79BF00, client map)`) -> its allod record
+(`MapAllodRecords_FindByName`) -> textures "Map<allod>", "Sys<allod>", "MapG<allod>", "saveload" and a 256x256 render target; the
+allod title (first line of "allod <id>", `+0x17C`) and the current zone's `map.txt` position `+0x180` (`MapTxt_LoadZonePosition`
+0x630E00: section `#zone <id>` then `#position` "x y z" ints; `MapTxt_LoadQuestPosition` 0x630CC0: section `#quest <id>`, first line
+"x y z"). The map lies in 3D: quaternion `+0x1EC` = 144 deg (2.513 rad) about x, centre (400,280), scale 10, every point projected as
+rot(p) + ((cx * 0.0025 - 1) * 0.4816 * s, (cy * 0.0025 - 0.75) * 0.4816 * s, s); quads 0 / 1 = the current-zone marker (0.8 scale
+copy at z + 2) and quad 2 the map.
+Three entry tables:
+- **zone entries** (0x10 bytes `+0x190`, count `+0x164`): **every** zone of the allod's list whose record `+0x28` kind is 0 ("game")
+  and whose record `+0x10` string is not empty; `+0` = trunc(`z.<zone>`) (0 = unknown: not hoverable / clickable), `+4` linked row or
+  -1, `+8` name, `+0xC` title (first line of "zone <id>"), one quad each (the old note "visited zones `z.` == 1" was wrong: the value
+  is stored, not filtered).
+- **quest markers** (0x18 bytes `+0x1B8`, count `+0x168`): per zone entry every variable of `q.<zone>` (`Game_GetNamedFloat2`) equal
+  to 1.0 with 3 dot parts: `+0` zone entry index, `+4` `#quest <id>` position, `+0x10` quest id, `+0x14` quest title; a 0.3-scale quad.
+- **zone rows** (0x18 bytes `+0x1A4`, count `+0x16C`): per zone entry, every exit (record `+0x4C` data, `+0x50` count, 0x3C each)
+  whose target zone is of kind 2 ("brief"), has a non-empty `+0x10` and `z.<target>` == 2.0: `+0` entry index, `+4` `#zone`
+  position, `+0x10` name, `+0x14` title, a 0.3-scale quad and a button (index 3 + row) at its projected rectangle; when the source
+  entry's state is 2 its `+4` links to the row.
+Then three cloud-layer quads (700..100 x 0..600, colours 0xA08200C8 / 0xF0B400FF / 0x4BFFFFFF, heights -0.5 / 0.7 / 2), render
+globals `+0x14` = 0xFF3C005A, the picking surface `+0x210` (built 400x300, rect 800x600), a hidden hover panel (400,0x14)-(0x30C,300),
+the time panel (20,20)-(170,70): line 1 the allod title, line 2 "save_day" "%s  %d,  %d:%02d" from "gtime" (game hours: m = trunc(gtime * 60)
+(fmul 60.0 at 0x62E750), day m / 1440, hour (m mod 1440) / 60, minute m mod 60) (font 2, 0xA7D7E4); the camp button art (hidden when `i.nocamp` == 1, `+0x27C`), the two rotate arrows; ambient of the
+selected entry `+0x280` (ingos (0.371, 0.508, 0.625), suslanger (0.391, 0.195, 0.086), else (0, 1, 0)), `+0x278` = 1 on gipat;
+`Game_ForwardToWorldServer(0, 0)`, music stopped, `FlameNoise` 256 `+0x214`, the 18 colour stages (`ApplyFadeColor`), wind.wav loop
+`+0x290`; **autosave "saveb"** (`QuickSave`) only when the screen is built live (not restored from the UI stream g_0x7AFDF8 on a
+load), the client mode (connection `+0x1C +0x104`) is not 5 (= not coming back from the camp [I]) and the option autosave g_0x79BE7C
+is on; tutorial.
+`Redraw` 0x630670 renders the picking surface: zone entry i is drawn flat in grey 0x18 + 0x10 i, so a pixel's bits 4..7 - 1 give
+the entry; **at most 15 zone entries per allod can be picked** (the 16th colour wraps to an invalid id) [V].
+
+Input [V]: buttons 0 / 1 rotate while held (`+0x174` = -1 / +1, move.wav; `Update` 0x62F050 turns the map by pi/4 rad per second,
+fmod 2 pi); right drag rotates by dx / 300 rad (`OnMouseMove` 0x630010, which also prints "x:y" to a debug stream); 2 camp =
+transit.wav + `World_SetConstrCurrent(0)` + `Game_SendLeave(5)` unless `i.nocamp` == 1. `OnMouseMove`: the hovered zone row button,
+or the picked zone entry (on gipat redirected to its linked row) -> `SelectEntry` 0x630860 + zone.wav when the name changes; the
+panel shows the title and, for a zone entry, the titles of its quest markers (one 20-px line each, frame grown to fit); an entry
+with state 0 shows nothing. `OnLButtonDown` 0x62F950 (globalmap ok.wav):
+- a picked zone entry with state != 0 that is not linked (any allod but gipat, or no row): `LoadZonePoints(current zone)` for that
+  zone name (`+0x1D8`) and push **CQuestLogWin** `SetCaption(name, +0x1E0 travel-time map, globalMapMode 1, allowTravel 0)`: the player
+  picks the entrance there and its OK travels (section 9);
+- a linked entry (gipat) or a zone row button (3..): `LoadZonePoints`; only when a path exists (`+0x1DC`) -> `World_AddGameTime(time
+  of entrance 0 in the map)` + `Game_SendString(zone name, 0)` (the travel order, entrance 0). `IsZoneAllowed_Ret1` 0x6316A0 always
+  allows.
+`LoadZonePoints` 0x6312C0 (zone record) is a depth-first search over the zone exits from the current zone: an exit whose target is the
+destination sets `+0x1DC` = 1 and stores, keyed by the exit's entrance index (`+0x2C`), the travel time (-1 when the destination is a
+direct neighbour, else the sum of the exit `+0` times of the hops before the last; the smaller value is kept); a target already on
+the path stack `+0x1C8` is skipped; the search passes **through** a zone of kind 0 only when `z.<zone>` == 2, kind 1 ("edge") when
+`z.` != 1, kind 2 ("brief") when `z.` != 0 (the destination itself may be passed once, flag `+0x1DD`). `World_AddGameTime` ignores
+negative deltas [I: its purpose says delta >= 0], so a direct neighbour costs no time.
+Esc = CEscMenu; 0x35 / 0x36 quick save / load. Tutorial key "global_map" / "global_map_nocamp" (0x62EE70).
 
 ## 9. The quest log / travel window (CQuestLogWin 0x7411BC, 0x1F0 bytes)
 
@@ -516,17 +571,38 @@ Buttons 0 prev / 1 OK / 2 next (50 px, bottom row, tips 0x7594..0x7596); the foo
 
 ## 12. The battle HUD (CBattleHud 0x740764 / 0x740730, screen id 1)
 
-`Build` 0x635250 [V]: hero ids `+0x1DC` from the party or, on a load, from the UI stream `g_0x7AFDF8` (ids, pause flag, zone name (v >
-0x46), zone exit (v > 0x61)); figure "battle00"; widgets `+0x194` CHudWeaponBar, `+0x198` CHudQuickBar (8 belt slots), `+0x19C`
+`Build` 0x635250 [V, deep read 2026-11-06]: the controlled-unit id list `+0x1DC` starts with **only the hero** (the id `+0x1C` of
+the first unit of the client party, `+0x200` "first zone enter" = 1; `UpdateUnitList` adds the others later) or, on a load, comes from the UI stream `g_0x7AFDF8`: count +
+ids, 4 more bytes, the pause byte (`Game_SetServerPaused`), when the stream version g_0x7AFE00 > 0x46 the **combat-log text** (put
+back into the message panel `+0x164`; the old note said "zone name"), when > 0x61 the pending zone exit `+0x188`; then the stream is
+emptied. Two 256x256 render targets, figure "battle00"; widgets `+0x194` CHudWeaponBar, `+0x198` CHudQuickBar (4 belt items + up to 4 quest items), `+0x19C`
 CHudSpellList, `+0x1A0` CHudAbilityList, `+0x1A4` CHudMainPanel (portraits + minimap frame), `+0x1A8` CHudUnitInfoPanel, `+0x1AC`
-CHudMinimap, `+0x1B0` CHudClockStrip, `+0x1B4` CHudStanceStrip, `+0x1B8` CTextListWin combat log, `+0x1BC` CHudMessagePanel, a
-UIControl740208 camera child; personality labels "pers *" (`+0x1F0`). `Update` 0x638280: the controlled units come from the client
-player's unit list (hero first; `UnitIdLists_Equals` 0x6381E0 detects changes -> `BuildUnitPortraits`, camera carrier = the hero), the
-leave-zone prompt (`Game_CollectHeroesInZoneExit` -> box "leave_zone", 0x10001 -> `Session_RequestMapChange(+0x188)`), quest sounds
-(quest.wav / subcomplete.wav / complete.wav). Slots 28..35: `OnLootMessage` 0x636150 (items / money into the message panel),
+CHudMinimap (built by 0x641F20, which was named `CHudMainPanel::Build` but runs on this vt 0x742660 object), `+0x1B0`
+CHudClockStrip, `+0x1B4` CHudStanceStrip, `+0x1B8` CTextListWin combat log (0xBE,0x19)-(0x262,0x59), `+0x1BC` CHudMessagePanel
+(`FlushCombatMessages`), a `CamCtlFree` camera handler; personality labels from every text "pers *" (first line, keyed by a hash of
+5 characters, std::map `+0x1F0`); command mode `+0x17C` = 0, slot `+0x180` = -1, selection `+0x168` emptied, called-shot flags
+cleared; `Game_ForwardToWorldServer(0, 0)`, `Game_SetFlag94_8`, bit 0x40 of g_0x79B2B0 cleared; in a lobby slot 36 is called. `Update` 0x638280 [V, deep read 2026-11-06]: (1) when exactly one unit is selected and its vt+0xDC answers non-zero [? a unit
+the player does not command], the weapon / quick / spell / ability bars are emptied and the unit info panel shows that unit (`+0x14C`
+unit, proto `+0x20` / `+0x24`, `UnitLabel`); (2) **only in a lobby game** the unit list is rebuilt from the lobby player records
+(`LobbyClient +0x25D8`): records with `+0x24` == 0 whose unit `+0x2C` exists give list A, the others their `+0x30` in list B (both
+sorted); when either differs from `+0x204 / +0x214` (`UnitIdLists_Equals` 0x6381E0) `+0x16C` is rebuilt with the own player's unit
+(record == `LobbyClient +0x25F0 +0xC`) first and selected (`HideObject`) and the others after it, `BuildUnitPortraits`, and the
+camera follows the own unit (`CCamera::FollowUnitId`, `+0x210`) + `RefreshPanels` (single player maintains `+0x16C` in
+`OnUnitAdded` / `OnUnitRemoved` / `UpdateUnitList`; the old note had it the other way round); (3) children tick,
+`ShowQueuedTutorial(0)`; (4) the pending exit `+0x18C`: the client party's hero records (`+0x30`, 0x784 bytes each, count `+0x34`)
+-> `Game_CollectHeroesInZoneExit(heroes, +0x188)` -> box "leave_zone" / "leave_zone_msg" (0x10000, OK + Cancel; 0x10001 ->
+`Session_RequestMapChange(+0x188)`), flag cleared; (5) during a rubber band drag the controlled, unselected units inside the
+rectangle get the hover flag 0x100 (`CollectPickedObjects`), the others lose it; (6) the quest sound `+0x1FC`: 1 quest.wav, 2
+subcomplete.wav, 3 complete.wav, then 0. Slots 28..35: `OnLootMessage` 0x636150 (items / money into the message panel),
 `OnUnitAdded` 0x6361B0, `OnUnitRemoved` 0x6364E0, `ShowGameOver` 0x6365E0 ("game_over" / "end_of_game", base 0x90000 -> leave),
-`OnUnitEvent` 0x6366F0 (unit voices, "say" lines into the log), `ShowQuestMessage` 0x6369D0 ("combat_get_quest" /
-"combat_complete_quest" / "combat_failed_quest" + title), `OnZoneEnter` 0x6360F0 (autosave "savea"), 40 `UpdateUnitList`.
+`OnUnitEvent` 0x6366F0 (unit voices, "say" lines into the log), `ShowQuestMessage` 0x6369D0 (name, value) [V, deep read 2026-11-06]: a quest variable `q.<zone>.<quest>` (3 dot parts) prints
+"\aC<EE E3 31>" (yellow) + "combat_complete_quest" (value 2) / "combat_failed_quest" (3) / "combat_get_quest" (other) + " " + the
+quest title (first line of "quest <id>"); a sub-objective `q.<zone>.<quest>.<n>` (4 parts) is shown only when its quest
+`q.<zone>.<quest>` != 0 (always in a lobby) in golden "\aC<FF B3 31>" with "combat_complete_subobj" / "combat_failed_subobj" /
+"combat_get_subobj" + the text of the `#subobj <n>` section; each line ends with "\aC<E4 D7 A7>\n" (back to beige) and goes into the
+message panel (`CTextListWin::Refresh` unless the panel is on its other tab); the clock strip `+0x158` = 1 (its quest-log button
+blinks [I]); `+0x1FC` sound = max(itself, trunc(value)) with a failure counted as 1, a completed quest forced to >= 3: so **a failed
+quest plays quest.wav (the "new quest" sound)**, a completed sub-objective subcomplete.wav, a completed quest complete.wav (Update), `OnZoneEnter` 0x6360F0 (autosave "savea"), 40 `UpdateUnitList`.
 
 **Selection** [V]: `SelectUnitIndex` 0x6379E0 (shift toggles; `CWorldClient::HideObject` = CUnit flag 0x10 = selected, net message 0x19;
 host party records `+0x778` mirror it), `DeselectAll` 0x637C60, a rubber band (`+0x1C1`, rect `+0x1CC`, released in `OnLButtonUp`
@@ -541,11 +617,21 @@ called-shot key -> `SendAttackOrder(target)` or `SendMoveOrder(point, 1)`; then 
 +0x184)` (use / science), 6 the same for objects with vt+0xA8 (loot), 7 `SendMsg39_SetLeader(unit, target)` + `OnUnitEvent(unit, 7)`
 (follow), 8 InteractOne with -1; default: a controlled unit = `SelectUnitIndex`, a usable object = `SendMsg36_InteractOne(.., 0, -1)`,
 terrain = `SendMoveOrder` 0x636F10 (`SendMsg30_Move(ids, shift, pos)` or `SendMsg3A_MoveFormation`; a zone exit under the point sets
-`+0x188 / +0x18C`) + console "Terrain Coords x y z", another unit = `SendInteractOrder` 0x6373A0 (`SendMsg36_Interact(ids, 0, id,
-target)`) and, when `CUnit::IsPlayerInMask` says hostile, `SendAttackOrder` 0x637190 (`SendMsg31_Attack(ids, shift, target, hit
-location 0..5 or 6 any)`, warning event 10 when the target is > 5 levels above) else a move to it. Every order resets `+0x17C / +0x180 /
-+0x184` and the slot highlights. `SetCursorTarget` 0x639EF0 picks the cursor frame per mode (attack, use 4, exit 0xF, forbidden 0xD,
-select 0x18).
+`+0x188 / +0x18C`) + console "Terrain Coords x y z", a **dead** unit (object vt+0xDC = `CUnit +0x274` dead flag; the decompile of
+0x638EF0 lost most branches, this split is from the deep read 2026-11-06 [I]) = `SendInteractOrder` 0x6373A0 (`SendMsg36_Interact(ids,
+0, id, target)`, i.e. loot the corpse), a living unit = when `CUnit::IsPlayerInMask(first unit, target)` says hostile
+`SendAttackOrder` 0x637190 (`SendMsg31_Attack(ids, shift, target, hit location 0..5 or 6 any)`, warning event 10 when the target is
+> 5 levels above) else a move to its position. The cast modes take the target only while it is alive (else the terrain point; a
+(0,0) point does nothing); mode 3 refuses a belt item of proto subtype 8 (scroll) on anyone but the user [I]; modes 5 / 6 / 8 flash
+the first selected unit's portrait (random phase from the ISAAC generator). Every order resets `+0x17C / +0x180 /
++0x184` and the slot highlights. `SetCursorTarget` 0x639EF0 (object, x, y) [deep read 2026-11-06; the switch is garbled in the decompile, frame numbers V,
+conditions I]: a living object with flag 0x400000 under the cursor becomes the unit info panel's hover unit (`+0x150`, proto `+0x20 /
++0x24`, label), cleared otherwise; nothing selected -> no change; then the frame per mode: 0 -> 1 attack on a hostile living unit
+(`IsPlayerInMask`), 4 on a corpse or a usable object (one unit selected), 0xF over a zone exit whose `z.<target>` != 1 (alt held:
+the same exit test); 1 / 2 (spell) -> 2 when `CUnit::SpellUsability(slot, point)` allows, else 0x17; 3 / 4 (belt item) -> 2 when
+`QuickItemUsability` allows (a scroll only on the user), else 0x17; 5 / 6 (use / loot) -> 4 when the object is usable (vt+0x98, loot
+also vt+0xA8), else 0xD; 7 (follow) -> 0xF on a living unit, else 0xD; 8 -> 0x18 unless the object is one of the controlled units
+(0xD).
 
 **Keys** (`OnKeyDown` 0x63A560, keyboard.ini actions) [V]: Esc cancels the command mode or pushes CEscMenu; 1 pause (clock.wav,
 `Game_SendLeaveFlag(!paused)` = message 0x10), 2 decel = normal (tick g_0x78FF34 = 0x37 ms), 3 accel = fast (0x1B ms, single player), 4
@@ -557,17 +643,29 @@ once, others enter mode 1 / 2 via `SelectSpellSlot` 0x63EC90; nomagic.wav when u
 mode 3 / 4), 0x2E..0x31 w_info1-4 (unit info tabs), 0x32 / 0x33 w_text1-2 (message panel tabs), 0x34 w_minimap (sling toggle), 0x35
 quicksave, 0x36 quickload, 0x37..0x39 select1-3, 0x3A select_all, 0x3B tutorial_script (`ShowQueuedTutorial(1)`). Lobby: Enter chat,
 Backspace clears it.
+Details from the deep read 2026-11-06 [V]: while `+0x22C` (modal portrait exchange) is set every key is swallowed and the flag
+cleared; auto-repeated keys (flag bit 0x4000) are ignored; Esc first cancels a pending command mode (mode / slot / interaction reset,
+highlights cleared) and only without one pushes CEscMenu; pause sends `Game_SendPause(!paused)`; **decel and accel both work only
+while not paused and not in a lobby** (clock strip `+0x154` = 0 / 1, mirrored to `CInterface +0x94`); obj stops the clock strip
+blink (`+0x158` = 0) and opens `CQuestLogWin::SetCaption(current map, 0, 0, 0)` (mission mode, **no travel** from the HUD key);
+camera_norm = `CCamera::SetYaw(0)` + minimap `+0x1B0` = 0.5; **spell1-8 and item1-4 without ctrl / alt call `SelectSpellSlot` /
+`SelectBeltSlot` (targeting mode), with ctrl or alt `UseSpellSlot` / `UseBeltSlot`**; weapon1-4 only when the slot exists and is not
+the current one (weapon.wav, `SendMsg34_SelectWeapon(unit, i)` when the bar has a unit); w_info1-4 open the unit info panel on that tab
+or close it when the tab is already shown (sling.wav), w_text1-2 the same for the message panel; w_minimap slides the minimap
+(`+0x1A8` direction negated, `+0x198` = 1); select1-3 = `SelectUnitIndex(0..2)` (on_off.wav) and with ctrl or alt the camera follows
+that unit; select_all (single player only) selects every controlled unit (`HideObject`), tilts every portrait, fires slot 32 for the
+hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 
 **The strips** [V]:
 
 | Widget | Buttons and effects |
 |---|---|
 | CHudWeaponBar 0x63BAB0 | 4 slots at ((i*5+10)*8, 0x1EF)-((i*5+15)*8, 600); release = `SetSlotSelected` + weapon.wav + `SendMsg34_SelectWeapon(unit, slot)`; follows `CUnit +0x270` in Update |
-| CHudQuickBar 0x63C800 | 8 belt slots (tooltips `SlotTooltipText` 0x63CEE0 "<name> %d/%d (%d)" charges); release = `UseBeltSlot`, right / shift = `SelectBeltSlot`; highlight = alpha 0.65 / 0.55 (0x63CD20) |
-| CHudSpellList 0x63E2A0 | spell rows x 0x2F8..800 from y 0x1D6 (0x28 each, "%s %d" name / cost, "school_%d" tips); release = `UseSpellSlot`, right = `SelectSpellSlot` |
+| CHudQuickBar 0x63C800 | 8 slot buttons, but `SetUnit` 0x63D2B0 [V, deep read 2026-11-06] fills them as: the unit's **4 belt items** (`CUnit::GetQuickSlotItem(0..3)`, figures at (695 - 50 i, 575), scale 0.55, tooltip `SlotTooltipText` 0x63CEE0 "<name> %d/%d (%d)" charges with the item1-4 key 0x2A + i appended) and then, **only for a unit the player owns** (`CPlayer::OwnsUnit`), the first up to 4 **quest items** (kind 0x3009) of the player's item list (player `+0xE8`) at (695 - 50 (i - 4), 525), scale 0.85, tooltip from `GetItemTextKeys`; slot records 0xC bytes `+0x15C` (+0 1 belt / 0 quest item, +4 item id, +8 item), quad index per slot `+0x16C..`; release = `UseBeltSlot`, right / shift = `SelectBeltSlot`; highlight = alpha 0.65 / 0.55 (0x63CD20) |
+| CHudSpellList 0x63E2A0 | spell rows x 0x2F8..800 from y 0x1D6 (0x28 each); `SetUnit` 0x63E820 [V, deep read 2026-11-06]: one row per filled spell slot `CUnit::GetSpellSlotItem(0..7)` (`CHudSpellList::Build` with the item's figure names); the row tooltip = the item text (`GetItemTextKeys`) + " \n" + lines built from the 13 labels "infoitem_7 / 18 / 8..13 / 21 / 22 / 26..28" (loaded by the ctor) with the container's `CSpell` (`+0x44`): a number "%s %d", the school "school_%d" text, a number or a text by proto byte `+0x7B`, speed shown as a number when >= 1 else a text, "%s %d%s", a "%.1f%s" value unless flag 0x10000000, the duration "%.1f%s" when `buff.duration` >= 2, a last "%s %d" (which label goes with which value is hidden by the x87 code), plus the spell1-8 key (action 0x1E + i); release = `UseSpellSlot`, right = `SelectSpellSlot` |
 | CHudAbilityList 0x63F300 | rows: 0 follow ("skill0009"), 1 Science ("skill0011") -> `SelectAbilityRow` |
-| CHudMainPanel 0x63FE70 | portraits (0x78-byte records: tilt quaternion, flash, HP / mana bars, face "me"/"fa"/"th" by state) built by `BuildUnitPortraits` 0x6407E0; click = portrait unit as the click target (lobby: `SendNamedEvent("%d")`); frame "battle00", minimap mesh (`CHudMinimap::Init` 0x642E80, markers `DrawMinimapUnits` 0x643DC0) |
-| CHudMinimap 0x645060.. | 0 sling toggle (scroll direction), 1 / 2 map click -> `CCamera::SetCarrierId(-1)` + `SetTarget(world point)`, 5 reset yaw; wheel = zoom `+0xD8` |
+| CHudMainPanel 0x63FE70 | the portrait strip (0x78-byte records `+0x158`); click = portrait unit as the click target (lobby: `SendNamedEvent("%d")`). [V, deep read 2026-11-06] `BuildUnitPortraits` 0x6407E0 (selected flag): one portrait per controlled unit (`+0x16C` of the HUD): face picture "infa<m/f><me/fa/th><n>face" (m = model "unhuma", f = "unhufe"; **th when the unit's build `+0xC8` < 0.2, fa when > 0.8, else me**; n = proto `+0xC`) or "face%s%02d"; selected units get a tilted portrait (rotation about -x by g_0x7C8144 / 7); record `+0` = HP (`+0x17E`), `+0x40` face name, `+0x50` "infa<sex>", `+0x54` "<n>face", `+0x58` build, `+0x74` -1; tooltip = `UnitLabel` with the select1-3 key (actions 0x37..0x39) for the first three (none in a lobby); in a lobby every player record without a live unit in the zone gets a **grey portrait without bars** (face of its hero prototype, tooltip = player name, `+0x74` = record `+0x30`). `BuildPortraitSlot` 0x640060 (picture, alt name, selected, absent): faces blitted 4 per 256x256 render target (128-px quadrants); single player slots 56 px wide centred on x 400 ((x, 510)-(x + 56, 600)), lobby 40 px (+16 for the selected one); face quad 510..580, HP bar 587..592 and mana bar 592..597 (hidden for absent players), frame, selection overlay, button (x, 0x1FE)-(x + w, 600); at most 6 slots (index mod 6). `Update` 0x641080 (slot 24) per portrait: HP bar = `+0x17E / +0x180`, mana bar = `+0x182 / +0x184` (UV fill 9 + 64 * ratio of 256); **an HP drop** (below record `+0`) starts a red flash (alpha fades over 1 s) and face variant 2 for 2 s (variant 1 lasts 4 s); otherwise variant 3 while `+0x184` == 0 or `+0x182 / +0x184` < 0.25 [? which pair this is: live row], else 0 (`BuildFaceArt` 0x640670 on a change); a build change swaps the me / fa / th face; random idle moves (chance dt / 3 per frame while not paused: a random tilt of up to pi/12 about y and x, eased with a cosine at speed 1..2), nod (1) / shake (2) animations of 0.63 s; the tilt eases to the selected / unselected pose at 2 dt; quad 0 is a marker 60 px above the portrait of the unit whose id == g_0x79B3C4. |
+| CHudMinimap 0x645060.. | 0 sling toggle (scroll direction), 1 / 2 map click -> `CCamera::SetCarrierId(-1)` + `SetTarget(world point)`, 5 reset yaw; wheel = zoom `+0xD8`. [V, deep read 2026-11-06] `Build` 0x641F20 (was named `CHudMainPanel::Build`; details in its batch row): window (0x267,0)-(800,0xA5), map size = zone record `+0x20 / +0x24` sectors x 32 m, texture = zone record `+0x18` ("battle00" without a record), `+0x168` = 2 / size, zoom `+0x16C` = min(1, size * 0.05), 7 buttons (0 (0x30C,0)-(800,0x1E) with the w_minimap key, 1 the 16-point disc, 2 (0x26C,0)-(0x30C,0xA0), 3 / 4 / 5 the three right-edge buttons (0x30C,100..0x82 / 0x82..0xA0 / 0x46..100), 6 the whole window), disc (700,80) r 64, ring r 66, frame. `Init` 0x642E80: centre `+0x14C / +0x150` = the camera point (g_0x79B388 / 38C), the map turns with the camera (angle atan2 of the camera's up axis), the 16-point disc UVs = centre + offset / zoom / (2 / size), clipped against the map edges (x, y >= 0 and <= size: Sutherland-Hodgman). `DrawMinimapUnits` 0x643DC0: markers in disc units (offset * 2 / size * zoom): **units** of the client's visible list (connection `+0x50D8`, count `+0x50DC`), not dead, within r^2 <= 0.56: an arrow along the unit's facing (tip 0.07, wings 0.04), colour 0 for the player's controlled units, 2 when the player's bit (player `+0x24`) is set in both unit masks `+0x244` and `+0x248` (hostile), else 1; the unit with id 0xA2C2A is forced to 2 on zone gz20g; **lights** of the light manager g_0x7AF748 (renderer.md) as colour-3 squares of 0.06; **zone exits** whose target is not "none" as colour-1 squares at `GetZoneExitCenter`; both squares shown inside r^2 <= 0.6, or at their unzoomed position on the rim (0.68 <= r^2, abs(x), abs(y) <= 0.97); in a lobby also the other players (connection `+0x50EC`). |
 | CHudUnitInfoPanel 0x6456E0 | sliding panel (0.3 s): 0 slide toggle (sling.wav), 1..4 tabs (w_info keys): figure with damaged parts, bars, body parts "skull/torso/arm/leg" (0x647B70), stats "move_%d", "dmg_%d", "consider_more%d / less%d" (0x647040: d = level of the shown unit - level of the first selected unit, clamped to +-25; d >= 0 -> `consider_more<d>`, d < 0 -> `consider_less<|d|>`: 51 texts, e.g. more0 "Equal", more25 "Invincible", less25 "Feeble" [V machine code + texts 2026-11-03]), spell info (0x646B90) |
 | CHudClockStrip 0x648520 | (0x2D0,0x208)-(800,600): 0 pause (clock.wav, `Game_SendLeaveFlag(!paused)`), 1 normal (g_0x78FF34 = 0x37), 2 fast (0x1B, single player), 3 the time dialog (CQuestLogWin); clock hands from "gtime" (0x6488E0); lobby: no speed buttons |
 | CHudStanceStrip 0x649190 | (0,0x208)-(0x50,600): 0 = the battle button (`OnSelect` 0x649810: if every selected unit has `CUnit +0x438` == 1 -> 0 else 1, `SendMsg3B_SetField438(unit, v)`; the "battle mode" / Regroup of `unit-ai.md`), 1..4 crawl / sneak / walk / run = `SendMsg35_SetStance`; marker from `CUnit +0x268` |
@@ -581,7 +679,7 @@ Backspace clears it.
 | CHScrollBar 0x65BC30 (0x742CBC / 0x742C88) | the horizontal twin (quads rotated 90 deg, 0x65B8B0); the options sliders |
 | CTextListWin 0x65CC00 (0x742E9C / 0x742E68, 0x1C8, a CScrollBar) | (ui, text, l, t, r, b, depth): the text is tokenised by `ScrollText_ParseEscape` 0x65D970 (`\n` paragraph, `\aF<d>` font, `\aC<rgb bytes>` colour, other `\a` = fatal "ScrollText::Incorrect special symbol") into word nodes (width by MeasureText) and format nodes (`FormatLines` 0x65D4B0), wrapped to width - 14 (`Relayout` 0x65DAA0, scroll range = total height - view), drawn line by line with full justification of inner lines (`Redraw` 0x65D150). `SetText` 0x65CFE0 restarts at 0, `Refresh` 0x65CF30 appends keeping the view anchored |
 | CListBoxWin 0x65BCD0 (0x742D5C / 0x742D28, 0x174) | (ui, l, t, r, b, first string): a one-line switch: `AddString` 0x65BE70, a click cycles `SetSelection(sel + 1)` 0x65BEE0 (wraps), `GetChanged` 0x65BEB0 |
-| CEditWin 0x65C010 (0x742DF4 / 0x742DC0) | (ui, l, t, r, b): `Init` 0x65C1A0 (char mask: 1 letters, 2 digits / space, 4 other, 8 . :, centred, font, max chars, text colour, caret colour; defaults 0xF / 0 / 1 / 50 / 0xFFFFFF / 0xFF); `OnChar` 0x65C930 inserts at the caret when the class is allowed, ctrl is not held, length < max and the text fits the rect (MeasureText); `OnKeyDown` 0x65C610 Backspace / Delete / Home / End / Left / Right; the first key on a fresh box clears it (`BeginEdit` 0x65C5C0); `SetText` 0x65C290, `SetActive` 0x65C2D0; the owner polls the dirty flag `+0x17A` |
+| CEditWin 0x65C010 (0x742DF4 / 0x742DC0) | (ui, l, t, r, b): `Init` 0x65C1A0 (char mask: 1 digits (`CRT_isdigit` 0x6E9379, was named _isalpha_like), 2 other letters / digits (isalnum) / space, 4 other, 8 . :, centred, font, max chars, text colour, caret colour; defaults 0xF / 0 / 1 / 50 / 0xFFFFFF / 0xFF); `OnChar` 0x65C930 inserts at the caret when the class is allowed, ctrl is not held, length < max and the text fits the rect (MeasureText); `OnKeyDown` 0x65C610 Backspace / Delete / Home / End / Left / Right; the first key on a fresh box clears it (`BeginEdit` 0x65C5C0); `SetText` 0x65C290, `SetActive` 0x65C2D0; the owner polls the dirty flag `+0x17A` |
 | CTooltipControl 0x65E320 (0x742F64 / 0x742F30) | (ui, owner, text, normalLines, actionCode): lines split at `\n`; `OnMouseMove` 0x65E580 is the state machine: armed -> after tooltip_time g_0x79BE80 seconds a surface is created at the cursor (+ hot spot g_0x7C8258), kept inside 800x600, with " (<key>)" of the bound action appended to line 0; fading out over `+0x17C`; `Redraw` 0x65E880: fill 0x1C2B, frame 0x31B3FF, lines in 0xA7D7E4 then 0x31B3FF from `+0x164` |
 | CRichEditSurface 0x65ED30 (0x742FD8, 0x58, a CUIBlitSurface2) | a hidden Win32 "RichEdit20A" (Riched20.dll) used as a text formatter: `StreamInFile` 0x65EE70 / `StreamInBuffer` 0x65EF80 / `StreamInFromResource` 0x65EF30 send EM_STREAMIN (0x449, SF_RTF); the credits scroller (`RichEditScroller::FormatRange / Draw / Start` 0x65F020.., outside this range) renders it |
 | DInputMouse 0x65EAD0 | DirectInput 7 mouse: `Create` (GUID_SysMouse, c_dfDIMouse, NONEXCLUSIVE | FOREGROUND, fatal messages), `Acquire` 0x65EC70, `GetState` 0x65ECB0 (dx, dy, wheel, buttons at `+0x10`), `Release` 0x65EC30; polled by CSoftCursor (framework) |
@@ -594,6 +692,15 @@ Backspace clears it.
 - New multiplayer hero limits: `CUnitInfoWin::Redraw` greys "-" at 15 and "+" at 35 / no points left; whether the click handler
   (not read in the 2026-11-06 round) refuses the same values, or only the grey colour stops the player, is not checked.
 - The addrbook.ini dword that `CLobbyScreen::Build` replaces by `GetTickCount() ^ ISAAC` when 0 is probably the client id.
+- `CExchangeScreen::Exchange` 0x62D210 (a, b, c): which party is which comes from the confirmed-pair update code at 0x41F270, which
+  has no function entry in the database (live row in live-t5-scr-b.tsv).
+- The decompiles of `CBattleHud::IssueCommandAt` 0x638EF0, `SetCursorTarget` 0x639EF0 and `CHudMinimap::DrawMinimapUnits` 0x643DC0
+  lost most branch targets (empty `if` bodies): the order / cursor / marker conditions in section 12 are [I] where marked; a
+  machine-code read would settle them.
+- Portrait face variant 3 tests `CUnit +0x182 / +0x184` < 0.25 (the second bar's pair, mana if `+0x17E / +0x180` is HP): live row.
+- The minimap colour-3 squares come from the light manager g_0x7AF748 as read; what they show in a zone is a live check.
+- The labels of the HUD spell tooltip ("infoitem_7 / 18 / 8..13 / 21 / 22 / 26..28") are paired with their values by x87 code the
+  decompile hides; the text resources defining them were not found in the repository.
 - ~~Tooltip id mapping~~ settled [V]: `UIButton::SetTooltipById` 0x5FC730 formats the id as the text key `tip %d` (decimal),
   reads it with `CTextManager::OpenText` + `ReadUntilHash`, and stores a new `CTooltipControl` in button +0x30 (id 0 = empty
   tooltip). So 0x4E84.. = `tip 20100`.., 0x7594.. = `tip 30100`.., 0x9CA4.. = `tip 40100`.., 0xEAC4.. = `tip 60100`..,
@@ -651,6 +758,16 @@ Backspace clears it.
 | ui-screens.md 4 (panes) | `CCampTradeWin` "two 4x5 grids" | two 4-column grids of two rows (8 cells each, the basket limit of `Party_TransferItem`) at (250,150) and (250,350) (`Draw` 0x627390) |
 | ui-screens.md 4 / 5 (cross-notes from the ui-fw round, checked in the decompile) | nothing said how the hero preview and the item icons are drawn | `CCampScreen::Draw` 0x60F050 calls `EnterMode` every frame and `UIUnitPreview::Render(hero, +0x258, 400, 1)` in tab 0; `CCampScreen2::Draw` 0x6159E0 renders at x 555 / 400; `UIUnitPreview::DrawItemFigure` 0x5ECA10 tints an icon dark red (0x82804040) when the screen's slot 43 (`CanDropItem`) refuses it; `DrawFaceFigure` 0x5ED7B0 compares the race mask exactly with unhuma / unhufe |
 | items.md (camp calls) | "CCampItemConstr::Deconstruct / TryConstruct" | same functions, now `CCampScreen::DeconstructItem` 0x6129C0 / `RefreshItemComponents` 0x612600 (behaviour as described there) |
+| ui-screens.md 6 / functions.tsv 0x62B7D0 / 0x62BD00 (credits) | "screensaver disabled (SPI 0x4A / 0x4B)" | SPI 0x4A / 0x4B are SPI_GETFONTSMOOTHING / SPI_SETFONTSMOOTHING: font smoothing is saved in `+0x16C`, switched off and restored on close (deep read 2026-11-06) |
+| ui-screens.md 5 / structs.tsv CExchangeScreen +0x1A4 | accept "when the remote money <= ours"; `Exchange` ends with `Session_LeaveGame`; +0x1A4 "second CCampBar2" | accept needs **our** offered money (`+0x198 +0x50`) <= our party money; `Update` / `Exchange` end with `Game_SendEnterWorld`; +0x1A4 is a `CCampTradeWin` (remote offer on top, ours below) |
+| ui-screens.md 13 / structs.tsv CEditWin +0x158 | char mask "1 letters, 2 digits / space" | the first test of `OnChar` 0x65C930 is `CRT_isdigit` 0x6E9379 (was named _isalpha_like): **1 = digits**, 2 = other letters / digits (isalnum) / space; the exchange money edit (mask 1) is digits only |
+| ui-screens.md 6 / structs.tsv CMessageBox +0x178 | the flag-4 edit "15 chars" | `Init(mask 0xF, ..., 50 chars)`: 0xF is the character mask (any character), the limit is 50 characters (`Build` 0x634790) |
+| ui-screens.md 8 / structs.tsv CWorldMapScreen +0x164 / +0x190 | "visited zones (`z.<zone>` == 1)", entry "+0 figure" | every kind-0 zone of the allod with a non-empty record `+0x10` gets an entry whose `+0` is trunc(`z.<zone>`) (0 = not hoverable / clickable); outside gipat a click opens the quest window (no direct travel); travel needs a path found by `LoadZonePoints` |
+| ui-screens.md 12 (Build) | the UI stream holds the "zone name" (v > 0x46); the HUD starts with the party's hero ids | it holds the combat-log text (restored into the message panel); a live start puts only the hero in the id list |
+| ui-screens.md 12 (Update) / functions.tsv 0x638280 | "outside a lobby game the controlled units come from the client player's unit list" | the list rebuild from the lobby player records runs **only in a lobby game**; single player keeps the list through `OnUnitAdded` / `OnUnitRemoved` / `UpdateUnitList` |
+| ui-screens.md 12 (strips) / structs.tsv CBattleHud +0x198 | `CHudQuickBar` "8 belt slots" | 4 belt quick items + up to 4 quest items (kind 0x3009) of the player for an owned unit (`SetUnit` 0x63D2B0) |
+| functions.tsv 0x641F20 | `CHudMainPanel::Build` | runs on the `CHudMinimap` object (+0x1AC, vt 0x742660) from `CBattleHud::Build`: renamed `CHudMinimap::Build` |
+| ui-screens.md 12 (orders) | "another unit = SendInteractOrder and, when hostile, SendAttackOrder" | object vt+0xDC is `CUnit +0x274` dead (slot 55): a corpse gets `SendInteractOrder` (loot), a living hostile unit `SendAttackOrder`, other living units a move [I: branches lost in the decompile] |
 
 ## 16. Function index (one line each; the batch rows carry the detail)
 
@@ -694,6 +811,8 @@ Backspace clears it.
 | 0x634650..0x634E60 | CMessageBox | generic box |
 | 0x635250..0x63B920 | CBattleHud | HUD, selection, orders, keys |
 | 0x63BAB0..0x64AB20 | CHud* widgets | weapon / quick / spell / ability / portraits / minimap / unit info / clock / stance / messages |
+| 0x641F20 / 0x642E80 / 0x643DC0 | CHudMinimap::Build / Init / DrawMinimapUnits | minimap window, disc geometry, unit / light / exit markers (0x641F20 was CHudMainPanel::Build) |
+| 0x6312C0 | CWorldMapScreen::LoadZonePoints | travel path search over the zone exits (z. passability per zone kind) |
 | 0x63B5D0 / 0x64BE40 | CQuestLogWin ctor / SetCaption | |
 | 0x64BE80 / 0x64CC10 | CQuestLogWin::Build / ShowMap | window + one zone |
 | 0x64D9B0 / 0x64DC60 / 0x64EA80 | CQuestLogWin::DrawQuestList / FillObjectives / LoadQuestMarkers | quests |

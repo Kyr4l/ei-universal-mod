@@ -2965,7 +2965,7 @@ CListBoxWin	CUIWidget	0x174	0x15C	int	selection	cycles on click
 CListBoxWin	CUIWidget	0x174	0x160	byte	changed	cleared by GetChanged 0x65BEB0
 CListBoxWin	CUIWidget	0x174	0x164	int[4]	rect	copy of the window rect
 CEditWin	CUIWidget	0x17C	0x148	int[4]	rect	text rect = surface rect
-CEditWin	CUIWidget	0x17C	0x158	int	charMask	1 letters, 2 digits / space, 4 other printable, 8 . and : (default 0xF)
+CEditWin	CUIWidget	0x17C	0x158	int	charMask	CORRECTION: was "1 letters, 2 digits / space": OnChar 0x65C930 tests CRT_isdigit 0x6E9379 first: 1 digits, 2 other letters / digits (isalnum) / space, 4 other printable, 8 . and : (default 0xF)
 CEditWin	CUIWidget	0x17C	0x15C	byte	centred	text centred when 1
 CEditWin	CUIWidget	0x17C	0x160	int	font	0..2 (default 1)
 CEditWin	CUIWidget	0x17C	0x164	int	maxChars	default 50
@@ -3004,12 +3004,12 @@ CBattleHud	CUIWindow	0x230	0x188	int	pendingExit	zone exit index of the leave-zo
 CBattleHud	CUIWindow	0x230	0x18C	byte	pendingExitFlag	1 = ask "leave_zone" when the heroes are inside the exit (Update)
 CBattleHud	CUIWindow	0x230	0x18D	byte[6]	calledShot	held cs_head / body / rleg / lleg / rhand / lhand keys (actions 17..22); hit location of SendAttackOrder
 CBattleHud	CUIWindow	0x230	0x194	pointer	weaponBar	CHudWeaponBar (vt 0x74279C)
-CBattleHud	CUIWindow	0x230	0x198	pointer	quickBar	CHudQuickBar (0x74283C, 8 belt slots)
+CBattleHud	CUIWindow	0x230	0x198	pointer	quickBar	CORRECTION: was "CHudQuickBar (0x74283C, 8 belt slots)": 8 slot buttons = 4 belt quick items (CUnit::GetQuickSlotItem 0..3) + up to 4 quest items (kind 0x3009) of the player for an owned unit (CHudQuickBar::SetUnit 0x63D2B0)
 CBattleHud	CUIWindow	0x230	0x19C	pointer	spellList	CHudSpellList (0x7428E4)
 CBattleHud	CUIWindow	0x230	0x1A0	pointer	abilityList	CHudAbilityList (0x742980)
 CBattleHud	CUIWindow	0x230	0x1A4	pointer	mainPanel	CHudMainPanel (0x742A18: portraits, minimap frame)
 CBattleHud	CUIWindow	0x230	0x1A8	pointer	unitInfoPanel	CHudUnitInfoPanel (0x7426F8)
-CBattleHud	CUIWindow	0x230	0x1AC	pointer	minimap	CHudMinimap (0x742660)
+CBattleHud	CUIWindow	0x230	0x1AC	pointer	minimap	CHudMinimap (0x742660), built by CHudMinimap::Build 0x641F20 (formerly named CHudMainPanel::Build)
 CBattleHud	CUIWindow	0x230	0x1B0	pointer	clockStrip	CHudClockStrip (0x7425C8: pause / speed / time dialog)
 CBattleHud	CUIWindow	0x230	0x1B4	pointer	stanceStrip	CHudStanceStrip (0x742530: battle button + 4 stances)
 CBattleHud	CUIWindow	0x230	0x1B8	pointer	combatLog	CTextListWin
@@ -3075,14 +3075,14 @@ DialogScreen	CUIWindow	0x2A4	0x29C	pointer	speakersCap
 DialogScreen	CUIWindow	0x2A4	0x2A0	byte	modalLobby	1 while a lobby exchange box is up: mouse events go to +0x1EC
 DialogScreen	CUIWindow	0x2A4	0x190	IdArray	partyUnits	CArray (vt +0x190, data +0x194, count +0x198, cap +0x19c, grow +0x1a0) of CUnit* indexed by party record: OnPartyChanged (slot 29) inserts the unit at its party index (IdArray::SetSize / DwordArray_SetAtGrow_60AD50); RemoveSpeakerByName / StartDialogLine look speakers up in it (the portrait order of the talk mode)
 DialogScreen			0x254	pointer	speakingUnit	CUnit* whose phrase is playing (ParseDialogScript '#phrase': the speaker record's unit; 0 after Build / StartDialogLine / end of the section): Update closes its mouth (unit +0x240 client specific) when the voice timer runs out
-CWorldMapScreen	CUIWindow	0x294	0x164	int	visitedCount	entries of visited zones (z.<zone> == 1)
+CWorldMapScreen	CUIWindow	0x294	0x164	int	zoneEntryCount	CORRECTION: was visitedCount "entries of visited zones (z.<zone> == 1)": every kind-0 zone of the allod with a non-empty record +0x10; the z value is stored in entry +0, not filtered
 CWorldMapScreen	CUIWindow	0x294	0x168	int	questCount	entries of quests (q.<zone>.<quest> == 1)
 CWorldMapScreen	CUIWindow	0x294	0x16C	int	reachableCount	entries of reachable zones (z. value 2 and record +0x28 == 2) with click buttons
 CWorldMapScreen	CUIWindow	0x294	0x170	int	entryCount	total
 CWorldMapScreen	CUIWindow	0x294	0x174	int	rotateDir	-1 / 0 / 1 while a rotate button is held
 CWorldMapScreen	CUIWindow	0x294	0x178	int	rotateChanged	
 CWorldMapScreen	CUIWindow	0x294	0x180	float[3]	zonePos	map.txt #zone <current> #position
-CWorldMapScreen	CUIWindow	0x294	0x190	pointer	entries	0x10-byte entries: +0 figure, +4 zone index or -1 (quest), +8 CString name, +0xC
+CWorldMapScreen	CUIWindow	0x294	0x190	pointer	entries	CORRECTION: was "+0 figure": 0x10-byte zone entries: +0 int trunc(z.<zone>) (0 = not hoverable / clickable), +4 linked zone row or -1, +8 CString zone name, +0xC CString zone title
 CWorldMapScreen	CUIWindow	0x294	0x1A4	pointer	zoneTable	0x18-byte zone rows: +0x10 name, +0x14 travel time (allods ingos / suslanger / gipat)
 CWorldMapScreen	CUIWindow	0x294	0x1D0	int	dragDelta	right-button drag of the map
 CWorldMapScreen	CUIWindow	0x294	0x1DC	byte	canTravel	a zone click sends the travel order
@@ -3121,13 +3121,17 @@ CWorldMapScreen			0x264	byte	dragging	right-button map drag in progress: 0 after
 CWorldMapScreen			0x278	byte	isGipat	1 when the current allod is 'gipat': SelectEntry links an entry to its zone row only on gipat (the one allod whose reachable zones are drawn as entries)
 CWorldMapScreen			0x280	float[3]	highlightAmbient	r, g, b ambient of the selected entry figure (+0x224.. of the figure, half for the linked zone): ingos (0.371, 0.508, 0.625), suslanger (0.39, 0.195, 0.086), otherwise (0, 1, 0); an unselected entry gets (1, 1, 1) (SelectEntry 0x630860)
 CWorldMapScreen			0x28c	byte	autosaveOnOpen	1 when the screen is built live (not from the UI stream g_0x7AFDF8) and the client player mode (connection +0x1c +0x104) != 5: after the build, with the autosave option g_0x79BE7C on, CSaveLoadWin::QuickSave('saveb'); cleared afterwards
+CWorldMapScreen	CUIWindow	0x294	0x1C8	pointer	pathStack	LoadZonePoints depth-first path: vector of 8-byte (zone record, exit index) pairs, begin +0x1C8, end +0x1CC, cap +0x1D0
+CWorldMapScreen	CUIWindow	0x294	0x1D4	float	pathTime	LoadZonePoints accumulated travel time (sum of exit +0 times of the hops on the path)
+CWorldMapScreen	CUIWindow	0x294	0x1D8	CString	targetZone	the clicked zone name LoadZonePoints searches for
+CWorldMapScreen	CUIWindow	0x294	0x1DD	byte	targetPassed	LoadZonePoints: the destination has been entered once on the current path
 CMessageBox	CUIWindow	0x180	0x164	CString	title	text key resolved by CTextManager::GetString
 CMessageBox	CUIWindow	0x180	0x168	CString	text	
 CMessageBox	CUIWindow	0x180	0x16C	int	resultBase	the parent gets resultBase | 1 (OK) or | 2 (Cancel) in vt slot 27
 CMessageBox	CUIWindow	0x180	0x170	int	flags	1 OK button, 2 Cancel button, 4 text input (the result copies the edit into +0x17C), 0x10 text align
 CMessageBox	CUIWindow	0x180	0x174	int	align	
-CMessageBox	CUIWindow	0x180	0x178	pointer	edit	CEditWin (flag 4, 15 chars)
-CMessageBox	CUIWindow	0x180	0x17C	pointer	inputTarget	LPSTR / CString* receiving the typed text
+CMessageBox	CUIWindow	0x180	0x178	pointer	edit	CORRECTION: was "CEditWin (flag 4, 15 chars)": Init(mask 0xF = any character, not centred, text font, 50 chars, 0xA7D7E4, caret 0x31B3FF)
+CMessageBox	CUIWindow	0x180	0x17C	pointer	inputTarget	CORRECTION: was "LPSTR / CString* receiving the typed text": a raw char buffer of the caller, shown in the edit and overwritten by strcpy on OK (lobby callers: CLobbyScreen +0x1A0)
 CEscMenu	CUIWindow	0x168	0x164	int	hoveredButton	0 continue 1 save 2 load 3 options 4 quit (figure animations 2..6)
 CMainMenu	CUIWindow	0x17C	0x16C	byte	lampPhase	random flash timer state (Update 0x632B10)
 CMainMenu	CUIWindow	0x17C	0x16D	byte	lampPhase2	
@@ -3143,7 +3147,7 @@ CLobbyScreen	CUIWindow	0x260	0x190	pointer	scrollBar2	the player-count scrollbar
 CLobbyScreen	CUIWindow	0x260	0x194	pointer	nameEdit	CEditWin (0x1C2,0x90)-(0x28A,0xA0): player name, letters / digits, 10 chars
 CLobbyScreen	CUIWindow	0x260	0x198	int	maxPlayers	
 CLobbyScreen	CUIWindow	0x260	0x19C	int	allodTab	0..3 lmp_allod_name_%d
-CLobbyScreen	CUIWindow	0x260	0x1A0	CString	password	typed in the password box
+CLobbyScreen	CUIWindow	0x260	0x1A0	char[0x9C]	password	CORRECTION: was CString: a raw char buffer (zeroed by its first byte, filled by strcpy from the CMessageBox edit, also the direct-connect / delete-server address text)
 CLobbyScreen	CUIWindow	0x260	0x220	int	showFull	toggle button 4
 CLobbyScreen	CUIWindow	0x260	0x224	CString	directAddress	typed in the direct-connect box
 CLobbyScreen	CUIWindow	0x260	0x23C	byte	connectLatch	a connect result is pending (Update shows lmp_server_full / lmp_you_are_banned / lmp_wrong_password / lmp_cannot_connect)
@@ -3156,12 +3160,12 @@ CLobbyStatusBar	CUIWidget	0x170	0x154	pointer	playersEnd
 CLobbyStatusBar	CUIWidget	0x170	0x158	pointer	playersCap	
 CLobbyStatusBar	CUIWidget	0x170	0x15C	CStringArray	texts	lmp_status_zone / base / camp / connect, lmp_exch_we_offer / they_offer
 CExchangeScreen	CUIWindow	0x1B8	0x164	pointer	itemInfoWin	UIItemInfoWin
-CExchangeScreen	CUIWindow	0x1B8	0x190	pointer	offerParty	CParty of the exchange
+CExchangeScreen	CUIWindow	0x1B8	0x190	pointer	offerParty	CORRECTION: was "CParty of the exchange": a scratch CParty created in Build and released by OnClose; not used by Draw / Update / clicks
 CExchangeScreen	CUIWindow	0x1B8	0x194	pointer	remoteOffer	g_LobbyClient +0x2690
 CExchangeScreen	CUIWindow	0x1B8	0x198	pointer	ownOffer	CParty of our offer (money +0x50 from the edit)
 CExchangeScreen	CUIWindow	0x1B8	0x19C	pointer	partyBar	CCampBar2 mode 0
 CExchangeScreen	CUIWindow	0x1B8	0x1A0	pointer	faceBar	CCampFaceBar
-CExchangeScreen	CUIWindow	0x1B8	0x1A4	pointer	offerBar	second CCampBar2
+CExchangeScreen	CUIWindow	0x1B8	0x1A4	pointer	offerBar	CORRECTION: was "second CCampBar2": a CCampTradeWin (vt 0x74170C, 0x164) built with the remote offer list (top grid) and the own offer list (bottom grid), kind 5
 CExchangeScreen	CUIWindow	0x1B8	0x1A8	pointer	moneyEdit	CEditWin (0,0x15E)-(200,0x16E)
 MfcCList		0x1c	0x0	pointer	vtable	MFC CList {vt, head, tail, count, free list, CPlex blocks, block size}; node = {next, prev, payload at +8}; every GSWorld list uses it
 MfcCList			0x4	pointer	head	first node (GSWorld::Tick iterates from here = newest first for the script lists)
@@ -4070,3 +4074,10 @@ MapAllodRecord		0x2c	0x4	CString[5]	lines	first word of each of the 5 lines afte
 MapAllodRecord		0x2c	0x18	CDWordArray	zoneIndices	indices of the '#zone' records naming this allod (vtable +0x18, data +0x1C, count +0x20)
 AcksCry			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2E..0x32 -> +0x20 Agress, +0x2C Suspect, +0x38 Kill, +0x44 Rest, +0x50 InAgress
 AcksOther			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2C -> +0x20 Talk, 0x2D -> +0x2C Rest
+CDifficultyBox	CMessageBox	0x184	0x180	int	choice	difficulty choice: 0 hard (default in Build), 1 easy; OK copies it into g_0x79BEC0
+CHudMinimap	CUIWidget	0x1B4	0x14C	float[2]	centre	camera point (g_0x79B388 / 38C) in metres, set by Init 0x642E80
+CHudMinimap	CUIWidget	0x1B4	0x15C	float[2]	mapSize	zone record +0x20 / +0x24 sectors * 32 (Build 0x641F20)
+CHudMinimap	CUIWidget	0x1B4	0x168	float	invHalfSize	2 / max(map width, height)
+CHudMinimap	CUIWidget	0x1B4	0x16C	float	zoom	min(arg, size * 0.05) in Build; marker / UV scale
+CHudMinimap	CUIWidget	0x1B4	0x170	float	maxZoom	size * 0.05
+CHudMainPanel	CUIWidget	0x164	0x158	pointer	portraits	vector of 0x78-byte portrait records: +0 last HP, +4 red flash timer, +8 / +0x18 / +0x28 quaternions (rest, current, selected target), +0x38 animation 0..3, +0x3C its time, +0x40 face name, +0x44 face variant shown, +0x48 face state, +0x4C its timer, +0x50 / +0x54 face name parts, +0x58 build, +0x5C random target quaternion, +0x6C speed, +0x70 absent flag, +0x74 lobby player value or -1
