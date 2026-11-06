@@ -35,6 +35,7 @@ SpellAddon setting (docs/SpellAddonInfo.en.md); SpellAddon only widens #17 (`pos
 | 21 | CONFIRMED | no (mod data / UM save without UM) | crash | null weapon / armour row read at +0xC |
 | 22 | CONFIRMED | no (no weapon / armour with M.Type none) | crash | FinishItem null then `+4 += 1` |
 | 23 | CONFIRMED, dead code | no (no caller) | none | own vs parent +0xFC record |
+| 24 | CONFIRMED (data mismatch, 2026-11-07) | yes, with the western speech.res | sound | the Russian exe's briefing voice path `t\` / `s\briefing\...` is not in the western speech.res: briefings silent |
 
 ## 1. CUnitServer::ExecuteInteraction 0x54F000: tame branch unreachable
 
@@ -408,3 +409,18 @@ CONFIRMED in code, and the whole path is dead: effect none.
   (`0x44899A`, inside its own 673 bytes: recursion over the child nodes). A raw-byte search finds no pointer to 0x448720 or 0x49F890
   anywhere in the image (no vtable / table use). So this 3DS keyframe stepping never runs in the shipped game.
 - Nothing to fix; only matters if someone revives the 3DS animation code.
+
+## 24. Briefing voices: the Russian exe's path vs the western speech archive (found during the live checks, 2026-11-07)
+
+CONFIRMED from the machine code and the archive tables; effect: no briefing / NPC dialog voice when the Russian game.exe runs on the
+western game data (the setup of these installs: `Engine\game.exe` + `C:\Evil Islands\res\speech.res`; Universal Mod ships no speech).
+
+- `DialogScreen::ParseDialogScript` 0x604C50 builds the voice name at 0x6051F1..0x60520B: `CString::Format("%s\briefing\%s\%d.mp3",
+  table_0x793378[rand & 1], this +0x184 topic, voice number)`; the table holds "t" and "s". The western exe's string is
+  `briefing\%s\%d.mp3`.
+- speech.res (1487 entries) holds only `briefing\<topic>\<n>.mp3`; sfx.res has no briefing voices. `CMappedResource` lookups
+  (`FindEntry` 0x674850) compare the whole name case-insensitively, so `t\briefing\..` / `s\briefing\..` are never found and
+  `Play2D` gets no sample.
+- Fix options: a Russian speech.res with `t\` and `s\` folders, or a one-place patch: the `push 0x79346C` at 0x605205 pointed at
+  `"%.0sbriefing\%s\%d.mp3"` (the `%.0s` swallows the t / s argument), which makes the Russian exe use the western layout.
+

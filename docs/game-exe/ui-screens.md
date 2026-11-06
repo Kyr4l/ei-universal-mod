@@ -854,8 +854,11 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
   written by `KeyBindings_Save` at exit.
 - ~~`CSaveLoadWin::ScanSaves` version gates~~ settled [V] from the machine code (0x656063 / 0x656089: `cmp [stream + 8], 1 / 2`): the
   version is the stream's own field, the folder number is a separate local (0x656128); time at v >= 2, label at v >= 3.
-- Briefing voices (live row): the root of "<r>\briefing\<topic>\<n>.mp3" is "t" or "s" at random per phrase; whether both sets
-  exist in the speech archives (two voice casts, or one silent half) was not checked (the game install is not read).
+- ~~Briefing voices~~ settled 2026-11-07 (machine code 0x6051F1..0x60520B + the archives): the Russian exe asks for
+  `"%s\briefing\%s\%d.mp3"` with `t` / `s` (table 0x793378) at random, the topic `+0x184` and the voice number; the western exe
+  asks for `briefing\%s\%d.mp3`. The `speech.res` both installs here load (`C:\Evil Islands\res`, 1487 entries) only has
+  `briefing\<topic>\<n>.mp3` (no `t\` / `s\`), and archive lookups compare the whole name: **with the western speech archive the
+  Russian exe finds no briefing voice** (a Russian `speech.res` with two voice sets `t\` / `s\` is what it expects). bugs.md #24.
 - Talk mode and zone exits (live row): `DialogScreen +0x164` is only ever 0, so Update / OnMouseMove / the leave box always use exit
   #0. Whether every talk zone has exactly one exit (a design limit) or this is a latent bug is not known.
 - The NPC portrait table `g_0x7C8764` (name -> "quitem%04d" number) of `AddSpeaker` has no other reference in the decompiles; who
