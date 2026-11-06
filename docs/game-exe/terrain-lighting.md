@@ -59,9 +59,11 @@ Addresses are VAs in game.exe; offsets are bytes; floats unless said.
 
 ### 2.1 `<zone>.mp` (inside the zone's `.mpr` archive; the terrain header) [V]
 
-`CTerrain::Load(mapPath, worldKey, isDungeon)`: `Unload`, opens the archive through the reader at +0x15C (vt[1]; file filter `*.mp`
-0x674AC0), keeps the path (+0xFC) and the file stem (+0xF8), reads `<stem>.mp` (vt[5]) and checks `FatalError "Unable to open file"`
-/ `"Wrong file format: "`.
+`CTerrain::Load(mapPath, worldKey, isDungeon)`: `Unload`, opens the archive through the reader at +0x15C (vt[1]; a failure returns 0
+without a message), keeps the path without its extension (+0xFC), lists the archive's `*.mp` entries (`CResourceBase::ListFiles`
+0x674AC0) and takes the **first** entry's name up to its first `.` as the file stem (+0xF8): the `.sec` and texture names come from
+the `.mp` inside the archive, not from the archive's own name. Reads `<stem>.MP` (vt[5]) and checks `FatalError "Unable to open file "`
+/ `"Wrong file format: "` (bad magic, header < 0x26 bytes, or size mismatch).
 
 | off | type | field | goes to |
 |---|---|---|---|
@@ -80,7 +82,10 @@ Addresses are VAs in game.exe; offsets are bytes; floats unless said.
 | | i32[tileTypeCount] | tile id -> tile type | +0x13C, followed by 16 entries of 0xF |
 | | {u16 tileId, u16 frames}[animated] | animated tiles | +0x14C: `map[tileId] = frames` (dword per tile id, 0 = static) |
 
-File size must be `0x26 + 4 * (11 * materials + tileTypes + animated)`.
+File size must be `0x26 + 4 * (11 * materials + tileTypes + animated)`; the animated count is really the u32 at 0x22 (the size check
+and the loop read 0x22..0x25 as one int). "Tile type count" is the number of **tile ids**: the tile-type table gets that many
+entries plus 16 of 0xF, and the animated map +0x14C is allocated with exactly `tileTypeCount` zeroed dwords; the animated pairs'
+tile ids are not bounds-checked (an id >= tileTypeCount writes past the map) [V].
 
 **TerrainMaterial** (0x38 in memory, from the 11 file dwords) [V]:
 
@@ -104,8 +109,10 @@ kind 0xB, refcount++), and for `i = count, count + 1` the optional lightmap page
 lights on the CPU) and `CTextureManager::LoadTexture` (section 6). Then the UV tables: 4 rotations x `tilesPerTexture` tiles at
 +0x1C8 and 4 x `tilesPerRow` full-height strips at +0x1D8 (`Terrain_BuildTileUVs` 0x6C7940: 18 floats per tile = `u[9]` then
 `v[9]` for the corners, edge midpoints and centre, inset by `8 / tileSize` of a tile = 8 texels, rotated by quarter turns, offset
-by the tile's column / row; a page strip has v 0..1 and no row offset) [V]. `+0x100 = 1`, the ambient world name +0xAE0 (`Dungeon`
-when isDungeon, else `Ingos` / `Suslanger` / `Gipat` by the world key), the ambient wav counts (table 0x7969D4), `flags +0x94 |= 0xFFFF`,
+by the tile's column / row; a page strip has v 0..1 and no row offset) [V]. A failed `LoadTextures` unloads and returns 0 (no
+message). `+0x100 = 1`, the ambient world name +0xAE0 (`Dungeon` when isDungeon, else `Ingos` / `Suslanger` / exactly `Gipat` for any
+other world key, case-insensitive), the ambient one-shot counts (table 0x7969D0 field +4: the number of consecutive files
+`ambient\<world>\<type>\day\<i>.wav` the sound archives hold, section 11b), `flags +0x94 |= 0xFFFF`,
 and the per-sector material height delta table +0xAEC (`sectorsX * sectorsY` records of 0x14: a float vector with one entry per
 material).
 
@@ -113,7 +120,9 @@ material).
 
 `TerrainSector_Load(sector, reader, sx, sy, textureCount, tilesPerTexture, stem, terrain)`: `"%s%3.3i%3.3i.sec"` through reader vt[5]
 (`FatalError "Unable to locate resource: "`), header `u32 magic 0xCF4BF774, u8 flags` (bit 0 = water layer -> sector +0x10, `flags & 3`
--> +0x14), payload size `0x2408` (one layer) or `0x4810` (two) plus `0x200` when `flags & 3` (`"Wrong format resource: "`):
+-> +0x14), payload size `0x2408` (one layer) or `0x4810` (two) plus `0x200` when `flags & 3` (`"Wrong format resource: "`); the
+test is on the whole file: exactly 0x240D or 0x4815 bytes (+ 0x200), a file under 5 bytes fails too. `TerrainSector_FreeData` runs
+first; +0x18 points at the payload (header skipped) [V, cross-check by the sp-ds round 2026-11-06]:
 
 | offset (payload) | content |
 |---|---|
@@ -218,9 +227,10 @@ and view stacks and run `RenderSectors(ctx, first, last)`:
 
 Per quarter with +0x144[q] != 2 and triplets for the pass: the vertices are copied into the static buffer g_0x7C8890 (0x20 bytes
 each: record +0x00..+0x0F, the 8 bytes diffuse + specular from +0x11, then `u, 1 - v` of the triplet) with the clip byte in
-g_0x7C884C; LOD 0 takes all 9 vertices and 8 triangles of a tile, LOD 1 six vertices and 4 triangles (3 when the sector's seam flag
-+0x174 / +0x178 meets the tile's edge flag 4 / 8), LOD 2 four vertices and 2 triangles (tables 0x79699C vertices / 0x7969A8
-triangles per tile); indices into g_0x7C887C. A partially clipped quarter runs `ctx vt[37]` (clip) and compacts the vertices
+g_0x7C884C; LOD 0 takes all 9 vertices and 8 triangles of a tile (**7** triangles, 0x15 indices, when the seam flag +0x174 meets a
+tile with edge flag 1 (top row) or +0x178 one with edge flag 2 (bottom row): LOD 0 stitches too), LOD 1 six vertices and 4
+triangles (3 when the sector's seam flag +0x174 / +0x178 meets the tile's edge flag 4 / 8), LOD 2 four vertices and 2 triangles
+(tables 0x79699C vertices 9 / 6 / 4 / 0x7969A8 triangles 8 / 4 / 2 per tile); indices into g_0x7C887C. A partially clipped quarter runs `ctx vt[37]` (clip) and compacts the vertices
 (g_0x7C88B8 / g_0x7C88A8 -> g_0x7C8864). Then `ctx vt[34](vertices, n)` (perspective divide), render state 0x1D SPECULARENABLE = 1
 (renderer g_0x7AF080 +0x54 vt[20]), `ctx vt[12]` = `I3DFigureImpl::DrawIndexedTriangles` 0x501BB0 (`DrawIndexedPrimitive`,
 TRIANGLELIST, FVF 0x1C4), SPECULARENABLE = 0. Water sectors first apply the pending material height deltas. The texture stage
@@ -335,32 +345,43 @@ vector `+0xAEC[sector][material] += delta`; `TerrainSector_ApplyMaterialHeightDe
 (the 16-byte records `{materialId, stepsLeft, level, step}` of `CWorld +0x70`, animated on the server by `WaterLevels::Tick`
 0x6D44E0 and set by the script through `WaterLevels::SetTarget` 0x6D4410): this is how the script's water levels move the sheet.
 
-### 5.3 Animation: `TerrainSector_Animate(sector, terrain, frame)` 0x6C3E80 [V]
-Every frame, when terrain flag 1 (`EnableWaterWaves`) and the sector has water, for every water vertex with a material:
+### 5.3 Animation: `TerrainSector_Animate(sector, terrain, tick)` 0x6C3E80 [V, deep read 2026-11-06]
+Called by `CTerrain::Tick` for every visible lit sector, i.e. **once per 55 ms tick, not per rendered frame**, with the terrain
+tick counter +0x218. When terrain flag 1 (`EnableWaterWaves`) and the sector has water, for every water vertex (33 x 33, `col`,
+`row` local) with a material:
 ```
-angle = wavePhase(+0x288) + windDir.x(+0x274) * col + windDir.y(+0x278) * row + phaseTable(+0x290)[row][col]
+base0 = fmod(windDir.x(+0x274) * P0.x + windDir.y(+0x278) * P0.y + 2 pi, 2 pi)   (P0 = the sector's first water vertex: the
+                                                                                 plane wave is continuous across sectors)
+mph   = fmod(wavePhase(+0x288) * material.amplitude(+0x2C) + 2 pi, 2 pi)        (recomputed when the material changes)
+angle = base0 + mph + windDir.x * col + windDir.y * row + phaseTable(+0x290)[row][col]
 s = sineTable(+0x2A0)[round(angle * 256 / pi) & 0x1FF]            (512 entries, sin(i pi / 256): one cycle per 512)
-specular +0x15 rgb = s >= 0 ? s * windStrength(+0x284) * material.amplitude(+0x2C) * 50 * material.rgb : 0   (alpha kept)
+specular +0x15 rgb = s >= 0 ? round(s * windStrength(+0x284) * material.amplitude * 50 * material.rgb) : 0   (alpha kept, no clamp)
 amp = waveAmplitude(+0x280) * material.amplitude
-type 4: position unchanged (x/y drift only when rec.+0x27 < 0, which the water record never has [I])
+type 4: x / y += s * amp only when the record's +0x27 is negative (the water record's +0x27 is never written [I]); z unchanged
 else:   z = base.z + s * amp * 0.25;  x = base.x + sin(col pi/4 + t 0.05) * amp * 3;  y = base.y + sin(row pi/4 + t 0.05) * amp * 3
 ```
-with `t = g_0x7AF61C + g_0x7AFCA8` (the frame time counters). `CTerrain::Tick` advances `+0x288 += +0x28C` every tick; `SetWindStrength(f)`
-0x6C7D70 sets `+0x284 = clamp(f)`, `+0x280 = 0.3 f`, `+0x28C = -0.15 f` and scales the wind direction by `0.449 (pi/2 + asin(..))`; the
-phase table is 40 random radial bumps of amplitude pi/2 with wrapping borders (`BuildWaveTable` 0x6C57E0, built once per
-`CTerrain::Init`). Every third frame, when terrain flag 2, the animated tiles (+0x364) advance: an entry mid-cycle, or at frame 0 when
-`rand % 1000 + 1 <= chance` (chance = `0x796960[tileType]`; >= 1000 = continuous), takes `frame = (frame + 1) % frameCount` and rewrites
-the u / 1-v of its 9 triplets with the UVs of `cell + frame` (the animation frames are the next cells of the same texture).
+with `t = g_0x7AF61C + g_0x7AFCA8` (the frame time counters) and every `sin` read from the same 512-entry table. The wave phase
+is **multiplied by the material's amplitude** (w6 of the `.mp` material), so each water material has its own band speed.
+`CTerrain::Tick` advances `+0x288 += +0x28C` every tick; `SetWindStrength(f)` 0x6C7D70 sets `+0x284 = clamp(f)`, `+0x280 = 0.3 f`,
+`+0x28C = -0.15 f` and scales the wind direction by `0.449 (pi/2 + asin(..))`; the phase table is 40 random radial bumps of
+amplitude pi/2 with wrapping borders (`BuildWaveTable` 0x6C57E0, built once per `CTerrain::Init`). Every third tick
+(`tick % 3 == 0`), when terrain flag 2, the animated tiles (+0x364, 0x18: triplets, rotation, cell, frame, frame count, chance)
+advance: an entry mid-cycle (frame != 0) or with chance >= 1000 always, an entry at frame 0 when `ISAAC % 1000 + 1 <= chance`;
+`frame = (frame + 1) % frameCount` and the u / 1-v of its 9 triplets are rewritten with `GetTileUVs(rotation, cell + frame, 0)`
+(the animation frames are the next cells of the same texture). Retail chance table 0x796960 by tile type: 1000 (continuous) for
+types 0..13, **5** for 14 (swamp) and **9** for 15, i.e. swamp tiles rest at frame 0 and start a cycle with 0.5 % per 3 ticks.
 
 ### 5.4 The stripes of docs/water.md [I from 5.3]
-The specular highlight is a plane wave along the wind (`windDir.x * col + windDir.y * row`), travelling with `+0x288`, and it is
-drawn only where `s >= 0`: a crest band appears, moves, and vanishes every half cycle. The cycle length is `512 / (256/pi *
-|+0x28C|)` ticks: with the retail wind strength 0.4 (`DefaultWindForce`), `|+0x28C| = 0.06`, one cycle is 2 pi / 0.06 = 105 ticks
-(5.8 s) and a band is visible for half of it; with a stronger wind the bands are faster. The tile cycling (every 3rd frame, 16
-frames = 48 frames = 0.8 s at 60 FPS) is the other periodic change. The user saw a 0.8 s pop with everything else off, which
-matches the **tile cycle** better than the sine band; the band is what moves diagonally. Not settled from the code alone: whether
-the water textures' animation frames differ enough to "pop" (they are texture cells; the random start frame per tile desynchronises
-neighbours). A test: `EnableWaterWaves = 0` removes the sine band (flag 1), terrain flag 2 the tile cycle.
+The specular highlight is a plane wave along the wind, travelling with `+0x288 * amplitude`, and it is drawn only where `s >= 0`:
+a crest band appears, moves, and vanishes every half cycle. The cycle length is `2 pi / (|+0x28C| * material amplitude)` ticks:
+with the retail wind strength 0.4 (`DefaultWindForce`), `|+0x28C| = 0.06`, and amplitude 1 one cycle is 105 ticks (5.8 s at 55 ms)
+and a band is visible for half of it; a stronger wind or a larger material amplitude makes the bands faster. The tile cycling (one
+cell per 3 ticks = 165 ms; a 5-frame loop = 0.8 s) is the other periodic change (the earlier "every 3rd frame at 60 FPS" was wrong:
+it runs on ticks). Both change only every tick, so at a high frame rate the water steps 18 times per second. The user saw a
+0.8 s pop with everything else off, which matches the **tile cycle** better than the sine band; the band is what moves
+diagonally. Not settled from the code alone: whether the water textures' animation frames differ enough to "pop" (they are
+texture cells; the random start frame per tile desynchronises neighbours). A test: `EnableWaterWaves = 0` removes the sine band
+(flag 1), terrain flag 2 the tile cycle.
 
 ### 5.5 Draw
 `CTerrain::RenderWater` (passes `textureCount + 2 ..`, after `RenderObjects`), the water records' DIFFUSE alpha = the material's
@@ -395,9 +416,19 @@ g_0x79BCDC, 0..3), +0xEC small-texture flag. `Init` 0x691500 deletes the loose `
    6 / 0xD -> 4444, else RGB565 0x5650; `FatalError` when the device lacks it), `CTexture::LoadBmpPair` 0x690260 -> `CTexture::LoadFromBmp`
    0x68FBF0: the 24-bit BMP (`CBitmapDib::LoadStream`) and the optional 8-bit alpha BMP `"<dir>\<prefix 0x795BE4><name>.bmp"`, packed per
    pixel with `PixelFormat_PackRGBA` into a 16-bit system-memory surface, `IDirect3DDevice7::Load` into the texture surface.
+   [V, deep read 2026-11-06] Details: the alpha file is `textures\a_<name>.bmp` (prefix `a_`) and is used only when it is 8-bit
+   (else opaque 0xFF); one level only (no mips, the mip skip ignored); `Lock(.., 0x21)` / `Unlock` failures are `FatalErrorHr "Can't
+   lock surface"` / `"Can't unlock surface"`; the byte size +0x28 is **not** set, so BMP textures never count against the cache
+   budget (6.3); the fill loop runs `width` rows of `height` pixels (the two counts are swapped: only square BMPs fill correctly)
+   and walks the source as packed `B G R` triplets with no 4-byte row padding (widths that are a multiple of 4 are safe) [I for the
+   source layout, which depends on `CBitmapDib::LoadStream`].
 3. else the **MMP path**: `"<name>.mmp"` from the archives (manager vt[19], released with vt[20]) or the loose file
    `"%stextures\%s.mmp"`; `CRenderDevice::FindTextureFormat(header)` -> DDPIXELFORMAT +0x3C (fourcc 0x8888 falls back to 0x4444 when
-   unsupported); first level = `min(mipSkip, mips - 1)`; `CTexture::LoadMipChain` 0x690430.
+   unsupported); first level = `min(mipSkip, mips - 1)`; `CTexture::LoadMipChain` 0x690430. [V, deep read 2026-11-06] The loose
+   `.mmp` is read only when no archive has the name, and that branch differs: no 0x8888 -> 4444 fallback (`FatalError
+   "CTextureManager::LoadTexture. Can't ..."` instead), the mip skip passed unclamped, and a missing file only traces and returns
+   1 with the texture still unloaded (no error; the next `LoadTexture` tries again). The BMP check comes first, so a loose
+   `textures\<name>.bmp` under the game root overrides every archive.
 
 `LoadMipChain(device, header, firstLevel)`: w / h = header >> first (more levels skipped while > 511 with +0xEC); levels = `mips -
 first` (1 when AppSettings g_0x79BCE0 mipmapping is off); a system-memory staging surface (DDSURFACEDESC2 flags 0x1007 (+0x20000
@@ -406,7 +437,7 @@ MIPMAPCOUNT), caps `TEXTURE | SYSTEMMEMORY` 0x1800 / 0x401808 with mips) and the
 (`CopyToSurface` 0x690970, per level `GetAttachedSurface`) when the device format has `DDPF_FOURCC` and the same FourCC, otherwise
 decoded in software (`UnpackToSurface` 0x690D30, mode DXT1 -> 565 / 555 / 5551 = 0 / 1 / 2, DXT2 / DXT3 -> 4444 = 3 / 4; `"Can't find
 decode format."` for anything else); 0x8888 sources through `CopyToSurface32` 0x690B30 (row conversion to the 16-bit target); the
-16-bit formats copied; then `IDirect3DDevice7::Load(texture, 0, staging, 0, 0)` under the DDraw critical section, flags |= 8, surface
+16-bit formats copied; then `IDirect3DDevice7::Load(texture, 0, staging, 0, 0)` under the DDraw critical section (its HRESULT goes to device +8, unchecked) [V, deep read 2026-11-06], flags |= 8, surface
 `SetPriority`-like vt[45](100), and the header's extra block copied to +0x2C. `MmpHeader::GetMipOffset(level)` 0x6908E0 = `hdr[0x48] +
 (w * h * bpp / 8) * (4^n - 1) * 4 / (3 * 4^n)` from the end of the 0x4C header (`hdr[0x48]`, the "reserved" field of
 `mmp-format.md`, is the size of an extra block between the header and level 0; it is 0 in the files seen and the block is
@@ -420,7 +451,17 @@ deletes by the +0x64 stamp. `FindByName` 0x693C60 (case-insensitive, no load), `
 0x691D00 are the lookups; `ReloadAll` / `ReloadFlaggedAll` rebuild after a device reset. The composed unit skins:
 `ComposeLayers(dest, names, size)` 0x693010 blends each layer's archive `.mmp` (`2DintMMX` g_0x7AF06C vt[5](dest, pixels = hdr + 0x4C +
 hdr[0x48], size^2, isPNT3)`; `"Texture %s dimentions are incorrect"` fatal) and `ComposeAndSaveLayers` 0x693180 writes the result as
-`textures\<name>.mmp` in ARGB1555 / 4444 / 8888 (the cache `Init` deletes).
+`textures\<name>.mmp` (the cache `Init` deletes). `ComposeAndSaveLayers(outName, recipe, name, altName, mips, fill, format)` [V,
+deep read 2026-11-06]: the recipe carries a **key** (bytes + length, the description of the layers) and the layer list; if
+`<root g_0x7AF460>textures\<name>.mmp` exists and its MMP extra block (`hdr[0x48]` bytes after the 0x4C header) equals the key, the
+file is reused (return 1, outName = name); otherwise the same test on `altName`'s file (outName = altName on a hit); on a miss
+with no layers the stale file is deleted (return 0); else a `size^2` ARGB buffer filled with `fill`, `ComposeLayers`, a header
+`MMP\0`, `size x size`, `mips`, the pixel format (0x5551 / 0x4444 / 0x5650 / 0x8888 / `PNT2` / `PNT3`), `+0x48` = key length, the
+key itself as the extra block, then the mip chain: `2DintMMX vt[2]` converts to 16 bits (mode 2 1555 / 3 4444 / 0 565), `vt[7]`
+halves the buffer for each further level (`FatalError "Can't open file %s to write result"` when the file cannot be created).
+Every level is written at 2 bytes per pixel, so only the 16-bit formats are valid; the callers (`CUnitClientSpecific::
+BuildSkinTextures` 0x536670, `BuildDamageTextures` 0x5370F0, `CWorldClient::PrebuildUnitSkinsAndModels` 0x568800) all pass 3
+mips, fill 0 and 0x5551 or 0x4444.
 
 ### 6.4 Registries, briefly [V]
 `CFileRegistry` (`Open` 0x6945A0: `CMappedFile`, magic 0x45AB3EFB; `FindData(section, key, type)` 0x6946D0: hash = sum of
@@ -465,17 +506,26 @@ and stale bounds, `CViewFrustum::CullBox`, then one particle quad per cell (`{x,
 100..200 / 200..400 with amplitudes 0.1..0.001). `CLightning::Init(from, to, type, demon)` 0x4680D0: `+0x50C type` (> 0 thin spell
 bolt, 0 random-branch bolt, < 0 static), `+0x510 amplitude` (0.3 / 0.05; 0.05 when |dz| == 30), the main segment +0x5C
 (`LightningSegment_Init` 0x466820: origin, `dir = (to - from) / count`, side / up orthonormal scaled to min(len, 15), 3 noise seed
-pairs `LightningSeed_Init` 0x466190, 16-byte points), width +0x100 = |type| (x1.5 if < 0, 4 if 0), six branches +0x104 (0xA8 each): type
-0 between jittered copies of from / to (+-5 % of the length, random widths 2.45..5.95), otherwise from `lerp(from, to, {0.2, 0.3,
-0.5, 0.8, 0.9, 0.9})` to `to` with widths `(0.7 + rand) * |type| / 2`; `Update`, `ComputeBounds` 0x467150 (+-1), the textures
-`SmtgLight` / `Lightning` or `DemonLight` / `DemonLightning` (6 frames each). `Update` 0x4672E0: `UpdatePoints` 0x466CE0 of the main
-segment (time / 4, scale 1.5 / 1 / 2 by type) = `EvalNoise` 0x4662C0 (the seeds advanced by whole time steps, a quadratic B-spline
-blend of the tables per point index) -> `point i = origin + i dir + dx side + dy up`; branches re-anchored at sine-animated
+pairs `LightningSeed_Init` 0x466190 with the scale 1.5 / 2 / 1 for type > 0 / 0 / < 0, seed time = (g_0x7AF61C + g_0x7AFCA8) / 4,
+16-byte points), width +0x100 = |type| (x1.5 if < 0, 4 if 0), six branches +0x104 (0xA8 each): type 0 between copies of from / to
+shifted by one shared random offset (each axis uniform in +-5 % of the length; widths `2.45 + 3.5 * U[0, 0.8)` = 2.45..5.25),
+otherwise from `f * from + (1 - f) * to` with `f` = {0.2, 0.3, 0.5, 0.8, 0.9, 0.9} (so the branches start 80 / 70 / 50 / 20 / 10 /
+10 % of the way along the bolt) to `to`, widths `(0.7 + U[0, 0.8)) * |type| / 2`; `Update`, `ComputeBounds` 0x467150 (+-1), cull
+radius +0x34 = the length of the bounds' max corner, the textures (kind 6) `SmtgLight` / `Lightning` or `DemonLight` /
+`DemonLightning` [V, deep read 2026-11-06]. `Update` 0x4672E0: `UpdatePoints` 0x466CE0 of the main
+segment (time / 4, scale 1.5 / 1 / 2 by type) = `LightningSegment::EvalNoise` 0x4662C0 [V, deep read 2026-11-06]: per axis (x, y) a ring of three
+seeds, each = two table indices (`ISAAC & 15`) with two weights (`U[-1, 1)`, normalised to unit length, times the scale); the
+seeds shift by one (a new random seed enters) per whole time step since the segment's seed time (at most 100 steps), and
+`offset[i] = sum over the 3 seeds of bspline_k(t) * (w0 table[idx0][i] + w1 table[idx1][i])` with the quadratic B-spline weights
+`t^2/2`, `t + 1/2 - t^2`, `(1 - t)^2 / 2` of the fractional step `t`, **plus** a fresh random pair from tables 16..31 at weight 1 on
+every call (the frame-to-frame flicker) -> `point i = origin + i dir + dx side + dy up`; branches re-anchored at sine-animated
 offsets (frequencies 0x787C90) along the main bolt and re-aimed; their points likewise. `Render(ctx)` 0x467AD0: cull box, `Update`
 when type >= 0, `ctx vt[16] DrawTexturedPolyline(points, width, .., |dir| * count * 0.6, random frame 0..3 * 0.25, 0.25)` for the main
 bolt and the 6 branches (static bolts without the width / frame terms), then `RenderGlow` 0x467590 at the far end (and at the
-origin for type 0): 8 quads along the bolt direction sized `size * sqrt(1 - t^2)` (size = clamp(len * 0.11, 0.5, 1.2) for spell
-bolts), frame `(world tick / 2) % 15` of a 4 x 4 atlas, `DrawParticleQuads`. `CEffectLightning` (kind 0x4D) owns it; weather flashes
+origin for type 0): 8 quads stacked **towards the camera** (g_0x79B2C4; quad i at `pos + toCamera * size * i/8`) sized `size *
+sqrt(1 - (i/8)^2)` (size = clamp(len * 0.11, 0.5, 1.2) for spell bolts), colour 0xA0FFFFFF, atlas frame `(world +0x64 tick +
+round(15 pos.x) + 2i) % 15` of the 15 cells of a 4 x 4 atlas (u = (c & 3) / 4, v = 0.75 - (c >> 2) / 4), glow texture through ctx
+vt[11], `DrawParticleQuads` (ctx vt[17]) [V, deep read 2026-11-06]. `CEffectLightning` (kind 0x4D) owns it; weather flashes
 come from `CWorldServer::UpdateEnvironment`.
 
 ## 10. Prints (decals) and the receiver mesh
@@ -501,35 +551,43 @@ extents, +0x18 growth per tick, +0x1C ttl (short), +0x20 `std::string` texture n
 maxOpacity`; a ttl <= 0 lets `CWorldClient::Update` delete the print. Every print takes `CTerrain::GetEdgeFadeAlpha` at creation.
 
 ### 10.2 `prints.db`: `CPrintsDb` 0x6D0250 (global g_0x7C89C8) [V]
-`CPrintsDb::Load(dataDir)` 0x6D0630 (once from `main` 0x45707D): `database.res` -> `prints.db` (`"Can't open terrain prints database"`),
+`CPrintsDb::Load(dataDir)` 0x6D0630 (once from `main` 0x45707D): `<dataDir>database.res` (failure: `FatalError "Can't open database file %s"` naming `databases.res`, a typo) -> `prints.db` (`"Can't open terrain prints database"`),
 Archive tags 1 / 2 / 3 = the `BloodPrints` (0x28-byte records) / `FootPrints` (0x34) / `FirePrints` (0x28) blocks of
 `database-format.md` into the vectors +0 / +0x20 / +0x40 with name -> record hash maps (+0xC / +0x2C / +0x4C). A 0x28 record is
 `{int, std::string terrain type name, +0x10 scale, +0x14 / +0x18 ids, +0x1C..+0x24 night variant}` (receivers.md); the AddTerrainPrint
 functions look the terrain tile type up by name (`CTerrain::GetMaterialAt`) for the opacity, lifetime and fade of a print.
 (The old names `CDatabase` / `CPrintManager::~body` meant this class.)
 
-### 10.3 Drawing a print: `CPrintDecal::Render` 0x6CEDE0 and the shadow machinery [V]
-Inactive -> nothing. Mesh not built: `z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, terrain height)`, the rectangle's 4 corners
-(half extents rotated by +0x44) at z0 -> `CWorldClient::RenderShadowVolume(light (0, 0, -1), pos (x, y, z0 + 1), radius 0, corners,
-the three arrays, bridgeCheck = 1, objects = 1)` = `ShadowProjector::Build` 0x4D8000 + `CTerrain::BuildShadowReceiverMesh` 0x6CCF20 +
-`ClipBuf::Finish` 0x4D89A0; then every uv is rotated about (0.5, 0.5) by +0x40 and mapped into the atlas cell, every z += 0.01.
-Then the colour's alpha byte = `round(opacity * 255)`, `CRenderDevice::SetTextureByDesc(stage 0, +0x20)`, `DrawQuadBatchClippedB(xyz,
+### 10.3 Drawing a print: `CPrintDecal::Render` 0x6CEDE0 and the shadow machinery [V, deep read 2026-11-06]
+Inactive -> nothing. Mesh not built: `z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, terrain height (world vt[27]))`, the
+rectangle's 4 corners (half extents rotated by +0x44; SoA `x[4] y[4] z[4] w[4] = 1`) at z0 ->
+`CWorldClient::BuildShadowReceiverMesh` 0x56C750 (was RenderShadowVolume) `(light (0, 0, -1), pos (x, y, z0 + 1), radius 0, corners,
+the three arrays, bridgeCheck = 1, objects = 1)` = `ShadowProjector::Build` 0x4D8000 + `CTerrain::BuildShadowReceiverMesh` 0x6CCF20
+(skipped when the point is on a bridge quad, `CBridgeManager::IsOnQuad` 0x561050) + the bridge parts (below) + `ClipBuf::Finish` 0x4D89A0; then every uv is rotated about (0.5, 0.5) by +0x40 and mapped into the atlas cell, every z += 0.01.
+The mesh is built once (`+4 = 1`; `CBloodPrint::Update` clears it while growing). Then the colour's alpha byte = `round(opacity *
+255)`, `CRenderDevice::SetTextureByDesc(stage 0, +0x20)`, `CRenderDevice::DrawTrianglesTransformed` 0x4EA4A0 (was DrawQuadBatchClippedB) `(xyz,
 uv, blocks, indices, count, colour, edgeFade << 24, 0, zScale 1.0)` with z-write off and the state block g_0x7AEDD8 (texture x diffuse,
 alpha texture x diffuse): the prints are drawn after the units and before the shadows and the water. A print centred on a bridge
-quad gets no mesh (bridgeCheck).
+quad gets no terrain mesh, only the bridge parts.
 
 **ClipBuf / ShadowProjector** (global g_0x7AF488, 0x7C bytes; `receivers.md` section 1-3, re-verified): `Build` makes the prism of the
 rectangle along the light (u / v axes +0xC / +0x18 = the rectangle edges with their light component removed, divided by their
 squared length; `cap = -((pos - L * 0.33 a) . L)` at +0x68); `BuildShadowReceiverMesh` slides the rectangle up the light ray to the
-highest vertex of the covered box (1-cell margin, clamped to the map), `ReserveForTriangles(((nx+1)(ny+1) + 5(nx+ny+1)) * 4)`
+highest vertex of the covered box (1-cell margin, clamped to the map; corners 0, 2, 3 move by `L * dz`, the fourth is `c0 + c2 - c3`,
+repeated until the highest ground vertex of the new box no longer rises) [V, deep read 2026-11-06], `ReserveForTriangles(((nx+1)(ny+1) + 5(nx+ny+1)) * 4)`
 0x4D8780, and feeds the two triangles of every 1-unit cell (`v00 v10 v11`, `v00 v11 v01`, `GetVertex` layer 0) through
 `ClipTriangleA` 0x4D8490 -> `ClipStage1` 0x4D7BD0 (cap, u >= 0, v >= 0) -> `ClipStage3` 0x4D71D0 / `ClipStage2` 0x4D74B0 (1 - u, 1 - v)
 (`Triangle_ClipByPlane5` 0x4D6E90 Sutherland-Hodgman on `x y z u v`, `ClipVertex_Interpolate5` 0x4D7140); `ClipBuf::AddVertex`
 0x4D6C50 stores x / y / z in SoA blocks of 4 (`x[4] y[4] z[4] pad[4]`), `(u, v)` in the second array, indices as a running counter
 (no sharing); `Finish` trims the counts and detaches the arrays. The same functions build the unit / object shadow receivers
-(`CObject3DClientSpecific::RenderShadow` 0x51CE60, renderer.md); the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code.
+(`CObject3DClientSpecific::RenderShadow` 0x51CE60, renderer.md). The object-receiver branch is **live** (corrected 2026-11-06, wcp-net
+round): with `objects = 1` it walks the walkable bridge quad list (`CWorldClient +0x1F4` = bridges +0x20), takes each quad's owner
+object (world vt[40] by id), and when the owner's bounding sphere meets the prism (`ShadowProjector::SphereVsPrism` 0x4D7F60) clips
+the owner's part triangles in (`ClipTriangleB` 0x4D85F0), so prints and unit shadows lie on bridges too. There is no de-duplication
+per owner: a building with several walkable quads has its parts clipped once per quad, which would stack the print / shadow there
+(darker) [I, live row].
 `CBitmapDib` (0x48, vt 0x744288) is the BMP / DIB helper of the BMP texture path and the screenshot code (`LoadFile` 0x6D4D40 maps a
-`.bmp`, `LoadStream` 0x6D5910, `LoadMmpMipLevel` 0x6D5BF0 decodes one DXT1..5 mip of an MMP into a 16-bit 565 DIB, `FromSurface` 0x6D6D40,
+`.bmp`, `LoadStream` 0x6D5910, `LoadMmpMipLevel` 0x6D5BF0 decodes one DXT1..5 mip of an MMP into a 16-bit 565 DIB (deep read 2026-11-06: the DXT alpha blocks are skipped, DXT1 3-colour blocks give black for index 3, 4444 is repacked to 555 without alpha, PNT2 becomes a 32-bit DIB with masks 0xFF / 0xFF00 / 0xFF0000, `AfxMessageBox "read error 1"` / `"wrong level for mipmap"`; **dead in this build**: its only caller `CBitmapDib::LoadMmpLevelFromStream` 0x6D6800 has no caller and no vtable slot), `FromSurface` 0x6D6D40,
 `WriteBmp` 0x6D5AC0).
 
 ## 11. The two small databases (data, not rendering) [V]
@@ -539,16 +597,75 @@ highest vertex of the covered box (1-cell margin, clamped to the map), `ReserveF
 | `CPrintsDb` 0x6D0250 (g_0x7C89C8), `Load` 0x6D0630 | `prints.db` | 1 BloodPrints, 2 FootPrints, 3 FirePrints | 0x28, 0x34, 0x28 | `CWorldClient::AddTerrainPrint` 1 / 2 / 3 |
 | `CAcksDb` 0x6D7220, `Load` 0x6D7620 (once from `main` 0x45706C) | `acks.db` | 1 Answers, 2 Cryes, 3 Others | 0x1C4 (`AcksAnswer`, 0x6DC000), 0x5C, 0x38 | `CUnit::PlayAck` 0x6D8430 (was CAcksDb::PlayUnitHitSound: unit event code -> sound list, combat.md 9), `FindUnitRecord` 0x6D8A40 (the unit's prototype name + gender) |
 
-Each block is a `std::vector` of records with a name -> record hash map (+0xC, +0x2C, +0x4C); an `AcksAnswer` additionally maps the
-sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line records `{wav path, weight, subtitle, text id}` =
-`AcksUniqueType` of `database-format.md`; ids 0x16..0x18 have no list). The many `Db*Vector_*` / `StrHashSet_*` functions around
-0x6D1000-0x6E0000 are the STLport instantiations of these containers.
+Each block is a `std::vector` of records with a name -> record hash map (+0xC, +0x2C, +0x4C). After loading, `CAcksDb::Load`
+gives every record an **ack id -> voice-line list** map at its own +0xC (the lists are 0xC-byte vectors of 0x28-byte line records
+`{wav path, weight, subtitle, text id}` = `AcksUniqueType` of `database-format.md`) [V, deep read 2026-11-06]. Answers (0x1C4: 35
+lists at `+0x20 + k * 0xC`, k = the spreadsheet column order Select .. ShopNo):
+
+| ack ids | lists (Answers columns) |
+|---|---|
+| 0x00..0x15 | +0x20..+0x11C: Select, Move, Attack, Cast, Loot, UseObj, Steal, Follow, UsePot, ChPos, NoWay, CntChPos, NoPath, CantCast, CantTele, SkiFail, NoTarget, ComplSp, DecToAtt, OutStam, ArmCrip, LegCrip |
+| 0x16..0x1B | none (0) |
+| 0x1C..0x1F | +0x128 Bored, +0x134 Unknown, +0x140 Overload, +0x14C Injured |
+| 0x20 / 0x21 / 0x22 | +0x170 WearCrip, +0x17C AttInDef, +0x188 WaitFoll |
+| 0x23 / 0x24 | +0x158 BigAtt, +0x164 ArmorCrip (`PlayAck` also plays `weapons\crash.wav`) |
+| 0x27 / 0x28 / 0x2A | +0x194 Scenario, +0x1A0 StealEmp, +0x1B8 ShopNo |
+| 0x29 | not in the map: `PlayAck` reads +0x1AC (the column DBEditor calls ShopYes) directly; its elements are 0x2C-byte **hit sound** records (`HitSoundTable::PickRandomMatching` 0x6D88E0: percent +0, environment flags +0x28), played only when the unit's weapon flags `& 0x3C0000` are 0x100000 / 0x140000 / 0x180000 |
+
+Cryes (0x5C): 0x2E..0x32 -> +0x20 Agress, +0x2C Suspect, +0x38 Kill, +0x44 Rest, +0x50 InAgress. Others (0x38): 0x2C Talk +0x20,
+0x2D Rest +0x2C. `CUnit::PlayAck` 0x6D8430 picks the table by the id range (< 0x2A Answers, < 0x2E Others, <= 0x32 Cryes; 0x25 /
+0x26 only `weapons\timecrash.wav`). The many `Db*Vector_*` / `StrHashSet_*` functions around 0x6D1000-0x6E0000 are the STLport
+instantiations of these containers.
+
+## 11b. Terrain ambient sounds: `CTerrain::UpdateAmbientSounds` 0x6CB390 [V, deep read 2026-11-06]
+
+Run every tick by `CTerrain::Tick` when terrain flag 8. The table at 0x7969D0 has one 0x18-byte entry per tile type (0..15):
+`{+0 type name, +4 one-shot count (filled by Load), +8 float weight, +0xC redirect type (-1 = itself), +0x10 pan limit, +0x14
+one-shot chance %}`. Retail values (read from the exe):
+
+| tile type | name | weight | chance % | | tile type | name | weight | chance % |
+|---|---|---|---|---|---|---|---|---|
+| 0 | Grass | 1.0 | 6 | | 8 | "" (outside the map) | 0 | 0 |
+| 1 | Ground | 1.0 | 6 | | 9 | snow | 1.0 | 6 |
+| 2 | Stone | 1.0 | 6 | | 10 | Ice | 3.0 | 6 |
+| 3 | sand | 1.0 | 6 | | 11 | DryGrass | 1.0 | 6 |
+| 4 | rock | 1.25 | 4 | | 12 | SnowBall | 1.0 | 6 |
+| 5 | field | 1.0 | 6 | | 13 | lava | 3.0 | 0 |
+| 6 | water | 3.0 | 6 | | 14 | swamp | 3.0 | 7 |
+| 7 | road | 3.0 | 6 | | 15 | rock | 1.25 | 4 |
+
+Every redirect is -1; the pan limits are the **ints** 30 / 100 (8, 13, 14, 15, 4, 6 = 100). One pass:
+
+1. Listener `P` and forward `F` from the sound manager (g_0x7AF784 +0x250 / +0x25C); listener sector `(sx, sy) = round(P) >> 5`.
+2. For the 3 x 3 sectors around it (`GetSector(x, y, 2, 1)`; a missing one counts as type -1): centre `c = ((x + 0.5) * 32,
+   (y + 0.5) * 32, max(ground z, water z))`, `d = c - P`; the dominant type = argmax over t of `sector.histogram(+0x374)[t] *
+   weight[t]` (added into slot `redirect[t]` when >= 0); proximity `p = (2304 - min(dx^2 + dy^2, 2304)) / 2304 * 100` (48 units);
+   the type's record gets `sumSq += p^2`, `count++`, and `vec = d` (overwritten, not summed).
+3. The 16 type records are sorted by `sumSq` (qsort 0x6CB360) and the first three with `sumSq > 0.001` are kept. For each:
+   `vec += p * d` over the 9 sectors of that type (so the last sector's raw `d` is counted once more, a harmless quirk); volume =
+   `min(100, round(sqrt(sumSq)))`; pan = `acos(F.vec / |vec.xy|)` folded into 0..pi/2, times `100 / (pi/2)`, negative when
+   `F.y * vec.x < F.x * vec.y`, then clamped to `+-panLimit` and rounded.
+4. One-shot: `ISAAC % 100 + 1 <= chance` -> a random sector of the 9 with that type (`3 (r % 3) + r' % 3`, retried until the type
+   matches) and, when the count is non-zero, `Play3D("ambient\<world>\<type>\<daytime>\<n>.wav", priority 1, pos = P + d + (U(-16,
+   16), U(-16, 16), 0), ranges 32 / 48)`; `<daytime>` = `Terrain_DayTimeName` 0x6CBC00 (day 6..18 h, morning 2..6, evening 18..22,
+   night), `n` from an ISAAC word and the day-folder count.
+5. Loops: a kept type already playing in one of the three slots (types +0xAD4[3], handles +0xAC8[3]) only gets
+   `SetChannelVolume(handle, volume, pan)`; a new one starts `Play2D("ambient\<world>\<type>\circle.wav", priority 1000, volume,
+   pan, loop)`; slots whose type is no longer kept are stopped; the kept types / handles are stored.
+
+Two quirks [V, machine code]: the pan limit is loaded with `mov eax, [ecx*8 + 0x7969E0]; fld dword` (0x6CB804), i.e. the int 30
+/ 100 is read as a float (4e-44 / 1.4e-43), so every pan clamps to 0: the terrain loops are always centred. And the one-shot count
+comes only from the `day` folder (Load counts `ambient\<world>\<type>\day\<i>.wav`), while the other day-times have their own
+numbers of files (vanilla `sfx.res`: Ingos Ice / Snow / SnowBall have 15 day files but 3 night files, Gipat grass 16 / 19), so at
+night most Ingos one-shots name a missing file (nothing plays) and some Gipat night files are never used [I from the shipped
+folders]. `water` and `lava` have no day folder (count 0: loop only).
 
 ## 12. What is not known
 
 * ~~The MMP extra block~~ settled [V]: `hdr[0x48]` bytes after the header are copied to `CTexture +0x2C` by `LoadMipChain`
-  0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); nothing reads them, so the block is skipped data
-  (the game only needs its size, in `GetMipOffset`). No file seen has one.
+  0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); the texture side never reads them (it only needs the
+  size, in `GetMipOffset`). The block is the **skin-cache key**: `ComposeAndSaveLayers` writes the layer recipe there and compares
+  it on the next build to reuse the cached `textures\<name>.mmp` (corrected 2026-11-06; shipped archive files have none).
 * The sun object's `+0x24` in the under-water sun attenuation (4.2): [live] (expected 0; live-checklist.tsv).
 * ~~`TraceSunRay`'s double slope~~ settled from the machine code (4.3), 2026-11-03; retail never runs the trace.
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
@@ -579,6 +696,15 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 | `docs/water.md` | "the specular colour from a 512-entry sine table driven by the wind and the phase table" | right; add: the band travels with +0x288 (+0x28C = -0.15 x wind strength per tick) and is drawn only on the positive half of the sine, the x / y drift uses a separate `sin(col pi/4 + t/20)` term, flat (type 4) water never drifts |
 | `_cpr/shadows/terrain-light.md` 1.2 | "+0x2B4 water tile map; +0x2CC.. 4 LOD strip groups" | +0x2B4 = water **material** per tile (int, -1 none); quarters as above |
 | `_cpr/shadows/terrain-light.md` 1.1 | "+0x15C resource reader; +0x1C8 [4] / +0x1D8 [4] ... (0x48 bytes per tile = 9 u,v pairs)" | the 18 floats are `u[9]` then `v[9]`, not interleaved pairs |
+| this page 2.1 (T5 deep read 2026-11-06) | "keeps the path and the file stem" (stem from the archive) | the stem +0xF8 is the first `*.mp` entry listed **inside** the archive; +0xFC = the path without extension; the animated map +0x14C has `tileTypeCount` entries and the file's tile ids are not bounds-checked |
+| this page 3.4 (sp-ds cross note, checked) | only LOD 1 stitches its seams | LOD 0 also stitches: 7 triangles for tiles with edge flag 1 / 2 when +0x174 / +0x178 is set |
+| this page 5.3 / 5.4 | "every frame", tile cycle "every 3rd frame, 0.8 s at 60 FPS", `angle = wavePhase + wind . (col, row) + phase` | `TerrainSector_Animate` runs once per 55 ms **tick** (from `CTerrain::Tick`), tiles every 3rd tick; the angle adds `fmod(wind . firstWaterVertex, 2 pi)` and `fmod(wavePhase * material amplitude, 2 pi)` (the band speed scales with the material amplitude); the tile start roll is ISAAC; chance table: swamp 5, type 15 9, others 1000 |
+| this page 6.3 / 12 | "the MMP extra block is copied but never read; no file has one" | it is the **skin-cache key**: `ComposeAndSaveLayers` writes the layer recipe there and compares it to reuse `textures\<name>.mmp`; only the texture loader ignores it |
+| this page 9 | branch widths 2.45..5.95; branches from `lerp(from, to, f)`; textures "6 frames each"; glow quads "along the bolt direction", frame `(tick / 2) % 15` | widths 2.45..5.25; branches start at `f * from + (1 - f) * to` (80 / 70 / 50 / 20 / 10 / 10 % along); 6 is the texture kind; the glow quads stack towards the camera; frame `(world tick + round(15 x) + 2i) % 15` |
+| this page 10.3 (wcp-net cross note, checked) | "the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code"; `RenderShadowVolume`, `DrawQuadBatchClippedB` | the branch is live: bridge quad owners' parts receive prints and shadows (no per-owner de-dup [I]); the functions are `CWorldClient::BuildShadowReceiverMesh` 0x56C750 and `CRenderDevice::DrawTrianglesTransformed` 0x4EA4A0 |
+| this page 11 + `structs.tsv` AcksAnswer +0xC / +0x1AC | "sound-kind ids 0..0x18; ids 0x16..0x18 have no list"; +0x1AC `linesShopYes` | the id map covers ack ids 0..0x2A (Answers), 0x2C / 0x2D (Others), 0x2E..0x32 (Cryes), table in section 11; +0x1AC holds 0x2C-byte hit-sound records used for id 0x29 |
+| `functions.tsv` CString::MakeUpper 0x700EFE / MakeLower 0x700EEC, `_strupr` 0x6EC8A8 / `_strlwr` 0x6EC81E | the names | swapped: 0x700EFE (35 callers) lower-cases (`_mbslwr`, LCMAP_LOWERCASE), 0x700EEC upper-cases (no caller) |
+| `functions.tsv` 0x6CB390 purpose / this page | ambient loops "pan from the listener's forward vector" | the pan limit is an int read as a float, so every terrain ambient loop is centred (section 11b) |
 
 ## 14. Function index
 
@@ -626,7 +752,7 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 | 0x6CA5D0 / 0x6CA720 / 0x6CA830 / 0x6CA9C0 / 0x6CAA70 / 0x6CAB50 / 0x6CAC10 | AddLight / RemoveLight / MoveLight / RelinkLightsInSector / PrepareLightRect / RelightRect / TerrainSector_LinkLight | point lights on vertices |
 | 0x6CB020 | CTerrain::GetEdgeFadeAlpha | map border fade |
 | 0x6CB1E0 | CTerrain::Tick | per tick |
-| 0x6CB390 / 0x6CBC00 / 0x6CBCD0 | CTerrain::UpdateAmbientSounds / Terrain_DayTimeName / StopAmbientSounds | ambient loops |
+| 0x6CB390 / 0x6CBC00 / 0x6CBCD0 | CTerrain::UpdateAmbientSounds / Terrain_DayTimeName / StopAmbientSounds | ambient loops (section 11b) |
 | 0x6CBD10 / 0x6CBE60 / 0x6CBF80 / 0x6CC2A0 / 0x6CC3E0 / 0x6CC530 | SetVertexHeight / SetSharedVertexPos / CollectSharedVertexSlots / Collect*EdgeVertices / ComputeVertexNormal | editor leftovers |
 | 0x6CC7F0 | CTerrain::SetMaterialHeight | water levels |
 | 0x6CC870 / 0x6CC8D0 | CTerrain::SetTileAtWorld / SetTile | editor leftovers |
@@ -637,7 +763,7 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 | 0x6CFEA0 | CFirePrint::ctor | |
 | 0x6D0250 / 0x6D0630 / 0x6D00E0 | CPrintsDb::ctor / Load / dtor | prints.db |
 | 0x6D4410 / 0x6D44E0 / 0x6D45D0 | WaterLevels::SetTarget / Tick / Read | script water levels |
-| 0x6D4AA0 / 0x6D4D40 / 0x6D5910 / 0x6D5BF0 / 0x6D6D40 | CBitmapDib ctor / LoadFile / LoadStream / LoadMmpMipLevel / FromSurface | |
+| 0x6D4AA0 / 0x6D4D40 / 0x6D5910 / 0x6D5BF0 / 0x6D6D40 | CBitmapDib ctor / LoadFile / LoadStream / LoadMmpMipLevel / FromSurface | LoadMmpMipLevel dead (only caller 0x6D6800 has none) |
 | 0x6D7220 / 0x6D7620 / 0x6D8430 / 0x6D8A40 | CAcksDb::ctor / Load / CUnit::PlayAck / FindUnitRecord | acks.db |
 | 0x68CED0 / 0x68D010 / 0x68D0A0 / 0x68D280 / 0x68D310 / 0x68D5A0 / 0x68D730 | CLight ctor / InitPositional / InitDirectional / PrecomputeMaterialTerms / ApplyDirectional / ApplyPointWrap / LuminanceAt | |
 | 0x68DA40 | CLightManager::CreateByKind | kinds 0x2E / 0x31 |
@@ -657,5 +783,5 @@ sound-kind ids 0..0x18 to its voice-line lists (+0x20 + k * 0xC, 0x28-byte line 
 | 0x4D9880 / 0x4D9AA0 / 0x4D9B80 | Matrix4_Mul / Quat_ToMatrix4 / MatrixStack_Push | |
 | 0x4E1770 / 0x4E1AB0 / 0x4E1C60 / 0x4E1EB0 / 0x4E23D0 | CVisibilityFog::ComputeBounds / Tick / RebuildCells / Render / Init | |
 | 0x4E2290 / 0x4E2700 / 0x4E2760 / 0x4E28D0 | CVisFogManager::CreateByKind / RenderAll / Tick / CreateAndRegister | |
-| 0x4660B0 / 0x466190 / 0x466820 / 0x466CE0 / 0x4662C0 | LightningNoise_BuildTable / LightningSeed_Init / LightningSegment_Init / CLightning::UpdatePoints / EvalNoise | |
+| 0x4660B0 / 0x466190 / 0x466820 / 0x466CE0 / 0x4662C0 | LightningNoise_BuildTable / LightningSeed_Init / LightningSegment_Init / CLightning::UpdatePoints / LightningSegment::EvalNoise (was CLightning::EvalNoise) | |
 | 0x4680D0 / 0x4672E0 / 0x467AD0 / 0x467590 / 0x467E10 / 0x467150 / 0x468A00 | CLightning::Init / Update / Render / RenderGlow / InitRandom / ComputeBounds / Lightning_LoadNoiseTables | |

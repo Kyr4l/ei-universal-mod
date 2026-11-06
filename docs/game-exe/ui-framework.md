@@ -207,8 +207,8 @@ the end of the text:
   skipped and then every following line whose first word starts with `##` (`0x78DCF8`, a comment marker [I])
   is skipped too.
 - multi-word name (split at spaces): reads whole lines (`ReadLines(.., 0)`); a line matches when it has at least as many words
-  and each of the name's words equals the line's word **upper-cased** (so callers pass upper-case names and the file side is
-  case-insensitive); mismatching lines are skipped the same way.
+  and each of the name's words equals the line's word **lower-cased** (0x700EFE, misnamed MakeUpper until 2026-11-06; so callers
+  pass lower-case names and the file side is case-insensitive); mismatching lines are skipped the same way.
 
 The two token strings are too short for the strings dump ([?]: `#` and `//` would fit every caller seen). DBCS lead bytes are
 honoured (`GetMbChar`, `_mbsinc`).
@@ -446,7 +446,7 @@ Only the top screen draws; screens below are frozen as the screenshot and their 
 
 | Entry | From | Does |
 |---|---|---|
-| `HandleScreenCommand(line)` 0x5F8070 | `CPlayerClient::OnMsg13_ScreenCommand` 0x667E60 (server message 0x13 = script `BroadcastMsgString`) | first word upper-cased: `say` / `say_block <id> [textkey]` -> top `vt[32] OnSay(id, String_HashCI(key))`; `tutorial <name>` -> pushed on the queue `+0x84` (shown by `ShowQueuedTutorial` 0x5F8A80 when the HUD is idle); `briefing ...` -> `vt[34] OnBriefing`; `autosave` -> `+0x81`; `endofgame` -> `vt[31]` |
+| `HandleScreenCommand(line)` 0x5F8070 | `CPlayerClient::OnMsg13_ScreenCommand` 0x667E60 (server message 0x13 = script `BroadcastMsgString`) | first word lower-cased: `say` / `say_block <id> [textkey]` -> top `vt[32] OnSay(id, String_HashCI(key))`; `tutorial <name>` -> pushed on the queue `+0x84` (shown by `ShowQueuedTutorial` 0x5F8A80 when the HUD is idle); `briefing ...` -> `vt[34] OnBriefing`; `autosave` -> `+0x81`; `endofgame` -> `vt[31]` |
 | `CreateScreenById` | `OnMsg07_GameMode` | the game mode = the screen |
 | `OnNamedValue(name, value)` 0x5F7FC0 | `OnMsg81_NamedValue` / `OnMsg82` | top `vt[33]`; remembers the third dot-part in `+0xAC` when value == 1.0 |
 | `OnItemsChanged` 0x5F7F30, `OnUnitAdded29 / 30` 0x5F7F60 / 80, `OnEndOfGame` 0x5F7FA0, `OnSay` 0x5F82A0, `OnLobbyListChanged` 0x5F82D0, `OnLobbyRef` 0x5F8310, `OnSaveToSlot` 0x5F86D0 (bottom screen `vt[40]`) | `CPlayerClient`, `LobbyClient`, `Session_SaveToSlot` | forwards to the top screen's slots 28..40 |
@@ -479,7 +479,7 @@ Toggled by scancode 0x29; default rect `(0, 0, 800, 150)` (`SetRect` 0x5E3E90 cl
 band 31 px with `'> '` (`RedrawInput` 0x5E4A10), 30 typed commands (Up / Down), 0x100 output lines (`history <n>`), PgUp / PgDn
 scroll, Ctrl+Home / End, Shift+arrows select, `game-memory.md`'s "+0x2C input length" is the selection anchor. Enter echoes the
 line and runs `Console_ExecuteLine`: `@expr` -> `WorldScript(expr)`, `#expr` -> `ConsoleFloat`, `$expr` -> `ConsoleString`
-(cheat mode only, `g_0x7C7B64`; never in a lobby); words upper-cased; the word XOR 0x66 compared with `g_0x740028`
+(cheat mode only, `g_0x7C7B64`; never in a lobby); words lower-cased; the word XOR 0x66 compared with `g_0x740028`
 ("thingamabob") enables cheat mode ("Activated!").
 
 | Table | Commands -> handler |
@@ -646,7 +646,7 @@ mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
 - `Refresh` order of tests: 0x3007 cat 1 -> material; 0x3007 cat 2 sub 0..2 -> weapon / armour; 0x3007 cat 2 sub 3 -> spell
   scroll; sub 4 -> perk; 0x3006 with proto subtype 8 -> `DrawItemOrSpellInfo`; **Ctrl (`CInterface +0x7C`) held and the item has
   a spell `+0x44`** (an enchanted item), or kind 0x3008 -> `DrawSpellItemInfo`; else the generic panel. Generic panel: the
-  material record `g_0x7C86D8 + (objectId & 0xFFFF) * 0x50`, its name with spaces -> `_` and upper-cased gives the
+  material record `g_0x7C86D8 + (objectId & 0xFFFF) * 0x50`, its name with spaces -> `_` and lower-cased gives the
   `matshort <NAME>` text ("Unknown" default); name (2 wrapped lines, white 0xFFFFFF, 17 px), `%s %s` line, then: 0x3006 whose proto
   `+0x10` is not `none` and every kind other than 0x3006 / 0x3007 / 0x3009 -> `%s %s x %d` material + count; all but 0x3009 ->
   `%s %d` price; weapons / armour / 0x3006 subtype 5 -> `%s %d` (value of the item's spell `+0x50` when enchanted) and `%s
@@ -758,6 +758,7 @@ Deep-read round 2026-11-06 (30 functions; wrong -> right):
 | this page 5.5 | `InitBorderStrips` 16 vertices; `InitDisc` with a uv rect; `InitQuadUV` "one quad" | 8 vertices (16 triplets), strips top / right / bottom / left; `InitDisc` takes a uv circle (`uc, vc, ur`); `InitQuadUV` is one triangle (rename `InitTriangle`) |
 | this page 5.8 | `UIUnitPreview::Render` draws into a render-target texture for the inventory / trade; `GetOrCreatePortrait` = unit portraits; `PickFaceFigure` only picks a name "by prototype" | `Render` draws the camp hero straight into the frame after a depth clear; `GetOrCreatePortrait` draws the 3D item icon of a slot (rename `DrawItemFigure`); `PickFaceFigure` draws the face figure, the sex test is equality on the model name (rename `DrawFaceFigure`) |
 | decompiles | one name `CString::operator_LPCSTR` | two functions: 0x700AF9 assigns, 0x700D4C appends (rename `operator_plus_assign_LPCSTR`) |
+| this page (case folding) | "upper-cased" for the names folded by 0x700EFE | lower-cased: 0x700EFE (misnamed `CString::MakeUpper` until 2026-11-06) calls `_mbslwr` (LCMAP_LOWERCASE); the real MakeUpper 0x700EEC has no caller |
 
 ## 8. Function index (one line each; the full purposes are in `batch-ui.tsv`)
 

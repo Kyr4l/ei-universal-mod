@@ -1054,11 +1054,11 @@ ItemMaterial			0x48	uint	flags	tag 12 (Unk12): ORed into the armor flags +0x8c /
 ItemMaterial			0x4c	uint	shopMask	Shop 1..5 bits (tag 13): bit (player index - 1) = sold by that player's shop
 ItemProtoBase		0x6c	0x0	pointer	vtable	0x744068 weapons / 0x744064 armors / 0x74405C quick / 0x744058 quest / 0x744054 loot; slot 0 GetItemKind returns 0x3004..
 ItemProtoBase			0x4	CString	name	Name (tag 0): the key of CItemManager::CreateItemByName
-ItemProtoBase			0x8	CString	type	Type (tag 1); "" protos are skipped by the shop
+ItemProtoBase			0x8	CString	type	CORRECTION: was '"" protos are skipped by the shop': Type (tag 1); ShopStock::GenerateItems 0x69AE20 skips protos whose Type is "wand" (vanilla quick Types: wand, scroll (potions), dangersensor)
 ItemProtoBase			0xc	int	typeId	TypeID (tag 2): weapon kind 0 sw 1 ax 2 dg 3 sp 4 hm 5 bw 6 cb / armor slot 0 hl 1 pl 2 lg 3 sh 4 pt 5 bt 6 gl; weapons: 0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow 8 unarmed [I]
-ItemProtoBase			0x10	CString	materialType	M.Type (tag 3): the material Type the proto accepts ("" = no material)
+ItemProtoBase			0x10	CString	materialType	CORRECTION: was '"" = no material': M.Type (tag 3): the material Type the proto accepts; "none" (case-insensitive _stricoll in ShopStock::GenerateItems 0x69AE20) = no material
 ItemProtoBase			0x14	int	field_14	tag 4 (Unk4)
-ItemProtoBase			0x18	int	textureTypeIndex	TTI (tag 5)
+ItemProtoBase			0x18	int	modelNumber	CORRECTION: was textureTypeIndex: TTI (tag 5) = the two-digit model number of the figure parts (%.2d in WeaponProto_GetFigurePartNames 0x6A0FF0 rh3.swordNN.., armour <part>.armorNN in UnitProto::BuildModelPartNames 0x535CB0)
 ItemProtoBase			0x1c	int	textureTypeIndex2	TTI2 (tag 6)
 ItemProtoBase			0x20	CStringArray	runtimeStrings	MFC CStringArray (0x14), not serialized; [0] is returned by item slot 18
 ItemProtoBase			0x34	float	price	Price (tag 7)
@@ -1917,7 +1917,7 @@ CTerrain			0xe8	pointer	materials	CMaterial* per texture entry (kind 0x12: diffu
 CTerrain			0xec	int	materialEntries	
 CTerrain			0xf0	int	materialCapacity	
 CTerrain			0xf4	int	materialGrow	
-CTerrain			0xf8	CString	mapStem	file name without extension ("zone2")
+CTerrain			0xf8	CString	mapStem	CORRECTION: was 'file name without extension': the name (up to the first '.') of the first *.mp entry listed inside the zone archive (CTerrain::Load 0x6C68B0), not the archive's own name
 CTerrain			0xfc	CString	mapPath	path without extension
 CTerrain			0x100	int	loaded	1 after Load
 CTerrain			0x104	int	sectorsX	.mp header dword 2
@@ -2285,7 +2285,7 @@ CAcksDb			0x44	pointer	othersEnd
 CAcksDb			0x48	pointer	othersCapacity	
 CAcksDb			0x4c	pointer	othersByName	
 AcksAnswer		0x1c4	0x0	pointer	name	std::string (the NPC / actor key)
-AcksAnswer			0xc	pointer	listsById	hash map sound kind id (0..0x18) -> list; filled by CAcksDb::Load
+AcksAnswer			0xc	pointer	listsById	CORRECTION: was "sound kind id (0..0x18) -> list": ack id -> list map built by CAcksDb::Load 0x6D7620: ids 0..0x15 -> +0x20 + id*0xC, 0x16..0x1B -> 0, 0x1C..0x1F -> +0x128..+0x14C, 0x20 -> +0x170, 0x21 -> +0x17C, 0x22 -> +0x188, 0x23 -> +0x158, 0x24 -> +0x164, 0x27 -> +0x194, 0x28 -> +0x1A0, 0x2A -> +0x1B8 (0x29 = +0x1AC read directly by CUnit::PlayAck)
 AcksAnswer			0x20	byte[264]	lists	0x16 lists of 0xC bytes {begin, end, cap} of 0x28-byte voice-line records {wav path, weight, subtitle, text id} for ids 0..0x15 (database-format.md fields 10..44)
 AcksAnswer			0x128	pointer[3]	linesBored	Answers field 32 Bored (the one AcksUniqueType(21) list: lines carry the extra cooldown subfield 10): vector {begin, end, cap} of voice-line records like +0x20 (ctor InitFields4_6DD550, dtor PoolFreeVector_006DD570); the 0x16-list note of +0x20 stops at field 31: fields 32..44 continue here at +0x20 + (field - 10) * 0xc (database-format.md acks)
 AcksAnswer			0x134	pointer[3]	linesUnknown33	field 33 Unknown
@@ -2298,7 +2298,7 @@ AcksAnswer			0x17c	pointer[3]	linesAttInDef	field 39 AttInDef
 AcksAnswer			0x188	pointer[3]	linesWaitFoll	field 40 WaitFoll
 AcksAnswer			0x194	pointer[3]	linesScenario	field 41 Scenario
 AcksAnswer			0x1a0	pointer[3]	linesStealEmp	field 42 StealEmp
-AcksAnswer			0x1ac	pointer[3]	linesShopYes	field 43 ShopYes (the dtor frees it with PoolFreeVector_006DD5C0, a different element pool than the others) [?]
+AcksAnswer			0x1ac	pointer[3]	hitSounds	CORRECTION: was linesShopYes [?]: vector of 0x2C-byte hit sound records (percent +0, environment flags +0x28; HitSoundTable::PickRandomMatching 0x6D88E0), used by CUnit::PlayAck for ack id 0x29 when the weapon flags & 0x3C0000 are 0x100000 / 0x140000 / 0x180000; DBEditor column 43 "ShopYes"
 AcksAnswer			0x1b8	pointer[3]	linesShopNo	field 44 ShopNo; the record ends at +0x1c4
 WaterLevelRecord		0x10	0x0	int	materialId	terrain material index
 WaterLevelRecord			0x4	int	stepsLeft	
@@ -4066,3 +4066,5 @@ AiTileMaterial		0x118	0x114	int	packedCosts	pre-packed nibbles for empty dry til
 MapAllodRecord		0x2c	0x0	CString	name	'#allod <name>' word 2 (gipat)
 MapAllodRecord		0x2c	0x4	CString[5]	lines	first word of each of the 5 lines after '#allod' (+4 .. +0x14)
 MapAllodRecord		0x2c	0x18	CDWordArray	zoneIndices	indices of the '#zone' records naming this allod (vtable +0x18, data +0x1C, count +0x20)
+AcksCry			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2E..0x32 -> +0x20 Agress, +0x2C Suspect, +0x38 Kill, +0x44 Rest, +0x50 InAgress
+AcksOther			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2C -> +0x20 Talk, 0x2D -> +0x2C Rest

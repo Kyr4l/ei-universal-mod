@@ -92,7 +92,7 @@ The blocks are read in that order, each as its own `Archive_Open / Close` pass o
 does not matter). After the four passes: `UnitProto +8 = index of FindRaceModelByName(+4)` (-1 unknown) and for every race model and
 `k < 6`: `+0x8c + k*0x10 = index of FindHitLocationByName(+0x88 + k*0x10)` (-1 unknown). The sheet values of those two fields are
 therefore ignored. `UnitsDb::CountSoundVariants` 0x53A8E0 (after the load and after `CWorldClient::InitClientResources`) lists `*.wav` of
-every sound archive and stores per race model `+0x144[i]` = the number of wav files whose upper-cased name starts with the step stem `+0x138[i]`.
+every sound archive and stores per race model `+0x144[i]` = the number of wav files whose lower-cased name starts with the step stem `+0x138[i]`.
 
 The field ids below are the sheet's `FLDx-y` (= the tag byte x, list index y); the sheet titles are those of `dbheaders.txt`
 (um-multitool `db_headers_generated.hpp`), which match the game's use.
@@ -578,6 +578,7 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 | this page 7.2 `GetCarrierOffset` | "mode 0 = `GetAttachPoint2`, 1.. = the part body0N, non-units `Carrier_GetAttachPoint`" | modes 1..7 = parts `hd`, `hd` + 1 m, `lh2`, `rh2`, `ll2`, `rl2`, `bd`; only 8..12 use `body00..04` (through `Carrier_GetAttachPoint`); non-units take position + height, not `Carrier_GetAttachPoint` |
 | this page 7.3 | 0x200F / 0x2031..0x2033 "rain streams"; 0x2030 "10 wind-band records"; 0x2014 texture "(none)"; acid fog "grid over `+0x11c`" | blood spurts by race Blood Type; 10 impact points; texture `Link` (prob 80, frames 15); the grid radius is the scaled size `+0x10c` |
 | `functions.tsv` `ParticleEmit_Link` 0x48E070 | the link emitter | the protection / antimagic shell emitter (types 0x2015..0x2017, 0x201A); the link 0x2014 uses LAB_48D8D0; its trace string was copy-pasted |
+| this page (case folding) | "upper-cased" for the names folded by 0x700EFE | lower-cased: 0x700EFE (misnamed `CString::MakeUpper` until 2026-11-06) calls `_mbslwr` (LCMAP_LOWERCASE); the real MakeUpper 0x700EEC has no caller |
 
 ## 11. Function index (address, name, one line)
 

@@ -263,7 +263,7 @@ in `+0x6e0` after the next step); the unit save records (`UnitHashes_ReadSave`: 
 `Game_SetZone`; the print lists, the exit effects, grid B, every effect, `ClearAll`, `UnpinItemsAndSpells`, unreferenced particle systems,
 `+0x20c -> +0x100 = 0`; the map path gets `World_MapPath()` in front unless it is absolute (`X:`); `CTerrain::Unload`, texture caches
 dropped (`vt[34]` texture manager `DeleteCachedFiles` + `DeleteAll`); world name `+0x184` from the map record (`MapZoneRecords_FindByName`
-on `g_0x79BF00`, default "gipat", upper case); `CTerrain::Load(map path, world, indoor)` or `FatalError("Can't load terrain or map
+on `g_0x79BF00`, default "gipat", lower-cased); `CTerrain::Load(map path, world, indoor)` or `FatalError("Can't load terrain or map
 file")`; both grids resized to terrain size / 16; terrain flag 1 (water waves) cleared without `EnableWaterWaves` (AppSettings `+0xC8`)
 and forced on indoors, flag 0x10 cleared without `EnableSelfShadowing` (`+0xCC`), relight budget = the second `LightingFreq` copy
 (`+0xD4`, `g_0x79BD44`) / 66; sky texture (slot 0x3d) "Sky01" with sky `+0xc` = 0 indoors, "Sky00" with 1 outdoors;

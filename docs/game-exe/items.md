@@ -40,7 +40,7 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
    opcode 5 (object blob) + opcode 6 (money + ids) (`CPlayerServer::SendItems`), the whole party as opcode 0x80 / 0x83 / 0x50.
 6. **Shops** (`CGSPlayer`): the stock is generated, not stored: `GenerateItemShop` 0x4A6DF0 draws 40..50 weapons, armors and
    quick items from the protos whose "Shop N" bit is set, picks a material of the right type whose stock is not exhausted
-   (price-weighted), embeds a random spell in half of them, adds 1..3 blueprints per proto and 20..50 materials
+   (price-weighted), embeds a random spell in about half of the weapons and armours, never generates wands (only their blueprints), adds 1..3 blueprints per proto and 20..50 materials
    (`ShopStock::GenerateItems` 0x69AE20). Prices in the camp are `CItem::GetPrice` x the mode coefficient
    (`docs/game-memory.md`, verified live); deconstruction and construction are `CCampScreen::DeconstructItem` 0x6129C0 /
    `CCampScreen::RefreshItemComponents` 0x612600.
@@ -56,7 +56,7 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
 | spell tables | `g_0x7C8510` spell protos (0x84 stride, name map 0x7C851C), `0x7C8530` perks / spell modifiers (0x24, map 0x7C853C), the three S_* filter tables `0x7C8550` S_Spells, `0x7C855C` S_Armors, `0x7C8568` S_Weapons (0x34 records, `+0x30` per-player mask) [I] |
 | weapon types | proto `+0xc`: 0 sword 1 axe 2 dagger 3 spear 4 hammer/club 5 bow 6 crossbow (model prefixes sw ax dg sp hm bw cb) [V: `GetModelName`] |
 | armor types / slots | proto `+0xc` = equipment slot: 0 helmet (hl) 1 plate (pl) 2 legs (lg) 3 shield (sh) 4 pants (pt) 5 boots (bt) 6 gloves (gl); tier 2 for 0..2, tier 1 for 3..6 (`CItemArmor::GetArmorTier` 0x6A31A0) [V] |
-| quick item subtypes | QuickItems "ItemID" `+0x6c`: 2 consumable (order 10), 5 charged magic item (uses its mana), 8 wand / scroll / spell container (uses charges `+0x48`) [V: `CanAffordSpell`, `QuickItemUsability`, `GenerateItems`] |
+| quick item subtypes | QuickItems "ItemID" `+0x6c`: 2 consumable (order 10), 5 charged magic item (uses its mana: the vanilla `wand 1..6`, Type `wand`, with a material), 8 spell container (uses charges `+0x48`: the vanilla potions, Type `scroll`, and the `spell container` row) [V: `CanAffordSpell`, `QuickItemUsability`, `GenerateItems`; data: vanilla database.xlsx QuickItems] |
 | loot categories | LootItems "TypeID" `+0x6c`: 1 material (`+0x54` = material row), 2 instruction / blueprint (`+0x50` table 0 weapon 1 armor 2 quick 3 spell 4 perk, `+0x54` row) [V] |
 | damage types | index 0..6 = impaling, slashing, crushing, thermal, chemical, electrical, general (the 7-float lists everywhere) |
 | refcounts | items: `+4` int, released with slot 4; `PartyItemLink` and the proto refs: 16-bit at `+4` (`RefCounted16_Release` 0x69FD50) |
@@ -68,7 +68,7 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
 multiplayer: `Game_SessionTick` swaps the whole `ItemsDb` object, see item-tables.md) into a `CMemStream`; one tagged archive per
 block: tag 1 Materials -> vector `+0` (map `+0xc`), 2 Weapons `+0x20` (map `+0x2c`), 3 Armors `+0x40` (`+0x4c`), 4 QuickItems
 `+0x60` (`+0x6c`), 5 QuestItems `+0x80` (`+0x8c`), 6 LootItems `+0xa0` (`+0xac`); each map is `std::string name -> record*`
-(filled from `+4` of every record). The record vtables (0x744068 weapons, 0x744064 armors, 0x74405C quick, 0x744058 quest,
+(filled from the material name `+0` and the proto name `+4`; with a duplicate name the last record wins; tags 4..6 through `ItemsDb::LoadQuickTable` / `LoadQuestTable` / `LoadLootTable`; `FatalError "Can't open database file"` / `"Can't open items database"`) [V, deep read 2026-11-06]. The record vtables (0x744068 weapons, 0x744064 armors, 0x74405C quick, 0x744058 quest,
 0x744054 loot) have one slot: `GetItemKind` returns 0x3004 / 0x3005 / 0x3006 / 0x3009 / 0x3007 (constants, 0x6A6430..70).
 
 **Materials** (`ItemMaterial`, 0x50, `ItemMaterial::SerializeFields` 0x69F620) [V]:
@@ -95,10 +95,10 @@ block: tag 1 Materials -> vector `+0` (map `+0xc`), 2 Weapons `+0x20` (map `+0x2
 | off | tag | column | notes |
 |---|---|---|---|
 | +4 | 0 | Name | the key of `CreateItemByName` |
-| +8 | 1 | Type | "" -> the shop skips the proto |
+| +8 | 1 | Type | `wand` -> the shop generator skips the proto (`GenerateItems`); vanilla quick items: `wand`, `scroll` (potions), `dangersensor` |
 | +0xc | 2 | TypeID | weapon kind / armor slot (table above) |
-| +0x10 | 3 | M.Type | material Type accepted, "" = no material |
-| +0x14..+0x1c | 4..6 | Unk4, TTI, TTI2 | texture type indices |
+| +0x10 | 3 | M.Type | material Type accepted; `none` (case-insensitive) = no material (`GenerateItems`) |
+| +0x14..+0x1c | 4..6 | Unk4, TTI, TTI2 | +0x18 (TTI) is the two-digit **model number** of the figure parts: weapon parts `rh3.sword%.2d` & co. (section 4), armour parts `<part>.armor%.2d` (`UnitProto::BuildModelPartNames` 0x535CB0) [V]; +0x14 / +0x1c not read here |
 | +0x20 | - | CStringArray | runtime only (slot 18 of the item returns `[0]`) |
 | +0x34 | 7 | Price | |
 | +0x38 | 8 | Weight | |
@@ -178,7 +178,7 @@ P = proto and M = material:
 then `item->vt[13] InitFromProto(T)`; a quick proto with ItemID 8 (spell container) gets the spell named in P `+0x7c`
 (`CSpellManager::CreateSpellByName`) attached **without** a price (`SetSpellNoPrice` 0x6A0520), any other item gets the
 constructor's `+0x2c` spell through `CItem::SetSpell` 0x6A04D0 (price `+0x38 += spell +0x48`); `item +0x18 = row << 16 |
-M.ID`, `+0x48 = count`. `CItem::InitFromProto` 0x6A0490: `+0x20 = +0x24 = T.Durability`, `+0x28 = +0x2c = T.Mana`, `+0x30 =
+M.ID` (low word 0 without a material), `+0x48 = count`. `CItem::InitFromProto` 0x6A0490: `+0x20 = +0x24 = T.Durability`, `+0x28 = +0x2c = T.Mana`, `+0x30 =
 0.001`, `+0x34 = T.Weight`, `+0x38 = T.Price`, `+0x3c = T.Size`, `+0x40 = T.Slots`; the weapon adds `+0x58 = Range`, `+0x50 =
 D.Min`, `+0x54 = D.Max` (spread); the armor copies the two 7-float sets; quick / spell `+0x4c = GD Level`; quest `+0x4c =
 ScriptID`; loot `+0x4c..+0x54`.
@@ -187,12 +187,18 @@ Checked on `Universal-Mod/mp/1.mp` (decoded offline): a weapon row 42 / material
 price 2616, size 900, slots 18 = exactly these products; the battle axe with an attached spell shows price 6404500 = base +
 spell price (the `SetSpell` addition).
 
-`CItemManager::CreateItemByName` 0x6AC970 [V]: `"name.material[x]"` -> the `[x]` text is split off, the rest split on `.` and
-upper-cased; `spell container` -> `CreateSpellContainer(spell name = x)`; else the first part is looked up in the weapon, armor,
-quick, loot and quest maps in that order (`FatalError "Can't find prototype for item"`), the world's constructor runs
-`BeginCreateItem(proto->GetItemKind(), -1)`, `SetProto`, `SetMaterial(second part)`, and `x` is the **count** (`atol`) when the
-proto is the loot row named `material`, otherwise a **spell name** to embed. For a category-2 loot item (blueprint) the second
-part names what it makes and its row goes to `+0x54` (weapon / armor / quick / spell / perk maps). `CItemManager::CreateItem`
+`CItemManager::CreateItemByName` 0x6AC970 [V, deep read 2026-11-06]: `"name.material[x]"` -> the text from the first `[` is
+split off (trimmed of `[`, `]` and blanks), the rest right-trimmed, split on `.` and **lower-cased** (the helper 0x700EFE
+named `CString::MakeUpper` calls `_mbslwr`: `LCMAP_LOWERCASE` 0x100, see section 9); first part `spell container` -> the spell
+named `x` (`CreateSpellByName`; unknown -> no item, 0 returned) in `CreateItem(0x3008, row of "spell container", 0, -1)` +
+`CItem::SetSpell` (price added); else the first part is looked up in the weapon, armor, quick, loot and quest maps in that
+order (`FatalError "Can't find prototype for item "%s"."`), the world's constructor runs `BeginCreateItem(proto->GetItemKind(),
+-1)`, `SetProto`, `SetMaterial(material map lookup of the second part, 0 when absent or unknown)`, and a non-empty `x` is the
+**count** (`atol` -> constructor `+0x30`) when the proto is the loot row named `material`, otherwise a **spell name** to embed
+(unknown -> silently none). `FinishItem` failing (a weapon / armour without a valid material) -> `FatalError "Can't create item
+"%s". Check shape and material names"`. For a category-2 loot item (blueprint) the second part names what it makes and its
+row goes to `+0x54` (table `+0x50`: 0 weapon / 1 armor / 2 quick / 3 spell proto `g_0x7C851C` / 4 perk `g_0x7C853C` maps;
+unknown -> -1; the lookups are `operator[]`-style, so an unknown name also inserts an empty map entry). `CItemManager::CreateItem`
 0x6AD000 (kind, proto row, material row, id) picks the record by kind (quick for 0x3008 too) and the material for weapons /
 armors only. `CreateSpellContainer` 0x6AD1E0 = `CreateItem(0x3008, row of "spell container", 0, -1)` + `SetSpell`.
 
@@ -250,6 +256,27 @@ Kind fields: `CItemWeapon` `+0x4c` ? (saved, never set by InitFromProto), `+0x50
 `CItemArmor` `+0x4c[7]` main, `+0x68[7]` additional, `+0x84/+0x88` 0; `CItemQuick` / `CItemSpell` `+0x4c` GD level;
 `CItemQuest` `+0x4c` script id; `CItemLoot` `+0x4c` category, `+0x50` table, `+0x54` row.
 
+**Weapon figure parts** [V, deep read 2026-11-06]: a hand weapon is not a separate model but parts of the unit's own figure,
+named by the weapon type (proto `+0xc`) and the proto's model number `NN = %.2d` of `+0x18`:
+
+| type | parts |
+|---|---|
+| 0 sword / 1 axe / 2 dagger / 3 spear / 4 club | `rh3.swordNN` / `rh3.axeNN` / `rh3.daggerNN` / `rh3.pikeNN` / `rh3.clubNN` |
+| 5 bow | `lh3.bwpartbNN`, `bwpartaNN`, `bwtetivaaNN`, `bwtetivabNN`, `quiver`, `arrows`, `rh3.arrow00` |
+| 6 crossbow | `rh3.crbowNNmain`, `crbowNNpart01`, `crbowNNpart02`, `crbowNNtetiva01`, `crbowNNtetiva02`, `quiver`, `arrows` |
+
+Two copies of the same list: `WeaponProto_GetFigurePartNames` 0x6A0FF0 (proto row, CStringArray; used by
+`CUnitClientSpecific::SetWeaponFigure` 0x535590 and `SetWeaponPartsVisible` 0x537CB0, which toggles part flag 0x80 on these
+names) and `WeaponId_ListFigurePartNames` 0x6A1780 (packed id `>> 16`, `std::vector<std::string>`; used by
+`UnitProto::BuildModelPartNames` 0x535CB0 to add the weapon parts to the unit's skin / part list). Both return nothing for a row
+out of range or a type > 6.
+
+`CItemLoot::GetIconName` 0x6A4B90 (slot 19) [V, deep read 2026-11-06]: category 1 -> `material%04d`; category 2 (blueprint) by
+the table `+0x50`: 0 -> `%s_%.2d.%d` with the weapon type prefix (`sw ax dg sp hm bw cb`) of weapon row `+0x54`, 1 -> the same
+with the armour slot prefix (`hl pl lg sh pt bt gl`), 2 `qitem%04d`, 3 `prototype%04d`, 4 `modifier%04d`, other tables "";
+any other category -> `litem%04d` (it also looks the item's own proto up by kind, unused). A blueprint whose weapon / armour row
+is out of range reads the type at address 0xC (crash; item-tables.md lists it as unguarded).
+
 ## 5. Persistence: the detail block, the hero record, the party file
 
 `CItem::Write` 0x6A0360 writes, after the 4-byte object id the manager writes: `+0x18, +0x20, +0x24, +0x28, +0x2c, +0x30, +0x34,
@@ -259,8 +286,10 @@ max, +16 mana, +20 max, +24 0.001, +28 weight, +32 price, +36 size, +40 spell id
 quest one int (56); loot category, table, row (64: the "row it makes" of a blueprint is +60). `CItem::Read` resolves the spell
 id with `CBaseManager::FindById` on the world's spell manager, so the spells must be read first.
 
-`HeroRecord` (0x784) [V: ctor 0x65F5F0, `Read` 0x65F9B0, `Write` 0x65FDE0]: CStrings `+0` display name, `+4` model (unhuma..),
-`+8` class ("Hero", udb `+0xe8`), `+0xc`, `+0x10` skin, `+0x14` proto name, `+0x18` copy; `+0x1c` id = `String_HashCI(model)`
+`HeroRecord` (0x784) [V: ctor 0x65F5F0, `Read` 0x65F9B0, `Write` 0x65FDE0]: CStrings `+0` display name, `+4` the hero's **key
+name** (`AddHero`'s first argument; mercenaries `merc<i>`), `+8` the race model's **Mask Name** (the figure stem `unhuma` / `unhufe`
+.., RaceModel `+0xe8`, written by `InitHeroFromProto`; `SpawnPartyHeroes` uses it as the unit's model; earlier read as a "Hero"
+class name), `+0xc`, `+0x10` skin, `+0x14` proto name, `+0x18` copy; `+0x1c` id = `String_HashCI(key name +4)` (-1 when empty)
 (1e9..2e9, the hero unit id: `IsHeroId`); `+0x20` UnitStats 0x704; `+0x724` complection[3]; `+0x730` weapons, `+0x740` quick
 items, `+0x750` armor, `+0x760` spell containers (aligned pointer arrays {data, count, max, grow}); `+0x770` stance (2),
 `+0x774` weapon slot in hand, `+0x778` byte, `+0x77c` follow target id (-1), `+0x780` battle button (1). File order = the ctor
@@ -282,7 +311,8 @@ their detail blocks (`CBaseManager::ReadObjects`, each list closed by 0xFFFFFADF
 `PartyStore::LoadAll` 0x662FB0 lists `dir\*.mp` and keeps the 1-hero parties as 0x74 slots (`CParty` + file name). The campaign
 save embeds the same stream (`CParty::ArchiveMp` 0x6617F0), `CParty::Assign` / `CopyCtor` deep-copy through it.
 
-Hero creation: `CParty::AddHero` 0x6628D0 (model, proto, display name) -> `InitHeroFromProto` 0x6621F0: stats from the proto,
+Hero creation: `CParty::AddHero` 0x6628D0 (key name, proto, display name) -> `InitHeroFromProto` 0x6621F0: `+8` = the race model's
+Mask Name, stats from the proto,
 `Units_GetProtoEquipment` 0x5143E0 (armor list `+0x10c` -> `+0x750`, weapon `+0x118` / `+0x11c` -> `+0x730`, spells `+0x100` ->
 `+0x760`); `ApplyHeroKit` 0x6625B0 replaces weapons and spells from the units.udb NPC record (`HeroKit` 0x60: `+0x30` weapons,
 `+0x3c` quick items, `+0x48` spells, `+0x54` experience, `+0x58` money).
@@ -293,7 +323,11 @@ kept) -> `+0x740`, spell slots -> `+0x760`, a `PartyItemLink` on each unit item,
 spell slots are not copied: a client hero reads them from the record); `CWorldServer::DetachHeroes` 0x58FD90 stores `+0x770
 / +0x774 / +0x780` from the unit. **On the client** `CUnit::GetWeaponSlotItem` 0x5318B0, `GetQuickSlotItem` 0x531920,
 `GetSpellSlotItem` 0x5319A0 and `GetItemSpell` 0x531A10 return the party record's arrays when the unit's specific typeId is
-0x3d (client hero): the record is the source of truth there [V].
+0x3d (client hero): the record is the source of truth there [V]. On the server `CWorldServer::SpawnPartyHeroes` 0x58EF20 clones
+every belt (quick) item of the record with its charge refilled (`clone +0x28 = +0x2c`) before `AddQuickSlotItem`: wands and other
+mana-charged belt items come back full on every zone entry [V, ws cross note checked 2026-11-06]. `CWorldServer::GiveExperience`
+0x5911C0 adds a hero's share to the matching `HeroRecord` stats (`+0x20`, by unit id) as well as to the live unit; a briefing's
+money goes to `CParty +0x50`.
 
 Net: `CPlayerServer::SendMsg05_06_Items` 0x66E7D0 (slot 17, from `CPlayer::AddItems` 0x665470) sends opcode 5 + a blob of the spells
 then the items (`ObjList_WriteStream`), then opcode 6 with money (u32), a byte and the item ids ending in -1;
@@ -326,8 +360,10 @@ the damage absorbed (combat.md 6); `DropBrokenItems` 0x532AC0 moves `< 1` items 
 and `+0x20 = +0x24`.
 
 Loot [V]: `CWorldServer::LootUnit` 0x5942D0 (unit, player) on a corpse (or `LootAllDeadUnits` 0x593D60 for the host):
-`CHoover::CollectUnitLoot` 0x461CB0 creates the prototype's drop list (`UnitProto +0xe8` names, `CreateItemByName`), rolls the
-money (`rand(+0xd0..+0xd4)` with chance `+0xc8` %, plus `rand(+0xe0..+0xe4)` with chance `+0xd8` %), takes the quick slots and
+`CHoover::CollectUnitLoot` 0x461CB0 creates the prototype's drop list (`UnitProto +0xe8` names, `CreateItemByName`; the new items
+go into both output lists, the 5th argument is unused), rolls the money twice: `amount = min < max ? ISAAC-based value in min..max :
+round(min)` for (`+0xd0`, `+0xd4`) and (`+0xe0`, `+0xe4`), each added when the CRT roll `(rand() * 100 / 0x7FFF) % 100 + 1 <=` its
+chance (`+0xc8` / `+0xd8`, floats), the sum clamped to >= 0 [V, ui-fw cross note checked 2026-11-06], takes the quick slots and
 the `+0x4a0` extras of every unit and, for hero ids, the armor and weapon slots too, and sets flag 0x100000; in a lobby game the
 host player gets the quest items (typeId 0x14) first; `player +0xc0 += money`, `CPlayer::AddItems(player, items, 0)`; a unit
 already flagged 0x20000000 gives its stored loot record (`+0x12e64` list: unit id, lobby index, money, item ids). The pick-up
@@ -353,23 +389,46 @@ stores two float[8] (per-school complexity caps). The stock is regenerated by `G
 `RollMaterialStock` (stock = rand(min..max) per material), `GenerateWeapons` / `GenerateArmors` / `GenerateQuickItems` 40..50
 each, 1..3 blueprints per allowed proto (`AddWeaponInstructions` & co.), `AddMaterials` 20..50; `GenerateSpellShop`
 0x4A6F60: 40..50 spell containers (`AddSpellContainers`), 1..3 spell blueprints ("prototype"), 20..50 runes.
+The allowed lists travel with the merchant (`CGSPlayer::Serialize` 0x4A6C40, tag 5, after the two stock parties):
+`ShopStock::Write` 0x69BAC0 / `ShopStock::Read` 0x69B5B0 (were `DwordVector_Serialize_69BAC0` / `CItemConstructor::LoadState`)
+store, each as a count + names, the armour protos `+8`, weapon protos `+0x14`, quick protos `+0x20`, the materials `+0x2c` (name +
+min, max, stock dwords), the spell protos `+0x38` and the perks `+0x44`; on reading, the item and material names are lower-cased
+(0x700EFE) before the map lookups, unknown names are dropped silently and duplicates skipped [V, deep read 2026-11-06].
 
-`ShopStock::GenerateItems` 0x69AE20 (proto vector, min, max, out, kind) [V]: `SelectSpellFilters` with S_Weapons (kind 0 / 3)
-or S_Armors (kind 1); n = rand(min..max) protos picked by a partial shuffle (protos with Type "" skipped); the material: among
-the stock entries whose material Type equals the proto's M.Type and whose stock >= proto Components, the first one accepted by
-a price test (material price p vs proto price P: chance `|(p - P/7) / (P/7 - P/5)| * 100` % when `2P/7 - P/5 <= p <= P/5`,
-else 10 %), otherwise a random one; stock -= Components; no candidate -> no item. With 50 % probability an embedded spell:
-`GetSlotsAndMana` 0x6A6480 -> `GenerateSpells` with the item's slots as every school's limit -> a random one whose mana cost
-`+0x40 <= item mana`. Wands (quick subtype 8) get 20 + rand%30 charges. `GenerateSpells` 0x69A780 builds, per filtered spell
-proto, a perk list (mandatory runes `+0xc`, optional `+0x18` at 50 %, repeats of `+0x24` while the summed complexity stays
-under the school's limit and the count < 8) and `CSpellManager::CreateSpellWithPerks` (spell side: another document).
+`ShopStock::GenerateItems` 0x69AE20 (proto vector, min, max, out, kind 0 weapons / 1 armours / 2 quick items; callers
+`GenerateWeapons` / `GenerateArmors` / `GenerateQuickItems` 0x69B570 / 0x69B550 / 0x69B590) [V, deep read 2026-11-06]:
+`SelectSpellFilters` with S_Weapons (kind 0, also 3, never passed) or S_Armors (kind 1), none for quick items. `n = min +
+(rand() * (max - min + 1) / 0x7FFF) % (max - min + 1)` (n = max when min >= max); when n < the number of protos the stock's own
+proto vector is shuffled **in place** (`random_shuffle`) and the first n are taken, else all. Protos whose **Type is `wand`**
+are skipped after the pick (they still use up one of the n): wands are never generated, only their blueprints are sold. The
+material, when the proto's M.Type is not `none` (case-insensitive): candidates = the stock entries (0x10: `{material*, type
+name, ?, stock}`) whose type equals M.Type and whose stock >= proto Components, in stock order; the first one that passes a
+price test wins (material price p, proto price P, `a = P/7`, `b = P/5`: chance `c = ftol(|(p - a) / (a - b)| * 100)` when `2a -
+b <= p <= b`, else 10; it passes when `(rand() * 100 / 0x7FFF) % 100 + 1 < c`, so the real chance is `c - 1` %); none passes ->
+the candidates are shuffled and the first taken; no candidate at all -> `Cancel`, no item; the winner's stock -= Components.
+M.Type `none` -> no material. Weapons and armours only (kinds 0 / 1 / 3): with probability 50/101 (`ISAAC % 101 < 50`)
+`GetSlotsAndMana` 0x6A6480 -> `GenerateSpells(limits = item slots for all 8 schools, 0)`, one spell drawn (`ISAAC % count`)
+and embedded only if its mana cost `+0x40 <= item mana` (no retry; the other generated spells are released). The item is
+built (`FinishItem`), refcount++, appended to the out list; a quick item of subtype 8 (the potions) gets a **stack count**
+`20 + (rand() * 30 / 0x7FFF) % 30` = 20..49. A weapon / armour proto with M.Type `none` would make `FinishItem` fail and the
+next line (`item +4 += 1`) dereference 0: no vanilla row does that [V, data]. `GenerateSpells(out, float limits[8], skipPercent)`
+0x69A780 [V, deep read 2026-11-06] walks the selected S_* filter records (hash `+0x50`; record `+0` spell name, `+0xc` mandatory
+rune names, `+0x18` optional ones, `+0x24` the repeat rune) and, for each one with `ISAAC % 101 >= skipPercent` (0 from
+`GenerateItems`, 50 from `AddSpellContainers`): the spell proto by name; complexity starts at proto `+0x44`, the limit is
+`round(limits[proto school +0x14])`; every mandatory rune is added without a limit test (complexity += perk `+0x18`, a running
+cost += perk `+0x10`); if the complexity then exceeds the limit (or 9+ runes) **no spell** is made for this record; else each
+optional rune with `ISAAC % 101 > 49` (50/101) while fewer than 8 runes is added when it still fits; then the repeat rune is
+added while it fits and fewer than 8 runes (a rune of letter `m` (perk `+4`) also adds `perk +0x14 * proto +0x18` to the cost and
+stops the repeats once the cost is <= proto `+0x18`); `CSpellManager::CreateSpellWithPerks(proto, runes)` and the spell goes
+to the out list (spell side: spells.md).
 
 ### 7.1 Item texts: `CTextManager::GetItemTextKeys` 0x4E0150 [V, deep read 2026-11-03]
 
 `(item, out name, out description, out category)`: builds a section key, finds it in the loaded text archives
 (`FindInArchives`), takes the section's line value as the **name** and the text up to `#` as the **description**; the
 **category** is the text of a fixed key (`GetString`). Every proto / material name in a key has its spaces replaced by `_` and is
-uppercased by the code; the section lookup ignores case, since the shipped texts are written `WEAPON Axe Adamantium`,
+**lower-cased** by the code (0x700EFE, the misnamed `CString::MakeUpper`, is `MakeLower`: corrected 2026-11-06, section 9); the
+section lookup ignores case, since the shipped texts are written `WEAPON Axe Adamantium`,
 `QITEM Large_Potion_1`, `ARMOR ...` (texts.res: 172 WEAPON, 548 armor, 41 QITEM, 200 INSTR, 105 LITEM, 33 MATERIAL, 24 MODIFIER,
 71 QUESTITEM, 31 SPELL sections). By item kind (`+0x10`):
 
@@ -397,7 +456,7 @@ A missing section leaves name and description untouched (no fallback text); the 
   feature.
 * ~~ShopStock +8 / +0x14~~ settled [V] (guess sweep 2026-11-01): `ItemsDb_ListArmorNames` feeds `+8` -> `GenerateArmors`, the weapon list feeds `+0x14`; `ShopStock::AddArmorProto` 0x699080 / `AddWeaponProto` 0x6990E0. The S_* table assignment above stands.
 * `CInventory` (typeId 0x17): no creator and its hash set is never filled: dead class in this build [V] (no `new` site of its vtable). [untestable]
-* ~~Model name arguments~~ settled [V]: `"%s_%.2d.%s.%d"` (`WeaponProto_FormatModelName` 0x6A0BF0, `Armor_FormatModelName` 0x6A3480) = model + type prefix (`unhufe` + `ax`), proto variant (`01`), material code (`co`), texture index (`0`): real file `redress.res/unhufeax_01.co.0.mmp`. `Weapon_GetAttachBones` not re-read.
+* ~~Model name arguments~~ settled [V]: `"%s_%.2d.%s.%d"` (`WeaponProto_FormatModelName` 0x6A0BF0, `Armor_FormatModelName` 0x6A3480) = model + type prefix (`unhufe` + `ax`), proto variant (`01`), material code (`co`), texture index (`0`): real file `redress.res/unhufeax_01.co.0.mmp`. ~~`Weapon_GetAttachBones` not re-read~~ read 2026-11-06 (section 4, weapon figure parts).
 * `CWorldServer::CloneItem`'s `desc[10] / desc[11]` (mana / max of the source) [I]; the update list `+0x12e44` is ticked by `CWorldServer::TickActiveObjects` 0x58D670 [V] (world-server.md 4.3).
 * ~~UnitProto +0x50~~ settled [V] (data-sound.md 3): `+0x50` is the Base Level (FLD41), not a natural skill.
 
@@ -428,6 +487,23 @@ A missing section leaves name and description untouched (no fallback text); the 
    (0x4A6DF0 / 0x4A6F60) generate the item / spell shop stock. `CItemRegistry::AddUnique_*` are its list builders (names fixed).
 8. `docs/game-exe/combat.md` 6: "Durability: items are placements too (+0x20 durability, +0x24 max, +0x48 count)" holds; "charge
    +0x28" is the item's mana. `CItemQuick::GetSubtype` works for every kind (`CItem::GetProtoSubtype`).
+9. This page section 2 / 7 (T5 deep read 2026-11-06, `ShopStock::GenerateItems` 0x69AE20): the shop skips protos whose Type is
+   **`wand`** (not ""), "no material" is M.Type **`none`** (not ""); the 20..49 count is the stack of a subtype-8 quick item (the
+   potions), not wand charges; embedded spells only for weapons / armours, one draw without retry; the price test passes with
+   `c - 1` %.
+10. This page section 1 (quick subtypes): "8 wand / scroll / spell container" -> 5 = the wands (Type `wand`, mana-charged), 8 = the
+    potions (Type `scroll`) and the `spell container` row (count-charged).
+11. This page section 3 / 7.1 and `functions.tsv`: `CreateItemByName`, `GetItemTextKeys` and `ShopStock::Read` **lower-case** their
+    names: `CString::MakeUpper` 0x700EFE is really MakeLower (its `_mbslwr` 0x6EC8A8 passes LCMAP_LOWERCASE); 0x700EEC is the real
+    MakeUpper (no caller); `_strupr` / `_strlwr` 0x6EC8A8 / 0x6EC81E swap too.
+12. This page section 5 (ws cross note, checked): `HeroRecord +4` is the hero's key name (hashed into `+0x1c`), `+8` the race model's
+    Mask Name (figure stem), not a model / "Hero" class name.
+13. `functions.tsv` `CItemConstructor::LoadState` 0x69B5B0 = `ShopStock::Read`, `DwordVector_Serialize_69BAC0` 0x69BAC0 =
+    `ShopStock::Write` (the merchant's allowed lists, `CGSPlayer::Serialize` tag 5).
+14. `functions.tsv` `Weapon_GetAttachBones` 0x6A0FF0 / `Weapon_ListModelParts` 0x6A1780: not bones but the unit-figure weapon part
+    names, numbered by proto `+0x18` (section 4); renamed `WeaponProto_GetFigurePartNames` / `WeaponId_ListFigurePartNames`.
+15. This page section 7 `GenerateSpells`: the mandatory runes ignore the school limit and a spell whose mandatory runes exceed it is
+    not generated at all (earlier: "while the summed complexity stays under the limit").
 
 ## 10. Function index
 
@@ -463,6 +539,7 @@ A missing section leaves name and description untouched (no fallback text); the 
 | 0x665470 | CPlayer::AddItems | loose list +0xe4 + SendItems |
 | 0x66E7D0 / 0x669490 | CPlayerServer::SendItems / CPlayerClient::OnMsg_AddItems | opcodes 5 + 6 |
 | 0x69A480 / 0x69A780 / 0x69AE20 | ShopStock::SelectSpellFilters / GenerateSpells / GenerateItems | the stock generator |
+| 0x69B5B0 / 0x69BAC0 | ShopStock::Read / Write | the allowed lists in `CGSPlayer::Serialize` (were CItemConstructor::LoadState / DwordVector_Serialize_69BAC0) |
 | 0x69F620 / 0x69F700 / 0x69F800 / 0x69F8C0 / 0x69F940 / 0x69F9C0 / 0x69FA90 | ItemMaterial / ItemProtoBase / WeaponProto / ArmorProto / QuickProto / QuestProto / LootProto ::SerializeFields | items.idb tags |
 | 0x69FCA0 / 0x69FE90 / 0x69FF70 / 0x69FFC0 | CItem::ctor / Equals / Clone / CloneInto | base object |
 | 0x6A0070 / 0x6A0270 / 0x6A0360 / 0x6A0490 | CItem::RegenMana / Read / Write / InitFromProto | base slots 6 / 9 / 10 / 13 |
@@ -472,6 +549,7 @@ A missing section leaves name and description untouched (no fallback text); the 
 | 0x6A2A50 / 0x6A2AE0 / 0x6A2BD0 / 0x6A2B80 / 0x6A2C60 / 0x6A2DE0 | ItemId_GetDamageMin / GetDamageMax / GetWeight / GetWeaponType / CItemWeapon::GetMainDamageType / RollDamage | id-based readers |
 | 0x6A0840 / 0x6A3240 / 0x6A2750 / 0x6A3720 / 0x6A3CD0 / 0x6A45C0 / 0x6A4B90 / 0x6A5820 | GetModelName / GetIconName of each kind | UI names |
 | 0x6A5470 | CItemLoot::GetPrice | the referenced record's price |
+| 0x6A0FF0 / 0x6A1780 | WeaponProto_GetFigurePartNames / WeaponId_ListFigurePartNames | the unit-figure weapon parts (were Weapon_GetAttachBones / Weapon_ListModelParts) |
 | 0x6A5AB0 / 0x6A5C50 / 0x6A5CF0 / 0x6A5D60 / 0x6A6480 | CItemConstructor ctor / BeginCreateItem / FinishItem / ApplyProto / GetSlotsAndMana | the builder |
 | 0x6A67A0 | ItemsDb::Load | items.idb |
 | 0x6AC810 / 0x6AC970 / 0x6AD000 / 0x6AD1E0 | CItemManager::CreateByKind / CreateItemByName / CreateItem / CreateSpellContainer | item creation entry points |
