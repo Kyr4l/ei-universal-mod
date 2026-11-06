@@ -103,12 +103,12 @@ CUnit			0x4ac	int	quickItemGrow	CArray grow step of the +0x4a0 extra item array 
 CUnit			0x350	ushort	lastHitSource	inside the packed stats (+0x330 + 0x20, net section 4): set by CUnitServer slot 20 TakeHit: 7 for a spell or no attacker, a hero attacker -> its weapon CItemWeapon::GetDamageKind (or +0x28c unarmed), a monster attacker -> its UnitProto index + 0x10; the client v46_PlayHitEffect 0x537500 picks the hit sound set from it (values >= 0x10 -> UnitProto +0x7C)
 UnitStats		0x704	0x4	float	experience	total experience; level = round(log(exp/200)/log(1.61)); MaxHP/MaxMana use log(exp/50)/log(1.61)
 UnitStats			0x8	float	expSpent	spent on skills + abilities
-UnitStats			0xc	int	strengthBase	
-UnitStats			0x10	int	strength	cached (UnitStats_Recompute)
-UnitStats			0x14	int	dexterityBase	
-UnitStats			0x18	int	dexterity	
-UnitStats			0x1c	int	intelligenceBase	
-UnitStats			0x20	int	intelligence	
+UnitStats		0x704	0xc	float	strengthBase	CORRECTION: was int: a float (CCampScreen2::OnLButtonDown 0x617050 writes 25.0f = 0x41C80000 into +0xC..+0x20; the six fields are str / dex / int base + current)
+UnitStats		0x704	0x10	float	strength	CORRECTION: was int (see +0xC)
+UnitStats		0x704	0x14	float	dexterityBase	CORRECTION: was int (see +0xC)
+UnitStats		0x704	0x18	float	dexterity	CORRECTION: was int (see +0xC)
+UnitStats		0x704	0x1c	float	intelligenceBase	CORRECTION: was int (see +0xC)
+UnitStats		0x704	0x20	float	intelligence	CORRECTION: was int: UnitStats_ManaCostFactor 0x523CD0 = const 0x73E124 / fdiv dword [+0x20]
 UnitStats			0x2c	float	actionSpeedBase	dex * 0.2 + 10 (15 for monsters, dex/2 at hero init); CORRECTION: was moveSpeedBase
 UnitStats			0x30	float	actionSpeed	max(1, (1 + quickness %) * armFactor * actionSpeedBase + buff 0x21 - buff 0x22); attack period = weapon frames * 15 / this; CORRECTION: was actionPoints; = stats +0x30 (attack period = frames * 15 / this)
 UnitStats			0x54	float	carryWeight	str * 12 * (1 + lift %); 1e6 for monsters; carried > this = overloaded (EffectLevel 2)
@@ -116,7 +116,7 @@ UnitStats			0x58	float	legFactor	1 / 0.5 / 0.33 by the worst leg part HP ratio (
 UnitStats			0x5c	float	armFactor	same for the arm parts (UnitStats_ArmFactor); CORRECTION: was crippleRatio1
 UnitStats			0x6c8	byte[3]	attributeSkills	0 science, 1 stealing, 2 ? (UnitStats_AttrSkill)
 UnitStats			0x6cb	byte[8]	weaponSkills	+0x6cb melee, +0x6cc archery, +0x6cd ?, +0x6ce/+0x6cf/+0x6d0 magic schools (0..2, 3..4, 5..7), +0x6d1, +0x6d2
-UnitStats			0x6d3	byte[36]	perkLevels	26 groups x ability levels, 0..3 each
+UnitStats		0x704	0x6d3	byte[36]	perkLevels	CORRECTION: was "26 groups": CCampSkillsWin::RefreshPerks reads 36 bytes +0x6D3..+0x6F6, byte g = level 0..3 of perk group g = records 3g..3g+2 of the perk table g_0x7AF274 (0x44 bytes each; groups beyond the table are skipped)
 UnitStats			0x6f8	uint	statFlags	bit 0 was backstabbed, bit 1 head hit, bit 2 hit[5] set, bit 3 HP > 0 after refresh; bit 4 set when a hit landed (net 4)
 UnitStats			0x6fc	float	maxHpStored	monsters: max HP from the proto (+0x48); heroes use the formula
 UnitStats			0x700	float	expAccumulator	fractional experience not yet flushed into +4 (skill costs, timed gain); CORRECTION: was hpFraction; = stats +0x700 (GiveExperience reads +0x8e0 + +0x1e4)
@@ -241,7 +241,7 @@ CItem			0x30	float	manaRegen	0.001 per CItem::RegenMana tick (fraction of manaMa
 CItem			0x34	float	weight	proto Weight +0x38 * material Weight +0x14; summed by GetCarriedWeight / HeroRecord::TotalWeight; CORRECTION: was field_34
 CItem			0x38	float	price	proto Price +0x34 + Components * material Price +0x10, + embedded spell price (+0x48); slot 16 GetPrice; CORRECTION: was weight
 CItem			0x3c	float	size	proto Size +0x3c; CORRECTION: was field_3c
-CItem			0x40	float	slots	complexity: proto Slots +0x44 + material Slots +0x1c (the max complexity of an embedded spell); CORRECTION: was field_40
+CItem	CObject	0x4c	0x40	int	slots	CORRECTION: was float slots: an int (ApplyProto 0x6A604C adds proto +0x44 + material +0x1C as integers, InitFromProto copies the dword raw); complexity cap of the embedded spell (CanDropItem tab 5: spell reqSkill +0x50 <= it, unsigned compare)
 CItem			0x44	pointer	spell	CSpell* embedded spell (weapons / armor enchantments, the contained spell of a spell container); CORRECTION: was subItem
 CItem			0x48	int	count	stack count (party items, materials) / charges (wands 20..49, scrolls); CORRECTION: was subWeight
 CItemWeapon	CItem	0x5c	0x4c	float	field_4c	written by Read/Write and Equals only, -1 after ctor; not set by InitFromProto [?]
@@ -2812,7 +2812,7 @@ CCampScreen	CUIWindow	0x260	0x211	byte	cancelAllowed
 CCampScreen	CUIWindow	0x260	0x212	byte	deconstructMode	1 = the component party holds a usable item / spell container (confirm = DeconstructItem / DeconstructSpell)
 CCampScreen	CUIWindow	0x260	0x214	pointer	itemPreview	CItem built by RefreshItemComponents 0x612600 (refcounted), 0 when none
 CCampScreen	CUIWindow	0x260	0x218	pointer	spellPreview	CItem (spell container) built by RefreshSpellComponents 0x612290
-CCampScreen	CUIWindow	0x260	0x21C	float[9]	priceCoef	CGSPlayer +0x10..+0x30: 0 spell buy 1 spell sell 2 spell deconstr 3 spell constr 4 item buy 5 item sell 6 item deconstr 7 item constr 8 repair (GetItemPrice 0x60FAB0)
+CCampScreen	CUIWindow	0x260	0x21C	float[9]	priceCoef	CORRECTION: was "2 spell deconstr 3 spell constr .. 6 item deconstr 7 item constr": EnterMode 0x611930 charges [2] / [6] on every component when constructing (default 0.2) and [3] / [7] on the item when deconstructing (default 0.1); 0 spell buy 1 spell sell 4 item buy 5 item sell 8 repair; = CGSPlayer +0x10..+0x30 (GetItemPrice slot 54)
 CCampScreen	CUIWindow	0x260	0x240	CStringArray	modeNames	mode_weapons .. mode_itemrepair, quit (the tab title texts)
 CCampScreen	CUIWindow	0x260	0x254	byte	noConstr	variable i.noconstr: the constructor tabs disabled
 CCampScreen	CUIWindow	0x260	0x258	float	heroChangeTimer	auto-repeat of the held hero arrow (0.5 s)
@@ -2827,6 +2827,7 @@ CCampScreen			0x17c	int	list170Limit	0x32
 CCampScreen			0x180	byte[8]	list180	second STL container (0x28-byte nodes), same pattern
 CCampScreen			0x188	byte	list180Variant	the ctor variant argument
 CCampScreen			0x18c	int	list180Limit	0x32
+CCampScreen	CUIWindow	0x260	0x194	byte	openedFromPartyEditor	ctor argument: 0 from CreateScreenById (screen 5), set by the inline ctor of CCampScreen2::OnLButtonDown (redress); OnButton(7) then only pops the screen instead of Game_SendEnterWorld
 CQuestLogWin	CUIWindow	0x1F0	0x164	pointer	mapsBegin	std::vector<CString> of the zones the window can show (Build: the z.* variables of the current allod)
 CQuestLogWin	CUIWindow	0x1F0	0x168	pointer	mapsEnd	
 CQuestLogWin	CUIWindow	0x1F0	0x16C	pointer	mapsCap	

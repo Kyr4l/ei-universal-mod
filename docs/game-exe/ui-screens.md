@@ -25,7 +25,7 @@ from the object start. "sub-object" = the `IUIEvents` object embedded at `+0x94`
 3. **Modal boxes** are pushed windows (`CMessageBox`, 0x180 bytes): they close with `resultBase | 1` (OK) or `| 2` (Cancel) and the
    parent receives that code in slot 27. Every "yes" flow in this page is such a code (0x10001, 0x20001 ...).
 4. **Orders** leave the HUD as `CPlayerClient::SendMsgNN_*` calls (`world-client-players.md`); the camp edits the `CParty` / `HeroRecord`
-   directly and sends nothing until the player leaves (`Session_LeaveGame`); the dialog talks to the server with `Order_MoveTo`,
+   directly and sends nothing until the player leaves (`Game_SendEnterWorld`); the dialog talks to the server with `Order_MoveTo`,
    `SendMsg19` (talk markers) and `SendMsg0F_Move` (camera cuts); saves are `Game_SaveToSlot_Wrap(folder)` + two small files.
 5. **Text comes from `CTextManager`** (`GetString(key)`, `OpenText("quest <id>")`, `SeekSection("#screen")`, `ReadLineValue`,
    `ReadUntilHash`), positions from `map.txt`, options from the globals listed in section 11.
@@ -89,7 +89,7 @@ Modes `+0x16C` [V]: 0 world, 1 topic list, 2 walking into place, 3 briefing text
 | mouse move (0x603D00) | hover unit with topics -> cursor frame 0xE and its name drawn at (x-0x7D, y-0x14); a zone exit whose `z.<target>` != 1 -> cursor 0xF; mode 1 hovered row -> `+0x188` + DrawTopicList |
 | OnCommand 0x606F40 | 0x10001 (leave-zone yes) = `Session_RequestMapChange(+0x164)`; 0x20001 = push CSaveLoadWin in save mode; 0x90001 / 0x100001 = leave the game (`CInterface +0x44` = 1, `LobbySession_ReleaseActive(2)`) |
 
-`SelectAnswer` 0x6064E0 [V]: "goodbye" -> mode 0; a "constr*" topic -> `World_SetConstrCurrent(id)` + `Game_SendLeave(5)` (enter the camp
+`SelectAnswer` 0x6064E0 [V]: "goodbye" -> mode 0; a "constr*" topic (the topic is lower-cased by `CString::MakeLower` 0x700EFE (was named MakeUpper) and its first 6 characters compared with "constr", 0x6078C0) -> `World_SetConstrCurrent(id)` + `Game_SendLeave(5)` (enter the camp
 / constructor); else opens the text `briefing <topic>`, reads its `#show` lines to name the second (`+0x1A8`) and third (`+0x1AC`)
 speaker, computes the two facing poses 2.5 m + proto radius apart (`+0x1B0 / +0x1BC`, centre `+0x1C8`, dirs `+0x1D4..`), saves the
 pre-dialog poses (`+0x210 / +0x228`), `PlaceUnit` (walk, 0x6089D0: a 0x30-byte node in the `+0x240` list, `Order_MoveTo`; teleport after
@@ -126,29 +126,67 @@ Entered by `Game_SendLeave(5)` with `constr.current` naming the merchant `CGSPla
 (`Game_SetWorldServerField6C(1)`), reads the merchant flags (`+0xC / +0xD` item / spell constructor, variables i.on/offitemconstr,
 i.on/offspellconstr, i.noconstr), the 9 price coefficients (`+0x21C` = CGSPlayer +0x10..+0x30) and the two stock parties
 (`+0x1B4` items = +0x3C, `+0x1C8` spells = +0xAC), creates the camp hero units (`Game_CreateHeroUnits` of the proto-type 0x32 records,
-`+0x1A0`), `SelectNextHero` and the first enabled tab. A first visit (`CGSPlayer +0x38`) seeds the stock bounds from the party's max /
-min magic skills and `CollectUnitsIntoParty`; a merchant without stock gets `FillConstructorStock` 0x612CF0 (every Instruction
-Weapon / Armor / Quick Item blueprint, Material, Prototype, Rune and "wand" sample). `OnClose` 0x60E6B0 unpauses, removes the camp
-units, releases the previews and the 8 basket parties. `OnButton(7)` = leave: baskets moved back (`Party_MoveAllItems`),
-transit.wav, `Session_LeaveGame`; Esc does the same (0x60F600). Lobby: Backspace clears / Enter opens the chat.
+`+0x1A0`), `SelectNextHero` and the first enabled tab. A first visit (`CGSPlayer +0x38` set) computes per magic school 0..7 the
+party's min and max `UnitStats_MagicSkill`, `CGSPlayer::SetShopLimits(min[8], max[8])`, `GenerateSpellShop`, `GenerateItemShop`
+and clears `+0x38`. The flag is set on a new merchant and, [I], again for every merchant by `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0, which the script `QuestComplete` calls: the shops would be re-rolled (`items.md` 6) on the first camp visit after each completed quest. `FillConstructorStock` 0x612CF0 (slot 39) has **no
+caller** (no direct call; no virtual `+0x9C` call on a camp screen found) [V]: a leftover developer stock that clears both stocks and fills them
+with everything: per weapon proto an "Instruction Weapon" (`+0x54` = row, count 10) plus one finished weapon per material whose
+name equals the proto's M.Type `+0x10`; the same for armor protos whose name does not contain "prototype"; an "Instruction Quick
+Item" (x10) per quick proto whose name contains "wand"; "Material.<name>" x20 per material; one "Rune" x10 per perk and one
+"Prototype" x10 per spell. `OnClose` 0x60E6B0 unpauses, removes the camp
+units, releases the previews and the 8 basket parties. Esc = leave (0x60F600). Lobby: Backspace clears / Enter opens the chat.
+
+`OnButton(tab)` 0x60E9E0 [V, deep read 2026-11-06]: disables every pane, resets the party bar filter to 9 (all), then enables per tab:
+0 unit info `+0x1D8` + hero slots `+0x1E4`; 1 unit info + quick bar `+0x1E8` + skills `+0x1F4`; 2 help `+0x1DC` ("camphelp" text) +
+spell trade + spell stock bar, party bar filter 1; 3 spell constructor + spell stock bar; 4 item trade + item stock bar, party bar
+filter 5; 5 item constructor + item stock bar; 6 repair + item stock bar. Tabs 2 / 3 need the spell shop `+0x195`, 4 / 5 / 6 the
+item shop `+0x196`, and 3 / 5 also `+0x254` (i.noconstr) == 0; a disabled tab re-applies the current one. So **i.noconstr removes
+only the two constructor tabs; trade and repair stay**. On a change: slot.wav, `+0x190` = tab, `CUnitInfoWin::SetMode(tab)`, the
+title `+0x240[tab]` on surface [1] (0,10)-(200,0x1E), tab icons scaled 0.5 except the active one (1.0); the hero arrows are hidden
+in tab 0 when there is no item shop or i.noconstr. Tab 7 = **leave**: `CCampSkillsWin::SelectNextAvailable(0, 1)` (uncommitted skill
+edits are discarded), the buy baskets go back to the stocks and the sell / repair baskets to the party (`Party_MoveAllItems`), the
+component lists empty item by item (`Party_TransferItem`: an item carrying the stock link (`+0x1C` link with flag `+0x10`) returns to
+the stock, others to the party), transit.wav, then `Game_SendEnterWorld` (the camp party is uploaded and the zone spawns again) or,
+when the camp was opened from the multiplayer hero editor (`+0x194` set by the inline ctor in `CCampScreen2::OnLButtonDown`),
+`RequestPopScreen(0)`.
 
 | Buttons (Build) [V] | rect / meaning |
 |---|---|
-| 0 / 1 | prev / next hero arrows (0xC,0x1C2)-(0x34,0x1EA) / (0x94..0xBC): press sets `+0x25C` = 1 / 2 and repeats every 0.5 s while held (Update 0x60F6B0); hidden in tab 0 without the item constructor |
+| 0 / 1 | prev / next hero arrows (0xC,0x1C2)-(0x34,0x1EA) / (0x94..0xBC): press sets `+0x25C` = 1 / 2 and repeats every 0.5 s while held (Update 0x60F6B0); hidden in tab 0 without the item shop or with i.noconstr (OnButton) |
 | 2 / 3 | confirm (300,0x1D6)-(0x14A,500) / cancel (0x1D6,0x1D6)-(500,500) -> `OnBuyOrRepair` 0x611220 / `OnCancel` 0x611760 when `+0x210 / +0x211` allow |
 | 4..11 | 8 tabs across x 0x26C..0x30C (20 px each), y 0x1AE..0x1EA: 0 weapons (tip 0x4E84) 1 skills 2 spell trade 3 spell constr 4 item trade 5 item constr 6 repair 7 leave; disabled tabs fall back (`OnButton` 0x60E9E0) |
-| sub-windows (ItemAtPoint slot 25, kinds) | party bar `+0x1E0` kind 1, spell stock bar `+0x1EC` kind 2, item stock bar `+0x1F0` kind 3, hero weapon / armor slots `+0x1E4` kinds 2 / 3 ("kind 0" = hero slot in OnDropItem), quick bar `+0x1E8` kind 1, trade baskets kinds 0x11 / 0x1C, repair 0x19, spell components 0x13, item components 0xD |
+| sub-windows (ItemAtPoint slot 25, kinds) | party bar `+0x1E0` kind 1, spell stock bar `+0x1EC` kind 2, item stock bar `+0x1F0` kind 3, hero bar `+0x1E4` (`CCampBar`: weapons kind 2, belt kind 3, doll armor kinds 4..10; "kind 0" = hero slot in OnDropItem), spell slots `+0x1E8` (`CCampQuickBar`, kind 1), trade baskets kinds 0x11 / 0x1C, repair 0x19, spell components 0x13, item components 0xD |
+
+**Drawing** [V, checked 2026-11-06]: `CCampScreen::Draw` 0x60F050 recomputes the hovered item `+0x168`, calls **`EnterMode` every
+frame** (so totals and the confirm state always follow the baskets), draws the windows and, in tab 0 only, the selected hero
+(`UIUnitPreview::Render(hero unit, +0x258, x = 400, sixRects = 1)`: drawn straight into the frame after a depth clear, no render
+target). Every item figure of the bars and panes goes through `UIUnitPreview::DrawItemFigure` 0x5ECA10 (was GetOrCreatePortrait),
+which asks the screen's slot 43 `CanDropItem(item, kind)`: a refused item gets a translucent dark-red overlay (0x82804040). So **the
+red-tinted icons of the camp are exactly the drop rules below** for the current tab.
 
 **Item moves** [V]: a click on an item of a bar reaches `CCampScreen::OnDropItem` 0x610AD0 (slot 42) with the bar kind; `CanDropItem`
-0x6100E0 (slot 43) decides per tab (table in the batch row: weapons / armor / quick only in tab 0, broken weapons refused; spell containers
-need the hero's magic skill in tab 1; the constructor rules below); the move is `Party_TransferItem(item, from, to, flags)` or, in tab 0,
+0x6100E0 (slot 43) decides per tab (rules below); the move is `Party_TransferItem(item, from, to, flags)` or, in tab 0,
 `PutOnItem` 0x60FCA0 / `UnequipItem` 0x60FE40 (`HeroRecord::AddWeapon / AddArmor + CUnit::EquipArmor / AddQuickItem / AddSpellItem`, 4
 weapons, 4 quick, 8 spells, one armor per type; the first weapon becomes the slot in hand `+0x774`; `CUnitInfoWin::Redraw`). Shift
 (`CInterface +0x7D`) moves a whole material stack. Every move calls `CCampBar2::RebuildList` on the bars concerned.
 
+`OnDropItem(item, kind)` 0x610AD0 [V, deep read 2026-11-06]: a refusal of `CanDropItem` plays messbox\cancel.wav. Kind 0 (hero slot)
+= `UnequipItem`; 1 (party bar) = `EquipItem` 0x610920 (per tab: 0 / 1 put on, 2 / 4 -> the sell basket, 3 / 5 -> the components, 6 ->
+the repair basket); 2 (spell stock): tab 2 -> the buy basket `+0x1CC`, tab 3 -> the components with the stock link; 3 (item stock):
+tab 4 -> the buy basket `+0x1B8`, tab 5 -> the components (with shift a material stack moves unit by unit while `CanDropItem(item, 3)`
+allows); these play put_on.wav. The other kinds take an item back (put_off.wav): 4 / 5 a spell / item basket item returns to the stock
+(buy basket) or the party (sell basket); 6 (spell components): a rune returns alone (stock if it carries the stock link, else party),
+anything else (blueprint or container) **empties the whole list**; 7 (item components): a material returns (shift: every material),
+then any spell container in the list goes back too; a container returns alone; a blueprint or usable item empties the list; 8
+repair basket -> party. **Basket capacity** (`Party_TransferItem` 0x5EE1B0 (item, dst, src, count, shiftFlag, keepLink)): with
+count n > 0 and the destination already holding >= n entries, the item only goes in when it stacks with one of the first n entries
+(item vt+0x38), else nothing moves: the trade baskets take 8 different entries (count 8), the repair basket 16 (0x10); components and
+stocks are unlimited (count 0). keepLink marks the item with a 0x18-byte `ItemLink` (`+0x1C`, flag `+0x10` = 1) = "came from the
+stock".
+
 **The merchants' price factors** [V, deep read 2026-11-03]: the 9 coefficients live in each merchant record (`CGSPlayer +0x10..+0x30`,
 saved with the campaign by `CGSPlayer::Serialize` tag 4; no script command or other code writes them). `GSPlayers_CreateDefaults`
-0x4A7630 sets them on a new game: buy 1.0, sell 0.5, deconstruct 0.2, construct 0.1 (the same four for spells [0..3] and items
+0x4A7630 sets them on a new game: buy 1.0, sell 0.5, construct 0.2 (charged per component), deconstruct 0.1 (charged on the item) (the same four for spells [0..3] and items
 [4..7]), repair 0.2 [8]. Single player (`Session_ResetPlayers_Single`) creates merchants 1..5 and gives **merchant 5 all nine
 factors 0** (everything at that merchant costs 0 and sells for 0; index 5 is the `b.golem.constr_5` building of the campaign start,
 world-server.md 2.6 [I]); multiplayer (`Session_ResetPlayers_Multi`) creates merchants 1, 3, 4, 5, all with the standard factors.
@@ -158,55 +196,163 @@ tag 4): merchants 1..4 hold 1.0 0.5 0.2 0.1 1.0 0.5 0.2 0.1 0.2, merchant 5 hold
 shop and merchant 2 only the spell shop. A mod can change the factors only by editing these records in the campaign save
 (`scenario.sav`) or by patching the defaults.
 
-**Prices** (`GetItemPrice` 0x60FAB0, slot 54, kind 0..8 = coefficient index; x87 code the decompile drops, verified live in
-`game-memory.md`): base = item `GetPrice`; weapon / armor: round(base * coef[k] - base * coef[8] * (1 - durability / max)); kind 8 repair =
-max(1, round(base * coef[8] * wear)) or 0; others round(base * coef[k]). `EnterMode` 0x611930 recomputes `+0x20C` total, `+0x210 / +0x211`
-and the title / "+%d" / "camp_current_money %d" line per tab: 0 "camp_repair_all" (sum kind 8 over the hero's items, item-constructor
-merchant only), 1 "camp_level_up" (points left), 2 "camp_spell_trade" (kind 0 of the buy basket - kind 1 of the sell basket), 3 spell
-constructor: a container in `+0x1D4` -> "camp_spell_deconstr" kind 3 (+ kind 0 when the material flag), a blueprint ->
-`RefreshSpellComponents` 0x612290 builds the preview `+0x218` ("camp_spell_constr", kind 2 per component), 4 "camp_item_trade" (kind 4 -
-kind 5), 5 item constructor: usable item -> "camp_item_deconstr" kind 7, blueprint -> `RefreshItemComponents` 0x612600 -> `+0x214`
-("camp_item_constr", kind 6 per component), 6 "camp_item_repair" (kind 8 of `+0x1C4`). Confirm refused when the total exceeds the
-party money `+0x50`.
+**Prices** (`GetItemPrice` 0x60FAB0, slot 54, kind 0..8 = coefficient index) [V, machine code re-read 2026-11-06]: base = item
+vt+0x40 `GetPrice` (one unit); wear = 1 - durability `+0x20` / max `+0x24`. Kind 8 (repair, any item kind) = 0 when wear == 0 or
+coef[8] == 0, else max(1, trunc(base * coef[8] * wear)). Other kinds: weapon / armor (0x3004 / 0x3005) = trunc(base * coef[k] -
+base * coef[8] * wear) (worn gear is worth less by exactly its repair cost), anything else trunc(base * coef[k]). All conversions are
+`_ftol` = truncation toward zero (not rounding).
 
-**Confirm** (`OnBuyOrRepair` 0x611220, buy.wav) [V]: tab 0 repairs the hero's weapons / inventory (durability = max); 1 commits the
-level-up (`CCampSkillsWin::SelectNextAvailable(1,0)`); 2 / 4 register the sold items in the merchant registry (`CItemRegistry` +0x1D4:
-spells `AddUnique_Loot`, blueprints / runes `AddUnique_Quest`, items by proto row `AddUnique_Armor / Weapon / Quick`, empty 0x3007
-containers deleted), then bought -> party, sold -> stock; 3 = `DeconstructSpell` 0x612500 (container -> a "Prototype" + one "Rune" per
-perk) or the preview replaces the components; 5 = `DeconstructItem` 0x6129C0 (item -> "Instruction Weapon/Armor/Quick Item" with
-`+0x54` = proto row, one "material.<name>" per proto Components, a "spell container" with its spell) or the preview replaces the
-components; 6 repairs the basket; finally money -= total. **Cancel** returns the baskets / components to where they came from.
+`EnterMode` 0x611930 [V, deep read 2026-11-06] recomputes `+0x20C` total, `+0x210` confirm / `+0x211` cancel allowed, `+0x212`
+deconstruct, and draws on surface [0]: "<camp_current_money> %d" (party money; tab 1: "camp_current_exp" + the free experience) at
+(0,10)-(200,0x1E), the title key at (0,0x1E)-(200,0x32) and the total "%+d" (or "0") at (0,0x32)-(200,0x46); the confirm / cancel
+quads 0 / 1 are scaled 0.5 when not allowed. Per tab:
+- 0 (item shop, no i.noconstr): "camp_repair_all" = sum of kind 8 over the selected hero's weapons `+0x730` and worn armor `+0x750`;
+  confirm when > 0.
+- 1: confirm = cancel = `CCampSkillsWin::GetPerkFlag` (something edited), total = `GetPointsLeft`, title "camp_level_up"; the money
+  test is skipped.
+- 2 / 4 (a basket not empty, confirm and cancel allowed): "camp_spell_trade" / "camp_item_trade", total = sum(kind 0 / 4 price *
+  count `+0x48`) over the buy basket - sum(kind 1 / 5 price * count) over the sell basket (negative = the party earns money).
+- 3 / 5 (components not empty, cancel allowed): every component costs kind 2 / 6 (the **construction** fee), plus the full buy
+  price kind 0 / 4 when it carries the stock link (taken from the merchant's stock = bought now); counts are not multiplied. A
+  spell container / usable item in the list switches to deconstruction: total = kind 3 / 7 of that item (the **deconstruction**
+  fee) (+ kind 0 / 4 when from the stock), `+0x212` = 1, confirm allowed, title "camp_spell_deconstr" / "camp_item_deconstr";
+  a blueprint calls `RefreshSpellComponents` 0x612290 / `RefreshItemComponents` 0x612600, whose result is the confirm flag and
+  which build the preview `+0x218` / `+0x214` (title "camp_spell_constr" / "camp_item_constr" when it succeeds); total 0 when
+  confirm is not allowed; with neither, the "camphelp" text is shown.
+- 6 (repair basket not empty): "camp_item_repair" = sum(kind 8 * count).
+Then (all tabs but 1) confirm is refused when the total exceeds the party money `+0x50`.
 
-**Constructor rules** (`CanDropItem` tabs 3 / 5) [V]: spell: a blueprint only into an empty component party and only when its school
-fits `GetMagicTotals` 0x610020 (slot 45: the party maximum of `UnitStats_MagicSkill(school)` and of max mana); a rune needs a
-blueprint, no container, < 8 runes, the blueprint's slot mask `+0x78[PerkProto +0xC]` and sum(complexity `+0x18`) within the mana
-maximum. Item: a blueprint or a usable item only when empty; materials must match the blueprint's material type (`+0x10` M.Type)
-and count < proto Components `+0x4C`; a spell container needs the preview (`+0x214`) to exist, be a quick item or the spell to have
-perk ic / it, spell level `+0x50` <= preview slots `+0x40`, spell mana `+0x40` <= preview mana `+0x2C`. `RefreshItemComponents` then
-drives `CItemConstructor` (`BeginCreateItem(kind, -1) / SetProto / SetMaterial / SetSpell / FinishItem`, `items.md`).
+**Confirm** (`OnBuyOrRepair` 0x611220, buy.wav) [V, deep read 2026-11-06]: tab 0 (repair all, only with the item shop and no
+i.noconstr) sets durability `+0x20` = max `+0x24` on the selected hero's weapons `+0x730` and worn armor `+0x750` (not the belt, not
+the backpack); 1 commits the level-up (`CCampSkillsWin::SelectNextAvailable(1,0)`) and **returns without touching the money**; 2
+spell trade: every sold item is restored to full durability and its prototype is **added to the merchant's allowed lists** (spell
+`ShopStock` `CGSPlayer +0x1D4`: a container -> `AddSpellProto` of its spell, a blueprint -> `AddSpellProto(row +0x54)`, a rune ->
+`AddPerkProto`), then the sell basket -> spell stock and the buy basket -> party (`Party_MoveAllItems`); 4 item trade: the same with
+the item `ShopStock` `+0x11C` (usable weapon / armor / quick item -> `AddWeapon / AddArmor / AddQuickProto` by proto row `+0x18 >> 16`;
+an instruction by its `+0x50` table and `+0x54` row), plain loot (kind 0x3007 category 0, e.g. trophies) is **deleted** instead of
+going into the stock; so a sold prototype can appear in that merchant's next generated stock (`ShopStock::Generate*`, items.md; regeneration: see Build above).
+3 = `DeconstructSpell` 0x612500 when `+0x212` (container -> a "Prototype" + one "Rune" per perk) else the preview `+0x218` replaces
+the components; 5 = `DeconstructItem` 0x6129C0 when `+0x212` (item -> "Instruction Weapon/Armor/Quick Item" with `+0x54` = proto row,
+one "material.<name>" per proto Components, a "spell container" with its spell) else the preview `+0x214` replaces the components;
+6 restores the repair basket to full durability and returns it to the party; finally (all tabs but 1) party money `+0x50` -=
+`+0x20C` (negative totals = income). **Cancel** returns the baskets / components to where they came from.
 
-**The bars** [V]: `CCampBar2` 0x620380 (vt 0x74197C; one strip of 0x40-px items at y 0 or 500: scroll arrows buttons 0 / 1 with
-auto-repeat, 6 category icons 2..7 (`SetTab` 0x620960, memory per tab), row area 8 with drag scrolling; classifier by mode `+0x194`:
+**Drop rules per tab** (`CanDropItem` 0x6100E0, slot 43 (item, source kind)) [V, deep read 2026-11-06, x87 parts from the machine
+code]. Source kinds: 1 party bar, 2 spell stock bar, 3 item stock bar, 6 / 7 the spell / item component lists (taking back is always
+allowed there).
+- tab 0 (equipment): only weapons 0x3004, armor 0x3005, quick items 0x3006; a weapon / armor with round(durability `+0x20`) < 1 is
+  refused when it comes from the party bar (broken gear cannot be put on).
+- tab 1 (skills): from the party bar only spell containers, and only when the selected hero (slot 51 -> record, stats `+0x20`) can
+  cast the spell: round(`UnitStats_MagicSkill(stats, SpellProto +0x14 school)`) >= spell `+0x50` reqSkill **and** trunc(spell mana
+  `+0x40`) <= trunc(`UnitStats_MaxMana` / `UnitStats_ManaCostFactor`). Other sources: always.
+- tab 2 (spell trade): spell containers, spell blueprints (`Item_IsLootCat2Sub3`), runes (`Sub4`); tab 4 (item trade): anything but
+  kind 0x3009, spell containers, blueprints and runes; tab 6 (repair): weapons / armor with durability `+0x20` < max `+0x24`.
+
+**Constructor rules** (tabs 3 / 5, sources 1 and 2 resp. 1 and 3) [V]: `GetMagicTotals` 0x610020 (slot 45: school -> the party
+**maximum** over all heroes of round(MagicSkill(school)) = maxSkill and of trunc(MaxMana / ManaCostFactor) = maxMana).
+- Spell: a container only into an empty component list `+0x1D4` (= deconstruct); a blueprint only into an empty list, when
+  trunc(SpellProto `+0x18` mana) <= maxMana and SpellProto `+0x44` complex <= maxSkill (school of the blueprint); a rune (PerkProto
+  row `+0x54`) only when a blueprint is in, no container, fewer than 8 runes, the blueprint allows the rune type (`+0x78[PerkProto
+  +0xC]`, checked only for types 0..4 r / t / a / e / d) and, counting the new rune, blueprint complex + sum(PerkProto `+0x18`
+  complex) <= maxSkill **and** trunc(blueprint mana + sum(PerkProto `+0x10` mana)) <= maxMana. So the limits are the best hero's
+  skill and mana budget, not the selected hero's.
+- Item: a blueprint (`Sub0to2`) or a usable item only into an empty list `+0x1C0`; a material only when no usable item is in and a
+  blueprint is: the first material's name (MaterialProto `+4`) must equal the blueprint proto's material type (`+0x10`, `_stricoll`),
+  later ones must be the same material row and the number of material entries already in must be < proto Components `+0x4C`
+  (blueprint proto row `+0x54` in the weapon / armor / quick table by blueprint `+0x50` = 0 / 1 / 2); a spell container only when the
+  preview `+0x214` exists, the container holds a spell, the preview is a quick item (0x3006) or the spell has perk ic / it
+  (`CSpell::HasItemPerk`), spell reqSkill `+0x50` <= preview slots `+0x40` (an int field), spell mana `+0x40` <= preview max mana
+  `+0x2C`, and no container is in yet. `RefreshItemComponents` then drives `CItemConstructor` (`BeginCreateItem(kind, -1) / SetProto /
+  SetMaterial / SetSpell / FinishItem`, `items.md`).
+
+**The bars** [V]: `CCampBar2` 0x620380 (vt 0x74197C; `Build(top)`: a 100-px strip at y 500 (arg 0, depth 4) or y 0 (arg 1,
+depth 8): scroll arrows buttons 0 (0x1E..0x32) / 1 (0x2EE..0x302) with auto-repeat, 6 category icons 2..4 (left column x 0..30) and
+5..7 (right column x 0x302..800, three 30-px rows each) (`SetTab` 0x620960, scroll memory per tab `+0x15C..+0x170`, the bar starts
+on tab 5), row area 8 (0x32..0x2EE) with drag scrolling, 8 cell frames of 100 px from x 50 (the last one is covered by the right
+end piece); classifier by mode `+0x194`:
 0 `Item_GetCampCategory` 0x6218F0, 1 `Item_GetSpellContainerGroup` 0x6219A0 (spell school 0..2, rune 3 / 4, other 5), 2
 `Item_GetSlotGroup` 0x621A80; filter `+0x1B0` 9 = all; `switch_filters` g_0x79BE84 jumps to the category of the moved item).
-`CCampBar` 0x622000 (figures camp1..4, 8 slot buttons: 0..3 weapons, 4..7 armor; right click on a weapon slot = the slot in hand
-`+0x774`, change.wav 0x622960). `CCampQuickBar` 0x622A80 (8 quick / spell slots). `CUnitInfoWin` 0x622DB0 (stats pane with the row
-buttons; mode 1 = skills edit spends points, 0.25 s blink). `CCampSkillsWin` 0x624F10 (figures skills / perks / perks_av: 10 skill
-rows, 11 available-perk rows, learned perks; per-hero edit records 0x3C: six stat bytes + spent exp + dirty; `RefreshPerks`
-0x625880 uses `Perk_ComputeCost / UnitStats_CanLearnPerk / UnitStats_LearnPerk`, costs printed by `FormatNumberKM` 0x626090).
-`CCampTradeWin` 0x6270A0 (trade1..4, two 4x5 grids), `CCampRepairWin` 0x6279E0 (repair1..4, 16 slots), `CCampSpellConstrWin`
-0x6280C0 (constrspell1..4), `CCampItemConstrWin` 0x628CC0 (constritem1..4).
+`CCampBar` 0x622000 [V, deep read 2026-11-06] = the hero row of 8 100-px buttons (y 0..100; window rect (0,0)-(800,100), or (800,500) with the doll): buttons 0..3
+= the weapon slots `+0x730` (hit kind 2), buttons 4..7 = the **belt** (quick items `+0x740`, drawn right to left: belt slot i =
+button 7 - i, hit kind 3); in the camp (`Build(1)`) also the "camp1..4" paper-doll picture (200..600 x 100..500) and 7 more
+buttons 8..14 = the worn armor by armor type (100x100 around table 0x741EC4 / 0x741EE0: 0 helmet (250,150), 1 plate (250,300),
+2 legs (250,450), 3 shield (550,150), 4 pants (550,350), 5 boots (550,450), 6 gloves (550,250); hit kind 4..10). `Draw` 0x622420:
+marker quad 0 on the weapon in hand (`+0x774`, x = 100 slot + 50), quad 1 on the selected belt slot `+0x154` (x = 750 - 100 i),
+the 3D item figures (`UIUnitPreview::DrawItemFigure`) of the weapons, the belt and the armor at its doll position (after a depth clear (Clear flags 2, or 6 with stencil) of the seven 70-px doll boxes; whole depth cleared again after); right
+click on a weapon slot = the slot in hand `+0x774`, change.wav (0x622960). `CCampQuickBar` 0x622A80 = the 8 **spell** slots
+(`+0x760`, hit kind 1, marker `+0x154`).
+
+`CUnitInfoWin` 0x622DB0 [V, deep read 2026-11-06] = the hero stats pane (0,100)-(200,400): buttons 0 / 1 (0..0x1E / 0xAA..200 x
+0x7D..0x91), one blit surface, arrow / frame quads, texts "infounit_3 / _4 / _9 / _14 / _17", "lmp_points_left", "lmp_pers_tall",
+"magic_skills" (`+0x15C` array). `SetMode(mode)` 0x6233C0 (`+0x158` = the camp tab, or the CCampScreen2 mode) recreates the
+tooltip row buttons from index 2 (15-px rows from (20,0xA5)): mode 0 = 4 + 3 + 1 + 1 rows with gaps; mode 10 = 4 label rows
+(0x14..0x8C) + 4 "-" buttons (0x8C..0xA0) + 4 "+" buttons (0xA0..0xB4) + one row (0x14,0xD2)-(0xB4,0xE1); others 8 rows. `Redraw`
+0x623880 draws the name at (0,0x1B)-(200,0x2B) and per mode:
+- mode 10 (new multiplayer hero): Strength / Dexterity / Intelligence = trunc of the base stats (`+0xC / +0x14 / +0x1C` floats),
+  "lmp_points_left" = trunc(75 - (str + dex + int)), "lmp_pers_tall" = `+0x170` (0..100); a "-" is grey (0x828282) when the stat
+  <= 15, a "+" when the stat >= 35 or no point is left; the height "-" / "+" grey at < 1 / > 99. So the creation rule is
+  **each stat 15..35, sum 75** (display gating; `OnConfirm` checks the sum).
+- mode 0 (equipment tab): "infoitem_25", the armor of 4 body parts (`DrawBodyPartArmor`), the weapon in hand (`+0x774`, none ->
+  blank): its name, two value lines, "damage_%d" (type < 7) and "%d-%d" damage; then Encumbrance = trunc(`HeroRecord::TotalWeight`)
+  / trunc(carry capacity), with the red (0xFF) overload text when weight > capacity, and one more text line.
+- other modes: Strength, Dexterity, Intelligence, Health (`UnitStats_MaxHP`), Mana (`MaxMana`), Actions, Experience, Encumbrance
+  (CCampScreen2 mode 11 takes the weight from slot 53 `GetCarryWeight`) with the same overload warning; in tab 1 (skills edit) the edited rows blink (0.25 s, earlier read).
+
+`CCampSkillsWin` 0x624F10 [V, deep read 2026-11-06] (the skills / perks pane of tab 1; one blit surface with origin (200,100);
+titles "skills" (0,10), "perks" (0,0xCD), "perks_av" (200,10) in surface coordinates). Buttons: 0 / 1 learned-list scroll (0x168..0x17C
+x 0x140 / 0x1E0), 2 / 3 available-list scroll (0x230..0x244 x 0x7D / 0x1E0), 4 / 5 Melee / Archery rows (0xD7..0x181 from y 0x87,
+15-px rows), **6 = an empty rect (0,0,0,0): the Backstab row**, 7..9 Elemental / Sense / Astral rows, 10 Science (y 0xA5, the third
+line), 11..33 the 23 available-perk rows (0x19F..0x249 x 0x87..0x1E0), 34..43 the 10 learned-perk rows (0xD7..0x181 x 0x14A..0x1E0).
+So the camp shows Melee, Archery, Science, a blank line, Elemental, Sense, Astral: **Backstab (stats `+0x6CD`) is never shown and
+cannot be raised in the camp**. Per party hero a 0x3C-byte edit record (`+0x190` vector, `SaveStatsBytes`) keeps the stat bytes and
+spent experience for Cancel.
+`RefreshPerks` 0x625880: `UnitStats_Recompute(stats, 0)`, owner slot 47; skill rows = the names Melee, Archery, Backstab, Elemental,
+Sense, Astral (table 0x793BD4) with level = byte `stats +0x6CB + i`, then Science = byte `+0x6C8`; title = first line of
+"perk <name>" (or the name); raise cost = `Skill_RaiseCost` 0x527FF0 = trunc(50 * 1.61^((v+1)/5) - 50 * 1.61^(v/5)) (constants
+g_0x7C547C = 50, g_0x7C5480 = 5 set at start, base 1.61 at 0x73E140). Learned perks: for each of the 36 bytes `stats +0x6D3..+0x6F6`
+with level L >= 1, record (3 g + L - 1) of the perk table g_0x7AF274 (0x44 bytes, code `+4` stripped of trailing "123" -> "perk
+<code>" text); label "%s (%s%d)" with "perk_level" when L >= 2; next cost = `Perk_ComputeCost(stats, record 3 g + L)` when L < 3,
+else 0 (maxed). Available perks: every first-level record (step 3) that `UnitStats_CanLearnPerk(stats, g_0x7AF268, record)`
+accepts, cost `Perk_ComputeCost`. Free experience `+0x18C` = trunc(stats `+0x700` + experience `+4` - spent `+8`).
+`RebuildRows` 0x6261A0 draws the three lists: a cost (`FormatNumberKM` 0x626090) is beige when <= the free experience, grey
+(0x828282) when not; skills at level >= 100 show no cost; each affordable-looking row gets a "+" quad (350..390 or 550..590);
+10 learned rows from scroll `+0x158`, 23 available rows from scroll `+0x154`.
+`CCampTradeWin` 0x6270A0 (trade1..4) [V, deep read 2026-11-06]: `Draw` 0x627390 clears the depth in (200,100)-(600,500) and draws
+the buy basket as a 4-column grid of 100-px cells from (250,150) and the sell basket from (250,350) (two rows each = the 8-entry
+basket limit), a stack count "%d" when `+0x48` > 1 and, unless `+0x160`, the unit price from the owner's slot 54 `GetItemPrice`.
+`CCampRepairWin` 0x6279E0 (repair1..4, 16 slots). `CCampSpellConstrWin` 0x6280C0 (constrspell1..4): `Draw` 0x6284A0 shows a
+container to deconstruct at (250,300), the blueprint at (350,300) and the runes in 2 columns x 4 rows from (450,150) (8 cells =
+the rune limit); with a blueprint two lines "%s %d (%d)" = complexity (blueprint `+0x44` + runes `+0x18`) with the party best skill
+from `GetMagicTotals`, and mana = trunc(max(blueprint mana, blueprint mana + runes `+0x10`)) with the best mana budget (the same
+max as `CSpell +0x40`; note `CanDropItem` tests the plain sum); a pulsing marker (cos 5 t) shows the free rune cells, or the
+container / blueprint cells when empty; without a blueprint the two help lines `+0x15C`. `CCampItemConstrWin` 0x628CC0
+(constritem1..4): `Draw` 0x628F80 shows a usable item to deconstruct at (250,300), the blueprint's proto figure at (350,250), the
+spell container at (350,350) and the materials in 2 x 4 cells from (450,150); the pulsing marker marks the material cells still
+needed (count < i <= proto Components `+0x4C`), then the container cell (350,350) once the materials are complete, or the item /
+blueprint cells (250,300) / (350,250) when empty; nothing while a container is in.
 
 ## 5. Party screen, lobby, exchange (multiplayer)
 
 **CCampScreen2** 0x613EA0 (pushed by the main menu button 5, modes `Layout` 0x615D30: 9 slot list, 10 new-hero edit, 11 equip and start):
-`PartyStore::LoadAll(g_0x7C82A0, "mp\")` fills the slot list `g_0x7C82A4` of 0x74-byte `PartySlot` (CParty + name); buttons in mode 9:
-0 back, 1 start (`OnStart` 0x6183B0 -> "lmp_no_pers" box or `PartyStore::SaveAll` + push CLobbyScreen), 5 new / 6 rename / 7 delete
-("lmp_deletepers" box -> 0x10001 `DeleteSlot`) / 8 redress (pushes a CCampScreen for the slot), 9..0x12 rows; mode 10: 2..4 random
-hero (25 / 25 / 25 stats, height 0.7), 9..0x13 voice rows (lmp_male_voice / lmp_female_voice sets "%s*.mp3"), `OnConfirm` 0x6186F0
-needs str + dex + int = 75 and a name; mode 11: 1 `StartGame` 0x617A50 (strips spells the hero cannot cast, copies the voice set,
-`PartySlot::SaveToFile`), 4 = reset equipment. Slot 42 `SetEquipped`, 43 `GetSpellCost`, 47 `CommitUnit`, 51 `GetHeroRecords`, 52
-`RebuildHeroSlots`, 53 `HeroRecord::GetCarryWeight` [V].
+`Databases_Reload`; `PartyStore::LoadAll(g_0x7C82A0, "mp\")` fills the slot list `g_0x7C82A4` of 0x74-byte `PartySlot` (CParty +
+name); the face lists = the hero prototypes of the 0x60-byte table `g_0x7AF378` split by the race model mask (`+0xE8`) "unhuma"
+(`+0x1C8`) / "unhufe" (`+0x1D4`); a prototype whose record byte `+0x5C` is set also gets a voice row "<lmp_male_voice / lmp_female_voice>
+<n>" (`+0x1F8 / +0x204`); both sorted. Two 10-character `CEditWin`: slot name (0x22E,0x6E)-(0x2B7,0x7E) and hero name
+(0,0x7F)-(200,0x8F). `Layout` re-rects the first buttons per mode (tooltips 0x9CA4.. mode 9, 0x9D6C.. mode 10, 0x9E34.. mode 11) and
+recreates the row buttons from 9 (mode 9: 10 slot rows (0x6E..0x172 x 0xFA + 0x18 r)).
+Buttons [V, deep read 2026-11-06] mode 9: 0 back ("reserved_04" message bar, `LobbySession_ReleaseActiveAndReset`, pop), 1 start
+(`OnStart` 0x6183B0 -> "lmp_no_pers" box or `PartyStore::SaveAll` + push CLobbyScreen), 2 / 3 hero arrows (held: `+0x1E4` = 1 / 2,
+camp\move.wav), 5 new (slot 52 with the current face, empty name, mode 10), 6 rename (`ShowSlotDetails`: the slot name edit; Enter
+stores "<label before '|'> | <new text>" (or the label alone when the text is empty) into the party name and `PartySlot::SaveToFile`;
+Esc cancels), 7 delete ("lmp_deletepers" box -> 0x10001 `DeleteSlot`), 8 redress (pushes a CCampScreen with `+0x194` = 1, so its leave
+button only pops), 9..0x12 slot rows (save\select.wav, `SelectSlot`). Mode 10: 0 cancel (mode 9), 1 `OnConfirm` 0x6186F0 (needs str
++ dex + int = 75 and a name), 2 / 3 face arrows, 4 reset the hero (slot 52 again, the six stat floats `+0x2C..+0x40` (str / dex / int,
+base and current) = 25.0, complection `+0x72C` = 0.7, empty name), 9..0x13 voice rows (record `+0x18` = the voice prototype,
+`LoadSlotSounds` plays a sample). Mode 11: 0 back to mode 10 (skill edits discarded, the name put back into the edit), 1 `StartGame`
+0x617A50 (strips spells the hero cannot cast, copies the voice set, `PartySlot::SaveToFile`), 4 undo (skill edits discarded, first
+weapon / quick item / spell re-selected in the bars). Keys (`OnKeyDown` 0x618A10): Enter = start / confirm / StartGame per mode,
+Esc = button 0 per mode, Up / Down / PgUp / PgDn (10 rows; 11 for voices) move the slot or voice selection. `Draw` 0x6159E0 renders the preview hero `+0x1A0` with `UIUnitPreview::Render` at x = 555 (400 in mode 10); the face bars draw their faces with `UIUnitPreview::DrawFaceFigure` 0x5ED7B0 (exact compare of the race mask `+0xE8` with "unhuma" / "unhufe" -> "infa%sme%dface", else "face%s%02d"). Slot 42 `SetEquipped`,
+43 `GetSpellCost`, 47 `CommitUnit`, 51 `GetHeroRecords`, 52 `RebuildHeroSlots`, 53 `HeroRecord::GetCarryWeight` [V].
 
 **CLobbyScreen** 0x61B2C0 [V]: reads `config\addrbook.ini` (`Archive_Open`, `NetServerRecords_Serialize`) into `NetClient::SetServerList`,
 `LobbyServer_Create`; buttons 0 join (`JoinSelected` 0x61CCE0: row 0 = host with `Lobby_StartServerOrClient(name, players, allod,
@@ -216,6 +362,15 @@ password, showFull)`, a password row -> box 0x50000 -> `Lobby_BeginConnectFromAd
 (0x34-byte server records). `Update` 0x61C430 polls `NetClient::TickDiscovery` every 0.5 s and shows lmp_server_full /
 lmp_you_are_banned / lmp_wrong_password / lmp_cannot_connect on a failed connect. `CConnectProgressWin` 0x61E2F0 (a CMessageBox with a
 TcpStream and a progress quad) closes when `LobbyClient::OnServerInfoPacket` is done.
+Build details [V, deep read 2026-11-06]: the player name edit `+0x194` (letters / digits, 10 chars, disabled) shows the client
+party's first hero name cut before '|' (the slot tag of CCampScreen2), at most 10 characters, trimmed; the host's player count is
+the `CHScrollBar` `+0x190` (0x1C2,0xC4)-(0x28A,0xCE) with range 5 (= 1..6 players, `+0x198` = 6); an id field of the loaded address book [I: client id], when 0, is
+replaced by `GetTickCount() ^ ISAAC` before `NetClient::SetServerList`; 22 texts "lmp_connection_%d" and 4 "lmp_allod_name_%d".
+`LayoutLobby` 0x61D780 draws the table from `+0x188` (rows 0x18 px): row 0 = "host a game", other rows name / "%d/%d" players /
+allod (or "?" when record `+0x24` == 4) / ping right-aligned, coloured by record `+0x2C` (1 gold 0x31B3FF, 2 0x31E3EE, else beige);
+the selected row (marker quad at x 239) fills the detail panel: row 0 = the host settings (players "%s %d", the 4 allods, two
+option texts), a server = name, "%s %d / %d" players, allod, the wrapped description, the address (`NetAddress::ToStringDefault`)
+and the ping; sort arrows by `+0x258`; separators with `CDC::LineTo`.
 
 **CExchangeScreen** 0x62C250 (screen id 9): offer parties `+0x190 / +0x194 / +0x198`, money edit `+0x1A8` (its dirty flag pushes
 `+0x50` + `LobbyClient::FillParty`), buttons 0 accept (`LobbyClient::ConfirmPair` when the remote money <= ours), 1 retract, 2 leave;
@@ -433,6 +588,12 @@ Backspace clears it.
 
 ## 14. What is not known
 
+- Shop re-roll [I]: `ObjPartyRecord::MarkChildrenChanged` 0x4A88E0 sets byte `+0x38` on every object of a vector of the party
+  record after `QuestComplete`; that these objects are the `CGSPlayer` merchants (so every completed quest re-rolls the shops on the
+  next camp visit) is inferred from the offset only (live row in live-t5-scr-a.tsv).
+- New multiplayer hero limits: `CUnitInfoWin::Redraw` greys "-" at 15 and "+" at 35 / no points left; whether the click handler
+  (not read in the 2026-11-06 round) refuses the same values, or only the grey colour stops the player, is not checked.
+- The addrbook.ini dword that `CLobbyScreen::Build` replaces by `GetTickCount() ^ ISAAC` when 0 is probably the client id.
 - ~~Tooltip id mapping~~ settled [V]: `UIButton::SetTooltipById` 0x5FC730 formats the id as the text key `tip %d` (decimal),
   reads it with `CTextManager::OpenText` + `ReadUntilHash`, and stores a new `CTooltipControl` in button +0x30 (id 0 = empty
   tooltip). So 0x4E84.. = `tip 20100`.., 0x7594.. = `tip 30100`.., 0x9CA4.. = `tip 40100`.., 0xEAC4.. = `tip 60100`..,
@@ -471,6 +632,24 @@ Backspace clears it.
 | functions.tsv 0x612290 / 0x612500 / 0x612600 / 0x6129C0 | classes CCampSpellConstr / CCampItemConstr | `this` is the `CCampScreen` (+0x1C0 / +0x1D4 / +0x214 / +0x218); renamed `CCampScreen::RefreshSpellComponents / DeconstructSpell / RefreshItemComponents / DeconstructItem` |
 | batch-screens.tsv (CEscMenu::OnLButtonDown row) | "COptionsScreen (0x418, +0x3F4 = 1 in-game)" | the in-game flag is +0x3F5 (slide-in); +0x3F4 is the waiting-for-key flag and is zeroed by Build |
 | findings.md (0x645000 section) | "CRichEditSurface (Riched20, EM_FORMATRANGE)" | EM_STREAMIN here; the EM_FORMATRANGE / EM_SETTARGETDEVICE calls are `RichEditScroller::FormatRange` 0x65F020 |
+| ui-screens.md 4 (constructor rules) | a rune needs "sum(complexity +0x18) within the mana maximum"; a blueprint only when "its school fits GetMagicTotals" | complexity (blueprint +0x44 + runes +0x18) is checked against the party's best magic skill of the school, and mana (blueprint +0x18 + runes +0x10, the float sum the decompile drops) against the best mana budget; the blueprint itself must pass both (`CanDropItem` 0x6100E0, 2026-11-06) |
+| ui-screens.md 4 (item moves) | tab 1 accepts a spell container when the hero has the magic skill | it also needs trunc(spell mana) <= trunc(MaxMana / ManaCostFactor) of the selected hero (machine code 0x6101B4..0x6101DD) |
+| structs.tsv CItem +0x40 | `float slots` | an **int**: ApplyProto adds proto `+0x44` + material `+0x1C` as integers (0x6A604C) and `InitFromProto` copies the dword raw; `CanDropItem` compares it as unsigned int with the spell's reqSkill |
+| ui-screens.md 4 (leave) | `OnButton(7)` ends with `Session_LeaveGame` | it calls `Game_SendEnterWorld` 0x578B20 (renamed from Session_LeaveGame), or only pops the screen when `+0x194` (opened from CCampScreen2); it also discards uncommitted skill edits and empties the component lists |
+| ui-screens.md 4 (tabs) | "disabled tabs fall back" (implied all need the constructor) | spell trade needs only the spell shop, item trade / repair only the item shop; i.noconstr disables tabs 3 / 5 only |
+| ui-screens.md 4 (confirm) | tab 0 "repairs the hero's weapons / inventory"; sold items registered in "`CItemRegistry` +0x1D4 ... AddUnique_*"; "empty 0x3007 containers deleted" | tab 0 repairs the weapons `+0x730` and the worn armor `+0x750` only; the registries are `ShopStock` +0x1D4 (spells) / +0x11C (items), `AddSpellProto / AddPerkProto / AddWeaponProto / AddArmorProto / AddQuickProto` (the merchant's allowed prototype lists); the deleted items are plain loot (0x3007, category 0); sold items are restored to full durability; tab 1 does not change the money |
+| ui-screens.md 4 (price factors) | "deconstruct 0.2, construct 0.1" for coefficients [2] / [3] (and [6] / [7]); batch row of GetItemPrice and structs.tsv `priceCoef` "2 spell deconstruct, 3 spell construct" | `EnterMode` charges kind 2 / 6 on every component when constructing and kind 3 / 7 on the item when deconstructing: [2] / [6] = construction fee 0.2, [3] / [7] = deconstruction fee 0.1 |
+| ui-screens.md 4 (prices) | `GetItemPrice` uses round(..) | every conversion is `_ftol` (0x6E853C) = truncation toward zero (machine code 0x60FAB0..0x60FB9B) |
+| ui-screens.md 4 (EnterMode) | trade totals = kind 0 - kind 1; constructor = kind 2 per component | trade prices are multiplied by the stack count `+0x48`; constructor components taken from the merchant's stock also cost their buy price (kind 0 / 4); constructor counts are not multiplied |
+| ui-screens.md 4 (camp Build) | "a merchant without stock gets `FillConstructorStock` 0x612CF0" | nothing calls it (slot 39 of vt 0x74091C, no `vt+0x9C` call anywhere): an unused developer "everything" stock; real stocks come from `GenerateSpellShop / GenerateItemShop` on the first visit |
+| ui-screens.md 5 (CCampScreen2) | mode 10 "2..4 random hero"; mode 11 "4 = reset equipment" (batch row: "then StartGame") | mode 10: 2 / 3 are the face arrows, 4 rebuilds the hero from the current face with str / dex / int 25 (not random); mode 11: 4 discards the skill edits and re-selects the first weapon / quick item / spell, no StartGame |
+| structs.tsv UnitStats +0xC..+0x20 | `int` strengthBase .. intelligence | **floats**: `UnitStats_ManaCostFactor` 0x523CD0 does `fdiv dword [ecx+0x20]`, CCampScreen2 writes 25.0f (0x41C80000) into all six |
+| functions.tsv 0x6FDAE9 | `CString::Mid_first` "substring from an index to the end" | MFC `CString::Left(n)`: AllocCopy(dest, n, 0, 0), whole string when n >= length |
+| ui-screens.md 4 (bars) / functions.tsv 0x622000 / 0x622860 / 0x622A30 / 0x622BC0 | `CCampBar` "8 slot buttons: 0..3 weapons, 4..7 armor"; `CCampQuickBar` "8 quick / spell slots"; `SelectArmorSlotOf` = index in "the armor array +0x740"; `CCampBar2` "0x40-px items" | `CCampBar` buttons 4..7 are the **belt** (quick items `+0x740`, button 7 - i); the armor is on 7 extra paper-doll buttons 8..14 (camp only) by armor type; `CCampQuickBar` holds the 8 **spell** containers `+0x760`; 0x622A30 selects a belt slot, 0x622BC0 a spell slot; `CCampBar2` cells are 100 px |
+| ui-screens.md 4 (CCampSkillsWin) | "10 skill rows, 11 available-perk rows, learned perks" | 6 skill rows (Backstab's button has an empty rect and its line is replaced by Science), 23 available-perk rows, 10 learned-perk rows (`Build` 0x624F10, `RebuildRows` 0x6261A0) |
+| functions.tsv 0x527FF0 | `Rand_Float` "returns an int from two random calls" | `Skill_RaiseCost` (fastcall ecx = from level, edx = to level) = trunc(50 * 1.61^(to/5) - 50 * 1.61^(from/5)); 0x6E81A0 is `_CIpow`, not random |
+| ui-screens.md 4 (panes) | `CCampTradeWin` "two 4x5 grids" | two 4-column grids of two rows (8 cells each, the basket limit of `Party_TransferItem`) at (250,150) and (250,350) (`Draw` 0x627390) |
+| ui-screens.md 4 / 5 (cross-notes from the ui-fw round, checked in the decompile) | nothing said how the hero preview and the item icons are drawn | `CCampScreen::Draw` 0x60F050 calls `EnterMode` every frame and `UIUnitPreview::Render(hero, +0x258, 400, 1)` in tab 0; `CCampScreen2::Draw` 0x6159E0 renders at x 555 / 400; `UIUnitPreview::DrawItemFigure` 0x5ECA10 tints an icon dark red (0x82804040) when the screen's slot 43 (`CanDropItem`) refuses it; `DrawFaceFigure` 0x5ED7B0 compares the race mask exactly with unhuma / unhufe |
 | items.md (camp calls) | "CCampItemConstr::Deconstruct / TryConstruct" | same functions, now `CCampScreen::DeconstructItem` 0x6129C0 / `RefreshItemComponents` 0x612600 (behaviour as described there) |
 
 ## 16. Function index (one line each; the batch rows carry the detail)
@@ -497,11 +676,11 @@ Backspace clears it.
 | 0x611220 / 0x611760 / 0x611930 | CCampScreen::OnBuyOrRepair / OnCancel / EnterMode | confirm, cancel, totals |
 | 0x612290 / 0x612500 | CCampScreen::RefreshSpellComponents / DeconstructSpell | spell constructor |
 | 0x612600 / 0x6129C0 | CCampScreen::RefreshItemComponents / DeconstructItem | item constructor |
-| 0x612CF0 | CCampScreen::FillConstructorStock | cheat / default constructor stock |
+| 0x612CF0 | CCampScreen::FillConstructorStock | unused developer stock (no caller) |
 | 0x613EA0..0x619150 | CCampScreen2 | multiplayer party / hero creation |
 | 0x61B2C0..0x61D780 | CLobbyScreen | server list, addrbook.ini, host / join |
 | 0x620380..0x621F30 | CCampBar2 | item strip with category tabs |
-| 0x622000..0x622D40 | CCampBar / CCampQuickBar | hero slots |
+| 0x622000..0x622D40 | CCampBar / CCampQuickBar | weapons + belt row and armor doll / the 8 spell slots |
 | 0x622DB0..0x624CB0 | CUnitInfoWin | hero stats pane |
 | 0x624F10..0x626FA0 | CCampSkillsWin | skills / perks editor |
 | 0x6270A0..0x6298B0 | CCampTradeWin / RepairWin / SpellConstrWin / ItemConstrWin | tab panes |

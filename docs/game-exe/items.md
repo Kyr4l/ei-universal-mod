@@ -15,7 +15,7 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
 
 1. **An item is a small CObject** (`CItem`, 0x4c bytes + per-kind fields): `+0x10` kind (0x3004 weapon, 0x3005 armor, 0x3006
    quick item, 0x3007 loot / material / blueprint, 0x3008 spell container, 0x3009 quest item), `+0x18` id = `protoRow << 16 |
-   materialId`, nine floats `+0x20..+0x40` (durability cur/max, mana cur/max, mana regen 0.001, weight, price, size, slots),
+   materialId`, eight floats `+0x20..+0x3C` (durability cur/max, mana cur/max, mana regen 0.001, weight, price, size) and the int slots `+0x40`,
    `+0x44` the embedded `CSpell`, `+0x48` the stack count / charges. Every stat is computed once, when the item is built, from
    an items.idb prototype row and a material row (section 3); afterwards only durability, mana and count change.
 2. **items.idb** (`ItemsDb` 0xc0 at `g_0x7C86D8`, `ItemsDb::Load` 0x6A67A0) is six STL vectors of fixed-size records with name
@@ -504,6 +504,8 @@ A missing section leaves name and description untouched (no fallback text); the 
     names, numbered by proto `+0x18` (section 4); renamed `WeaponProto_GetFigurePartNames` / `WeaponId_ListFigurePartNames`.
 15. This page section 7 `GenerateSpells`: the mandatory runes ignore the school limit and a spell whose mandatory runes exceed it is
     not generated at all (earlier: "while the summed complexity stays under the limit").
+16. This page section 1: `CItem +0x40` (slots) is an **int**, not a float: `ApplyProto` 0x6A604C adds proto `+0x44` and material
+    `+0x1C` as integers and `InitFromProto` copies the dword (scr-a round, machine-checked 2026-11-06).
 
 ## 10. Function index
 
