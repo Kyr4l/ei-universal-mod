@@ -208,8 +208,8 @@ purposes in functions.tsv but no page reads the range as a whole.
 | 0x42D000-0x42E000 | CClientSpecificManager; ChunkFile (tag+length chunk reader-writer over CFile), vector<byte>, polygon clipping | core | net-transport.md (ChunkFile); rest named only |
 | 0x42E000-0x433000 | GameBuffer; Vertex32_Lerp, OBB tests, Mat3_Solve, LZ compressor, BigNum_ModExp + RIPEMD-128 key hash, NetPeer::ctor | leaf | net-transport.md (LZ, NetPeer); rest named only |
 | 0x433000-0x444000 | net transport: NetConnection / NetServer / NetClient | net | net-transport.md |
-| 0x444000-0x446000 | debug text (Courier New) + misc | client | named only |
-| 0x446000-0x447000 | CFakeUnit | units | named only |
+| 0x444000-0x446000 | debug text (Courier New), std::map<string, string>, CStringFinder, NetServerRecord vector helpers | client | read (t7 2026-11-06), findings.md |
+| 0x446000-0x447000 | CFakeUnit (+ shared CUnit slot getters) | units | read (t7 2026-11-06), combat.md |
 | 0x447000-0x453000 | 3ds model import / figure export (editor leftover): Scene3ds_*, WeldVertices, AnimNode_Write .ani / .ast / .bon | figures | named only (editor leftover) |
 | 0x453000-0x455000 | CFigure base in-place constructors, CFakeFigure dtor, hash / CList / aligned vector helpers | figures | renderer.md 3.3 |
 | 0x455000-0x456000 | CObject helpers (GetWorld, SetManager), PlayerRelations, disk / capture | core | unit-ai.md 5.1 (PlayerRelations) |

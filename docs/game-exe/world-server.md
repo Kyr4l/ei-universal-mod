@@ -521,9 +521,9 @@ walks the object hash `+0x12d70`, keeps the ids of the units (`vt[12]` type 0x50
 (`CAIMap::HasPassableNeighbour`) in a local array, and then for each id: a unit found by `FindUnitById` with an id above
 100,000,000 (the player characters, ids ~1e9) is taken out of the collision map, moved to `CAIMap::FindNearestReachableCell`, put
 back (`AddObjectAndStamp`) and reset (`CUnitServer::ResetOrdersAndStance`); any other id (a `.mob` unit) goes to
-`CWorldServer::RemoveObject` - a map unit saved on a closed-in cell is deleted on load. It then calls `ReleaseAllObjects` on the four managers;
+`CWorldServer::RemoveObject` - a map unit saved on a closed-in cell is deleted on load. It then calls `ReleaseUnreferenced` (0x4048F0: Release on every object whose refcount is 0) on the four managers [V];
 `Session_EnterZoneFromParty` runs the catch-up afterwards. `WriteSave` starts with `BroadcastGameTime` in zone kinds 1 / 3 and
-`ReleaseAllObjects` on the managers. The limb-HP refill `ResetUnitEffects` 0x5956E0 runs only in
+`ReleaseUnreferenced` on the managers. The limb-HP refill `ResetUnitEffects` 0x5956E0 runs only in
 `Session_SaveZoneToCurrent` (zone change), not in `WriteSave` itself nor in `Session_SaveToSlot` (2.5). The zone kind **is** saved
 (chunk 4) and restored into `+0x12d64`; `Game_EnterZone` writes the same value again through `g_0x7C2CC4` after the load.
 
@@ -753,6 +753,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | structs.tsv UnitProto +0x108 / +0x114 | bloodKind / hitEffectFlag | the end-of-storage words of the spells (`+0x100`) and wears (`+0x10c`) vectors; blood / cast type are `UdbRaceModel +0x108 / +0x114` |
 | world-client-players.md day light | a third section "(sky / fog)" | the section is named "sky"; keys `hourNN` must be ascending, each interpolated from the previous key, hours after the last key keep old values |
 | world-client-players.md Update | "print colours re-lit from the lights" | only the blood prints are relit (grey of the max luminance: the sun at the camera ground point, then every non-sun light whose radius covers the print) |
+| functions.tsv 0x4048F0 | `CBaseManager::ReleaseAllObjects` "release every object" | `ReleaseUnreferenced`: only the objects whose refcount +4 is 0 get refcount 1 + vt[4] Release (4.8; t7 2026-11-06) |
 
 ## 8. Function index (addresses)
 

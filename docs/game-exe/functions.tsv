@@ -1,87 +1,87 @@
 addr	size	name	status	purpose
 0x00401000	367	NetPlayerInfo::Write	named	serialize into GameBuffer: dwords +0x1c,+0x20, two CStrings (+0,+0xc), bytes +0x18,+0x19,+0x1b,+0x1a
 0x00401170	414	NetPlayerInfo::Read	named	GameBuffer counterpart of 0x401000, reads the same fields in the same order
-0x00401310	46	GameBuffer::ReadInline	named	copy N bytes from the cursor (+8) without bounds check, advance cursor
-0x00401340	97	GameBuffer::ReadBytes	named	bounds-checked read of N bytes; slow path via GameBuffer::Read or vt[3] refill
-0x004013B0	32	StaticInit_Guarded_4013B0	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x004013E0	31	StaticInit_Consts3_4013E0	named	static initializer: sets 3 globals (0, 0, 0)
-0x00401420	32	StaticInit_Guarded_401420	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x00401440	31	StaticInit_Consts3_401440	named	static initializer: sets 3 globals (0, 0, 0)
-0x00401460	41	Quat_StaticInit_Identity	named	sets global quaternion g_0x79B1C0 to (1,0,0,0)
+0x00401310	46	GameBuffer::ReadInline	named	(dst, n): copies n bytes from the cursor +8 (dwords then tail bytes), +8 += n; no bounds check
+0x00401340	97	GameBuffer::ReadBytes	named	(dst, n): if cursor +8 + n > +0x10 -> GameBuffer::Read(dst, n); else if it fits under +0xc copies inline and advances +8; else vt[3](dst, n) refill path
+0x004013B0	32	StaticInit_Guarded_4013B0	named	sets bit 0 of 0x7CAEE4 if clear, then always atexit(0x4013D0); 0x4013D0 is an empty ret (iostream-style init guard)
+0x004013E0	31	StaticInit_Consts3_4013E0	named	static init: zeroes the float[3] at 0x79B1A8..0x79B1B0
+0x00401420	32	StaticInit_Guarded_401420	named	same as 0x4013B0: guard bit 0 of 0x7CAEE4, atexit(empty 0x4013D0)
+0x00401440	31	StaticInit_Consts3_401440	named	static init: zeroes the float[3] at 0x79B1D0..0x79B1D8
+0x00401460	41	Quat_StaticInit_Identity	named	static init: global quaternion 0x79B1C0 = (1,0,0,0) (w first)
 0x00401490	115	CObject3D::CopyTransform	named	CObject3D slot 13: copies +0x1c..+0x50 (local pos 3f @0x1c, world pos 3f @0x28, local rot quat 4f @0x34, world rot quat 4f @0x44) from the other object
 0x00401510	39	CObject3D::WriteTransform	named	CObject3D slot 16: stream->vt[14](ptr,size) writes local pos (+0x1c, 12 bytes) and local rot (+0x34, 16 bytes)
 0x00401540	39	CObject3D::ReadTransform	named	CObject3D slot 17: stream->vt[13](ptr,size) reads local pos (+0x1c, 12) and local rot (+0x34, 16)
-0x00401570	258	CObject3D::BuildRotationMatrix	named	4x4 matrix (16 floats) from the quaternion at +0x44..0x50, identity elsewhere
+0x00401570	258	CObject3D::BuildWorldMatrix	named	(float[16] out): identity, then rotation part from worldRot +0x44 (w,x,y,z) in the D3D row-vector layout, translation row out[12..14] = worldPos +0x28; CORRECTION: was 'rotation matrix only' (it also writes the translation)
 0x00401680	535	CObject3D::LookAtPlanar	named	rotation delta between local axis and target vector (xy), via Quat_FromAngleAxis, applied with Quat_MulAssign
-0x004018A0	148	Quat_PreMulAssign	named	this = q * this (the doc comment 'this*param' is the other order)
+0x004018A0	148	Quat_PreMulAssign	named	(this quat, q): this = q * this (Hamilton, w first); checked term z = q1*a2 - q2*a1 + ..
 0x00401940	527	CObject3D::RotateTowardDirection_B	named	rotation of the object's quaternion (+0x34) that turns the other local axis onto a target direction (sibling of 0x401680)
-0x00401B50	643	CObject3D::AlignToDirection	named	computes rotation that turns the local axis onto a target vector (cross products, normalise, acos), applies it to quat +0x34
+0x00401B50	643	CObject3D::AlignToDirection	named	(dir float[3]): from localRot +0x34 builds the object's -Y axis (column 1) and Z axis (column 2), projects dir onto the plane normal to Z (Z x dir x Z, normalised), axis = (-Y) x proj; if |axis| >= 1e-5 angle = acos(clamp(dot(-Y, proj))) else axis (1,0,0) angle 0; RotateAxisAngle(axis, angle): turns the object about its own Z so -Y faces dir
 0x00401DE0	25	InitFields3_401DE0	named	initializes 3 field(s) from constants/arguments (param_1, param_2, param_3)
-0x00401E00	21	Vec3_Dot	named	dot product of two float[3] vectors
-0x00401E20	33	Vec3_Length	named	Euclidean length of a float[3] vector
-0x00401E50	176	CObject3D::RotateAxisAngle	named	post-multiply quaternion +0x34..0x40 by Quat_FromAngleAxis(axis, angle)
-0x00401F00	766	CObject3D::AlignToDirectionInv	named	AlignToDirection variant using the inverse-rotated axes, optional flag param_2; 3 callers
-0x00402200	25	Vec3_Negate	named	out = -in for float[3]
-0x00402220	97	CObject3D::SetYawFromDir	named	quaternion = rotation about Z by atan2(dir.y,dir.x)+g_0x79B1B8
-0x00402290	32	StaticInit_Guarded_402290	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x004022B0	19	SetGlobal_0079B1B8_4022B0	named	stores 0x3fc90fdb into the global 0x0079B1B8
-0x004022D0	59	ClampUnit	named	clamp float to [-1,1] (before acos/asin)
-0x00402310	452	ScratchBuf32_Reserve	named	grow global 32-byte-aligned scratch buffer g_0x79B210 (growth 1/8 clamped 4..0x400), static-init guard
-0x00402500	599	ScratchBufU16_Reserve	named	grow global ushort scratch array g_0x79B1F8 (same growth policy)
-0x00402780	887	ScratchBufU32_Reserve	named	grow global uint scratch array g_0x79B1E0 (same growth policy)
+0x00401E00	21	Vec3_Dot	named	fastcall: x0*x1 + y0*y1 + z0*z1 (x87 result)
+0x00401E20	33	Vec3_Length	named	fastcall: sqrt(x*x + y*y + z*z)
+0x00401E50	176	CObject3D::RotateAxisAngle	named	(axis, angle): q = Quat_FromAngleAxis(angle, axis); localRot +0x34 = q * localRot (q on the left); CORRECTION: was 'post-multiply'
+0x00401F00	766	CObject3D::AlignToDirectionSmooth	named	(dir, slow): same axes and projection as AlignToDirection (own -Y toward dir about own Z); angle > pi branch (2pi - angle, axis negated) cannot trigger after acos; slow != 0 scales the angle by 0.4 (gradual turn); then RotateAxisAngle; CORRECTION: was 'inverse-rotated axes'
+0x00402200	25	Vec3_Negate	named	fastcall (out, in): out = -in, float[3]
+0x00402220	97	CObject3D::SetYawFromDir	named	(dir): localRot +0x34 = Quat_FromAxisAngle((0,0,1), atan2(dir.y, dir.x) + g_0x79B1B8 (pi/2))
+0x00402290	32	StaticInit_Guarded_402290	named	same as 0x4013B0: guard bit 0 of 0x7CAEE4, atexit(empty 0x4013D0)
+0x004022B0	19	StaticInit_HalfPi_4022B0	named	static init: g_0x79B1B8 = 0x3FC90FDB (pi/2 float), the yaw offset used by SetYawFromDir
+0x004022D0	59	ClampUnit	named	(float): returns 1 if > 1, -1 if < -1, else the value (x87)
+0x00402310	452	RadixSortU8	named	fastcall (byte *data, n): in-place counting sort of n bytes: grows the 32-byte-aligned scratch g_0x79B210 (cap +0x79B218, growth = last n/8 clamped 4..0x400; once-guard 0x79B220 + atexit 0x4024E0), counts 256 buckets, scatters into the scratch, copies back; no caller or pointer; CORRECTION: was 'ScratchBuf32_Reserve' (the grow is only its first step) [dead: no caller or pointer]
+0x00402500	599	RadixSortU16	named	fastcall (ushort *data, n): 2-pass LSD radix sort (low byte into scratch g_0x79B1F8, high byte back into data); scratch grown like 0x402310 (AlignedAlloc32_406B30, guard 0x79B208, atexit 0x402760); no caller or pointer; CORRECTION: was 'ScratchBufU16_Reserve' [dead: no caller or pointer]
+0x00402780	887	RadixSortU32	named	fastcall (uint *data, n): 4-pass LSD radix sort (bytes 0..3, ping-pong data <-> scratch g_0x79B1E0, result back in data); scratch grown like 0x402310 (AlignedAlloc32_406B50, guard 0x79B1F0, atexit 0x402B00); no caller or pointer; CORRECTION: was 'ScratchBufU32_Reserve' [dead: no caller or pointer]
 0x00402B20	416	CBaseManager::CBaseManager	named	CBaseManager constructor body (the managers' ctors call it before storing their vtable)
 0x00402CC0	1	CObject::v5_Nop	named	root slot 5: empty default
 0x00402CD0	3	CObject::v6_Ret0	named	root slot 6: default returns 0
 0x00402CE0	6	CObject::GetName_noname	named	"root slot 7: default name ""noname"""
 0x00402CF0	6	CObject::GetDesc_nodesc	named	"root slot 8: default description ""nodesc"""
-0x00402D00	3	CObject::Read_Nop	named	root slot 9: Read(stream) default: nothing (stream vt[1](ptr,size) = read, stream+8 = version; see CTree slot 9)
-0x00402D10	3	CObject::Write_Nop	named	root slot 10: Write(stream) default: nothing (stream vt[2](ptr,size) = write)
-0x00402D20	30	CObject::DeletingDtor_402D20	named	scalar deleting destructor: runs FUN_00455930 then operator delete when flag&1
+0x00402D00	3	CObject::Read_Nop	named	ret 4: CObject vtable 0x73B8E0 slot 9 (Read(stream)) default does nothing; shared by ~100 vtables
+0x00402D10	3	CObject::Write_Nop	named	ret 4: CObject slot 10 (Write(stream)) default does nothing; shared by ~100 vtables
+0x00402D20	30	CObject::DeletingDtor	named	CObject vtable 0x73B8E0 slot 0: CObject::dtor_base 0x455930, operator delete when flag & 1, returns this
 0x00402D40	25	CObject::CopyBase	named	root slot 1: copies this+8 flags, this+0x10 typeId, this+0x18 from the other object (the base part of a clone/assign)
-0x00402D60	5	CBaseManager::v16_Ret0	named	CBaseManager slot 16 default: 0
-0x00402D70	5	CBaseManager::v17_Ret0	named	CBaseManager slot 17 default: 0
-0x00402D80	3	CBaseManager::v18_Ret0	named	CBaseManager slot 18 default: 0
-0x00402D90	5	CBaseManager::v19_Ret0	named	CBaseManager slot 19 default: 0
-0x00402DA0	5	CBaseManager::v20_Ret0	named	CBaseManager slot 20 default: 0 (byte)
-0x00402DB0	5	CBaseManager::v21_Ret0	named	CBaseManager slot 21 default: 0
-0x00402DC0	1	CBaseManager::v22_Nop	named	CBaseManager slot 22 default: empty
-0x00402DD0	30	CBaseManager::~CBaseManager	named	"CBaseManager (vtable 0x73B870, 25 slots; the name is in the string ""CBaseManager::RegisterInstant"") slot 0: deleting dtor (body 0x402DF0)"
-0x00402DF0	539	CBaseManager::DestroyBody	named	vtable 0x73B870; frees the two hash tables (+0x6c,+0x84) and ref lists, calls Done; used by derived dtors
-0x00403010	1	Nop_403010	named	empty function (returns immediately)
-0x00403020	390	CBaseManager::Init	named	slot 2: resets the containers: +0x98 id min = 0, +0x9c id max = 2000000000, id map +0x1c (0x4067B0 clear, 0x406640 reserve 0x400), +0x30 max id = 0, hash +0x50 (0x400 buckets; nodes freed by 0x407580), hash +0x68 (0x100; nodes 0x407DA0), hash +0x80 (0x100; nodes 0x404D70(n,0xc)), +0xa0 = 0, +0xa4 = 300; returns 1
-0x004031B0	41	CBaseManager::SetWorld	named	slot 13 (world): +0xac = world; calls own vt[2]() (Init); on failure +0xac = 0, returns 0; else 1
-0x004031E0	761	CBaseManager::Done	named	slot 3: for every object in the id map +0x1c: refcount++ then vt[3]() (Done), collects them in a list and vt[4]() (Release) each; frees the list +0x38 (count +0x40, free list +0x44, pool +0x48 via 0x6FE90F), destroys every object (vt[0]()), clears the containers (0x4067B0, 0x406E80, 0x404410, 0x407050, 0x407220)
-0x004034E0	568	CBaseManager::DoneObjects	named	slot 15: for every object in the id map: refcount++, vt[3]() Done, vt[4]() Release; +0x30 = 0; clears the id map (0x4067B0), the list +0x38.. and the hash +0x50 (0x406E80)
-0x00403720	13	SetField_AC_403720	named	stores the argument into this+0xac (undefined4)
-0x00403730	636	CBaseManager::RegisterInstant	named	"slot 23 (type, id): if the type's pool (+0x80 count map, +0x68 pool map) has a free object (0x404FE0) reuse it else vt[14](type) creates one; obj+8 = 0, obj+0x10 = type; id == -1: random id in [+0x98, +0x9c) not yet in the id map (100000 tries; else ""CBaseManager::RegisterInstant: Can't f..."" log 0x480080), or +0x30 + 1 when in range; adds obj to the id map +0x1c (0x404F80 / 0x404E80), to the list +0x38 (0x405040) and the id->node hash +0x50; obj+0xc = id; +0xa8 = last id; +0x30 = max id; 0x455970(obj, this) sets obj+0x14 = manager; obj->vt[2]() Init; returns obj"
-0x004039B0	289	CBaseManager::RemoveById	named	unregister object id: erase from id map (+0x1c) and from node map (+0x50), unlink its list node (+0x38 head, +0x3c tail, +0x40 count) and recycle it
-0x00403AE0	225	CBaseManager::DestroyObject	named	slot 24 (obj) (called by CObject::Release at refcount 0): if obj refcount (+4) == 0: removes the id (obj+0xc) from the hash +0x50 (0x405BB0 / 0x405720) and the node from the list +0x38 (free list +0x44, count +0x40; whole pool freed at 0); obj->vt[3]() Done; 0x455970(obj, 0); 0x404040(this, obj) returns it to the type pool (or deletes)
-0x00403BD0	349	CBaseManager::RegisterWithNewId	named	pick a free id in [+0x98,+0x9c) (sequential from +0x30, else up to 100000 random tries; error string CBaseManager::RegisterInstant), add to id map, append to object list, track max id +0x64
-0x00403F40	68	CBaseManager::FindById	named	(manager, id): the object with that id in the manager's id map (CWorldClient::FindObjectById)
-0x00403F90	173	CBaseManager::FindByField10	named	linear walk over the id map (+0x1c) returning the object whose +0x10 equals the argument, 0 if none
-0x00404040	529	CBaseManager::PoolObject	named	(obj): returns the object to the per-type pool +0x68 / +0x80 or deletes it (DestroyObject)
+0x00402D60	5	CBaseManager::v16_Ret0	named	xor eax / ret 4: slot 16 default returns 0 (one arg); also in 8 derived manager vtables
+0x00402D70	5	CBaseManager::v17_Ret0	named	xor eax / ret 4: slot 17 default returns 0 (one arg)
+0x00402D80	3	CBaseManager::v18_Ret0	named	xor eax / ret: slot 18 default returns 0 (no arg)
+0x00402D90	5	CBaseManager::v19_Ret0	named	xor eax / ret 8: slot 19 default returns 0 (two args)
+0x00402DA0	5	CBaseManager::v20_Ret0	named	xor al / ret 4: slot 20 default returns false (byte, one arg)
+0x00402DB0	5	CBaseManager::v21_Ret0	named	xor eax / ret 4: slot 21 default returns 0 (one arg)
+0x00402DC0	1	CBaseManager::v22_Nop	named	ret: slot 22 default does nothing (no arg)
+0x00402DD0	30	CBaseManager::DeletingDtor	named	vtable 0x73B870 slot 0: DestroyBody 0x402DF0, operator delete when flag & 1, returns this
+0x00402DF0	539	CBaseManager::DestroyBody	named	resets vt 0x73B870, calls Done (0x4031E0), frees the nodes and bucket vectors of poolCountByKind +0x80, poolsByKind +0x68, nodeMap +0x50, empties the object list +0x34 (vt reset to 0x73B8D4, head/tail/free/count 0, CPlex chain +0x48 via List_FreeChain), frees idMap +0x1c, then CObject::dtor_base; shared body of 10 manager dtors
+0x00403010	1	Nop_403010	named	empty function; called as the per-element destructor of two array destroy loops (SSCCmdBindingsCArray_dtor2, PartySlots74_Destroy)
+0x00403020	390	CBaseManager::Init	named	slot 2: idMin +0x98 = 0, idMax +0x9c = 2000000000; idMap +0x1c cleared and resized to 0x400 buckets; nodeMap +0x50 nodes freed, 0x400 buckets; poolsByKind +0x68 nodes freed (PoolFree_N12_407DA0, the pooled lists themselves are not touched), 0x100 buckets; poolCountByKind +0x80 nodes freed, 0x100 buckets; every maxId = 0; +0xa0 = 0, +0xa4 = 300; returns 1
+0x004031B0	41	CBaseManager::SetWorld	named	slot 13 (world): +0xac = world; calls own vt[2] (Init); Init == 0 -> +0xac = 0, returns 0; else 1
+0x004031E0	761	CBaseManager::Done	named	slot 3: walks idMap +0x1c three times: (1) refcount +4 += 1 on every object, (2) records each id +0xc in a temp std::list and calls obj vt[3] (Done), (3) for each recorded id still in idMap calls vt[4] (Release); frees the temp list, empties the object list +0x38 (CPlex chain +0x48), (4) deletes every object left in idMap (vt[0](1)); clears idMap (+0x30 = 0), nodeMap +0x50 (+0x64 = 0), FreeTypeGroups 0x404410, poolsByKind +0x68 (+0x7c = 0), poolCountByKind +0x80 (+0x94 = 0); world +0xac = 0
+0x004034E0	568	CBaseManager::DoneObjects	named	slot 15: three passes over idMap +0x1c: refcount +4 += 1 on every object, then vt[3] (Done) on each, then vt[4] (Release) on each; idMap maxId +0x30 = 0 and its entries freed; object list +0x38 emptied (CPlex chain freed); nodeMap +0x50 cleared (+0x64 = 0); pools and world kept
+0x00403720	13	CBaseManager::SetWorldNoInit	named	(world): +0xac = world without the Init call of SetWorld; one caller CWorldServer::Init (on the manager at server +0x44)
+0x00403730	636	CBaseManager::RegisterInstant	named	slot 23 (kind, id): poolCountByKind +0x80[kind] > 0 and a pooled list in poolsByKind +0x68 -> PopPooled reuses an object, else vt[14](kind) creates one (0 -> returns 0); obj flags +8 = 0, kind +0x10 = kind; id != -1: appends a list entry +0x38 and a nodeMap +0x50 entry when the id is new, idMap maxId +0x30 raised, idMap[id] = obj; id == -1: maxId + 1 when maxId lies in [idMin +0x98, idMax +0x9c), else up to 100000 rand()*0x8000+rand() tries for an unused id, then FatalError 'CBaseManager::RegisterInstant: Can't f..'; inserts like above; obj id +0xc = id, lastRegisteredId +0xa8 = id; CObject::SetManager(obj, this); obj vt[2] (Init); returns obj
+0x004039B0	289	CBaseManager::RemoveById	named	(id): looks the id up in idMap +0x1c (absent -> 0), erases it, erases the nodeMap +0x50 entry and unlinks its object-list entry (to the free chain +0x44; count +0x40 -> 0 frees the CPlex chain); returns the object; does not Done / pool it; one caller CTextureManager::DestroyObject
+0x00403AE0	225	CBaseManager::DestroyObject	named	slot 24 (obj): only when obj != 0 and refcount +4 == 0: erases nodeMap +0x50[obj id +0xc] and unlinks its object-list entry (count 0 -> CPlex chain freed), obj vt[3] (Done), CObject::SetManager(obj, 0), PoolObject (0x404040) puts it into the kind pool
+0x00403BD0	349	CBaseManager::RegisterWithNewId	named	(obj): id = idMap maxId +0x30 + 1 when in [idMin, idMax), else up to 100000 random tries for an unused id (FatalError 'CBaseManager::RegisterInstant..' on failure); new id -> list entry appended +0x38 and nodeMap +0x50 entry (+0x64 max); idMap maxId raised, idMap[id] = obj; obj +0xc = id, lastRegisteredId +0xa8 = id, SetManager(obj, this); no vt[2] Init; returns the id; callers CTextureManager::TakeFromReleaseCache / FindByName
+0x00403F40	68	CBaseManager::FindById	named	(id): bucket = id % bucketCount of idMap +0x1c, walks the chain {next, id, obj}; returns obj or 0 (105 call sites)
+0x00403F90	173	CBaseManager::FindFirstByKind	named	(kind): walks idMap +0x1c in bucket order, returns the first object whose kind +0x10 == kind, 0 if none; no caller or pointer; CORRECTION: was 'FindByField10' (+0x10 is CObject::kind) [dead: no caller or pointer]
+0x00404040	529	CBaseManager::PoolObject	named	(obj): if idMap +0x1c[obj id +0xc] is obj, removes it from idMap, nodeMap +0x50 and the object list (CList12_RemoveNode); then appends obj to the kind's CList in poolsByKind +0x68 (creates the list when missing: operator new 0x1c, vt 0x73B8D4, block 10; +0x7c max kind), obj id +0xc = -1, poolCountByKind +0x80[kind] += 1 (+0x94 max kind); returns 0; never deletes; CORRECTION: was 'or deletes it'
 0x00404410	490	CBaseManager::FreeTypeGroups	named	iterates the std::map at +0x68, for each group deletes all objects of its list (vt[0](1)), clears it and frees; then empties hash table +0x6c
-0x004046E0	125	CBaseManager::Read	named	slot 9 Read(stream): 0x404410(this); reads a count then per object: 4 bytes type, 4 bytes id, 4 bytes x -> obj = vt[23](type, id) (RegisterInstant); obj+0x18 = the first dword read (decompile garbled: count in esi)
-0x00404760	119	CBaseManager::Write	named	slot 10 Write(stream): writes +0x40 (object count) then per list node (+0x38 list: node {next, prev, obj}): obj+0xc (id), 4 bytes, obj+0x18
-0x004047E0	128	CBaseManager::ReadObjects	named	stream loop: read id (4 bytes), end marker 0xFFFFFADF followed by a flag byte; look up object in hash +0x20 and call its vt[9](stream)
-0x00404860	130	CBaseManager::WriteObjects	named	for every object in list +0x38 write id (+0xc; extra byte if id==-0x521) and call vt[10](stream); terminator 0xFFFFFADF + byte
-0x004048F0	40	CBaseManager::ReleaseAllObjects	named	for every object in list +0x38 with +4 (refcount) == 0: set +4=1 and call vt[4] (release/destroy)
-0x00404920	50	ManagerIter::Begin	named	iterator over a manager's object list: holds manager (+4 refcount incremented), stores next node, returns first object (61 callers)
-0x00404960	19	ManagerIter::Next	named	returns object of the stored node and advances to its successor, 0 at end (58 callers)
-0x00404980	71	HashIter_Advance	named	STLport hashtable iterator ++: next in chain else first node of next non-empty bucket
-0x004049D0	11	CopyField_0_4049D0	named	copies this+0 to *param_1
-0x004049E0	67	List16_Clear	named	std::list clear: return all nodes to the 0x10-byte pool g_0x79B228, reset sentinel
-0x00404A40	41	List16_InsertBefore	named	allocate list node (List16_NewNode), link before param_2, return iterator in param_1
-0x00404A70	426	List16_NodeAllocInline	named	pool allocation of a 0x10-byte node with the chunk-refill logic inlined (stlport_node_alloc_chunk_alloc 0x10), then constructs node
-0x00404C30	83	HashTable_Begin	named	first non-empty bucket iterator {node, table} of an STLport hashtable (+4 begin, +8 end)
-0x00404C90	121	List16_NewNode	named	take a 0x10-byte node from pool g_0x79B228 (refill 20 via chunk allocator), store value at +8
-0x00404D10	62	PoolFree_N12	named	free an array of N 12-byte elements (size N*12 <= 0x80 to size-class pool g_0x79B224 else operator delete)
-0x00404D50	18	SetFields2_4_404D50	named	stores two arguments into this+0 and this+4
-0x00404D70	41	PoolFree	named	free block of given size: <=0x80 back to size-class pool (index (size-1)>>3), else operator delete
-0x00404DA0	54	HashIter_NextBucketNode	named	first node in any bucket after the current node's bucket, 0 if none
-0x00404DE0	148	HashTable12_Clear	named	free every 0xC-byte node of all buckets, zero the count (+0x10), free the bucket vector
-0x00404E80	157	HashMapU32_SetAt	named	insert or assign key->value in uint-keyed STLport hashtable; keeps max key in +0x14, grows via 0x406640
-0x00404F20	82	HashMapU32_Remove	named	erase key (via 0x405620) and return its stored value, 0 if absent
+0x004046E0	125	CBaseManager::Read	named	slot 9 (stream): FreeTypeGroups (0x404410); reads a dword count, then per record three dwords id, kind, objectId: obj = vt[23](kind, id) (RegisterInstant), obj +0x18 = objectId; CORRECTION: was 'type, id' order (the record is id, kind, +0x18, as Write writes it)
+0x00404760	119	CBaseManager::Write	named	slot 10 (stream): writes objectListCount +0x40, then for each object of the list +0x38 its id +0xc, kind +0x10 and objectId +0x18 (4 bytes each, stream vt[2])
+0x004047E0	128	CBaseManager::ReadObjects	named	(stream): loop: read a 4-byte id; id 0xFFFFFADF -> read a byte, 0 = end (1 = escaped real id); find the id in idMap (+0x20 buckets), stop when absent or its object is 0, else obj vt[9] Read(stream); callers CWorldClient::ReadSpellsAndItems, CWorldServer::LoadSave
+0x00404860	130	CBaseManager::WriteObjects	named	(stream): for each object of the list +0x38: writes its id +0xc (plus byte 1 when the id equals the marker 0xFFFFFADF) and obj vt[10] Write(stream); ends with 0xFFFFFADF + byte 0; callers CWorldServer::WriteSave
+0x004048F0	40	CBaseManager::ReleaseUnreferenced	named	for each object of the list +0x38 whose refcount +4 is 0: refcount = 1 then vt[4] (Release, which drops it to 0 and destroys it); callers CWorldServer::LoadSave (10 sites); CORRECTION: was 'ReleaseAllObjects'
+0x00404920	50	ManagerIter::Begin	named	(manager): drops the refcount +4 of the previously held manager, stores the new one at +0 (refcount += 1), +4 = next of the head entry +0x38; returns the head's object +8 or 0 (61 sites)
+0x00404960	19	ManagerIter::Next	named	returns the object +8 of the stored entry +4 and advances +4 to its next; 0 at the end
+0x00404980	71	HashIter_Advance	named	fastcall (it {node, table}): node = node->next, else scans the buckets (table +4..+8) after node key % bucketCount for the next non-empty one (0 at the end); returns it
+0x004049D0	11	CopyField_0_4049D0	named	*out = *this (dword copy; used to pass std::list iterators by value)
+0x004049E0	67	List16_Destroy	named	fastcall (std::list*): returns every entry and then the sentinel to the 0x10-byte free list g_0x79B228; reached only from EH unwind funclets (jmp at 0x70E333, 0x716733, 0x721D09 .. 9 sites); CORRECTION: was 'List16_Clear' (it also frees the sentinel)
+0x00404A40	41	List16_InsertBefore	named	(out it, pos, value*): List16_NewNode(value), links it before pos (prev->next, pos->prev), *out = the new entry
+0x00404A70	426	List16_Ctor	named	(this list, alloc byte): allocates the sentinel from the 0x10-byte pool g_0x79B228 (refill of 20 entries inlined: chunk g_0x79B268..g_0x79B26C, heap total g_0x79B264, then stlport_node_alloc_chunk_alloc), sentinel next = prev = itself; returns this; CORRECTION: was 'List16_NodeAllocInline' (it is the std::list constructor)
+0x00404C30	83	HashTable_Begin	named	(this hashtable, out {node, table}): first chain head of the bucket vector +4..+8, 0 when all buckets are empty; out[1] = this
+0x00404C90	121	List16_NewNode	named	(value*): takes a 0x10-byte entry from the free list g_0x79B228 (refill 20 via stlport_node_alloc_chunk_alloc), entry +8 = *value; returns the entry
+0x00404D10	62	PoolFree_N12	named	(p, n): p != 0: n*12 > 0x80 -> operator delete, else pushed on the size-class free list g_0x79B224[(n*12-1)>>3]
+0x00404D50	18	SetFields2_4_404D50	named	this[0] = a, this[1] = b (iterator {node, table} constructor)
+0x00404D70	41	PoolFree	named	fastcall (p, size): size > 0x80 -> operator delete, else pushed on g_0x79B224[(size-1)>>3] (242 sites)
+0x00404DA0	54	HashIter_NextBucketNode	named	fastcall (it {node, table}): first chain head in a bucket after node key % bucketCount, 0 if none (the bucket half of iterator ++)
+0x00404DE0	148	HashTable12_Destroy	named	fastcall (hashtable): frees every 0xC-byte chain entry (PoolFree 0xc), count +0x10 = 0, frees the bucket vector +4 (capacity +0xc; pool or operator delete); reached only from EH unwind funclets (jmp at 0x70E1F6, 0x70E27E); CORRECTION: was 'Clear' (it also frees the bucket vector)
+0x00404E80	157	HashMapU32_SetAt	named	(key*, value*): max key +0x14 raised, HashTable_Resize_406640(count + 1), finds key in its bucket; new key -> NodeAlloc16_407420 entry pushed at the bucket head, count +0x10 += 1; entry +8 = value
+0x00404F20	82	HashMapU32_Remove	named	(key*): finds key in its bucket, erases it (HashU32_EraseNode_405620), returns its value +8; 0 if absent
 0x00404F80	83	HashMapU32_Lookup	named	STL-style hash map find (this = {+4 buckets begin, +8 end}, key uint*, out value*) -> 1 / 0: bucket = key % bucket count, chain of nodes {next, key +4, value +8} compared on the key, *out = value on a hit; CBaseManager::RegisterInstant / PoolObject look the per-type pool record up by type id
 0x00404FE0	89	CBaseManager::PopPooled	named	(this = a per-type pool record's MFC CList {+4 head, +8 tail, +0xc count, +0x10 free nodes, +0x14 CPlex}) -> the pooled object: RemoveHead (data +8 returned, node to the free list); at count 0 the CPlex chain is freed (List_FreeChain) and the list reset; CBaseManager::RegisterInstant
 0x00405040	128	CList12_NewNode	named	MFC-style CList node alloc (0xC-byte nodes, free list +0x10, blocks +0x14 via 0x6FE8EF), stores value at +8
@@ -1160,9 +1160,9 @@ addr	size	name	status	purpose
 0x0042E4D0	465	Vertex32_Lerp	named	(a, b, t, out): interpolates a 0x20-byte vertex: position +0..+0xc, two packed ARGB colours +0x10 / +0x14 (per channel), uv +0x18 / +0x1c
 0x0042E6B0	31	StaticInit_Vec3Zero_g79B6A0	named	CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x79B6A0
 0x0042E6D0	41	StaticInit_QuatIdentity_g79B690	named	CRT: per-translation-unit copy of the header constant identity quaternion {1,0,0,0} at g_0x79B690
-0x0042E700	3436	OBB_Intersects	named	(boxA, boxB, posA xyz, posB xyz, quatA, quatB): separating-axis test of two oriented boxes (half extents at +0x20 / +0x24 / +0x28, axes from the quaternions, Mat3_Solve for the relative axes): 15 axis tests, 1 when they overlap DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03).
-0x0042F4C0	976	OBB_IntersectsSegment	named	(box, quat, boxPos xyz, segStart xyz, segDir xyz): separating-axis test of an oriented box against a line segment (direction normalized, half length); 1 when they intersect
-0x0042F890	397	Mat3_Solve	named	(out, row1, row2, row3, rhs): solves the 3x3 linear system by Cramer's rule (determinant expansion)
+0x0042E700	3436	OBB_Intersects	named	fastcall (boxA, boxB, posA xyz, posB xyz, quatA*, quatB*): builds the 3 axes of each box from its quaternion (w,x,y,z), half extents at box +0x20/+0x24/+0x28, expresses the centre offset and B's axes in A's frame with Mat3_Solve, then the 15 separating-axis tests (3 + 3 face axes, 9 edge cross products); returns 1 on overlap, 0 on the first separating axis; no caller or pointer [dead: no caller or pointer]
+0x0042F4C0	976	OBB_IntersectsSegment	named	fastcall (box, quat*, boxPos xyz, segCentre xyz, segVec xyz): box axes from the quaternion, segment direction = segVec / |segVec|, half length |segVec| * 0.5, centre offset and direction expressed in the box frame (Mat3_Solve), 6 separating-axis tests (3 box axes, 3 axis x direction); 1 when they intersect; no caller or pointer [dead: no caller or pointer]
+0x0042F890	397	Mat3_Solve	named	fastcall (out, a, b, c, rhs): solves the 3x3 system with the rows a, b, c by Cramer's rule (one determinant, three numerators, divides; no zero check); only called by the two dead OBB tests above
 0x0042FAE0	444	LzCodec_InitTables	named	static initializer of the LZ match-length code tables g_0x79B848 (code) / g_0x79B7C0 (bits): lengths 1..6 fixed codes (1,3,5,3,5,5 bits), 7..10 = 6-bit code, 11..18 = 8-bit, 19..34 = 10-bit; offset tables g_0x79B738 / g_0x79B6B0 for distances 0..33 (6 / 7 / 9-bit codes)
 0x0042FCA0	98	LzCompressor::Reset	named	(state 0x2828 bytes): clears the bit writer +0x2800, position +0x2818, match pos +0x281c = -1, match length +0x2820, last byte +0x2824, the 0x400-entry hash heads +0x1800 and the chain entry +0x800[0] = 0x400; window bytes at +0 / +0x400 (mirrored 1 KB ring)
 0x0042FD10	1222	LzCompressor::EmitMatch	named	(this, matchPos): writes the match length +0x2820 (< 35 table code; 35..98 prefix 0x17 in 5 bits + 6 bits of len-35; 99..226 prefix 0x3f in 6 bits + 7 bits of len-99) then the distance d = (pos - len - matchPos - 1) & 0x3ff (d < 34 table code; d < 98: 3 bits 010 + 6 bits of d-34; < 354: 3 bits 110 + 8 bits of d-98; < 1378: 2 bits 11 + 10 bits of d-354; < 5474: 2 bits 01 + 12 bits of d-1378) with LzBitWriter_PutBits; clears the match +0x281c = -1
@@ -1187,22 +1187,22 @@ addr	size	name	status	purpose
 0x00433060	698	NetPeer::Clone	named	slot 3: new 0x1168-byte NetPeer copy-constructed from this (all trees / lists / buffers)
 0x00433320	403	NetPeer::dtor	named	slot 2 (deleting destructor): member teardown as dtor_body then free
 0x004334C0	30	NetPeer::DeletingDtor	named	scalar deleting destructor of NetPeer: runs NetPeer::dtor_body then operator delete when flag&1 (0 sites)
-0x004334E0	496	NetPeer::dtor_body	named	non-virtual destructor body of the 0x1168-byte NetPeer (vtable 0x73BF38, refcounted base 0x73BB68): frees the two GameBuffers +0x112c/+0x1148, the 0x10c-node lists +0x111c/+0x1120, the PairTree +0x110c, the ScriptRefTree +0x1100, the 0x120-node lists +0x10f8/+0x10fc, the 11 per-kind trees +0x1074, the trees +0x1068/+0x105c, the list +0x1054 and the 0x100 vector<short> +0x54
-0x004336D0	55	Vector2_Deallocate	named	frees a vector of shorts to the node allocator
-0x00433710	160	ObjRefTree_Dtor	named	destroys an int-keyed {key, obj ref} tree (ObjRefTree_DestroySubtree, 0x43FD00 payload dtor) and frees the header (4 callers)
-0x004337B0	160	ObjRefTree_Dtor2	named	destroys an unsigned-keyed {key, obj ref} tree and frees the header (4 callers)
-0x00433850	160	ObjRefTree_Dtor3	named	destroys an unsigned-keyed {key, obj ref} tree and frees the header
-0x004338F0	160	ScriptRefTree_Dtor	named	destroys the script object tree (0x20-byte nodes, g_0x79B230) and frees the header (4 callers)
-0x00433990	150	RbTree18_Dtor	named	destroys a plain 0x18-byte node tree (RbTree18_DestroySubtree) and frees the header (4 callers)
+0x004334E0	496	NetPeer::dtor_body	named	vt = 0x73BF38; GameBuffer::dtor on inStream +0x1148 and outStream +0x112c; frees the chunk lists inChunks +0x1120 / outChunks +0x111c (0x10c entries), the idsByReceivedObject tree +0x110c, receivedByKey +0x1100, lostPackets +0x10fc / sentPackets +0x10f8 (0x120 entries, ListHeap_ClearObjLists2), the 11 groupTrees +0x1074 (ObjRefTree_Dtor3 each), entriesByObject +0x1068, entriesByKey +0x105c, idRecycleList +0x1054, the 256 idAlloc vectors +0x54 (Vector2_Deallocate each) and the recvWindow vector +0x14..+0x1c; vt = 0x73BB68 (refcounted base); one caller NetPeer::DeletingDtor
+0x004336D0	55	Vector2_Deallocate	named	fastcall (vector<u16>*): frees the buffer begin..cap (+0, +8) to the size-class pool g_0x79B224 (<= 0x80 bytes) or operator delete; the element dtor passed to __ehvec for NetPeer idAlloc (ctor / dtor / dtor_body) and an EH funclet of NetPeer::Clone
+0x00433710	160	ObjRefTree_Dtor	named	fastcall (tree {header, count}): when count != 0 destroys every entry (ObjRefTree_DestroySubtree on the right child, payload dtor 0x43FD00 releasing the ObjRef, entry freed with NodeAlloc_Free18n5), resets the header links and count, then returns the header to the 0x18 free list g_0x79B22C; reached only from EH unwind funclets of NetPeer::ctor / Clone / dtor / dtor_body
+0x004337B0	160	ObjRefTree_Dtor2	named	same as ObjRefTree_Dtor for the second {key, ObjRef} tree type (subtree 0x43C0B0, payload dtor 0x43DCC0, free 0x43B200); header to g_0x79B22C; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body
+0x00433850	160	ObjRefTree_Dtor3	named	same pattern for the third {key, ObjRef} tree type (subtree 0x43C600, payload dtor 0x43DCE0, free 0x43B240); passed to __ehvec as the element dtor of the 11 NetPeer groupTrees +0x1074 (ctor / dtor / dtor_body) and used by EH funclets
+0x004338F0	160	ScriptRefTree_Dtor	named	same pattern for the 0x20-byte-entry tree {key, ScriptObjRef} (subtree ScriptRefTree_DestroySubtree, payload dtor 0x43FD20, entries NodeAlloc_Free1Cn2), header to the 0x20 free list g_0x79B230; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body
+0x00433990	150	RbTree18_Dtor	named	same pattern for a 0x18-byte-entry tree with a plain payload (RbTree18_DestroySubtree, NodeAlloc_Free18n8), header to g_0x79B22C; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body
 0x00433A30	214	Shorts_CopyCtor	named	STL: copy ctor of one NetPeer idAlloc slot (0x10: vector<u16> free ids +0..+8, u16 counter +0xc): buffer from the size pool (<= 0x80) or new, memmove, counter copied; NetPeer::Clone loops it over the 256 kinds of +0x54
 0x00433BD0	826	NetPeer::Tick	named	(this = NetPeer link, dt double): +0x44 += dt (silence timer), +0x48 += dt (clock); resend timeout = clamp(rttMean + 3 * sqrt(|mean^2 - var|), 0.1, NetConnection +0x10); sent packets +0x10f8 older than it -> PacketLost and moved to +0x10fc, where they are dropped after NetConnection +0x10 s; send cadence: +0x40 += dt, every +0x3c s SendUpdate(budget = +0x50 = 220, asm 0x433D58: push [esi+0x50]) (repeated while the out stream +0x112c still has bytes); every NetConnection +0x14 s recycles the ids of the acked removals (+0x1054 list -> per-kind free stacks +0x54); returns false (drop the peer) when +0x44 > NetConnection +0xc (60 s) or the pending out stream exceeds 32000 bytes. Was NetConnection::CheckTimeout
-0x00433F10	9	ListHeader_ClearFirst	named	**p = 0 (reset a list head pointer)
+0x00433F10	9	ListHeader_ClearFirst	named	fastcall (p): **p = 0; reached only from EH funclets of NetPeer::Tick / ParseUpdate / ReleaseReceivedObjects and NetConnection::Receive
 0x00433F20	119	NetPeer::PacketLost	named	(this = NetPeer, sent record): once per record (+0x114 flag): for every message entry of its list +0xc: channel 0 (update) with entry version == sent version -> entry version +8 = 0 (resend), channel 2 (removal) -> entry +8 = 0; re-queues the record's stream chunk (+0x10: u16 offset, u8 len, data) at the front of the out chunk list +0x111c
 0x00433FA0	359	NetPeer::OnPacketAcked	named	(this = NetPeer, sent record): rtt = clock +0x48 - record time; mean +0x24 and mean-square +0x28 with factor 0.93; for every message entry: channel 1 (ack-mode update) -> entry version = max(entry, sent version); channels 2 / 3 (removals) -> erase the entry from its group tree +0x1074 + group * 0xc and the key tree +0x105c, push {id, kind} to the id-recycle list +0x1054. Was PacketAcked_Rtt
 0x00434110	685	NetPeer::RegisterObject	named	(this = NetPeer, {object, group}): kind = registry +0x2c lookup of the object's vtable; new 0x14-byte NetPendingEntry (vtable 0x73BF4C: +8 version sent, +0xc u16 id, +0xe u8 kind, +0xf bit 0 ack-mode (from the connection byte table +0x64 + kind) | group << 1, +0x10 object ref) inserted into the object tree +0x1068 and the group tree +0x1074 + group * 0xc
-0x004343C0	109	NetPendingEntry::Clone	named	slot 3: new 0x14-byte copy {+8, short +0xc, byte +0xe, bit 0 of +0xf, obj +0x10 (refcount++)}
-0x00434430	112	NetPendingEntry::Reset	named	slot 2 (vtable 0x73BF4C): releases the object +0x10 (short refcount) and re-initialises (+0x10 = 0, +8 = 0, short +0xc = 0)
-0x004344A0	30	NetPendingEntry::ScalarDtor	named	slot 0: NetPendingEntry::Dtor and delete
+0x004343C0	109	NetPendingEntry::Clone	named	vt 0x73BF4C slot 3: operator new 0x14, refcount +4 = 0, copies sentVersion +8, id +0xc (u16), kind +0xe, flags bit 0 of +0xf, object +0x10 (its short refcount +4 += 1); vt 0x73BF4C; returns the copy (0 when new fails)
+0x00434430	112	NetPendingEntry::Reset	named	vt 0x73BF4C slot 2: releases object +0x10 (short refcount -1, vt[0](1) at 0), then re-inits in place: object = 0, sentVersion +8 = 0, id +0xc = 0 (kind / flags kept)
+0x004344A0	30	NetPendingEntry::ScalarDtor	named	vt 0x73BF4C slot 0: NetPendingEntry::Dtor, operator delete when flag & 1
 0x004344C0	93	NetPendingEntry::Dtor	named	vt 0x73BF4C slot 0 body: releases the replicated object +0x10 (short refcount +4 --, vt[0](1) deleting dtor at 0), vt -> 0x73BB68; NetPendingEntry::ScalarDtor
 0x004346D0	673	NetPeer::SyncObjectSet	named	(this = NetPeer): calls NetConnection vt[13] GatherReplicated of g_0x79B920 into the global vector g_0x79B8D0 of {object, group}, sorts it by object pointer, merges with the object tree +0x1068: new objects -> RegisterObject, gone objects -> their entry is detached (object released, version 0 -> a removal is sent; entries with id 0 are dropped at once). Was ResendSweep
 0x00434990	329	NetPeer::TakeStreamChunk	named	(this = NetPeer, maxLen): with pending re-send chunks in +0x111c moves the oldest (by u16 offset) to the front; else cuts min(maxLen, 255, pending) bytes of the out stream GameBuffer +0x112c into a new chunk node {+8 u16 offset = +0x1118, +0xa u8 len, +0xb data}, removes them from the buffer and advances +0x1118
@@ -1211,22 +1211,22 @@ addr	size	name	status	purpose
 0x00434CE0	134	NetPeer::AckOne	named	(this = NetPeer, u16 seq): finds the sent record with that seq (+0x10) in +0x10f8 then +0x10fc, OnPacketAcked and erases it
 0x00434D70	215	NetPeer::ReadAcks	named	(this = NetPeer, cursor*): u16 ackSeq, u32 bits; shifts the ack mask +0x1124 by the signed 16-bit distance from +0x1128 (x86 shr-by-32 quirk kept), fresh = bits & ~mask, +0x1128 = ackSeq, AckOne(ackSeq) and AckOne(ackSeq - i) for every fresh bit i-1 (i = 1..32)
 0x00434E50	388	NetPeer::AcceptSeq	named	"(this = NetPeer, unwrapped seq): seq + 32 < last +0xc -> log ""SKIP too old update, dif="" false; last = max(last, seq); seq already in the window vector +0x14 -> ""DUPLICATE update received from"" false; else pushed, true"
-0x00434FE0	17	CallFunctionPtrWithThis	named	calls the function pointer param_1 with this
+0x00434FE0	17	CallFunctionPtrWithThis	named	(fn): fn(this), returns this; the ostream manipulator call (operator<< (fn)) used by the console / log output (127 sites)
 0x00435010	29	NetAddress::ToStringDefault	named	(this, buf): NetAddress::ToString(buf, 0) and returns buf (19 callers: lobby screen, NetClient, NetConnection, NetPeer, NetServer)
 0x004352F0	115	NetPeer::SetObjectId	named	(this = NetPeer, object, kind, id): node of the pair tree +0x110c (received objects: object -> {u16 id +0x14, u8 kind +0x16}) inserted / updated
 0x004355B0	520	NetWriter::WriteRef	named	(this = NetPeer, cursor*, object): null or deleted (+4 bit 31) -> flag bit 0 + u8 0 + u16 0; object known in the sent-object tree +0x1068 -> entry (id allocated from the per-kind free stack +0x54 + kind*0x10 or the counter +0x60 when 0, key tree +0x105c) -> flag bit 0, u8 kind, u16 id; object known only as received (pair tree +0x110c) -> flag bit 1, u8 kind, u16 id; else null ref. The flag bit says whose id space the id belongs to (0 = the writer's own objects, 1 = objects the writer received from the reader)
-0x004357C0	94	BitWriter_PutByte	named	(this={cursor, lastByte, acc, nbits}, v): packs 8-bit values into the accumulator +8 and flushes complete bytes to the output cursor
+0x004357C0	94	BitWriter_PutBit	named	(this {cursor, bytePtr, acc, nbits}, bit): nbits 0 -> reserves the byte at cursor (bytePtr = cursor++), acc = bit, nbits = 1; else acc += bit << nbits, nbits++; when nbits > 8 stores the low byte at bytePtr, nbits -= 8, acc >>= 8, reserves the next byte; LSB-first bit packing; 3 calls in NetWriter::WriteRef; CORRECTION: was 'BitWriter_PutByte' (one bit per call)
 0x00435820	471	NetPeer::ReadObjectRef	named	(this = NetPeer, cursor*): flag bit, u8 kind, u16 id; id 0 -> null; bit set -> the object we SENT with that key (+0x105c -> entry +0x10); bit clear -> the received object of key kind<<16|id in +0x1100, created through the factory (kind) when unknown, re-created through the creator hash g_0x79B920 +0x40 when released
 0x00435A00	1295	NetPeer::SendUpdate	named	"(this = NetPeer, budget = NetPeer +0x50 = 220 bytes; from Tick): SyncObjectSet; builds in g_0x79B900 (reserve budget + 0x400): u8 0, u16 seq (+8 ++), WriteAcks, TakeStreamChunk(budget - 16 = 204 max) + the chunk {u16 offset, u8 len, data}, u8 count then the reliable messages: walks the 11 group trees from +0x10ec down to +0x1074; removed object (null or +4 bit 31) with an id -> flag bit 0, u8 kind, u16 id (removal); object version +8 != entry version -> allocates an id when 0 (AllocSeqId on +0x54 + kind * 0x10, key tree +0x105c), flag bit 1, u8 kind, u16 id, object vt[4] Write(cursor); stops adding messages once cursor - start > budget (so a datagram is about 220-230 bytes: um-bot's ""228""; the 0x400 is only the buffer reserve, NOT a 1024-byte limit); each message is recorded in the sent record (+0x10f8 node: +8 time, +0x10 seq, +0x14 message list {channel, version, entry}, +0x18 chunk copy); flag bits are packed LSB-first in a byte reserved before every 8 messages; NetSocket::SendTo(peer addr +0x2c); on failure PacketLost at once"
 0x00435F10	29	NetPeer::AllocSeqId	named	(this = per-kind id allocator {vector<u16> free +0..+0xc, u16 counter +0xc}): pops a recycled id or returns ++counter (ids start at 1 per kind)
 0x00435F30	1268	NetPeer::ReadMessage	named	"(this = NetPeer, cursor*, packet seq): flag bit (LSB-first from the byte read before each group of 8), u8 kind, u16 id, key = kind << 16 | id in the received-object tree +0x1100 (node +0x14 ObjRef, +0x18 version = seq of the last change); flag set: unknown key -> insert, NetObjectFactory(g_0x79B920 +0x2c, kind), SetObjectId, vt[5] Read, created handlers (g_0x79B920 +0x164 + kind*0xc); known with version < seq -> re-create when released, Read, created handlers when version was 0 else updated handlers (+0xd64); else ""SKIP update, newer version"" and a throwaway object reads the payload; flag clear: unknown -> tombstone {null, seq}; known with version < seq -> removed handlers (+0x1964), object released; else ""SKIP remove""; false (drop the peer) only when the factory fails"
-0x00436430	62	ScriptObjRef_Release2	named	releases a short-refcounted script object at +0 (external ref protocol)
+0x00436430	62	ScriptObjRef_Release2	named	fastcall (ref*): obj = *ref; if its short refcount +4 != 1 sets bit 0x80 of +7 (being destroyed), refcount++ / vt[2]() / refcount--; then refcount--, vt[0](1) at 0; reached only from an EH funclet of NetPeer::ReadMessage
 0x00436470	431	NetPeer::ParseUpdate	named	(this = NetPeer, cursor*): +0x44 = 0 (silence timer); u16 seq unwrapped with +0x10 (wrap base, +0x10000 when the 16-bit distance crosses 0x8000), AcceptSeq, ReadAcks, u16 chunk offset + u8 len + data queued in +0x1120 when offset - +0x111a <= 0x8000 and len > 0, DrainChunks, u8 n then n x ReadMessage(cursor, seq); g_0x79B924 = this while parsing
 0x00436620	329	NetPeer::ReleaseReceivedObjects	named	(this = NetPeer, from RemoveClient): for every received object of the tree +0x1100 fires the removed handlers of its kind (g_0x79B920 +0x1964) and releases it. Was NetServer::DispatchReplicated
 0x00436770	328	NetConnection::ctor	named	vtable 0x73BF5C: magic +8 = 0, peer list +0x28 (0xc nodes {next, prev, NetPeer*}), class registry +0x2c (vtable -> kind) / +0x40 (kind -> creator), NetSocket +0x54 (interface list), reliability byte table +0x64 [256] per kind, handler tables +0x164 created / +0xd64 updated / +0x1964 removed (256 x vector<fn>), +0x20 clock = 0, +0x18 = 1 (receive counter), +0xc = 60 (peer timeout s), +0x10 = 5 (max resend timeout / lost-record age s), +0x14 = 75 (id recycle period s)
 0x004368C0	7	RefCountedBase::dtor_base_D	named	restores the RefCountedBase vtable 0x73BB68 (compiler-generated base dtor step, one copy per translation unit: net messages / NetPeerInfo / AiLogic dtors)
-0x004368D0	30	NetConnection::dtor_delete	named	slot 0 of 0x73BF5C: deleting destructor (NetConnection::dtor + free)
-0x004368F0	318	NetRegistry::Clear	named	clears the two hash tables (+0x18 buckets of 0xc-byte nodes, +4 buckets of 0x40B560 nodes) and frees their bucket vectors
+0x004368D0	30	NetConnection::dtor_delete	named	vt 0x73BF5C slot 0 (deleting dtor): NetConnection::dtor, operator delete when flag & 1
+0x004368F0	318	NetRegistry::Destroy	named	fastcall (registry at NetConnection +0x2c): frees the creatorByKind hash (+0x18 buckets, 0xc entries via NodeAlloc_FreeCn3, count +0x24 = 0, bucket vector freed) and the classByVtable hash (+4 buckets, entries via PoolFree_N12_40B560, count +0x10 = 0, bucket vector freed); reached only from EH funclets of NetConnection::ctor / dtor; CORRECTION: was 'Clear' (it frees the bucket vectors too)
 0x00436A50	480	NetConnection::dtor	named	sends {u8 1, u32 linkId (+0x20)} (disconnect) to every peer of +0x28, destroys the handler tables, the NetSocket +0x54, the registries +0x2c / +0x40 and the peer list
 0x00436C30	46	GameBuffer::WriteRaw	named	(data, n): copies n bytes at the write cursor +8 (no bounds check)
 0x00436C60	83	GameBuffer::Write	named	(data, n): copies n bytes at the cursor +8 when they fit before the end +0xc (flag +0x18 |= 1), else vt[4](data, n) (overflow handler) (11 callers)
@@ -1247,303 +1247,303 @@ addr	size	name	status	purpose
 0x00437370	823	NetConnection::Receive	named	"(dt double): g_0x79B920 = this, clock +0x20 += dt; for every datagram (NetSocket::ReceiveFrom into g_0x79B8E0, 2048 max; ""ZERO length packet received from"" when empty): u8 type -> slot 3 OnUpdate (0), 6 OnDisconnect (1), 4 OnGetInfo (3), 5 OnLogin (4), 7 OnInfo (5), 8 OnAccepted (6), 9 OnRejected (7), 10 OnMasterPacket (0xFF); then NetPeer::Tick(dt) of every peer: false -> ""TIMEOUT client, drop"", vt[11] OnPeerTimeout, vt[2] RemovePeer; +0x18 ++; g_0x79B920 = 0"
 0x004376D0	3	NetConnection::v13_Nop	named	NetConnection slot 13 default (NetClient, NetServer); the lobby classes override it with v13_GatherReplicated
 0x004377D0	157	NetConnection::AddHandler	named	(table 0 created / 1 updated / 2 removed, kind, callback(ecx = connection, edx = object)): appends to the vector at +0x164 / +0xd64 / +0x1964 + kind * 0xc
-0x004378E0	57	Vector4_Deallocate5	named	frees a dword vector buffer to the node allocator
-0x00437930	163	List14_CopyCtor	named	list copy constructor (0x14-byte nodes, 0x18-byte node-alloc header)
-0x004379E0	164	VecList18_Dtor	named	destroys a list of 0x18-byte nodes holding dword vectors (0x440180 element dtor, Vector4_Deallocate10) and the sentinel (4 callers)
+0x004378E0	57	Vector4_Deallocate5	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body
+0x00437930	163	List14_CopyCtor	named	(this list, src list*): allocates the sentinel from the 0x18 free list g_0x79B22C (PoolAlloc_Refill(0x14) when empty), self-links it, then List_InsertRangeIter copies every element of src; one caller NetPeer::Clone (idRecycleList)
+0x004379E0	164	VecList18_Dtor	named	fastcall (std::list of vectors): per entry: element dtor Nop_440180, Vector4_Deallocate10 on the vector +8, entry back to g_0x79B22C; then the sentinel; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body
 0x00437AA0	230	ObjRefTree_CopyCtor	named	STL: rb-tree copy ctor (this, src) of NetPeer +0x105c entriesByKey (key kind << 16 | id -> NetPendingEntry ref, 0x18 nodes): header from PoolAlloc, the whole tree cloned by ObjRefTree_CopySubtree (refcounts ++), count copied; NetPeer::Clone
-0x00437B90	190	IntTree_GetOrInsert	named	(key*): returns the value slot (+0x14) of the int-keyed tree node, inserting a new {key, null obj} node when missing
+0x00437B90	190	IntTree_GetOrInsert	named	(key*): map<int, ObjRef>::operator[]: IntTree_LowerBound2; when it hits end or a greater key inserts {key, null ObjRef} with ObjRefTree_InsertWithHintIter (the temp ObjRef released after); returns &entry +0x14 (the value); callers NetWriter::WriteRef, NetPeer::SendUpdate and one more
 0x00437C50	230	ObjRefTree_CopyCtor2	named	STL: rb-tree copy ctor (this, src) of NetPeer +0x1068 entriesByObject (object pointer -> NetPendingEntry ref, 0x18 nodes): header from PoolAlloc, ObjRefTree_CopySubtree2 clone, count copied; NetPeer::Clone
 0x00437D40	17	Thunk_ObjRefTree_Erase_437D40	named	STL: map::erase(key) forwarding thunk (NetPeer::SyncObjectSet object-ref tree)
 0x00437D60	13	InitFields1_437D60	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 7 sites: NetPeer::RegisterObject, ObjRefTree_EraseKey2, ObjRefTree_InsertWithHintIter2 ...
-0x00437D70	141	List18_CtorB	named	allocates the sentinel of a list with 0x18-byte nodes (0x4060E0 when the free list is empty)
+0x00437D70	141	List18_CtorB	named	fastcall (tree header {header*, count, cmp byte}): allocates the 0x18 header from g_0x79B22C (PoolAlloc_Refill(0x18) when empty), colour byte 0, parent +4 = 0, left +8 / right +0xc = itself, count 0, comparator byte; returns this (an empty rb-tree, not a list); referenced from NetPeer::ctor (dword 0x432E5B, __ehvec element ctor of the 11 groupTrees); CORRECTION: was 'list sentinel' (it builds an rb-tree header)
 0x00437E00	230	ObjRefTree_CopyCtor3	named	STL: rb-tree copy ctor (this, src) of one of the 11 NetPeer +0x1074 groupTrees (NetPendingEntry by group, 0xc each): header from PoolAlloc, ObjRefTree_CopySubtree3 clone, count copied; NetPeer::Clone loops it 11 times
 0x00437EF0	17	Thunk_ObjRefTree_Erase2_437EF0	named	STL: map::erase(key) forwarding thunk (NetPeer::OnPacketAcked object-ref tree)
 0x00437F10	13	InitFields1_437F10	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 10 sites: NetPeer::RegisterObject, ObjRefTree_EraseKey3, ObjRefTree_InsertWithHintIter3 ...
 0x00437F20	11	CopyField_0_437F20	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: NetPeer::Tick
-0x00437F30	48	ListHeap_EraseObjList	named	(out next, node): unlinks a heap node, destroys its ObjRefList18 (+8) and frees it
+0x00437F30	48	ListHeap_EraseObjList	named	(out next, entry): unlinks a heap-allocated list entry, destroys the ObjRefList18 at entry +8 (ObjRefList18_DtorAt0C), operator delete the entry, *out = next; callers NetPeer::Tick, NetPeer::AckOne (2)
 0x00437F60	147	List120_CopyCtor	named	STL: list copy ctor (this, src) of the NetPeer sent / lost packet lists +0x10f8 / +0x10fc (0x120 nodes: SentPacket {time +8, seq +0x10, entry list +0x14, stream chunk copy +0x18, lost flag +0x114}): sentinel from new, List_InsertRangeIter2 clones every node; NetPeer::Clone (x2)
 0x00438000	13	DerefOut_438000	named	STL: iterator dereference into the out param (**this); 1 site: List120_CopyCtor
-0x00438010	160	List120_Clear	named	list clear: destroys the ObjRefList18 at node +0x14 and frees the 0x120-byte nodes
+0x00438010	160	List120_Destroy	named	fastcall (std::list of 0x120-byte SentPacket records): per entry: ObjRefList18_Clear on the list +0x14 and frees its sentinel (NodeAlloc_Free14n3), Nop_4380B0, PoolFree(entry, 0x120); then the sentinel (operator delete); reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body; CORRECTION: was 'Clear' (it frees the sentinel too)
 0x004380B0	1	Nop_4380B0	named	STL/MFC: empty element destructor / destroy no-op (3 sites: List120_Clear)
-0x004380C0	58	List_Splice1	named	(pos, _, node): STLport list splice of a single node before pos
-0x00438110	155	ScriptObjRef_Assign2	named	(ref, obj): replaces a short-refcounted script object (clone through vt[3] when +6 bit 0)
+0x004380C0	58	List_Splice1	named	(pos, list, it): splice of the single entry it before pos (no-op when it == pos or it->next == pos): relinks the three prev / next pairs; one caller NetPeer::Tick
+0x00438110	155	ScriptObjRef_Assign2	named	(this ref*, obj): when obj != current: releases the current (refcount != 1 -> bit 0x80 of +7, refcount++ / vt[2]() / refcount--; then refcount--, vt[0](1) at 0); obj 0 or obj +4 bit 31 set (being destroyed) -> ref = 0; obj +6 bit 0 (shared) -> ref = obj vt[3]() clone; else ref = obj; refcount++ and +6 bit 0 set; returns this; callers NetPeer::ReadMessage (2)
 0x004381B0	230	ScriptRefTree_CopyCtor	named	STL: rb-tree copy ctor (this, src) of NetPeer +0x1100 receivedByKey (key kind << 16 | id -> {ObjRef +0x14, version +0x18}, 0x1c nodes): header from PoolAlloc, ScriptRefTree_CopySubtree clone, count copied; NetPeer::Clone
-0x004382A0	247	ObjRefTree_GetOrInsert	named	(key*): map<int, ObjRef>::operator[]: returns the value slot (+0x14) of the node with that key, inserting a null ObjRef when missing
+0x004382A0	247	ObjRefTree_GetOrInsert	named	(key*): map<int, ScriptObjRef>::operator[]: IntTree_LowerBound3; missing key -> builds {key, null ref} (ObjRef_Assign 0) and inserts it with ScriptRefTree_InsertWithHintIter, then releases the temp ref (external ref protocol); returns &entry +0x14; one caller NetPeer::ReadObjectRef
 0x004383A0	160	ScriptRefTree_Dtor2	named	STL: rb-tree destructor of NetPeer +0x1100 receivedByKey (0x1c nodes {.., key +0x10, ObjRef +0x14, version +0x18}): every value destroyed (ref released), ScriptRefTree_DestroySubtree, nodes freed (0x1c), header to the 0x20 pool g_0x79B230; NetPeer::dtor
 0x00438440	230	PairTree_CopyCtor	named	STL: rb-tree copy ctor (this, src) of NetPeer +0x110c idsByReceivedObject (object pointer -> {u16 id +0x14, u8 kind +0x16}, 0x18 nodes): header from PoolAlloc, PairTree_CopySubtree clone, count copied; NetPeer::Clone
-0x00438530	98	UintTree_GetOrInsert	named	(key*): returns the value slot (+0x14) of the unsigned-keyed node, inserting when missing
+0x00438530	98	UintTree_GetOrInsert	named	(key*): map<uint, dword>::operator[]: UintTree_LowerBound3; missing key -> {key, 0} inserted with PairTree_InsertWithHintIter; returns &entry +0x14; one caller NetPeer::ReadObjectRef
 0x004385A0	150	RbTree18_Dtor2	named	STL: rb-tree destructor of NetPeer +0x110c idsByReceivedObject (0x18 nodes {.., object key +0x10, u16 id +0x14, u8 kind +0x16}): RbTree18_DestroySubtree, nodes freed to the 0x18 pool, the header to pool g_0x79B22C; NetPeer::dtor
 0x00438640	13	DerefOut_438640	named	STL: iterator dereference into the out param (**this); 2 sites: List10C_CopyCtor, NetPeer::TakeStreamChunk
 0x00438650	11	CopyField_0_438650	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 2 sites: NetPeer::PacketLost, NetPeer::ParseUpdate
-0x00438660	38	List_EraseFree	named	(out next, node): unlinks a heap-allocated list node and frees it
+0x00438660	38	List_EraseFree	named	(out next, entry): unlinks a heap-allocated list entry, operator delete it, *out = next; callers NetPeer::DrainChunks, NetPeer::SendUpdate
 0x00438690	147	List10C_CopyCtor	named	STL: list copy ctor (this, src) of the NetPeer out / in stream chunk lists +0x111c / +0x1120 (0x10c nodes {u16 offset +8, u8 len +0xa, data[255] +0xb}): sentinel from new, List10C_InsertRange clones the nodes; NetPeer::Clone (x2)
-0x00438730	60	ListHeap_Clear	named	frees every node of a heap-allocated list and its sentinel (8 callers)
-0x00438770	60	List_SpliceRange	named	(pos, _, first, last): STLport list splice of a range before pos
+0x00438730	60	ListHeap_Destroy	named	fastcall (std::list with operator-new entries): operator delete every entry, then the sentinel; reached only from EH funclets of NetPeer::ctor / Clone / dtor / dtor_body (the chunk lists); CORRECTION: was 'Clear' (frees the sentinel too)
+0x00438770	60	List_SpliceRange	named	(pos, list, first, last): splices [first, last) before pos (no-op when empty or pos == last); one caller NetPeer::TakeStreamChunk
 0x004387C0	13	InitFields1_4387C0	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 4 sites: List10C_InsertRange, List10C_PushBack, List_InsertRange3 ...
-0x004387D0	64	Vector8_Deallocate	named	frees a vector of 8-byte records to the node allocator
+0x004387D0	64	Vector8_Deallocate	named	fastcall (vector of 8-byte records): frees begin..cap (+0, +8) to the size-class pool or operator delete; one jmp from 0x434985 (tail of NetPeer::SyncObjectSet)
 0x00438820	13	DerefOut_438820	named	STL: iterator dereference into the out param (**this); 4 sites: NetConnection::AddPeer, NetConnection::FindPeerByAddress, NetConnection::v3_OnUpdate ...
 0x00438830	11	CopyField_0_438830	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 5 sites: NetConnection::AddPeer, NetConnection::FindPeerByAddress, NetConnection::v3_OnUpdate ...
-0x00438840	52	ScriptRefList10_Erase	named	(out next, node): unlinks a 0x10-byte list node, releases its script object (+8) and frees it (g_0x79B228)
-0x00438880	148	ObjRefList_ClearRelease	named	clears a list of 0xc-byte nodes releasing the short-refcount object at node +8 (external ref protocol, 0x417DF0 release)
+0x00438840	52	ScriptRefList10_Erase	named	(out next, entry): unlinks a 0x10-byte list entry, ScriptObjRef_Release4 on its ref +8, entry back to the 0x10 free list g_0x79B228, *out = next; one caller NetConnection::RemovePeer
+0x00438880	148	ObjRefList_Destroy	named	fastcall (std::list of 0xc entries {next, prev, obj}): per entry: obj refcount != 1 -> bit 0x80 of +7 and RefObj_AddRefCallRelease, then RefCount16_Release; PoolFree(entry, 0xc); sentinel to g_0x79B228; reached only from EH funclets of NetConnection::ctor / dtor (the peers list +0x28); CORRECTION: was 'ClearRelease' (frees the sentinel too)
 0x00438930	139	NetObjectFactory	named	(this = NetConnection +0x2c registry, kind): looks the creator up in the kind hash (+0x14) and returns creator() (a fresh message object) or 0
 0x00438A00	7	ZeroFirstDword_438A00	named	STL: iterator / smart-pointer default ctor (node pointer = 0); 1 site
-0x00438A10	28	ObjRef_ReleaseAt0	named	releases the short-refcounted object at +0
-0x00438A30	29	ObjRef_ReleaseAt4b	named	releases the short-refcounted object at +4
-0x00438A50	29	ObjRef_ReleaseAt4c	named	releases the short-refcounted object at +4
-0x00438A70	29	ObjRef_ReleaseAt4d	named	releases the short-refcounted object at +4
+0x00438A10	28	ObjRef_ReleaseAt0	named	fastcall (ref*): obj = *ref; obj != 0: short refcount +4 -= 1, at 0 vt[0](1); reached only from EH funclets of NetPeer::RegisterObject and IntTree_GetOrInsert
+0x00438A30	29	ObjRef_ReleaseAt4b	named	fastcall (p): same release on the ObjRef at p +4 (payload dtor of the first {key, ObjRef} tree; 0x43FD00, DestroySubtree, EH)
+0x00438A50	29	ObjRef_ReleaseAt4c	named	fastcall (p): same release on the ObjRef at p +4 (second tree type: 0x43DCC0, DestroySubtree2 ..)
+0x00438A70	29	ObjRef_ReleaseAt4d	named	fastcall (p): same release on the ObjRef at p +4 (third tree type: 0x43DCE0, DestroySubtree3 ..)
 0x00438A90	9	ZeroFirstDword_438A90	named	STL: iterator / smart-pointer default ctor (node pointer = 0); 2 sites: NetPeer::ReadMessage
-0x00438AA0	62	ScriptObjRef_Release3	named	releases a script object at +0 (external ref protocol)
-0x00438AE0	64	ScriptObjRef_ReleaseAt4	named	releases a script object at +4 (external ref protocol) (6 callers)
-0x00438B30	62	ScriptObjRef_Release4	named	releases a script object at +0 (external ref protocol)
-0x00438B70	303	HashTable_CtorN	named	(bucketHint, ...): hash table constructor: picks the next prime of the table 0x73B914 and allocates / zero-fills the bucket vector +4
+0x00438AA0	62	ScriptObjRef_Release3	named	fastcall (ref*): ScriptObjRef release (refcount != 1 -> bit 0x80 of +7 + vt[2]() under a temp ref; refcount--, vt[0](1) at 0); reached only from EH funclets of NetPeer::ReadMessage and ObjRefTree_GetOrInsert
+0x00438AE0	64	ScriptObjRef_ReleaseAt4	named	fastcall (p): the same ScriptObjRef release on p +4 (payload dtor of the ScriptRefTree entries: 0x43FD20, ScriptRefTree_DestroySubtree, 0x439B06, EH of NetPeer::ReadMessage)
+0x00438B30	62	ScriptObjRef_Release4	named	fastcall (ref*): the same ScriptObjRef release on *ref; callers ScriptRefList10_Erase, 0x43DCA3
+0x00438B70	303	HashTable_CtorN	named	(n, hash, eq, alloc): STLport hashtable ctor: functor bytes, bucket vector +4..+0xc empty, count +0x10 = 0; bucket count = first prime >= n from the 28-entry table 0x73B914 (0xfffffffb past the end), vector reserved and filled with 0 (Vector4_InsertN4); one caller NetConnection::ctor
 0x00438CA0	22	GetFieldOut_8_438CA0	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: Shorts_CopyCtor
 0x00438CC0	22	GetFieldOut_8_438CC0	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: NetPeer::Clone
 0x00438CE0	24	InitFields4_438CE0	named	STL: STLport _Vector_base / _String_base ctor with allocator: start = finish = 0, allocator byte copied, end_of_storage = 0; 1 site: NetPeer::ctor
 0x00438D00	515	Vector4_CtorN4	named	STL: vector<uint>(n) ctor (pool refill inlined) used by NetPeer::Clone for the copy of the received-sequence window +0x14..+0x1c
-0x00438F10	57	Vector4_Deallocate6	named	frees a dword vector buffer
+0x00438F10	57	Vector4_Deallocate6	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; reached only from an EH funclet of NetPeer::Clone
 0x00438F50	9	ZeroFirstDword_438F50	named	STL: iterator / smart-pointer default ctor (node pointer = 0); 2 sites: NetPeer::RegisterObject
-0x00438F60	139	ObjRefList18_PushBack	named	(list, rec*): builds the node payload (0x43A3D0) and inserts before the sentinel (ObjRefList18_InsertBefore)
+0x00438F60	139	ObjRefList18_InsertDefault	named	thiscall (list, out it, pos): inserts a default record {?, ?, null ObjRef} before pos (ObjRefList18_InsertBefore), releases the temp ObjRef, returns out; one caller NetPeer::SendUpdate; CORRECTION: was 'PushBack (list, rec*)' (it inserts a default value at pos)
 0x00438FF0	13	DerefOut_438FF0	named	STL: iterator dereference into the out param (**this); 1 site: List14_CopyCtor
-0x00439000	191	List_InsertTempVector	named	builds a temporary vector<dword> from the stack arguments, inserts it into the list and frees it
-0x004390C0	52	List18_EraseVec	named	(out next, node): unlinks a 0x18-byte node, frees its vector payload (+8, Vector4_Deallocate) and the node
+0x00439000	191	List18_InsertEmptyVector	named	thiscall (list, out it, pos): inserts an empty vector<u32> {0,0,0} before pos (ListNode_InsertBefore2 copies it) and frees the temp; callers NetPeer::ctor (2), NetPeer::Tick; CORRECTION: was 'from the stack arguments'
+0x004390C0	52	List18_EraseVec	named	(out next, entry): unlinks a 0x18-byte list entry, frees its vector +8 (Vector4_Deallocate7), entry to g_0x79B22C, *out = next; one caller NetPeer::Tick
 0x00439100	21	CopyField_0_439100	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: List14_CopyCtor
-0x00439120	432	List18_CtorC	named	allocates the sentinel of a list with 0x18-byte nodes (inline chunk refill)
-0x004392D0	182	VecList18_Dtor2	named	destroys a list of 0x18-byte nodes holding vectors of objects (0x440250 element dtor per entry) and the sentinel
-0x00439390	41	ObjRefTree_InsertWithHintIter	named	(out node, hint, key*): iterator wrapper around 0x43BBC0 (insert with hint)
-0x004393C0	212	RbTree18_Ctor	named	(flag, flag2): STLport red-black tree header node (0x18-byte nodes from g_0x79B22C), count 0
-0x004394A0	95	ObjRefTree_Clear	named	clears an int-keyed {key, obj ref} tree (heap nodes 0x404D70 free)
-0x00439500	20	NodeAlloc_Free18b	named	returns a 0x18-byte node to g_0x79B22C
+0x00439120	432	List18_CtorC	named	(this list, alloc byte): std::list ctor: sentinel from the 0x18 free list g_0x79B22C (refill of 20 entries inlined: chunk g_0x79B268..g_0x79B26C, then stlport_node_alloc_chunk_alloc 0x18), self-linked; returns this; one caller NetPeer::ctor (idRecycleList +0x1054)
+0x004392D0	182	VecList18_Dtor2	named	fastcall (std::list of vectors): per entry: element dtor Nop_440250 for every dword of the vector +8..+0xc, Vector4_Deallocate10, entry to g_0x79B22C; then the sentinel; reached only from an EH funclet of List14_CopyCtor
+0x00439390	41	ObjRefTree_InsertWithHintIter	named	(out it, hint, value*): copies the hint iterator and calls ObjRefTree_InsertWithHint 0x43BBC0; returns out; one caller IntTree_GetOrInsert
+0x004393C0	212	RbTree18_Ctor	named	(this tree, cmp byte, alloc byte): rb-tree ctor: header from g_0x79B22C (refill 20 via stlport_node_alloc_chunk_alloc 0x18), colour 0, parent 0, left = right = header, count +4 = 0, cmp byte +8; one caller NetPeer::ctor
+0x004394A0	95	ObjRefTree_Clear	named	fastcall (tree): when count +4 != 0: for each entry down the left spine ObjRefTree_DestroySubtree(right), ObjRef_ReleaseAt4b on the payload +0x10, PoolFree(entry, 0x18); header links reset, count 0 (header kept); callers NetPeer::dtor, NetPeer::dtor_body
+0x00439500	20	NodeAlloc_Free18b	named	fastcall (p*): pushes *p (when != 0) on the 0x18 free list g_0x79B22C (frees a tree header); callers NetPeer::dtor and EH funclets of NetPeer::dtor / dtor_body / ObjRefTree_Dtor / ObjRefTree_CopyCtor
 0x00439530	13	InitFields1_439530	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 10 sites: IntTree_GetOrInsert, ObjRefTree_EraseKey, ObjRefTree_InsertWithHintIter ...
-0x00439540	41	ObjRefTree_InsertWithHintIter2	named	wrapper around 0x43C100
-0x00439570	212	RbTree18_Ctor2	named	STLport red-black tree header (0x18-byte nodes)
-0x00439650	65	ObjRefTree_Erase	named	(node): RbTree_RebalanceForErase, releases the object at +0x14, frees the node, count--
+0x00439540	41	ObjRefTree_InsertWithHintIter2	named	(out it, hint, value*): copies the hint and calls ObjRefTree_InsertWithHint2 0x43C100; returns out; one caller NetPeer::RegisterObject
+0x00439570	212	RbTree18_Ctor2	named	identical to RbTree18_Ctor (header from g_0x79B22C, count 0, cmp byte); one caller NetPeer::ctor
+0x00439650	65	ObjRefTree_Erase	named	(tree, entry): RbTree_RebalanceForErase(entry, &root, &leftmost, &rightmost), ObjRef_ReleaseAt4c on the payload +0x10, entry to g_0x79B22C, count +4 -= 1; callers Thunk_ObjRefTree_Erase_437D40, ObjRefTree_EraseRange2
 0x004396A0	95	ObjRefTree_Clear2	named	STL: clear() of NetPeer +0x1068 entriesByObject (0x18 nodes): ObjRefTree_DestroySubtree2 on the right subtrees, the NetPendingEntry ref of every node released (ObjRef_ReleaseAt4c), nodes PoolFree'd (0x18), header reset, count +4 = 0; NetPeer::dtor / dtor_body
-0x00439700	20	NodeAlloc_Free18c	named	returns a 0x18-byte node to g_0x79B22C
-0x00439730	41	ObjRefTree_InsertWithHintIter3	named	wrapper around 0x43C650
-0x00439760	65	ObjRefTree_Erase2	named	(node): erase of a tree node holding an object ref at +0x14
-0x004397B0	20	NodeAlloc_Free18d	named	returns a 0x18-byte node to g_0x79B22C
-0x004397E0	291	List14_InsertTempList	named	builds a temporary list of 0x14-byte nodes, splices it into the target list, then frees the temporary
-0x00439910	28	ObjRef_ReleaseAt0b	named	releases the short-refcounted object at +0
+0x00439700	20	NodeAlloc_Free18c	named	fastcall (p*): pushes *p on g_0x79B22C; callers NetPeer::dtor and EH funclets (NetPeer::dtor / dtor_body / ObjRefTree_Dtor2 / CopyCtor2)
+0x00439730	41	ObjRefTree_InsertWithHintIter3	named	(out it, hint, value*): copies the hint and calls ObjRefTree_InsertWithHint3 0x43C650; returns out; one caller NetPeer::RegisterObject
+0x00439760	65	ObjRefTree_Erase2	named	(tree, entry): RbTree_RebalanceForErase, ObjRef_ReleaseAt4d on the payload +0x10, entry to g_0x79B22C, count -= 1; callers Thunk_ObjRefTree_Erase2_437EF0, ObjRefTree_EraseRange3
+0x004397B0	20	NodeAlloc_Free18d	named	fastcall (p*): pushes *p on g_0x79B22C; reached only from EH funclets of ObjRefTree_Dtor3 / ObjRefTree_CopyCtor3
+0x004397E0	291	List120_InsertDefault	named	thiscall (list, out it, pos): builds a temp SentPacket record whose list +0x14 is empty (sentinel PoolAlloc(0x14)), inserts a copy before pos (ListNode_InsertBefore3 -> List120_CreateNode), then frees the temp's list (ObjRef_ReleaseAt0b on each +0x10, PoolFree 0x14, sentinel to g_0x79B22C); one caller NetPeer::SendUpdate; CORRECTION: was 'InsertTempList'
+0x00439910	28	ObjRef_ReleaseAt0b	named	fastcall (ref*): short refcount +4 of *ref -= 1, vt[0](1) at 0; callers List120_InsertDefault, ObjPartyRecord_dtor (2)
 0x00439930	13	InitFields1_439930	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 3 sites: List14_InsertTempList, List_InsertRange2, List_InsertRangeIter2
 0x00439940	21	CopyField_0_439940	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: List120_CopyCtor
-0x00439960	93	List120_Ctor	named	allocates the 0x120-byte sentinel of a list with 0x120-byte nodes
-0x004399C0	150	ListHeap_ClearObjLists	named	destroys every heap node's ObjRefList18 (+0x14, ObjRefList18_Clear + NodeAlloc_Free14n3 sentinel) and frees the nodes and the sentinel
+0x00439960	93	List120_Ctor	named	(this list, alloc byte): sentinel = operator new 0x120, self-linked; callers NetPeer::ctor (sentPackets / lostPackets)
+0x004399C0	150	ListHeap_ClearObjLists	named	fastcall (std::list of 0x120 SentPacket records): per entry: ObjRefList18_Clear on the list +0x14 and frees its sentinel (NodeAlloc_Free14n3), operator delete the entry; then operator delete the sentinel; callers NetPeer::dtor (2), EH of List120_CopyCtor
 0x00439A60	10	DerefFieldOut_4_439A60	named	STL: list iterator step through node+4 (prev link) - NetPeer::SendUpdate
-0x00439A70	41	ScriptRefTree_InsertWithHintIter	named	wrapper around 0x43CBC0
-0x00439AA0	52	IntTree_LowerBound	named	(out node, key*): red-black tree lower_bound by the int key at node +0x10
+0x00439A70	41	ScriptRefTree_InsertWithHintIter	named	(out it, hint, value*): copies the hint and calls ScriptRefTree_InsertWithHint 0x43CBC0; callers NetPeer::ReadMessage (2), ObjRefTree_GetOrInsert
+0x00439AA0	52	IntTree_LowerBound	named	(tree, out it, key*): walks from the root +4 of the header: entry key +0x10 < key -> right, else remember it and go left; out = first entry with key >= *key (header when none); callers NetPeer::ReadMessage (2)
 0x00439AE0	95	ScriptRefTree_Clear	named	STL: clear() of NetPeer +0x1100 receivedByKey (0x1c nodes {.., key, ObjRef +0x14, version +0x18}): ScriptRefTree_DestroySubtree on the right subtrees, every ref released (ScriptObjRef_ReleaseAt4), nodes PoolFree'd (0x1c), header reset, count = 0; NetPeer::dtor_body
-0x00439B40	20	NodeAlloc_Free20	named	returns a 0x20-byte node to g_0x79B230
+0x00439B40	20	NodeAlloc_Free20	named	fastcall (p*): pushes *p on the 0x20 free list g_0x79B230 (ScriptRefTree header); callers NetPeer::dtor_body and EH funclets
 0x00439B70	13	InitFields1_439B70	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 4 sites: NetPeer::ReadMessage, ObjRefTree_GetOrInsert, ScriptRefTree_InsertWithHintIter
-0x00439B80	41	PairTree_InsertWithHintIter	named	wrapper around 0x43D040
-0x00439BB0	87	HashTable_ClearNodes	named	(hash with +0 bucket vector, +4 count): walks the chain from the header, 0x43D000 destroys each node's payload (+0xc) and frees the node
-0x00439C10	20	NodeAlloc_Free18e	named	returns a 0x18-byte node to g_0x79B22C
+0x00439B80	41	PairTree_InsertWithHintIter	named	(out it, hint, value*): copies the hint and calls PairTree_InsertWithHint 0x43D040; callers NetPeer::SetObjectId (2), UintTree_GetOrInsert
+0x00439BB0	87	RbTree18_Clear	named	fastcall (tree): when count != 0: RbTree18_DestroySubtree on each right child down the left spine, entries to g_0x79B22C; header links reset, count 0; one caller NetPeer::dtor_body (idsByReceivedObject +0x110c); CORRECTION: was 'HashTable_ClearNodes' (it is an rb-tree)
+0x00439C10	20	NodeAlloc_Free18e	named	fastcall (p*): pushes *p on g_0x79B22C; callers NetPeer::dtor_body and EH funclets
 0x00439C40	13	InitFields1_439C40	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 8 sites: NetPeer::SetObjectId, PairTree_EraseKey, PairTree_InsertWithHintIter ...
-0x00439C50	41	ListNode_InsertBefore	named	(out node, pos, payload*): 0x43A950 node inserted before pos
-0x00439C80	59	List10C_PushBack	named	(list, payload): copies the 0x104-byte payload (0x4387C0) and inserts a 0x10c-byte node before the sentinel
+0x00439C50	41	ListNode_InsertBefore	named	(out it, pos, value*): List10C_NodeNew(value), links it before pos, out = it; callers NetPeer::PacketLost, NetPeer::ParseUpdate and 3 more
+0x00439C80	59	List10C_InsertDefault	named	thiscall (list, out it, pos): inserts a 0x104-byte chunk record taken uninitialised from its own stack before pos (ListNode_InsertBefore -> List10C_NodeNew), returns out; the caller fills it; one caller NetPeer::TakeStreamChunk; CORRECTION: was 'PushBack' (inserts at pos)
 0x00439CC0	21	CopyField_0_439CC0	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: List10C_CopyCtor
-0x00439CE0	93	List10C_Ctor	named	allocates the 0x10c-byte sentinel of a list with 0x10c-byte nodes
-0x00439D40	60	ListHeap_Clear2	named	frees every node of a heap-allocated list and its sentinel
-0x00439D80	69	NodeAlloc_Free10Cn	named	(p, n): frees n * 0x10c bytes to the node allocator
-0x00439DD0	62	Pairs8Vector_Erase	named	(first, last): STLport vector<8-byte>::erase range (moves the tail down)
+0x00439CE0	93	List10C_Ctor	named	(this list, alloc byte): sentinel = operator new 0x10c, self-linked; one caller NetPeer::ctor (outChunks / inChunks)
+0x00439D40	60	ListHeap_Clear2	named	fastcall (std::list with operator-new entries): operator delete every entry and then the sentinel (a list destructor); callers NetPeer::dtor (2), EH of List10C_CopyCtor
+0x00439D80	69	NodeAlloc_Free10Cn	named	(p, n): p != 0: n*0x10c > 0x80 -> operator delete, else to the size-class free list g_0x79B224[(n*0x10c-1)>>3]; callers NetPeer::dtor_body (2)
+0x00439DD0	62	Pairs8Vector_Erase	named	(vec, first, last): moves the 8-byte records [last, end) down to first, end +4 = first + their count; one caller NetPeer::SyncObjectSet
 0x00439E10	24	InitFields4_439E10	named	STL: STLport _Vector_base / _String_base ctor with allocator: start = finish = 0, allocator byte copied, end_of_storage = 0; 1 site: NetPeer::SyncObjectSet
-0x00439E30	41	ScriptRefList10_InsertBefore	named	(out node, pos, obj*): new 0x10-byte node holding the script object inserted before pos
-0x00439E60	62	NodeAlloc_FreeCn	named	(p, n): frees n * 0xc bytes to the node allocator
-0x00439EA0	123	IdHash_GetOrInsert3	named	(id*): returns the value slot (+8) of the hash node with that id, inserting a 0x42AA00 node when missing (0x42AA90 rehash)
-0x00439F20	303	Vector4Hash_Ctor	named	(n, flags...): STLport hashtable ctor: bucket vector sized to the next prime >= n (table 0x73B914), count 0
-0x0043A050	30	ObjRefPair_Ctor	named	(key*, obj*): {key, obj} with the short refcount +4 incremented
-0x0043A070	30	ObjRefPair_Ctor2	named	(key*, obj*): {key, obj} with the refcount incremented
-0x0043A090	97	ScriptRefPair_Ctor	named	(key*, {obj, extra}): {key, script obj (cloned when +6 bit 0), extra}
-0x0043A120	29	ObjRef_ReleaseAt8	named	releases the short-refcounted object at +8
-0x0043A150	64	Vector4_Deallocate7	named	frees a dword vector buffer
-0x0043A1D0	132	ObjRefList18_DtorAt0C	named	destroys the list at +0xc: 0x40A3A0 (release with Done) on each node's object (+0x10), nodes and sentinel freed
-0x0043A2B0	57	Vector4_Deallocate8	named	frees a dword vector buffer
-0x0043A300	59	NodeAlloc_Free4n	named	(p, n): frees n dwords to the node allocator
-0x0043A340	41	ObjRefList18_InsertBefore	named	(out node, pos, rec): new 0x18-byte node {a, b, obj} inserted before pos
+0x00439E30	41	ScriptRefList10_InsertBefore	named	(out it, pos, ref*): ScriptRefNode10_New(ref), links it before pos, out = it; one caller NetConnection::AddPeer
+0x00439E60	62	NodeAlloc_FreeCn	named	(p, n): p != 0: n*0xc > 0x80 -> operator delete, else to g_0x79B224[(n*0xc-1)>>3]; one caller NetConnection::dtor
+0x00439EA0	123	IdHash_GetOrInsert3	named	(key*): IdHash_Rehash(count +0x10 + 1), bucket = key % bucketCount (+4..+8), finds the key in the chain or pushes a new IdHashNode_Create({key, 0}) at the bucket head (count += 1); returns &entry +8 (the value); one caller NetPeer::ReadObjectRef
+0x00439F20	303	Vector4Hash_Ctor	named	(n, hash, eq, alloc): STLport hashtable ctor (same as HashTable_CtorN, other instantiation): functor bytes, bucket count = first prime >= n from 0x73B914, bucket vector reserved and zero-filled (Vector4_InsertN5), count +0x10 = 0; one caller NetConnection::ctor
+0x0043A050	30	ObjRefPair_Ctor	named	(this, key*, ref*): this[0] = *key, this[1] = *ref with its short refcount +4 += 1; one caller NetPeer::RegisterObject
+0x0043A070	30	ObjRefPair_Ctor2	named	same as ObjRefPair_Ctor (other instantiation); one caller NetPeer::RegisterObject
+0x0043A090	97	ScriptRefPair_Ctor	named	(this, key*, src {ref, version}*): this[0] = *key; src ref 0 or being destroyed (+4 bit 31) -> this[1] = 0, else this[1] = ref (or ref vt[3]() clone when +6 bit 0 shared), refcount += 1, +6 bit 0 set; this[2] = src[1]; callers NetPeer::ReadMessage (2)
+0x0043A120	29	ObjRef_ReleaseAt8	named	fastcall (p): short refcount of the object at p +8 -= 1, vt[0](1) at 0; callers ObjRefList18_Clear, EH of ObjRefList18_PushBack
+0x0043A150	64	Vector4_Deallocate7	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; callers List18_EraseVec, VecList18_Clear, EH funclet
+0x0043A1D0	132	ObjRefList18_DtorAt0C	named	fastcall (p): destroys the std::list at p +0xc: per entry RefCount16_Release on +0x10 when set, entry to g_0x79B22C; then the sentinel; callers ListHeap_EraseObjList, ListHeap_ClearObjLists2, EH funclet
+0x0043A2B0	57	Vector4_Deallocate8	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; one caller NetConnection::dtor
+0x0043A300	59	NodeAlloc_Free4n	named	(p, n): p != 0: n*4 > 0x80 -> operator delete, else to g_0x79B224[(n*4-1)>>3]; callers NetPeer::dtor, NetPeer::dtor_body (the recvWindow vector)
+0x0043A340	41	ObjRefList18_InsertBefore	named	(out it, pos, rec*): ObjRefNode18_New(rec) (0x18 entry {a, b, ObjRef}), linked before pos, out = it; callers ObjRefList18_PushBack (InsertDefault), ObjRefList18_InsertRange
 0x0043A370	21	PairCtor_43A370	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: List14_InsertTempList
-0x0043A390	62	NodeAlloc_Free14n3	named	(p, n): frees n * 0x14 bytes to the node allocator
+0x0043A390	62	NodeAlloc_Free14n3	named	(p, n): p != 0: n*0x14 > 0x80 -> operator delete, else to the size-class free list g_0x79B224[(n*0x14-1)>>3]; callers List120_Destroy, ListHeap_ClearObjLists (the sentinels of the SentPacket inner lists)
 0x0043A3D0	13	InitFields1_43A3D0	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 3 sites: ObjRefList18_InsertRange, ObjRefList18_InsertRange2, ObjRefList18_PushBack
-0x0043A3E0	41	ListNode_InsertBefore2	named	(out node, pos, payload*): 0x43AC40 node inserted before pos
-0x0043A410	62	NodeAlloc_Free14n4	named	(p, n): frees n * 0x14 bytes
+0x0043A3E0	41	ListNode_InsertBefore2	named	(out it, pos, vector*): VecList18_CreateNode(vector) (entry with a copy of the vector), linked before pos, out = it; callers List18_InsertEmptyVector, List_InsertRange
+0x0043A410	62	NodeAlloc_Free14n4	named	(p, n): same size-class free of n*0x14 bytes; one caller NetPeer::dtor
 0x0043A450	13	InitFields1_43A450	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 3 sites: List_InsertRange, List_InsertRangeIter, List_InsertTempVector
 0x0043A460	21	CopyField_0_43A460	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: ObjRefTree_CopyCtor
-0x0043A480	62	NodeAlloc_Free18n3	named	(p, n): frees n * 0x18 bytes
+0x0043A480	62	NodeAlloc_Free18n3	named	(p, n): same size-class free of n*0x18 bytes; callers NetPeer::dtor_body (entriesByKey header), ObjRefTree_EraseRange
 0x0043A4C0	21	CopyField_0_43A4C0	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: ObjRefTree_CopyCtor2
-0x0043A4E0	62	NodeAlloc_Free18n4	named	(p, n): frees n * 0x18 bytes
+0x0043A4E0	62	NodeAlloc_Free18n4	named	(p, n): same size-class free of n*0x18 bytes; callers NetPeer::dtor_body (entriesByObject header), ObjRefTree_EraseRange2
 0x0043A520	21	CopyField_0_43A520	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: ObjRefTree_CopyCtor3
-0x0043A540	41	ListNode_InsertBefore3	named	(out node, pos, payload*): 0x43ADE0 node inserted before pos
-0x0043A570	25	MapHeader_Init_A	named	initializes a std::map header node (left=parent=0, leftmost/rightmost = self)
-0x0043A590	419	RbTree20_Ctor	named	STLport red-black tree header with 0x20-byte nodes (g_0x79B230, inline chunk refill)
+0x0043A540	41	ListNode_InsertBefore3	named	(out it, pos, rec*): List120_CreateNode(rec) (0x120 SentPacket entry), linked before pos, out = it; callers List120_InsertDefault, List_InsertRange2
+0x0043A570	25	MapHeader_Init_A	named	fastcall (tree): header colour byte 0, parent +4 = 0, left +8 = right +0xc = header (empty rb-tree header); one caller NetPeer::ctor
+0x0043A590	419	RbTree20_AllocHeader	named	(this tree, alloc byte): takes the header from the 0x20 free list g_0x79B230 (refill of 20 inlined, stlport_node_alloc_chunk_alloc 0x20) and stores it at +0; does not link it (MapHeader_Init_A does); one caller NetPeer::ctor (receivedByKey +0x1100); CORRECTION: was 'RbTree20_Ctor'
 0x0043A740	21	CopyField_0_43A740	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: ScriptRefTree_CopyCtor
-0x0043A760	25	MapHeader_Init_B	named	initializes a std::map header node (second instance)
-0x0043A780	425	RbTree18_Ctor3	named	STLport red-black tree header with 0x18-byte nodes (inline chunk refill)
+0x0043A760	25	MapHeader_Init_B	named	fastcall (tree): same as MapHeader_Init_A (empty header links); one caller NetPeer::ctor
+0x0043A780	425	RbTree18_AllocHeader	named	(this tree, alloc byte): takes the header from the 0x18 free list g_0x79B22C (refill of 20 inlined) and stores it at +0, no linking (MapHeader_Init_B does); returns this; one caller NetPeer::ctor; CORRECTION: was 'RbTree18_Ctor3'
 0x0043A930	21	CopyField_0_43A930	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: PairTree_CopyCtor
-0x0043A950	38	List10C_NodeNew	named	(payload[0x41]): heap 0x10c-byte list node with a 0x104-byte payload copy
+0x0043A950	38	List10C_NodeNew	named	(rec*): operator new 0x10c, copies the 0x104-byte chunk record (0x41 dwords) to +8; returns the entry; one caller ListNode_InsertBefore
 0x0043A980	21	PairCtor_43A980	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: NetPeer::ctor
-0x0043A9A0	238	ScriptRefNode10_New	named	(obj*): allocates a 0x10-byte node (g_0x79B228) holding a script object ref at +8
-0x0043AAB0	57	Vector4_Deallocate9	named	frees a dword vector buffer
-0x0043AAF0	50	NodeAlloc_Free120n	named	(p, n): frees n * 0x120 bytes
-0x0043AB30	50	NodeAlloc_FreeCn2	named	(p, n): frees n * 0xc bytes
-0x0043AB70	57	Vector4_Deallocate10	named	frees a dword vector buffer (5 callers)
-0x0043ABB0	141	ObjRefNode18_New	named	(rec {a, b, obj}): allocates a 0x18-byte node (g_0x79B22C) {next, prev, a, b, obj (refcount++)}
-0x0043AC40	288	VecList18_CreateNode	named	allocates a 0x18-byte list node {next, prev, vector<dword>} from the node allocator and copies the vector
+0x0043A9A0	238	ScriptRefNode10_New	named	(ref*): 0x10-byte entry from g_0x79B228 (refill 20); +8 = ScriptObjRef copy of *ref (0 when null or being destroyed; vt[3]() clone when +6 bit 0; refcount += 1, +6 bit 0 set); returns the entry; one caller ScriptRefList10_InsertBefore
+0x0043AAB0	57	Vector4_Deallocate9	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; one caller NetConnection::dtor
+0x0043AAF0	50	NodeAlloc_Free120n	named	fastcall (p, n): p != 0: n*0x120 > 0x80 -> operator delete, else size-class free list; callers NetPeer::dtor_body (2: the SentPacket list sentinels)
+0x0043AB30	50	NodeAlloc_FreeCn2	named	fastcall (p, n): same size-class free of n*0xc bytes; one caller NetConnection::dtor
+0x0043AB70	57	Vector4_Deallocate10	named	fastcall (vector<u32>*): frees begin..cap to the size-class pool or operator delete; callers VecList18_Dtor, VecList18_Dtor2, EH funclets
+0x0043ABB0	141	ObjRefNode18_New	named	(rec* {a, b, obj}): 0x18 entry from g_0x79B22C (refill 20); +8 = a, +0xc = b, +0x10 = obj with its short refcount += 1; returns the entry; one caller ObjRefList18_InsertBefore
+0x0043AC40	288	VecList18_CreateNode	named	(vector<u32>* src): 0x18 entry from g_0x79B22C (refill 20); copy-constructs the vector at +8: buffer PoolAlloc(n*4) (0 when empty), begin / end / cap +8 / +0xc / +0x10, elements copied with Dwords_CopyChecked3; returns the entry; one caller ListNode_InsertBefore2
 0x0043AD80	21	PairCtor_43AD80	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: ObjRefTree_CopyCtor
 0x0043ADA0	21	PairCtor_43ADA0	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: ObjRefTree_CopyCtor2
 0x0043ADC0	21	PairCtor_43ADC0	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: ObjRefTree_CopyCtor3
-0x0043ADE0	226	List120_CreateNode	named	allocates a 0x120-byte list node and copy-constructs the record {dword, dword, short, ObjRefList18, 0x104 bytes, byte}
+0x0043ADE0	226	List120_CreateNode	named	(rec*): operator new 0x120; +8 = rec[0] (double time, 2 dwords), +0x10 = u16 seq, +0x14 = std::list (List18_CtorD) filled with a copy of rec's list (ObjRefList18_InsertRange2), +0x18..+0x11b = the 0x104-byte chunk copy (0x41 dwords), +0x11c = lost byte; returns the entry; one caller ListNode_InsertBefore3
 0x0043AEE0	13	DerefOut_43AEE0	named	STL: iterator dereference into the out param (**this); 1 site: List120_CreateNode
-0x0043AEF0	432	List18_CtorD	named	allocates the sentinel of an 0x18-byte node list (inline chunk refill)
-0x0043B0A0	147	ObjRefList18_Dtor	named	releases every node's object (+0x10) of an STLport list with 0x18-byte nodes and the sentinel
+0x0043AEF0	432	List18_CtorD	named	(this list, alloc byte): std::list ctor: sentinel from g_0x79B22C (refill of 20 inlined), self-linked; returns this; one caller List120_CreateNode
+0x0043B0A0	147	ObjRefList18_Dtor	named	fastcall (std::list of {a, b, ObjRef +0x10}): per entry: ObjRef short refcount -= 1 (vt[0](1) at 0), entry to g_0x79B22C; then the sentinel; reached only from an EH funclet of List120_CreateNode
 0x0043B140	21	PairCtor_43B140	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: ScriptRefTree_CopyCtor
 0x0043B160	21	PairCtor_43B160	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: PairTree_CopyCtor
-0x0043B180	50	NodeAlloc_Free14n5	named	(p, n): frees n * 0x14 bytes
-0x0043B1C0	50	NodeAlloc_Free18n5	named	(p, n): frees n * 0x18 bytes
-0x0043B200	50	NodeAlloc_Free18n6	named	(p, n): frees n * 0x18 bytes
-0x0043B240	50	NodeAlloc_Free18n7	named	(p, n): frees n * 0x18 bytes
-0x0043B280	56	NodeAlloc_Free1Cn2	named	(p, n): frees n * 0x1c bytes
-0x0043B2C0	50	NodeAlloc_Free18n8	named	(p, n): frees n * 0x18 bytes
-0x0043B310	45	NodeAlloc_FreeBytes	named	(p, size): frees a block of the given size to the node allocator free lists (> 0x80: free()) (37 callers)
+0x0043B180	50	NodeAlloc_Free14n5	named	fastcall (p, n): p != 0: n*0x14 > 0x80 -> operator delete, else size-class free list; one caller NetPeer::dtor_body (idRecycleList sentinel)
+0x0043B1C0	50	NodeAlloc_Free18n5	named	fastcall (p, n): size-class free of n*0x18 bytes; one caller ObjRefTree_Dtor
+0x0043B200	50	NodeAlloc_Free18n6	named	fastcall (p, n): size-class free of n*0x18 bytes; one caller ObjRefTree_Dtor2
+0x0043B240	50	NodeAlloc_Free18n7	named	fastcall (p, n): size-class free of n*0x18 bytes; one caller ObjRefTree_Dtor3
+0x0043B280	56	NodeAlloc_Free1Cn2	named	fastcall (p, n): size-class free of n*0x1c bytes; callers ScriptRefTree_Dtor, 0x4383F6
+0x0043B2C0	50	NodeAlloc_Free18n8	named	fastcall (p, n): size-class free of n*0x18 bytes; callers RbTree18_Dtor, 0x4385EC
+0x0043B310	45	NodeAlloc_FreeBytes	named	fastcall (p, size): p != 0: size > 0x80 -> operator delete, else pushed on g_0x79B224[(size-1)>>3]; ~37 call sites across the exe (NetConnection, StrHashTable_LookupId, script compiler, world, UI)
 0x0043B340	21	PairCtor_43B340	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 2 sites: List_InsertTempVector, VecList18_CreateNode
-0x0043B360	35	Dwords_CopyRangeReturnEnd	named	memcpy(dst, first, (last-first)) of dwords and return the end of dst
-0x0043B390	314	Vector4_InsertN4	named	STLport vector<dword>::insert(pos, n, value) (0x40B600 reallocates)
-0x0043B4D0	90	HashTable10_Clear	named	returns every node of a hash table's buckets to g_0x79B228 and zeroes the buckets, count +0x10 = 0
+0x0043B360	35	Dwords_CopyRangeReturnEnd	named	fastcall (first, last, dst): memmove(dst, first, (last-first) bytes), returns dst + count; one caller NetPeer::Clone
+0x0043B390	314	Vector4_InsertN4	named	(vec, pos, n, value*): vector<u32>::insert(pos, n, value): reallocating path DwordVector_InsertRealloc_40B600 when the spare capacity < n; else shifts the tail up by n (two cases: n < tail or not) and fills n copies of *value; one caller HashTable_CtorN
+0x0043B4D0	90	HashTable10_Clear	named	fastcall (hashtable): returns every chain entry to the 0x10 free list g_0x79B228, empties every bucket, count +0x10 = 0 (bucket vector kept); one caller NetConnection::dtor
 0x0043B530	335	Shorts_InsertN	named	STL: vector<u16>::insert(pos, n, value) reallocating path of the per-kind free-id stacks (NetPeer +0x54 idAlloc, 0x10 per kind); NetPeer_DistributeIds (75 s id recycling) and NetPeer::Tick
 0x0043B6C0	331	Dwords_InsertN3	named	STL: vector<dword>::insert(pos, n, value) reallocating path (Dwords_CopyChecked / FillN); NetPeer::OnPacketAcked (acked entry list) and the NetAddress::ToStringDefault neighbour (a call-graph artefact: that 6-line function does not call it)
 0x0043B850	334	Dwords_InsertN4	named	STL: vector<uint>::insert(pos, n, value) reallocating path of the NetPeer received-sequence window +0x14..+0x1c; NetPeer::AcceptSeq pushes every accepted unwrapped sequence
-0x0043B9E0	59	ObjRefList18_Clear	named	releases every node's object (+8) and frees the nodes (g_0x79B22C); the sentinel is re-linked
-0x0043BA20	59	VecList18_Clear	named	frees each node's dword vector (+8) and the nodes of an 0x18-byte list; sentinel re-linked
-0x0043BA60	176	ObjRefTree_CopySubtree	named	(src node, parent): recursive copy of an int-keyed {key, obj ref} subtree (ObjRefNode18_New2)
-0x0043BB70	65	ObjRefTree_DestroySubtree	named	(node): recursive destruction releasing the object at +0x14
-0x0043BBC0	666	ObjRefTree_InsertWithHint	named	(out node, hint, pair*): STLport insert_unique(hint, value) for the int-keyed {key, obj ref} tree
-0x0043BE60	150	ObjRefTree_EraseKey	named	(key*): erases every node with the key (equal_range + ObjRefTree_EraseRange); returns the count
-0x0043BF00	96	IntTree_Find	named	(out node, key*): red-black tree find by the int key at node +0x10 (header when missing)
-0x0043BF60	52	IntTree_LowerBound2	named	(out node, key*): red-black tree lower_bound by the int key
+0x0043B9E0	59	ObjRefList18_Clear	named	fastcall (std::list of {a, b, ObjRef +0x10}): per entry ObjRef_ReleaseAt8 on entry +8 (the ObjRef +0x10), entry to g_0x79B22C; sentinel relinked to itself and kept; callers List120_Destroy, ListHeap_ClearObjLists
+0x0043BA20	59	VecList18_Clear	named	fastcall (std::list of vector<u32>): per entry Vector4_Deallocate7 on +8, entry to g_0x79B22C; sentinel kept; callers NetPeer::dtor, NetPeer::dtor_body
+0x0043BA60	176	ObjRefTree_CopySubtree	named	(src entry, parent): STLport _M_copy for the int-keyed {key, ObjRef} tree: clones src with ObjRefNode18_New2 (colour byte copied, children 0, parent set), recurses on the right child, iterates down the left spine; returns the copy; callers ObjRefTree_CopyCtor and itself
+0x0043BB70	65	ObjRefTree_DestroySubtree	named	(entry): STLport _M_erase: recursive on the right child, iterative on the left; per entry ObjRef_ReleaseAt4b on +0x10 and the entry to g_0x79B22C; callers ObjRefTree_Dtor, ObjRefTree_Clear, itself, 0x43BB0A
+0x0043BBC0	666	ObjRefTree_InsertWithHint	named	(out it, hint, value*): STLport insert_unique(hint, value) for the signed-int-keyed {key, ObjRef} tree (entries ObjRefNode18_New2): O(1) paths when hint is begin / end or value lies between hint-1 and hint (ObjRefTree_InsertAt or a direct link + RbTree_Rebalance, count +4 += 1), else ObjRefTree_InsertUnique; out = the entry; one caller ObjRefTree_InsertWithHintIter
+0x0043BE60	150	ObjRefTree_EraseKey	named	(key*): map<int, ObjRef>::erase(key): upper bound walk + IntTree_LowerBound2, count = RbTree_DistanceIter(lower, upper), ObjRefTree_EraseRange(lower, upper); returns the count; one caller NetPeer::OnPacketAcked
+0x0043BF00	96	IntTree_Find	named	(tree, out it, key*): lower bound by signed key +0x10, out = that entry when its key == *key, else the header (end); one caller NetPeer::ReadObjectRef
+0x0043BF60	52	IntTree_LowerBound2	named	(tree, out it, key*): first entry with signed key +0x10 >= *key, header when none; callers IntTree_GetOrInsert, ObjRefTree_EraseKey, 0x435235
 0x0043BFA0	176	ObjRefTree_CopySubtree2	named	STL: recursive rb-subtree copy (src node, parent) -> new node: ObjRefNode18_New3 clones the node (object ref refcount ++, colour / key copied), right subtree by recursion, left subtree by the loop; ObjRefTree_CopyCtor2 (NetPeer +0x1068 entriesByObject)
-0x0043C0B0	65	ObjRefTree_DestroySubtree2	named	(node): recursive destruction releasing the object at +0x14
-0x0043C100	666	ObjRefTree_InsertWithHint2	named	(out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree
-0x0043C3A0	14	Iter_DerefNode8_A	named	out = node->payload (+8) of the current node (list/map iterator deref)
-0x0043C3B0	150	ObjRefTree_EraseKey2	named	(key*): erases every node with the key (unsigned); returns the count
-0x0043C450	96	UintTree_Find	named	(out node, key*): red-black tree find by the unsigned key at node +0x10
-0x0043C4B0	52	UintTree_LowerBound	named	(out node, key*): red-black tree lower_bound by the unsigned key
+0x0043C0B0	65	ObjRefTree_DestroySubtree2	named	(entry): recursive subtree free for the second tree type: ObjRef_ReleaseAt4c on +0x10, entries to g_0x79B22C; callers ObjRefTree_Dtor2 and the clear / erase paths
+0x0043C100	666	ObjRefTree_InsertWithHint2	named	(out it, hint, value*): the same STLport insert_unique(hint) for an unsigned-keyed {key, ObjRef} tree (entries ObjRefNode18_New3, fallback ObjRefTree_InsertUnique2 / InsertAt2); one caller ObjRefTree_InsertWithHintIter2
+0x0043C3A0	14	Iter_DerefNode8_A	named	(tree, out it): out = header->left (+8), i.e. begin(); one caller 0x43C1E5 (inside ObjRefTree_InsertWithHint2)
+0x0043C3B0	150	ObjRefTree_EraseKey2	named	(key*): map<uint, ObjRef>::erase(key) for the second tree type: upper bound walk + UintTree_LowerBound, count = RbTree_DistanceIter2, ObjRefTree_EraseRange2; returns the count; callers NetPeer::SendUpdate and 0x435C51
+0x0043C450	96	UintTree_Find	named	(tree, out it, key*): lower bound by unsigned key +0x10; out = the entry when its key == *key, else the header; one caller NetWriter::WriteRef
+0x0043C4B0	52	UintTree_LowerBound	named	(tree, out it, key*): first entry with unsigned key +0x10 >= *key, header when none; callers NetPeer::RegisterObject, ObjRefTree_EraseKey2, 0x43464C
 0x0043C4F0	176	ObjRefTree_CopySubtree3	named	STL: recursive rb-subtree copy (src node, parent) -> new node via ObjRefNode18_New4 (right subtree recursive, left iterative); ObjRefTree_CopyCtor3 (the 11 NetPeer +0x1074 group trees)
-0x0043C600	65	ObjRefTree_DestroySubtree3	named	(node): recursive destruction releasing the object at +0x14
-0x0043C650	666	ObjRefTree_InsertWithHint3	named	(out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree
-0x0043C8F0	14	Iter_DerefNode8_B	named	out = node->payload (+8) (iterator deref, instance B)
-0x0043C900	150	ObjRefTree_EraseKey3	named	(key*): erases every node with the key (unsigned); returns the count
+0x0043C600	65	ObjRefTree_DestroySubtree3	named	(entry): recursive subtree free for the third tree type: ObjRef_ReleaseAt4d on +0x10, entries to g_0x79B22C; callers ObjRefTree_Dtor3 and the clear / erase paths
+0x0043C650	666	ObjRefTree_InsertWithHint3	named	(out it, hint, value*): the same STLport insert_unique(hint) for the third unsigned-keyed {key, ObjRef} tree (entries ObjRefNode18_New4, fallback InsertUnique3 / InsertAt3); one caller ObjRefTree_InsertWithHintIter3
+0x0043C8F0	14	Iter_DerefNode8_B	named	(tree, out it): out = header->left (+8) = begin(); one caller ObjRefTree_InsertWithHint3
+0x0043C900	150	ObjRefTree_EraseKey3	named	(key*): map<uint, ObjRef>::erase(key) for the third tree type (UintTree_LowerBound2, RbTree_DistanceIter3, ObjRefTree_EraseRange3); returns the count; callers NetPeer::SyncObjectSet (2)
 0x0043C9A0	96	UintTree_Find2	named	(this = one NetPeer +0x1074 group tree, out iterator, key NetPendingEntry*) -> *out = the node with the key or the header (end): lower_bound walk then an upper check; NetPeer::OnPacketAcked looks the acked entries up in their group tree
-0x0043CA00	52	UintTree_LowerBound2	named	(out node, key*): red-black tree lower_bound by unsigned key
-0x0043CA40	55	ListHeap_ClearObjLists2	named	destroys every heap node's ObjRefList18 (+8) and frees the nodes
-0x0043CA80	172	ScriptRefTree_CopySubtree	named	(src node, parent): recursive copy of the script object tree (ScriptRefNode20_New)
-0x0043CB70	65	ScriptRefTree_DestroySubtree	named	(node): recursive destruction releasing the script object at +0x14 (external ref protocol), nodes to g_0x79B230
-0x0043CBC0	666	ScriptRefTree_InsertWithHint	named	(out node, hint, rec*): insert_unique(hint, value) for the script object tree
-0x0043CE60	14	Iter_DerefNode8_C	named	iterator deref, instance C
+0x0043CA00	52	UintTree_LowerBound2	named	(tree, out it, key*): first entry with unsigned key +0x10 >= *key, header when none; callers NetPeer::RegisterObject, ObjRefTree_EraseKey3, 0x434574
+0x0043CA40	55	ListHeap_ClearObjLists2	named	fastcall (std::list of SentPacket records): per entry ObjRefList18_DtorAt0C(entry +8) (the inner list +0x14) and operator delete the entry; sentinel relinked and kept; callers NetPeer::dtor_body (2)
+0x0043CA80	172	ScriptRefTree_CopySubtree	named	(src entry, parent): STLport _M_copy for the {key, ScriptObjRef} tree (entries ScriptRefNode20_New): clone + recursion on the right child, loop down the left; returns the copy; callers ScriptRefTree_CopyCtor and itself
+0x0043CB70	65	ScriptRefTree_DestroySubtree	named	(entry): recursive subtree free: ScriptObjRef_ReleaseAt4 on +0x10, entries to the 0x20 free list g_0x79B230; callers ScriptRefTree_Dtor, ObjRefTree_GetOrInsert path, 0x439AFB ..
+0x0043CBC0	666	ScriptRefTree_InsertWithHint	named	(out it, hint, value*): the same STLport insert_unique(hint) for the signed-int-keyed {key, ScriptObjRef, version} tree (entries ScriptRefNode20_New, fallback ScriptRefTree_InsertUnique / InsertAt); one caller ScriptRefTree_InsertWithHintIter
+0x0043CE60	14	Iter_DerefNode8_C	named	(tree, out it): out = header->left (+8) = begin(); one caller ScriptRefTree_InsertWithHint
 0x0043CE70	96	IntTree_Find2	named	(this = NetPeer +0x1100 receivedByKey, out iterator, key kind << 16 | id) -> *out = the node with the key or the header (end); NetPeer::ReadObjectRef and ReadMessage resolve received object ids
-0x0043CED0	52	IntTree_LowerBound3	named	(out node, key*): red-black tree lower_bound by int key
-0x0043CF10	172	PairTree_CopySubtree	named	(src node, parent): recursive copy of a {key, value} tree (PairNode18_New)
-0x0043D000	55	RbTree18_DestroySubtree	named	(node): recursive destruction of plain 0x18-byte tree nodes (6 callers)
-0x0043D040	666	PairTree_InsertWithHint	named	(out node, hint, pair*): insert_unique(hint, value) for the {key, value} tree
+0x0043CED0	52	IntTree_LowerBound3	named	(tree, out it, key*): first entry with signed key +0x10 >= *key, header when none; one caller ObjRefTree_GetOrInsert
+0x0043CF10	172	PairTree_CopySubtree	named	(src entry, parent): STLport _M_copy for the {uint key, dword} tree (entries PairNode18_New); returns the copy; callers PairTree_CopyCtor and itself
+0x0043D000	55	RbTree18_DestroySubtree	named	(entry): recursive subtree free of a 0x18-entry tree with a plain payload (entries to g_0x79B22C); callers RbTree18_Dtor, RbTree18_Dtor2, RbTree18_Clear and more (6)
+0x0043D040	666	PairTree_InsertWithHint	named	(out it, hint, value*): the same STLport insert_unique(hint) for the unsigned-keyed {key, dword} tree (entries PairNode18_New, fallback PairTree_InsertUnique / InsertAt); one caller PairTree_InsertWithHintIter
 0x0043D2E0	150	PairTree_EraseKey	named	(this = NetPeer +0x110c idsByReceivedObject, key object pointer*) -> erased count: upper bound by the inline walk + lower bound, RbTree_DistanceIter4 counts the equal range, PairTree_EraseRange removes it; NetPeer::ReadMessage when a received object is removed
 0x0043D380	96	UintTree_Find3	named	(this = NetPeer +0x110c idsByReceivedObject, out iterator, key object pointer) -> *out = the node {u16 id +0x14, u8 kind +0x16} or the header (end); NetWriter::WriteRef (flag bit 1 = a reference to a received object)
-0x0043D3E0	52	UintTree_LowerBound3	named	(out node, key*): red-black tree lower_bound by unsigned key
-0x0043D420	45	ListHeap_Clear3	named	frees every node of a heap-allocated list; sentinel re-linked
-0x0043D450	314	Vector4_InsertN5	named	STLport vector<dword>::insert(pos, n, value) (0x43F610 reallocates)
+0x0043D3E0	52	UintTree_LowerBound3	named	(tree, out it, key*): first entry with unsigned key +0x10 >= *key, header when none; callers NetPeer::SetObjectId, UintTree_GetOrInsert and 3 more in 0x4353B0..0x43554B
+0x0043D420	45	ListHeap_Clear3	named	fastcall (std::list with operator-new entries): operator delete every entry; sentinel relinked and kept; callers NetPeer::dtor_body (2: inChunks / outChunks, sentinel freed after by NodeAlloc_Free10Cn)
+0x0043D450	314	Vector4_InsertN5	named	(vec, pos, n, value*): vector<u32>::insert(pos, n, value), same code as Vector4_InsertN4 with Dwords_InsertN6 (0x43F610) as the reallocating path; one caller Vector4Hash_Ctor
 0x0043D590	90	HashTable10_Clear2	named	STL: clear() of NetConnection +0x40 creatorByKind (kind -> creator, 0x10 nodes): every bucket's node chain returned to the pool g_0x79B228, buckets zeroed, count +0x10 = 0; NetConnection::dtor
 0x0043D5F0	331	Dwords_InsertN5	named	STL: vector<handler fn>::insert(pos, n, value) reallocating path (Dwords_CopyChecked2 / FillN2) of the per-kind handler vectors NetConnection +0x164 / +0xd64 / +0x1964 (0xc each); NetConnection::AddHandler push_back
-0x0043D780	52	ObjList_FindByAddressIter	named	(this = out, first, last, addr*): iterator wrapper around ObjList_FindByAddress
+0x0043D780	52	ObjList_FindByAddressIter	named	(out it, first, last, addr*): copies the two list iterators and calls ObjList_FindByAddress; returns out; callers NetConnection::FindPeerByAddress, NetConnection::AddPeer, NetConnection::OnUpdate (+1)
 0x0043D7C0	13	InitFields1_43D7C0	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 2 sites: ObjList_FindByAddressIter
 0x0043D7D0	15	StoreFirstDword_43D7D0	named	STL: iterator ctor from a node pointer (this in ecx); 1 site: NetConnection::AddPeer
-0x0043D7E0	11	Dword_PlacementCopy_A	named	if dst != 0: *dst = *src (placement construct of a dword)
-0x0043D7F0	9	Dword_PlacementCopy_B	named	if dst != 0: *dst = *src (second instance)
-0x0043D800	42	List_InsertRangeIter	named	(pos, first, last): iterator wrapper around List_InsertRange
-0x0043D830	933	RbTree_RebalanceForErase	named	(node, &root, &leftmost, &rightmost): STLport _Rb_tree_rebalance_for_erase (8 callers)
-0x0043DBE0	58	RbTree_Increment	named	(iterator*): STLport red-black tree iterator ++ (24 callers)
-0x0043DC20	42	List_InsertRangeIter2	named	(pos, first, last): iterator wrapper around List_InsertRange2
-0x0043DC50	42	List10C_InsertRange	named	list insert range wrapper (0x10c-byte nodes)
-0x0043DC80	31	Dwords_Copy	named	(first, last, dst): copies dwords
+0x0043D7E0	11	Dword_PlacementCopy_A	named	fastcall (dst, src): dst != 0 -> *(u16*)dst = *(u16*)src (placement copy of a 16-bit value); one caller NetPeer::Tick
+0x0043D7F0	9	Dword_PlacementCopy_B	named	fastcall (dst, src): dst != 0 -> *dst = *src (dword); one caller NetPeer::OnPacketAcked
+0x0043D800	42	List_InsertRangeIter	named	(list, pos, first, last): copies the pos iterator and calls List_InsertRange (list of vectors); one caller List14_CopyCtor
+0x0043D830	933	RbTree_RebalanceForErase	named	fastcall (z, &root, &leftmost, &rightmost): STLport _Rb_tree_rebalance_for_erase: unlinks z (swapping in its successor when it has two children), fixes leftmost / rightmost, recolours / rotates (colour byte 0 red, 1 black; left +8, right +0xc, parent +4); returns the entry to free; 8 callers (the tree Erase functions)
+0x0043DBE0	58	RbTree_Increment	named	fastcall (it*): ++it: right child -> its leftmost, else climb while it is a right child; header special case (right of header == it); 24 sites
+0x0043DC20	42	List_InsertRangeIter2	named	(list, pos, first, last): copies the pos iterator and calls List_InsertRange2 (SentPacket list); one caller List120_CopyCtor
+0x0043DC50	42	List10C_InsertRange	named	(list, pos, first, last): copies the pos iterator and calls List_InsertRange3 (chunk list); one caller List10C_CopyCtor
+0x0043DC80	31	Dwords_Copy	named	fastcall (first, last, dst): copies (last-first)/4 dwords forward; one caller NetPeer::Tick
 0x0043DCA0	30	ScriptObjRef_Release4_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_Release4, then operator delete when flag&1 (1 site: NetConnection::dtor)
 0x0043DCC0	30	ObjRefTreeNode4c_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4c, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor2, ObjRefTree_EraseRange2)
 0x0043DCE0	30	ObjRefTreeNode4d_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4d, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor3, ObjRefTree_EraseRange3)
 0x0043DD00	22	GetFieldOut_8_43DD00	named	STL: get_allocator() - copies the empty allocator byte (+8) of a vector / string / hashtable base into the out param; 1 site: VecList18_CreateNode
 0x0043DD20	13	DerefOut_43DD20	named	STL: iterator dereference into the out param (**this); 1 site: List120_CreateNode
 0x0043DD30	21	CopyField_0_43DD30	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: List120_CreateNode
-0x0043DD50	135	ObjRefNode18_New2	named	(pair {key, obj}): 0x18-byte tree node with the pair at +0x10 (refcount++)
-0x0043DDE0	135	ObjRefNode18_New3	named	(pair {key, obj}): 0x18-byte tree node with the pair (refcount++)
-0x0043DE70	135	ObjRefNode18_New4	named	(pair {key, obj}): 0x18-byte tree node with the pair (refcount++)
-0x0043DF00	250	ScriptRefNode20_New	named	(rec {key, script obj, extra}): 0x20-byte tree node (g_0x79B230) with the script object (cloned when +6 bit 0)
+0x0043DD50	135	ObjRefNode18_New2	named	(value* {key, ObjRef}): 0x18 entry from g_0x79B22C (refill 20); +0x10 = key, +0x14 = ObjRef with its short refcount += 1; returns the entry; 12 sites in the first tree type (CopySubtree, InsertWithHint, InsertAt, InsertUnique)
+0x0043DDE0	135	ObjRefNode18_New3	named	identical code to ObjRefNode18_New2 for the second tree type; 12 sites
+0x0043DE70	135	ObjRefNode18_New4	named	identical code to ObjRefNode18_New2 for the third tree type; 12 sites
+0x0043DF00	250	ScriptRefNode20_New	named	(value* {key, ref, version}): 0x20 entry from g_0x79B230 (refill 20); +0x10 = key, +0x14 = ScriptObjRef copy (0 when null or being destroyed, vt[3]() clone when +6 bit 0, refcount += 1, +6 bit 0 set), +0x18 = version; returns the entry; 12 sites (ScriptRefTree functions)
 0x0043E020	127	PairNode18_New	named	STL: allocates a 0x18-byte rb-tree node (pool g_0x79B22C via chunk_alloc) and copies the pair {object key +0x10, u16 id +0x14, u8 kind +0x16} in; the NetPeer +0x110c idsByReceivedObject inserts / copy (12 sites)
-0x0043E0A0	62	NodeAlloc_FreeCn3	named	(p, n): frees n * 0xc bytes
+0x0043E0A0	62	NodeAlloc_FreeCn3	named	(p, n): p != 0: n*0xc > 0x80 -> operator delete, else size-class free list; one caller NetRegistry::Destroy
 0x0043E0E0	22	InitFields2_43E0E0	named	STL: pair<iterator, iterator> / two-dword range ctor; 0 sites
 0x0043E100	22	InitFields2_43E100	named	STL: pair<iterator, iterator> / two-dword range ctor; 1 site
 0x0043E120	22	InitFields2_43E120	named	STL: pair<iterator, iterator> / two-dword range ctor; 0 sites
-0x0043E140	438	ObjRefTree_InsertAt	named	(out node, hint, parent, pair*): STLport _M_insert for an int-keyed tree of {key, obj ref} nodes (inline rebalance)
-0x0043E300	72	RbTree_RotateRight	named	(node, &root): STLport _Rotate_right (18 callers)
-0x0043E350	72	RbTree_RotateLeft	named	(node, &root): STLport _Rotate_left (25 callers)
-0x0043E3A0	312	ObjRefTree_InsertUnique	named	(out {node, inserted}, pair*): STLport insert_unique for the int-keyed {key, obj ref} tree
-0x0043E4E0	194	ObjRefTree_EraseRange	named	(first, last): STLport erase(first, last) of the int-keyed {key, obj ref} tree
-0x0043E5B0	52	IntTree_UpperBound	named	(out node, key*): red-black tree upper_bound by int key
-0x0043E5F0	45	RbTree_DistanceIter	named	(first, last): iterator wrapper around RbTree_Distance
-0x0043E620	438	ObjRefTree_InsertAt2	named	(out node, hint, parent, pair*): _M_insert for an unsigned-keyed {key, obj ref} tree
-0x0043E7E0	312	ObjRefTree_InsertUnique2	named	(out {node, inserted}, pair*): insert_unique for the unsigned-keyed {key, obj ref} tree
-0x0043E920	194	ObjRefTree_EraseRange2	named	(first, last): erase(first, last) of an unsigned-keyed {key, obj ref} tree
-0x0043E9F0	52	UintTree_UpperBound	named	(out node, key*): red-black tree upper_bound by unsigned key
-0x0043EA30	45	RbTree_DistanceIter2	named	(first, last): wrapper around RbTree_Distance2
-0x0043EA60	438	ObjRefTree_InsertAt3	named	(out node, hint, parent, pair*): _M_insert for an unsigned-keyed {key, obj ref} tree
-0x0043EC20	312	ObjRefTree_InsertUnique3	named	(out {node, inserted}, pair*): insert_unique for the unsigned-keyed {key, obj ref} tree
-0x0043ED60	194	ObjRefTree_EraseRange3	named	(first, last): erase(first, last) of an unsigned-keyed {key, obj ref} tree
-0x0043EE30	62	NodeAlloc_Free18n9	named	(p, n): frees n * 0x18 bytes
-0x0043EE70	52	UintTree_UpperBound2	named	(out node, key*): red-black tree upper_bound by unsigned key
-0x0043EEB0	45	RbTree_DistanceIter3	named	(first, last): wrapper around RbTree_Distance3
-0x0043EEE0	438	ScriptRefTree_InsertAt	named	(out node, hint, parent, rec*): _M_insert for an int-keyed {key, script obj, extra} tree (0x20-byte nodes)
-0x0043F0A0	312	ScriptRefTree_InsertUnique	named	(out {node, inserted}, rec*): insert_unique for the int-keyed script object tree
-0x0043F1E0	438	PairTree_InsertAt	named	(out node, hint, parent, pair*): _M_insert for an unsigned-keyed {key, value} tree
-0x0043F3A0	312	PairTree_InsertUnique	named	(out {node, inserted}, pair*): insert_unique for the unsigned-keyed {key, value} tree
-0x0043F4E0	184	PairTree_EraseRange	named	(first, last): STLport erase(first, last) of the {key, value} tree (clear fast path)
-0x0043F5A0	62	NodeAlloc_Free18n10	named	(p, n): frees n * 0x18 bytes
-0x0043F5E0	45	RbTree_DistanceIter4	named	(first, last): wrapper around RbTree_Distance4
+0x0043E140	438	ObjRefTree_InsertAt	named	(out it, x, parent, value*): STLport _M_insert for the signed-key tree: new entry (ObjRefNode18_New2) as the left child of parent when parent is the header, x != 0 or key < parent key (updating root / leftmost), else as the right child (rightmost); then the insert rebalance inlined (recolouring, rotations via 0x43E300 / 0x43E350), root black, count += 1, out = entry; callers ObjRefTree_InsertWithHint (4)
+0x0043E300	72	RbTree_RotateLeft	named	fastcall (x, &root): y = x->right (+0xc); x->right = y->left; y->parent = x->parent (root / left / right link updated); y->left = x; x->parent = y; CORRECTION: was 'RbTree_RotateRight' (it is the left rotation: left +8, right +0xc)
+0x0043E350	72	RbTree_RotateRight	named	fastcall (x, &root): y = x->left (+8); x->left = y->right; parent link moved to y; y->right = x; x->parent = y; CORRECTION: was 'RbTree_RotateLeft'
+0x0043E3A0	312	ObjRefTree_InsertUnique	named	(out {it, bool}, value*): STLport insert_unique(value) for the signed-key tree: walks to the leaf, checks the predecessor (RbTree_Decrement) for an equal key (-> {it, false}), else links a new ObjRefNode18_New2 entry, RbTree_Rebalance, count += 1, {entry, true}; callers ObjRefTree_InsertWithHint (2)
+0x0043E4E0	194	ObjRefTree_EraseRange	named	(tree, first, last): first == begin and last == end -> frees every entry (DestroySubtree, payload dtor 0x43FD00, NodeAlloc_Free18n3) and resets the header / count; else erases one by one (successor computed before each ObjRefTree_Erase3); callers ObjRefTree_EraseKey and 0x435289 (unregistered dead code)
+0x0043E5B0	52	IntTree_UpperBound	named	(tree, out it, key*): first entry with signed key +0x10 > *key, header when none; one caller 0x435223 (unregistered dead code)
+0x0043E5F0	45	RbTree_DistanceIter	named	(out count*, first, last): copies both iterators and calls RbTree_Distance; callers ObjRefTree_EraseKey, 0x43526C (unregistered dead code)
+0x0043E620	438	ObjRefTree_InsertAt2	named	same as ObjRefTree_InsertAt for the unsigned-key second tree type (ObjRefNode18_New3); callers ObjRefTree_InsertWithHint2 (4)
+0x0043E7E0	312	ObjRefTree_InsertUnique2	named	same as ObjRefTree_InsertUnique for the unsigned-key second tree type (ObjRefNode18_New3); callers ObjRefTree_InsertWithHint2 (2)
+0x0043E920	194	ObjRefTree_EraseRange2	named	same as ObjRefTree_EraseRange for the second tree type (DestroySubtree2, payload dtor 0x43DCC0, NodeAlloc_Free18n4; single erase ObjRefTree_Erase); callers ObjRefTree_EraseKey2, 0x4346A0 (unregistered dead code)
+0x0043E9F0	52	UintTree_UpperBound	named	(tree, out it, key*): first entry with unsigned key +0x10 > *key; one caller 0x434639 (unregistered dead code)
+0x0043EA30	45	RbTree_DistanceIter2	named	(out count*, first, last): copies the iterators and calls RbTree_Distance2; callers ObjRefTree_EraseKey2, 0x434683
+0x0043EA60	438	ObjRefTree_InsertAt3	named	same as ObjRefTree_InsertAt for the unsigned-key third tree type (ObjRefNode18_New4); callers ObjRefTree_InsertWithHint3 (4)
+0x0043EC20	312	ObjRefTree_InsertUnique3	named	same as ObjRefTree_InsertUnique for the third tree type (ObjRefNode18_New4); callers ObjRefTree_InsertWithHint3 (2)
+0x0043ED60	194	ObjRefTree_EraseRange3	named	same as ObjRefTree_EraseRange for the third tree type (DestroySubtree3, payload dtor 0x43DCE0, NodeAlloc_Free18n9; single erase ObjRefTree_Erase2); callers ObjRefTree_EraseKey3, 0x4345C4 (unregistered dead code)
+0x0043EE30	62	NodeAlloc_Free18n9	named	(p, n): size-class free of n*0x18 bytes; one caller ObjRefTree_EraseRange3
+0x0043EE70	52	UintTree_UpperBound2	named	(tree, out it, key*): first entry with unsigned key +0x10 > *key; one caller 0x434562 (unregistered dead code)
+0x0043EEB0	45	RbTree_DistanceIter3	named	(out count*, first, last): copies the iterators and calls RbTree_Distance3; callers ObjRefTree_EraseKey3, 0x4345A7
+0x0043EEE0	438	ScriptRefTree_InsertAt	named	same as ObjRefTree_InsertAt for the signed-key {key, ScriptObjRef, version} tree (ScriptRefNode20_New); callers ScriptRefTree_InsertWithHint (4)
+0x0043F0A0	312	ScriptRefTree_InsertUnique	named	same as ObjRefTree_InsertUnique for the ScriptRef tree (ScriptRefNode20_New); callers ScriptRefTree_InsertWithHint (2)
+0x0043F1E0	438	PairTree_InsertAt	named	same as ObjRefTree_InsertAt for the unsigned-key {key, dword} tree (PairNode18_New); callers PairTree_InsertWithHint (4)
+0x0043F3A0	312	PairTree_InsertUnique	named	same as ObjRefTree_InsertUnique for the pair tree (PairNode18_New); callers PairTree_InsertWithHint (2)
+0x0043F4E0	184	PairTree_EraseRange	named	same as ObjRefTree_EraseRange for the pair tree (RbTree18_DestroySubtree, no payload dtor, NodeAlloc_Free18n10; single erase PairTree_Erase); callers 0x435404 (unregistered dead code), 0x43D365
+0x0043F5A0	62	NodeAlloc_Free18n10	named	(p, n): size-class free of n*0x18 bytes; one caller PairTree_EraseRange
+0x0043F5E0	45	RbTree_DistanceIter4	named	(out count*, first, last): copies the iterators and calls RbTree_Distance4; callers 0x4353E7 (unregistered dead code), 0x43D348
 0x0043F610	334	Dwords_InsertN6	named	STL: vector<node*>::insert(pos, n, value) reallocating path (DwordRange_Copy) behind Vector4_InsertN5 = the bucket fill of Vector4Hash_Ctor (NetConnection::ctor hash tables +0x2c classByVtable / +0x40 creatorByKind)
 0x0043F7A0	201	Vector4_AllocCopy4	named	STL: allocate n node pointers (size pool with chunk refill when <= 0x80 bytes, else new) and copy the range [first, last) in; the bucket vector of Vector4Hash_Ctor = NetConnection::ctor hash tables +0x2c classByVtable / +0x40 creatorByKind
-0x0043F870	313	Pairs8_IntroSortLoop	named	(first, last, _, depth, _): STLport __introsort_loop for 8-byte {key, value} pairs by unsigned key (median of three, heap sort fallback)
-0x0043F9B0	381	Pairs8_InsertionSort	named	(first, last): STLport insertion sort of 8-byte {key, value} pairs by the unsigned key (chunked for > 16 elements)
-0x0043FB30	60	ObjList_FindByAddress	named	(out pos, first, last, addr[4]): finds the node whose object's 16-byte address block (+0x2c) equals addr
-0x0043FB70	38	Dwords_Copy2	named	(first, last, dst): copies dwords; returns the end
-0x0043FBA0	58	List_InsertRange	named	(pos, first, last): inserts copies of the nodes of [first, last) before pos (0x43A450 payload copy, ListNode_InsertBefore2)
-0x0043FBE0	72	RbTree_Decrement	named	(iterator*): STLport red-black tree iterator -- (45 callers)
-0x0043FC30	58	List_InsertRange2	named	(pos, first, last): inserts copies of a node range before pos (0x439930 payload copy)
-0x0043FC70	58	List_InsertRange3	named	(pos, first, last): inserts copies of a node range before pos (0x4387C0 payload copy, 0x10c-byte nodes)
-0x0043FCB0	42	ObjRefList18_InsertRange2	named	list insert range wrapper (0x18-byte nodes)
-0x0043FCE0	32	Net_StaticInit51	named	static init slot 51: registers the atexit handler 0x4013D0 once (flag g_0x7CAEE4 bit 0)
+0x0043F870	313	Pairs8_IntroSortLoop	named	fastcall (first, last, _, depth, _): STLport __introsort_loop on 8-byte records keyed by the unsigned first dword: returns at <= 16 records; depth 0 -> heap sort (Pairs8_MakeHeap then repeated Pairs8_HeapAdjust pops); else median-of-three pivot, Hoare partition swapping whole records, recursion on the right part, loop on the left; callers NetPeer::SyncObjectSet and itself
+0x0043F9B0	381	Pairs8_InsertionSort	named	fastcall (first, last): STLport __final_insertion_sort on the 8-byte records (unsigned first dword): plain insertion sort for <= 16 records, else insertion sort of the first 16 and unguarded linear inserts for the rest; one caller NetPeer::SyncObjectSet
+0x0043FB30	60	ObjList_FindByAddress	named	(out it, first, last, addr*): walks the peer list entries {next, prev, NetPeer*} from first to last and stops at the first peer whose NetAddress +0x2c (16 bytes) equals *addr; out = that entry or last; one caller ObjList_FindByAddressIter
+0x0043FB70	38	Dwords_Copy2	named	fastcall (first, last, dst): copies (last-first)/4 dwords forward, returns dst end; one caller Dwords_InsertN4
+0x0043FBA0	58	List_InsertRange	named	(list, pos, first, last): for each element of [first, last) of a list of vector<u32>: ListNode_InsertBefore2(pos, &element) (deep copy); one caller List_InsertRangeIter
+0x0043FBE0	72	RbTree_Decrement	named	fastcall (it*): --it: the header (red and its grandparent is itself) -> rightmost (+0xc); left child -> its rightmost descendant; else climb while it is a left child; 45 sites
+0x0043FC30	58	List_InsertRange2	named	(list, pos, first, last): for each SentPacket record of [first, last): ListNode_InsertBefore3(pos, &record) (List120_CreateNode copy); one caller List_InsertRangeIter2
+0x0043FC70	58	List_InsertRange3	named	(list, pos, first, last): for each 0x104-byte chunk record of [first, last): ListNode_InsertBefore(pos, &record); one caller List10C_InsertRange
+0x0043FCB0	42	ObjRefList18_InsertRange2	named	(list, pos, first, last): copies the pos iterator and calls ObjRefList18_InsertRange; one caller List120_CreateNode
+0x0043FCE0	32	Net_StaticInit51	named	CRT initializer (pointer 0x7830D0): sets bit 0 of 0x7CAEE4 if clear, then atexit(empty 0x4013D0) (the per-unit iostream init guard)
 0x0043FD00	30	ObjRefTreeNode4b_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ObjRef_ReleaseAt4b, then operator delete when flag&1 (2 sites: ObjRefTree_Dtor, ObjRefTree_EraseRange)
 0x0043FD20	30	ScriptRefTreeNode_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs ScriptObjRef_ReleaseAt4, then operator delete when flag&1 (2 sites: ScriptRefTree_Dtor, ScriptRefTree_Dtor2)
-0x0043FD40	14	Iter_DerefNode8_D	named	iterator deref, instance D
-0x0043FD50	65	ObjRefTree_Erase3	named	(node): erase of a tree node holding an object ref at +0x14
-0x0043FDA0	14	Iter_DerefNode8_E	named	iterator deref, instance E
-0x0043FDB0	53	PairTree_Erase	named	(node): erase of a plain tree node (no refs)
+0x0043FD40	14	Iter_DerefNode8_D	named	(tree, out it): out = header->left (+8) = begin(); one caller ObjRefTree_InsertWithHint
+0x0043FD50	65	ObjRefTree_Erase3	named	(tree, entry): erase one entry of the signed-key first tree type: RbTree_RebalanceForErase, ObjRef_ReleaseAt4b on +0x10, entry to g_0x79B22C, count -= 1; one caller ObjRefTree_EraseRange
+0x0043FDA0	14	Iter_DerefNode8_E	named	(tree, out it): out = header->left (+8) = begin(); one caller PairTree_InsertWithHint
+0x0043FDB0	53	PairTree_Erase	named	(tree, entry): RbTree_RebalanceForErase, entry to g_0x79B22C (plain payload), count -= 1; one caller PairTree_EraseRange
 0x0043FDF0	22	InitFields2_43FDF0	named	STL: pair<iterator, bool> ctor (insert result); 1 site: ObjRefTree_InsertWithHint
 0x0043FE10	22	InitFields2_43FE10	named	STL: pair<iterator, bool> ctor (insert result); 1 site: ObjRefTree_InsertWithHint2
 0x0043FE30	22	InitFields2_43FE30	named	STL: pair<iterator, bool> ctor (insert result); 1 site: ObjRefTree_InsertWithHint3
 0x0043FE50	22	InitFields2_43FE50	named	STL: pair<iterator, bool> ctor (insert result); 1 site: ScriptRefTree_InsertWithHint
 0x0043FE70	22	InitFields2_43FE70	named	STL: pair<iterator, bool> ctor (insert result); 1 site: PairTree_InsertWithHint
-0x0043FE90	424	RbTree_Rebalance	named	(node, &root): STLport _Rb_tree_rebalance after insert (51 callers)
-0x00440040	80	RbTree_Distance	named	(out count, first, last): counts the tree nodes between two iterators
+0x0043FE90	424	RbTree_Rebalance	named	fastcall (x, &root): STLport _Rb_tree_rebalance after an insert: x red; while the parent is red: red uncle -> recolour and climb, else one or two rotations (inlined) with recolouring; root black; 51 sites
+0x00440040	80	RbTree_Distance	named	(count*, first, last): *count += 1 for every in-order step from first to last (increment inlined); one caller RbTree_DistanceIter
 0x00440090	80	RbTree_Distance2	named	STL: distance(first, last) over rb-tree iterators: in-order successor walk (right subtree's leftmost, else up while coming from the right), *this (the count) ++ per step; RbTree_DistanceIter2
 0x004400E0	80	RbTree_Distance3	named	STL: distance(first, last) over rb-tree iterators (in-order successor walk, *this count ++ per step); RbTree_DistanceIter3
 0x00440130	80	RbTree_Distance4	named	STL: distance(first, last) over rb-tree iterators (in-order successor walk, *this count ++ per step); RbTree_DistanceIter4 = the equal-range count of PairTree_EraseKey (NetPeer idsByReceivedObject)
 0x00440180	3	Nop_440180	named	STL/MFC: empty element destructor / destroy no-op (1 site: VecList18_Dtor)
-0x00440190	58	ObjRefList18_InsertRange	named	(pos, first, last): inserts copies of {a, b, obj} nodes before pos
-0x004401D0	31	Dwords_CopyChecked	named	(first, last, dst): copies dwords when dst is not null
-0x004401F0	29	Dwords_FillN	named	(dst, n, value*): fills n dwords
-0x00440210	31	Dwords_CopyChecked2	named	(first, last, dst): copies dwords
-0x00440230	29	Dwords_FillN2	named	(dst, n, value*): fills n dwords
+0x00440190	58	ObjRefList18_InsertRange	named	(list, pos, first, last): for each record of [first, last): ObjRefList18_InsertBefore(pos, &record) (ObjRef refcount += 1); one caller ObjRefList18_InsertRange2
+0x004401D0	31	Dwords_CopyChecked	named	fastcall (first, last, dst): uninitialized_copy of dwords (skips the store when dst is 0); callers Dwords_InsertN3 (2)
+0x004401F0	29	Dwords_FillN	named	fastcall (dst, n, value*): uninitialized_fill_n of n dwords (store skipped when dst is 0); one caller Dwords_InsertN3
+0x00440210	31	Dwords_CopyChecked2	named	fastcall (first, last, dst): same uninitialized_copy of dwords; callers Dwords_InsertN5 (2)
+0x00440230	29	Dwords_FillN2	named	fastcall (dst, n, value*): same uninitialized_fill_n of dwords; one caller Dwords_InsertN5
 0x00440250	1	Nop_440250	named	STL/MFC: empty element destructor / destroy no-op (1 site: VecList18_Dtor2)
-0x00440260	31	Dwords_CopyChecked3	named	(first, last, dst): copies dwords
-0x00440280	154	Pairs8_HeapAdjust	named	(first, last, hole, key, value): STLport __adjust_heap for 8-byte pairs (unsigned key)
-0x00440320	39	Shorts_Copy	named	(first, last, dst): copies shorts
-0x00440350	229	Pairs8_MakeHeap	named	(first, last): STLport make_heap for 8-byte pairs by unsigned key
+0x00440260	31	Dwords_CopyChecked3	named	fastcall (first, last, dst): same uninitialized_copy of dwords; one caller VecList18_CreateNode
+0x00440280	154	Pairs8_PopHeap	named	fastcall (first, last, result*, key, value): STLport __pop_heap on 8-byte records: *result = *first, then __adjust_heap from the root over [first, last) (larger child up, unsigned first dword) and pushes {key, value} back up; one caller Pairs8_IntroSortLoop; CORRECTION: was 'Pairs8_HeapAdjust' (it is the pop step)
+0x00440320	39	Shorts_Copy	named	fastcall (first, last, dst): copies (last-first)/2 u16 forward, returns dst end; one caller Shorts_InsertN
+0x00440350	229	Pairs8_MakeHeap	named	fastcall (first, last): STLport make_heap on the 8-byte records (unsigned first dword): for every parent from (n-2)/2 down to 0, sift down then push up; fewer than 2 records -> nothing; one caller Pairs8_IntroSortLoop
 0x00440440	586	NetAddress::FromString	named	"(this = sockaddr out, ""host[:port]"", defaultPort): AF_INET, splits at ':', atoi port, inet_addr else gethostbyname for the host; htons port; false when the host cannot be resolved"
 0x00440690	343	NetAddress::ToString	named	"(addr*, resolveName): formats the 16-byte sockaddr as ""host:port"" (gethostbyaddr when resolveName) or ""%i.%i.%i.%i:%i"" into a new std::string"
 0x004407F0	321	NetSocket::ctor	named	WSAStartup(1.1), socket +0 = -1, gethostname + gethostbyname: one 16-byte {AF_INET, ip, 0, 0} record per local address in the interface vector +4..+0xc (netmask by class A/B/C)
 0x00440940	94	NetSocket::dtor	named	closesocket + WSACleanup, frees the interface record vector +4
 0x004409A0	201	NetSocket::Open	named	(port): closes the old socket, socket(AF_INET, SOCK_DGRAM, UDP), bind(htons(port)) when port > 0 (server 8888; client -1 = ephemeral), FIONBIO non-blocking, SO_BROADCAST; false on failure
-0x00440A70	24	Socket_CloseIfOpen	named	if the socket handle at *p != -1: closesocket (Ordinal 3) and set -1
+0x00440A70	24	Socket_CloseIfOpen	named	fastcall (SOCKET*): closesocket when != -1, then *s = -1; no caller or pointer [dead: no caller or pointer]
 0x00440A90	82	NetAddressList::Get	named	(out addr[4], index, port): copies the 16-byte interface record and sets its port (htons via Ordinal_9); false past the end
 0x00440AF0	145	NetAddressList::IsLocal	named	(address): true for 127.0.0.1 or when the address matches one of the local interface entries (16-byte records, +4 ip, +8 mask-like prefix of 0xff bytes)
 0x00440B90	65	NetSocket::SendTo	named	(addr*, GameBuffer*): sendto(socket, data +4, (end +0x10 - data) + bias +0x14, 0, addr, 16); true when every byte went out
@@ -1552,18 +1552,18 @@ addr	size	name	status	purpose
 0x00440D40	90	TcpStream::dtor	named	closesocket(+0x38) and destroys the send GameBuffer +0 and the receive GameBuffer +0x1c. Was NetSocketPair::Dtor
 0x00440DA0	53	TcpStream::Close	named	closes the TCP socket +0x38 (closesocket) and stores the state +0x3c; a TcpStream method (the NetSocket is only 0x10 bytes). Was NetSocket::Close
 0x00440DE0	630	TcpStream::Poll	named	select() state machine on +0x38, returns the state +0x3c: 1 connecting -> 4 when writable; 4 -> send() the whole send buffer +0 (the 4-byte request written by the CConnectProgressWin ctor: u32 NetClient +0x25b8) -> 2; 2 -> recv up to 0x800 bytes appended to the receive GameBuffer +0x1c (vt[4]), 0 bytes = closed -> 3 (download complete), error -> socket closed, 0; polled by CConnectProgressWin::Update, the buffer then goes to LobbyClient::OnServerInfoPacket
-0x00441060	64	Vector16_Deallocate	named	frees a vector of 16-byte records to the node allocator
+0x00441060	64	Vector16_Deallocate	named	fastcall (vector of 16-byte records): frees begin..cap to the size-class pool or operator delete; reached only from an EH funclet of NetSocket::ctor
 0x004410A0	220	stlport_string_throw_length_error	named	CRT/STL: no-return throw helper: a std::string 'basic_string' is built and strncpy'd (256 bytes) into a __Named_exception-derived object (vt 0x73B994 then 0x73BE8C) thrown with throw info 0x74C640 = STLport length_error; overflow tail of the string ctor inlined in NetAddress::FromString
 0x00441180	351	Records16_InsertN	named	STL: vector<NetAddress 16>::_M_fill_insert(pos, n, value) of the NetSocket local-interface list +4..+0xc (Records16_CopyChecked / FillN, realloc from the pool); NetSocket::ctor appends one record per local address
-0x00441320	32	Net_StaticInit52	named	static init slot 52: registers the atexit handler 0x4013D0 once
+0x00441320	32	Net_StaticInit52	named	CRT initializer (pointer 0x7830D4): bit 0 of 0x7CAEE4, atexit(empty 0x4013D0)
 0x00441340	22	InitFields2_441340	named	STL: pair<char, char> / two-byte record ctor in NetAddress::FromString
-0x00441360	57	Records16_CopyChecked	named	(first, last, dst): copies 16-byte records
-0x004413A0	55	Records16_FillN	named	(dst, n, value*): fills n 16-byte records
-0x004413E0	44	NetPeerInfo::Ctor	named	vtable 0x73BB40; +8..+0x14 = 0, +0x18 = 0, +0x1c = 10.0 (timeout seconds), byte +0x20 = 0, +0x24 = 0
-0x00441410	46	Records2C_FindByAddress	named	(addr[4]): finds the 0x2c-byte record whose first 16 bytes equal addr (returns through this)
+0x00441360	57	Records16_CopyChecked	named	fastcall (first, last, dst): uninitialized_copy of 16-byte records (NetAddress); callers Records16_InsertN (2)
+0x004413A0	55	Records16_FillN	named	fastcall (dst, n, value*): uninitialized_fill_n of 16-byte records; caller Records16_InsertN
+0x004413E0	44	NetPeerInfo::Ctor	named	fastcall: address +8..+0x17 = 0, vt = 0x73BB40, timeout +0x18 = 0, ping +0x1c = the float at 0x73BFA0 (9.999), versionMismatch +0x20 = 0, source +0x24 = 0 (refCount +4 untouched); callers ServerInfo::ctor, ServerInfo::Reset and 3 more
+0x00441410	46	Records2C_FindByAddress	named	(vec, addr*): walks the vector begin +0 .. end +4 in 0x2c-byte steps and returns the first record whose first 16 bytes (NetAddress) equal *addr, else end (eax); callers NetClient::OnInfo (2)
 0x00441440	148	NetServerRecord::Serialize	named	(archive): one address-book entry {sockaddr 16 at +0, GameBuffer +0x10: length then bytes, grown on load}; no direct callers (inlined into AddrBook_Serialize)
 0x004414E0	338	AddrBook_Serialize	named	(archive): the lobby screen's server address book = vector of NetServerRecords {sockaddr 16, GameBuffer +0x10 holding the ServerInfo record bytes} (count then each record) + the dword +0xc; AddrBook_Save / CLobbyScreen::Build. Was NetServerRecords_Serialize
-0x00441640	27	BitReader::GetRemaining	named	pos = max(pos, limit); returns end - begin + pos (bytes available)
+0x00441640	27	GameBuffer::Length	named	fastcall: validEnd +0x10 = max(validEnd, cursor +8); returns validEnd - data +4 + bias +0x14 (the written length); one caller AddrBook_Serialize; CORRECTION: was 'BitReader::GetRemaining'
 0x00441660	220	NetClient::SendGetInfo	named	(addr*): sends {u8 3, f32 clock (+0x20)} (the server echoes the float in its type 5 reply; used as a ping). Was SendKeepAlive
 0x00441740	431	NetClient::SendLogin	named	(addr*, payload GameBuffer): sends {u8 4, u32 magic +8 (0xDEC0AD07), u32 linkId +0x2594, u32 rate = GetRateFor(addr), payload bytes (the 20-byte password from the lobby, else empty)}
 0x004418F0	73	NetClient::OnUpdate	named	"slot 3: only in state +0x2598 == 2 (""ERROR: Normal update when not in active state""), then NetConnection::v3_OnUpdate"
@@ -1574,7 +1574,7 @@ addr	size	name	status	purpose
 0x00442180	325	NetClient::TickDiscovery	named	sends SendGetInfo to the broadcast address of every local interface (port 8888), then to the first queued address of +0x25bc (dropped), else round-robin (+0x25d0) to one server of the NetServerRecord vector +0x25ac; re-queues +0x25c0 when +0x25c4 is set (the LAN server browser)
 0x004422D0	35	NetClient::SetSelectedServerAddress	named	copies a 16-byte NetAddress (CLobbyScreen server row +0x14, or four zeros when no row is selected) into +0x25c0..+0x25cc; CLobbyScreen::Update calls it before NetClient::TickDiscovery. CONTRADICTS structs.tsv NetClient +0x25c0 requeueList / +0x25c4 requeueFlag byte: the field is the address's IP (sockaddr_in +4; TickDiscovery tests the +0x25c4 dword for a selected server)
 0x00442300	614	NetClient::SetServerList	named	(records*): installs the address book vector +0x25ac (+0x25b8 dword); every record without a live ServerInfo node gets one decoded from the record's GameBuffer (vt[16] NewServerInfo + vt[5] Read) with source +0x24 = 1 (known internet server) so the browser lists it before any reply; CLobbyScreen::Build
-0x00442570	24	BitWriter_Flush	named	flushes the partial byte (+8) to the last byte pointer (+4) when pending (+0xc)
+0x00442570	24	BitWriter_Flush	named	fastcall (this {cursor, bytePtr +4, acc +8, nbits +0xc}): when nbits != 0: nbits = 0 and the pending low byte of acc is stored at bytePtr (when non-null); runs on scope exit of a stack bit writer in NetClient::SetServerList and MpFile::ReadContainer, and on CPlayerClient +0x2800 in its ctor
 0x00442590	600	NetClient::AddServerAndPing	named	(addr*): appends the address to the address book +0x25ac when new and sends SendGetInfo {u8 3, f32 clock} to it (a get-info probe, NOT a keep-alive); marks the ServerInfo node; CLobbyScreen::OnCommand (add server). Was OnServerFound
 0x004427F0	173	NetClient::RemoveServer	named	(addr*): erases the NetServerRecord with that address from the vector +0x25ac and every server info node with that address (+8) from the list +0x25a8
 0x004428A0	215	NetClient::AddServerInfo	named	(ServerInfo from OnServerInfoPacket): when no node of +0x25a8 carries that address: source +0x24 = 2, timeout +0x18 = the internet marker 0x7e967699 (never aged out by Receive), linked into +0x25a8; the address is pushed to the probe queue +0x25bc (TickDiscovery sends it one get-info)
@@ -1591,109 +1591,109 @@ addr	size	name	status	purpose
 0x00443590	273	NetServer::Receive	named	"(dt double): ages the pending accept records (+0x20 += dt; dropped after 60 s ""Accept period elapsed for"") then NetConnection::Receive(dt)"
 0x004436B0	13	DerefOut_4436B0	named	STL: iterator dereference into the out param (**this); 2 sites: NetClient::AddServerAndPing, NetClient::v7_OnInfo
 0x004436C0	11	CopyField_0_4436C0	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 4 sites: NetClient::AddServerAndPing, NetClient::AddServerInfo, NetClient::SetServerList ...
-0x004436D0	52	List10_EraseStr	named	(out next, node): unlinks a 0x10-byte node, destroys its payload (0x42A610) and frees it (g_0x79B228)
+0x004436D0	52	List10_EraseStr	named	(out next, entry): unlinks a 0x10-byte list entry, ObjRef_ReleaseExt23 on its ref +8, entry to g_0x79B228, *out = next; callers NetClient::RemoveServer, NetClient::Receive
 0x00443710	13	DerefOut_443710	named	STL: iterator dereference into the out param (**this); 1 site: NetServer::v5_OnLogin
 0x00443720	11	CopyField_0_443720	named	STL: iterator copy (copies the node pointer at +0 into the out iterator); 1 site: NetServer::v5_OnLogin
-0x00443730	40	List28_Erase	named	(out next, node): unlinks a 0x28-byte list node and frees it (g_0x79B234)
+0x00443730	40	List28_Erase	named	(out next, entry): unlinks a 0x28-byte list entry and returns it to the 0x28 free list g_0x79B234, *out = next; callers NetServer::OnUpdate, NetServer::Receive
 0x00443760	7	ZeroFirstDword_443760	named	STL: iterator / smart-pointer default ctor (node pointer = 0); 4 sites
-0x00443770	28	NetItem_Ctor	named	zero 4 dwords then GameBuffer::ctor at +0x10
-0x00443790	8	NetItem_Dtor	named	GameBuffer::dtor at +0x10
-0x004437A0	41	ScriptRefList10_InsertBefore2	named	(out node, pos, obj*): 0x10-byte node holding a script object inserted before pos
-0x004437D0	40	List18_Erase	named	(out next, node): unlinks a 0x18-byte list node and frees it (g_0x79B22C)
-0x00443800	41	List28_InsertBefore	named	(out node, pos, rec[7]): 0x28-byte node inserted before pos
-0x00443830	238	ScriptRefNode10_New2	named	(obj*): 0x10-byte list node holding a script object ref at +8
-0x00443940	124	Node28_New	named	(rec[7]): 0x28-byte list node (g_0x79B234) with a 7-dword payload
+0x00443770	28	NetServerRecord::DefaultCtor	named	fastcall (rec): addr +0..+0xf = 0, GameBuffer::ctor on +0x10; returns rec; one caller NetClient::AddServerAndPing; CORRECTION: was 'NetItem_Ctor' (the 0x2c-byte record is NetServerRecord)
+0x00443790	8	NetServerRecord::Dtor	named	fastcall (rec): GameBuffer::dtor on +0x10; callers NetServerRecords_Assign (2), NetItem_DeletingDtor, NetServerRecordVector_Erase; CORRECTION: was 'NetItem_Dtor'
+0x004437A0	41	ScriptRefList10_InsertBefore2	named	(out it, pos, ref*): ScriptRefNode10_New2(ref), linked before pos, out = it; callers NetClient::OnInfo, NetClient::SetServerList, NetClient::AddServerAndPing (+1)
+0x004437D0	40	List18_Erase	named	(out next, entry): unlinks a 0x18-byte list entry, returns it to g_0x79B22C, *out = next; one caller NetClient::TickDiscovery
+0x00443800	41	List28_InsertBefore	named	(out it, pos, rec*): Node28_New(rec), linked before pos, out = it; one caller NetServer::OnLogin
+0x00443830	238	ScriptRefNode10_New2	named	(ref*): 0x10 entry from g_0x79B228 (refill 20); +8 = ScriptObjRef copy of *ref (0 when null or being destroyed, vt[3]() clone when +6 bit 0, refcount += 1, +6 bit 0 set); same code as ScriptRefNode10_New; one caller ScriptRefList10_InsertBefore2
+0x00443940	124	Node28_New	named	(rec*): 0x28 entry from the free list g_0x79B234 (refill 20 via stlport_node_alloc_chunk_alloc 0x28), copies the 0x1c-byte record (7 dwords) to +8; returns the entry; one caller List28_InsertBefore
 0x004439C0	457	NetServerRecords_InsertN	named	STL: vector<NetServerRecord 0x2c>::_M_fill_insert(pos, n, value) with GameBuffer::CopyCtor / dtor per record; NetClient::AddServerAndPing push_back and NetServerRecordVector_Resize
 0x00443BF0	560	NetServerRecords_Assign	named	STL: vector<NetServerRecord 0x2c {NetAddress, GameBuffer +0x10}>::operator= (realloc with AllocCopy, or in-place GameBuffer::Assign / UninitCopy with the surplus destroyed); NetClient::SetServerList installs the address book +0x25ac
 0x00443E20	15	StoreFirstDword_443E20	named	STL: iterator ctor from a node pointer (this in ecx); 4 sites: NetClient::AddServerAndPing, NetClient::AddServerInfo, NetClient::SetServerList ...
 0x00443E30	82	NetServerRecord::ctor	named	(this 0x2c) in-place ctor of a lobby address-book record: the NetAddress +0 zeroed (4 dwords) and GameBuffer::ctor at +0x10 (the ServerInfo bytes); NetClient::AddServerAndPing builds the record it pushes. Was NetPacket::Ctor
 0x00443E90	30	NetItem_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs NetItem_Dtor, then operator delete when flag&1 (2 sites: NetClient::RemoveServer, NetServerRecordVector_Resize)
-0x00443EB0	243	NetServerRecords_AllocCopy	named	(n, first, last): allocates n 0x2c-byte records from the node allocator and copy-constructs the range
-0x00443FF0	117	Records2C_Copy	named	(first, last, dst): copies 0x2c-byte records (16 raw bytes + 0x4DAA80 copy of the rest); returns the end
+0x00443EB0	243	NetServerRecords_AllocCopy	named	(n, first, last): allocates n * 0x2c bytes (size-class pool when <= 0x80, refill 20; else operator new; 0 when n is 0) and copy-constructs [first, last) into it (NetServerRecord_UninitCopyRange2); returns the buffer; one caller NetServerRecords_Assign
+0x00443FF0	117	Records2C_Copy	named	fastcall (first, last, dst): std::copy of NetServerRecords: per record the 16-byte address and GameBuffer::Assign of +0x10; returns dst end; callers NetClient::RemoveServer, NetServerRecordVector_Resize
 0x00444070	32	StaticInit_Guarded_444070	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
 0x00444090	475	NetServerRecordVector_Resize	named	STL: vector<NetServerRecord 0x2c>::resize(n): a default record (zero NetAddress + GameBuffer::ctor) inserted n - size times (NetServerRecords_InsertN) or the tail destroyed (GameBuffer::dtor); AddrBook_Serialize when loading the lobby address book
-0x00444270	53	NetServerRecord_CopyCtor	named	copy-construct a 0x2c record: 16 bytes + GameBuffer copy (0x4DA9E0) at +0x10
-0x004442B0	126	NetServerRecordVector_Erase	named	(this, dest, first): moves the tail records down (GameBuffer assign) and destroys the surplus; end -= n
-0x00444330	139	NetServerRecord_UninitCopyRange	named	uninitialized copy of 0x2c records (4 dwords + GameBuffer copy)
+0x00444270	53	NetServerRecord_CopyCtor	named	(this, src): copies the address +0..+0xf and GameBuffer::CopyCtor on +0x10; one caller NetServerRecordVector_Resize
+0x004442B0	126	NetServerRecordVector_Erase	named	(vec, first, last): assigns [last, end) down onto first (address + GameBuffer::Assign), destroys the leftover tail records (NetServerRecord::Dtor), end +4 = new end; returns first; one caller AddrBook_Serialize
+0x00444330	139	NetServerRecord_UninitCopyRange	named	fastcall (first, last, dst): uninitialized_copy of NetServerRecords (address + GameBuffer::CopyCtor, skipped when dst is 0); returns dst end; callers NetServerRecords_InsertN (2), NetServerRecordVector_Resize (2)
 0x004443E0	140	NetServerRecord_UninitFillN	named	STL: uninitialized_fill_n(dst, n, value) of NetServerRecord 0x2c: the NetAddress (4 dwords) copied raw, GameBuffer::CopyCtor for +0x10; NetServerRecords_InsertN / NetServerRecordVector_Resize
-0x00444490	96	NetServerRecord_CopyBackward	named	copy-assign a range of 0x2c records backward (GameBuffer assign 0x4DAA80)
-0x004444F0	79	NetServerRecord_FillRange	named	copy-assign one 0x2c record into [first, last)
+0x00444490	96	NetServerRecord_CopyBackward	named	fastcall (first, last, dstEnd): copy_backward of NetServerRecords (address + GameBuffer::Assign); returns the new dst begin; one caller NetServerRecordVector_Resize
+0x004444F0	79	NetServerRecord_FillRange	named	fastcall (first, last, value*): assigns *value to every record of [first, last) (address + GameBuffer::Assign); one caller NetServerRecordVector_Resize
 0x00444540	139	NetServerRecord_UninitCopyRange2	named	STL: uninitialized_copy([first, last), dst) of NetServerRecord 0x2c (NetAddress raw + GameBuffer::CopyCtor); NetServerRecords_Assign / AllocCopy (NetClient::SetServerList)
 0x004445F0	32	StaticInit_Guarded_4445F0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
 0x00444610	31	StaticInit_Vec3Zero_g79B988	named	CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x79B988
-0x00444630	41	Quat79B978_StaticInit	named	static init of g_0x79B978 = (1,0,0,0)
+0x00444630	41	Quat79B978_StaticInit	named	CRT initializer (pointer 0x7830E4): global quaternion 0x79B978 = (1,0,0,0)
 0x00444660	22	StaticInit_g79B930_StringMap	named	CRT: StringMap_ctor on the global g_0x79B930, atexit destructor
-0x00444690	161	StringMap_Clear	named	(this): erases all nodes (value free + node to pool) and resets the header, root, leftmost, rightmost and count
-0x00444740	142	StringMap_ctor	named	(this): vt 0x73BFAC then 0x73BFA4, allocates the 0x28-byte header node, empty tree (vt 0x73BFA4 = DebugText key/value table)
-0x004447D0	6	GetDebugTextBuffer	named	returns the address of the global buffer 0x79B930
-0x004447E0	441	StringMap_SetValue	named	slot 0 (this, key, text): finds or creates the entry for the key and overwrites its text with the given string (copy / grow)
-0x004449A0	208	StringMap_RemoveByName	named	slot 1 (this, name): wraps the name in a std::string, finds it (StringMap_LowerBound) and erases the node when found
+0x00444690	161	StringMap_Destroy	named	fastcall (DebugText map object; tree at +4, count +8): when count != 0 frees every entry (StringMap_EraseSubtree on the right child, pair dtor 0x4457F0, MapNodeBuffer_Free), resets the header; then returns the header to the 0x28 free list g_0x79B234; reached only by a jmp from the atexit stub after StaticInit_g79B930_StringMap (0x444685): the destructor of the global DebugText map; CORRECTION: was 'Clear' (it frees the header)
+0x00444740	142	StringMap_ctor	named	fastcall (this): vt = 0x73BFAC (pure-call base) then 0x73BFA4; std::map<string, string> at +4: header PoolAlloc(0x28), count +8 = 0, cmp byte +0xc, MapHeader_Init_C; returns this; one caller StaticInit_g79B930_StringMap (g_0x79B930)
+0x004447D0	6	GetDebugTextBuffer	named	returns &g_0x79B930 (the global DebugText key/value map object); callers I3DFigureImpl::EndFrame, CWorldClient::ClearStateFlag1 / HideRenderStats and 3 more
+0x004447E0	441	StringMap_SetValue	named	vt 0x73BFA4 slot 0 (key, text): builds a std::string key, StringMap_FindInsertPos (lower_bound); when it is end or key < its key (StringRange_Less) inserts {key, empty string} (StringMapValue_CopyCtor + StringMap_InsertAt); then overwrites the value string +0x1c..+0x20 with text (copy over the existing bytes, then append the rest with StlString_AssignRange or erase the surplus with StlString_EraseRange); frees the temp key
+0x004449A0	208	StringMap_RemoveByName	named	vt 0x73BFA4 slot 1 (key): builds a std::string key, StringMap_LowerBound (really map::find), frees the temp; when found erases the entry (Thunk_StringMap_Erase_445010)
 0x00444A70	134	DebugText::Init	named	"(this, owner UI): +0x10 owner, +0x14 window = 0, +0x3c shown = 0, creates the font holder +0x18 (0x70BBE5 CreateFont, 0x5a height ""Courier New""), default rect (10, 10, 0x122, 0x122) via SetRect"
 0x00444B00	3	MfcCObject::Serialize_Nop	named	MFC: CObject::Serialize(CArchive&) default no-op, slot 2 of the release-build MFC CObject vtables 0x73BFB4 (CFont) and 0x7463D4 (CGdiObject)
-0x00444B10	30	StdException_deleting_dtor	named	(vt 0x73BFB4 slot 0, flag): dtor body then operator delete
-0x00444B30	60	StdException_dtorBody	named	sets the exception vt 0x7463D4 and runs the base cleanup 0x70A0CC
+0x00444B10	30	CFont::DeletingDtor	named	vt 0x73BFB4 slot 1 (the DebugText font holder, 8 bytes {vt, HFONT}): CFont::~CFont 0x444B30, operator delete when flag & 1; CORRECTION: was 'StdException_deleting_dtor'
+0x00444B30	60	CFont::~CFont	named	fastcall: vt = 0x7463D4 (MFC CGdiObject), CGdiObject::DeleteObject 0x70A0CC (frees the HFONT); one caller CFont::DeletingDtor; CORRECTION: was 'StdException_dtorBody'
 0x00444B70	30	MfcCGdiObject::DeletingDtor	named	MFC: CGdiObject scalar deleting destructor (vtable 0x7463D4 slot 1; body StdException_dtorBody2 = CGdiObject::~CGdiObject)
-0x00444B90	60	StdException_dtorBody2	named	sets the exception vt 0x7463D4 and runs the base cleanup 0x70A0CC (6 callers)
-0x00444BD0	54	DebugText::Destroy	named	deletes the window object +0x14 (0x5FD120 dtor) and the font object +0x18 (vt[1](1))
-0x00444C10	191	DebugText::SetRect	named	(rect*): stores the overlay rect +0x2c..+0x38, clamps to the window (UI window 0x5F7CA0 / 0x5F7DA0 query), width at least 100, height at least 15, +0x1c = left
-0x00444CD0	47	DebugText::Tick	named	refreshes the overlay at most every 500 ms (timeGetTime +0x40) via Render, then forwards to the window's slot 0
-0x00444D00	584	DebugText::Render	named	(this): draws the key/value table of the debug text map +4 into the overlay window +0x14 (UI DC 0x5FDC00; background 0x70BB04 / 0x7090C2): one line per entry with a shadow offset (1,1) in two columns (key left half, value right half; DrawText 0x68 with colours 0x80808 / 0x800)
-0x00444F50	185	DebugText::Show	named	(this, on): +0x3c = on; creates the overlay window object (0x38 bytes, 0x5FCDD0, order 5) when needed, stamps timeGetTime +0x40 and renders; hiding destroys the window
+0x00444B90	60	CGdiObject::~CGdiObject	named	fastcall: vt = 0x7463D4, CGdiObject::DeleteObject 0x70A0CC; called by MfcCGdiObject::DeletingDtor 0x444B70 and MFC EH funclets (0x739E5F ..); CORRECTION: was 'StdException_dtorBody2'
+0x00444BD0	54	DebugText::Destroy	named	fastcall: deletes the overlay window +0x14 (CUIBlitSurface::~body + operator delete) and the font +0x18 (vt[1](1)), both pointers = 0; one caller CInterface::Destroy
+0x00444C10	191	DebugText::SetRect	named	(rect*): stores the rect at +0x2c..+0x38, UiScale::ScaleRect with the owner +0x10, clamps width to [100, screen width] and height to [15, screen height], copies to +0x1c..+0x28 and UiScale::UnscaleRect it; when shown (+0x3c) re-creates the window (Show 0, Show 1); callers DebugText::Init, DebugText_SetRect (console 'debuginfo')
+0x00444CD0	47	DebugText::Tick	named	fastcall: every 500 ms (timeGetTime - +0x40) re-stamps +0x40 and Render; then jumps to the window +0x14 vt[0] (blit) when it exists; one caller CInterface::Draw2D
+0x00444D00	584	DebugText::Render	named	fastcall: when the window +0x14 exists: GetDC (0x5FDC00), clears it to colour 0 (0x70BB04), transparent background (0x7090C2), selects the font; walks the map +4 from begin: per entry draws key (left half) and value (right half) first with colour 0x080808 offset (1,1) (shadow), then with 0xFFFFFF, DrawText flags 0x800 (DT_NOPREFIX); next line 15 px lower, stops when past the rect height; restores the font, ReleaseDC; CORRECTION: was 'colours 0x80808 / 0x800' (0x800 is the DrawText flag, the text is white)
+0x00444F50	185	DebugText::Show	named	(show): +0x3c = show; show: creates the 0x38-byte CUIBlitSurface window (owner +0x10, rect +0x1c, 5) when missing, +0x40 = timeGetTime, Render; hide: deletes the window, +0x14 = 0; callers DebugText::SetRect (2)
 0x00445010	17	Thunk_StringMap_Erase_445010	named	STL: map<string,..>::erase(key) forwarding thunk (StringMap_RemoveByName)
 0x00445030	13	InitFields1_445030	named	STL: iterator / node-pointer wrapper ctor (copies one dword: list or rb-tree node); 2 sites: StringMap_InsertAt, StringMap_SetValue
-0x00445040	110	MapValue_Free	named	frees the buffers of a map value {std::string key at +0, text at +0xc..} back to the size pool
-0x004450B0	41	StringMap_InsertAt	named	(this, out iterator, hint, value*): builds a node from the pair and inserts it (0x445360)
-0x004450E0	14	Iter_DerefNode8_F	named	iterator deref, instance F
-0x004450F0	65	StringMap_Erase	named	(this, key): finds the node, rebalances the tree (RbTree_RebalanceForErase), frees the value and the node to g_0x79B234, count --
-0x00445140	20	MapNode_FreeToPool	named	returns an std::map node pointer to the 0x28-byte node pool g_0x79B234
-0x00445170	259	StringMapValue_CopyCtor	named	(this = {std::string key, value}, key range*, value*): copies the key (length_error on overflow) and the text
-0x00445290	25	MapHeader_Init_C	named	initializes a std::map header node (third instance)
+0x00445040	110	MapValue_Free	named	fastcall (pair<string, string>*): frees the second string buffer (+0xc begin, +0x14 cap) and the first (+0 begin, +8 cap) to the size-class pool or operator delete; callers StringMap_SetValue, StringMap_Erase, StringMap_EraseSubtree, MapValue_DeletingDtor (+1)
+0x004450B0	41	StringMap_InsertAt	named	(out it, hint, value*): copies the hint and calls StringMap_InsertValue; returns out; one caller StringMap_SetValue
+0x004450E0	14	Iter_DerefNode8_F	named	(tree, out it): out = header->left (+8) = begin(); callers DebugText::Render, StringMap_InsertValue
+0x004450F0	65	StringMap_Erase	named	(tree, entry): RbTree_RebalanceForErase, MapValue_Free on the pair +0x10, entry to g_0x79B234, count +4 -= 1; one caller Thunk_StringMap_Erase_445010
+0x00445140	20	MapNode_FreeToPool	named	fastcall (p*): pushes *p on the 0x28 free list g_0x79B234; reached only from EH funclets of StringMap_Destroy / StringMap_ctor
+0x00445170	259	StringMapValue_CopyCtor	named	(this pair, key string*, value string*): pair<string, string> ctor: allocates len+1 for the key (PoolAlloc; String_ThrowLengthError on overflow), copies it with a terminating 0 (+0 begin, +4 end, +8 cap), then the same for the value at +0xc (String_Alloc); returns this; one caller StringMap_SetValue
+0x00445290	25	MapHeader_Init_C	named	fastcall (tree): empty rb-tree header (colour 0, parent 0, left = right = header); one caller StringMap_ctor
 0x004452B0	21	PairCtor_4452B0	named	STL: STLport empty-base pair ctor (allocator byte + value; the second store overwrites the first); 1 site: StringMap_ctor
-0x004452D0	50	MapNodeBuffer_Free	named	(buffer, n 0x28-byte nodes): return to the size pool
-0x00445310	65	StringMap_EraseSubtree	named	(node): recursive post-order free of a subtree (value free + node to pool)
-0x00445360	703	StringMap_InsertValue	named	(this, out iterator, hint, value*): hinted red-black insertion of a {key, text} pair (703 bytes)
-0x00445620	191	StringMap_LowerBound	named	(this, out iterator, key*): lower bound of the key in the tree using StringRange_Compare
-0x004456E0	148	StringMap_FindInsertPos	named	(this = std::map<string,...>, out iterator, key*): lower_bound walk of the red-black tree comparing byte ranges with memcmp
-0x00445780	99	StringRange_Less	named	(a, b): std::string range operator< (memcmp on the common prefix, then length) (65 callers)
+0x004452D0	50	MapNodeBuffer_Free	named	fastcall (p, n): p != 0: n*0x28 > 0x80 -> operator delete, else size-class free list g_0x79B224; one caller StringMap_Destroy
+0x00445310	65	StringMap_EraseSubtree	named	(entry): recursive subtree free: MapValue_Free on the pair +0x10, entry to the 0x28 free list g_0x79B234; callers StringMap_Destroy and itself
+0x00445360	703	StringMap_InsertValue	named	(out it, hint, pair*): STLport insert_unique(hint, value) for map<string, string> (keys compared with StringRange_Less): O(1) paths at begin / end / between hint-1 and hint (StringMapNode_Create + RbTree_Rebalance, or StringMap_InsertNode), else StringMap_InsertUnique; one caller StringMap_InsertAt
+0x00445620	191	StringMap_Find	named	(tree, out it, key string*): lower bound with StringRange_Compare, then end unless the found key equals the key (memcmp of the shorter length, then the lengths); callers StringMap_RemoveByName; CORRECTION: was 'StringMap_LowerBound' (it is map::find)
+0x004456E0	148	StringMap_LowerBound	named	(tree, out it, key string*): first entry whose key is >= key (byte compare, then length), header when none; one caller StringMap_SetValue; CORRECTION: was 'StringMap_FindInsertPos'
+0x00445780	99	StringRange_Less	named	fastcall (a {begin, end}*, b*): lexicographic unsigned byte compare over the shorter length, then shorter < longer; returns a < b; 65 sites (string maps / sorting)
 0x004457F0	30	MapValue_DeletingDtor	named	scalar deleting destructor (MSVC ??_G of a non-virtual element class): runs MapValue_Free, then operator delete when flag&1 (1 site: StringMap_Clear)
-0x00445810	83	StringRange_Compare	named	(first1, last1, first2, last2): three-way memcmp compare of byte ranges, -1 / 0 / 1 (30 callers)
-0x00445870	389	StringMap_InsertNode	named	(this, out iterator, force-left, parent, value*): red-black tree insertion with rotations (RbTree_RotateLeft / Right)
-0x00445A00	420	StringMap_InsertUnique	named	(this, out {iterator, bool}, value*): descends the tree comparing keys, handles the duplicate case, inserts via StringMap_InsertNode
+0x00445810	83	StringRange_Compare	named	fastcall (aBegin, aEnd, bBegin, bEnd): -1 / 0 / 1 three-way compare of the byte ranges (bytes first, then lengths); 30 sites
+0x00445870	389	StringMap_InsertNode	named	(out it, x, parent, pair*): STLport _M_insert for map<string, string>: new StringMapNode_Create entry as the left child of parent (parent = header, x != 0, or key < parent key) updating root / leftmost, else the right child (rightmost); inline rebalance with RbTree_RotateLeft / RotateRight; count += 1; callers StringMap_InsertValue (4)
+0x00445A00	420	StringMap_InsertUnique	named	(out {it, bool}, pair*): descends with StringRange_Compare; duplicate key -> {existing, false}; else links a new entry (StringMapNode_Create) and rebalances, {entry, true}; one caller StringMap_InsertValue
 0x00445BB0	32	StaticInit_Guarded_445BB0	named	CRT: per-translation-unit guarded registration (bit 0 of g_0x7CAEE4) of the empty destructor 0x4013D0; no data initialised (name kept: pure boilerplate)
-0x00445BD0	273	StringMapNode_Create	named	(pair*): allocates a 0x28-byte node from pool g_0x79B234 and copy-constructs the {std::string key, std::string text} pair (10 callers)
+0x00445BD0	273	StringMapNode_Create	named	(pair*): 0x28 entry from g_0x79B234 (refill 20 via stlport_node_alloc_chunk_alloc 0x28); copy-constructs the key string at +0x10 and the value string at +0x1c (String_CtorRange); returns the entry; 10 sites
 0x00445D00	22	InitFields2_445D00	named	STL: pair<iterator, bool> ctor (insert result); 1 site: StringMap_InsertValue
-0x00445D20	11	CStringFinder_Reset	named	*p = 0 then CStringFinder_Next
-0x00445D30	270	CStringFinder_Next	named	(iterator {pos, string*, needle, match}): finds the next occurrence of the needle in the string, fills the match / remainder CStrings (0x6FDBE7 Find) and advances; returns 0 at the end
-0x00445E50	311	CString_ReplaceAll	named	(this = text, needle, replacement): replaces every occurrence of the needle (via 0x445F90 range helper, 0x6FDBE7 Find) by the replacement text
+0x00445D20	11	CStringFinder_Reset	named	fastcall (finder {pos, CString* src, sep, CString piece +0xc}): pos = 0, then CStringFinder_Next (first piece); callers CCreditsScreen::Build (2)
+0x00445D30	270	CStringFinder_Next	named	fastcall (finder): pos == src length -> pos = -1; pos -1 -> returns 0; CString::Find(sep, pos): not found -> piece = Mid(pos) (the tail), pos = length; found -> piece = Mid(pos, found - pos), pos = found + strlen(sep); returns the piece buffer (+0xc); splits a CString by a separator (a trailing separator yields no empty last piece); callers CCreditsScreen::Build (5)
+0x00445E50	311	CString_ReplaceAll	named	(this CString, find, repl): loop: pos = Find(find, pos), -1 -> return; string = Left(pos) + repl + Mid(pos + strlen(find)) (StringRangeRef_ctor helper, operator+); pos += strlen(repl); no caller or pointer [dead: no caller or pointer]
 0x00445F90	42	StringRangeRef_ctor	named	(out {a, b, owner, empty CString}, a, b): helper record for a substring range of a CString
-0x00445FC0	8	StringAtOffset0C_Free	named	free the std::string at this+0xC
-0x00445FD0	119	CString_AssignLiteral2	named	(CString*): assigns the literal g_0x7842D4 through temporaries (0x700D88 concat)
-0x00446050	114	CString_InitDefaultConst	named	static-init helper: builds a CString from constant g_0x7842D8 and assigns it to this (SEH frame)
-0x004461B0	45	CString_WriteToStream	named	calls stream->vt[14](CString data, length) then releases the buffer
-0x004461E0	8	Console_FlushLine13	named	calls 0x6FD963 with 0xD (carriage return)
+0x00445FC0	8	StringAtOffset0C_Free	named	fastcall (p): CString::~CString on p +0xc (the StringRangeRef temp); reached only from an EH funclet of CString_ReplaceAll
+0x00445FD0	119	CString_FromFloat	named	"(out CString, float): CString::Format(""%f"" at 0x7842D4, value) into a temp, copy-constructs out from it, frees the temp; returns out; no caller or pointer; CORRECTION: was 'CString_AssignLiteral2' [dead: no caller or pointer]"
+0x00446050	114	CString_FromInt	named	"(out CString, int): CString::Format(""%i"" at 0x7842D8, value), copy into out; returns out; no caller or pointer; CORRECTION: was 'CString_InitDefaultConst' [dead: no caller or pointer]"
+0x004461B0	45	CString_WriteToStream	named	(this CString, stream): stream vt[14] (+0x38)(GetBuffer(0), length -8), then ReleaseBuffer(-1); no caller or pointer [dead: no caller or pointer]
+0x004461E0	8	CString_RemoveCR	named	fastcall (CString*): CString::Remove('\r' 0xd); one caller CCreditsScreen::Build; CORRECTION: was 'Console_FlushLine13'
 0x004461F0	31	StaticInit_Vec3Zero_g79B9B0	named	CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x79B9B0
-0x00446210	41	Quat_StaticInit_Identity2	named	sets global quaternion g_0x79B9A0 to (1,0,0,0)
+0x00446210	41	Quat_StaticInit_Identity2	named	CRT initializer (pointer 0x7830F4): global quaternion 0x79B9A0 = (1,0,0,0)
 0x00446240	19	StaticInit_One_g79B998	named	CRT: per-translation-unit copy of the header float constant 1.0f (0x3f800000) at g_0x79B998
 0x004466D0	213	CFakeUnit::CFakeUnit	named	ctor (0x580 bytes, kind 0x39 in CMapObjectManager::CreateByKind): CUnit::CUnit, CAnimationSystemOld::ctor at +0x4e0, four empty MFC arrays at +0x530 (vt 0x73C108) / +0x544 (0x73C0FC) / +0x558 (0x73C0F0) / +0x56c (0x73C0E4), then vt_CFakeUnit; returns this
-0x004467B0	3	CFakeUnit::GetFlagFalse_v43	named	slot 43: returns 0 (default for map objects)
+0x004467B0	3	VirtualReturnTrue_4467B0	named	mov al, 1 / ret: returns true; CUnit / CFakeUnit slot 43 and 8 more map-object vtables (0x73DB4C, 0x73E224 ..); CORRECTION: was 'GetFlagFalse_v43 returns 0' (it returns 1)
 0x004467C0	19	CObject3D::SpecificVt19	named	slot 47: specific (+0x170)->vt[19](arg)
-0x004467E0	3	CFakeUnit::GetFlagFalse_v29	named	slot 29: returns 0 (CUnit/CFakeUnit default)
-0x004467F0	29	CFakeUnit::ForwardSlot20_v31	named	slot 31: forwards (a,b,c) to the specific (+0x240) virtual slot 20
+0x004467E0	3	CUnit::v29_ReturnTrue	named	mov al, 1 / ret: CUnit (0x73EB00) and CFakeUnit (0x73C05C) slot 29 returns true; CORRECTION: was 'GetFlagFalse returns 0'
+0x004467F0	29	CUnit::v31_ForwardToSenses	named	(a, b, c): forwards to the specific / senses object +0x240 vt[20] (+0x50)(a, b, c); CUnit and CFakeUnit slot 31
 0x00446810	11	CUnit::SpecificVt31	named	CUnit slot 58: unit specific (+0x240)->vt[31]()
-0x00446820	7	CFakeUnit::GetNameString_v7	named	slot 7: returns the CString pointer at +0x238 (unit name)
-0x00446830	19	CUnit::Set238Str	named	CUnit slot 61: +0x238 = strcpy-like 0x700AF9(arg) (a std::string assign)
+0x00446820	7	CUnit::GetName	named	returns the CString +0x238 (playerName); CUnit (0x73EAA8) and CFakeUnit slot 7
+0x00446830	19	CUnit::SetName	named	(text): CString::operator=(LPCSTR) on +0x238; CUnit and CFakeUnit slot 61
 0x00446850	22	CUnit::SpecificVt42	named	CUnit slot 56: unit specific (+0x240: CUnitServer / CUnitClientSpecific)->vt[42](arg)
 0x00446870	14	CUnit::SpecificVt53	named	CUnit slot 57: unit specific (+0x240)->vt[53]()
 0x00446880	7	CUnit::Get274	named	CUnit slot 55: returns +0x274
-0x00446890	7	CUnit::Get278	named	CUnit slot 54: returns +0x278
-0x004468A0	7	CUnit::GetBodyRadius	named	CUnit slot 60: returns the unit body radius +0x328 (see CMapObject::GetBodyRadius: contact distance = sum of the two radii). Was CUnit::Get328f
+0x00446890	7	CUnit::IsWalking	named	returns +0x278 (walking); CUnit and CFakeUnit slot 54
+0x004468A0	7	CUnit::GetBodyRadius	named	fld +0x328 (bodyRadius); CUnit and CFakeUnit slot 60
 0x004468B0	26	CUnit::GetSpeedA	named	CUnit slot 59: 0x52F920(this, &a, &b) and returns a (float)
-0x004468D0	6	CFakeUnit::ClassName	named	
-0x004468E0	6	CFakeUnit::GetTypeId	named	slot 12 GetTypeId() (root layout)
-0x004468F0	30	CFakeUnit::~CFakeUnit	named	slot 0: deleting destructor (root layout)
-0x00446910	466	CFakeUnit::~CFakeUnit_body	named	vtable vt_CFakeUnit; tears down animation system +0x4E0, CUnit body, decrements 0x220-byte entries in array +0x534, three member arrays (0x27-dword, 5-dword elements)
-0x00446AF0	35	CFakeUnit::Init	named	slot 2: 0x508870(+0x4e0); 0x508930(+0x4e0, this); CUnit::Init
-0x00446B20	116	CFakeUnit::Done	named	slot 3: 0x5088E0(+0x4e0); 0x508930(+0x4e0, 0); CUnit::Done; destroys the +0x534[] objects (count +0x538, 0x220 bytes each, vt[0](0)) and frees the array
+0x004468D0	6	CFakeUnit::ClassName	named	"slot 11: returns the string 0x7842F0 ""CFakeUnit"""
+0x004468E0	6	CFakeUnit::GetTypeId	named	slot 12: returns 0x50 (the unit type id, same as CUnit)
+0x004468F0	30	CFakeUnit::DeletingDtor	named	vt 0x73BFE8 slot 0: ~CFakeUnit_body 0x446910, operator delete when flag & 1
+0x00446910	466	CFakeUnit::~CFakeUnit_body	named	vt = vt_CFakeUnit; animSystemOld +0x4e0 Detach + SetOwner 0; CUnit::Done; CFigures_CArraySetSize(+0x530, 0); refcount +4 of each figure -= 1; destroys the arrays materials +0x570 (0x9c each, vt[0](0)), vectors +0x55c (0x14, vt[1](0)), fakeFigures +0x548 (0x18c, vt[0](0)), figures +0x534 (0x220, vt[0](0)), each freed, CArray vts reset; CAnimationSystemOld::dtor; CUnit::~CUnit_body; one caller the deleting dtor
+0x00446AF0	35	CFakeUnit::Init	named	slot 2: CAnimationSystemOld::Reset(+0x4e0), SetOwner(+0x4e0, this), CUnit::Init
+0x00446B20	116	CFakeUnit::Done	named	slot 3: animSystemOld +0x4e0 Detach + SetOwner 0, CUnit::Done, destroys the figures +0x534 (count +0x538, 0x220 each, vt[0](0)), frees the array, figures = 0, count +0x538 = cap +0x53c = 0
 0x00446BA0	112	CFakeUnit::Load	named	CFakeUnit slot 62 (name, arg): 0x446C10(name, arg, this); for each of the +0x534[] entries (0x220 bytes, count +0x538): 0x59F390(entry, vt[18]()->vt[23](0x45 kind, -1)) (RegisterInstant of a CFigureClientSpecific per entry); returns 1
 0x00446C10	4909	CFakeUnit::LoadModelFromScene	named	"loads a ""scenes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*.3ds""/.amf figure through the 3DS reader, runs Scene3ds_* pipeline (nodes, mappings, weld, index components); errors ""Can't open file %s"" and ""Scene %s have more then one top-level object"""
 0x00447F40	7	ZeroFirstDword_447F40	named	STL: iterator / smart-pointer default ctor (node pointer = 0); 1 site

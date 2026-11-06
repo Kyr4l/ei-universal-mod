@@ -4081,3 +4081,13 @@ CHudMinimap	CUIWidget	0x1B4	0x168	float	invHalfSize	2 / max(map width, height)
 CHudMinimap	CUIWidget	0x1B4	0x16C	float	zoom	min(arg, size * 0.05) in Build; marker / UV scale
 CHudMinimap	CUIWidget	0x1B4	0x170	float	maxZoom	size * 0.05
 CHudMainPanel	CUIWidget	0x164	0x158	pointer	portraits	vector of 0x78-byte portrait records: +0 last HP, +4 red flash timer, +8 / +0x18 / +0x28 quaternions (rest, current, selected target), +0x38 animation 0..3, +0x3C its time, +0x40 face name, +0x44 face variant shown, +0x48 face state, +0x4C its timer, +0x50 / +0x54 face name parts, +0x58 build, +0x5C random target quaternion, +0x6C speed, +0x70 absent flag, +0x74 lobby player value or -1
+CStringFinder		0x10	0x0	int	pos	next search position; -1 = finished (CStringFinder_Next 0x445D30)
+CStringFinder			0x4	pointer	source	CString* being split
+CStringFinder			0x8	pointer	separator	char* separator (CString::Find)
+CStringFinder			0xc	CString	piece	the current piece (Mid of the source); returned by Next
+BitWriter		0x10	0x0	pointer	cursor	next free output byte (BitWriter_PutBit 0x4357C0)
+BitWriter			0x4	pointer	bytePtr	byte reserved for the bits being collected
+BitWriter			0x8	uint	acc	bit accumulator, LSB first
+BitWriter			0xc	byte	nbits	bits in acc; BitWriter_Flush 0x442570 stores the pending byte when != 0
+DebugText			0x4	byte[12]	entries	std::map<string, string> (header +4, count +8) rendered by DebugText::Render: key left half, value right half
+DebugText			0x2c	int[4]	scaledRect	the SetRect rect scaled to screen pixels (UiScale::ScaleRect) and clamped (width 100..screen, height 15..screen); +0x1c..+0x28 = its unscaled copy (window rect)

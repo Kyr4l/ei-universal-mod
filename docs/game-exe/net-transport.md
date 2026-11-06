@@ -569,6 +569,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 - `ServerInfo.gameKind` = `LobbyServer +0x25e4` = the ctor argument = the lobby screen's allod tab `CLobbyScreen +0x19c` (0..3,
   `lmp_allod_name_%d`; 0 after `Build`): `JoinSelected` 0x61CD8C -> `Lobby_StartServerOrClient` third argument -> `LobbyServer::ctor`.
   The zero bytes of the captures are the first allod tab [V]; the "4 by default" was wrong.
+- Unregistered code (t7 2026-11-06): 0x434520, 0x434610, 0x4350B0, 0x435110, 0x435140, 0x435170, 0x4351F0, 0x435370, 0x435420 have no entry in `functions.tsv` and no call or pointer anywhere (raw byte scan); they call the STL map helpers (`UintTree_UpperBound2`, `ObjRefTree_EraseRange3`, `PairTree_EraseRange` ...): dead instantiations of NetPeer map methods, not yet described [V scan].
 
 ## 7. Corrections to earlier notes
 
@@ -597,6 +598,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | this page 4.5 | `SetMap`: "list `+0x25ac` := `<quest>_2`" | it also clears every variable `+0x25b0`, then seeds the briefing-record variables and `q.<quest>.<quest>[.1]` = 1 |
 | `functions.tsv` (merged by the caller) | `LzCompress` "rewrites the buffer in place"; `Scene3ds_ConvertToModel` | `(compressor, input view, output buffer)`; `Scene3ds_ReadBinaryScene` (a binary scene reader, dead in practice) (batch-t5-wcp-net rows) |
 | `structs.tsv` | `LzCompressor +0 byte[10256] "1 KB ring window and the Huffman / bit writer"`; `DeltaCodec +0 byte[160] streams`; `DeltaCodecSet +0x22 inStream` | the LZ coder has no Huffman part (window, window copy, chain, hash heads, bit writer, pos, match); four named CMemStreams; `+0x1c` (batch CORRECTION rows) |
+| `functions.tsv` (merged by the caller, t7 2026-11-06) | `BitWriter_PutByte` 0x4357C0; `BitReader::GetRemaining` 0x441640; `RbTree_RotateRight` 0x43E300 / `RotateLeft` 0x43E350; `HashTable_ClearNodes` 0x439BB0; `NetItem_Ctor / Dtor` | `BitWriter_PutBit` (one bit per call, LSB first, used by `NetWriter::WriteRef`); `GameBuffer::Length` (validEnd - data + bias); the two rotations are swapped (0x43E300 rotates LEFT: left +8, right +0xc); `RbTree18_Clear` (an rb-tree); the 0x2c-byte record is `NetServerRecord` [V] |
 
 ## 8. Function index
 
