@@ -521,7 +521,7 @@ name prefix (three names tried; a part with flag 0x40 uses its own box) or else 
 derived from `t` (the number rises). Flag bit 31 = a single 32 x 10 marker quad and the entry is deleted after that frame. Otherwise the value is
 formatted as text, each digit an 8 x 12 quad from a 4-column digit texture (u = `(c - '0') & 3) x 0.125`, v = `1 - ((c - '0') >> 2) x 0.15625`),
 plus one 64 x 10 label strip per flag 1, 2 and 8 (three different rows of the texture); colour `0x40FFFF` with flag 8, else `0x40FF40` or `0xFF4040`
-by a unit field (probably the owning player: monsters green [I], player units **red** [V live 2026-11-07: a script hit on the hero showed a red
+by a unit field (the owning player: monsters **green** [V live 2026-11-06: a script hit on a boar showed a green "0"], player units **red** [V live 2026-11-07: a script hit on the hero showed a red
 "17" with the BACKSTAB label strip]), alpha from the age. Off-screen boxes are skipped
 ("CFlyingHitPoints::Draw. SetTexture failed" is fatal).
 

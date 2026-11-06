@@ -477,11 +477,13 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 * `PathCells +0xE`: written by `RateFootprintPath`, sent by `MoveRequest::WriteNet` (bits 4-5) and stored by `ReadNet`; no other reader
   in the decompiles of the curve (0x5C6000-0x5C7FFF), the path code or the client unit [I]: transmitted, unused.
 * A wait does shift the request start tick: `TickAnimation` -> `ShiftTimes(+1)` every paused tick (5.4 step 6, corrected) [V].
-* `FindUnitsNear` 0x5C0BD0: the offset table (`CellOffsets_Build` 0x5BF8F0) holds the 21 x 21 sector offsets sorted by the gap distance
-  `int(sqrt((|dx|-1)^2 + (|dy|-1)^2))`; the call takes the prefix with gap <= `int(radius * 0.03125)`. Sectors are 16 m (32 tiles), so the
-  scan is only guaranteed to reach `16 * (int(radius / 32) + 1)` m: radii in [16, 32) m (and [48, 64), ...) can miss units in the far
-  corner of the scanned square [V the arithmetic, I the effect]. `RefreshNearbyUnits` scales correctly (`radius * 2 * 0.03125`, tile
-  units). Live check in `live-checklist.tsv`.
+* `FindUnitsNear` 0x5C0BD0 [V live 2026-11-06, the rule corrected]: cell = `round(pos x 2 - 0.5)`, sector = cell >> 5 (16 world units);
+  the offset table (`CellOffsets_Build` 0x5BF8F0: the 21 x 21 sector offsets sorted by the float gap `sqrt(g(dx)^2 + g(dy)^2)` with
+  g(d) = |d| - 1, 0 for d = 0) is taken up to and including the **first distinct gap value >= radius / 32** (`BitTree_Lookup`). Radius 30
+  -> 0.9375 -> gaps 0 and 1.0: the 3 x 3 block plus the four sectors two steps away in a straight line, but not the diagonal ones (gap
+  1.41) although they start 23 units away. Live, by `CALL` with P = (80.5, 112.5), r = 30: a unit 20.5 away at (dx -2, dy 0) was
+  returned, a unit 24.7 away at (dx -2, dy -2) was missed. So units in the diagonal corner sectors can be missed for radii whose
+  lookup stops before their gap (e.g. 16..32 units). `RefreshNearbyUnits` scales its radius x 2 first.
 * Stamp rule: dead units are not stamped (+0x274) [V]; units removed from the world are taken out of it: `CWorldServer::RemoveObject` 0x5935C0 calls `CollisionMap::RemoveObjectAndUnstamp` (0x59364D) for units [V, 2026-11-06].
   `BeginPaint / EndPaint` (now `BeginAIMapBatch` / `EndAIMapBatch`) have no reference in the exe: the editors' use is [untestable].
 

@@ -366,7 +366,8 @@ this behind "unreachable" blocks.) Its functions:
   `<name>.lnk`). Scenes are refcounted by their objects; nothing evicts them in this module (the world drops them with the zone).
 - `BuildFigureMesh` 0x4F7F00 (FIG8) / `BuildFigureMeshOld` 0x4F87D0 (the 6-corner format) blend one part into the scene (3.3).
 - **Re-morph** (deep read 2026-11-06 [V], `GetOrCreateFigure` 0x4F75E0 = manager slot 6, called by `CObject3D::SetMorphParams`
-  0x517700 with the object's current scene): when the scene's refcount `+4` is below 3 = no other object shares it [V: a new scene
+  0x517700 with the object's current scene): when the scene's refcount `+4` is below 3 = no other object shares it [V live 2026-11-06: a hero
+  under Enlarge kept its scene (refcount 2) while the scene's `+0x30` went from (0.35, 0.2, 0.9) to (0.75, 0.6, 1.3) and back; code: a new scene
   starts at 0 (`CRenderScene` ctor 0x4F2C00), the cache multimap node keeps 1 (`CreateScene` 0x4F7B10 / `CreateSceneFromLink`: node copy
   0x4FC6E0 adds 1, the temporaries add and drop theirs), and every `CObject3D` using it keeps 1 (`RcObj_Assign` in `LoadModel` /
   `SetMorphParams`, the direct `+1` in `LoadModel`'s link path); `SetMorphParams` passes its pointer without a temporary reference])
@@ -546,8 +547,8 @@ call, `DrawFigure` (slot 14 = `Render`) with constant colours.
   `SetMaterialsOpaque` 0x51CCA0 ends it. **Stun**: `SetMaterialsStunPulse` 0x51CCD0 (was SetMaterialsEmissiveByHour) sets `+0x40` = 0.2 + 0.5 * tri(time) (a 30-unit triangle wave,
   0.2..0.7) and `+0x44 / +0x48` = 0 plus material flag 0x10 on every material: `+0x40` is the red of the D3DMATERIAL7 **specular**
   block (CMaterial `+0x20` diffuse, `+0x30` ambient, `+0x40` specular, `+0x50` emissive; `CLight::PrecomputeMaterialTerms` 0x68D280
-  feeds `+0x40` into the light's specular term `+0x124`), so the stun pulse is a red specular colour. **It probably shows nothing**
-  [I, 2026-11-07]: the only lighting kernel the game calls (pipeline slot 40, 2.2a) never reads the specular term, and with material
+  feeds `+0x40` into the light's specular term `+0x124`), so the stun pulse is a red specular colour. **It shows nothing** [V live 2026-11-06: a stunned hero, `SetMaterialsStunPulse` reached 6 times (breakpoint), red / green ratio of the
+  hero unchanged; earlier reasoning 2026-11-07]: the only lighting kernel the game calls (pipeline slot 40, 2.2a) never reads the specular term, and with material
   flag 0x10 `RenderLit` sets draw flag 8 (`DrawMesh` turns SPECULARENABLE on) but skips refilling the part's specular array, whose
   RGB stays 0; only the optional per-part colour provider of `RenderLit` (the `+0x1C / +0x20` calls) could fill it [live row].
   `ClearMaterialsEmissive` 0x51CD60 ends it. **Colour push / pop**: `SaveRestoreMaterialColors` 0x51C9F0 pushes the diffuse `+0x50..+0x5C` of
@@ -583,12 +584,7 @@ between frames: every frame the drops are regenerated from a hash of the grid ce
 - Draw: SoA blocks in the scratch `+0x38` (0x8000 blocks reserved), pipeline vt[9] on stack 2 into `+0x28` with codes `+0x4C`, the
   kept `VertexTL`s in `+0x70`, pipeline vt[32] over them (the clip-to-screen step: the snow offsets are applied before it) [I], vt[35]
   when `device +0x158`, then one locked `DrawIndexedPrimitive(TRIANGLELIST, 0x1C4, ..., indices +0x84, 3 per triangle)` straight on the
-  D3D device (no material, no `DrawIndexedWithMaterial`), with the same stats. The diffuse / specular dwords `+0x10 / +0x14` are
-  **never written** [V]: the copy loops (rain 0x4E4A48..0x4E4B02, snow 0x4E53D4..0x4E54E3) copy the xyzw and write the uv `+0x18 / +0x1C`
-  only, vt[32] only maps to the screen (2.2a), and vt[35] (vertex fog) only lowers the specular alpha (`min(old, 255 - f)`). The buffer
-  `+0x70` comes from `AlignedAlloc32_Elem32_B` 0x4E5710 = a bare `operator new` (not cleared) of 81 x 81 x 3 VertexTLs (~630 KB) and is
-  kept between frames, so the colours are whatever that heap block held; a block that large normally gets fresh zeroed pages (0 = black
-  diffuse, fog alpha 0) [I; live row]. At most 81 x 81 = 6561 drops per frame.
+  D3D device (no material, no `DrawIndexedWithMaterial`), with the same stats. The diffuse / specular dwords `+0x10 / +0x14` [V, corrected live 2026-11-06]: the per-frame copy loops (rain 0x4E4A48..0x4E4B02, snow 0x4E53D4..0x4E54E3) write only the xyzw and the uv; the colours are written once, when the buffer `+0x70` grows, by `CVertexScratch::Reserve` 0x4E3C20 (diffuse 0xFFFFFFFF = opaque white, specular 0xFF000000, default uv). Live (rain started with `CWorldServer::SetRain(1, 30)`): all drop vertices white / 0xFF000000, no write to them in 4 s. vt[35] (vertex fog, when the device fog flag `+0x158` is set) lowers the specular alpha with `min(old, 255 - f)` and nothing raises it again, so a drop vertex once fogged would stay fogged (fog was off in the test). At most 81 x 81 = 6561 drops per frame.
 
 ## 4. The animation system
 
@@ -729,7 +725,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   returns 1 (its caller would read stale outcodes) [I, needs the DLL]. vt[32] vs vt[34] (both look like "clip space -> screen") and who
   fills the diffuse / specular dwords of the weather vertices are open.~~ Settled 2026-11-07 (2.2a): vt[9] returns 0 only after it projected
   the vertices to the screen itself; vt[14] always returns 0; vt[32] / vt[34] are the same step (34 two at a time with a `w == 0` guard).
-  ~~Who fills the weather vertices' colours~~: nobody (3.7, 2026-11-06): uninitialised heap; the value on screen is a live row.
+  ~~Who fills the weather vertices' colours~~: `CVertexScratch::Reserve` when the buffer grows (3.7, live 2026-11-06).
 - ~~CFigureClientSpecific +0x30 / CI3DFigure +0x27C~~ settled: `CI3DFigure +0x27C` is a **CMaterial** [V], handed to the
   renderer's DrawFigure (vt[14]) by `CI3DFigure::Draw` 0x5E6D90; the UI quad figures get the widget's `+0xEC quadMaterial`
   (kind 0x16, colour 0,0,0) from `AddQuadMesh` / `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10. The three 1.0 floats at
