@@ -47,7 +47,7 @@ Addresses are VAs; offsets are bytes; "tick" = `CWorld +0x64` (18/s on the serve
 | message framing | `MsgStream_Compress` 0x47D7F0 writes `{u32 raw length}` + LZ bytes and `MsgStreamBase::v8_SendBuffered` 0x47BAD0 adds the u32 frame length; `MsgStream_Decompress` 0x47D970 inflates with the receive `LzCompressor` (corrected by net-transport.md 7; nothing is at 0x4A5790); empty keep-alive = `04 00 00 00 00 00 00 00` (multiplayer-protocol.md) [V] |
 | strings in payloads | C strings with their NUL (`SendMsgString`, `Stream_ReadCString` 0x4A48F0); "embedded stream" = `Stream_WriteEmbeddedStream` 0x4A5250: u16 `len*2` or u32 `len*2+1` (>= 0x7531) then the bytes; "length-prefixed blob" = `MsgStream_WriteLenPrefixed` / `ReadLenPrefixed` 0x47DAE0: 1 or 4 byte length (bit 0 = long), max 100000 [V] |
 | ids | object ids (`CObject +0xc`); heroes 0x3B9ACA0D.. (1 000 000 013); `IsHeroId` 0x5F8B20 marks them; a respawned hero gets the first free id >= old + 250000 [V] |
-| flags used here (`CObject +8`) | 1 deleted, 2 net dirty (PackDeltaNetState before sending), 0x10 selected by the local player (the UI iterates units with it), 0x20 inside the view frustum, 0x100 ghost / hidden render mode (message 0x19), 0x200 animation-budget candidate, 0x400 animation enabled, 0x400000 party unit (message 0x60), 0x800000 dead (orders skip it) [V] |
+| flags used here (`CObject +8`) | 1 deleted, 2 net dirty (PackDeltaNetState before sending), 0x10 selected by the local player (`SelectObject` 0x566030; the UI iterates units with it), 0x20 inside the view frustum, 0x100 ghost render mode (message 0x19), 0x200 relit periodically (lighting cache expires), 0x400 lighting cache valid (`Draw` sets it with render specific `+0xEC` = `timeGetTime`), 0x400000 visible to the local party (the unit list of message 0x60: party units and what they see; corrected 2026-11-06, was "party unit"), 0x800000 dead (orders skip it) [V] |
 | type ids (`vt[12]`) seen in the client lists | 0x50 CUnit, 0x52 CTree, 0x54 CBuilding (`GetTypeId` 0x529820) and 0x5d CLeverObject (0x52B2F0) = the objects with walkable parts (`ActivateObjectBridges`; no other vtable reuses these two slots), 0x44 CFigure, 0x4f CSpell [V] |
 | the game-state globals | `g_0x7C83D0` server packet stream (+5 ok byte), `g_0x7AFF60` CWorldServer (its +0x64 = `g_0x7AFFC4` tick), `g_0x7AF5B8` CWorldClient (+0x64 = `g_0x7AF61C`), `g_0x79B2A8` CCamera, `g_0x7C7D50` CInterface, `g_0x79B5D8` lobby client, `g_0x7B0098` party store mode (1 local store, 2 session hash, 3, 4 none) [V] |
 
@@ -157,7 +157,7 @@ error during parsing command"). [V]
 | 16 | WeaponBroken | u32 hero unit id, u32 weapon index | `SendMsg16_WeaponBroken` 0x66EA70 (`CUnit::DropBrokenItems` 0x532AC0) | `OnMsg16_WeaponBroken` 0x669400 | `HeroRecord::RemoveWeapon`, `CUnitClientSpecific vt[25] SetWeaponFigure(-1)` |
 | 17 | ClearItems | - | `SendMsg17_ClearItems` 0x66EA10 (slot 18) | `OnMsg17_ClearItems` 0x669350 | `CPlayer::ClearItems`, UI refresh |
 | 18 | UnitExperience | u32 unit id, f32 xp | `SendMsg18_UnitExperience` 0x66F2C0 (`GiveExperience`, session share) | `OnMsg18_UnitExperience` 0x66A5A0 | floating number (kind 8) |
-| 19 | UnitVisibility | u8 mode, u32 unit id | `SendMsg19_Dialog` 0x66F840, only from the server `DialogScreen` and only to player 0: `AddSpeaker` (1), `RemoveSpeakerByName` (2), `Update` talk markers (1 / 2), `StartBriefing` (0, 3), `StartDialogLine` end (2 per speaker, then (0, 0)) [V] | `OnMsg19_UnitVisibility` 0x66A620 | 0 `HideObject`, 1 ghost flag 0x100 + render specific `vt[26](1)`, 2 clear, 3 `UnhideObject(all)` |
+| 19 | UnitVisibility | u8 mode, u32 unit id | `SendMsg19_Dialog` 0x66F840, only from the server `DialogScreen` and only to player 0: `AddSpeaker` (1), `RemoveSpeakerByName` (2), `Update` talk markers (1 / 2), `StartBriefing` (0, 3), `StartDialogLine` end (2 per speaker, then (0, 0)) [V] | `OnMsg19_UnitVisibility` 0x66A620 | 0 `SelectObject` (the speaker gets the selection marker; was read as "HideObject"), 1 ghost flag 0x100 + render specific `vt[26](1)`, 2 clear, 3 `DeselectObject(all)` |
 | 40 | UnitCreate | unit record + full net state (multiplayer-protocol.md "Unit creation") | `SendMsg40_UnitCreate` 0x66D7F0 | `OnMsg40_UnitCreate` 0x667EC0 | the unit is created (figure manager), `CMapObject::ReadNetState(0)`, `CWorldClient::AddObject`, player unit hash `+0x28` |
 | 41 | UnitUpdate | u32 id + delta net state | `SendMsg41_UnitUpdate` 0x66DBA0 (objects changed this tick) | `OnMsg41_UnitUpdate` 0x6687B0 | `UnpackNetState(1)`; types 0x54 (CBuilding) / 0x5d (CLeverObject) re-register their bridge quads |
 | 42 | UnitRemove | u32 id | `SendMsg42_UnitRemove` 0x66DAD0, `RemoveTrackedUnit` 0x66DC90 | `OnMsg42_UnitRemove` 0x668850 | `SetPlayer(0)` for party units, hash `+0x28` erase, `RemoveObject` |
@@ -165,7 +165,7 @@ error during parsing command"). [V]
 | 50 | EffectCreate | u32 id, u32 type id + length-prefixed full state | `SendMsg50_EffectCreate` 0x66DDE0 | `OnMsg50_EffectCreate` 0x668940 | effect manager `vt[23](type, id)`, `CEffect::ReadDelta(0)` (spells.md), hash `+0x58` |
 | 51 | EffectUpdate | u32 id + delta | `SendMsg51_EffectUpdate` 0x66E020 | `OnMsg51_EffectUpdate` 0x668A30 | `CEffect::ReadDelta(1)` |
 | 52 | EffectRemove | u32 id | `SendMsg52_EffectRemove` 0x66DF40 | `OnMsg52_EffectRemove` 0x668AA0 | hash erase, release |
-| 60 | PartyStatus | u8 paused, u32 sync marker, u32 player index, u32 n, n x u32 visible unit ids, u32 party mode, u32 m, m x u32 loot-owner unit ids | `SendMsg60_PartyStatus` 0x66E430 (every replication in states 1 / 2) | `OnMsg60_PartyStatus` 0x668C50 | `CWorldClient +0x6c` paused, flag 0x400000 moved to the listed units (`+0x50d8`), `+0x6e4` party mode, `+0x50e8` loot ids |
+| 60 | PartyStatus | u8 paused, u32 sync marker, u32 player index, u32 n, n x u32 visible unit ids, u32 party mode, u32 m, m x u32 loot-owner unit ids | `SendMsg60_PartyStatus` 0x66E430 (every replication in states 1 / 2; the ids are `CPlayerServer +0x510c`, the visible set) | `OnMsg60_PartyStatus` 0x668C50 | `CWorldClient +0x6c` paused, flag 0x400000 ("visible to the party") moved to the listed units (`+0x50d8`), `+0x6e4` party mode, `+0x50e8` loot ids; in a playable zone only these units are drawn (section 8, RenderObjects) |
 | 70 | Weather | u8, i16 (3 B) | `SendMsg70_Weather` 0x66EC10 (dirty bit 2: `CWorldServer +0xe4 / +0xe8`) | `OnMsg70_Weather` 0x669760 | `CWeatherSound::SetRain(g_0x7AFCAC, 3, 0)` |
 | 71 | GameTime | f32 hour, f32 rate | `SendMsg71_GameTime` 0x66EC70 (dirty bit 4, `CWorld::GetHourAndRate`) | `OnMsg71_GameTime` 0x6697B0 | `SetTimeScale(rate)`, `SetTime(hour)`, `UpdateDayLight` |
 | 72 | Wind | f32[3], u32 | `SendMsg72_Wind` 0x66ECD0 (dirty bit 8) | `OnMsg72_Wind` 0x669800 | `CWorldClient::SetWind` (terrain + weather) |
@@ -205,8 +205,9 @@ name and a u32. The object comes from the world's map object manager `vt[23](kin
   world of kind 3 a unit loads its mouth texture.
 
 What the client keeps: `CPlayer +0x28` every replicated unit, `+0x40` the party units (`CUnit::SetPlayer` -> `TrackUnit`), `+0x58` the effects,
-`+0xe0` the loose items of the last `06` batch, `+0xc4` the named values, `+0x114` the synced item ids, `CPlayerClient +0x50d8` the party
-unit ids of the last `60`, `+0x50e8` the loot-owner ids, `CWorldClient +0x6e4` the party mode. [V]
+`+0xe0` the loose items of the last `06` batch, `+0xc4` the named values, `+0x114` the synced item ids, `CPlayerClient +0x50d8` the
+visible unit ids of the last `60` (party units plus every unit they see), `+0x50e8` the loot-owner ids, `CWorldClient +0x6e4` the party
+mode. [V]
 
 ## 7. CPlayer / CPlayerClient / CPlayerServer layouts (details in `batch-players-structs.tsv`)
 
@@ -216,7 +217,7 @@ named values, `+0xd8` map name, `+0xdc` entry, `+0xe0` item CList, `+0xfc` party
 `+0x110` last gtime tick, `+0x114` synced item CList, `+0x130` dirty bits. [V]
 
 `CPlayerClient` (0x50f8): `+0x20` state, `+0x24` handlers (256), `+0x34` receive CMemStream (ok `+0x39`), `+0x5c` send CMemStream, `+0x84`
-lobby mode, `+0x85` upload pending, `+0x88` send LzCompressor (0x2828), `+0x28b0` receive LzCompressor, `+0x50d8` party unit ids (count
+lobby mode, `+0x85` upload pending, `+0x88` send LzCompressor (0x2828), `+0x28b0` receive LzCompressor, `+0x50d8` visible unit ids (count
 `+0x50dc`), `+0x50e8` loot-owner ids (count `+0x50ec`). There is no DeltaCodec member: the one the earlier notes placed at `+0x2898` is the
 bit writer inside the send codec; `OnMsg0E_MovePath` builds a DeltaCodec on its stack. [V]
 
@@ -236,25 +237,43 @@ party unit: the "+0x5120 modes" open question of unit-ai.md), `+0x5124` party re
 in the world), `+0xb4` hero list, `+0xbc / +0xd8` visible CList + id hash (the objects `Update` ticks), `+0x120` grid A and `+0x150` grid B
 (16-unit cells, `terrain size / 16` after `LoadZone`; `ObjGrid_MoveObject` 0x570860 through slots 41 / 42 when an object moves), `+0x8c` zone
 exits, `+0xa0` zone exit effects, `+0xf0` screen rectangles of the drawn objects and `+0xf4` the pick records, `+0x108` debug polylines,
-`+0x1b8 / +0x1bc / +0x1c0` blood / foot / scorch prints, `+0x1d4` CBridgeManager, `+0x7bc` hidden object ids; managers `+0x180` terrain,
+`+0x1b8 / +0x1bc / +0x1c0` blood / foot / scorch prints, `+0x1d4` CBridgeManager, `+0x7bc` selected object ids; managers `+0x180` terrain,
 `+0x188` materials, `+0x18c` textures, `+0x190` lights, `+0x19c` particles, `+0x1a0` lightning, `+0x1a4` vis fog, `+0x1a8` music, `+0x1ac` sky,
 `+0x1b0` moshka bird, `+0x1b4` floating numbers, `+0x1cc` sound, `+0x1d0` texts; `+0x20c` the local player, `+0x210` the camera. [V]
 
 **AddObject** 0x5647E0 / **RemoveObject** 0x564BE0: object list, grid A cell, hero list (kind 0x32 + `IsHeroId`), visible list when `vt[29]`,
 and for types 0x54 CBuilding / 0x5d CLeverObject the walkable part faces (flag 0x400 parts) into the bridge manager; `ActivateObjectBridges` 0x5651A0 refreshes them
-on every `41`. `HideObject` / `CWorldClient::HideObject` 0x566030 / 0x566100 (message 0x19). `CollectObjectsNear` 0x56DAF0 walks the grid cells of a square.
-`FindNearestPartyUnitFor` 0x5640A0 uses the connection's party ids and the relation masks `+0x244 / +0x248 / +0x250`. [V]
+on every `41`. `SelectObject` 0x566030 (was `HideObject`: flag 0x10, render specific `vt[26]` unless ghost then `vt[25]`, the id
+appended to the selected list `+0x7bc`) / `DeselectObject` 0x566100 (was `UnhideObject`; 0 = all): called by `CBattleHud` (click, keys,
+`SelectUnitIndex`, `DeselectAll`), `UIOrderClickHandler`, `DialogScreen::OnPartyChanged` and message 0x19 modes 0 / 3 [V].
+`CollectObjectsNear` 0x56DAF0 walks the grid cells of a square. `FindNearestPartyUnitFor` 0x5640A0 returns the nearest live unit of
+the visible list `+0x50d8` whose relation masks `+0x244 & +0x248` contain the given unit's side bit `1 << +0x250` (a friend of it). [V]
 
-**LoadZone** 0x567AB0 (the `02` payload) [V]: sounds paused; `+0x64` tick; zone name, map name; zone exits (`ZoneExitArray_SetSize`,
-`CEffectKey::WriteAll` 0x4E5750 reads each); `+0x6e0` indoor; the unit save records (`UnitHashes_ReadSave`: 0x3c unit records with the
-equipment, 0x24 model records); `Game_SetZone`; the print lists, the exit effects, grid B, every effect, `ClearAll`, `UnpinItemsAndSpells`,
-`+0x20c -> +0x100 = 0`; `CTerrain::Unload`, texture caches dropped; world name `+0x184` from the map record (default "gipat", upper case);
-`CTerrain::Load(map path, world, indoor)` or `FatalError("Can't load terrain or map file")`; both grids resized; terrain flags from
-`g_0x79BD38 / 3C`, relight budget `g_0x79BD44 / 66`; sky "Sky01" (indoor) / "Sky00"; `LoadDayLightTable("lights[cave]<world>")` (indoor also
-sets the reverb); `CreateZoneExitEffects` 0x567500 (one particle 0x2038 per named exit, enabled when the player's value "<prefix><exit>" is
-1.0, `UpdateZoneExitEffectStates` 0x567680); `UpdateDayLight`; music zone (`"final"` for gz20g); the remaining bytes of the message are
-re-queued (`CPlayerClient::AppendStream`); `PrebuildUnitSkinsAndModels` 0x568800 composes the heroes' skin textures ("<prefix>skin_NN.mmp" +
-armor / spell overlays -> "prot.dp" / "mo.dp" 256 and "prot.ds" / "mo.ds" 128) and assembles the figures; wind; `SendMsg09_Ready`.
+**CreateHeroUnits** 0x566F70 (`Game_CreateHeroUnits` from `CCampScreen::Build` / `CCampScreen2::InitHero`: the party of the camp
+screens, no server) [V]: per hero record a local `CUnit` (kind 0x32, id = record `+0x1C`) from the map object manager; part list
+`hd bd hp hr lh1 lh2 lh3 rh1 rh2 rh3 ll1 ll2 ll3 rl1 rl2 rl3` where `hr` becomes `hr.%.2d` of the unit-database row (`+0x14` name)
+`+0x10`, or is dropped when that is -1; proto index from the same row, `SetProto2ByName(+0x18)`, flag 0x4000000, `LoadModel(+8, parts)`
+(failure ends the loop), materials, the model's animation set, `SetTextureNames("none", +0x10 unless "none")`, the stats block `+0x20`
+(`vt[35]`), morph `+0x724`, weapons `+0x730` (count `+0x734`), armour `+0x750` / `+0x754` (pieces of armour type 0 only when the second
+argument is set), quick items `+0x740` / `+0x744`, `vt[61](+0)`, `AddObject`.
+
+**LoadZone** 0x567AB0 (the `02` payload) [V]: `Lobby_FinishPendingAction`; effects volume 0 and `StopAll`; `+0x6e4` party mode = 0;
+`+0x64` tick; zone name, map name; zone exits (`ZoneExitArray_SetSize`, `CEffectKey::WriteAll` 0x4E5750 reads each); u32 indoor (stored
+in `+0x6e0` after the next step); the unit save records (`UnitHashes_ReadSave`: 0x3c unit records with the equipment, 0x24 model records);
+`Game_SetZone`; the print lists, the exit effects, grid B, every effect, `ClearAll`, `UnpinItemsAndSpells`, unreferenced particle systems,
+`+0x20c -> +0x100 = 0`; the map path gets `World_MapPath()` in front unless it is absolute (`X:`); `CTerrain::Unload`, texture caches
+dropped (`vt[34]` texture manager `DeleteCachedFiles` + `DeleteAll`); world name `+0x184` from the map record (`MapZoneRecords_FindByName`
+on `g_0x79BF00`, default "gipat", upper case); `CTerrain::Load(map path, world, indoor)` or `FatalError("Can't load terrain or map
+file")`; both grids resized to terrain size / 16; terrain flag 1 (water waves) cleared without `EnableWaterWaves` (AppSettings `+0xC8`)
+and forced on indoors, flag 0x10 cleared without `EnableSelfShadowing` (`+0xCC`), relight budget = the second `LightingFreq` copy
+(`+0xD4`, `g_0x79BD44`) / 66; sky texture (slot 0x3d) "Sky01" with sky `+0xc` = 0 indoors, "Sky00" with 1 outdoors;
+`LoadDayLightTable("Lights[Cave]<WORLD>.ini")` (indoors with sound: reverb `(0.3, 1.0, 3.0)`, outdoors sound manager `+0x8a8 = 0`);
+`g_0x78FF38 = -1` so the first `UpdateDayLight` pushes the sun to the terrain; `CreateZoneExitEffects` 0x567500 (one particle 0x2038 per named exit, enabled when the player's value "<prefix><exit>" is
+1.0, `UpdateZoneExitEffectStates` 0x567680); `UpdateDayLight`; music zone (`"final"` for gz20g, only with `Audio` and a music volume); the
+remaining bytes of the message are re-queued (`CPlayerClient::AppendStream`); `+0x6ec = 0`; `PrebuildUnitSkinsAndModels` 0x568800 composes the
+heroes' skin textures ("<prefix>skin_NN.mmp" + armor / spell overlays -> "prot.dp" / "mo.dp" 256 and "prot.ds" / "mo.ds" 128) and
+assembles the figures; wind strength = `DefaultWindForce` (`+0x1E8`) when not 0; `SendMsg09_Ready`; `Bink_Close`. `Movie_PlayIntro` is
+called between the long steps so the loading video keeps playing. A terrain failure returns `FatalError`'s value (the process exits).
 
 Skin composition in detail (`PrebuildUnitSkinsAndModels` 0x568800, deep read 2026-11-03 [V]). For every look record of the zone state
 (prototype index -> 0x120 `UnitProto` -> units-database row; the row's `+0xE8` is the texture prefix) with a non-empty armor id list,
@@ -269,38 +288,73 @@ weapon id list +0x10 / +0x14, active weapon byte +0x1C, `+0x20`.
 - **secondary** (`prot%ds` / `mo%ds`; 128 x 128, kind 2): armor slot 0, then the active weapon (record byte `+0x1C` indexes the
   weapon id list `+0x10`; `WeaponProto_FormatModelName` from the 0xB4 table `g_0x7C86F8` + material).
 `ComposeAndSaveLayers` also writes the result to `textures\<name>.mmp` (the skin cache). The second loop assembles the figures:
-`CUnitClientSpecific::BuildArmorModelNames` and the render manager's `vt[3]`.
+`UnitProto::BuildModelPartNames` 0x535CB0 (section 8.1) and the render manager's `vt[3]`.
 
 **Update** 0x5641F0 (slot 6, every frame) [V]: frame counter `+0x6ec` (10 = "autosave" command + volumes), terrain / music / sound / vis fog
 `vt[6]`, net pumps (`+0x5c`, `+0x1c8`, `CTcpNetDriver::SyncPeers(+0x60)`), the player: `PurgeSyncedItems`, connection `vt[23] Update` (0 ->
 `FatalError` "Disconnected"), `vt[6] SendClientState`; unpaused (`+0x6c == 0`): `+0x64 ++`, every visible object `vt[6]` (dropped when it
 returns 0), every effect, the moshka; in a session the objects also get `vt[25](tick + +0x6f0)`; `CParticleManager::RemoveFinished`, expired
-prints erased, print colours re-lit every `g_0x79BD24` frames from the lights, texture cache trimmed every 32 ticks.
+prints erased, print colours re-lit from the lights when `EnableBloodprintsRelight` (`g_0x79BD58`) and the countdown `+0x1c4` (minus the
+tick length `g_0x78FF34` = 55 ms per unpaused update) runs out, reloaded with `LightingFreq` (`g_0x79BD24` = AppSettings `+0xB4`, ms),
+texture cache trimmed every 32 ticks.
 
 **Frame** `Render` 0x569E40 [V]: `UpdateDayLight`; view matrix (`CCamera::BuildViewMatrix` of `g_0x79B2A8`) pushed on the view and world
-stacks of `g_0x7AF068`; flag 0x1000: the sky (fog / z off); `Net_TickAll`; flag 0x100: `CTerrain::SetVisibleArea(camera xy, 100)` +
-`RenderOpaque`; `RenderObjects`; `RenderWater`; flag 0x400: vis fog, particles sorted by depth, lightning, weather (alpha states);
-`RenderDebugPolylines`; stacks popped; flag 0x2000: `CFlyingHitPoints::Draw` without z-test. The render pass flags live in `CWorld +8`
+stacks of `g_0x7AF068`; flag 0x1000: the sky (render states alpha test 15 = 0, z-write 14 = 0, cull 22 = none, 29 = 1; post-process
+off); `Net_TickAll`; flag 0x100: `CTerrain::SetVisibleArea(camera xy, 100)` + `RenderOpaque`; `RenderObjects`; `Net_TickAll`; flag 0x100:
+`RenderWater`; `Net_TickAll`; flag 0x400: vis fog, particles sorted by depth (`vt[36]` particle manager), lightning, weather (blend
+SRCALPHA / INVSRCALPHA, alpha blend on, z-write off); `Net_TickAll`; `RenderDebugPolylines`; stacks popped; flag 0x2000:
+`CFlyingHitPoints::Draw` with ZENABLE 0. The network is pumped four times per frame so a slow frame does not starve the link [V]. The render pass flags live in `CWorld +8`
 (`0x3dc0` set by the ctor; 0x40 / 0x80 object / unit passes, 0x200 shadows, 0x8000 wireframe `ToggleWireframe` 0x569970).
 
-**RenderObjects** 0x56AFE0 [V]: the 11 global lists (`g_0x7AF508..0x7AF5B4`) reset; the grid A cells of the camera +- 100 units are
-classified, then the deferred units (`g_0x7AF5B4`) and the hero list; `ClassifyCellObjects` 0x56A990 per object: heroes only in the last
-pass, units get `vt[25] UpdateClientPresence`, the world matrix `+0x54` is built from `+0x34 / +0x1c`, `CViewFrustum::CullBox(+0x124)`:
-outside -> flag 0x20 cleared and, when `IsShadowVisible`, the shadow-only list of its type; inside -> flag 0x20, world position `+0x28`, the
-draw list of its type (units 0x7AF578, trees 0x7AF568, buildings 0x54 0x7AF5A8, levers 0x5d 0x7AF588, others 0x7AF598) and the shadow list; flag 0x200 objects
-whose animation is older than `g_0x79BD24` frames go to 0x7AF508, sorted by last animation tick (`Unit_IntroSortLoopByEC`), and at most
-`max(10, visible / 8)` of them get flag 0x400 cleared (the animation budget). Then: the object lists sorted by material key (`RenderObj_Less`
-0x574300) and drawn in two passes, the units (flag 0x80), the prints (`CPrintDecal::Render`, toggles `g_0x79BD50 / 4C / 54`), the shadows
-(flag 0x200: a shear matrix `sun up * -0.02`, `CMapObject` slot 24 `RenderShadow` on the shadow lists, units last), the debug arrows on the
-selected objects (`g_0x79BE64`). `BuildShadowReceiverMesh` 0x56C750 (was RenderShadowVolume) builds the receiver geometry of one caster:
-`ShadowProjector::Build`, the terrain cells in the prism (unless the caster stands on a bridge quad) and the parts of the bridge-quad owners
-whose spheres meet the prism (shadows.md).
+**RenderObjects** 0x56AFE0 (deep read 2026-11-06) [V]: nothing without a loaded terrain. The 11 global lists reset: draw lists units
+0x7AF578, trees (0x52) 0x7AF568, buildings (0x54) 0x7AF5A8, levers (0x5d) 0x7AF588, others 0x7AF598; shadow lists units 0x7AF528, trees
+0x7AF518, buildings 0x7AF558, levers 0x7AF538, others 0x7AF548; the relight list 0x7AF508; the deferred units 0x7AF5B4. The moshka flight is
+advanced (`tick + g_0x7AFCA8`). Classification (`ClassifyCellObjects` 0x56A990, `now = timeGetTime()`):
+1. the grid A cells of the camera position +- 100 units (clamped to the terrain) in rows: non-units are classified, units (type 0x50) are
+   only appended to the deferred list, heroes (kind 0x32 + `IsHeroId`) skipped;
+2. the deferred units, then the hero list `+0xb4`: each unit gets `vt[25] UpdateClientPresence`, and is classified only when the world is
+   not a playable zone (`g_0x79BE6C` and the local player's mode `+0x100 == 1`) or the unit has flag 0x400000 (visible to the party,
+   message 0x60): **the client-side fog of war**;
+3. classifying one object (with a render specific `+0x94`): world matrix `+0x54` = `Quat_ToMatrix4(+0x34)` with the position `+0x1c` in
+   column 3; `CD3DLibrary::CullBox(+0x124)` under it. Outside (2) -> flag 0x20 cleared and, when `IsShadowVisible`, the animation
+   advanced and the object pushed to the shadow list of its type. Inside -> flag 0x20, `+0x28..+0x30` = the position rotated into view
+   axes (rows 0..2 of the view top, no translation; `+0x30` is the depth used by the sort), the draw list and the shadow list of its type;
+   flag 0x200 objects lit longer ago than `LightingFreq` (`g_0x79BD24`, ms: `now - render specific +0xEC`) also go to 0x7AF508. The
+   return value is the count of those stale objects.
+Relight budget: the stale list is sorted by `+0xEC` newest first (`Unit_GreaterByStatEC`) and the first `max(10, stale / 8)` lose flag
+0x400, so their next `Draw` relights them. Drawing: flags 0xC0 -> state block, the screen rects `+0xf0` cleared, alpha test on (state 15);
+flag 0x40 -> the four object lists sorted by `RenderObj_Less` 0x574300 (material key `*(render specific +0x20)`, then `+0xf0`, then
+depth `+0x30`) and drawn others (slot 22 `Draw` = render specific slot 19 without a rect), levers (slot 23 = `Draw` into the rect `+0x100`,
+then `0x56A370` appends `{type, id, rect}` to `+0xf0` for objects with flag 0x20 and without 0x40), flush, buildings and trees (slot 22);
+flag 0x80 -> units sorted and drawn with slot 23 + rect records. So only units and levers are pickable on screen. Prints when a list is
+not empty (`EnableBloodprints` `g_0x79BD50`, `EnableFootprints` `4C`, `EnableFireprints` `54`; `CPrintDecal::Render`). Flag 0x200 ->
+the shadow lists of buildings, others, levers, trees sorted, a **translation by `-0.02 *` the camera up axis** (`Quat_GetUpAxis` of
+`g_0x79B2DC` = `CCamera +0x34`, the view axis also used for the particle depth sort) pushed on stacks 2 and 1 as a depth bias, then
+`CMapObject` slot 24 `RenderShadow` on levers, others, buildings, trees and the units (unsorted). Last, with `SelectionType` 1
+(`g_0x79BE64` = AppSettings `+0x1F4`) and the unit pass on: a `DrawArrow3D` (size 0.5, the object's forward / right axes) at the part whose
+name starts with "hp" (else the position) of every live object of the selected list `+0x7bc`; a dead one (`vt[55]`) is deselected
+(flags 0x110 cleared, render specific slots 25 / 26) and removed. The draw lists are emptied for the next frame.
+
+`BuildShadowReceiverMesh` 0x56C750 (was RenderShadowVolume; deep read 2026-11-06) builds the receiver geometry of one caster:
+`ShadowProjector::Build` (the global `g_0x7AF488`); the terrain cells in the prism (`CTerrain::BuildShadowReceiverMesh`) unless the
+bridge check is on and the caster's xy is on a bridge quad; then, with the objects flag, every node of the bridge quad list (`+0x1f4` =
+CBridgeManager `+0x20`): its owner (`vt[40]` by id) is tested with a coarse sphere (position `+0x1c`, radius `|bounds centre +0x128| +
++0x134`) and a fine one (world bounds centre, `+0x134`); on a hit every part `+0xd0` (count `+0xd4`) is put on the matrix stack `+0x84`,
+its mesh fetched by part name (`+0xf0` slot 6), transformed by the device into the 16-byte vertex buffer `g_0x7AF478` and its triangles
+clipped with `ClipTriangleB`; `ClipBuf::Finish`. Callers: `CPrintDecal::Render` (bridge check 1, objects 1: a print on a bridge is laid on
+the bridge parts instead of the terrain) and `CObject3DClientSpecific::RenderShadow` (no bridge check; objects unless one of the caster's parts has bounds flag 0x400, i.e. the caster is itself a bridge owner).
+The walk is per quad, so an owner with several walkable quads has its parts clipped once per quad (duplicate receiver triangles) [I].
 
 **Picking** [V]: the object renderers append `{RECT, object id}` to `+0xf0`; `PickObjectsAt` 0x565790 / `PickObjectsAtPrecise` 0x5659D0
 (`ScreenRects_CollectAt` 0x571800 / 0x5718B0 with the stats `vt[22]` / `vt[24]` point test) fill `+0xf4` (0x18-byte records), sort by view depth
 (live units first, `UnitRecord_LessByDepth` 0x573A60) and iterate with `NextPickedObject` 0x565C30 / `FirstPickedUnit` 0x565D00 /
 `NextPickedUnit` 0x565F60 / `PickUnitAt` 0x565E40. `PickTerrainPoint` 0x56C350: the screen ray from the inverted view-projection and the
-terrain height (slot 29: terrain + bridges) by iteration and bisection; `PickTerrainPointRaw` 0x56BF30 samples the terrain only.
+terrain height (slot 29: terrain + bridges) by iteration and bisection; `PickTerrainPointRaw` 0x56BF30 (only caller
+`UIOrderClickHandler::OnLButtonDown`) samples the terrain only (`CTerrain::GetHeightAt(x, y, 0)`). Its algorithm (deep read 2026-11-06):
+the view top is pushed on stack `+0x14`, the ray is solved by Cramer's rule as `x(z) = a z + b`, `y(z) = c z + d` for the integer screen
+point; `z0 = (H(ray(m)) + m) / 2` with `m` = terrain `+0x114` / 2; fixed-point `z = H(ray(z))` until `|dz| <= 0.01` (at most 100 steps);
+when that does not converge, a damped iteration `z = H(ray((z + H) / 2))` (100 steps). Ray coordinates are clamped to >= 0 only. With an
+empty view stack the result is `g_0x7AFDB0`. [V]
 
 **CBridgeManager** (`+0x1d4`, 0x38) [V]: a CList of 0x4c-byte walkable quads {owner id, centre, radius, origin, u / v axes, normal, lengths}
 built by `AddBoxFaces` 0x560820 (the six faces of a part box, normals with z >= 0.8 kept, `AddQuad` 0x560650) for objects of types 0x54 / 0x5d;
@@ -309,12 +363,66 @@ built by `AddBoxFaces` 0x560820 (the six faces of a part box, normals with z >= 
 bridges and stairs on the client.
 
 **Day light** [V]: `LoadDayLightTable` 0x563930 reads `config/lights[cave]<world>.ini` sections "sunlight", "ambient" and a third (sky / fog):
-keys = hours, values r g b / 255, interpolated into 24 rgba entries at `+0x22c / +0x3ac / +0x52c`. `UpdateDayLight` 0x566360: indoor uses hour 0
-with the light direction (0.5, 0.5, -0.707) and fog density `g_0x79BED4`; outdoor interpolates by the hour (`CWorld::GetHourAndRate`), sun
-elevation `30 + 45 * bell(4..20 h)` degrees, azimuth `hour / 24 * 2 pi`, fog density blended between `g_0x79BED0` (night) and `g_0x79BED4` (day)
-over 2..6 h and 18..22 h; writes `+0x6cc` sun, `+0x6ac` ambient (0.8 * sun when the table is zero), `+0x6bc` fog, the renderer light / fog, the
-sky, and once per hour `CTerrain::SetSunLight`. `GetEnvironmentMask` 0x56D9F0 (stance bits, world name, day / night, in / outdoor, weather
+keys = hours, values r g b / 255, interpolated into 24 rgba entries at `+0x22c / +0x3ac / +0x52c`. `UpdateDayLight` 0x566360 (every
+`Render`; deep read 2026-11-06): nothing when render globals flag 1 is clear; `UpdateZoneExitEffectStates`; hour `h` = fmod of the world
+hour. Indoor: the hour-0 entries, light direction (0.5, 0.5, -0.7071), fog density `g_0x79BED4`, the sky recoloured black. Outdoor: fog
+density `g_0x79BED4` (day) over 6..18 h, `g_0x79BED0` (night) over 22..2 h, linear in between (2..6 h, 18..22 h); `+0x6dc = 0x80`; the
+three tables interpolated between entry `floor(h)` and `(floor(h) + 1) % 24`; **elevation**: 4..20 h `30 + 30 * (1 - |h - 12| / 8)`
+degrees (30 at 4 h and 20 h, 60 at noon), otherwise `30 + 45 * d / 4` with `d` the hours past 20 h or before 4 h (75 at midnight: the
+night light comes from high up); azimuth `h / 24 * 2 pi`; direction `(cos az cos el, sin az cos el, -sin el)` into the sun light
+`+0xd4..+0xdc`, its colour `+0x98..`. Writes `+0x6cc` sun, `+0x6ac` ambient (0.8 * sun when the ambient entry of `floor(h)` is zero),
+`+0x6bc` = a copy of the ambient colour (not the fog), the fog-table colour as the D3D fog colour `0xFFRRGGBB` (render globals `+0x14`),
+`CSky::Recolour(ambient copy, sun, fog colour)`, and when the hour passed a whole hour since `g_0x78FF38` (reset to -1 when `h` goes back)
+`CTerrain::SetSunLight`; returns 1 on that hourly update. `GetEnvironmentMask` 0x56D9F0 (stance bits, world name, day / night, in / outdoor, weather
 `+0x7a8`) selects ambient sounds and music.
+
+### 8.1 The client unit: sounds, hit effects, skins, part names (`CUnitClientSpecific`, deep read 2026-11-06) [V]
+
+The rest of the client unit (net sections, animation playback, move replay) is `combat.md` 8.
+
+**`UpdateAnimSounds` 0x534B60** (from `Update` every frame): the clip entry is `animSystem +0x40`, its time `+0x60`; a new entry
+restarts `lastAnimTime +0x2c` at 0; nothing when the time did not move. The clip class is `entry +0x14 & 0x3C0000`:
+- `0x040000` plain and `0x200000`: the clip's sound event between the last and the current time (`GetAnimSoundName`, priority 1000 for
+  0x040000, 0 for 0x200000);
+- `0x080000` swing / hit (skipped when the local player's mode is 3): the loop sound `+0x88` stopped; when the time crosses the clip's hit
+  frame `entry +0x40` a camera shake of strength `UnitProto +0x30` (the "Detonation" column, read as a float; 5.0, 0.25) at the unit;
+  heroes (kind 0x32) with `CUnit +0x256` set also play the hit / miss event sound; then the clip's sound as the **voice** `+0x90`, not
+  restarted while the previous voice is still playing or pending;
+- `0x100000` / `0x140000` steps: up to four step frames `entry +0x30..+0x3c` (stored + 1, 1 ends the list). When one is crossed: the step
+  sound for the terrain material under the unit (`GetStepSoundName`) unless the unit has buff 0x10 (silence); then, unless the stance
+  `+0x264` is 0 (crawl): the camera shake as above, and a **footprint** when the race (`RaceModel` = `CUnit::GetProto` 0x530970) has a
+  Footprint Type `+0x10c` >= 0 and Leg Segments `+0x110` in 1..8: the part `ll%d` for even step events, `rl%d` for odd ones (swapped by
+  First Step Right `+0x11c`), placed at the part minus half its size along the facing, rotated to the facing, strength `UnitProto +0xb0`
+  times 0.75 when sneaking (stance 1), visible when not in a playable zone or the unit has flag 0x400000;
+  `CWorldClient::AddFootPrint(.., (left << 16) | type, ..)`; prints are chained 4 + rand(0..3) at a time (`+0x80` / `+0x84`);
+- `0x180000`: the sound becomes the loop sound `+0x88`; `0x1C0000`: loop and voice stopped, then the sound (priority 1000).
+Every sound is `Play3D(name, priority, unit position, 8, 40)`.
+
+**`v46_PlayHitEffect` 0x537500** (was `PlayAnimation`; slot 46, called by `CUnit::ReadNetState` section 4 when a body part's HP ratio
+drops: (part 0..5, drop, packed-stats byte `+0x107`)): nothing with flag 8 or a drop <= 0.0001. The sound
+`weapons\<set>\<material>\1.wav` (priority 1000): the set by the u16 `CUnit +0x350` (a weapon kind below 0x10, else
+`UnitProto[+0x350 - 0x10] +0x7c`): 0, 1, 13 slash; 2, 3, 5, 6, 10 pierce; 4, 11 crash; 9 hands1; 12 hands4; 14 hands6; 15 hands7; 7 / 8
+none. The material is the race's Skin Type (`RaceModel +0x118`); for heroes the first worn armour covering the part (table 0x73EC78 per
+part: head slot 0; torso 1 then 3; arms 1, 3, 6; legs 2, 4, 5) gives the material record (`g_0x7C86D8`, 0x50 bytes, index = armour id
+& 0xFFFF) whose name `+4` maps Crystal / Bone / Stone -> `stone`, Metal -> `Metal`, anything else -> `leather`. With unit flag 0x80, a blood
+particle at the part (`hd bd lh2 rh2 ll2 rl2`, attach modes 1 / 7 / 3 / 4 / 5 / 6) by Blood Type `RaceModel +0x108` (1 / 5 0x200F,
+2 / 6 0x2031, 3 / 7 0x2032, 4 / 8 0x2033), scale `part +0x198 * 2.5`, intensity = the drop clamped to 0.1..1; for blood types 1..4 also
+a blood print (`AddBloodPrint`) under the part, offset randomly by up to `min(+0x144, +0x148, 1)` in 0.02 steps, size
+`(part +0x1a8 + +0x1ac) / 2 * 0.3` by three times that, kind `(type - 1) << 16 | rand(0..1)`.
+
+**`BuildSkinTextures` 0x536670** (callers `UpdateBodyTexture`, `UpdateHeadTexture`): the run-time twin of the skin composition of
+`PrebuildUnitSkinsAndModels` (section 8 above), on the replicated equipment `armorIds +0xa0` / `weaponIds +0xbc`. Mode 0: `mo%ds` /
+`prot%ds`, 128, armour slot 0 then the active weapon (`CUnit +0x26c` <= 3). Mode 1: `mo%dp` / `prot%dp`, 256, the base skin
+`<prefix>skin_%.2d.mmp` (`skin_00` when the proto index `+0x18` is out of range), armour slots 3..6, then slots 1 and 2 with the smaller
+`ArmorProto_GetWearOrder` first. Every layer name is `<CUnit +0xa4 prefix><model name>.mmp`; `BuildEquipmentList` gives the 12-byte
+layer records; `ComposeAndSaveLayers(out, records, names, 3, 0, 0x5551)`.
+
+**`UnitProto::BuildModelPartNames` 0x535CB0** (was `CUnitClientSpecific::BuildArmorModelNames`; `this` is the 0x120 `UnitProto` row;
+only caller `PrebuildUnitSkinsAndModels`, when the look record has no part list of its own): the part table 0x73EC24 is three rows of
+seven inline 4-byte names: head `hr hd`, body `bd rh1 rh2 rh3 lh1 lh2 lh3`, legs `hp rl1 rl2 rl3 ll1 ll2 ll3`. For every armour id (row
+`g_0x7C8718 + (id >> 16) * 200`) the row chosen by the armour's slot kind `+0xc` (0 head, 1 body, 2 legs; others skipped) yields
+`hr.%.2d.armor%.2d` (proto `+0x10`, armour `+0x18`; skipped when the proto has no hair, -1) or `%s.armor%.2d` (part, armour `+0x18`); then
+`Weapon_ListModelParts` for each weapon id. The second output is the 21 base parts with `hr` -> `hr.%.2d` (dropped without hair).
 
 **CWeather** (`+0x6f4`, 0xc8, vt 0x73F4C8) [I]: rain / snow particles and sounds; `CWeatherSound::SetRain` 0x4E3FC0 from message 0x70,
 `SetWind` 0x564190 from 0x72, updated with the camera position in `Render` (`CEffectSoundObj::Update`); its own module (0x4E3000) is not
@@ -347,6 +455,14 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 * `CPlayerServer +0x44` is only ever set to -1 (ctor, Init, Done, Reset, ClearLists): write-only [V by disassembly of 0x66C540-0x671280];
   `CPlayer +0x108` = `GodMode` level (combat.md 4.3) [V].
 
+Open after the T5 deep read (2026-11-06):
+
+* `UnitProto +0xb0` (the first "Detections" float of data-sound.md 3.1) is the footprint strength in `UpdateAnimSounds`; whether the
+  column order of data-sound.md is off by one there or the designers reused the detectability is not settled [?].
+* `CUnit +0x256` (anim flags byte) gates the hero hit / miss event sound of class-0x080000 clips; its bit meanings beyond "miss" are [?].
+* The duplicate receiver triangles of a bridge owner with several walkable quads (8, `BuildShadowReceiverMesh`) should darken a unit
+  shadow / a print twice where they overlap: **[live]** (`live-t5-wcp-net.tsv`).
+
 ## 10. Corrections to earlier notes
 
 | file | wrong | right |
@@ -366,6 +482,15 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | functions.tsv | `WorldClient::OnTick`, `OnNewHeroId`, `CPlayer::CallSlot2WithKind9`, `CObject3D::GetPartBounds` at 0x5647E0, `CWorld::IsNight` at 0x56D9F0, `CBridgeManager::AddBoxFaces` at 0x5651A0, `CUnit::SetProto2ByName` at 0x566F70, `CPlayer::ClearAll` at 0x564E70 | mis-attributed names: see the batch (`OnMsg00_PlayerId`, `OnMsg0B_UnitEvent`, `SendMsg09_Ready`, `CWorldClient::AddObject`, `GetEnvironmentMask`, `ActivateObjectBridges`, `CreateHeroUnits`, `CWorldClient::ClearAll`) |
 | flows.md 236 | `CWorldClient::v6` "slot 6 default" | the per-frame `Update` |
 | pathfinding.md 320 | "`OnMsg_UnitMoveState` stores the path" | it only decodes it into a temporary unit; nothing is kept unless the debug flag `g_0x79BE70` draws it |
+| this page 1, 5, 6, 7 (until 2026-11-06) | flag 0x400000 = "party unit"; `CPlayerClient +0x50d8` = "party unit ids" | the message-0x60 list is the server's VISIBLE set (`+0x510c`: party units and what they see); flag 0x400000 = visible to the party; in a playable zone the client draws only those units (fog of war) |
+| this page 1 / 8 RenderObjects | flags 0x200 / 0x400 = "animation-budget candidate / animation enabled"; "at most `max(10, visible / 8)` ... (the animation budget)"; `g_0x79BD24` "frames" | 0x200 = cacheable lighting, 0x400 = lighting cache valid (`Draw` sets it with `+0xEC` = `timeGetTime`); a **relight** budget of `max(10, stale / 8)` newest-lit stale objects; `g_0x79BD24` = AppSettings `LightingFreq` in ms |
+| this page 8 RenderObjects | shadows under "a shear matrix `sun up * -0.02`"; `+0x28` "world position" | a translation by `-0.02 *` the CAMERA up axis (`g_0x79B2DC` = `CCamera +0x34`), a depth bias; `+0x28..+0x30` = the position rotated into view axes (sort depth `+0x30`) |
+| this page 8, 5 (0x19), `structs.tsv` | `HideObject` / `UnhideObject`, `+0x7bc` "hidden object ids" | `SelectObject` / `DeselectObject`: flag 0x10 and the selected list `+0x7bc` (the SelectionType 1 arrows); message 0x19 mode 0 selects the speaker, mode 3 deselects all |
+| this page 8 Day light | "sun elevation `30 + 45 * bell(4..20 h)`"; `+0x6bc` "fog" | 4..20 h: `30 + 30 * (1 - abs(h - 12) / 8)` (60 at noon); night up to 75 at midnight; `+0x6bc` is a copy of the ambient colour, the fog colour goes to the renderer |
+| this page 8 Frame | `Net_TickAll` once per frame | four times per `Render` |
+| `terrain-lighting.md` 10.3 | "the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code"; "A print centred on a bridge quad gets no mesh" | `+0x1F4` is the CBridgeManager quad list (filled by `AddQuad`); prints (objects = 1) and unit shadows (objects unless the caster has walkable parts) are clipped onto the bridge-owner parts; a print on a bridge gets no TERRAIN mesh but does get the bridge mesh (page not owned by this round: reported) |
+| `data-sound.md` 3.1 row 33 / `functions.tsv` | "`+0x118` also selects the animation set (`CUnitClientSpecific::PlayAnimation` 0x537500)" | 0x537500 is slot 46 `PlayHitEffect`; the field it reads is `RaceModel +0x118` Skin Type (hit-sound material), not `UnitProto +0x118` Weapon 1 (reported) |
+| `functions.tsv` | `CUnitClientSpecific::BuildArmorModelNames` 0x535CB0; `CMapObject::PickTest_v22` / `GetScreenRect_v23` | `UnitProto::BuildModelPartNames` (`this` = the 0x120 row); slot 22 = `Draw` without a rect, slot 23 = `Draw` recording the screen rect (batch-t5-wcp-net) |
 
 ## 11. Function index
 
@@ -388,7 +513,7 @@ getters 0x561890..0x5619D0, `CWeather::dtor` 0x5616C0, `CreateSky` 0x562F70, `Pi
 `InitClientResources` 0x563710, `LoadDayLightTable` 0x563930, `TerrainHeightClamped` 0x563F70, `GetHeight` 0x564070, `FindNearestPartyUnitFor`
 0x5640A0, `SetWind` 0x564190, `Update` 0x5641F0, `AddObject` 0x5647E0, `RemoveObject` 0x564BE0, `ClearAll` 0x564E70, `ClearVisibleEffects`
 0x565090, `ActivateObjectBridges` 0x5651A0, `ApplyObjectVariables` 0x5652E0, `SetNamedObjectState` 0x565380, `World_BuildObjectVarName`
-0x5654F0, `FindTexture` / `CWorldClient::FindTexture` 0x5655D0 / 0x5655F0, `SetCamera` 0x565670, picking 0x5656A0..0x565F60, `HideObject` / `UnhideObject`
+0x5654F0, `FindTexture` / `CWorldClient::FindTexture` 0x5655D0 / 0x5655F0, `SetCamera` 0x565670, picking 0x5656A0..0x565F60, `SelectObject` / `DeselectObject`
 0x566030 / 0x566100, `CameraLookAt` 0x5662B0, `SendPause` 0x566330, `SetPaused` 0x566350, `UpdateDayLight` 0x566360, `CreateMoshkaEffect`
 0x566C20, net stream attach 0x566CB0..0x566F30, `CreateHeroUnits` 0x566F70, `RemoveHeroUnits` 0x567400, zone exits 0x567440..0x5677F0,
 `ReadItemObjects` 0x567950, `ReadSpellsAndItems` 0x567A60, `LoadZone` 0x567AB0, `Hero_BuildEquipmentEntries` 0x5683D0,
@@ -398,6 +523,10 @@ getters 0x561890..0x5619D0, `CWeather::dtor` 0x5616C0, `CreateSky` 0x562F70, `Pi
 `ResetDisabledShadowBuffers` 0x56D7A0, `AddVisibleObject` 0x56D7E0, `GetEnvironmentMask` 0x56D9F0, `CollectObjectsNear` 0x56DAF0,
 `ReloadMouthTextures` 0x56DE80; containers / sorts 0x56DEC0..0x578400 (`ObjGrid_*` 0x570730..0x5728D0, `ScreenRects_*` 0x5717B0 / 0x571800 /
 0x5736D0, `UnitRecord_*` / `RenderObj_*` STL sorts); glue `Game_* / World_* / Session_*` 0x578560..0x578E30 (section 11 of the batch).
+
+Client unit (section 8.1; the rest of `CUnitClientSpecific` is combat.md 8): `UpdateAnimSounds` 0x534B60, `UnitProto::BuildModelPartNames`
+0x535CB0, `BuildSkinTextures` 0x536670, `v46_PlayHitEffect` 0x537500; slot thunks `CMapObject::Draw_v22` 0x516460 / `DrawWithScreenRect_v23`
+0x516420 / `RenderShadow_v24` 0x516490.
 
 Left to the server / session page (read only as entry points): `CWorld::ctor / CreateManagers / Done / dtor` 0x55EAB0..0x55F8E0 and the
 CWorld getters 0x55EB30..0x55EC50, `CWorld::CloneItem` 0x55E940, `FindUnitById` 0x55FB00, `SetTime / SetTimeScale / GetHourAndRate / IsNight /

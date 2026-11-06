@@ -123,10 +123,12 @@ interval 0.1 s. `NetClient::Receive` re-sends `SendLogin` whenever the retry tim
 state 2 ("ERROR: Normal update when not in active state"). `v2_RemovePeer` 0x4420E0: when the peer list becomes empty, "CONNECTION LOST
 server link is lost, entering idle", state 0.
 
-**Server** (`NetServer`): `v5_OnLogin` 0x443080 reads magic (must equal `+8`, else silently ignored), linkId, rate (clamped to
-`GetRateFor(addr)` and 500..50000). A known peer at that address -> "ERROR: Ignoring login request for active session". A pending accept
-record (`+0x2568` list, 0x28-byte nodes `{addr +8, linkId +0x18, rate +0x1c, age +0x20}`) for that address -> "Reaccepting" (linkId
-updated; "WARNING: LinkID mismatch" when it differs) and `{6, linkId}` again. Otherwise `vt[16] CanAccept(addr, cursor, &reason)`
+**Server** (`NetServer`): `v5_OnLogin` 0x443080 reads magic (must equal `+8`, else silently ignored), linkId, rate (only capped by
+`GetRateFor(addr)` here; the 500..50000 clamp is `AddPeer`'s). A known peer at that address -> "ERROR: Ignoring login request for active
+session" and nothing is sent: the same `address:port` cannot log in again until its old peer times out (60 s). A pending accept
+record (`+0x2568` list, 0x28-byte nodes `{addr +8, linkId +0x18, rate +0x1c, age +0x20}`) for that address -> "Reaccepting" (linkId and
+rate updated, the age kept, so the record still dies 60 s after the first login; "WARNING: LinkID mismatch" when the linkId differs) and
+`{6, linkId}` again. Otherwise `vt[16] CanAccept(addr, cursor, &reason)`
 (`LobbyServer::v16_CanAccept` 0x41A050: 2 when the address is in the ban list `+0x25c4`; 3 when a password is set and the next 20 payload
 bytes differ; 1 when `peers + pending >= maxPlayers +0x25e0` (8)) -> `{7, linkId, reason}`; accepted -> "Accepting client from", record
 pushed, `{6, linkId}`. `NetServer::Receive` 0x443590 ages the records and drops them after 60 s ("Accept period elapsed for").
@@ -153,8 +155,13 @@ message = [flag bit] u8 kind u16 id [payload when the flag bit is 1]
 
 `SendUpdate(budget = NetPeer +0x50 = 220)` (asm 0x433D58 `push [esi+0x50]`): the `NetCursor` is opened on `g_0x79B900` with budget +
 0x400 bytes of room (the 0x400 is only slack); `seq = +8 ++`; `WriteAcks`; `TakeStreamChunk(budget - 16 = 204)`; then the group trees
-`+0x10ec` down to `+0x1074` (group 10 first, 0 last) and, for each entry whose object is gone (removal) or whose version differs from the
-entry's, one message; the loop stops once `cursor - start > budget`, so a datagram is ~220-230 bytes (um-bot measured 228 in the lobby).
+`+0x10ec` down to `+0x1074` (group 10 first, 0 last) and, for each entry whose object is gone (removal, only while the entry version is 0)
+or whose version differs from the entry's, one message. The budget test (`cursor - (start + 1) > budget`, i.e. counted from the seq field)
+runs **after** a message is written: the message that crosses it stays in the buffer but is neither counted in `n` nor recorded, the group
+loop ends, and each later group writes (and drops) one more message the same way; the receiver reads only `n` messages, so these are
+harmless trailing bytes (their ids are already allocated, their entries are re-sent next time). A datagram is therefore ~220-230 bytes
+plus at most one message per remaining group (um-bot measured 228 in the lobby). A `SendTo` failure runs `PacketLost` on the new record at
+once (deep read 2026-11-06).
 `NetSocket::SendTo` sends the buffer's content length (`validEnd`), which can include stale bytes of an earlier, longer packet. Every message
 is recorded in the packet's `SentPacket` (`+0x10f8` list, 0x120-byte node: `+8` time, `+0x10` seq, `+0x14` list of `{channel, version,
 entry}`, `+0x18..+0x11b` the copy of the whole 0x104-byte stream-chunk node tail `{u16 offset, u8 len, data[257]}` (`rep movsd` of 0x41 dwords at 0x435B2B), `+0x11c` lost flag; `PacketLost` gets the record at node + 8, so its offsets read 8 lower) [V].
@@ -189,14 +196,19 @@ An empty keep-alive is `00 seq ack bits 0000 00 00` (offset = the current stream
   than it -> `PacketLost` 0x433F20 (once: `+0x114`; channel 0 entries whose version still equals the sent version get version 0, channel 2
   entries too; the chunk copy is re-queued at the front of `+0x111c`) and the record moves to `+0x10fc`, where it is discarded after 5 s.
   `rttMean` starts at 5.0 s, so the first loss is detected late; it converges with the 0.93 EWMA.
-- Removals (flag 0) are written in every update while their entry lives and the entry goes only on ack [I: no version test for a null
-  object in `SendUpdate`]; the ids return to the per-kind free stack every 75 s (`NetConnection +0x14`, `NetPeer_DistributeIds` 0x432D20).
+- Removals (flag 0): when `SendUpdate` finds the entry's object gone (null or refcount bit 31) it drops the object from the object tree
+  `+0x1068` and sets the entry version to 0; a removal is written only while the entry version is 0 and the version then becomes 1
+  (record channel 2, mode 0; channel 3 in mode 1), so it goes out **once** and again only after `PacketLost` resets channel-2 entries
+  to 0; the entry goes on ack [V] (corrected 2026-11-06: it was noted as "written in every update"). The ids return to the per-kind free
+  stack every 75 s (`NetConnection +0x14`, `NetPeer_DistributeIds` 0x432D20).
 - Receiver (`ReadMessage` 0x435F30, key `kind << 16 | id` in `+0x1100`, node `{ObjRef +0x14, version +0x18}`): flag 1 + unknown key ->
   insert, `NetObjectFactory` 0x438930 (creator hash `+0x40`), `SetObjectId` 0x4352F0 (pair tree `+0x110c` for refs), `vt[5] Read`, the
-  **created** handlers (`+0x164 + kind * 0xc`); known + `version < seq` -> re-created if released, `Read`, **updated** handlers (`+0xd64`;
-  created handlers when the old version was 0 = a tombstone); otherwise "SKIP update, newer version of object is already here" and a
-  throwaway object consumes the payload. Flag 0 + unknown -> tombstone `{null, seq}` (a late update cannot resurrect it); known +
-  `version < seq` -> **removed** handlers (`+0x1964`) and release; else "SKIP remove". Only a failing factory returns false (-> peer drop).
+  **created** handlers (`+0x164 + kind * 0xc`); known + `version < seq` -> an object that was released (a removed key / tombstone) is
+  re-created through the factory with version 0 and gets `Read` + the **created** handlers; a live one gets `Read` + the **updated**
+  handlers (`+0xd64`); otherwise "SKIP update, newer version of object is already here" and a throwaway object consumes the payload.
+  Flag 0 + unknown -> tombstone `{null, seq}` (an older update cannot resurrect it); known + `version < seq` -> the **removed** handlers
+  (`+0x1964`, only when the object is still there) and release, the key stays as a tombstone with the new version; else "SKIP remove".
+  Only a failing factory returns false (-> peer drop).
 - Handlers are `void(ecx = connection, edx = object)` registered by `NetConnection::AddHandler` 0x4377D0 (table 0 / 1 / 2) through the
   per-class helpers 0x4279B0-0x4288E0; `NetClassRegistry::Register` 0x42A890 maps vtable -> kind and kind -> creator.
 
@@ -260,6 +272,14 @@ window (`+8`..`+0x1c`), linkId `+0x20`, RTT `+0x24/+0x28`, address `+0x2c`, send
 `SetPassword`) and `LobbyClient` (0x2700, `ctor` 0x41BC40, `g_0x79B5D8`, created by `Lobby_Create` 0x57F390; the host runs one too,
 connecting to 127.0.0.1 as "Server"). Both ctors run `RegisterMessageFactory` and `AddHandler` for their side (the rows of both ctors in
 `batch-net.tsv` list every handler). Their lists (section 4.2's "server list" / "client list" columns) are in `batch-net-structs.tsv`.
+`LobbyServer::v13_GatherReplicated` 0x417EB0 (deep read 2026-11-06) builds, for the peer `g_0x79B924`, in this order (group 2 unless
+noted): every player record `+0x2590`; every variable `+0x25b0`; the peer's own peer record of `+0x25a4` (its player record decides the
+rest); the chat lines `+0x2594` whose id `+0xc` is above that player's watermark `+0x38` and whose target `+0x1c` is 0 or this peer (only
+while the player record is alive); every file transfer `+0x2598` and, in group 1, all chunks `+0x20..+0x24` of a transfer this peer
+requested (`+0x259c` `{transfer +0xc, peer +0x10}`); the map list `+0x25ac` only when the player is the host (`+0x28`); the quest host
+line `+0x25a0` and the current map `+0x25a8`; the player events `+0x25b4` addressed to the peer (`+0xc`); the exchange records `+0x25b8`
+the player owns (`+0x2c`) **with their item blobs, but only when every blob is alive** (one dead blob holds the whole offer back); the
+exchange pairs `+0x25bc` and the expired pairs `+0x25c0` that involve the player. [V]
 `LobbyServer::v14_Tick` 0x4182E0 also ages the player-event list `+0x25b4` and the expired-pair list `+0x25c0` (60 s) and sends the master
 heartbeat; `LobbyClient::v14_PerFrame` 0x41CCD0 ages the timed outgoing list `+0x2604` and applies queued player events once the local
 player is back in the lobby.
@@ -315,9 +335,12 @@ above its join watermark (no history on join); the server keeps the last 50 (`Po
 
 - `RefreshMapList` 0x418530 fills `+0x25ac` with one `StringMessage` `"<quest>_1"` per `maps\*.mq` (`Campaign_ShuffleNames` 0x57F850 by
   game kind) and queues each `.mq` as a file transfer (4.6). The host's client sees the list (kind 8, host only) and picks a quest:
-  `Lobby_SendNamedEvent` 0x57FB60 -> kind 7 `{1, "<quest>_1"}` -> `OnNamedEvent` -> `SetMap` 0x4186F0: list `+0x25ac` := `"<quest>_2"`,
-  current map `+0x25a8` := `StringMessage2 "<quest>"` (kind 9 to everyone), `QuestFiles_Scan`, `Session_SetMapName` 0x57ED60 (the host loads
-  the zone: `world-server.md` 2.6), chat 5; `Session_HostMpZone` then creates the kind-3 line `{host:8000, zone}` and posts chat 8 to the
+  `Lobby_SendNamedEvent` 0x57FB60 -> kind 7 `{1, "<quest>_1"}` -> `OnNamedEvent` -> `SetMap` 0x4186F0 (deep read 2026-11-06): the map list
+  `+0x25ac` **and every variable `+0x25b0`** are cleared, the list := `"<quest>_2"`, current map `+0x25a8` := a new `StringMessage2 "<quest>"`
+  (kind 9 to everyone; the name also in `+0x25d4`), `QuestFiles_Scan`, `Session_SetMapName` 0x57ED60 (the host loads the zone:
+  `world-server.md` 2.6), chat 5 with the localized quest name (`Game_GetQuestName`); then, when the briefing record
+  `g_0x7C87D4["<quest>_1"]` exists: one variable = 1.0 per name of its `+0x2c` vector (written directly: value, serial `g_0x79B608++`,
+  version + 1), `SetVariable("q.<quest>.<quest>", 1)`, `SetVariable("q.<quest>.<quest>.1", 1)` and `PostMapEvents(record, 0)`; `Session_HostMpZone` then creates the kind-3 line `{host:8000, zone}` and posts chat 8 to the
   non-hosts. `"<quest>_2"` -> `UnloadMap` 0x418CC0 (chat 6, `PostMapEvents` with start, map released, lists cleared, `RefreshMapList`);
   `"<quest>_3"` -> `OnMapRecord` 0x418ED0 (chat 7, the record `g_0x7C87D4["<quest>_3"]`: experience (kind 0) and money (kind 1) player
   events to every peer, map events). `Lobby_QuestMapFinished` 0x57FB90 (script `QuestComplete`) -> `OnQuestMapFinished` 0x4193F0 appends
@@ -433,6 +456,15 @@ LSB-first from a byte pulled from the stream when the accumulator is empty; lite
   34..97, `011`+8 bits 98..353, `11`+10 bits 354..1377, `10`+12 bits 1378..5473.
 - the encoder (`EmitMatch` 0x42FD10, tables from `LzCodec_InitTables` 0x42FAE0) emits lengths 2..225 and distances < 798 only (hash
   `(lastByte << 2) ^ byte`, 1024 heads `+0x1800`, chain `+0x800`); a literal-only stream (flag bits 0) is valid, which is what um-bot sends.
+- encoder search (`LzCompress(compressor, input view, output buffer)`; deep read 2026-11-06) [V]: every input byte is stored in the window
+  (`+0` and the copy `+0x400`), the hash head updated and `chain[pos]` = distance to the previous position with the same hash (0 -> 0x400 =
+  none). Without a current match, the chain is walked while the distance is < 798 (0x31E) for a position whose two bytes equal the last two
+  input bytes: the match starts with length 2; else the previous byte goes out as a literal (literals are emitted one byte late, `+0x2824`).
+  With a match, the next byte extends it while the length is < 225 (0xE1); on a mismatch the chain is walked again for a candidate that
+  matches `length + 1` bytes; failing that, `EmitMatch`. The length tables are indexed by the length and include the match flag bit (entry 1
+  = the literal flag); `d = (pos - len - matchPos - 1) & 0x3ff`, so the 12-bit distance form is never produced. The decoder trusts the raw
+  length (the output is reserved at once) and has no input bound: a truncated or hostile frame reads past its buffer (a remote-crash
+  surface of `MsgStream_Decompress`, `LobbyClient::OnServerInfoPacket` and `MpFile::ReadContainer`); distances >= 1024 alias modulo the window.
 
 ### 5.5 Frames and the MsgStream family [V]
 
@@ -545,6 +577,12 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | `_cpr/claude-re/net/README.md` | "keep-alive packet {3, time}"; info payload "00x6, u8 1, u8 5, u8 0 (players 1 / max 5 ?)"; "TRIED kind 13 with ref (3,1)" | type 3 = get-info; `u32 gameKind, map\0, players, max, hasPassword`; kind 13 is a file-chunk request (a ref to a kind-11 object) |
 | `_cpr/claude-re/net/engine/README.md`, `net_types.hpp` | "NetConnection layout +0x08 nextSendSeq ... +0x1148"; "NetConnection::WriteAcks / AckOne / ReadAcks / AcceptSeq / ParseUpdate" | those fields and functions belong to `NetPeer` (0x1168, one per link); `NetConnection` (0x2568+) owns the socket, registries, handler tables and the peer list; the engine's struct works because it only ever points at a NetPeer |
 | `functions.tsv` (merged by the caller) | `NetServer::GetLoginReply`, `SendKeepAlive`, `SendReject`, `LobbyServer::RaiseMaxCounter`, `IsPeerLoaded`, `FirstReadyPlayerId`, `Game_LoadWorldMapStreams`, `Lobby_SendMapFiles`, `MsgStream73C*::*`, `NetSocket::Close` | `GetRateFor`, `SendGetInfo`, `SendDisconnect`, `GameBuffer::CommitCursor`, `IsPeerHost`, `HostPlayerId`, `Game_SaveReceivedMapFile`, `Lobby_QueueMapFileTransfer`, `CFileStream / FileMsgStream / DualFileMsgStream / PeerMsgStream / TcpMsgStream::*`, `TcpStream::Close` (batch rows) |
+| this page 3.6 (until 2026-11-06) | "Removals (flag 0) are written in every update while their entry lives [I]" | written once (entry version 0 -> 1 after writing), again only after `PacketLost` resets it; erased on ack (`SendUpdate` 0x435A00) |
+| this page 3.4 | "the loop stops once `cursor - start > budget`" | the test follows each write and counts from the seq field; the crossing message stays in the datagram uncounted, and each later group adds one more |
+| this page 3.3 | `v5_OnLogin` clamps the rate to `GetRateFor` "and 500..50000" | `OnLogin` only caps it by `GetRateFor`; 500..50000 is `AddPeer`'s clamp; a re-accept keeps the record's age |
+| this page 3.6 | "created handlers when the old version was 0 = a tombstone" | a released object (removed key / tombstone) is re-created with version 0 and gets the created handlers; the tombstone keeps the removal's seq |
+| this page 4.5 | `SetMap`: "list `+0x25ac` := `<quest>_2`" | it also clears every variable `+0x25b0`, then seeds the briefing-record variables and `q.<quest>.<quest>[.1]` = 1 |
+| `functions.tsv` (merged by the caller) | `LzCompress` "rewrites the buffer in place"; `Scene3ds_ConvertToModel` | `(compressor, input view, output buffer)`; `Scene3ds_ReadBinaryScene` (a binary scene reader, dead in practice) (batch-t5-wcp-net rows) |
 | `structs.tsv` | `LzCompressor +0 byte[10256] "1 KB ring window and the Huffman / bit writer"`; `DeltaCodec +0 byte[160] streams`; `DeltaCodecSet +0x22 inStream` | the LZ coder has no Huffman part (window, window copy, chain, hash heads, bit writer, pos, match); four named CMemStreams; `+0x1c` (batch CORRECTION rows) |
 
 ## 8. Function index

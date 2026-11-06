@@ -55,12 +55,15 @@ C->S  00 ...                        updates, from now on
 
 Server side (0x443080, `OnLogin`): the KEY must match the server's (else ignored); a login from an address
 that already has an active session is logged "ERROR: Ignoring login request for active session from" and
-ignored; a known cookie from a new address is "Reaccepting client from" (the session moves to the new
-address); otherwise "Accepting client from" creates the client link ("ADD client" 0x436DD0) and answers 06. A
-server past its accept period answers nothing ("Accept period elapsed", 0x443590). "LinkID mismatch" is the
-rejection when the cookie does not match a re-accept. The u32 12500 after the cookie: with 0 the server treats
-the link differently (the stream ran from the lobby on); 12500 as the real client sends it is right; its
-meaning (a bandwidth or a timeout?) is **unknown**. The 20 zero bytes are **unknown** (never non-zero in captures).
+ignored (the same address:port can log in again only after its old link timed out, 60 s); a login from an
+address that still has a pending (not yet updated) accept record is "Reaccepting client from" (linkId and rate
+refreshed, the record still expires 60 s after the first login; "WARNING: LinkID mismatch" is only a log line
+when the cookie differs); otherwise "Accepting client from" stores the record and answers 06; the link itself
+("ADD client" 0x436DD0) is created by the client's first type-0 update. Records older than 60 s are dropped
+("Accept period elapsed", 0x443590). The u32 12500 after the cookie is the rate in bytes/s (12500 LAN, 2500
+otherwise; capped by the server's own value for that address, then clamped 500..50000; send interval 250 / rate s);
+the 20 bytes are the lobby password, present only when the lobby has one (net-transport.md 3.3, corrected
+2026-11-01 / 2026-11-06).
 
 Client side: `OnInfo` 0x441D40 stores KEY and the host's description, `OnAccepted` 0x441940 checks the cookie
 (client+0x965*4) and switches the game to its MP state ("z.MPGame1", 0x41D410: nothing is sent there),
@@ -100,11 +103,12 @@ rules in short:
   sweep 0x4346D0 first (a sent packet past its time is lost, 0x433F20 re-marks its messages as to be sent), then
   the header, acks, one chunk taken from the outgoing stream (0x434990, <= 255 bytes, kept in `outChunks`
   until acked), then the messages from the 11 send lists (by channel / priority, +0x1074..+0x10EC), each
-  packet recorded with the messages it carried (list +0x10F8, record +0xC). The resend timing constants are
-  **unknown** (not needed by a client: the server tolerates a packet every 20 ms, and keep-alives every 0.3 s
-  keep a client in the lobby).
-- Packets are 228 bytes on the wire in the lobby: past the data, old buffer bytes (the game sends its buffer,
-  not just what it filled).
+  packet recorded with the messages it carried (list +0x10F8, record +0xC). Resend timing: a packet is lost
+  after `rttMean + 3 sigma` clamped to 0.1..5 s (net-transport.md 3.6). A removal (flag 0) is written once and
+  again only if the packet carrying it is declared lost (verified 2026-11-06).
+- Packets are ~228 bytes on the wire in the lobby: the 220-byte budget is tested after each message, so the
+  message that crosses it stays in the datagram uncounted (`n` excludes it), plus one more per remaining send
+  list; and the length sent is the buffer's high-water mark, so older bytes can trail too (net-transport.md 3.4).
 
 An empty keep-alive from a client: `00 seq ack ackBits 0000 00 00` with `ack`/`ackBits` tracking the server.
 
@@ -389,7 +393,7 @@ Other server -> client sub-messages seen in a quest world (lengths known):
 | 0x41 | u32 id, then the u16 mask and the sections above (delta coded against the unit's previous state): the unit update |
 | 0x42, 0x43 | u32 id: the unit leaves the view / its body is gone |
 | 0x81 | CString name, f32 value: a named game value ("gtime" = the day time; "q.<quest>..." quest values) |
-| 0x60 | u8, u32 -1, u32 n, n x u32 ids: a resync list of the units the server sees as known |
+| 0x60 | u8 paused, u32 sync marker (-1), u32 player index, u32 n, n x u32 ids, ...: the units visible to the party (its units plus what they see); the client flags them 0x400000 and, in a playable zone, draws only those units (world-client-players.md 5 / 8) |
 | 0x04 | u32 id, u32 tick, u8 1: an event on a unit (seen with a hit / a death) |
 | 0x0B | u32 id, u32 code (0x29, 0x2F, 0x31 ...): a unit event |
 | 0x18 | u32 hero id, f32 **experience share** (`CPlayerServer::SendMsg18`, sent by `CWorldServer::GiveExperience` 0x5911C0 once per player's first hero on every kill in a session) |

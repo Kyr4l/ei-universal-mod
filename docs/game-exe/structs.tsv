@@ -1,7 +1,7 @@
 class	parent	size	off	type	name	note
 CObject		0x1c	0x0	pointer	vtable	
 CObject			0x4	int	refcount	items use this int too (not a 16-bit refcount)
-CObject			0x8	uint	flags	bit 28 = no animation (CUnitClientSpecific::SetAnimation)
+CObject			0x8	uint	flags	CORRECTION (add): bit 0x400000 = visible to the local party (message 0x60 list); in a playable zone (g_0x79BE6C and CPlayer +0x100 == 1) ClassifyCellObjects draws only units with it (client fog of war); bit 0x400 = lighting cache valid (Draw sets it with +0xEC = timeGetTime), bit 0x10 = selected (SelectObject); bit 28 = no animation (CUnitClientSpecific::SetAnimation)
 CObject			0xc	int	id	-1 before the manager sets it
 CObject			0x10	int	kind	the creation key (0x32..0x34 CUnit, 0x35 CTree ...)
 CObject			0x14	pointer	manager	CBaseManager*
@@ -100,6 +100,7 @@ CUnit			0x27c	MoveCurve	moveCurve	CORRECTION: the embedded 0xa4-byte MoveCurve (
 CUnit			0x320	float	flyHeight	height above the terrain of a flying unit (packed moveType +0x33f == 2): SnapZToTerrain(h) stores it and sets z = world vt[30](x, y) + it on the client (the server, GetTypeId 0x3e, keeps its own z); TerrainZAt and the client ReplayMove add it; 0 for walkers and after ResetFields; saved by CFakeUnit::Read / Write
 CUnit			0x43c	int	pathCostUniform	FindPath cost-table selector for this unit: 0 = the move-class table, != 0 = the uniform table (CAIMap::InitStepQueryForUnit +0x54, pathfinding.md 6); the order dispatcher and MoveGroup set it to IsCellWater(pos) before BeginMoveTo, ApproachTarget / 0x54E600 set 1 (chase), CUnitServer::FindPath temporarily = its mode argument, BeginMoveTo saves and restores it; 0 after ResetFields
 CUnit			0x4ac	int	quickItemGrow	CArray grow step of the +0x4a0 extra item array (0 = auto: count / 8 clamped to 4..0x400, AddObject4A0); 0 in the ctor; read by CFakeUnit::Read
+CUnit			0x350	ushort	lastHitSource	inside the packed stats (+0x330 + 0x20, net section 4): set by CUnitServer slot 20 TakeHit: 7 for a spell or no attacker, a hero attacker -> its weapon CItemWeapon::GetDamageKind (or +0x28c unarmed), a monster attacker -> its UnitProto index + 0x10; the client v46_PlayHitEffect 0x537500 picks the hit sound set from it (values >= 0x10 -> UnitProto +0x7C)
 UnitStats		0x704	0x4	float	experience	total experience; level = round(log(exp/200)/log(1.61)); MaxHP/MaxMana use log(exp/50)/log(1.61)
 UnitStats			0x8	float	expSpent	spent on skills + abilities
 UnitStats			0xc	int	strengthBase	
@@ -596,7 +597,7 @@ UnitProto			0x14	float[3]	complection	FLD5..7 (tags 5..7): morph x y z (CObject3
 UnitProto			0x20	float	infoWindowScale	FLD34 (tag 0x22)
 UnitProto			0x28	float	dialogCameraDistance	FLD37 (tag 0x25)
 UnitProto			0x2c	float	dialogCameraHeight	FLD38 (tag 0x26)
-UnitProto			0x30	int	detonation	FLD40 Graphics Data Detonation (tag 0x28)
+UnitProto			0x30	float	detonation	CORRECTION: was int. "Detonation" column read as a float: the camera shake strength of the unit footsteps / hit frame (UpdateAnimSounds 0x534B60, CCamera::AddShake when > 0)
 UnitProto			0x34	CString	field_34	FLD8 Unk8 (tag 8), unused string
 UnitProto			0x5c	float	actionsTuning	FLD12 Tuning Actions (tag 0xc)
 UnitProto			0x7c	int	realWeaponTypeId	FLD39 Attack Real Weapon Type Id (tag 0x27)
@@ -1227,12 +1228,12 @@ CPlayerClient			0x84	byte	lobbyMode	set in the lobby: OnMsg07_GameMode only forw
 CPlayerClient			0x85	byte	uploadPending	SendClientState prefixes the identity with 0x08 + the party (MpFile::Write) when set
 CPlayerClient			0x88	LzCompressor	sendCodec	0x2828 bytes: the LZ window of the client -> server stream (kept across messages)
 CPlayerClient			0x28b0	LzCompressor	recvCodec	CORRECTION: was "+0x2898 DeltaCodec" (that offset is inside the send codec's bit writer); 0x2828 bytes: the LZ window of the server -> client stream
-CPlayerClient			0x50d8	pointer	partyUnitIds	aligned DWORD array of the party unit ids of the last message 0x60 (units flagged 0x400000); +0x50dc count, +0x50e0 capacity, +0x50e4 grow
+CPlayerClient			0x50d8	pointer	visibleUnitIds	CORRECTION: was partyUnitIds. Aligned DWORD array of the unit ids of the last message 0x60 = CPlayerServer +0x510c visible set (party units plus every unit their AiMemory sees); those units carry CObject flag 0x400000 on the client; +0x50dc count, +0x50e0 capacity, +0x50e4 grow
 CPlayerClient			0x50e8	pointer	lootUnitIds	aligned DWORD array (4) of the unit ids whose loot belongs to the player (message 0x60 tail); +0x50ec count, +0x50f0 capacity, +0x50f4 grow
 CPlayerClient	CObject	0x50f8	0x28	int	handlerCount	0x100 after Init (the aligned handler array +0x24 is {data, count, capacity, grow}); DispatchPackets checks the server opcode against it
 CPlayerClient			0x2c	int	handlerCapacity	
 CPlayerClient			0x30	int	handlerGrow	
-CPlayerClient			0x50dc	int	partyUnitIdCount	number of party unit ids of the last message 0x60 (partyUnitIds +0x50d8; AlignedDwords_SetSize in the ctor, Done / ResetStreams empty it)
+CPlayerClient			0x50dc	int	visibleUnitIdCount	CORRECTION: was partyUnitIdCount. Number of ids in visibleUnitIds +0x50d8 (message 0x60)
 CPlayerClient			0x50e0	int	partyUnitIdCapacity	
 CPlayerClient			0x50e4	int	partyUnitIdGrow	
 CPlayerClient			0x50ec	int	lootUnitIdCount	number of unit ids whose loot belongs to the player (lootUnitIds +0x50e8, message 0x60 tail)
@@ -1347,7 +1348,7 @@ CWorldClient			0x6e4	int	partyMode	the server's party mode from message 0x60 (0 
 CWorldClient			0x6ec	int	frameCounter	frames since LoadZone (10 = autosave + volumes; 0x5a music reset)
 CWorldClient			0x6f0	float	tickOffset	added to the tick for the session object updates (vt[25])
 CWorldClient			0x6f4	CWeather	weather	rain / snow (CWeatherSound, CEffectSoundObj::Update in Render, SetWind)
-CWorldClient			0x7bc	pointer	hiddenObjectIds	STL list of the ids hidden by HideObject (message 0x19)
+CWorldClient			0x7bc	pointer	selectedObjectIds	CORRECTION: was hiddenObjectIds. STL list of the selected object ids (SelectObject 0x566030 / DeselectObject 0x566100); RenderObjects draws a 3D arrow on each with SelectionType 1 and drops dead ones
 CWorldClient			0x7c0	int	scriptEventValue	u32 round(b) of script SendEvent(a, b) via msg 0x12 (-1 after the ctor); write-only, no reader in the exe. CORRECTION: was field7c0 "byte << 24"
 CWorldClient			0x7d0	pointer	hCursor	LoadCursorFromFile("wincurs/Df0000.cur")
 CWorldClient			0x7d4	CString	windowTitle	"EvilIslands"
