@@ -164,7 +164,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0042D4E0 | 287 | Bytes_InsertNRealloc | STL: vector<byte>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n) from the pool / new, both halves copied, fill, old buffer freed); Bytes_InsertN and ByteVector_Resize (CString_Scramble / Unscramble, LoadWor... |
 | 0x0042DA80 | 229 | ClipPolygon | (verts, idx[], &vertCount, &count, xMax, yMax): clips a polygon against the six view planes (no outcodes) and re-triangulates it as a fan |
 | 0x0042D1C0 | 146 | ChunkFile::ctor | (name CString): vtable 0x73BE94 -> 0x73BE9C, tag / consumed / length / start = 0, parent +0x14 = 0, CFile at +0x18, opens the file; NO CALLERS (the chunk reader is only used through sub-chunk objects created by the owning serializ... |
-| 0x0042D060 | 120 | ChunkFile::ReadVec4B | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and stores {0x10, ?, x, y}; second function named ReadVec4 (the other is 0x42CEC0) |
+| 0x0042D060 | 120 | ChunkFile::ReadVec4B | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and copies the four dwords read to the output (machine code 0x42D0BB..0x42D0CF; the decompile's {0x10, .., x, y} was a stack misread); second function named ReadVec4... |
 | 0x0042D0E0 | 115 | ChunkFile::WriteDwordPair | (value): CFile::Write (vt[14]) of the dword twice plus 16 more bytes; consumed bytes accounted on the parent |
 | 0x0042D160 | 96 | ChunkFile::Open | (name, mode): CFile::Open (CFile +0x18 vt[8]) with mode & 0xffff |
 | 0x0042D270 | 73 | ChunkFile::dtor | destroys the CFile and restores the base vtable 0x73BE94 |
@@ -430,9 +430,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00471B10 | 12595 | Scene3ds_ReadBinaryScene | (this = scene header out, stream, model out): reads a pre-converted binary scene with the stream slot 13 Read: object count + material count, per object a 0x2c-byte header, two name strings, vertex / normal arrays (12-byte), 0x1c ... |
 | 0x00471A90 | 25 | Vec3_Ctor3f | (this, x, y, z): writes the three floats (3ds material colour triples in Scene3ds_BuildFigures / ConvertToModel) |
-| 0x00471AB0 | 24 | Material3ds::SetColor20 | stores a float triple at +0x20 of the 0x9c 3ds material record (the second of the three colour triples read after the material name) [?] ambient / diffuse / specular order |
-| 0x00471AD0 | 24 | Material3ds::SetColor30 | stores a float triple at +0x30 of the 0x9c 3ds material record (the first triple read) [?] |
-| 0x00471AF0 | 24 | Material3ds::SetColor40 | stores a float triple at +0x40 of the 0x9c 3ds material record (the third triple read) [?] |
+| 0x00471AB0 | 24 | Material3ds::SetDiffuse | stores a float triple at +0x20 of the 0x9c 3ds material record: the diffuse colour (chunk 0xA020, the second triple read), the D3DMATERIAL7 layout of CMaterial (+0x20 diffuse, +0x30 ambient, +0x40 specular); dead code (the 3ds imp... |
+| 0x00471AD0 | 24 | Material3ds::SetAmbient | stores a float triple at +0x30 of the 0x9c 3ds material record: the ambient colour (chunk 0xA010, the first triple read; CMaterial layout); dead code |
+| 0x00471AF0 | 24 | Material3ds::SetSpecular | stores a float triple at +0x40 of the 0x9c 3ds material record: the specular colour (chunk 0xA030, the third triple read; CMaterial layout); dead code |
 
 ## 0x474000 - 0x47E000: MFC CArray/CMap instantiations, IStream/CMemStream/CFileStream, MsgStream family (file / peer / TCP), CTcpNetDriver, Huffman coder, unit prototype apply
 
