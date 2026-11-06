@@ -76,10 +76,10 @@
 
 | Function | Description |
 |----------|-------------|
-| **Sleep** (Sleep: float) | Pauses script execution (in 1/15 sec units). |
+| **Sleep** (Sleep: float) | Pauses script execution in script ticks: one per server game tick of 55 ms (about 18 per second; the 1/15 s of the vendor text is wrong, docs/game-exe/gs-functions.md 3.2). |
 | **KillScript** () | Stops the current script (only in map script modules). |
 | **KillUnit** (Unit: object) | Kills a unit (no XP granted). |
-| **InflictDamage** (Unit: object, Amount: float) | Deals damage. In the real code no XP is granted, and the hit carries all seven damage types at full weight: body part 1 of an unarmoured unit takes up to 7 x Amount (the unit's HP follows from its parts; read from the code, not yet measured in game: docs/game-exe/gs-functions.md). |
+| **InflictDamage** (Unit: object, Amount: float) | Deals `Amount` of pure electrical damage to body part 1, minus the unit's electrical armour; it always hits and grants no XP (read from the code and the disassembly, not yet measured in game: docs/game-exe/gs-functions.md 3.4). |
 | **IsAlive** (Unit: object) → float | Checks if unit is alive. |
 | **IsDead** (Unit: object) → float | Checks if unit is dead. |
 | **GetX / GetY / GetZ** (Object: object) → float | Returns world coordinates. |
@@ -103,14 +103,14 @@
 | **WaitEndAnimation** () | Not implemented in game.exe (does nothing). |
 | **SleepUntil** (bool: float) | Pauses the script until the condition becomes non-zero. |
 | **SleepUntilIdle** (Unit: object) | Pauses the script until the unit has no order any more. |
-| **WaitSegment** (Wait: float) | Pauses the called procedure for `Wait` segments (15 per second); map script modules only. |
+| **WaitSegment** (Wait: float) | Pauses the called procedure for `Wait` segments (the frame's own run count, one per script tick of 55 ms; counted from the start of the procedure, not from the call); map script modules only. |
 | **SetCP** (Object: object, x: float, y: float, z: float) | Moves any map object (not only a unit) to (x,y). Units lose their orders, and the passability graph is recalculated (slower than `SetCPFast`). |
 | **SetCPFast** (Object: object, x: float, y: float, z: float) | Like `SetCP`, but the AI passability graph is not recalculated. |
 | **HideObject** (Unit: object, Hide: float) | Hides (`Hide ≠ 0`) or shows (`0`) a map object. Meant for briefing zones: per the code it only has a visible effect there (in quest zones the players keep seeing the object; read from the code, not yet checked in game). |
 | **RemoveObjectFromServer** (Object: object) | Removes the object from the server (same as `RemoveUnitFromServer`). |
 | **RemoveUnitFromServer** (Unit: object) | Removes the object from the server (same as `RemoveObjectFromServer`). |
 | **RemoveObject** (grp: group, Unit: object) | Removes the unit from a game group (the group variable of the map script; not usable from the console). |
-| **For** (GlobalVariable: object, grp: group) (Command) | Runs the commands in the body once for every object of the group, with the global variable set to that object. The group may be a diplomatic group, a game group or the result of `GroupAdd` / `GroupCross`. |
+| **For** (GlobalVariable: object, grp: group) (Command) | Runs the commands in the body once for every object of the group, with the global variable set to that object. The group may be a diplomatic group, a game group or the result of `GroupAdd` / `GroupCross`. The body cannot use the parameters of the enclosing `Script` (compile error); a `Sleep` inside it only ends the current iteration. |
 | **ForIf** (GlobalVariable: object, grp: group, condition: float) (Command) | Like `For`, but only for the objects for which the condition is non-zero. |
 
 ### AI behaviours (UM commands)
@@ -195,7 +195,7 @@
 | **PlayFX** (x: float, y: float, z: float, rad: float, NameWav: string) | Not implemented in game.exe (does nothing). |
 | **PlayCamera** (PlayName: string) | Starts the automatic camera path in `CAMERA\<PlayName>`. |
 | **PlayMovie** (PlayName: string) | Plays the video `MOVIES\<PlayName>` (with its extension). |
-| **PlayMusic** (nPlayer: float, PlayName: string) | Plays the piece `STREAM\<PlayName>` (no extension) for the player. |
+| **PlayMusic** (nPlayer: float, PlayName: string) | Plays the piece `STREAM\<PlayName>` (no extension: the client appends `.mp3`) for the player, only while its music is in zone mode. |
 | **SetCameraOrientation** (float) | Not implemented in game.exe (does nothing). |
 | **SetCameraPosition** (float, float, float) | Not implemented in game.exe (does nothing). |
 | **SetDirectionToObject** (nUnit: float) | Not implemented in game.exe (does nothing). |
@@ -213,13 +213,13 @@
 
 ---
 
-> **2026-11-01, from the engine ([game-exe/script-vm.md](game-exe/script-vm.md)):** there is no `else`; an undeclared name in an object / group position is compile error 7 (no implicit groups or named-object lookup); wrong script-call argument counts are compile errors 5 / 6; identifiers must not begin with any command or keyword name (`Sleepy` is cut into `Sleep` `y`); `/* */` comments and `#define` exist; number literals keep fractions. um.dll's MOB_VALIDATION should follow these rules.
+> **2026-11-01, from the engine ([game-exe/script-vm.md](game-exe/script-vm.md)):** there is no `else`; statements and the conditions of an `if` are written one after the other, a `,` between them is a compile error (3 / 9); an undeclared name in an object / group position is compile error 7 (no implicit groups or named-object lookup); wrong script-call argument counts are compile errors 5 / 6; identifiers must not begin with any command or keyword name (`Sleepy` is cut into `Sleep` `y`); `/* */` comments and `#define` exist; number literals keep fractions. um.dll's MOB_VALIDATION should follow these rules.
 
 ## Script validation (`MOB_VALIDATION` in um.dll)
 
 With `MOB_VALIDATION=true`, `um.dll` checks each `.mob` file's mission script (the encrypted `SS_TEXT` node, dumped as `.eis` by `um-multitool mobdump`) when the game opens the file, and writes the findings to `um.log` as `[MOBCHECK]` lines. Line numbers count lines of the script text, so they match the dumped `.eis` file. Only maps inside the folder of the mod that contains `um.dll` are checked; other mods' maps and the base game's, which the game also opens, are left alone.
 
-The language is small and regular: `GlobalVars`, `DeclareScript`, `Script`, `WorldScript`, `if ( conditions ) then ( ... ) [else ( ... )]`, nested `Command( args )` calls, `variable = value`, and the `For( var, group ) ( ... )` loop. The command list (name, parameter types, return type) comes from the VGG editor's `syntax.ini`/`scripts.htm` and MobExplorer's `script_refs.txt`, corrected against the shipped maps; see `resources/universal-mod/um-dll/mob_script_functions.hpp`. In um-multitool, `script_commands.txt` beside the program adds or changes commands for a game whose executable differs (see `tools/um-multitool/mapedit/README.md`, Checks).
+The language is small and regular: `GlobalVars`, `DeclareScript`, `Script`, `WorldScript`, `if ( conditions ) then ( ... )` (no `else`), nested `Command( args )` calls, `variable = value`, and the `For( var, group ) ( ... )` loop. The command list (name, parameter types, return type) comes from the VGG editor's `syntax.ini`/`scripts.htm` and MobExplorer's `script_refs.txt`, corrected against the shipped maps; see `resources/universal-mod/um-dll/mob_script_functions.hpp`. In um-multitool, `script_commands.txt` beside the program adds or changes commands for a game whose executable differs (see `tools/um-multitool/mapedit/README.md`, Checks).
 
 | Level in `um.log` | Meaning |
 | :--- | :--- |

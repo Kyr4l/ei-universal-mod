@@ -360,11 +360,11 @@ Per page, the open items that matter most for the mod work:
   console handlers 0x5DD920-0x5E0A10 (now defined) and the map.txt zone record are settled.)
 - ui-screens.md: nothing open. (Settled: the camp screen layouts, tooltip ids = text keys `tip N`, `GetMagicTotals` = a quotient,
   the options are saved to the registry at exit.)
-- script-vm.md: the second auto-id counter `+0x6C` has no reader (a failed `.mob` compile is silent: settled 2026-11-03); `GetBSZValue` reads a stale vtable slot (undefined on the server).
+- script-vm.md: the auto-id counters are `+0x68` (lightnings and particle sources, shared) and `+0x6C` (sound sources) (settled 2026-11-06); a failed `.mob` compile is silent; `GetBSZValue` reads a stale vtable slot (undefined on the server).
 - gs-functions.md: `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; (the sound-source respawn loop's test is
   inverted: a game bug, `CreateRandomizedFXSource` never plays; one-byte fix at 0x4BF161, settled 2026-11-03); `HideObject` / `BlockUnit` /
-  `ActivateTrap` flip flags without `MarkNetDirty` (the KillUnit / InflictDamage hit record is settled: `InflictDamage(n)` can remove
-  up to 7 x n HP).
+  `ActivateTrap` flip flags without `MarkNetDirty` (InflictDamage settled 2026-11-06: its own hit record carries only electrical damage n, so it removes at most n HP minus the
+  unit's electrical armour, always hits and gives no XP).
 - data-sound.md: RaceModels `+0x158..` (Unk47..50) have no reader; the bodies of the 60 particle emit / step callbacks are not
   described one by one (defined and named 2026-11-03). (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
   player is dead code, the reverb is set per zone by `LoadZone`, the Levers fields.)
@@ -385,4 +385,4 @@ Global:
 
 ## Coverage
 
-Coverage (13881 functions): named 13865, guess 16.
+Coverage (13881 functions): named 13864, guess 17.

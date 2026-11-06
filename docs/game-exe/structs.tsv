@@ -1543,8 +1543,8 @@ GSWorld			0x10	int	lightGrow
 GSWorld			0x14	MfcCList	particleSources	vt 0x73D388, 0x2c nodes {GSEffectRecord}; CreateParticleSource / Move / Delete / AttachParticles / SetParticleSourceSize
 GSWorld			0x30	MfcCList	soundSources	vt 0x73D37C, 0x3c nodes {GSSoundSourceRecord}; CreateFXSource / CreateRandomizedFXSource / DeleteFXSource; respawned in Tick
 GSWorld			0x4c	MfcCList	lightnings	vt 0x73D370, 0x10 nodes {GSLightningRecord}; CreateLightning / DeleteLightning
-GSWorld			0x68	int	nextAutoLightningId	-2 after Reset, decremented by CreateLightning with a negative id
-GSWorld			0x6c	int	nextAutoId2	-2 after Reset; second auto id counter (saved with +0x68) [?]
+GSWorld			0x68	int	nextAutoEffectId	CORRECTION: was nextAutoLightningId: -2 after Reset, taken and decremented by CreateLightning AND GSWorld::CreateParticleSource 0x4BD9A0 for a negative id (shared by lightnings and particle sources); saved
+GSWorld			0x6c	int	nextAutoSoundId	CORRECTION: was nextAutoId2 [?]: -2 after Reset, taken and decremented by GSWorld::CreateSoundSource 0x4BD310 (CreateFXSource / CreateRandomizedFXSource) for a negative id; saved
 GSWorld			0x70	MfcCList	programs	vt 0x73D364, 0x20 nodes {SSCProgram}: every condition list, then body and For body of the compiled scripts; id = index (GSWorld::AddProgram 0x4BF540)
 GSWorld			0x8c	CArray	declarations	SSCScriptDecl[] (data +0x90, count +0x94; vt 0x73D358): DeclareScript / Script definitions; FindDeclIndexByName 0x4D3780
 GSWorld			0xa0	SSCVars	globals	GlobalVars of every module compiled since Reset (numbers +0xa0, strings +0xc8, objects +0xf0, groups +0x118); the only assignable variables (id 0x78); saved
@@ -3192,7 +3192,7 @@ SSCScriptDecl			0xc	CArray	pairs	SSCIfThenPair[] (data +0x10, count +0x14; vt 0x
 SSCScriptDecl			0x20	SSCVars	vars	parameters: names + values (numbers +0x20 / names +0x34, strings +0x48 / +0x5c, objects +0x70 / +0x84, groups +0x98 / +0xac); the values are the bound arguments of an active instance (BindArguments 0x4BB6A0)
 SSCScript		0xb4	0x0	pointer	program	SSCProgram* being executed; SSCScript::Run 0x4B6760; swapped with the body program during For / ForIf
 SSCScript			0x4	int	pc	index of the next command; unchanged by a waiting command; Run returns 0 when pc >= count
-SSCScript			0x8	int	runCounter	++ per Run; Sleep / WaitSegment compare against it (1 per tick of the owning VM)
+SSCScript			0x8	int	runCounter	++ at every SSCScript::Run entry (also the call that finds the frame finished); For / ForIf bodies run with it swapped to 0 and restored; WaitSegment compares against it
 SSCScript			0xc	int	sleepStart	runCounter at the first stop of the current Sleep, -1 when not sleeping
 SSCScript			0x10	pointer	killFlag	int* = +0 of the owning active SSCScriptDecl instance, or 0 (WorldScript body, console line, a body re-queued after a wait): KillScript is a FatalError when 0
 SSCScript			0x14	SSCVars	vars	copy of the instance parameters (RunProgram) or empty (StartScript); numbers +0x18 / names +0x2c, strings +0x40 / +0x54, objects +0x68 / +0x7c, groups +0x90 / +0xa4
@@ -3224,18 +3224,18 @@ GSLightRecord			0x14	float[3]	velocity	position increment per tick
 GSEffectRecord		0x24	0x0	ObjRef	obj	CEffectParticle or null (particle sources of GSWorld +0x14); CreateParticleSource 0x4BD9A0
 GSEffectRecord			0x4	int	id	script particle source id
 GSEffectRecord			0x8	int	removeWhenDone	MoveParticleSource parameter 5
-GSEffectRecord			0xc	int	moving	
-GSEffectRecord			0x10	int	steps	
-GSEffectRecord			0x14	float[3]	velocity	
-GSEffectRecord			0x20	int	lifetime	ticks until the node is removed (Tick phase 6)
+GSEffectRecord			0xc	int	moving	1 while MoveParticleSource animates it; cleared when steps run out (GSWorld::Tick phase 6)
+GSEffectRecord			0x10	int	steps	ticks left of the move; position += velocity while the old value is > 0
+GSEffectRecord			0x14	float[3]	velocity	position increment per tick
+GSEffectRecord			0x20	int	lifetime	CORRECTION: was "ticks until the node is removed": set from the particle table's default life (g_0x78B128[3k], CreateParticleSource 0x4BD9A0); counts down while > 0, < 0 = never expires, the record is removed on the tick it is found at 0 (GSWorld::Tick 0x4BF000)
 GSSoundSourceRecord		0x34	0x0	ObjRef	obj	CEffectSound (type 0x48) or null; GSWorld::CreateSoundSource 0x4BD310
 GSSoundSourceRecord			0x4	int	id	script sound source id
 GSSoundSourceRecord			0x8	CString	wav	sound file name (copied to the CEffectSound +0x14c)
 GSSoundSourceRecord			0xc	float[3]	pos	
 GSSoundSourceRecord			0x18	float	volume	-> CEffectSound +0x24c
 GSSoundSourceRecord			0x1c	float	radius	-> CEffectSound +0x250
-GSSoundSourceRecord			0x20	int	randomized	1 for CreateRandomizedFXSource records; GSWorld::Tick phase 4 serves records with 0 (see gs-functions.md section 5: inverted test or dead command)
-GSSoundSourceRecord			0x24	float	scatter	respawn position = pos +- random * scatter (x, y)
+GSSoundSourceRecord			0x20	int	randomized	CORRECTION: was "(see gs-functions.md section 5: inverted test or dead command)": 1 for CreateRandomizedFXSource records; GSWorld::Tick serves the records with 0: an inverted test (game bug, settled 2026-11-03, um-engine byte patch at 0x4BF161)
+GSSoundSourceRecord			0x24	float	scatter	CORRECTION: was "pos +- random * scatter (x, y)": the respawned sound's x and y are each pos + uniform[-scatter, +scatter] (two ISAAC words), z = pos.z (GSWorld::Tick 0x4BF000)
 GSSoundSourceRecord			0x28	int	minDelay	ticks
 GSSoundSourceRecord			0x2c	int	maxDelay	ticks
 GSSoundSourceRecord			0x30	int	countdown	ticks until the next respawn

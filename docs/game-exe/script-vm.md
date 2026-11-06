@@ -23,14 +23,15 @@ Tags: **[V]** read directly in the decompile, **[I]** inferred from several func
 3. **Grammar** (0x4D23A0 top level, 0x4D1330 statements, 0x4CFBC0 one call): `GlobalVars ( name : type, ... )`, `DeclareScript Name ( ... )`,
    `Script Name [ ( params ) ] ( if ( conds ) then ( cmds ) ... )`, `WorldScript ( cmds )`. A statement is a *command* call, a script call,
    `For / ForIf ( ... ) ( cmds )`, or `global = expr`. An argument is a literal, a declared variable, or a nested *function* call of the right
-   return type. No `else`, no `if` inside command lists, no operators, no implicit declarations, no strings from functions.
+   return type. No `else`, no `if` inside command lists, no operators, no implicit declarations, no strings from functions, no `,` between
+   statements or between conditions, no script parameters inside a `For` body.
 4. **Compiled form = a tree of `SSCCmd` records (0x94)** in `SSCProgram` arrays: function id + four typed argument slot arrays (float / string /
    object / group) + two binding lists (local var -> slot, global var -> slot) + nested-call bindings (child `SSCCmd` -> slot) + a body program
    pointer for `For`. Literals are baked into the slots; variables are *re-bound before every execution* (0x4B3F60), nested calls re-evaluated
    depth first (0x4B4030). Object slots hold *pointers to the variable's reference cell*, which is how `For` and `=` write variables.
 5. **Scheduler** (0x4BF000): per tick, (a) every *running* `SSCScript` (WorldScript bodies and then-bodies suspended in a wait) is stepped until it
    waits or ends, (b) every *active* script instance (created by a call `Name(args)`) has its `if/then` pairs tested in order, a true pair's body
-   is run at once (and parked in the running list if it waits), until `KillScript()` marks the instance, (c) dead object references are purged,
+   is run at once (and a copy parked in the running list, where it continues after a wait or is dropped next tick when it ended), until `KillScript()` marks the instance, (c) dead object references are purged,
    (d) effect timers advance. Waits count the script's own run counter (= VM ticks). There is no call stack and no return value: a script call is
    "spawn an instance".
 6. **Values.** float32 everywhere (truth = non-zero); string = CString; object = a refcounted `CObject*` cell (null = `none`; deleted objects become
@@ -88,10 +89,10 @@ top         := "GlobalVars" "(" vardecls ")"                                    
              | "WorldScript" "(" commands ")"                                   one per unit (error 0xE); body -> AddProgramNeg, queued by StartScript
 vardecls    := [ NAME ":" ("float"|"string"|"object"|"group") { "," NAME ":" type } ]       Compiler_ParseVarDecls 0x4D1FE0 (type words case-sensitive)
 pairs       := { "if" "(" conditions ")" "then" "(" commands ")" }+             Compiler_ParseIfThenPairs 0x4D1030 (error 0xB when none)
-conditions  := [ fcall { "," fcall } ]                                           Compiler_ParseConditions 0x4D0BF0: each must be an F function (error 9); empty = true
+conditions  := { fcall }                                                         Compiler_ParseConditions 0x4D0BF0: each must be an F function (error 9, also for a ","); empty = true
 commands    := { statement }                                                     Compiler_ParseCommands 0x4D1330: no separators needed, ")" ends
 statement   := COMMAND "(" args ")"                                              table record with params != 0
-             | ("For"|"ForIf") "(" args ")" "(" commands ")"                    body -> AddProgram, SSCCmd +0x90
+             | ("For"|"ForIf") "(" args ")" "(" commands ")"                    body -> AddProgram, SSCCmd +0x90; body parsed WITHOUT the script's parameters
              | SCRIPTNAME "(" args ")"                                           declared script (plain or "!N!" name): id 8
              | GLOBALNAME "=" expr                                               GlobalVars only: id 0x78 (error 3 "Unexpected token '%s'" otherwise)
 args        := [ arg { "," arg } ]                                               Compiler_ParseCommand 0x4CFBC0: one arg per signature letter
@@ -103,16 +104,29 @@ What the parser does **not** accept, in case the validator guesses otherwise [V]
 function as a statement (`GetObject(1)` alone is error 3); a command as an argument (commands have no signature -> error 7); an undeclared name as
 an argument of any type, including object and group positions (error 7 `Parameter of type %s expected`: there is no implicit "named map
 object" lookup and groups are not created by use); assignment to a script parameter or local (error 3); arithmetic operators; `,` after the last
-argument before `)` (the `)` is read as an argument name -> error 7). Accepted leniencies: `f()` for a command with an empty signature; the
-`#` and `.` characters in names; keywords in any case (`any(...)`, `worldscript`); a script defined before its declaration-free use is not
-possible: a call to a name that is not yet declared is error 3, which is why the shipped maps declare everything first.
+argument before `)` (the `)` is read as an argument name -> error 7); **a `,` between statements** (error 3 `Unexpected token ','`: the
+`,` record has no params, so it is looked up as a script / global name) **or between conditions** (error 9: it has no `F` signature); a
+**parameter of the enclosing `Script` inside a `For` / `ForIf` body** (error 7: `ParseCommands` parses the body with no local table, `push 0`
+at 0x4D160D; the loop header may use parameters); a number literal in an `o` / `g` position (error 7). Accepted leniencies: `f()` for a command
+with an empty signature; the `#` and `.` characters in names; keywords in any case (`any(...)`, `worldscript`); a script defined before its
+declaration-free use is not possible: a call to a name that is not yet declared is error 3, which is why the shipped maps declare everything
+first (an undeclared `Script X (params) ( ... )` cannot call itself either: its declaration is added only after its pairs are parsed).
+
+**Name resolution of an argument** (`Compiler_ParseCommand`) [V]: number / string literal (only in `f` / `s` positions) -> the script's own
+parameters of that type (plain name) -> `GlobalVars` of that type by plain name -> by `!N!` name -> a nested function whose return letter
+matches; else error 7. A parameter therefore shadows a global of the same name and type.
 
 **Module qualification.** `Compiler_QualifyName` (0x4D37F0) turns `name` into `!N!name` when `GSWorld +0x1AC` = N is non-zero. GlobalVars
 names, DeclareScript / Script names are *stored* qualified; every lookup (`ParseCommand` variables, `ParseCommands` script calls and globals)
 tries the plain name first, then the qualified one, and `GSWorld::FindDeclIndexByName` (0x4D3780) strips a `!N!` prefix and retries. Module 0 (the
 first compile after `Reset`: the base map's `SS_TEXT`) therefore has plain names; a quest map loaded on top, the generated quest chain and every
-console line are later modules and see the base map's names, while the base map never sees theirs. Two modules may declare the same name without
-a clash [V].
+console line are later modules and see the base map's names, while the base map never sees theirs. What a clash does [V, corrected 2026-11-06]:
+- **Scripts**: `FindDeclIndexByName` finds `!N!X` as `X` too, so a later module's `DeclareScript X` where module 0 declared `X` is error 0xF
+  `Duplicate script`, and its `Script X ( if ... )` *fills module 0's declaration* when that one has no pairs yet (error 0x10 when it has).
+  Later modules never clash with each other (`!1!X` and `!2!X` are both found only by exact name). Script calls match the plain name or the
+  caller's own `!N!` name, first declaration in array order.
+- **GlobalVars**: a later module may re-declare a module-0 name (it is stored as `!N!x`, the duplicate check is per `GlobalVars` list), but every
+  lookup tries the plain name first, so that module's own `x` binds the **base map's** variable of the same type; `!N!x` is unreachable.
 
 **Script calls** (`ParseCommands`): the declaration's signature string (`SSCScriptDecl +8`, letters in declaration order) is used as the parameter
 list, with `scriptCall` mode reserving float slot 0 (= declaration index) and string slot 0 (= the name as written). The argument *count* per type
@@ -181,6 +195,13 @@ partial script). The codes:
 | 0xF / 0x10 | `Duplicate script %s` / `Multiple declaration of script %s` | DeclareScript of a known name / Script body of a name that has one |
 | 0x11 | `Unable to read file "%s"` | `Compiler_CompileFile` 0x4D36F0 |
 
+Compile quirks [V, 2026-11-06]: `DeclareScript` (and `Script`) as the **last token** of a text read the name through a null cursor (no end
+test in those two top-level cases): an access violation instead of error 1. A `WorldScript` body program is created *before* its commands are
+parsed, so a failing body leaves a partial program in `+0x178` (never started). The result of a `For` / `ForIf` header is not checked before the
+body is parsed: the reported error can be a later one (the compile still fails). `#define` matches the 7 bytes `#define` at the start of a
+line (`#defineX a b` defines `X`), and lines are split at `\n` only, so with CRLF text the value keeps its `\r` (harmless: white space to the
+lexer). The text CString passed in is rewritten with the define-expanded text.
+
 Run-time `FatalError`s (message box, process ends): `KillScript command not allowed here`, `Wrong number of script %s float|string|object|group
 parameters`, `Function does not return float|object|string at SSCCmd`, `SSCCmd::SetParameters, unknown parameter`, `SSCCmd::CalcParameters,
 unknown function`, `wrong type char in CScript::LoadFunction`, `Uknown variable type at CScript..` [V].
@@ -190,6 +211,8 @@ unknown function`, `wrong type char in CScript::LoadFunction`, `Uknown variable 
 `Compiler_AddIfThenPair` 0x4C0520, and the **decompiler** `GSWorld::Decompile` 0x4D53C0 (`Decompiler_WriteVars` / `WriteProgram` / `WriteCommand`),
 which rebuilds `GlobalVars ( ... ) DeclareScript N(...) Script N( if ... then ... ) WorldScript ( ... )` from the records and documents the canonical
 layout: 2-space indents, `(` / `)` on their own lines, `ShitHappens` for an unresolvable slot; it recurses into `For` bodies but not `ForIf` ones.
+`Decompiler_WriteCommand` 0x4D41C0 strips a `!N!` prefix only for the last compiled module and prints names of any other module N > 0 as empty
+strings; an assignment is written `name = value`, the value's type taken from float slot 1.
 
 ## 5. GSWorld: the VM object (0x1F8)
 
@@ -199,7 +222,7 @@ layout: 2-space indents, `(` / `)` on their own lines, `ShitHappens` for an unre
 | +0x14 | particleSources CList (vt 0x73D388) | `GSEffectRecord` 0x24 `{obj, id, removeWhenDone, moving, steps, velocity[3], lifetime}` |
 | +0x30 | soundSources CList (0x73D37C) | `GSSoundSourceRecord` 0x34 `{obj, id, CString wav, pos[3], volume, radius, randomized, scatter, minDelay, maxDelay, countdown}` |
 | +0x4C | lightnings CList (0x73D370) | `GSLightningRecord` 8 `{obj, id}` |
-| +0x68 / +0x6C | auto id counters | -2 after Reset; `CreateLightning` with a negative id uses and decrements +0x68 |
+| +0x68 / +0x6C | auto id counters | -2 after Reset; `CreateLightning` and `CreateParticleSource` (0x4BD9A0) with a negative id use and decrement +0x68 (one shared counter); sound sources use +0x6C |
 | +0x70 | programs CList (0x73D364) | every condition list / then body / For body: `SSCProgram`, id = index |
 | +0x8C | declarations CArray (0x73D358) | `SSCScriptDecl[]`, data +0x90, count +0x94 |
 | +0xA0 | globals `SSCVars` | numbers +0xA0, strings +0xC8, objects +0xF0, groups +0x118 |
@@ -226,23 +249,32 @@ Per tick, in this order [V]:
    `pc >= count` (the frame is then removed: a body that ends is dropped one tick after its last command), else purges dead references in the frame's
    vars and executes commands from `pc`: bind locals (`SetParameters` from `+0x14`) and globals (from the VM `+0xA0`), evaluate nested bindings
    (`CalcParameters`, depth first, left to right in binding order), run the case, `ClearTempResults`, `pc++` unless the command *stopped* the run
-   (then `pc` stays and `Run` returns 1). A frame whose body never waits therefore runs to the end in one tick.
+   (then `pc` stays and `Run` returns 1). It also returns **1 after running the last command** (0x4B9BF2: only the entry test returns 0). A frame
+   whose body never waits therefore runs to the end in one tick.
 2. **Active instances** (`+0x140`, head first): `SSCVars::PurgeDeadObjects` on the instance's parameters, then for each `if/then` pair in source order
    `SSCIfThenPair::Run` (0x4BB520): the conditions are evaluated one by one (`EvalFloat`, `ClearTempResults` after each) and the first `0.0` ends the
    pair; if none is zero (an empty list counts as true) `RunProgram(body, instance)` builds a *stack* `SSCScript` {body, pc 0, counter 0, sleep -1,
-   kill flag = &instance.killed, vars = a copy of the instance parameters} and runs it once; if it returns 1 (stopped in a wait before the end) a copy
-   with **kill flag 0** is pushed to the running list. After each pair the instance's `killed` word is tested: set -> the instance is removed (the
-   remaining pairs are skipped). Not set -> the next pair; **every true pair fires again next tick**, which is why bodies start with `KillScript()`.
+   kill flag = &instance.killed, vars = a copy of the instance parameters} and runs it once; whenever that returns 1, i.e. **after every firing of a
+   non-empty body**, finished or stopped in a wait, a copy with **kill flag 0** is put at the head of the running list (a finished copy is dropped in
+   step 1 of the next tick, a waiting one continues there). After each pair the instance's `killed` word is tested: set -> the instance is removed
+   (the remaining pairs are skipped). Not set -> the next pair; **every true pair fires again next tick**, which is why bodies start with
+   `KillScript()`. Order consequence: a script called by a step-1 frame is added at the head of the active list before step 2 starts and is tested
+   in the same tick; one called from a then-body in step 2 is tested from the next tick.
 3. Dead references in the global objects / groups are released (`ObjRef_ReleaseIfFlag1` / `ObjRefCArray_PurgeFlag1`: object flag bit 0).
-4. Sound sources with `randomized == 0`: countdown, respawn a `CEffectSound` at `pos +- rand * scatter`, new countdown in `[minDelay, maxDelay]`.
-5. Moving point lights: `steps--`, position += velocity, `CEffect::MarkDirty`; at 0 removed when `removeWhenDone`.
-6. Particle sources: `lifetime--`, same motion; expired nodes removed (the list is freed when it empties).
+4. Sound sources with `randomized == 0` (the inverted test, gs-functions.md 5): `countdown--`; below 1: new countdown `minDelay + rand % (maxDelay -
+   minDelay + 1)`, the old `CEffectSound` removed, a new type 0x48 one at x, y each `+ uniform[-scatter, +scatter]` (two ISAAC words), z = `pos.z`,
+   volume / radius / wav from the record, `AddEffectObject`. A countdown of 0 fires on the first tick.
+5. Moving point lights (records with an object and `moving`): `steps--`; while the old value was > 0 position += velocity and `CEffect::MarkDirty`,
+   so a move of n steps takes n ticks and stops on tick n + 1 (`moving = 0`, the light removed when `removeWhenDone`).
+6. Particle sources: `lifetime` (from the particle table's default life, `CreateParticleSource` 0x4BD9A0) counts down while > 0; a negative
+   lifetime never expires; the record is removed on the tick it is found at 0. Moving sources move like lights; when the steps run out `moving = 0`
+   and the record is removed at once if `removeWhenDone`. The whole CList is freed when it empties.
 7. `ClearTempResults`.
 
 **Waits** (the only commands that return "stop"): `Sleep(n)` 0x7: `sleepStart = counter` at the first stop, stops while `counter - sleepStart <
 round(n)`, then resets `sleepStart = -1` and continues (the command is re-run every tick, its argument re-evaluated); `WaitSegment(n)` 0x9: stops
 while `counter < round(n)` (absolute, counted from the frame's start); `SleepUntil(expr)` 0xDE: stops while `expr == 0`; `SleepUntilIdle(unit)` 0xB9:
-stops while the unit is a unit and its brain's current logic `+0x984` is non-zero. Since the counter is per frame and a frame runs once per tick,
+stops while the object is a unit and its brain order kind `+0x984` (`Brain +4`, 0 = no order) is non-zero (the server specific is not null-checked). Since the counter is per frame and a frame runs once per tick,
 `Sleep(n)` = n ticks of the VM that owns it [V].
 
 **Script call** 0x8: `SSCScriptDeclCList_AddHead(+0x140, declarations[float slot 0])` + `BindArguments` (the arguments are copied *by value* into
@@ -258,6 +290,10 @@ is arbitrary but reversed w.r.t. `Every` / `Any` / `Sum`, which walk 0..n-1); pe
 then the body runs through a **recursive `SSCScript::Run` on the same frame** with `{program, pc, counter, sleepStart}` swapped to
 `{body, 0, 0, -1}` and restored afterwards; the inner result is ignored, so a wait inside the body ends that iteration (the next element starts at
 once) and a `Sleep` in a loop body never sleeps longer than one run. `+0x1E8--` at the end; temporaries made inside the loop live until then [V].
+The element count is read once, the elements live: removing the current element in the body is safe, removing one with a lower index shifts the
+current one down so it is visited again. After the loop the variable holds element 0 (the last visited; unchanged for an empty group); `Every` /
+`Any` / `Sum` leave it on the element where they stopped [V]. The body cannot name the script's parameters (section 3); `ForIf`'s condition is the
+first *nested* float binding; a literal or variable condition is bound once for the whole loop.
 
 **Re-entrancy.** `Compiler_CompileText` may be called from inside `Run` (`QFinish` -> `QuestObjectives_GenerateScript`, a trap or a named event
 compiling a `WorldScript(...)` into the *same* VM): the new programs / declarations / globals are appended and the new WorldScript body is added at
@@ -464,7 +500,7 @@ handler is in gs-functions.md section 3 and is not repeated):
 | 0xB6 | RunWorldTime | R | f | F0 | continue |
 | 0xB7 | FixWorldTime | R | f | F0 | continue |
 | 0xB8 | SetWaterLevel | R | fff | F0 F1 F2 | continue |
-| 0xB9 | SleepUntilIdle | R | o | O0 | stop while O0 unit busy (+0x984) |
+| 0xB9 | SleepUntilIdle | R | o | O0 | stop while O0 is a unit with brain orderKind (+0x984) != 0 |
 | 0xBA | SetParticleSourceSize | R | ff | F0 F1 | continue |
 | 0xBB | IsInSquare | F | ffffff | F0 F1 F2 F3 F4 F5 | float -> *out |
 | 0xBC | UnitInSquare | F | offff | O0 F0 F1 F2 F3 | float -> *out |
@@ -604,6 +640,12 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 | game-memory.md "Scripts and quests" | "Each variable is a heap object of class 0x0073BCE8" | those are the `StringFloatMap` nodes of `CPlayer +0xC4` (`q.*` quest values), not script variables; script `GlobalVars` are the `SSCVars` arrays at `GSWorld +0xA0` |
 | mob-format.md | `SS_TEXT` magic "`2899242187` (`0xACD33E2B`)" | 2899242187 = `0xACCEECCB` (the scrambled script chunk; `0xACCEECCA` = plain text) |
 | um_rig.cpp comment on 0x5785D0 | "out: {CString, line, code}" | out = {CString, code, line} |
+| script-vm.md 3 grammar | `conditions := [ fcall { "," fcall } ]` | `{ fcall }` without separator: `Compiler_ParseConditions` 0x4D0BF0 has no `,` case and the `,` record has no signature, so a comma is error 9 (2026-11-06; the decrypted campaign scripts write conditions one after the other) |
+| script-vm.md 3 "Module qualification" | "Two modules may declare the same name without a clash" | true only between later modules; against module 0: `DeclareScript X` is error 0xF, `Script X` fills module 0's empty declaration (0x10 if it has pairs), and a re-declared GlobalVars name binds module 0's variable (plain name looked up first) |
+| script-vm.md 6 (2), functions.tsv `GSWorld::RunProgram` / `SSCScript::Run` | "if it returns 1 (stopped in a wait before the end) a copy ... is pushed"; "a body that finishes in one run leaves nothing behind" | `Run` returns 1 also after its last command (0x4B9BF2), so a kill-flag-0 copy is queued after every non-empty firing and dropped next tick when finished |
+| script-vm.md 6 Waits / 7 table, functions.tsv `SSCScript::Run` | `SleepUntilIdle` "stops while ... its brain's current logic `+0x984` is non-zero" | `+0x984` = `Brain +4` orderKind (0 none, 1 move ...): it waits until the unit has no order (gs-functions.md had it right) |
+| (new) script-vm.md 3 / 4 | - | `For` / `ForIf` bodies are parsed without the script's parameters (0x4D160D `push 0`): a parameter in a loop body is error 7 |
+| gs-functions.md 3.4 / 5 / 6, scripting.md, README.md | `InflictDamage` = KillUnit's `Hit_Init` record with [8] / [9] / [11] changed, "up to 7 x n HP" | own record: electrical weight [5] = 1.0 only, [8] 100, [9] n, [10] 1, [11] 1, `TakeHit` (CUnitServer vt[20]) direct; at most n HP; a spell-type hit (gs-functions.md 7) |
 
 ## 11. Function index (address, name, one line)
 
