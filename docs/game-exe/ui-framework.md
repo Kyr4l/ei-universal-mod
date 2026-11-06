@@ -201,10 +201,10 @@ from it; the game side of the exit record is `ZoneExit` in `structs.tsv`.
 cursor `+0x20` = buffer `+0x24`, size `+0x28`). `SeekSection(name)` 0x4DF030 moves the cursor and returns 1 when found, 0 at
 the end of the text:
 
-- `name == 0` (next section; `MapInfo_Load`): reads words; a word whose first character is the token `0x78DCFC` and whose first
-  two characters are not the token `0x78DCF8` is a section start; any other word skips the rest of its line.
+- `name == 0` (next section; `MapInfo_Load`): reads words; a word whose first character is `#` (`0x78DCFC`) and whose first
+  two characters are not `##` (`0x78DCF8`) is a section start; any other word skips the rest of its line.
 - one-word name: reads words until one equals the name exactly (case-sensitive); after a mismatch the rest of the line is
-  skipped and then every following line whose first word starts with the two-character token `0x78DCF8` (a comment marker [I])
+  skipped and then every following line whose first word starts with `##` (`0x78DCF8`, a comment marker [I])
   is skipped too.
 - multi-word name (split at spaces): reads whole lines (`ReadLines(.., 0)`); a line matches when it has at least as many words
   and each of the name's words equals the line's word **upper-cased** (so callers pass upper-case names and the file side is
@@ -463,7 +463,8 @@ Only the top screen draws; screens below are frozen as the screenshot and their 
 and a coded word / line (codes kept); a space closes the word; before adding a character, `MeasureText(line + word + ch, font
 1) > 0x30C` (780 UI units) pushes the line, and if `word + ch` alone is still wider the word is pushed too (hard break inside
 long words); `'^'` + `'0'..'7'` goes only into the coded text, `'^'` + another character **appends** a fixed
-string `0x787BE8` [?] to the coded word (the call is the append `CString::operator+=` 0x700D4C, the only CString-from-text operator this function calls) and drops that character. Then the oldest lines are erased until `old + new <= 12`, and per new line a
+string `"7"` (`0x787BE8`, the first entry of a "7", "6", ... "0" table) to the coded word, so an unknown code
+becomes `^7` (the call is the append `CString::operator+=` 0x700D4C, the only CString-from-text operator this function calls) and drops that character. Then the oldest lines are erased until `old + new <= 12`, and per new line a
 0x18-byte node `{next, prev, +8, text +0xC (plain), time +0x10, surface +0x14}` is appended with a `CUIBlitSurface(0, 0,
 MeasureText(text) + 3, 0x11, flags 5 = colour-keyed + visible)`; the coded line is drawn in segments split at `'^'`, each at
 `x = MeasureText(previous plain segments)` in rect `(x, 0)-(0x30F, 0x11)`, font 1. Lines are placed at `(10, 10 + 16 i)` by
@@ -710,8 +711,8 @@ mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
   `structs.tsv` MapZoneRecord / ZoneRecord (same record).
 - `CSoftCursorFrame::CreateFromMmp`: settled as far as needed [I]: the per-pixel copy loops are compiler-eliminated in the
   decompile; the surface comes from `CDXDirectDrawSurface::CreateFromPicture`.
-- (2026-11-06) Short strings below the strings-dump threshold: `0x787BE8` (appended by `AddMessage` after `^` + a non-digit),
-  the `SeekSection` tokens `0x78DCFC` / `0x78DCF8` (probably `#` / `//`). A byte read of the exe's .rdata would settle them.
+- ~~(2026-11-06) Short strings below the strings-dump threshold~~ settled the same day by a byte read of the exe: `0x787BE8` = "7",
+  `0x78DCFC` = "#", `0x78DCF8` = "##".
 - (2026-11-06) The `CString::Format` arguments of the `UIItemInfoWin` panels and of `CInterface::Init`'s font sizes are lost
   in the decompiles (FPU / varargs); which value fills which line needs the disassembly or a live look at the panels.
 - (2026-11-06) `CSoftCursor::ComposeFrame`: which locked surface feeds which operand of `background & mask | cursor` [I].
