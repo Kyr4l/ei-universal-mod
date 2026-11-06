@@ -44,7 +44,7 @@ Addresses are VAs in game.exe; offsets are bytes; "UI units" = the virtual 800x6
 | UI space | 800 x 600 virtual pixels; `UiScale::ScaleRect` 0x5F7CA0 `x * screenW / 800`, `y * screenH / 600` (integer); `UnscalePoint` 0x5F7E00 the inverse; screen size = `CInterface +0 / +4` (primary surface description, `Init` 0x5F4990) [V] |
 | UI -> 3D | `CObject3D::SetScreenPos2D(x, y, z)` 0x5E6FA0: `pos = ((x/400 - 1) * k * z, (y/400 - 0.75) * k * z, z)`, `k = 0.48157462 = tan(pi/7)` = tan(fov/2); a quad built by `UIQuadMesh::InitRect` gets the uniform scale `z * k * scale / 400` so `scale` UI units = one vertex unit; y grows downwards on screen because the UI view has y down [I]; 800 UI units span the whole view at any depth [V] |
 | depths used | 7.8 / 7.9 / 8.0 for the camp frame layers (`UIFrameWidget::BuildFrameMesh` 0x5F2A90), 10 for most quads; smaller z = in front [V] |
-| texture uv | pixel coordinates of a 256 px texture: `u = px / 256`, `v = 1 - py / 256`, both inset by 1/512 towards the centre (`InitRect` 0x5E70E0) [V] |
+| texture uv | pixel coordinates of a 256 px texture: `u = px / 256`, `v = 1 - py / 256`, then every uv shifted by `+1/512, -1/512` (= +0.5 texel on both pixel coordinates: texel-centre sampling, not an inset towards the centre; every builder, 5.5) [V] |
 | colours | GDI `COLORREF` BGR for text (`0xA7D7E4` = light yellow, `0xFFFFFF` white, `0x00FF00` green); `'^N'` in a message log line = colour escape, N bit0 blue, bit1 green, bit2 red (`^7` white, `^4` red, `^2` green, `^1` blue, `^6` yellow) (`CUIMessageLog::AddMessage` 0x5E2A30) [V] |
 | fonts | `CInterface +0x70 / +0x74 / +0x78` = Times New Roman at `size * 0x68 / 0x70 / 0x90` (size from a 75 pt probe, i.e. scaled with the resolution); `MeasureText` 0x5F8340 returns UI units; the console uses Courier New 9 pt [V] |
 | time | `timeGetTime()` ms everywhere in the UI; game ticks `g_0x78FF34` ms (55 normal, 27 at x2); `CCamera::Update` dt = ms * 0.0181818 = ticks [V] |
@@ -55,18 +55,18 @@ Addresses are VAs in game.exe; offsets are bytes; "UI units" = the virtual 800x6
 
 ### 2.1 `main` (WinMain, 0x456440) - startup in order [V]
 
-1. `res\sysmsg.txt`: three lines (DirectX 7 missing, low disk space, insert CD 2 prompts; English defaults when the file is missing).
-2. `App_ProbeDirectX` 0x45E310 -> level code (0x100 IDirectDraw2 .. 0x700 IDirectDraw7, 0x800 D3D8 present); `< 0x700` -> `MessageBox` "CRITICAL ERROR" + exit.
+1. `res\sysmsg.txt`: split at `\n`; fewer than 3 lines (or no file) -> the three English defaults (DirectX 7 missing, low disk space, insert CD 2 prompts).
+2. `App_ProbeDirectX` 0x45E310 -> level code (0x100 IDirectDraw2 .. 0x700 IDirectDraw7, 0x800 D3D8 present); `< 0x700` -> `MessageBox(line 1, "CRITICAL ERROR", MB_ICONEXCLAMATION)` and `main` returns 0xDEAD.
 3. `FactoryMap_Register` 0x458570: save-object factories 1 = `CGSPlayer_New` 0x457850, 2 = `NamedParty_New` 0x457740.
-4. Command line (space separated): `-moviepath_<dir>`, `-nocam` (clears flag 8 of `g_0x7AF5C0`), `*.cam` -> `g_0x79BA1C`, `*.scr` -> `g_0x79BA18`, `*.mob` -> `g_0x79BA14`, `*.mpr` -> `g_0x79BA10`, `-benchmark_<n>` -> `g_0x79BD60 / 5C`, `-devicetarget_<n>` -> `AppSettings +0x2C`.
-5. `LoadString` 0x65 = title "Evil Islands" (`g_0x79BB24`), 0x66 = class "EIGAME" (`g_0x79BA24`); `RegisterClassEx` (style `CS_DBLCLKS`, icon 0x69, **no cursor, no background brush**, wndproc `App_WndProc` 0x457D40). `FindWindow(class, title)` -> an existing instance is brought to front and this one `_exit(-1)`.
-6. `g_0x7AF450 = "Software\Nival Interactive\EvilIslands"`; `World_InitWorkDir` 0x55EA10 (work dir = current dir + `\`); `AiInfo_Load config\ai.reg`; `AppSettings::ReadFromRegistry`; `CWorldClient::Init` / `CWorldServer::Init`; `CCamera::InitFromSettings` 0x40D0A0 (near / far / fov pi/3.5 from the settings).
-7. Free disk space < 300 MB -> sysmsg line 2 warning; CD 2 volume label check (line 3) when the resources path is not the work path; `saves\`, `mp\`, `textures\` created under the work dir.
-8. `DInputMouse` object -> `g_0x79BA08`; **`CreateWindowExA(0, "EIGAME", title, WS_POPUP | WS_VISIBLE (0x84000000), 0, 0, VideoResolution w, h)`** -> `g_0x79BC28`; `ShowWindow(nCmdShow)`; `SetCursor(0)`. The window has no frame in either mode: "fullscreen" only decides whether the DirectDraw device takes exclusive mode (`CDXDirectDraw +0x20 & 1`), so a borderless launcher only needs `FullScreen = 0` and a resolution equal to the desktop (um.dll BORDERLESS subclasses this window, `um-dll/um_window.cpp`).
-9. Renderer `vt[2](hwnd, settings)` (`g_0x7AF080` DirectDraw / D3D7 device); video-memory probes -> `g_0x784753/754/755` (< 8 MB flags; `g_0x784753` makes the transition screenshots 400x300); `g_0x784756 = DrawingTarget != 0` (software device -> 16 px cursors); `SetGamma(brightness, contrast, gamma)`.
-10. Audio (`CSoundManager::Open(hwnd, 1, -1, 44100, 16)`, `streamsn.reg`, `sfx.res`, `res\speech.res`, volumes `+0x58 / +0x5C / +0x54`, Reverse_Stereo); `Movies_PlayIniList("Start")` 0x458270 (`config\movie.ini` section key `movies`, comma separated, `Movies\<name>` through `Movie_PlayFile` 0x5DB3F0); `Progres.bik` loading movie; databases (perks, quests, units, spells, items, levers, `database.res`).
-11. `DInput_Create` 0x65EAD0; `CWorldClient::InitClientResources`; `Cursors_Register` 0x5DAEA0 (FPSIndependentCursor -> kind 2, small set when `g_0x784756`); **`CInterface::Init(g_0x7C7D50, device)`**; `MapInfo_LoadBoth` 0x45EA00 (`map.txt`, `map_LMP.txt`); `App_LoadMapAndScript` 0x456140 (the `-mpr/-mob/-scr` arguments; without a `.mob` the game starts in the menu flow through `Game_SessionTick`).
-12. The message loop (2.3). On `WM_QUIT`: `CTextureManager::DeleteCachedFiles` (`textures\*.mmp`), `CInterface::Destroy` 0x5F4F90 (writes `config\tutorial.ini`, `KeyBindings_Save`), `CSoftCursor::Stop`, release the mouse, `SetGamma(0, 0, 0)`, renderer `vt[3]`, `AppSettings::WriteToRegistry` 0x45C560, `CWorldServer::Done`, `CWorldClient::Done`; returns `wParam`.
+4. Command line (split at spaces; `g_0x79BA1C` defaults to `.\camera.cam`, the three others emptied): `-moviepath_<dir>` (prefix match: clears flag 0x20 of `g_0x7AF5C0`, dir + `\` -> `g_0x79BA0C`); while flag 0x10 of `g_0x7AF5C0` is clear: `-nocam` (case-insensitive) clears flag 8, a token **containing** `.cam` -> `g_0x79BA1C`; otherwise tokens containing `.scr` -> `g_0x79BA18`, `.mob` -> `g_0x79BA14`, `.mpr` -> `g_0x79BA10`; `-benchmark_<n>` -> `NumberOfFrames` (+0xF0, `g_0x79BD60`) = n and `CreateOutputInfo` (+0xEC, `g_0x79BD5C`) = 1; `-devicetarget_<n>` -> `DrawingTarget` (+0x2C). These three settings are written **before** `ReadFromRegistry`, which uses the field as the default only, so an existing registry value (always there after the first run, `WriteToRegistry` stores all) overrides them [V].
+5. `LoadString` 0x65 = title "Evil Islands" (`g_0x79BB24`), 0x66 = class "EIGAME" (`g_0x79BA24`); `RegisterClassEx` (style `CS_DBLCLKS`, icon 0x69, **no cursor, no background brush**, wndproc `App_WndProc` 0x457D40). `FindWindow(class, title)` -> an existing instance is brought to front (restored when iconic, only when it is not already the foreground thread) and this one `_exit(-1)`.
+6. `g_0x7AF450 = "Software\Nival Interactive\EvilIslands"`; `World_InitWorkDir` 0x55EA10 (work dir = current dir + `\`); `AiInfo_Load config\ai.reg`; `AppSettings::ReadFromRegistry`; `_set_new_handler(0x455A30)`; `CWorldClient::Init` / `CWorldServer::Init`; `CCamera::InitFromSettings` 0x40D0A0 (settings, `NearClipDistance`, `FarClipDistance`, fov pi/3.5) and `CWorldClient::SetCamera(g_0x79B2A8)`.
+7. Free space on the drive of `g_0x7AF460` (`GetDiskFreeSpaceExA` when kernel32 exports it, else `GetDiskFreeSpaceA`) below 300 MB (314572800) -> `MessageBox(line 2, "Warning", MB_OKCANCEL)`, Cancel returns 0xDEAD; when `g_0x7AF460 != g_0x7AF458` the volume label of `g_0x7AF458`'s drive must equal `CD2_Label` (+0x21C, "EICD2"): `MessageBox(line 3)` repeats until it does, Cancel returns 0xDEAD; `%ssaves\`, `%smp\`, `%stextures\` created.
+8. `DInputMouse` object (0x20 bytes, refcounted) -> `g_0x79BA08`; **`CreateWindowExA(0, "EIGAME", title, WS_POPUP | WS_VISIBLE (0x84000000), 0, 0, VideoResolution w, h)`** -> `g_0x79BC28` (failure returns 0); `ShowWindow(nCmdShow)`, `UpdateWindow`, `SetCursor(0)`; the camera eye `g_0x79B2C4` starts at (`CameraDefaultXDeploy`, `CameraDefaultYDeploy`, `CameraDefaultHeight`). The window has no frame in either mode: "fullscreen" only decides whether the DirectDraw device takes exclusive mode (`CDXDirectDraw +0x20 & 1`), so a borderless launcher only needs `FullScreen = 0` and a resolution equal to the desktop (um.dll BORDERLESS subclasses this window, `um-dll/um_window.cpp`).
+9. Renderer `vt[2](hwnd, settings)` (`g_0x7AF080` DirectDraw / D3D7 device); `IDirectDraw7::GetAvailableVidMem` (vt +0x5C) free bytes: `g_0x784754` = texture memory (caps 0x1000) <= 8 MB, `g_0x784753` = (video memory 0x4000 minus texture memory, when larger) <= 8 MB (makes the transition screenshots 400x300), `g_0x784755` = non-local (AGP, 0x20004000) <= 8 MB; `g_0x784756 = DrawingTarget != 0`; `SetGamma(brightness, contrast, gamma)`.
+10. Audio only when `Audio` (+0x50) != 0: `CSoundManager::Open(hwnd, 1, -1, 44100, 16)`, music `CMusicSystem::SetTrackPath(<g_0x7AF460>stream\, <g_0x7AF45C>streamsn.reg)`, listener resources `sfx.res` + `<g_0x7AF458>res\speech.res`, `SetMasterVolume(AudioSFX +0x58)`, `SetEffectsVolume(AudioSpeech +0x5C)`, `SetMusicVolume(AudioStreaming +0x54)`, Reverse_Stereo -> sound manager +0x8A4; `Movies_PlayIniList("Start")` 0x458270 (`config\movie.ini` section key `movies`, comma separated, `Movies\<name>` through `Movie_PlayFile` 0x5DB3F0); `Progres.bik` through `Movie_PlayIntro` + `Bink_Close`; databases from the resources path: perks, quests, units, spells, items (`database.res`), levers, acks, prints.
+11. `DInputMouse::Create(hwnd, hInstance)`; `CWorldClient::InitClientResources`; `Cursors_Register` 0x5DAEA0 (kind 2 when FPSIndependentCursor else 1; the "small" `sm_cursor_*` argument is **always 0** here and in `App_WndProc`'s re-register, so the 16 px set is never used; the last argument `DrawingTarget == 0` is handed to every `AddFrame`); **`CInterface::Init(g_0x7C7D50, device)`**; `MapInfo_LoadBoth` 0x45EA00 (`map.txt`, `map_LMP.txt`) into `g_0x79BF00`; `App_LoadMapAndScript` 0x456140 (the `-mpr/-mob/-scr` arguments; without a `.mob` the game starts in the menu flow through `Game_SessionTick`); `SetGamma` again.
+12. The message loop (2.3). On `WM_QUIT`: `CTextureManager::DeleteCachedFiles` (`textures\*.mmp`), `CInterface::Destroy` 0x5F4F90 (writes `config\tutorial.ini`, `KeyBindings_Save`), `CSoftCursor::Stop`, release the mouse, `SetGamma(0, 0, 0)`, renderer `vt[3]`, `AppSettings::WriteToRegistry` 0x45C560, `CWorldClient::SetCamera(0)`, `CWorldServer::Done`, `CWorldClient::Done`, the old new-handler restored; returns `wParam`.
 
 ### 2.2 `App_WndProc` (0x457D40) [V]
 
@@ -84,31 +84,41 @@ Addresses are VAs in game.exe; offsets are bytes; "UI units" = the virtual 800x6
 ```
 loop:
   while PeekMessage(no remove) finds nothing:
-    activation changed (g_0x79BC5D)? inactive: render-globals flag &= ~1, InvalidateRect; active: (device flag 2: re-query the
-        primary surface under g_0x7AEE78) flag |= 1, SetCursor(0)
+    activation changed (g_0x79BC5D)? inactive: render-globals flag &= ~1, InvalidateRect(NULL); active: (device flag 2:
+        IDirectDraw7::RestoreAllSurfaces (vt +0x64) under g_0x7AEE78, HRESULT -> device[2]) flag |= 1, SetCursor(0)
     dt = timeGetTime() - g_0x79B9F8 (ms since the last frame; first frame: 0)
-    render-globals inactive  -> World_SetStatScramble(0); frameRendered = 0           (messages then go to App_WndProc only)
+    render-globals inactive  -> World_SetStatScramble(0); frameRendered = 0           (messages then go to App_WndProc only;
+                                                     nothing sleeps here, so the minimized game spins this loop [I])
     else:
       World_SetStatScramble(1)
       CWorldClient::NetObjectIdle -> Lobby_IsAlive ? Lobby_Create : LobbySession_ReleaseActive2
+      dt > 0x80000000 (timer wrap) -> 0
       Net_TickAll 0x4122D0                                             (1st call: um-engine mp_speed hooks it)
       dt = min(dt, 5 * g_0x78FF34);  movie capture (g_0x79BC54): dt = 1000 / MovieCapturingFPS
-      serverAccum g_0x79BC64 += dt;  clientAccum g_0x79BC68 = ftol(clientAccum + dt * g_0x784758) (speed factor, 1.0 when not in state 2) [I: the multiply]
-      while serverAccum >= tick: CWorldServer::v6 Tick (0 -> stop everything), serverAccum -= tick, Net_TickAll
-      while clientAccum >= tick and (TickNetAndQuery6 or not connection state 2):
-            CWorldClient::v6 Tick, clientAccum -= tick, CCamera::Update(tick / 55), Net_TickAll   (2nd call: mp_ghost hook 0x4573AE)
+      serverAccum g_0x79BC64 += dt;  not CWorldClient::IsInWorld -> speed g_0x784758 = 1.0
+      clientAccum g_0x79BC68 = ftol(clientAccum + dt * g_0x784758) [I: the multiply]; > 0x4000000 -> 0
+      repeat:                                                          (server and client ticks interleave)
+        serverAccum >= tick: CWorldServer::Tick (0 -> skip to the render), serverAccum -= tick, Net_TickAll
+        while clientAccum >= tick and (CWorldClient::PumpNetHasPacketHeader or not IsInWorld):
+            CWorldClient::Update (0 -> skip to the render), clientAccum -= tick, CCamera::Update(tick / 55), Net_TickAll
+                                                                       (2nd call: mp_ghost hook 0x4573AE)
+      until no server tick ran                                         (in a world the client ticks only on a received packet)
       Session_ProcessRequest(g_0x7AFE20) 0x57C700 (handles one pending SessionRequest: zone change, save, menu flow; world-server.md 1)
       g_0x7AFCA8 = clientAccum / tick (the render interpolation fraction) unless paused (g_0x7AF624)
-      client speed balance: lag = TickNetAndQuery7 - fraction; speed = lag < 0 ? 2^(0.1 lag) : lag < 1 ? 1 : 0.9 + 0.1 sqrt(lag);
-            g_0x784758 = clamp(speed, 0.1, 10); 'Client speed ... balance' log when g_0x79BC60
-      CCamera::Update once per whole tick of dt, then once with the remainder (um-engine camera_smooth redirects these 3 call sites)
+      client speed balance: lag = CWorldClient::PumpNetCountPackets - fraction; speed = lag < 0 ? 2^(0.1 lag) : lag < 1 ? 1 :
+            0.9 + 0.1 sqrt(lag); g_0x784758 = clamp(speed, 0.1, 10); 'Client speed ... balance' log when g_0x79BC60
+      CCamera::Update once per whole tick of dt (while dt > tick), then once with the remainder (um-engine camera_smooth
+            redirects these 3 call sites); together with the per-client-tick call the camera eases about twice per tick of
+            real time while a world runs [I]
       not paused: recording flag 0x10 -> CCamera::RecordKeyframe; playback flag 0x20 -> CCamera::PlayCamFile(tick g_0x7AF61C + fraction)
-    frameRendered = 1
-    CInterface::ProcessPendingScreens 0x5F57C0      (pops / replaces screens requested during the frame, ticks the top screen)
-    App_RenderFrame(g_0x784752 present, 1) 0x458010  (BeginFrame, Render3D, EndFrame, Draw2D, cursor, flip, screenshot capture)
+      frameRendered = 1
+      CInterface::ProcessPendingScreens 0x5F57C0      (pops / replaces screens requested during the frame, ticks the top screen)
+      App_RenderFrame(g_0x784752 present, 1) 0x458010  (BeginFrame, Render3D, EndFrame, Draw2D, cursor, flip, screenshot capture)
   GetMessage -> 0 = WM_QUIT -> shutdown (2.1 step 12)
   TranslateMessage; frameRendered ? App_HandleInputMessage : App_WndProc
 ```
+
+Screens are processed and the frame rendered only on the active branch [V]: an inactive window renders nothing.
 
 `App_RenderFrame` (0x458010): only when the window is active (`g_0x79BC5C`) and a screen is open (`g_0x784750`, else `Sleep(50)`):
 `I3DFigureImpl::BeginFrame` -> `CInterface::Render3D` 0x5F5220 (frozen background blit, top screen `vt[20] Draw` = the world + the
@@ -127,9 +137,21 @@ screens unscale them to 800x600.
 
 ### 2.5 Settings - `AppSettings` (`g_0x79BC70`, 0x26C bytes; every field in `batch-ui-structs.tsv`) [V]
 
-Read by `ReadFromRegistry` 0x45B210 from `HKCU\Software\Nival Interactive\EvilIslands` (string / DWORD / 4-byte binary float
-values, the compiled-in default when missing), written by `WriteToRegistry` 0x45C560 at exit (so every value exists after the
-first run). `ReadFromIni` 0x459100 / `WriteToIni` 0x45A380 read the same keys from ini sections (`Path Settings`, `General
+Read by `ReadFromRegistry` 0x45B210 from **per-section subkeys** of `HKCU\Software\Nival Interactive\EvilIslands` (the
+section names of the ctor are the subkey names: `Path Settings`, `General Settings`, `Shadow Settings`, `Terrain Settings`,
+`Statistics Output Settings`, `Camera Settings`, `Game Specific Settings`, `Network Settings`; `CWinRegistry::GetDWord`
+0x698610 opens `<key>\<section>` per value and falls back to the default when the subkey / value is missing or the value is
+not 4 bytes), as string / DWORD / 4-byte binary float values with the current field (the ctor 0x458870 defaults) as the
+default, and written back by `WriteToRegistry` 0x45C560 at exit (so every value exists after the first run). Value placement
+[V]: Path = the three paths; General = video, audio, `Brightness..Gamma`, `Reverse_Stereo`; Shadow = the five `*Shadow`,
+`LightingFreq` (+0xB4, 10000), `FloraSpecialLight`; Terrain = `LOD1` (+0xBC, 40) / `LOD2` (+0xC0, 75) (the fog start / end; short
+value names), `BorderFogDistance` (32), water waves, dynamic lights, self shadowing, a **second** `LightingFreq` (+0xD4, 1000),
+`ShadowingFreq` (6000), the four `*prints`; Statistics = `CreateOutputInfo`, `NumberOfFrames` (-1); Camera = every `Camera*`
+plus `NearClipDistance` / `FarClipDistance`; Game = the rest from `DefaultWindForce` on; Network = `Master_Server_Name`.
+Conversions: `VideoResolution` "WxH" split at the first `x` with `atol` (written back as `%dx%d`); `CameraFlipX/YAxis` stored
+as DWORD bool (non-zero -> field -1.0, else +1.0); `Hero_Light_*` / `Quest_Light_*` R / G / B as DWORD 0..255 (field = value /
+255), radii as DWORD ints; `Difficulty_Level` copied into +0x250 and +0x254 (only +0x254 written back); `Joystick` is read with
+default 0 and always written as 0. `ReadFromIni` 0x459100 / `WriteToIni` 0x45A380 read the same keys from ini sections (`Path Settings`, `General
 Settings`, `Terrain Settings`, `Statistics Output Settings`, `Camera Settings`, `Game Specific Settings`, `Shadow Settings`,
 `Network Settings`) but **have no callers**. `SetDefaults` 0x458DA0 is an older default set (640x480, master server
 `a3master.nival.com`), also unused.
@@ -140,17 +162,63 @@ Settings`, `Terrain Settings`, `Statistics Output Settings`, `Camera Settings`, 
 | video | `DrawingTarget` +0x2C (0 = hardware), `VideoResolution` "WxH" -> +0x30/+0x34 (800x600), `VideoColorDepthInBits` +0x38 (16), `VideoZBufferDepthInBits` +0x3C, `VideoRefreshRate` +0x40, `FullScreen` +0x44 (1), `Video` +0x4C, `Dithering` +0x60, `Specular` +0x64, `Antialiasing` +0x68, `TextureQuality` +0x6C, `Mipmapping` +0x70, `Filtering` +0x74, `PerspectiveCorrection` +0x78, `ShowParticles` +0x7C, `AutomaticQuantization` +0x84, `MovieCapturingFPS` +0x88 (15), `Brightness` +0x8C, `Contrast` +0x90, `Gamma` +0x94 (floats) |
 | audio | `Audio` +0x50, `AudioStreaming` +0x54 (music), `AudioSFX` +0x58 (master), `AudioSpeech` +0x5C (volumes 100), `Reverse_Stereo` +0x98 |
 | shadows / lighting | `ShadowQuality` +0x9C, `HeroShadow` +0xA0, `UnitShadow`, `BuildingShadow`, `FloraShadow`, `OtherShadow` +0xB0, `LightingFreq` +0xB4 (10000), `FloraSpecialLight` +0xB8, `EnableSelfShadowing` +0xCC, `EnableDynamicLights` +0xD0, `ShadowingFreq` +0xD8, `ObjectsLightingCoeff` +0x22C, `Hero_Light_R/G/B/Radius` +0x230.., `Quest_Light_*` +0x240.. |
-| terrain / effects | `BorderFogDistance` +0xC4, fog 40 / 75 / 32 m, `FogNightStartDistance` +0x260 (50), `FogDayStartDistance` +0x264 (90), `EnableWaterWaves` +0xC8, `EnableFootprints` +0xDC, `EnableBloodprints` +0xE0, `EnableFireprints` +0xE4, `EnableBloodprintsRelight` +0xE8, `DefaultWindForce` +0x1E8 (0.4), `DefaultTimeScale` +0x1EC (60) |
-| camera | `CameraFlipXAxis` +0xF4, `CameraFlipYAxis` +0xF8, `CameraMinHeight` +0xFC (4), `CameraMaxHeight` +0x100 (100), `CameraDefaultHeight` +0x104 (30), `CameraDefaultXDeploy / YDeploy` +0x108 / +0x10C, `CameraMin/Max/MinLimit/MaxLimit/DefaultDistanceToCarrier` +0x110..+0x120 (4 / 100 / 3 / 80 / 30), `CameraBriefing*` +0x124..+0x138, `CameraBorderScrollArea` +0x13C (5 px), `CameraFrameSelectionSensetiveArea` +0x140 (20), `CameraTerrainSensetiveArea` +0x144 (10), `CameraDefault{Scroll,Rotate,Pitch,Zoom}{Speed,PowerMouse,PowerKeyboard}` +0x148..+0x174 (1 / 1 / 0.5), `CameraShortcut_%d_{AxisX,AxisY,AxisZ,Angle,Distance,Pitch}` x4 +0x178 (0x18 each), `CameraDefaultMinPitch / MaxPitch` +0x1D8 / +0x1DC (20 / 80 deg), `NearClipDistance` +0x1E0 (2), `FarClipDistance` +0x1E4 (100) |
+| terrain / effects | `LOD1` +0xBC (40) / `LOD2` +0xC0 (75) fog start / end, `BorderFogDistance` +0xC4 (32), `LightingFreq` (Terrain) +0xD4 (1000), `ShadowingFreq` +0xD8 (6000), `FogNightStartDistance` +0x260 (50), `FogDayStartDistance` +0x264 (90), `EnableWaterWaves` +0xC8, `EnableFootprints` +0xDC, `EnableBloodprints` +0xE0, `EnableFireprints` +0xE4, `EnableBloodprintsRelight` +0xE8, `DefaultWindForce` +0x1E8 (0.4), `DefaultTimeScale` +0x1EC (60) |
+| camera | `CameraFlipXAxis` +0xF4, `CameraFlipYAxis` +0xF8, `CameraMinHeight` +0xFC (4), `CameraMaxHeight` +0x100 (100), `CameraDefaultHeight` +0x104 (30), `CameraDefaultXDeploy / YDeploy` +0x108 / +0x10C, `CameraMin/Max/MinLimit/MaxLimit/DefaultDistanceToCarrier` +0x110..+0x120 (4 / 100 / 3 / 80 / 30: soft min / soft max / hard min / hard max; the hard max 80 being below the soft max 100, the zoom stops at 80), `CameraBriefing{Min,Max,MinLimit,MaxLimit}DistanceToCarrier` +0x124..+0x130 (4 / 100 / 3 / 80), `CameraBriefingMin/MaxPitch` +0x134 / +0x138 (30 / 60 deg), `CameraBorderScrollArea` +0x13C (5 px), `CameraFrameSelectionSensetiveArea` +0x140 (20), `CameraTerrainSensetiveArea` +0x144 (10), `CameraDefault{Scroll,Rotate,Pitch,Zoom}{Speed,PowerMouse,PowerKeyboard}` +0x148..+0x174 (1 / 1 / 0.5), `CameraShortcut_%d_{AxisX,AxisY,AxisZ,Angle,Distance,Pitch}` x4 +0x178 (0x18 each), `CameraDefaultMinPitch / MaxPitch` +0x1D8 / +0x1DC (20 / 80 deg), `NearClipDistance` +0x1E0 (2), `FarClipDistance` +0x1E4 (100) |
 | game | `Joystick` +0x48 (0), `FPSIndependentCursor` +0x80 (1 = cursor thread), `UseSWCursors` +0x1F0, `SelectionType` +0x1F4, `CornerSize` +0x1F8, `DrawVisibleOnly` +0x1FC, `DrawPath` +0x200, `DrawFlyingHP` +0x204, `ShowTutorial` +0x208 (`g_0x79BE78`), `Autosave` +0x20C, `ToolTip_Time` +0x210 (0.5 s, `g_0x79BE80`), `SwitchFilters` +0x214, `Font_CharSet` +0x224 ("english"), `Keyboard_Layout` +0x228 (0x409; `CInterface::Init` activates that HKL), `Difficulty_Level` +0x254, `CreateOutputInfo` +0xEC, `NumberOfFrames` +0xF0 |
 
 ### 2.6 `map.txt` (`MapInfo_Load` 0x45EA20) [V]
 
-`<resources>\map.txt` and `map_LMP.txt` are parsed with `CTextManager::ReadLines` into the global-map data (`MapInfo`: `+4`
-allod records 0x2C bytes, `+0x18` zone records 0x5C bytes): `#allod <n>` (5 lines each), `#zone <n>` (name, kind word `brief` /
-camp / base, then per zone `#camera`, `#maps` (2 names -> +0x20 / +0x24), `#figure`, `#weather` (`tornado` ...), `#cage`,
-`#restrict` (3 ints -> +0x38..), `#exit <n>` (0x3C-byte exit records at +0x4C), `#deploy`, `#deployangle`, `#passtime`,
-`#remove`, `#view`). `QuestFiles_Scan` re-reads it for `#quest`. The world-map screen (0x740B08) and the quest log draw from it.
+`<resources>\map.txt` and `map_LMP.txt` (`MapInfo_LoadBoth` 0x45EA00 into `g_0x79BF00`; the second file **appends**) are walked
+with `CTextManager::SeekSection(0)` (every `#` line) + `ReadLines(1)` (one line split into words) into `MapInfo` (`+4` allod
+records 0x2C bytes, `+0x18` zone records 0x5C bytes, MFC `CArray` growth). Returns 0 when the file cannot be opened. Every
+`#allod` / `#zone` / `#exit` line appends **one** record (the word after it is a name, not a count) [V, deep-read 2026-11-06]:
+
+| Line | Effect |
+|---|---|
+| `#allod <name>` (>= 2 words) | new allod record: +0 = name, then the next 5 lines' first words -> +4 .. +0x14; +0x18 = `CDWordArray` of zone indices |
+| `#zone <name> <allod> <kind>` (>= 4 words) | new zone: +0 name, +4 allod name; the zone index is appended to the first allod whose name matches case-insensitively; kind `game` 0 / `edge` 1 / `brief` 2 (+0x28; other words leave it 0); defaults weather +0x2C = 1, +0x30 = 0, restrict +0x34 = 0, cage +0x44 = 0; the exit cursor is reset |
+| `#res` | next line `<mpr> <mob>` -> +0xC / +8 |
+| `#camera` / `#figure` | next line word 1 -> +0x1C / +0x10 |
+| `#maps` | next line two ints -> +0x20 / +0x24; the line after `<map picture> <quest picture>` -> +0x18 / +0x14 |
+| `#weather` | next line: `none` 0, `snow` 2, `tornado` 3, anything else 1 (+0x2C) |
+| `#sky` | next line `cave` -> +0x30 = 1, else 0 |
+| `#cage` | +0x44 = 1 |
+| `#restrict` | next line 3 numbers (atof) -> floats +0x38 / +0x3C / +0x40, +0x34 = 1 |
+| `#exit` | new 0x3C exit record in +0x4C (count +0x50) with +0x30 / +0x34 / +0x38 = 0; next line `<target zone> <n>` -> +0x28, +0x2C = n - 1 |
+| `#deploy` (needs an exit) | next line 4 numbers -> +0x14..+0x20 **and** +4..+0x10, +0x24 = 0; a 5th number -> +0x24 = deg * pi / 180 |
+| `#remove` | the same into +0x14..+0x20 / +0x24 only (so it overrides the leave rectangle of `#deploy` when it comes later) |
+| `#passtime` | next line number -> exit +0 |
+| `#view` | next line number (missing -> "0") -> exit +0x30 in radians |
+| `#deployangle` | exit +0x34 = 1, next line number (missing -> "0") -> +0x38 in radians |
+
+Zone sub-keys before any `#zone` and exit sub-keys before any `#exit` of the current zone are ignored; `#position` and `#quest`
+are not read here (`QuestFiles_Scan` re-reads the file for `#quest`). The world-map screen (0x740B08) and the quest log draw
+from it; the game side of the exit record is `ZoneExit` in `structs.tsv`.
+
+### 2.7 `CTextManager` text scanning and `CSysInfo` (0x4DD000-0x4E0000) [V, deep-read 2026-11-06]
+
+`CTextManager` (`g_0x7AF788`, also `CWorldClient +0x1D0`) reads text files out of its archive list `+0x1C` (`OpenText` 0x4DEFC0:
+cursor `+0x20` = buffer `+0x24`, size `+0x28`). `SeekSection(name)` 0x4DF030 moves the cursor and returns 1 when found, 0 at
+the end of the text:
+
+- `name == 0` (next section; `MapInfo_Load`): reads words; a word whose first character is the token `0x78DCFC` and whose first
+  two characters are not the token `0x78DCF8` is a section start; any other word skips the rest of its line.
+- one-word name: reads words until one equals the name exactly (case-sensitive); after a mismatch the rest of the line is
+  skipped and then every following line whose first word starts with the two-character token `0x78DCF8` (a comment marker [I])
+  is skipped too.
+- multi-word name (split at spaces): reads whole lines (`ReadLines(.., 0)`); a line matches when it has at least as many words
+  and each of the name's words equals the line's word **upper-cased** (so callers pass upper-case names and the file side is
+  case-insensitive); mismatching lines are skipped the same way.
+
+The two token strings are too short for the strings dump ([?]: `#` and `//` would fit every caller seen). DBCS lead bytes are
+honoured (`GetMbChar`, `_mbsinc`).
+
+`CSysInfo::CollectInfo` 0x4DDF28 (`CSysInfo::Init`, vt 0x73D644 slot 2): `GetOsInfo`, `GetSystemInfo` (+0x50), `GetMemoryStatus`
+(+0x30), `DetectCpuFeatures`; flag `+8 |= 8`; platform `+0x84`: 0 -> "Windows 3.11/Win32s" (flag 0x20), 1 -> "Windows 95" (flag 0x40) or,
+build `+0x80` low word >= 1998, "Windows 98" (flag 0x80), 2 -> "Windows NT" (flag 0x100), else "UNKNOWN OS" / "UNKNOWN VERSION" (flags
+0x1E0 cleared); name `+0x24`, version `+0x28` ("%d.%d.%d"), `+0x2C`, computer name `+0x1C`, user name `+0x20`. It then builds a
+report string ("OS ... build ...", "Total / Available physical / virtual memory") and **destroys it unused** (the log output
+was compiled out); returns 1.
 
 ## 3. Input
 
@@ -195,6 +263,20 @@ The mouse is acquired / unacquired with the window activation.
   primary surface, scratch surfaces 32x32 (`+0x60`) and 64x64 (`+0x64`), event `+0x1C`. `kind` 1 = composed only in
   `App_RenderFrame`; 2 (`FPSIndependentCursor`) = plus `ThreadProc` 0x5E5690: every 41 ms, while the window is active, restores
   the saved background on the **front** buffer (`device +0x14`) and draws the cursor there, so it moves between frames.
+  `ThreadProc` in detail [V, deep-read 2026-11-06]: once at start, when `+0x91` initialised (under the cursor critical section `+0xA0`) `UpdateState` and the
+  primary-surface pixels under `dstRect +0x30` are saved into the 32x32 scratch `+0x60`, `lastRect +0x20 = dstRect`; then until
+  the stop flag `+0x9C`: sleep the rest of 41 ms (0x29); skip while the render-globals active bit is clear; `UpdateState`
+  returns "changed" -> only when `mode +0xC != 0` and changed: **disjoint** old / new rects: `IDirectDraw7::WaitForVerticalBlank
+  (BLOCKBEGIN)`, old background `+0x60` -> screen at `lastRect`, screen at `dstRect` -> `+0x60`, `ComposeFrame` into the 64x64
+  scratch `+0x64`, `+0x64` -> screen at `dstRect`; **overlapping**: screen at the union rect -> `+0x64`, old background
+  `+0x60` -> `+0x64` at the old offset, `+0x64` at the new offset -> `+0x60` (the new background), `ComposeFrame` at the new
+  offset, wait for the vertical blank, `+0x64` -> screen at the union (one blit, no flicker); then `lastRect = dstRect`. Every
+  Blt is `DDBLT_WAIT | DDBLT_ASYNC` (0x1000200) under the DirectDraw critical section `g_0x7AEE78` and skipped when source and
+  destination are the same surface. On exit it signals the event `+0x1C` (`Stop` waits for it).
+- `ComposeFrame(frame, dstRect, srcRect)` 0x5E5C40: locks the frame's strip surface at `srcRect`, the 64x64 scratch at `dstRect`
+  and the 32x32 scratch at (0, 0, w, h) (`IDirectDrawSurface7::Lock`, "Can't lock surface." / "Can't unlock surface." fatal) and
+  writes `background & mask | cursor pixel` per pixel for 16 and 32 bpp surfaces only (any other depth composes nothing) [V for
+  the operation and the depths; which locked pointer feeds which operand is garbled in the decompile [I]].
 - Frames: `Cursors_Register` 0x5DAEA0 adds 25 `cursor_*.mmp` (or `sm_cursor_*`) strips with `AddFrame` 0x5E63F0 ->
   `CSoftCursorFrame::CreateFromMmp` 0x5E4EB0 (0x20-byte frame: surface strip of 0x7C-px frames, count = width / 0x7C, hot spot,
   AND-mask buffer). `SetFrame(i)` 0x5E5200 indices: 0 default, 1 attack, 2 spell, 3 wait, 4 use, 5..12 scroll
@@ -237,18 +319,40 @@ Settings globals used below (AppSettings fields): scroll power mouse `g_0x79BDBC
 ### 3.6 `CCamera` (`g_0x79B2A8`, 0x308 bytes, vt_CCamera; fields in `batch-ui-structs.tsv`) [V]
 
 Model: target `+0xE0` (x, y, z = terrain height + `+0xEC` height offset), yaw quaternion `+0xF4` (about z), pitch `+0x104`
-(degrees), distance `+0xF0`; `UpdateFromTarget` 0x40F8B0 derives the view quaternion `+0x34 = yaw * rot_x(-(90 + pitch))` and
+(**radians**; the settings limits are degrees, converted with `pi / 180` on every clamp), distance `+0xF0`; `UpdateFromTarget` 0x40F8B0 derives the view quaternion `+0x34 = yaw * rot_x(-(90 + pitch))` and
 the position `+0x1C = target - up(view) * distance`, then `AvoidObstacles` 0x40E4C0 lifts the camera above the terrain box
 (`Terrain_SampleHeightBox` 0x40D9B0, +-2 m) and above objects within 16 m, by at least `CameraMinHeight` and at most
-`CameraMaxHeight` above the ground. `Update(dt)` 0x40FB30 (dt in ticks): sound listener; flags `0x60` (recording / playback)
-return; follow the carrier unit `+0x11C` (flag 8 = snap onto the unit, else the target eases 20 % per call); scroll velocity
-`+0x98` eases to `+0xA4` with `+0xB0` (0.1333), moves the target by `v * dt * (0.2 + (dist - min) / (1.125 (max - min)))` and
-drops the carrier; leash flag `0x100` keeps the target within `+0x118` of `+0x10C` (`SetLeash` 0x411360, dialogs); height eases
-10 % to the terrain box; pitch / yaw / zoom speeds ease with `+0xC8 / +0xBC / +0xD4` (0.333) towards the inputs set by the
-controllers (`SetRotateInput` 0x40F360, `SetPitchInput` 0x40F3C0, `SetZoomInput` 0x40F420, `SetScrollVelocity` 0x40F230); pitch
-clamped to `CameraDefaultMinPitch..MaxPitch` (briefing pair with flag 0x200), distance between the hard limits with a spring
-back to the soft limits (`1.1 * dt` of the excess); shake list `+0x108` (`AddShake` 0x4113A0: within 20 m of the source, `amp *
-exp(-f t) * cos(g_0x79B2A4 * 0.2667 t)` added to z for `strength * 30` ticks). The memory-scanned addresses in
+`CameraMaxHeight` above the ground.
+
+`Update(dt)` 0x40FB30 (dt in ticks), in order [V, deep-read 2026-11-06]:
+
+1. Sound listener (`CSoundManager::SetListener`, up axis of `+0x34`): at the target (z re-sampled as `GetHeight + heightOffset`
+   when a world is loaded, `g_0x7AF738`), or at the eye when flags `0x60`; flags `0x60` (recording / playback) then return.
+2. Carrier `+0x11C` (`FindById` in `g_0x7AF5F8`). Flag 8: eye = unit `+0x1C` with z `+= unit +0x130 + unit +0x14C`, looking along the
+   unit's **backward** horizontal axis (`-forward`, z = 0, normalised; `RotateTowardDirection_B`, `LevelRoll`) and return - nothing
+   below runs. Else the target x / y move **20 % of the gap per call** (not scaled by dt) and are clamped to
+   `[0, mapW - 1] x [0, mapH - 1]` (`g_0x7AF738 +0x10C / +0x110`).
+3. Scroll: `delta = (+0xA4 - +0x98) * +0xB0` (0.1333); `|delta| < 0.001` snaps, else `+0x98 += delta * dt` and snaps when `|v|^2`
+   crosses `|target|^2` (the same overshoot rule is used for pitch / yaw / zoom). A non-zero velocity moves the target by
+   `v.xy * dt * ((dist - softMin) / (1.125 (softMax - softMin)) + 0.2)` (v.z unused; briefing distances with flag 0x200), clamps
+   it to the map, sets the carrier to -1 and clears flag 8; with the leash flag `0x100` the target is then pulled back onto the
+   circle of radius `+0x118` around `+0x10C` (`SetLeash` 0x411360, dialogs). The leash is only applied on a scroll step.
+4. Height: `Terrain_SampleHeightBox(target, box = CameraTerrainSensetiveArea g_0x79BDB4: 0.5 / 1 / 1 times)`; target z moves
+   **10 % per call** towards (box height, or the carrier's z when one exists) `+ heightOffset`.
+5. Pitch / yaw / zoom speeds `+0xC0 / +0xB4 / +0xCC` ease towards the inputs `+0xC4 / +0xB8 / +0xD0` (`SetPitchInput` 0x40F3C0,
+   `SetRotateInput` 0x40F360, `SetZoomInput` 0x40F420; scroll: `SetScrollVelocity` 0x40F230) with `+0xC8 / +0xBC / +0xD4` (0.333)
+   per dt; `pitch += speed * dt` then clamped to `CameraDefaultMin/MaxPitch` (+0x1D8 / +0x1DC) or the briefing pair (+0x134 /
+   +0x138); `yawRot *= quat(z axis, speed * dt)`; `dist += speed * dt`.
+6. Distance limits (normal: soft `+0x110 / +0x114`, hard `+0x118 / +0x11C`; briefing `+0x124 / +0x128`, `+0x12C / +0x130`), run every
+   call even without zoom input: `d < hardMin` -> `hardMin`; `d < softMin` -> `d += (softMin - d) * 1.1 dt / (softMin - hardMin)`;
+   `d > hardMax` -> `hardMax`; `d > softMax` -> `d -= (d - softMax) * 1.1 dt / (hardMax - softMax)`. With the shipped defaults (see
+   2.5) the "MaxLimit" is below the "Max", so the hard max decides.
+7. `UpdateFromTarget` (eye, view quaternion, obstacle lift), then the shake list `+0x108` (`AddShake` 0x4113A0: within 20 m of the
+   source, for `strength * 30` ticks): `eye.z += sum(amp * exp(-freq * t) * cos(pi/2 * 0.26667 * t))` (`g_0x79B2A4` = pi/2: a
+   15-tick = 0.83 s period), `t += dt` after the term, the node dropped once `t >= duration`.
+
+The 20 % follow and 10 % height steps are per call while `Update` is called a variable number of times per frame (per client
+tick, plus once per whole tick of the frame time and once with the remainder), so the follow lag depends on the frame rate [I]. The memory-scanned addresses in
 `game-memory.md` are these fields: `0x79B2C4 = +0x1C`, `0x79B2DC = +0x34`, `0x79B388 = +0xE0`, `0x79B39C / 0x79B3A8 = +0xF4 / +0x100`
 (the yaw quaternion's z and w = sin / cos of the half angle).
 
@@ -269,9 +373,18 @@ quat[4]}` into `+0x2F0`; `cutIndex > 1` cuts the file at the first gap > 500 tim
 
 ### 4.1 Lifetime [V]
 
-`Init` 0x5F4990 (device): screen size `+0 / +4`, fonts `+0x70..`, keyboard layout (`Keyboard_Layout` HKL or US), `KeyBindings_Load`,
-console `+0x14` (`g_0x7C7D64`), `DebugText::Init(g_0x79B930)`, message log `+0x1C`, fade `+0x18`, tutorial pages from
-`config\tutorial.ini` into the map `+0x98`, `+0x30 = 1` (drawing enabled). `Destroy` 0x5F4F90 pops everything, writes the
+`Init` 0x5F4990 (device) [V, deep-read 2026-11-06]: device `+8`; screen size `+0 / +4` = the primary surface's width / height
+(device `+0x18` -> `+0x14 / +0x18`, only when a primary surface exists); fonts: a 75 pt Times New Roman probe
+(`CreatePointFont(750)`, `GetObject` -> `|lfHeight| * 0.01`) then three Times New Roman fonts `+0x70 / +0x74 / +0x78` whose
+point sizes are `ftol` of an FPU expression built from `screenWidth * 0x68 / 0x70 / 0x90` and the probe (the exact divisor is
+hidden on the FPU stack) - "CInterface3D::Create. Cannot create font." is fatal; keyboard layout: every installed HKL
+(`GetKeyboardLayoutList`, max 16) is activated in turn and its `GetKeyboardLayoutName` parsed as hex; the first whose low word
+equals `Keyboard_Layout` (`g_0x79BE98`, e.g. 0x419 Russian) wins, else the 0x409 one, else the layout active at start, and it
+stays activated; `KeyBindings_Load`; console `+0x14` (`CUIConsole`, 0x7C, `g_0x7C7D64`), `DebugText::Init(g_0x79B930)`, message
+log `+0x1C` (`CUIMessageLog`, 0x158), capture handler / screenshots / transition / close-all / pending screen cleared, `+0x30 = 1`
+(drawing enabled), fade `+0x18` (`ScreenFade`, 0x14), save-state bytes `+0x89..+0x94`, modifiers `+0x7C..+0x80`, autosave
+`+0x81` zeroed; `<saves root>\config\tutorial.ini`: each line split at spaces, `<screen> <page>` -> `std::map<CString, int>`
+`+0x98` (`atol`); `+0xA8 = 0`, FPS bar `+0x20 = 0`, `+0x28 = timeGetTime()`, `+0x2C = 0` frames, disconnect flag `+0x88 = 0`. `Destroy` 0x5F4F90 pops everything, writes the
 tutorial pages, saves the key bindings. `ReadSaveState` 0x5F8420 / `WriteSaveState` 0x5F85C0 persist `+0x89..+0x94`, the queued
 tutorial name `+0xA4` / page `+0xA8` and `+0xAC` (the third dot-part of the last `OnNamedValue` name with value 1.0) in the save
 file (versions 0x47 / 0x56 / 0x5D / 0x5F gates); `ResetSaveState` 0x5F51F0 zeroes them for a new game.
@@ -339,15 +452,22 @@ Only the top screen draws; screens below are frozen as the screenshot and their 
 | `OnItemsChanged` 0x5F7F30, `OnUnitAdded29 / 30` 0x5F7F60 / 80, `OnEndOfGame` 0x5F7FA0, `OnSay` 0x5F82A0, `OnLobbyListChanged` 0x5F82D0, `OnLobbyRef` 0x5F8310, `OnSaveToSlot` 0x5F86D0 (bottom screen `vt[40]`) | `CPlayerClient`, `LobbyClient`, `Session_SaveToSlot` | forwards to the top screen's slots 28..40 |
 | `ShowTutorialForTopScreen(force)` 0x5F86F0 | the screens' `Build` / `OnOpen`, key 0x3B | `vt[41] GetTutorialName` -> page map `+0x98` (`config\tutorial.ini` `<screen> <page>`, -1 never shown): pushes `CTutorialScreen(flag 0, name, page)` with a fade when forced or `ShowTutorial` is on and the page is -1 |
 | `ShowMessageBar(text)` 0x5F75B0 | loading / saving | synchronous: an 800x40 green centred text at y = 280 rendered once |
-| `AddChatLine(text, colour)` 0x5F82F0 | `LobbyClient::OnAddressLine` (um-engine mp_ghost hooks this call at 0x41E656) | `CUIMessageLog::AddMessage` |
+| `AddChatLine(text, colour)` 0x5F82F0 | `LobbyClient::OnAddressLine` (um-engine mp_ghost hooks this call at 0x41E656) | `CUIMessageLog::AddMessage` (the colour is ignored there: use `^N` codes) |
 | `EnableChatInput` 0x5F7C60 / `ClearChatLines` 0x5F7C80 | Enter in the battle / camp / dialog / trade screens | lobby chat line |
 | `ConsoleAddText` 0x5F7EB0 | `LogStream::sync` (every game log line) | `CUIConsole::AddText` |
 
 ### 4.6 The message log `CUIMessageLog` (`CInterface +0x1C`, vt 0x7400DC / 0x7400A8, `CUIWidget` + 0x10) [V]
 
-`AddMessage(text, colour)` 0x5E2A30 wraps at 0x30C px (font 1, `'^N'` colour escapes kept per segment), keeps at most 12
-lines (0x18-byte nodes `{text, colour codes, time, surface}`), each line a colour-keyed `CUIBlitSurface` 17 px high placed at
-`(10, 10 + 16 i)` by `BlitSurfaces` 0x5E29E0; `Tick` 0x5E2990 drops lines older than 20 s. The chat input line (surface
+`AddMessage(text, colour)` 0x5E2A30 [V, deep-read 2026-11-06]: **the colour argument is never read**; every line starts white
+(0xFFFFFF) and only `'^N'` escapes change it. Word wrap (DBCS aware, `_mbsinc`): the text is walked keeping a plain word / line
+and a coded word / line (codes kept); a space closes the word; before adding a character, `MeasureText(line + word + ch, font
+1) > 0x30C` (780 UI units) pushes the line, and if `word + ch` alone is still wider the word is pushed too (hard break inside
+long words); `'^'` + `'0'..'7'` goes only into the coded text, `'^'` + another character **appends** a fixed
+string `0x787BE8` [?] to the coded word (the call is the append `CString::operator+=` 0x700D4C, the only CString-from-text operator this function calls) and drops that character. Then the oldest lines are erased until `old + new <= 12`, and per new line a
+0x18-byte node `{next, prev, +8, text +0xC (plain), time +0x10, surface +0x14}` is appended with a `CUIBlitSurface(0, 0,
+MeasureText(text) + 3, 0x11, flags 5 = colour-keyed + visible)`; the coded line is drawn in segments split at `'^'`, each at
+`x = MeasureText(previous plain segments)` in rect `(x, 0)-(0x30F, 0x11)`, font 1. Lines are placed at `(10, 10 + 16 i)` by
+`BlitSurfaces` 0x5E29E0; `Tick` 0x5E2990 drops lines older than 20 s. The chat input line (surface
 `(10, 573)-(790, 590)`, text `+0x150`, caret `+0x154`, mode `+0x14C`): `OnKeyDown` 0x5E3230 (Enter sends a lobby chat message
 through `LobbyClient`, Esc cancels), `OnChar` 0x5E3550 (200 chars max), `RedrawInput` 0x5E3700.
 
@@ -426,18 +546,26 @@ in UI units, origin `+0x28/+0x2C` subtracted for scrolled lists) and plays `UI_P
 
 ### 5.5 `UIQuadMesh` - the quad builders (a `CI3DFigure`; own vertices `+0x1C0` SoA blocks of 4, normals `+0x1D0`, `{vertex, 0, uv}` triplets `+0x1E0`, indices `+0x200`, uvs `+0x210`, scale `+0x23C`) [V]
 
+Mesh format (all builders, deep-read 2026-11-06 [V]): vertices are SoA blocks of 0x40 bytes `{x[4], y[4], z[4] = 0, w[4] = 1}`
+in UI units / `scale` (y down); the normal block `+0x1D0` is one block `{0, 0, 1, 1}`; the **index list `+0x200` indexes the
+6-byte triplets `+0x1E0`** `{vertex index, 0, uv index}`, not the vertices, so one vertex can carry several uvs; uvs `+0x210` are
+`(u / 256, 1 - v / 256)` from texel coordinates; the colour arrays `+0x138 / +0x148` are sized 4. Position and scale: centre
+builders use `SetScreenPos2D` of the rect centre, the others of their origin; uniform scale `+0x23C / +0x250 / +0x264 = z * k *
+scale / 400`.
+
 | Builder | Arguments | Geometry |
 |---|---|---|
-| `InitRect` 0x5E70E0 (202 callers) | z, scale, x, y, x2, y2, u0, v0, u1, v1 | 4 vertices +-(w / 2) / scale around the centre, 2 triangles, uv rect; `u1 < u0` mirrors (both shifted by -1) |
-| `InitGrid` 0x5E7680 | + cols, rows | `(cols + 1)(rows + 1)` vertices from the **top-left** corner, the same uv rect on every cell (tiled) |
-| `InitBorderStrips` 0x5E7D60 (was InitFrame16) | z, scale, l, t, r, b, border, uv | 4 strips between the outer rect and the rect inset by `border`, each with the whole uv rect |
-| `InitBorderRing` 0x5E8450 (was InitFrame8) | same | 8 vertices, 8 triangles; inner uv inset by `border * (u1 - u0) / (r - l)` |
-| `InitDisc` 0x5E8C60 (was InitN) | z, scale, cx, cy, radius, n, uv | n points on a circle, fan `(0, i + 1, i)` |
-| `InitRing` 0x5E91F0 (was InitStrip) | + thickness | n quads between `radius` and `radius - thickness` |
-| `InitQuadUV` 0x5E99D0 | corners + 3 uv pairs | one quad with explicit per-corner uv (rotated / mirrored art): `(z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2)`, 4th uv (0, 0) (section 6) [V] |
+| `InitRect` 0x5E70E0 (202 callers) | z, scale, x, y, x2, y2, u0, v0, u1, v1 (ints) | 4 vertices `(-hw, -hh), (-hw, hh), (hw, -hh), (hw, hh)` with `hw = (x2 - x) / 2 / scale`, uvs `(u0, v0), (u0, v1), (u1, v0), (u1, v1)`, triplets `(i, 0, i)`, indices `0 1 2 1 3 2`; `u1 < u0` mirrors (both shifted by -1) |
+| `InitGrid` 0x5E7680 | + cols, rows | `(cols + 1)(rows + 1)` vertices row-major from the **top-left** corner (position = that corner), cell `(c, r)` = triplets `(v, uv0), (v + cols + 1, uv1), (v + 1, uv2), (v + cols + 2, uv3)` with the same 4 uvs (tiled), indices `4k + {0 1 2 1 3 2}` |
+| `InitBorderStrips` 0x5E7D60 (was InitFrame16) | z, scale, l, t, r, b, border (float), u0, v0, u1, v1 | **8** vertices: block 0 = outer TL, inner TL, outer TR, inner TR; block 1 = outer BR, inner BR, outer BL, inner BL (inner = inset by `border`); 16 triplets = 4 trapezoid strips **top, right, bottom, left** (strip s uses vertices `2s .. 2s + 3`, the last wraps to 0 / 1), each with the whole uv rect: v runs from the outer edge (v0) to the inner edge (v1), u along the strip; mitred corners |
+| `InitBorderRing` 0x5E8450 (was InitFrame8) | same | 8 vertices (0..3 outer TL, BL, TR, BR; 4..7 inner, same order), 8 uvs: outer = the uv rect, inner = inset by `border * (u1 - u0) / (r - l)` and `border * (v1 - v0) / (b - t)` texels (the texture's own border lands on the frame border); 8 triangles `0 4 2, 4 6 2, 2 6 3, 6 7 3, 3 7 1, 7 5 1, 1 5 0, 5 4 0` |
+| `InitDisc` 0x5E8C60 (was InitN) | z, scale, cx, cy, radius, n, uc, vc, ur (ints) | n vertices `radius / scale * (cos, sin)(2 pi i / n)` (no centre vertex), uv **circle** `(uc + ur cos, vc + ur sin)` texels (not a uv rect), fan `(0, i + 1, i)` for i = 1 .. n - 2 |
+| `InitRing` 0x5E91F0 (was InitStrip) | z, scale, cx, cy, radius, n, thickness, u0, v0, u1, v1 | 2n vertices (outer / inner at angle i), n quads: triplets `(2i, uv0), (2i + 1, uv1), (2i + 2, uv2), (2i + 3, uv3)` (the last wraps), indices `4i + {0 1 2 1 3 2}`; v from outer to inner, u along the angle |
+| `InitQuadUV` 0x5E99D0 | z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2 | **one triangle** (indices `0 1 2` only): vertex 0 = the origin (position), 1 / 2 = `(xi - x0, yi - y0) / scale`, explicit uv per corner; the 4th vertex and uv are (0, 0) padding of the SoA block. Callers draw pointer arrows (`CUIWindow_648520::Build`: `(0, 0), (17, 11), (17, -11)`) and the quest-log marker (`CQuestLogWin::Rebuild`) |
 | helpers | `SetUniformScale` 0x5E7060, `SetScaleY` 0x5E7090, `BindOwnArrays` 0x5EA150, `CloneQuadMesh` 0x5FF460 | |
 
-Every builder ends with the 1/512 uv inset and `BindOwnArrays` (own arrays -> draw pointers `+0x9C..+0xC8`, colour arrays sized).
+Every builder ends with the same uv shift - **every** uv gets `u += 1/512`, `v -= 1/512` (= +0.5 texel on both pixel coordinates,
+i.e. texel-centre sampling, not an inset towards the centre) - and `BindOwnArrays` (own arrays -> draw pointers `+0x9C..+0xC8`, colour arrays sized).
 
 ### 5.6 `CUIBlitSurface` (0x38 bytes, vt 0x740F28) [V]
 
@@ -461,11 +589,39 @@ UpdateHover` 0x5FEBF0 feeds the cursor (`CInterface +0x68 / +0x6C`) to every but
 `CI3DFigureHolder` (4 bytes = one `CObject3D*`): `Load(model, textures)` 0x5FC1F0 creates a world object of kind 0x33 with flag
 `0x4000000` (UI object) at (0, 0, 3), loads the model / materials / animation; `SetAnimationByName` 0x5FC3D0 / `ByIndex`
 0x5FC3B0, `ShowPart` 0x5FC4C0 / `ShowAllParts` 0x5FC4F0 (flag 0x80 on the parts), `SetScreenPos2D` 0x5FC450, `RenderAnimated`
-0x5FC2F0 (the camp / lobby heroes). `UIUnitPreview::Render` 0x5EC300 draws a unit into a render-target texture
-(`AddRenderTargetTexture`) for the inventory / trade screens; `GetOrCreatePortrait` 0x5ECA10 keeps a `std::map<name, {time,
-figure}>` at screen `+0x170` trimmed by `TrimPortraitCache` 0x5F2F20; `PickFaceFigure` 0x5ED7B0 picks `infa%sme%dface` /
-`face%s%02d` by prototype; `LoadPictureTo256Target` 0x5EC020 decodes a `.mmp` into a 256x256 A1R5G5B5 render target and
-`CUIWidget::BlitPictureIntoTexture` 0x5FFFB0 writes one into a region of an existing texture (slot art, speaker portraits).
+0x5FC2F0 (the camp / lobby heroes). `LoadPictureTo256Target` 0x5EC020 decodes a `.mmp` into a 256x256 A1R5G5B5 render target
+and `CUIWidget::BlitPictureIntoTexture` 0x5FFFB0 writes one into a region of an existing texture (slot art, speaker portraits).
+
+Deep-read 2026-11-06 [V] - the three "UIUnitPreview" functions draw straight into the frame (no render-target texture):
+
+- `UIUnitPreview::Render(renderGlobals, unit, yaw, x, sixRects)` 0x5EC300 (`CCampScreen::Draw` tab 0: the hero at x = 400 with
+  `sixRects`; `CCampScreen2::Draw`: x = 555 or 400): flushes the vertex buffers; `IDirect3DDevice7::Clear` of the **depth**
+  (plus stencil when the device has one) over the whole target, then again over the preview rect(s) - UI `(200, 100)-(600, 500)`
+  when `x <= 400` else `(410, 100)-(700, 500)`, or the six rects of the tables 0x7402F8 / 0x740310 / 0x740328 / 0x740340 - so the
+  unit draws over the UI quads; saves the unit's position / quaternion, sets unit flag 0x800, animates it with
+  `vt[25](timeGetTime / 1024 * 15)`, places it at view-space `((x / 400 - 1) * k * 6, 1.0113, 6)` (depth 6, feet at UI y = 440)
+  with `quat(y axis, yaw) * quat(x axis, pi/2)` and, when `x > 400`, a further `quat(-z, 0.15 * pi/2)` turn; material colour
+  scale (`+0x94` -> `+0xF0..+0xF8`) 1.2 and texture stage 0 `MIPFILTER` = none during `vt[22] Draw`, then everything restored.
+- `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10 is really the **3D item icon** of an inventory / camp slot (callers
+  `UIInventoryWin::Draw`, `CCampBar(2)::Draw`, `CCampQuickBar::Draw`, `CCampTrade/Repair/SpellConstr/ItemConstrWin::Draw`). Slot
+  descriptor `{item, x, y, z, size, kind}`; the item's `vt[20]` model name -> figure cache `std::map<name, {figure, time}>` (miss:
+  `GetDefaultQuad` 0x5EBFB0 + `TrimPortraitCache`), `vt[19]` texture name -> texture cache (`LoadPictureTo256Target` +
+  `TrimFaceCache`); figure at `SetScreenPos2D(x, y, z)`, scale `size * k * z * 0.0009375`, material = the widget's `+0xEC`. A
+  0x18-byte spin state is attached to the item at `+0x1C` on first draw (vt 0x7403F8 `ItemLink`; `+8` speed, `+0xC` angle, `+0x14`
+  random glow phase in [0, 2 pi)). `kind == 9` (greyed): ambient 0.5, no spin, fitted to the slot by the figure bounds. Else
+  ambient 1.0; an item with a spell at `+0x44` (weapon 0x3004 / armour 0x3005) gets a pulsing specular colour from the 8-entry
+  school table 0x740358 (render state `SPECULARENABLE` 0x1D on while drawn); the hovered item (`== screen field`) spins up by (dt = `Time_GetSeconds`, render-globals `vt[6]` ms * 0.001 [I: the frame time])
+  `8 * dt` (max 5 rad/s), others spin back to rest (`speed = (2 pi - angle) * 4` until < 0.1); orientation: runes 0x3008 and
+  0x3007 cat 2 sub 3 / 4 = `quat(z, pi)` (no spin), weapons `quat(x, pi) * quat((1, 1, 0), angle)`, 0x3007 cat 2 sub 0..2 =
+  `quat(x, pi)`, others `quat(x, pi) * quat(y, angle)`; a backdrop `InitRect` 70x70 at `z * 1.3` (uv 157..227 of texture 2) first.
+  Runes with modifiers draw up to 8 small 35x35 icons (texture 1, an 8x8 atlas: `u = ((m - 1) & 7) / 8`, `v = -((m - 1) >> 3) / 8`)
+  clockwise from the top around the figure at `d = scaleX * 550 / z`. Finally, when `kind != 9` and the screen's `vt[43](item,
+  kind)` returns 0, an untextured 70x70 overlay with colour `0x82804040` (half-transparent dark red) at `z * 1.25` (`z * 0.8` for
+  runes / scrolls) marks the item.
+- `UIUnitPreview::PickFaceFigure` 0x5ED7B0 draws a hero's **face figure** (`CCampBar2::DrawFace`): the prototype name -> the
+  `UnitsDb` entry, whose model name (`+0xE8`) **equal** to `unhuma` / `unhufe` selects the sex part; figure
+  `infa%sme%dface` and texture `face%s%02d` through the same two caches; ambient 1.0, `quat(-x, (y - 300) * 0.001) * quat(x, pi)`
+  (a slight tilt by the screen row), the same 70x70 backdrop, then the face.
 
 ### 5.9 The item / spell / perk info panels (`UIItemInfoWin`, 0x5EE440-0x5F2A00) [V]
 
@@ -483,14 +639,52 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
 `DrawPerkDetail(record)` 0x5F1590 is the skills window's 26-case detail text. Ctrl toggles the spell view
 (`UIInventoryWin::OnKeyDown / OnKeyUp` 0x5EE640 / 0x5EE680 -> `Refresh`).
 
+Deep-read 2026-11-06 [V] (the `CString::Format` arguments are lost in the decompiles, so which number fills which `%d` is
+mostly [?]; "label n" = `infoitem_n` / `infoskill_n`, the array index):
+
+- `Refresh` order of tests: 0x3007 cat 1 -> material; 0x3007 cat 2 sub 0..2 -> weapon / armour; 0x3007 cat 2 sub 3 -> spell
+  scroll; sub 4 -> perk; 0x3006 with proto subtype 8 -> `DrawItemOrSpellInfo`; **Ctrl (`CInterface +0x7C`) held and the item has
+  a spell `+0x44`** (an enchanted item), or kind 0x3008 -> `DrawSpellItemInfo`; else the generic panel. Generic panel: the
+  material record `g_0x7C86D8 + (objectId & 0xFFFF) * 0x50`, its name with spaces -> `_` and upper-cased gives the
+  `matshort <NAME>` text ("Unknown" default); name (2 wrapped lines, white 0xFFFFFF, 17 px), `%s %s` line, then: 0x3006 whose proto
+  `+0x10` is not `none` and every kind other than 0x3006 / 0x3007 / 0x3009 -> `%s %s x %d` material + count; all but 0x3009 ->
+  `%s %d` price; weapons / armour / 0x3006 subtype 5 -> `%s %d` (value of the item's spell `+0x50` when enchanted) and `%s
+  %d/%d`; weapons / armour -> durability `%s %d/%d` (0 when `<= 0`); weapons -> the first non-zero of the 7 damage proportions
+  names the type (`damage_%d`), `%s %d-%d %s`, then three `%s %d` lines (labels 38 / 39; ranged kinds 5 / 6 of
+  `CItemWeapon::GetDamageKind` print a different value on the last); armour -> `FormatResistLists(item +0x4C[7])`: label 25 +
+  list 1, label 24 + list 2 when not empty; 0x3007 -> description + `loot_item` text (7 lines), others the description (4
+  lines) and, for enchanted weapons / armour / 0x3006 sub 5, the spell's `spell <name>` title (`%s %s`) and label 6.
+- `DrawMaterialInfo` 0x5EFD90: record by item `+0x54`; `%s %s`, label 17 + `mattype_<record +4 upper>` text, four `%s %d` and
+  one `%s %.1f` lines, label 4 + resist list 1, label 24 + list 2, description (4 lines).
+- `DrawWeaponArmorInfo` 0x5F0370: proto table by item `+0x50` (0 weapon `g_0x7C86F8` 0xB4, 1 armour `g_0x7C8718` 200, 2
+  `g_0x7C8738` 0x8C) and index `+0x54`; `%s %s` (`mattype_` of proto `+0x10`), `%s %s x %d`, `%s %d` lines (fewer for sub 2);
+  weapons: damage type from proto `+0x98[7]`, `%s %d-%d %s`, two `%s %d`, a third for proto kind `+0xC` 5 / 6; armour: resist
+  floats `proto +0x70[i] * proto +0x6C * 10`.
+- `DrawSpellInfo` 0x5F0B90 (scroll) and `DrawSpellItemInfo` 0x5EF5D0 (rune / Ctrl view) share the layout: name, `%s %s`, two
+  `%s %d`, label 18 + `school_%d`, mana `%s %d` (or `%s %s` when proto byte `+0x7B` is 0), range `%s %d` when speed >= 1 else
+  `%s %s`, `%s %d%s`, area `%s %.1f%s` (or `%s %s` when spell flag 0x10000000), duration `%s %.1f%s` when >= 2 else `%s %s`, `%s
+  %d`, description (4 lines). The rune view adds label 19 and the modifier names (perk table `g_0x7C8530`, 0x24 records, index
+  `perk code - 1`; name = the third value line of the `modifier <name>` text section, "-" default) joined by `, ` (trailing
+  separator trimmed) in 3 wrapped 16 px lines. The decompile shows two different `CString` functions under one name: 0x700AF9
+  assigns, 0x700D4C appends; this function calls both, so which calls inside the modifier loop append is [I].
+- `DrawPerkDetail(record {kind, id, slot, ?, unit, name})` 0x5F1590: kinds 0..3 title from the `perk <name>` section, 4..7
+  from `<name>` / `<name>_desc` texts. Kind 0 = attribute (id 0 strength: `UnitStats_StrengthRatio` `%s %d%%` + `CarryWeight`;
+  1 dexterity: `DexterityRatio` + `MoveSpeed`; 2: an `atan2` value + `ManaCostFactor` `%s %d%%`), kind 1 = skill
+  (`UnitStats_GetByteStat6CB`, `SkillValue` / `PerkBonusA`), kind 2 = `GetByteStat6C8` + `AttrSkill`, then 13 lines of
+  description. Kind 3 = perk family: the name with a trailing `0` trimmed and the level suffix appended finds the perk in
+  `PerksDb` (`g_0x7AF268`, 0x44-byte records); `family = index / 3` (the 26 cases) and the three levels `3 family .. 3 family +
+  2` are listed: level name, label 21 (right-aligned "owned" mark) for levels below the owned count (`record +4`), the family's
+  value line (`"     %s %d"` for families 0..14 and 23..25, `"     %s %d%%"` for 15..22: 5-space indented) and a `Perk_ComputeCost` line (`"     %s %d"`, rect widened by 15);
+  then 6 description lines. Kind 4 = equipment-slot resists: label 25 and the 7 damage types summed over 3 values of the unit's
+  slot record `unit +0x11C + slot * 0xF4` (stride 0x48).
+
 ## 6. What is not known
 
 - ~~InitQuadUV argument order~~ settled [V] (0x5E99D0): `(z, scale, x0, y0, x1, y1, x2, y2, u0, v0, u1, v1, u2, v2)`: corner 0 is
   the origin, corners 1 and 2 give the two edge vectors (`(x1 - x0) / scale`, `(x2 - x0) / scale`, stored at the mesh +0x1C0); the
   uv table (+0x210) gets `u / 256, 1 - v / 256` for corners 0..2 in the same order, and the 4th corner's uv is set to (0, 0), not
-  derived; then every uv gets the half-texel inset (+1/512, -1/512).
-- `InitBorderStrips`: the 3rd / 4th strips are read as left / right by symmetry (only the first two vertex blocks were
-  decoded) [I].
+  derived; then every uv gets the half-texel shift (+1/512, -1/512). Deep-read 2026-11-06: the index list is only `0 1 2`, so it is **one triangle**, not a quad (5.5).
+- ~~`InitBorderStrips` strips 3 / 4~~ settled [V] (deep-read 2026-11-06): both vertex blocks decoded: 8 vertices, strips top / right / bottom / left (5.5).
 - ~~Console handler bodies~~ settled [V] (2026-11-03): the 21 handlers 0x5DD920..0x5E0A10 are now Ghidra functions, named
   `Console_*` in functions.tsv (`Console_DebugInfo`, `Console_Console`, `Console_History`, `Console_LogMask`, `Console_Show`,
   `Console_LoadVar`, `Console_LastFps`, `Console_Join`, `Console_Host`, `Console_MemUsage_Nop` (empty in this build),
@@ -516,6 +710,11 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
   `structs.tsv` MapZoneRecord / ZoneRecord (same record).
 - `CSoftCursorFrame::CreateFromMmp`: settled as far as needed [I]: the per-pixel copy loops are compiler-eliminated in the
   decompile; the surface comes from `CDXDirectDrawSurface::CreateFromPicture`.
+- (2026-11-06) Short strings below the strings-dump threshold: `0x787BE8` (appended by `AddMessage` after `^` + a non-digit),
+  the `SeekSection` tokens `0x78DCFC` / `0x78DCF8` (probably `#` / `//`). A byte read of the exe's .rdata would settle them.
+- (2026-11-06) The `CString::Format` arguments of the `UIItemInfoWin` panels and of `CInterface::Init`'s font sizes are lost
+  in the decompiles (FPU / varargs); which value fills which line needs the disassembly or a live look at the panels.
+- (2026-11-06) `CSoftCursor::ComposeFrame`: which locked surface feeds which operand of `background & mask | cursor` [I].
 
 ## 7. Corrections to earlier notes
 
@@ -542,6 +741,23 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
   PerkProtoTable_GetAt`; `UIHandler7403F8` -> `ItemLink`; `MapData / Record2C / 5C / 3C` -> `MapInfo / MapAllodRecord /
   MapZoneRecord / MapExitRecord`; `StringFloatMap_*` -> `NamedFloatMap_*`.
 
+Deep-read round 2026-11-06 (30 functions; wrong -> right):
+
+| File / place | Wrong | Right |
+|---|---|---|
+| this page 3.6, `structs.tsv` was right | `CCamera +0x104` pitch "(degrees)" | radians; only the settings limits are degrees (`pi / 180` per clamp) |
+| this page 3.6 | distance spring "`1.1 * dt` of the excess" | `excess * 1.1 * dt / (hard - soft gap)`; with the defaults the hard max 80 < soft max 100, so the zoom stops at 80 |
+| this page 2.5, `structs.tsv` AppSettings +0x0 note | values flat under `HKCU\...\EvilIslands`, "the registry uses the value names only" | one subkey per section (`Camera Settings` ...); fog start / end are the values `LOD1` / `LOD2` |
+| this page 2.1 step 4 | `-benchmark_` / `-devicetarget_` set their settings | they are written before `ReadFromRegistry`, which overrides them whenever the value exists (always after the first run) |
+| this page 2.1 step 9 / 11 | "software device -> 16 px cursors", "small set when `g_0x784756`" | `Cursors_Register` always gets small = 0 (`main` and `App_WndProc`): the `sm_cursor_*` set is never used |
+| this page 2.3 | reactivation "re-query the primary surface" | `IDirectDraw7::RestoreAllSurfaces`; server and client ticks interleave, the in-world client ticks only on a received packet |
+| this page 2.6 | `#allod <n>` / `#zone <n>` / `#exit <n>` counts, kind words brief / camp / base, `#maps` 2 names -> +0x20 / +0x24 | one record per line with a name; kinds game / edge / brief; `#maps` = 2 ints then 2 picture names |
+| this page 4.6 | `AddMessage(text, colour)` colours the line; node `{text, colour codes, time, surface}` | the colour argument is unused (lines start white; only `^N`); the list entry keeps the plain text only |
+| this page 1 (texture uv) | uv "inset by 1/512 towards the centre" | the same `+1/512, -1/512` shift on every uv (+0.5 texel, texel-centre sampling) |
+| this page 5.5 | `InitBorderStrips` 16 vertices; `InitDisc` with a uv rect; `InitQuadUV` "one quad" | 8 vertices (16 triplets), strips top / right / bottom / left; `InitDisc` takes a uv circle (`uc, vc, ur`); `InitQuadUV` is one triangle (rename `InitTriangle`) |
+| this page 5.8 | `UIUnitPreview::Render` draws into a render-target texture for the inventory / trade; `GetOrCreatePortrait` = unit portraits; `PickFaceFigure` only picks a name "by prototype" | `Render` draws the camp hero straight into the frame after a depth clear; `GetOrCreatePortrait` draws the 3D item icon of a slot (rename `DrawItemFigure`); `PickFaceFigure` draws the face figure, the sex test is equality on the model name (rename `DrawFaceFigure`) |
+| decompiles | one name `CString::operator_LPCSTR` | two functions: 0x700AF9 assigns, 0x700D4C appends (rename `operator_plus_assign_LPCSTR`) |
+
 ## 8. Function index (one line each; the full purposes are in `batch-ui.tsv`)
 
 Application: `main` 0x456440 WinMain; `App_MessageBox` 0x4560D0; `App_LoadMapAndScript` 0x456140; `App_SetQuitAllowed` 0x455F10;
@@ -551,6 +767,10 @@ Application: `main` 0x456440 WinMain; `App_MessageBox` 0x4560D0; `App_LoadMapAnd
 0x45B210 / `WriteToRegistry` 0x45C560 / `~AppSettings` 0x458730; `App_ProbeDirectX` 0x45E310; `MapInfo_Load` 0x45EA20 /
 `LoadBoth` 0x45EA00 / `dtor` 0x45E6F0; `NamedFloatMap_Get / Set / Remove / Read` 0x460AF0 / 0x460BC0 / 0x460DB0 / 0x460FE0;
 `IsHeroId` 0x4613A0; `Net_TickAll` 0x4122D0; `GSWorld::GetLastError` 0x456360.
+
+Text / system info (2.7): `CTextManager::OpenText` 0x4DEFC0, `CloseText` 0x4DF020, `SeekSection` 0x4DF030, `SkipToSectionEnd`
+0x4DF510, `SkipLine` 0x4DF6E0, `ReadWord` 0x4DF770, `ReadLineValue` 0x4DF8D0, `ReadLines` 0x4DFCB0; `CSysInfo::Init` 0x4DDF05,
+`CollectInfo` 0x4DDF28.
 
 Key bindings: `KeyBindings_Load` 0x462C10, `Save` 0x462DF0, `FindKeyByAction` 0x462F70; `DInput_Create` 0x65EAD0, `DInputMouse::
 Acquire` 0x65EC70, `GetState` 0x65ECB0.
@@ -580,12 +800,12 @@ CreateFromMmp` 0x5E4EB0, `Destroy` 0x5E5160, `CSoftCursor::CSoftCursor` 0x5E51C0
 
 Quads / controllers / previews: `CObject3D::SetScreenPos2D` 0x5E6FA0, `GetScreenPos2D` 0x5E7010; `UIQuadMesh::SetUniformScale`
 0x5E7060, `SetScaleY` 0x5E7090, `GetScaleX` 0x5E70B0, `InitRect` 0x5E70E0, `InitGrid` 0x5E7680, `InitBorderStrips` 0x5E7D60,
-`InitBorderRing` 0x5E8450, `InitDisc` 0x5E8C60, `InitRing` 0x5E91F0, `InitQuadUV` 0x5E99D0, `ResetVertices` 0x5E9F30, `BindOwnArrays`
+`InitBorderRing` 0x5E8450, `InitDisc` 0x5E8C60, `InitRing` 0x5E91F0, `InitQuadUV` (= InitTriangle) 0x5E99D0, `ResetVertices` 0x5E9F30, `BindOwnArrays`
 0x5EA150; `SoABlockArray_SetSize` 0x5EA210, `UvArray_SetSize` 0x5EA380, `IndexArray_SetSize` 0x5EA4C0, `VertexUvMapArray_SetSize`
 0x5EA600; `CamCtlClassic::*` 0x5EA810..0x5EABD0; `CamCtlFree::*` 0x5EACB0..0x5EB580; `CamCtlSimple::*` 0x5EB600..0x5EB790;
 `UIKeyHandler741154` 0x5EB8A0 / 0x5EB8B0; `UIOrderClickHandler::*` 0x5EB8C0..0x5EBBC0; `IdArray::*` 0x5EBBE0..0x5EBDB0;
-`UIUnitPreview::GetDefaultQuad` 0x5EBFB0, `LoadPictureTo256Target` 0x5EC020, `Render` 0x5EC300, `GetOrCreatePortrait` 0x5ECA10,
-`PickFaceFigure` 0x5ED7B0, `TrimPortraitCache` 0x5F2F20, `TrimFaceCache` 0x5F2F90; `PortraitCache_FindOrInsert` 0x5F3000,
+`UIUnitPreview::GetDefaultQuad` 0x5EBFB0, `LoadPictureTo256Target` 0x5EC020, `Render` 0x5EC300, `GetOrCreatePortrait` (= DrawItemFigure) 0x5ECA10,
+`PickFaceFigure` (= DrawFaceFigure) 0x5ED7B0, `TrimPortraitCache` 0x5F2F20, `TrimFaceCache` 0x5F2F90; `PortraitCache_FindOrInsert` 0x5F3000,
 `FaceCache_FindOrInsert` 0x5F3170; `CampScreen::CreateFrameWidget` 0x5EDD80; `UIFrameWidget::BuildFrameMesh` 0x5F2A90; `UIBar::
 Layout` 0x5F2E00; `UICampHelp::Draw` 0x5F2910; `CRect::CRect` 0x5EC9F0.
 

@@ -1396,17 +1396,18 @@ CWeather			0x5c	pointer	map5c	MFC map (vt 0x746560)
 CWeather			0x70	pointer	array70	aligned array
 CWeather			0x80	pointer	map80	MFC map (vt 0x745F78)
 CWeather			0x94	pointer	array94	aligned array
-ZoneExit		0x3c	0x14	float	xMin	exit rectangle in world units (CRect2F::Contains; a hero inside may leave the zone)
+ZoneExit		0x3c	0x14	float[4]	leaveRect	'#deploy' or a later '#remove' 4 numbers; CORRECTION: was only "exit rectangle" (+0x14 xMin..): '#remove' writes only this copy
 ZoneExit			0x18	float	yMin	
 ZoneExit			0x1c	float	xMax	
 ZoneExit			0x20	float	yMax	
-ZoneExit			0x24	float	rotation	rotation about the centre (cos / sin for the exit effect)
+ZoneExit		0x3c	0x24	float	rotation	5th number of '#deploy' / '#remove' in degrees, stored in radians (0 when absent)
 ZoneExit		0x3c	0x28	CString	targetZone	"none" or the zone record name
 ZoneExit		0x3c	0x2c	int	entrance	the exit index in the target zone (-1 only with "none")
-ZoneExit		0x3c	0x4	float[4]	rect	x0, y0, x1, y1 of the exit area (map.txt _exit); centre = the arrival point of PlayerIn
+ZoneExit		0x3c	0x4	float[4]	deployRect	'#deploy' 4 numbers (also copied to +0x14; '#remove' does not touch +4)
 ZoneExit		0x3c	0x30	float	viewAngle	map.txt _view (arrival facing)
 ZoneExit		0x3c	0x34	byte	hasViewAngle	
 ZoneExit		0x3c	0x38	float	viewAngleOverride	used instead of the rect direction when +0x34 is set (PlayerIn)
+ZoneExit		0x3c	0x0	float	passTime	map.txt '#passtime' (the travel time of this exit)
 CMemStream		0x28	0x0	pointer	vtable	0x73C960 (IStream 0x73BDB0 base 0x73BD90): slots 1 Read(buf, n), 2 Write(buf, n), 3 Seek(pos), 4 GetSize, 5 GetPos, 6 Clear / SetSize
 CMemStream			0x5	byte	ok	1 while every read succeeded; a short read clears it (the dispatchers test it)
 CMemStream			0x8	int	limit	2000000000
@@ -2462,9 +2463,9 @@ CUIMessageLog	CUIWidget	0x158	0x154	int	caret
 UIMessageLine		0x18	0x0	pointer	next	list node
 UIMessageLine		0x18	0x4	pointer	prev	
 UIMessageLine		0x18	0x8	CString	text	the wrapped line
-UIMessageLine		0x18	0xc	CString	colorCodes	the ^N colour escapes of the line
-UIMessageLine		0x18	0x10	uint	time	timeGetTime; removed after 20 s
-UIMessageLine		0x18	0x14	pointer	surface	CUIBlitSurface (text + 3 px wide, 17 px high, colour keyed)
+UIMessageLine		0x18	0xc	CString	text	plain text of the wrapped line (colour codes removed)
+UIMessageLine		0x18	0x10	uint	time	timeGetTime when added (Tick drops it after 20 s)
+UIMessageLine		0x18	0x14	pointer	surface	CUIBlitSurface (text width + 3) x 0x11, flags 5, drawn in colour segments
 CUIConsole		0x7C	0x0	pointer	ui	CInterface
 CUIConsole		0x7C	0x4	pointer	surface	CUIBlitSurface while visible
 CUIConsole		0x7C	0x8	pointer	font	CFont Courier New 9 pt
@@ -2580,7 +2581,7 @@ CamKeyframe		0x24	0x0	float	time	tick time (PlayCamFile compares with the world 
 CamKeyframe		0x24	0x4	float	unused4	
 CamKeyframe		0x24	0x8	float[3]	position	
 CamKeyframe		0x24	0x14	float[4]	rotation	view quaternion
-AppSettings		0x26C	0x0	CString	secStatistics	"Statistics Output Settings" (ini section names; the registry uses the value names only)
+AppSettings		0x26C	0x0	CString	secStatistics	"Statistics Output Settings": ini section name AND registry subkey name (every value lives in <EvilIslands key>\<section>); CORRECTION: was "the registry uses the value names only"
 AppSettings		0x26C	0x4	CString	secGame	"Game Specific Settings"
 AppSettings		0x26C	0x8	CString	secTerrain	"Terrain Settings"
 AppSettings		0x26C	0xc	CString	secGeneral	"General Settings"
@@ -2627,13 +2628,13 @@ AppSettings		0x26C	0xac	int	floraShadow	FloraShadow
 AppSettings		0x26C	0xb0	int	otherShadow	OtherShadow
 AppSettings		0x26C	0xb4	int	lightingFreq	LightingFreq (ms; read twice, also into +0xD4)
 AppSettings		0x26C	0xb8	int	floraSpecialLight	FloraSpecialLight
-AppSettings		0x26C	0xbc	float	fogStart	40 (Terrain Settings)
-AppSettings		0x26C	0xc0	float	fogEnd	75
+AppSettings		0x26C	0xbc	float	fogStart	value LOD1 in Terrain Settings (40)
+AppSettings		0x26C	0xc0	float	fogEnd	value LOD2 in Terrain Settings (75)
 AppSettings		0x26C	0xc4	float	borderFogDistance	BorderFogDistance
 AppSettings		0x26C	0xc8	int	enableWaterWaves	EnableWaterWaves
 AppSettings		0x26C	0xcc	int	enableSelfShadowing	EnableSelfShadowing
 AppSettings		0x26C	0xd0	int	enableDynamicLights	EnableDynamicLights
-AppSettings		0x26C	0xd4	int	lightingFreq2	second LightingFreq read
+AppSettings		0x26C	0xd4	int	lightingFreq2	LightingFreq in Terrain Settings (default 1000; +0xB4 is the Shadow Settings one, 10000)
 AppSettings		0x26C	0xd8	int	shadowingFreq	ShadowingFreq
 AppSettings		0x26C	0xdc	int	enableFootprints	EnableFootprints
 AppSettings		0x26C	0xe0	int	enableBloodprints	EnableBloodprints
@@ -4051,3 +4052,6 @@ AiTileMaterial		0x118	0x108	float	stepLook	tileDesc.reg StepLook / 100 (default 
 AiTileMaterial		0x118	0x10C	float	stepSmell	tileDesc.reg StepSmell / 100 (default 1.0)
 AiTileMaterial		0x118	0x110	float	stepSound	tileDesc.reg StepSound / 100 (default 1.0); footstep loudness factor (StimulusMap::EmitFootstep)
 AiTileMaterial		0x118	0x114	int	packedCosts	pre-packed nibbles for empty dry tiles (PackMaterialCosts)
+MapAllodRecord		0x2c	0x0	CString	name	'#allod <name>' word 2 (gipat)
+MapAllodRecord		0x2c	0x4	CString[5]	lines	first word of each of the 5 lines after '#allod' (+4 .. +0x14)
+MapAllodRecord		0x2c	0x18	CDWordArray	zoneIndices	indices of the '#zone' records naming this allod (vtable +0x18, data +0x1C, count +0x20)
