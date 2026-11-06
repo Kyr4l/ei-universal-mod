@@ -325,7 +325,9 @@ heroes, or by `sqrt(exp)` weighting when no player). A miss / absorbed hit retur
 corpse is not activated or logged, and `OnDamaged` / experience only run for a unit that was alive when the hit arrived. The experience condition is:
 the victim had no player at entry, the hit killed it, and the attacker **object** (third argument: the shooter for arrows, the caster object for spells)
 belongs to a player. **Online** (`Lobby_IsAlive`, a lobby client exists) the kill is credited as `GiveExperience(0, exp)`: every player's first hero
-gets a share weighted by `sqrt` of its experience, whoever made the kill; offline (single player / LAN without the lobby) the killer's player gets it,
+gets a share weighted by `sqrt` of its experience, whoever made the kill [V live 2026-10-19, hosted session + um-bot, 4 boar kills by
+the host and by the bot: 5.0 per boar split 4.9871 / 0.0129 = sqrt(74.7 million) : sqrt(500); control run with two 500-exp heroes:
+2.5 / 2.5; docs/multiplayer-protocol.md "Experience in a multiplayer session"]; offline (single player / LAN without the lobby) the killer's player gets it,
 split among its live heroes. Death kind `CUnit +0x350`: 7 without an attacker unit or for a spell hit; a humanoid attacker (kind 0x32): its equipped
 weapon's damage kind, else its natural kind `CUnitServer +0x28C`; **any other attacker (monsters 0x33 / 0x34 and objects): its `+0x18` value + 0x10**.
 The miss path declares hostility only for a unit attacker (type id 0x50), with weight 10, then `Brain::OnAttackedBy` (also for a null attacker). A hit on
