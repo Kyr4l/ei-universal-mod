@@ -164,8 +164,11 @@ fog start / end, `+0x3C` `255 / (end - start)`, `+0x40..+0x7C` the projection (a
   `+0x124..+0x12C`), 42 (sun both), 40 (sun + points, diffuse: the one the game uses, um-engine's `fp_light.cpp`), 41 / 39 (with
   points: specular / both) [41 / 39 / 42 from their arguments and fields, I]. **The game calls only slot 40, which never reads the
   specular colour**: the specular term `CLight::PrecomputeMaterialTerms` writes (`+0x124`, from the material's specular `+0x40`) is
-  never used, and the game has no per-vertex specular highlight [V]. The other 28 slots (6, 8, 10..23, 25..28) are unused transform /
-  bounds variants for other vertex layouts (16-, 32- and 64-byte strides, with and without the divide) [I, not read line by line].
+  never used, and the game has no per-vertex specular highlight [V]. The other unused slots are variants of the called ones
+  for other output layouts [I, 2026-11-07: classified by arguments, the fields read and byte comparison]: 8 / 10 / 11 / 12 / 21 / 23 =
+  slot 9's algorithm (11 and 23 differ from slot 9 in 24 / 36 of 2254 bytes; 12 also copies a colour dword to `+0x14`), 15 / 16 / 17
+  / 20 / 22 = slot 14's (16 differs in 16 of 1574 bytes), 13 / 18 / 19 / 27 / 28 = clip space + codes without the screen step, 25 /
+  26 = plain matrix transforms, 6 = bounds over 16-byte records; every input is the 0x40-byte block of 4 vertices.
 
 ### 2.2b Inside 2DintMMX.dll (reverse 2026-11-07) [V unless marked]
 
