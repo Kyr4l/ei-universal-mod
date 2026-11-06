@@ -189,8 +189,8 @@ as + values; visibility, noise, life signature as - values; scent +).
 | +0x38 | callForHelpRadius | .mob Help (7 default); also `PropagateAlarm`'s radius (+0x9b8) |
 | +0x3c | alarmCondition | .mob AlarmCondition 0 / 1 / 2 |
 | +0x40 | alarmWait | `max(1, slot +0x44)` = 75 ticks for every .mob unit: the slot ctor's default, no chunk fills it (the .mob Wait float lands in slot +0x30, unused) [V; live 2026-11-07 in a new game's zone1: six units, alarmWait 75, all five slots +0x44 = 75 (their Wait was -1); live 2026-11-06: with every slot's Wait +0x30 poked to 10.0 the alarm countdown still read 47 some ticks after the alarm, so it starts at 75 whatever the Wait] |
-| +0x44 / +0x48 | nearRange / farRange | radius + 35 / + 80 (guard) or 35 / 80; 100000 after a reset; only written, saved and loaded (typed-field and raw-offset search) [I] |
-| +0x4c | idleSpeedFactor | random 0.8..1.0 on a stationary `Begin`, decays to 1 in `Brain::Tick`; no other reader (only the decay, Write / Read) [I] |
+| +0x44 / +0x48 | nearRange / farRange | radius + 35 / + 80 (guard) or 35 / 80; 100000 after a reset; only written, saved and loaded (whole-exe disassembly index) [V] |
+| +0x4c | idleSpeedFactor | random 0.8..1.0 on a stationary `Begin`, decays to 1 in `Brain::Tick`; no other reader (only the decay, Write / Read) [V] |
 | +0x50 / +0x5c | prevWaypoint / curWaypoint | post / patrol points (-1313 none); `IsNearPath` |
 | +0x68 | spotRetryCountdown | `FindRandomReachableSpot` backoff |
 | +0x6c | followTick | `TickFollow` every 8 |
@@ -577,7 +577,7 @@ flag / slot, the 5 mob slots (`UnitLogic::Write` 0x45D760), wait, active, both s
 Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`):
 
 * `brain +0x44 / +0x48 / +0x4c` and `AiSpellInfos +0x28 maxLevel`: written, saved and loaded only (`Brain::Write` / `Read`; +0x4c also decayed by
-  `Brain::Tick`); no reader in a typed-field and raw-offset search [I]. `FollowLimit` (AiInfo +0x20 = 0x7C5418): no instruction in the exe
+  `Brain::Tick`); no reader [V, whole-exe disassembly index 2026-11-06; `maxLevel` is only a running maximum inside `AiSpellInfos_Build` and is not saved]. `FollowLimit` (AiInfo +0x20 = 0x7C5418): no instruction in the exe
   references the address; the AiInfo block is only addressed through its base 0x7C53F8 by the static init and the aiinfo.res loader in
   `main` [V]. `normal.dat`: only the load copies into it (the AiInfo table above) [V]. `AiMemory +0x20`: only the `RefreshNearbyUnits` countdown,
   `Clear`, `Read`, `Write` [V].

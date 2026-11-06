@@ -264,8 +264,9 @@ stock".
 saved with the campaign by `CGSPlayer::Serialize` tag 4; no script command or other code writes them). `GSPlayers_CreateDefaults`
 0x4A7630 sets them on a new game: buy 1.0, sell 0.5, construct 0.2 (charged per component), deconstruct 0.1 (charged on the item) (the same four for spells [0..3] and items
 [4..7]), repair 0.2 [8]. Single player (`Session_ResetPlayers_Single`) creates merchants 1..5 and gives **merchant 5 all nine
-factors 0** (everything at that merchant costs 0 and sells for 0; index 5 is the `b.golem.constr_5` building of the campaign start,
-world-server.md 2.6 [I]); multiplayer (`Session_ResetPlayers_Multi`) creates merchants 1, 3, 4, 5, all with the standard factors.
+factors 0** (everything at that merchant costs 0 and sells for 0; in the campaign merchant 5 is **Rick**
+(`b.Rick.constr_5`, opened only by the zone19 / bz7g scripts before the last zone; `b.golem.constr_5` is a multiplayer start building,
+world-server.md 2.6) [V, map scan 2026-11-06]); multiplayer (`Session_ResetPlayers_Multi`) creates merchants 1, 3, 4, 5, all with the standard factors.
 Both shops (+0xC items, +0xD spells) start enabled for every merchant; the campaign toggles them later (the `i.on/offitemconstr`,
 `i.on/offspellconstr` variables). Confirmed in a real save (`_cpr/claude-re/sav/save38_scenario.sav.raw`, the five records after
 tag 4): merchants 1..4 hold 1.0 0.5 0.2 0.1 1.0 0.5 0.2 0.1 0.2, merchant 5 holds nine zeros; there merchant 1 has only the item
@@ -562,7 +563,7 @@ the time panel (20,20)-(170,70): line 1 the allod title, line 2 "save_day" "%s  
 selected entry `+0x280` (ingos (0.371, 0.508, 0.625), suslanger (0.391, 0.195, 0.086), else (0, 1, 0)), `+0x278` = 1 on gipat;
 `Game_ForwardToWorldServer(0, 0)`, music stopped, `FlameNoise` 256 `+0x214`, the 18 colour stages (`ApplyFadeColor`), wind.wav loop
 `+0x290`; **autosave "saveb"** (`QuickSave`) only when the screen is built live (not restored from the UI stream g_0x7AFDF8 on a
-load), the client mode (connection `+0x1C +0x104`) is not 5 (= not coming back from the camp [I]) and the option autosave g_0x79BE7C
+load), the client mode (connection `+0x1C +0x104`) is not 5 (= not coming back from the camp [V: written only by `OnMsg07_GameMode`, which echoes the mode of the last `0x04` leave; `Game_SendLeave(5)` is only the camp]) and the option autosave g_0x79BE7C
 is on; tutorial.
 `Redraw` 0x630670 renders the picking surface: zone entry i is drawn flat in grey 0x18 + 0x10 i, so a pixel's bits 4..7 - 1 give
 the entry; **at most 15 zone entries per allod can be picked** (the 16th colour wraps to an invalid id) [V].
@@ -671,7 +672,7 @@ gamma, stereo); shadows set `+0x410`. A double click or Enter on a key row sets 
 "key_already_mapped" (0x10001 -> `ApplyPendingKey` 0x652000 moves it), else rebinds at once (the action loses its other keys). OK
 (button 0 / `ApplyToGlobals` 0x6524A0) writes `+0x164` back to `g_0x79BF70` and the values to the globals, `EnsureObjectRenderData` when
 shadows changed, close 0x110001; cancel (button 1 / Esc) restores the previewed volumes / gamma from the globals and closes 0x110001.
-Persisting them (`config\keyboard.ini` and the options ini) is the framework's job [I]. Up / Down move between filled rows, Left /
+Persisting happens at shutdown, not here [V]: `CInterface::Destroy` -> `KeyBindings_Save` 0x462DF0 writes `config\keyboard.ini`; the option values go to the registry (`HKCU\Software\Nival Interactive\EvilIslands`, `AppSettings::WriteToRegistry` at the exit of `main`); `AppSettings::WriteToIni` has no caller. Up / Down move between filled rows, Left /
 Right nudge the slider, PgUp / PgDn change the tab.
 Details [V, deep read 2026-11-06, the key switch checked in the jump tables 0x651308 / 0x65132C]: `Build` 0x6503C0 lays the tab
 buttons at (100, 0x9C + 0x18 i)-(0xFA, ..) with icon quads (110..240), the tab tooltip is the text "tip option_group_<name>" (read
@@ -747,7 +748,7 @@ quest title (first line of "quest <id>"); a sub-objective `q.<zone>.<quest>.<n>`
 `q.<zone>.<quest>` != 0 (always in a lobby) in golden "\aC<FF B3 31>" with "combat_complete_subobj" / "combat_failed_subobj" /
 "combat_get_subobj" + the text of the `#subobj <n>` section; each line ends with "\aC<E4 D7 A7>\n" (back to beige) and goes into the
 message panel (`CTextListWin::Refresh` unless the panel is on its other tab); the clock strip `+0x158` = 1 (its quest-log button
-blinks [I]); `+0x1FC` sound = max(itself, trunc(value)) with a failure counted as 1, a completed quest forced to >= 3: so **a failed
+pulses [V]: `CHudClockStrip::Update` 0x648CA7 sets its colour to the clock pulse `0.7 + 0.3 cos` while the flag is set; `OpenTimeDialog` clears it); `+0x1FC` sound = max(itself, trunc(value)) with a failure counted as 1, a completed quest forced to >= 3: so **a failed
 quest plays quest.wav (the "new quest" sound)**, a completed sub-objective subcomplete.wav, a completed quest complete.wav (Update), `OnZoneEnter` 0x6360F0 (autosave "savea"), 40 `UpdateUnitList`.
 
 **Selection** [V]: `SelectUnitIndex` 0x6379E0 (shift toggles; `CWorldClient::HideObject` = CUnit flag 0x10 = selected, net message 0x19;
@@ -894,8 +895,9 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 - ~~CCampScreen2 +0x1A0..+0x220~~ settled [V]: the full CCampScreen2 layout (+0x164..+0x21C, 33 fields) is in structs.tsv (struct
   completion 2026-11-02). ~~CCampScreen +0x168..+0x18F~~ settled 2026-11-03: `+0x168` is the hovered item (recomputed by `Draw`
   0x60F050 from the hit tests of the hero slots, quick bar and party bar) [V]; `+0x170` / `+0x180` are two STL containers of 0x28-byte
-  nodes (limit 50 at `+0x17C` / `+0x18C`, the ctor's variant byte at `+0x178` / `+0x188`) that only the shared base ctor 0x5F6240 /
-  0x5F6F30 builds and the dtor frees [I] (structs.tsv).
+  nodes (limit 50 at `+0x17C` / `+0x18C`, the ctor's variant byte at `+0x178` / `+0x188`) = the timed name caches of the 3D item icons and faces [V, corrected 2026-11-06]:
+  `UIUnitPreview::DrawItemFigure` / `DrawFaceFigure` fill them, `TrimPortraitCache` / `TrimFaceCache` drop the oldest entries, and
+  `CampScreen::CreateFrameWidget` sets the limits `+0x17C` / `+0x18C` to 30 and then 20 (structs.tsv).
 
 ## 15. Corrections to earlier notes
 

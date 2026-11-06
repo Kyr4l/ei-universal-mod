@@ -424,3 +424,14 @@ western game data (the setup of these installs: `Engine\game.exe` + `C:\Evil Isl
 - Fix options: a Russian speech.res with `t\` and `s\` folders, or a one-place patch: the `push 0x79346C` at 0x605205 pointed at
   `"%.0sbriefing\%s\%d.mp3"` (the `%.0s` swallows the t / s argument), which makes the Russian exe use the western layout.
 
+## 25. 2DintMMX AlphaOver: the first pixel of every group of four takes its neighbour's alpha (found in the [I] sweep, 2026-11-06)
+
+CONFIRMED from the MMX machine code of 2DintMMX.dll (same file in both installs); effect: a one-pixel alpha smear on composed
+textures, visible only where the alpha changes from one pixel to the next.
+
+- `Blitter::AlphaOver` 0x10001780 (vtable slot 5, `dst = sat(src + (dst * (255 - a) >> 8))`) handles 4 pixels per loop. In the flag-0
+  variant (0x100017AF..0x10001887) pixels 1, 2, 3 read their alpha from source bytes +7, +0xB, +0xF, but pixel 0 also reads +7 (pixel
+  1's alpha) instead of +3. The flag-1 (PNT3) variant reads +3 correctly.
+- Caller: the game's layer composer (`ComposeLayers` 0x693010, flag = isPNT3) when it composes texture layers that are not PNT3.
+- Fix: one byte in the DLL: the displacement of `mov al, byte ptr [ecx + 7]` at 0x100017B4 (the first one) from 7 to 3.
+

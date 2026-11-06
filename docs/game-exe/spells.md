@@ -47,7 +47,7 @@ Tags: **[V]** read directly in the decompile, **[I]** inferred from several func
 | Thing | Value |
 |---|---|
 | spell kind | the proto index (row of `SpellPrototypes`, 0..0x29 in vanilla): `CSpell +0x18 >> 16`; it is also the **buff kind byte** and the switch key of the three `CSpellEffect` scripts [V] |
-| spell id | `kind << 16 \| sequence`; sequence 0 = the bare prototype spell (`CreateSpellById` 0x688EC0), > 0 = a constructed spell registered in `CSpellManager +0xBC` [V] |
+| spell id | `kind << 16 \| sequence`; the sequence is always 0 in practice: `CSpellContainer::Finalize` sets `proto index << 16`, and `CreateSpellById` 0x688EC0 is only reached with -1 (its prototype-init and registry branches never run) [V, corrected 2026-11-06] |
 | spell object | `CSpell` 0x5C (kind 0x3002, vt 0x743A94, typeId 0x4F); its data block `+0x1C..+0x2F` is exactly a buff record [V] |
 | container | `CSpellContainer` 0x90 (kind 0x3003): blueprint `+0x1C`, rune list `+0x20`, result `CSpell` at `+0x30` [V] |
 | spell item | `CItemSpell` (kind 0x3008, 0x50): the `CSpell` at `+0x44`, its id at `+0x4C`; weapons / armor / quick items (subtype 5 charged, 8 scroll) carry their embedded spell at `+0x44` too (items page) [V] |
@@ -132,7 +132,7 @@ last row's index too. Field tags = the `FLD` numbers of the xlsx dump (`resource
 | 0x23 | comprehend | domination | u | no script |
 | 0x24 | charm | domination | u | `CUnitServer::OnProvoked(caster, caster's intelligence + power)` until the target's player matches; msg 0x1A when resisted; never cast in vanilla (see 0x15) |
 | 0x25 / 0x26 | enlarge / shrink | enchantments | u | buff: morph scale +-0.4 (`ApplyBuffKinds`) |
-| 0x27 | campfire | fire | t | thermal "hit" every 4 ticks on the live units in the radius (the hit record of kind 0x27), blocks the map; **never ends**: its phase-2 countdown counts up, so the fire stays for the life of the zone [V] (the cast list is written into the zone save, so it also survives a save / load [I]) |
+| 0x27 | campfire | fire | t | thermal "hit" every 4 ticks on the live units in the radius (the hit record of kind 0x27), blocks the map; **never ends**: its phase-2 countdown counts up, so the fire stays for the life of the zone [V] (the cast list is written into the zone save, so it also survives a save / load [V: `WriteSave` writes the cast list +0x12E28 and `LoadSave` reads it back]) |
 | 0x28 / 0x29 | rick_magic / curse_magic | fire / lightning | u | the arrow (0x204E) / lightning (style 1) variants used by scripts |
 
 ### 2.3 `PerkProto` (runes, 0x24) [V] (`PerkProto::SerializeFields` 0x683AF0)
@@ -376,8 +376,9 @@ when told (`CWorldClient::RemoveObject`).
 
 Vtable (24/25 slots, hierarchy.md): 0 dtor, 2 `InitNetStream`, 3 Done (= Reset), 6 `Update` (0 = remove), 9/10 Read/Write (save),
 11/12 ClassName/TypeId, 13..17 CObject3D transform, 18 `Reset`, 19 `GetPercent` (volume / 100), 20 `GetPos`, 21 `ReadDelta(update, stream)`,
-22 `WriteDelta`, 23 `Activate(update)`, 24 `UpdateAttached` (arrows). The 18-slot classes (particle, light, wall, lightning, arrow) reach
-their Reset / ReadDelta / Activate through the same slot numbers of their own vtables [I].
+22 `WriteDelta`, 23 `Activate(update)`, 24 `UpdateAttached` (arrows). The particle, light, wall, lightning and arrow classes have the same slots in their own vtables
+(0x7435D0, 0x74356C, 0x743630, 0x743690, 0x7436F0: 18 `ResetState`, 21 `ReadDelta`, 23 `Activate`; the wall inherits the particle's
+`Activate`): 24 slots, the arrow 25 (`Reactivate`) [V, vtable dumps 2026-11-06; an older note said 18 slots].
 
 ### 7.2 The classes (`CEffectManager::CreateByKind` 0x67E170) [V]
 
@@ -427,15 +428,15 @@ Hit effects of damage spells are the particles the server creates (0x2041 / 0x20
 
 ## 9. What is not known
 
-* ~~Sequence numbers~~ settled [V]: `CSpellManager` never generates them. `CreateSpellById` 0x688EC0 only tracks maxima (`maxHighId` +0xD0 and the sub-table +0x14 are written there and reset by the ctor / Done / ClearRegistry, read nowhere); a copy made by `CSpell::FillFromId` 0x68B410 carries the source's id and is filled from the registered container. The low 16 bits come with the container's id from its creator (item data / save / net) [I].
+* ~~Sequence numbers~~ settled [V]: `CSpellManager` never generates them. `CreateSpellById` 0x688EC0 only tracks maxima (`maxHighId` +0xD0 and the sub-table +0x14 are written there and reset by the ctor / Done / ClearRegistry, read nowhere); a copy made by `CSpell::FillFromId` 0x68B410 carries the source's id and is filled from the registered container. The low 16 bits are in fact always 0 [V, corrected 2026-11-06]: `CSpellContainer::Finalize` sets the embedded spell's id to `proto index << 16`, `FillInfo` copies it, and the only caller of `CreateSpellById` (`FillFromId`, 0x68B414) passes -1, which returns a blank spell at 0x688ED9: its prototype-init and registry branches never run.
 * ~~SpellProto +0x48 / +0x54 / +0x60~~ settled [V]: the typed readers are only `SpellProto::SerializeFields` 0x683B80, `CopyCtor` 0x686BF0, `operator_assign` 0x6875D0 and the dtor; `+0x54` (special mods) is also read by the camp spell-constructor preview `CCampScreen::RefreshSpellComponents` 0x612290; `+0x48` (build-in mods) and `+0x60` (TTI) have no gameplay reader: table data for the editors.
 * ~~The exact `CEffectSoundSeq::Activate` modes~~ settled 2026-11-03 from the machine code [V]: the "modes" are the next-index
   callbacks handed to `StartStreamSlot` 0x6BA2D0 (the stream slot asks for the next file index each time the current file ends; a
   loop flag passes 1000, else 0). File list = the record's names, preceded by the folder name when `+0x14C` is not empty. Without
-  a folder: count 1 -> `0x40000000` (index 0 with bit 30, [I] the "last file" flag: play once); 2..5 -> a uniform random index
+  a folder: count 1 -> `0x40000000` (index 0 with bit 30 = the **loop** flag: `StreamSlot_PlayNext` 0x6BA16D masks it off and passes it as the `loop` argument of `Play3D`, so a one-file sequence loops [V, corrected 2026-11-06]); 2..5 -> a uniform random index
   (`r & 1`, `r % 3`, `r & 3`, `r % 5`, `r` from the shared 256-entry random table `g_0x7A9D40`). With a folder: the first call
   (previous index 0) plays entry 0 (the folder item), later calls pick `1 + random` among the named files (count 1:
-  `0x40000001`, the single file once). Counts above 5 fall back to the count-1 callback.
+  `0x40000001`, the single file looped). Counts above 5 fall back to the count-1 callback.
 * ~~CEffectArrow vtable size~~ settled [V]: one 25-slot vtable at 0x7436F0; classes.tsv had split it into 18 slots + a 7-slot "vtable" at 0x743738 (= 0x7436F0 + 18 x 4), which holds ReadDelta 0x67B690 (slot 21) and Activate 0x67B4E0 (slot 23), same 25 slots as the projectile base.
 * Shapechange (0x16) and comprehend (0x23): no server script and no literal `GetBuffValue` reader (only kinds 0x1D / 0x1E are read through it) [V]; they are not sold and no monster has them [V, data 2026-11-03]: both have prototype rows (SpellPrototypes), but no shop set (S_Spells) and no Monsters row lists them, and no shipped map script hands one out either (`GiveUnitSpell` has 0 calls in the campaign and LostInAstral, gs-functions.md 4.1); its cast would do nothing (phase 3 at once). Charm, possession and link are not sold either. Note: the particle types 0x2039..0x203B with the "ShapeChange" texture are NOT this spell: 0x2039 / 0x203A draw the move-path preview of message 0x0E, and only with the debug flag `g_0x79BE70` (`CPlayerClient::OnMsg0E_MovePath` 0x669FA0).
 * ~~The buff `+0x10` flag byte~~ settled 2026-11-06 [V]: `Start` writes the quiet flag there (6.1); still no reader (0x5ED710 is an

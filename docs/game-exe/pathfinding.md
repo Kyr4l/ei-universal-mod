@@ -89,7 +89,7 @@ interact -> `ExecuteCombatOrder`, `ApproachTarget` 0x54D140 (chase, below); 7/8/
 ## 3. CAIMap: the data
 
 `CAIMap` (ctor 0x5B3C30, dtor 0x5B5E10) is a member of the server world (`CWorldServer +0x170`); `CAIMap::Load` 0x5B43C0 has exactly one caller, `CWorldServer::NewZone` 0x595C70, so
-only the server has grids and **a client does no pathfinding** (the client code only evaluates `MoveCurve`s) [I]. Pointers like `terrainGridRows` are row
+only the server has grids and **a client does no pathfinding** (the client code only evaluates `MoveCurve`s) [V: `CAIMap::Ctor` is called only by `CWorldServer::ctor`, `CAIMap::Load` only by `CWorldServer::NewZone`, and every caller of `CAIMap::FindPath` is server code]. Pointers like `terrainGridRows` are row
 tables (`rows[y] -> first cell of row y`); each grid object is `{+0 data, +4 rows, +8 width, +0xC height}`.
 
 | Grid | Where | Cell | Written by | Read by |
@@ -133,7 +133,7 @@ the AI reads them again on its own:
 |---|---|
 | +0 u32 | 8 nibbles; nibble k (bits 4k..4k+3) = passability of unit class k: **0 blocked, 1..15 usable** (15 best). 7..15 are "walkable" (cost factor < 12000), 1..6 are swamp-like (factor 12000..36000); `IsUnitPositionWalkable` 0x5BA5A0 accepts only a step cost 1..11999 |
 | +4 u16 | ground height in steps of `maxZ/511` (`CAIMap +0x120 = 511/maxZ` is the scale; `GetTerrainHeight` 0x5B77F0 divides by it). Bridge cells hold the bridge top (`SetBridgeCells`) |
-| +6 u16 | bits 0-5 water depth (0x3F = very deep), **bit 6 (0x40) cell is a bridge / platform** (original data saved in the bridge hash), bit 7 (0x80) water. The high byte (+7) is unused [I]: `TerrainGrid_Alloc` 0x5BD030 masks the word with 0xFF00 on fresh `operator new` memory (so it stays uninitialised), every writer keeps it (`& 0xFFC0` in 0x5B30B0, `& 0xFF40` / `& 0xFF3F` in 0x5B6740) and no 16-bit read of the cell tests bits 8-15 (all readers mask 0x3F / 0x40 / 0x80) |
+| +6 u16 | bits 0-5 water depth (0x3F = very deep), **bit 6 (0x40) cell is a bridge / platform** (original data saved in the bridge hash), bit 7 (0x80) water. The high byte (+7) is unused [V, whole-exe index 2026-11-06]: `TerrainGrid_Alloc` 0x5BD030 masks the word with 0xFF00 on fresh `operator new` memory (so it stays uninitialised), every writer keeps it (`& 0xFFC0` in 0x5B30B0, `& 0xFF40` / `& 0xFF3F` in 0x5B6740) and no 16-bit read of the cell tests bits 8-15 (all readers mask 0x3F / 0x40 / 0x80) |
 | +8 u8 | **standing-unit level** (see 3.3). 0 on a freshly loaded map |
 
 The border: `UpdatePassability` forces the 3 outermost rows / columns to nibble 0 (units can't leave the map); `PathFinder::Init`'s 34 x 34 window is closed on its edge.
@@ -397,7 +397,7 @@ turnRate`; kind 1 reports `turning = 1` throughout (also after the turn), kind 4
 target looked up by id (world vt[40]; gone -> as kind 0); aim point = its predicted position at the request's `+0x18` tick (vt[52]) while `t <= +0x18`,
 its live position (vt[53]) afterwards, in tile units; until the `+0x1C` tick the heading moves linearly from the start heading to that bearing
 (`start + wrapped(bearing - start) x (t - startTick) / (+0x1C - startTick)`), then it is the bearing itself (normalised vector; a zero vector leaves
-(0, 0)). Position never changes for kinds 0 / 1 / 3 / 4. Speed units: tile units per tick (walk ~0.2 -> ~1.9 m/s at 18 ticks/s; docs/game-memory.md's "x 10 = m/s" is ~10 % high) [I].
+(0, 0)). Position never changes for kinds 0 / 1 / 3 / 4. Speed units: tile units per tick [V] (walk 0.208 = 3.8 tile units per second at 55 ms ticks). No code defines metres, so an m/s figure (docs/game-memory.md's "x 10 = m/s", or the "~1.9 m/s" this page gave before 2026-11-06) is a convention, not a fact of the game.
 
 ### 5.4 Per-tick server update `CUnitServer::TickMovement` 0x547890 (states 0 walking / 1 turning) [V unless marked]
 
@@ -452,7 +452,7 @@ into the client unit's request (and, with the debug flag `0x79BE70`, rebuilds th
 
 | | server (`CWorldServer`, CUnitServer) | client (`CWorldClient`, CUnitClientSpecific) |
 |---|---|---|
-| AI map / grids / stamps | yes (CAIMap +0x170) | no [I] |
+| AI map / grids / stamps | yes (CAIMap +0x170) | no [V] |
 | path search | yes (`FindPath`) | none |
 | MoveRequest | authoritative, rebuilt per chunk / re-path; `MarkNetDirty(10)` | received (section 10) |
 | MoveCurve | built by `ResetMover` | built by `ReadNetState` / `OnMsg_UnitMoveState`; `ReplayMove` 0x535850 evaluates it every frame with the fractional time, z from the terrain, yaw smoothed `exp(-0.3 dt)`, animation speed = ground speed |
@@ -470,12 +470,12 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   Universal-Mod/config/ai.reg (and the XP-Mates one) has no [RPG] RotateSpeedMult key, so the static default **100** applies [V]
   (parsed with the reg-format.md reader; the file holds DifficultyLevels, LMP, AddonPerk, Addon and RPG Perk Power Base 1.95).
 * `NavPortalTables`: deterministic tables built once at static init from constants (no game state): `[inDir][outDir]` = how the 9
-  window slots of one path cell connect to those of the next (shared cells, entry and exit edges); used by the corridor re-plan, 4.5 [I].
+  window slots of one path cell connect to those of the next (shared cells, entry and exit edges); used only by the corridor re-plan, 4.5 (`CAIMap::SmoothPathStart` is the only reader of g_0x7C3058) [V].
 * `CUnit +0x274` = the dead flag (section 3.3: corpses are not stamped) [V]. Bridge heights for rendering: the client world's slots 29 /
   30 (`HeightWithBridges` 0x5618E0 / 0x561930: `CBridgeManager::GetHeightAt` 0x560F00 = highest walkable quad under the point, else the
   terrain; world-client-players.md 8) [V].
 * `PathCells +0xE`: written by `RateFootprintPath`, sent by `MoveRequest::WriteNet` (bits 4-5) and stored by `ReadNet`; no other reader
-  in the decompiles of the curve (0x5C6000-0x5C7FFF), the path code or the client unit [I]: transmitted, unused.
+  anywhere in the exe [V, whole-exe disassembly index 2026-11-06; in the request record it becomes `+6`, which only `ReadNet` writes]: transmitted, unused.
 * A wait does shift the request start tick: `TickAnimation` -> `ShiftTimes(+1)` every paused tick (5.4 step 6, corrected) [V].
 * `FindUnitsNear` 0x5C0BD0 [V live 2026-11-06, the rule corrected]: cell = `round(pos x 2 - 0.5)`, sector = cell >> 5 (16 world units);
   the offset table (`CellOffsets_Build` 0x5BF8F0: the 21 x 21 sector offsets sorted by the float gap `sqrt(g(dx)^2 + g(dy)^2)` with

@@ -427,7 +427,7 @@ seven inline 4-byte names: head `hr hd`, body `bd rh1 rh2 rh3 lh1 lh2 lh3`, legs
 `hr.%.2d.armor%.2d` (proto `+0x10`, armour `+0x18`; skipped when the proto has no hair, -1) or `%s.armor%.2d` (part, armour `+0x18`); then
 `Weapon_ListModelParts` for each weapon id. The second output is the 21 base parts with `hr` -> `hr.%.2d` (dropped without hair).
 
-**CWeather** (`+0x6f4`, 0xc8, vt 0x73F4C8) [I]: rain / snow particles and sounds; `CWeatherSound::SetRain` 0x4E3FC0 from message 0x70,
+**CWeather** (`+0x6f4`, 0xc8, vt 0x73F4C8) [V: the ctor stores the vtable at this + 0x6F4 = g_0x7AFCAC]: rain / snow particles and sounds; `CWeatherSound::SetRain` 0x4E3FC0 from message 0x70,
 `SetWind` 0x564190 from 0x72, updated with the camera position in `Render` (`CEffectSoundObj::Update`); its own module (0x4E3000) is not
 in this round.
 
@@ -445,8 +445,8 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   `u32 round(b)`; `a` is dropped by `SendMsg12` (disassembly of 0x66D730 / 0x66C340 / 0x4B6EB6) [V].
 * `CWorldClient +0x7c0` (msg 0x12, -1 after the ctor) and `+0x6dc` (0 in `Init`, 0x80 in `UpdateDayLight`) are write-only: an
   exe-wide disassembly scan of `0x7c0(` / `0x6dc(` finds only these stores [V]. `+0x228` (10 in the ctor) has no other access in
-  0x55E000-0x579000 [I]. `vt[37] / vt[38]` return `+0x194 / +0x198`, written only by the ctor (0): null manager slots, and the server
-  versions return 0 too (`CWorldServer::v37_Ret0 / v38_Ret0`) [I].
+  the whole exe [V, index 2026-11-06]. `vt[37] / vt[38]` return `+0x194 / +0x198`, written only by the ctor (0): null manager slots, and the server
+  versions return 0 too (`CWorldServer::v37_Ret0 / v38_Ret0`) [V].
 * Type id 0x54 = `CBuilding`, 0x5d = `CLeverObject` (the only `GetTypeId` bodies returning them) [V]. The 16-byte records of `0x73`
   are the `WaterLevels` of `CWorld +0x70` [V].
 * `0x38` is dead at both ends: the client writer `0x66AF90` (`{u32 unit id, u32 value}`) has no reference anywhere, and the server

@@ -42,7 +42,7 @@ Addresses are VAs in game.exe; offsets are bytes; "UI units" = the virtual 800x6
 | Thing | Value |
 |---|---|
 | UI space | 800 x 600 virtual pixels; `UiScale::ScaleRect` 0x5F7CA0 `x * screenW / 800`, `y * screenH / 600` (integer); `UnscalePoint` 0x5F7E00 the inverse; screen size = `CInterface +0 / +4` (primary surface description, `Init` 0x5F4990) [V] |
-| UI -> 3D | `CObject3D::SetScreenPos2D(x, y, z)` 0x5E6FA0: `pos = ((x/400 - 1) * k * z, (y/400 - 0.75) * k * z, z)`, `k = 0.48157462 = tan(pi/7)` = tan(fov/2); a quad built by `UIQuadMesh::InitRect` gets the uniform scale `z * k * scale / 400` so `scale` UI units = one vertex unit; y grows downwards on screen because the UI view has y down [I]; 800 UI units span the whole view at any depth [V] |
+| UI -> 3D | `CObject3D::SetScreenPos2D(x, y, z)` 0x5E6FA0: `pos = ((x/400 - 1) * k * z, (y/400 - 0.75) * k * z, z)`, `k = 0.48157462 = tan(pi/7)` = tan(fov/2); a quad built by `UIQuadMesh::InitRect` gets the uniform scale `z * k * scale / 400` so `scale` UI units = one vertex unit; y grows downwards on screen [V live: the camp's item figures at UI y ~ 490 are drawn at the bottom] (the 3DfpFPU screen step maps +y upwards, so the flip is in the UI pass's view or projection; not located); 800 UI units span the whole view at any depth [V] |
 | depths used | 7.8 / 7.9 / 8.0 for the camp frame layers (`UIFrameWidget::BuildFrameMesh` 0x5F2A90), 10 for most quads; smaller z = in front [V] |
 | texture uv | pixel coordinates of a 256 px texture: `u = px / 256`, `v = 1 - py / 256`, then every uv shifted by `+1/512, -1/512` (= +0.5 texel on both pixel coordinates: texel-centre sampling, not an inset towards the centre; every builder, 5.5) [V] |
 | colours | GDI `COLORREF` BGR for text (`0xA7D7E4` = light yellow, `0xFFFFFF` white, `0x00FF00` green); `'^N'` in a message log line = colour escape, N bit0 blue, bit1 green, bit2 red (`^7` white, `^4` red, `^2` green, `^1` blue, `^6` yellow) (`CUIMessageLog::AddMessage` 0x5E2A30) [V] |
@@ -88,7 +88,7 @@ loop:
         IDirectDraw7::RestoreAllSurfaces (vt +0x64) under g_0x7AEE78, HRESULT -> device[2]) flag |= 1, SetCursor(0)
     dt = timeGetTime() - g_0x79B9F8 (ms since the last frame; first frame: 0)
     render-globals inactive  -> World_SetStatScramble(0); frameRendered = 0           (messages then go to App_WndProc only;
-                                                     nothing sleeps here, so the minimized game spins this loop [I])
+                                                     nothing sleeps here, so the minimized game spins this loop [V: no Sleep or wait in the loop])
     else:
       World_SetStatScramble(1)
       CWorldClient::NetObjectIdle -> Lobby_IsAlive ? Lobby_Create : LobbySession_ReleaseActive2
@@ -204,7 +204,7 @@ the end of the text:
 - `name == 0` (next section; `MapInfo_Load`): reads words; a word whose first character is `#` (`0x78DCFC`) and whose first
   two characters are not `##` (`0x78DCF8`) is a section start; any other word skips the rest of its line.
 - one-word name: reads words until one equals the name exactly (case-sensitive); after a mismatch the rest of the line is
-  skipped and then every following line whose first word starts with `##` (`0x78DCF8`, a comment marker [I])
+  skipped and then every following line whose first word starts with `##` (`0x78DCF8`, a comment marker [V: the shipped map.txt uses `##` comment lines])
   is skipped too.
 - multi-word name (split at spaces): reads whole lines (`ReadLines(.., 0)`); a line matches when it has at least as many words
   and each of the name's words equals the line's word **lower-cased** (0x700EFE, misnamed MakeUpper until 2026-11-06; so callers
@@ -358,7 +358,7 @@ the position `+0x1C = target - up(view) * distance`, then `AvoidObstacles` 0x40E
    15-tick = 0.83 s period), `t += dt` after the term, the node dropped once `t >= duration`.
 
 The 20 % follow and 10 % height steps are per call while `Update` is called a variable number of times per frame (per client
-tick, plus once per whole tick of the frame time and once with the remainder), so the follow lag depends on the frame rate [I]. The memory-scanned addresses in
+tick, plus once per whole tick of the frame time and once with the remainder), so the follow lag depends on the frame rate [V: the three `CCamera::Update` calls in `main`]. The memory-scanned addresses in
 `game-memory.md` are these fields: `0x79B2C4 = +0x1C`, `0x79B2DC = +0x34`, `0x79B388 = +0xE0`, `0x79B39C / 0x79B3A8 = +0xF4 / +0x100`
 (the yaw quaternion's z and w = sin / cos of the half angle).
 
@@ -685,9 +685,10 @@ Deep-read 2026-11-06 [V]; "label n" = `infoitem_n` (the array `+0x1CC`, entry = 
   `%s %d`, label 18 + `school_%d`, mana `%s %d` (or `%s %s` when proto byte `+0x7B` is 0), range `%s %d` when speed >= 1 else
   `%s %s`, `%s %d%s`, area `%s %.1f%s` (or `%s %s` when spell flag 0x10000000), duration `%s %.1f%s` when >= 2 else `%s %s`, `%s
   %d`, description (4 lines). The rune view adds label 19 and the modifier names (perk table `g_0x7C8530`, 0x24 records, index
-  `perk code - 1`; name = the third value line of the `modifier <name>` text section, "-" default) joined by `, ` (trailing
-  separator trimmed) in 3 wrapped 16 px lines. The decompile shows two different `CString` functions under one name: 0x700AF9
-  assigns, 0x700D4C appends; this function calls both, so which calls inside the modifier loop append is [I].
+  `perk code - 1`; name = the third value line of the `modifier <name>` text section, "?" default) joined by `, ` (trailing
+  separator trimmed) in 3 wrapped 16 px lines. From the machine code [V, 2026-11-06]: per modifier the line gets `" "` appended (0x700D4C),
+  the name defaults to `"?"` (0x700AF9 assigns), is read as the third line of `modifier <code>`, and `name + ","` is appended; after the
+  loop the trailing `","` is trimmed and `"."` appended ("<label 19> Fire, Ice.").
 - `DrawPerkDetail(record {kind, id, slot, ?, unit, name})` 0x5F1590: kinds 0..3 title from the `perk <name>` section, 4..7
   from `<name>` / `<name>_desc` texts. Kind 0 = attribute (id 0 strength: `UnitStats_StrengthRatio` `%s %d%%` + `CarryWeight`;
   1 dexterity: `DexterityRatio` + `MoveSpeed`; 2: an `atan2` value + `ManaCostFactor` `%s %d%%`), kind 1 = skill

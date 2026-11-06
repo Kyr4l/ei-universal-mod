@@ -297,7 +297,7 @@ through), `World_InitWorkDir` 0x55EA10 = `g_0x7AF454`.
 | +0x15c / +0x160 | mapLoaded / worldScriptRunning | |
 | +0x164 | startPosition | copied into joining players |
 | +0x170 | aiMap | `CAIMap` (0x12704; CollisionMap `+0x294`, NavGrid `+0x2468`, terrain rows `+0x280c`, StimulusMap `+0x2838`) |
-| +0x12874 / +0x12a6c | worldScript / systemScript | (script-vm.md 2026-11-01: SpawnPartyHeroes, OnNamedEvent, CTrapObject::Update, MobFile_Load and LoadWorldScript all compile into the ZONE VM +0x12874; only the console WorldScript_Execute and World_ScriptSpawnFlash use +0x12A6C) two `GSWorld` VMs (0x1f8): the zone script (saved) and a second one ticked unconditionally (one-shot `WorldScript(...)` texts from `SpawnPartyHeroes` / `OnNamedEvent` 0x592090 / `World_ScriptSpawnFlash`) [I] |
+| +0x12874 / +0x12a6c | worldScript / systemScript | (script-vm.md 2026-11-01: SpawnPartyHeroes, OnNamedEvent, CTrapObject::Update, MobFile_Load and LoadWorldScript all compile into the ZONE VM +0x12874; only the console WorldScript_Execute and World_ScriptSpawnFlash use +0x12A6C) two `GSWorld` VMs (0x1f8): the zone script (saved; `Update` ticks it only while the flag tested at 0x58DF93 is set) and the console VM, ticked on every `Update` (0x58DFAA) and once more by `WorldScript_Execute`; `World_ScriptSpawnFlash` only compiles into it [V, 2026-11-06; `SpawnPartyHeroes` / `OnNamedEvent` use the zone VM] |
 | +0x12c64 | relations | `PlayerRelations` (0x100) |
 | +0x12d64 | zoneKind | = `g_0x7C2CC4` (2.3); the branch selector of the tick set, the replication set, the random weather, the hero spawn and the camp behaviour |
 | +0x12d68 / +0x12d6c | mapName (.mob) / terrainName (.mpr) | |
@@ -675,7 +675,7 @@ index -> entry, "Index out of range / No entry"), `Reset` 0x674810.
   with CRT file I/O (`+0x24` handle), `Attach(data)` works on a memory image (`+0x28` base); `OpenFile(name, out size)` returns a
   cached buffer (name hash `+0x44`, pointer hash `+0x30`, refcount `+0x14` of the entry) read from the file or pointing into the
   image; `CloseFile(buffer)` drops the refcount and writes the buffer back when `+0x2c` writable; `FreeEntries` 0x672040. Slot order
-  0 dtor, 1 Open, 2 Attach, 3 Release, 4 nop, 5 OpenFile, 6 CloseFile, 7 FreeEntries [I]. `CMappedResource2` (vt 0x743300, 0x6c)
+  0 dtor, 1 Open, 2 Attach, 3 Release, 4 nop, 5 OpenFile, 6 CloseFile, 7 FreeEntries [V, vtable dump]. `CMappedResource2` (vt 0x743300, 0x6c)
   adds a `CMappedFile` at `+0x58` and `FindEntry` 0x6725E0 returning `view + offset` (zero-copy): the memory-mapped variant used
   for `database.res`, the registries and `aiinfo.res`.
 - `CMappedFile` (0x10: file, mapping, view, size): `Open` 0x675770 (`FILE_FLAG_NO_BUFFERING` when the sector size divides the
@@ -684,7 +684,7 @@ index -> entry, "Index out of range / No entry"), `Reset` 0x674810.
   of opened archives at `+0xb0..+0xb8` (`{std::string name, CMappedResource*}`): slot 16 `OpenProtoResource(name)` 0x675050
   appends and opens a new archive (1 when already open), 17 `CloseProtoResource` 0x675200, 18 `ClearProtos` 0x675340,
   19 `OpenFile(name, out size)` 0x675440 (first archive that has it; `CFigureManager` loads `.fig` / `.ani` / `.lnk` through it),
-  20 `CloseFile(buffer)` 0x675490, 21 `HasFile(name)` 0x6754E0, 22 `FreeCachedFiles` 0x675530. [I slot roles]
+  20 `CloseFile(buffer)` 0x675490, 21 `HasFile(name)` 0x6754E0, 22 `FreeCachedFiles` 0x675530. [V, vtable 0x743338 dump]
 
 ## 6. What is not known
 
@@ -703,9 +703,10 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
   zone kind `+0x12d64` (save chunk 4) [V].
 - `+0x12e00 staticObjectStream` is read: `CWorldClient::LoadZone` appends it to its player stream through the absolute address
   0x7C2D60 (`Game_GetGlobal7C2D60`) [V]. A remote client's own process builds the same stream with its own `CWorldServer::NewZone`
-  [I] (the "client loads them from the same `.mob`" of section 4).
+  [V: `CWorldClient::LoadZone` -> `Game_SetZone` -> `CWorldServer::SetZone` -> `LoadZone` -> `NewZone` -> `SeparateStaticObjects` fills
+  `+0x12E00`; the immediate `UnloadZone` leaves it] (the "client loads them from the same `.mob`" of section 4).
 - `CWorld +0x5c` is a `RefHolder` (vt 0x73F240) created empty by `CWorld::Init` (`+8` ref = 0); nothing sets its ref, its slot 5
-  ("pump") is empty and `AcceptPlayers` on it moves a null ref: a dead placeholder of a removed net driver [I]. `+0x60` = the
+  ("pump") is empty and `AcceptPlayers` on it moves a null ref: a dead placeholder of a removed net driver [V: slot 5 of vt 0x73F240 is a bare `ret`, called by `PumpNet` / `Tick`; the reference is set only at creation (0)]. `+0x60` = the
   `RefListPair` of the game streams (`CTcpNetDriver::SyncPeers`, net-transport.md 4.9) [V].
 - `CObjectDesc`: `+0x3c` = chunk 0xB004 OBJNAME (the editor name, e.g. "Human Kania Hunter F7-1000324"), `+0x4c` = chunk 0xB016 =
   the object's script name (empty in 56527 of 56805 objects of the 200 shipped .mob files; set examples "q1r.5", "z0jq1.1"): it is
@@ -776,7 +777,7 @@ CWorldServer: `ctor` 0x589ED0, `Init` 0x58AE10, `Done` 0x58B020, `Reset` 0x58B60
 0x5942C0, `ReplicateToPlayer` 0x58B750, `SendZoneState` 0x58C890, `SendPlayerPosition` 0x58CBB0, `WriteUnitHashes` 0x58C4F0,
 `FlagAllPlayers` 0x58B6D0, `BroadcastGameTime` 0x58D280, `BroadcastMsg0B` 0x58D340, `UpdateEnvironment` 0x58CCD0,
 `SetWeatherMode` 0x58CC80, `CWorldServer::SetCaveFlag` 0x58CC70, `SetRain` 0x58EE00, `SetWind` 0x58EE20, `SetTime` 0x58EEA0,
-`SetTimeScale` 0x58EEE0, `GetHeight` 0x594220, `GetTerrainCell` 0x58A390, `FindObjectById` 0x593AA0, `FindPlayerById` 0x594180,
+`SetTimeScale` 0x58EEE0, `GetHeight` 0x594220, `GetSurfaceHeight` 0x58A390, `FindObjectById` 0x593AA0, `FindPlayerById` 0x594180,
 `CreateObjectFromDesc` 0x5927C0, `RemoveObject` 0x5935C0, `RemoveAllObjects` 0x596C60, `RemoveAllUnits` 0x5939E0,
 `AddEffectObject` 0x58E520, `RemoveEffectObject` 0x58E5D0, `CastSpell` 0x58E670, `CastSpellMulti` 0x58E850, `LoadZone` 0x595480,
 `NewZone` 0x595C70, `LoadMapObjects` 0x596030, `World_LoadAIGraphStream` 0x596140, `SeparateStaticObjects` 0x5951A0, `LoadMob`

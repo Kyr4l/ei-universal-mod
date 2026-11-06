@@ -167,11 +167,13 @@ Gap `+0x38..+0x44` is never written or read [V]. The record is exactly 0x120 byt
 | 0 | Name | +0 | CString |
 | 1 | Physical Piercing / Shashing / Bludgeoning, Elemental Termal / Chemic / Electric, Other General | +8 | float[7] (armor tier 1) |
 | 2 | the same "2" columns | +0x24 | float[7] (armor tier 2) |
-| 3 / 4 | Unk3-0 / Unk4-0 | +0x40 / +4 | int |
+| 3 / 4 | Unk3-0 / Unk4-0 | +0x40 / +4 | int: cripple mask / part kind |
 
 `Unit_InitStatsFromProto` 0x5136D0 / `Hero_InitStatsFromProto` 0x513DA0 index `g_0x7AF3B8` by the slot's resolved index to build the
-body part armor tiers (combat.md 5: `+0x110` parts, 3 tiers of 7 values); the slot's Weight / Vitality give the part's hit weight and HP
-fraction [I].
+body part armor tiers (combat.md 5: `+0x110` parts, 3 tiers of 7 values); the HitLocations row gives the part kind (`+4`, Unk4 -> part `+0`) and the cripple mask
+(`+0x40`, Unk3 -> part `+4`); the unit's own slot record {HL Type, -, Weight, Vitality} gives the HP fraction (Weight -> part `+0xEC`) and
+the penalty / healing rate (Vitality -> part `+0xF0`) [V, 0x5136D0, corrected 2026-11-06: neither is a hit weight; the hit location
+comes from a fixed 20-slot table, combat.md].
 
 ### 3.4 NPC (`UdbNpcRecord` 0x60; was "HeroRecord", which collides with the party record) [V]
 
@@ -237,7 +239,7 @@ from text by `QuestsDb::ParseQuestReg` 0x6AE8E0 (was QuestsDb_ParseIni; `this` =
 | 7 | complete quests | +0x38 | vector<CString> | quest ids completed (= 2, "brief_complete_quest") |
 | 8 | available zones | +0x44 | vector<CString> | zones made reachable (named value = **1.0**) |
 | 9 | complete zones | +0x50 | vector<CString> | zones completed (named value = 2.0) |
-| 10 | - | +0x68 | int | specials text: when > 0 the briefing dialog (`DialogScreen` 0x604C50, at 0x605862) prints the text key `brief_get_specials_<N>` [V]; display only, the server never reads it [I] |
+| 10 | - | +0x68 | int | specials text: when > 0 the briefing dialog (`DialogScreen` 0x604C50, at 0x605862) prints the text key `brief_get_specials_<N>` [V]; display only, the server never reads it [V, whole-exe index: the only reader] |
 
 ParseQuestReg appends a quest / briefing only when its name is new (`BriefingTable_AddUnique` 0x6B0600; quests: map lookup first), so
 quests.qdb entries win over quest.reg duplicates [V]. Readers: the quest log rewards (`CQuestLogWin::FillObjectives` 0x64DC60:
@@ -538,7 +540,7 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 * `Scene3ds_BuildFigures` 0x46F1F0 (10 KB): a 3DS -> CFigure converter never reached by the game [untestable].
 * ~~Particle world block~~ settled [V]: `CWorld +0x24` windDir (3 floats) + `+0x30` windStrength = the wind (SetWind, net message 0x72) copied into `CParticle +0x140`. The `LAB_` emit / step bodies (~40 per-type callbacks without function symbols) stay unread.
 * ~~3D pan zeroed~~ settled [V] from the machine code (0x6B8215..0x6B8243): `pan +0x18 = round(...)`, then `neg` when the cross product is negative, then `ret`: there is NO zeroing (decompiler artefact). 3D sounds are panned +-100.
-* Reverb `+0x8a8..+0x8b0`: set by `CSoundManager::SetReverbParams` 0x6B69E0, whose only caller is `CWorldClient::LoadZone` 0x567AB0 (per zone) [V]. The XMIDI sequence player (`+0x1cc..`): never started by the code read [I].
+* Reverb `+0x8a8..+0x8b0`: set by `CSoundManager::SetReverbParams` 0x6B69E0, whose only caller is `CWorldClient::LoadZone` 0x567AB0 (per zone) [V]. The XMIDI sequence player (`+0x1cc..`) can never run [V]: `SequenceStart` 0x6BBC70 has no caller, `SequenceThreadProc` 0x6BBCB0 no reference, and the thread handle `+0x1D8` is only zeroed (`InitFields`).
 * ~~`CSoundDesc +0x70` and the use of SOUND_RANGE2 / MIN / MAX~~ settled 2026-11-06 [V, machine code 0x5931CC..0x593304 in `CreateObjectFromDesc`]: a plain sound (`CEffectSound` 0x48) plays the **first** wave of the list, with `+0x24C` (min range) = float(RANGE `+0x68`) and `+0x250` (max range) = float(RANGE2 `+0x6C`); MIN / MAX are not used. An ambient sound (`CEffectSoundSeq` 0x49) takes the whole wave list, `+0x160 / +0x164` = RANGE / RANGE2 and `+0x168 / +0x16C` = MIN / MAX. `CSoundDesc +0x70` is set to 1 by the ctor and never read, loaded or saved: a dead field.
 * Bug candidates from the 2026-11-06 deep read (not fixed; not in docs/SpellAddonInfo.en.md):
   - `LoadSample` 0x6B89F0 with `decompressMp3` (dialog speech, `DialogScreen` 0x604C50 -> `Play2D(.., 1)`): on a cache **hit** the
@@ -549,7 +551,7 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
     from the centre to one side [V code; audible check in the live list].
 * Music markers (`Markers1` / `Markers2`) are read with `CFileRegistry::GetFloatArray` but compared as integers with the frame
   positions [V]; harmless today (no shipped track has them), but a modder adding markers must write the raw float bits of the frame
-  number, or the switch / loop points never trigger [I].
+  number, or the switch / loop points never trigger [V: `GetFloatArray` copies the floats as they are and 0x6BB020 compares them as ints].
 
 ## 10. Corrections to earlier notes
 

@@ -343,7 +343,11 @@ quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip 
 
 State on 2026-11-06, after the offline pass that closed the pages' "What is not known" lists and the live sessions that
 settled every row of `_cpr/claude-re/full/live-checklist.tsv` (the results are tagged `[V live ...]` on the pages). What is left
-is **untestable** (no code path reaches it in the shipped game) or a field that no code reads.
+is **untestable** (no code path reaches it in the shipped game) or a field that no code reads. The last 55 `[I]` (inferred) claims were
+re-checked against the machine code the same evening with a whole-exe disassembly index (`_cpr/claude-re/full/tools/xindex.py` +
+`xq.py`; log `full/i-claims.tsv`): 39 confirmed, 16 corrected (among them `GetBSZValue` works and returns the water surface height, the
+body-part Weight / Vitality columns, merchant 5 = Rick, the camp's icon caches, the spell id sequence that is always 0, the sound-sequence
+loop bit, and a new 2DintMMX alpha bug, bugs.md 25). The only `[I]` tags left quote old claims in the corrections tables.
 
 Per page:
 

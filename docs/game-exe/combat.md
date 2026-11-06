@@ -45,7 +45,7 @@ Addresses are VAs; offsets are bytes. "tick" = the server world tick `CWorldServ
 | distances | metres; reach = own radius `CUnit +0x32C` + target radius + weapon range `CItemWeapon +0x58` (natural `stats +0x70`) [V] |
 | damage types | index 0..6 = impaling, slashing, crushing, thermal ("termical"), chemical, electrical, general (log strings in `UnitStats_ApplyDamage`) [V] |
 | hit locations | 0 head, 1 torso, 2/3 arms (log "LHand"/"RHand"), 4/5 legs, 6 = any / whole body [V] (`TakeHit` log table, `PickHitLocation` pairs) |
-| weapon kinds (`CItemWeapon::GetDamageKind` 0x6A07F0 = weapon proto +0xC) | 0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow, 8 natural/unarmed [I]; the attack kind mask `1 << kind` selects the animation set |
+| weapon kinds (`CItemWeapon::GetDamageKind` 0x6A07F0 = weapon proto +0xC) | 0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow [V]; without a weapon the unit's natural attack kind (`UnitStats +0xAC`, proto +0x78) is used, and any value >= 7 gives mask 0 (the unarmed set, 0x5474B0); the unit data holds 3, 5, 8 (the human heroes) and 16 (bats, mages) [V, databaselmp]; the attack kind mask `1 << kind` selects the animation set |
 | random | ISAAC words `g_0x7A9D48[g_0x7A9D44]` (`rand % n`); the hero damage/accuracy use CRT `rand()` |
 | difficulty | `g_0x79BEC0` indexes two float tables: 0x7C54A0[] scales the armor of non-player targets, 0x7C54AC[] scales the natural attack skill of monsters (both 1.0 at static init) [V] |
 | stats constants (`AiInfo_StaticInit` 0x5CDFB0) | 0x7C5454/68 = 25, 0x7C5458/6C = 30, 0x7C545C/70 = 50, 0x7C5460/74 = 1.1, 0x7C5464/78 = 1.61, 0x7C5488 = 200, 0x7C548C = 1.61, 0x7C543C/40/4C = 0.5, 0x7C5448 = 0.33, 0x7C549C = 0.3, 0x7C5438 = 100 (turn mult), 0x7C5430 = 3.0 (backstab base) [V]; they are fields of the AiInfo block 0x7C53F8 (0x7C5454 = +0x5C HP_Val_1 ... +0x6C HP_Val_5, 0x7C5468.. = MP_Val_1..5, Skill_Val, Perk_Power_Base, Consider_*), overridden at load by aiinfo.res [RPG] (`AiInfo_Load` 0x5CE0F0, unit-ai.md 3.1) [V, 2026-11-03] |
@@ -539,7 +539,9 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 
 * `UnitStats +0x48` (Skills Peripheral, proto +0x94) **is read**: `StimulusMap::SeeUnits` 0x5CA5A0 uses it as the peripheral vision
   range (observer `CUnitServer +0x228` = stats +0x48) [V]. `CItemWeapon +0x4C` (hit[7]) and `UnitStats +0x8C` (Tuning Actions, proto
-  +0x5C) have no reader in an offset search of the decompiles: write-only [I].
+  +0x5C) are write-only [V, whole-exe disassembly index 2026-11-06: `UnitStats +0x8C` has no read at all; `CItemWeapon +0x4C` is
+  read only by its Equals / CloneInto / Write and by `CItem::GetScriptId` 0x4BA040 when a weapon sits in a unit's quest-item list
+  `+0x4A0`, which no shipped map does (all 34 listed items are quest items)].
 * The max HP "cap" is a floor: `max(1.0, x)` (section 5) [V].
 * The pow in `MaxHP` / `MaxMana`: `1.1^(log(exp/50)/log(1.61))`; 0x6E81A0 is `_CIpow`, not atan2 (renamed in `batch-t3.tsv`) [V]. The
   constants are the AiInfo HP_Val / MP_Val rows, overridable by aiinfo.res [V].

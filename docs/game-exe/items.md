@@ -53,7 +53,7 @@ Addresses are VAs; offsets are bytes; "slot N" = virtual slot N (offset N*4) of 
 | kind / typeId | `+0x10` kind 0x3004..0x3009 (the object kind the manager creates, `CItemManager::CreateByKind` 0x6AC810); slot 12 typeId 0x11 weapon, 0x12 armor, 0x13 quick, 0x14 quest, 0x15 loot, 0x16 spell container [V] |
 | item id | `+0x18` = `protoRow << 16 \| materialId & 0xffff`; the low word is the Materials "ID" column (every table lookup indexes the vector with it, so ID must equal the row) [V: `ApplyProto`] |
 | tables | `g_0x7C86D8` materials (begin) / `0x7C86DC` (end), stride 0x50; `0x7C86F8/FC` weapons 0xb4; `0x7C8718/1C` armors 200; `0x7C8738/3C` quick 0x8c; `0x7C8758/5C` quest 0x7c; `0x7C8778/7C` loot 0x78; every reader tests `row < (end-begin)/stride` and carries a NULL record on when it fails (`docs/game-exe/item-tables.md`) [V] |
-| spell tables | `g_0x7C8510` spell protos (0x84 stride, name map 0x7C851C), `0x7C8530` perks / spell modifiers (0x24, map 0x7C853C), the three S_* filter tables `0x7C8550` S_Spells, `0x7C855C` S_Armors, `0x7C8568` S_Weapons (0x34 records, `+0x30` per-player mask) [I] |
+| spell tables | `g_0x7C8510` spell protos (0x84 stride, name map 0x7C851C), `0x7C8530` perks / spell modifiers (0x24, map 0x7C853C), the three S_* filter tables `0x7C8550` S_Spells, `0x7C855C` S_Armors, `0x7C8568` S_Weapons (0x34 records, `+0x30` per-player mask) [V: spells.sdb blocks 3 / 4 / 5 -> loader 0x684550 -> these vectors; users AddSpellContainers / GenerateItems] |
 | weapon types | proto `+0xc`: 0 sword 1 axe 2 dagger 3 spear 4 hammer/club 5 bow 6 crossbow (model prefixes sw ax dg sp hm bw cb) [V: `GetModelName`] |
 | armor types / slots | proto `+0xc` = equipment slot: 0 helmet (hl) 1 plate (pl) 2 legs (lg) 3 shield (sh) 4 pants (pt) 5 boots (bt) 6 gloves (gl); tier 2 for 0..2, tier 1 for 3..6 (`CItemArmor::GetArmorTier` 0x6A31A0) [V] |
 | quick item subtypes | QuickItems "ItemID" `+0x6c`: 2 consumable (order 10), 5 charged magic item (uses its mana: the vanilla `wand 1..6`, Type `wand`, with a material), 8 spell container (uses charges `+0x48`: the vanilla potions, Type `scroll`, and the `spell container` row) [V: `CanAffordSpell`, `QuickItemUsability`, `GenerateItems`; data: vanilla database.xlsx QuickItems] |
@@ -449,7 +449,7 @@ A missing section leaves name and description untouched (no fallback text); the 
 
 * `CItemWeapon +0x4c`: saved and compared, never written after the ctor (-1; 0 in 1.mp files written by older code) [V]: a dead field. `ItemMaterial
   +0x24` Skill and the proto bytes `+0x78`, `+0x7d..`, `+0xbc..`, `+0x83..`: no reader found in this round.
-* ~~The runtime `CStringArray +0x20 / +0x50`~~ settled [I] (2026-11-03): nothing fills them. The only typed accesses are the
+* ~~The runtime `CStringArray +0x20 / +0x50`~~ settled [V] (2026-11-03; every caller of the CStringArray fill methods checked 2026-11-06): nothing fills them. The only typed accesses are the
   proto constructors (0x6A63B0, the database loader 0x6A5D60), the copy (0x6A8F20 `CStringArray::Copy`) and the destructors; no
   `Add` / `SetAtGrow` on either array anywhere. So item slot 18 (`GetProtoText0`) yields "" for armor (it checks the count) and
   element 0 of an empty array for weapons (`CItemWeapon::GetProtoText0` 0x6A0F70 does not check): a leftover of an unused

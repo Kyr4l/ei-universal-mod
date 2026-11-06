@@ -236,7 +236,9 @@ Per direction: `outStream` GameBuffer `+0x112c` (bytes queued by `PeerMsgStream:
   created through the factory when unknown (an unknown ref makes a blank object: the "Player  is offering you a swap" symptom).
 - The 11 groups: lobby objects use group 2 (server) / 1 (client, and the server's file chunks); the group only orders the walk in
   `SendUpdate` (higher group first) and lets `GatherReplicated` keep a chunk list separate. [V]
-- `NetPeer::Clone` 0x433060 copy-constructs the whole 0x1168 (never called by the lobby [I]).
+- `NetPeer::Clone` 0x433060 copy-constructs the whole 0x1168 and is dead [V, 2026-11-06]: its only reference is NetPeer vtable slot 3
+  (0x73BF44, the copy-on-write clone of the reference holders), and a peer is held in one place only, the list node that
+  `NetConnection::AddPeer` makes once for a fresh peer (held bit `+6` clear), so the clone never fires.
 
 ### 3.9 Timers, rates and limits (summary)
 

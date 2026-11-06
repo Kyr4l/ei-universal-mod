@@ -180,8 +180,8 @@ The game holds it twice: `CD3DLibrary +0x10` / `g_0x7AF06C` (textures, shadows) 
 |---|---|
 | 1 | `SetPixelFormat(mode, a, r, g, b masks)`: mode 0 the 16-bit opaque format, 1 = 555, 2 = 1555 (masks and shifts). Each mode also sets a "standard masks" fast-path flag and clears it on the next line, so slot 2 always takes its generic path (only a speed loss) |
 | 2 | `ConvertRow32To16(dst, src, mode, count)`: ARGB -> 565 / 555 / 1555 by those masks, mode 3 = 4444 |
-| 3 / 4 | palette blend `dst = (dst * w2 + palette[i] * w1) >> 8`, saturated; 4 = the same with separate byte planes, 128 x 128 pixels [I] |
-| 5 | alpha "over" `dst = src + dst * (255 - src alpha) >> 8` (premultiplied), a flag picks a second variant (`ComposeLayers` isPNT3) [I] |
+| 3 / 4 | palette blend per channel `dst = ((dst * w2 + palette[i] * w1) mod 65536) >> 8` (triples {w1, w2, index}, 4 pixels per loop; the 16-bit sum wraps and nothing saturates: exact when w1 + w2 <= 256); 4 = the same with three byte planes, 0x4000 pixels (128 x 128) [V, MMX read 2026-11-06] |
+| 5 | alpha "over" `dst = sat(src + (dst * (255 - src alpha) >> 8))` (premultiplied), 4 pixels per loop [V]. Flag 0: **pixel 0 of each group of 4 uses the alpha of pixel 1** (byte +7 instead of +3: a one-pixel alpha smear, bugs.md 25). Flag 1 (`ComposeLayers` isPNT3): own alphas, and a group whose first source pixel has alpha 0 and a non-zero dword is a skip record (dst += that many bytes, src += 4: the transparent runs of PNT3) [V, MMX read 2026-11-06] |
 | 6 | premultiply `rgb *= a / 256` |
 | 7 | 2 x 2 box downsample (the mip chain of composed textures) |
 | 8 / 9 | triangle fill into a 16-bit target, flat / textured (the unit shadow bitmap; 9 is dead: docs/shadows.md) |
@@ -258,7 +258,7 @@ without one the call is a plain locked `DrawIndexedPrimitive`. With one (materia
   handle 0 + the first `stagesPerPass` records; every further pass k = handle k + **one** record (index stagesPerPass + k - 1) bound
   to stage 0 only; one `DrawIndexedPrimitive` per pass; the three states restored at the end.
 Stats per draw: `+0x16C` += vertex count, `+0x170` += indexCount / 3, `+0x174` += 1. (With pre-transformed vertices D3D7 does no texture
-coordinate generation, so a TCI mode in a record would not work here [I].) The only material this module sets
+coordinate generation, so a TCI mode in a record would not work here [V: every draw is FVF 0x1C4 = XYZRHW; texture-coordinate generation is part of the D3D7 vertex pipeline].) The only material this module sets
 is the object's `textureBlend` (+0xDC, the wounds overlay); the materials proper (`CMaterial`, kinds 17..25) belong to the materials page.
 
 ### 2.5 Surfaces and formats [V]
@@ -308,7 +308,7 @@ The three renderer-built primitives (deep read 2026-11-06 [V]):
   Two triangles per segment; in the clipped mode a segment is drawn when at least one end has outcode 0. Drawn by
   `CRenderDevice::DrawIndexedTriangles` with SRCBLEND SRCALPHA / DESTBLEND ONE (**additive**), the previous blend states restored.
 - **`DrawParticleQuads`** 0x502CA0 (slot 17; additive flag, points {0x10-byte xyz + size, n}, records {colour, uv rect*}): batches of
-  at most 511 points; pipeline vt[24] with the **transpose** of stack 2's top builds four corners per point (size scaled by w [I]),
+  at most 511 points; pipeline vt[24] with the **transpose** of stack 2's top builds four corners per point (half size = size * rhw * half viewport width: divided by w, square in pixels [V, 3DfpFPU slot 24]),
   with outcodes; each corner: diffuse = the record's colour, specular 0xFF000000, uv = the rect `{u0, v0, u1, v1}` corners (u0 v0,
   u1 v0, u1 v1, u0 v1). Quads whose first corner has a negative z are dropped, the rest **sorted by that z** (float bits as integers:
   **descending** = far quads first, back to front [V, corrected 2026-11-06]: up to 128 quads a strided bottom-up merge sort
@@ -535,7 +535,7 @@ call, `DrawFigure` (slot 14 = `Render`) with constant colours.
   (`+0x100` holds range squared, compared with d^2) adds the normalised light -> object vector times `(1 - +0x104 * d^2) * (0.3 r + 0.6 g
   + 0.1 b)` (x10 with light flag 0x800); any other light (the sun) adds that luminance times its direction `+0xD4..+0xDC`. The sum is
   normalised; when `atan(|z| / horizontal) < 20 deg` z becomes `-0.36397 * horizontal` (tan 20 deg, downward). The test uses |z|, so a
-  steep sum pointing **up** (a strong light below the object) is kept and the shadow would be cast upward [I]. Parts with a squared
+  steep sum pointing **up** (a strong light below the object) is kept [V]; `Shadow_BuildLightProjectionMatrix` 0x4F1440 projects onto the ground plane (`x - (vx / vz) z`), so the shadow still lies on the ground, mirrored to the light's side [V, corrected 2026-11-06: not cast upward]. Parts with a squared
   position > 1e10 or flag 0x80 are left out of the silhouette. The receivers come from `CWorldClient::BuildShadowReceiverMesh` with
   bridge check 0 and "objects" = no part of the caster has bounds flag 0x400 (`BASE`, walkable), so unit shadows are also laid on bridge
   parts. Its first step, `ShadowProjector::Build` 0x4D8000 [V] (deep read 2026-11-06; the full clipper is `terrain-lighting.md` 10.3):
@@ -582,7 +582,7 @@ between frames: every frame the drops are regenerated from a hash of the grid ce
 - Snow flake = the flake centre is transformed once and the triangle is built **in clip space** (so it shrinks with distance):
   x - 0.1 / x + 0.1 / x, y - 0.06 / y - 0.06 / y + 0.14, uv (c, 0.5), (c + 0.25, 0.5), (c + 0.125, 0.74); kept when the outcode is 0.
 - Draw: SoA blocks in the scratch `+0x38` (0x8000 blocks reserved), pipeline vt[9] on stack 2 into `+0x28` with codes `+0x4C`, the
-  kept `VertexTL`s in `+0x70`, pipeline vt[32] over them (the clip-to-screen step: the snow offsets are applied before it) [I], vt[35]
+  kept `VertexTL`s in `+0x70`, pipeline vt[32] over them (the clip-to-screen step: the snow offsets are applied before it) [V: the snow copy loop ends at 0x4E54E3, slot 32 is called at 0x4E55AF], vt[35]
   when `device +0x158`, then one locked `DrawIndexedPrimitive(TRIANGLELIST, 0x1C4, ..., indices +0x84, 3 per triangle)` straight on the
   D3D device (no material, no `DrawIndexedWithMaterial`), with the same stats. The diffuse / specular dwords `+0x10 / +0x14` [V, corrected live 2026-11-06]: the per-frame copy loops (rain 0x4E4A48..0x4E4B02, snow 0x4E53D4..0x4E54E3) write only the xyzw and the uv; the colours are written once, when the buffer `+0x70` grows, by `CVertexScratch::Reserve` 0x4E3C20 (diffuse 0xFFFFFFFF = opaque white, specular 0xFF000000, default uv). Live (rain started with `CWorldServer::SetRain(1, 30)`): all drop vertices white / 0xFF000000, no write to them in 4 s. vt[35] (vertex fog, when the device fog flag `+0x158` is set) lowers the specular alpha with `min(old, 255 - f)` and nothing raises it again, so a drop vertex once fogged would stay fogged (fog was off in the test). At most 81 x 81 = 6561 drops per frame.
 
@@ -730,7 +730,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
   renderer's DrawFigure (vt[14]) by `CI3DFigure::Draw` 0x5E6D90; the UI quad figures get the widget's `+0xEC quadMaterial`
   (kind 0x16, colour 0,0,0) from `AddQuadMesh` / `UIUnitPreview::GetOrCreatePortrait` 0x5ECA10. The three 1.0 floats at
   `CFigureClientSpecific +0x30..+0x38` are written only by `Init` 0x5A70E0 and read nowhere (class methods and raw `+0x30`
-  accesses through `CFigure +0x94` checked): dead [I].
+  accesses through `CFigure +0x94` checked): dead [V, whole-exe index 2026-11-06: the other `+0x30` reads in the class go through other objects].
 - ~~CStateBlockSet slot 6~~ settled [V]: `GetEffectRecords` 0x4FDBC0 / `GetDefaultEffectRecords` 0x4FDD80 copy the records OUT of the registry (getters; guess sweep 2026-11-01).
 - `LoadFigFile2` 0x4F9E50 is a live path [V]: reached from `CRenderManager::GetOrCreateFigure` 0x4F75E0 (call at 0x4F7721) and it calls `BuildFigureMeshB / C` 0x4F9FD0 / 0x4FA670 (0x4F9F90 / 0x4F9FB3). Deep read 2026-11-03 [V]: `LoadFigFile2(scene,
   archive or 0, name, s, d, h)` opens `<prefix><name>.fig` from the given archive, or searches every archive of `+archives` when none is
@@ -789,7 +789,7 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | `functions.tsv` (`RenderShadow` 0x51CE60), `docs/shadows.md` item 1 | "recomputed every frame for units, every ~8 frames for static objects (age rule)" | recomputed only when the object is dynamic (flag 0x200 clear), its lighting cache was invalidated (`(flags & 0x600) == 0x200`) or the specific's flag 8 is set (after a real relight); no frame-count rule (3.6) |
 | `renderer.md` 3.4 step 6 | "the union rect -> owner `+0x100`" every draw | only when a rect pointer is passed: `CMapObject` slot 23 (levers, units); slot 22 (buildings, trees, the rest) passes none. `+0xEC` is `timeGetTime()` and is written, with specific flag 8, only after a real relight |
 | `functions.tsv` (`Mesh_ComputeBounds2D_C` 0x4E8900) | "projected 32-byte vertices" | the 16-byte transformed positions {x, y, z, rhw} of `g_0x7AEE10` |
-| `structs.tsv` `CWeather` | `+0x48 / +0x5C / +0x80` "MFC map", `+0x1C` "refcounted object" | MFC arrays: outcodes (data `+0x4C`), texture columns (`+0x60`), indices (`+0x84`); `+0x1C` = the RainSnow texture holder; `CRenderDevice +0x158` = the per-vertex fog switch [I] |
+| `structs.tsv` `CWeather` | `+0x48 / +0x5C / +0x80` "MFC map", `+0x1C` "refcounted object" | MFC arrays: outcodes (data `+0x4C`), texture columns (`+0x60`), indices (`+0x84`); `+0x1C` = the RainSnow texture holder; `CRenderDevice +0x158` = the per-vertex fog switch [V, 2.2 slot 35] |
 | `renderer.md` 3.5 step 3 (deep read 2026-11-06, ren-b) | "`+0x148` = ambient << 24" | the specular array is the **edge-fade alpha argument** << 24 (unless material flag 0x10); the colour triple given to vt[40] is the material's `+0x50..+0x58`; the "crown" rule needs `FloraSpecialLight` (AppSettings `+0xB8`, default 1) and an exact name match |
 | `renderer.md` 3.5 step 6 | flag 0x40 after every draw | a scene-less part in `RenderLit` gets flag 0x40 only when an out RECT is passed; scene parts and `Render` set it whenever not culled |
 | `renderer.md` 4.5 (ren-a), `modules.md` / `functions.tsv` (0x44A2A0) | `Material_ParseName` parts are "upper-cased" and compared with "upper-case strings" | they are **lower-cased**: `CString::MakeUpper` 0x700EFE is really `MakeLower` (it calls 0x6EC8A8 = `_mbslwr`, LCMAP_LOWERCASE 0x100) and `MakeLower` 0x700EEC is `MakeUpper`; the 25 strings are lower-case (table in 4.5). Every one of the 35 "MakeUpper" callers lower-cases |
