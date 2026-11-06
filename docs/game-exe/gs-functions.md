@@ -283,8 +283,8 @@ Areas (`AddRoundToArea`, `AddRectToArea`) are records of the VM (GSWorld+0x198) 
 
 | id | name | kind | params | handler | behaviour | st |
 |---|---|---|---|---|---|---|
-| 0x9A | CreateParty | command | fs | Run 0x4B868B | CreateParty(player, name): PartyStore::AddParty(name) on the global party store (g_0x7AA5A0+0x24) when the player exists; the player argument is only checked, the store is global. | V |
-| 0x9B | RemoveParty | command | fs | Run 0x4B86D7 | RemoveParty(player, name): PartyStore::RemoveByName(name). | V |
+| 0x9A | CreateParty | command | fs | Run 0x4B868B | CreateParty(player, name): PartyList::AddParty(name) on the global party store (g_0x7AA5A0+0x24) when the player exists; the player argument is only checked, the store is global. | V |
+| 0x9B | RemoveParty | command | fs | Run 0x4B86D7 | RemoveParty(player, name): PartyList::RemoveByName(name). | V |
 | 0x9C | SetCurrentParty | command | fs | Run 0x4B8723 | SetCurrentParty(player, name): stores the name in the party store's current-party string (+0xC). Names containing "::" ("Store::Hero") are resolved by ScriptParty_Resolve: the part before "::" selects the party, the rest is the hero name; the current party (g_0x7AA5D4) maps to the player's own party (+0x70). | V |
 | 0x86 | AddUnitToParty | command | fss | Run 0x4B856C | AddUnitToParty(player, "Party::HeroRes", protoRes): ScriptParty_Resolve then CParty::AddHero(modelName = HeroRes, protoName = protoRes, display name ""): appends a hero record (0x784 bytes, id +0x1C = hash of the model name). | V |
 | 0x87 | RemoveUnitFromParty | command | fs | Run 0x4B8604 | RemoveUnitFromParty(player, "Party::HeroRes"): CParty::RemoveHeroById(String_HashCI(HeroRes)). | V |

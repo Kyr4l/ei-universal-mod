@@ -74,7 +74,7 @@ access violation instead of the intended FatalError text); not reachable with va
   `0x513E0A test esi,esi` (-> FatalError "Can't find prototype (%s) for new HERO").
 - The single caller CParty::InitHeroFromProto 0x6621F0 (`0x66227E call 0x513DA0`) does its own `0x662251 call 0x5144D0` and reads
   `0x66225D mov eax,[esi+8]` with no check, so a bad name faults at 0x66225D before Hero_InitStatsFromProto runs. That function's only
-  caller is CParty::AddHero 0x6628D0 (from PartyStore::ResetToDefault, the mission script op 0x86 in SSCScript::Run, Console_Join,
+  caller is CParty::AddHero 0x6628D0 (from PartyList::ResetToDefault, the mission script op 0x86 in SSCScript::Run, Console_Join,
   CWorldServer::OnMercenaryEvent, SpawnSingleHero, camp screen).
 - Reachable only with a mod / mission script / save naming a hero prototype that is not in units data. Vanilla: no. Fix value: a clean
   error message for modders, nothing more.
@@ -208,12 +208,12 @@ named in the claim do not produce null. Effect: none with vanilla scripts; a cra
 
 - CParty::FindHeroById 0x6621B0 starts with `mov edx,[ecx+0x34]`, so a null party is an access violation at 0x34.
 - ScriptParty_Resolve 0x4BAEC0 returns null only for a null player object (already excluded: both cases test FindPlayerById first)
-  or when PartyStore::FindByName 0x4A5E10 returns 0:
+  or when PartyList::FindByName 0x4A5E10 returns 0:
   - Name without "::": the store name stays "" and is compared with the current store name g_0x7AA5D4; equal (the normal case) -> the
     player's own party +0x70; else FindByName("").
   - Unknown store name: FindByName falls back to the entry named g_0x79B298 (the shared "" literal) (`0x4A5E71 mov eax,ebx` returns that
-    default). PartyStore::ResetToDefault 0x4A5BD0 always creates that ""-named party (single and multiplayer session start).
-  - So 0 only when the store has no ""-named entry: after a script `RemoveParty(player, "")` (op 0x9B -> PartyStore::RemoveByName,
+    default). PartyList::ResetToDefault 0x4A5BD0 always creates that ""-named party (single and multiplayer session start).
+  - So 0 only when the store has no ""-named entry: after a script `RemoveParty(player, "")` (op 0x9B -> PartyList::RemoveByName,
     `0x4B8719`), or a save whose store lacks it.
 - Vanilla use (plain-text scripts in `drive_c/Evil Islands/maps`): bz13h `CopyStats(0, "HeroAlone::Hero", "Hero")` and back, bz7g
   `CopyStats` / `CopyItems(0,"Hero","JunParty::JunBoy")`, zone15 `CopyStats(0,"HeroAlone::Hero","Hero")`; all resolve (HeroAlone /
