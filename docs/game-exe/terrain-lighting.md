@@ -487,7 +487,7 @@ SoA position / normal arrays +0x1C0 / +0x1D0, index arrays, per-vertex colour ar
 horizon table +0x220). `CSkyObject::Recolour` 0x4D9360 (through `CSky::Recolour` 0x4D9DE0 from `UpdateDayLight`, 0x566633 indoor /
 0x566B9C outdoor, with the hour's colours): the horizon table (`sqrt(-normal.z)` for vertices whose position z >= 1, else 0) is
 rebuilt when the vertex count changed; a horizon-ring vertex gets diffuse `(r g b, alpha 0)` and specular 0, every other vertex
-diffuse `0xFF r g b` and the second colour; the dome fades into the fog colour (render globals +0x14) at the horizon. The dome
+diffuse `0xFF r g b` and the second colour; the dome fades into the fog colour (render globals +0x14) at the horizon. The colours [V, machine code 2026-11-06]: `UpdateDayLight` passes (sun direction, `CWorldClient +0x6BC`, the sun colour `+0x6CC`, the hour's fog colour); the diffuse rgb is `+0x6BC`; the second colour (`+0x148`, the specular dword) is a **sun glow**: rgb = sun colour x 150 x max(0, normal . sun direction)^2, alpha = the vertex's horizon factor x 255. The dome
 mesh itself is the figure `nask0sky.fig` (0x562F70), `Sky00` / `Sky01` per zone (`LoadZone`) [V].
 
 ## 8. Fog of war: `CVisibilityFog` / `CVisFogManager` [V]
@@ -675,7 +675,7 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
 * ~~`TraceSunRay`'s double slope~~ settled from the machine code (4.3), 2026-11-03; retail never runs the trace.
 * Which of the two periodic water changes (sine band, tile cycle) the user's 0.8 s stripes are (5.4): [live] (`EnableWaterWaves = 0`; live-checklist.tsv).
 * Whether the water pass's state block lets the material alpha through (5.5) and the exact blend of the water pass: [live] (live-checklist.tsv).
-* ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. The second colour array (+0x148, "specular") beyond the per-hour colours stays open.
+* ~~Sky dome figure~~ settled [V]: `nask0sky.fig` (0x562F70), with the `Sky00` / `Sky01` variants chosen by `CWorldClient::LoadZone` 0x567AB0. ~~The second colour array (+0x148)~~ settled 2026-11-06: a sun glow (section 7, `CSkyObject::Recolour`) [V].
 * ~~`CTextureManager::LoadTextureFromRegistry` 0x691BF0~~ settled 2026-11-06 [V], renamed `TakeFromReleaseCache`: it creates
   nothing. It looks in the released-texture cache list `+0xC0` for a texture of that kind and name; a hit is unlinked, its size
   `+0x28` leaves the cached-bytes counter, it gets a new id (`RegisterWithNewId`) and `IDirectDrawSurface7::SetPriority(100)`; a
