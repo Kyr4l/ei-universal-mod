@@ -341,56 +341,52 @@ quad helpers and the RIPEMD-128 / big-number code. A re-implementation can skip 
 
 ## Known gaps
 
-Per page, the open items that matter most for the mod work:
+State on 2026-11-06, after the offline pass that closed the pages' "What is not known" lists. What is left is either a **live**
+check (the behaviour on screen or on the network; rows in `_cpr/claude-re/full/live-checklist.tsv`) or **untestable** (no code
+path reaches it in the shipped game).
 
-- world-server.md: `+0x12E00 staticObjectStream` is filled and never read. (Settled: zone kind 3 = the 16 `bz*` allod bases,
-  the hour formula, the save header dwords +120 / +124, `CWorld +0x5C` / `+0x60`.)
-- world-client-players.md: nothing open: 0x0C's sender is dead code, 0x12 / 0x19 have senders (script SendEvent, the dialog
-  screen). (Settled: 0x54 CBuilding / 0x5D CLeverObject, the 0x40 record read in full 2026-11-03, the 0x73 water levels.)
-- combat.md: nothing open for the mod work: order kind 10 is dead code (no reference), the player `+0x108` cheat level only
-  replaces the hit record. (Settled: the full 0x0B unit event code list, the max HP floor `max(1, x)`.)
-- unit-ai.md: brain +0x44 / +0x48 / +0x4C and `FollowLimit` / `normal.dat` are written, saved and loaded only (no reader); the
-  .mob Wait (`MobLogicSlot +0x30`) is unused, the alarm wait is always 75 (a live check confirms it). Sleeping-unit activation:
-  world-server.md 4.3; the `+0x5120` party modes: world-client-players.md 7.
-- pathfinding.md: nothing open except live checks (`FindUnitsNear` corner miss); `Vec2Q64`, `RotateSpeedMult`, the portal tables
-  (the corridor re-plan), `CUnit +0x274` and the wait shift are settled.
-- spells.md: the buff `+0x10` flag byte is never read; shapechange and comprehend have no server script. (Settled: the sound
-  sequence "modes" are random next-file pickers; no fresh sequence numbers are generated; `SpellProto +0x48 / +0x54 / +0x60`.)
-- items.md: nothing open (the proto runtime `CStringArray`s are never filled). Dead / unread: `CItemWeapon +0x4C`,
-  the material Skill column, several proto byte fields, `CInventory`.
-- renderer.md: `3DfpFPU.dll` reversed 2026-11-07 (2.2a: the 45 pipeline slots, clip codes, the clipper, fog, particle quads, the
-  six lighting kernels; the game never computes specular); 28 unused slots only classified;
-  which objects load the alternate node tracks is a live check. (`LoadFigFile2` and `BuildFigureMeshB / C` read 2026-11-03: copies
-  of the two mesh builders.)
-- terrain-lighting.md: which periodic water change the 0.8 s
-  stripes are (test with `EnableWaterWaves = 0`); the water pass blend mode (inherited from `RenderObjects`: a live check). (The
-  MMP extra block is never read; the sky figure is nask0sky.fig: settled.)
-- ui-framework.md: `CamCtlClassic` / `CamCtlSimple` are dead; several static-init globals are unexplained. (`InitQuadUV`, the
-  console handlers 0x5DD920-0x5E0A10 (now defined) and the map.txt zone record are settled.)
-- ui-screens.md: nothing open. (Settled: the camp screen layouts, tooltip ids = text keys `tip N`, `GetMagicTotals` = a quotient,
-  the options are saved to the registry at exit.)
-- script-vm.md: the auto-id counters are `+0x68` (lightnings and particle sources, shared) and `+0x6C` (sound sources) (settled 2026-11-06); a failed `.mob` compile is silent; `GetBSZValue` reads a stale vtable slot (undefined on the server).
-- gs-functions.md: `CreateFXSource` vs `CreateFX` differ only in `CEffectSound +0x254`; (the sound-source respawn loop's test is
-  inverted: a game bug, `CreateRandomizedFXSource` never plays; one-byte fix at 0x4BF161, settled 2026-11-03); `HideObject` / `BlockUnit` /
-  `ActivateTrap` flip flags without `MarkNetDirty` (InflictDamage settled 2026-11-06: its own hit record carries only electrical damage n, so it removes at most n HP minus the
-  unit's electrical armour, always hits and gives no XP).
-- data-sound.md: RaceModels `+0x158..` (Unk47..50) have no reader; the bodies of the 60 particle emit / step callbacks are not
-  described one by one (defined and named 2026-11-03). (Settled: the loot fields have no gameplay reader, the 3D pan is not zeroed (decompiler artefact), the XMIDI
-  player is dead code, the reverb is set per zone by `LoadZone`, the Levers fields.)
+Per page:
+
+- world-server.md: nothing open (settled 2026-11-06: the `LoadSave` stuck-unit fix-up, the previous-state records, `Quest +0x10`,
+  the loot owner check, the mercenary dialogs, why `bz7g` is kept, the `.mp` flag byte).
+- world-client-players.md: nothing open offline (`CUnit +0x256` is a 0 / 1 miss flag, `UnitProto +0xB0` is Detections Sight);
+  live: the bridge receiver triangles drawn once per walkable quad.
+- combat.md / unit-ai.md: nothing open offline; live: online kill XP, the floating damage colour on monsters, the alarm wait on a
+  map with a set Wait.
+- pathfinding.md: live: the `FindUnitsNear` corner miss for radii 16..32 m (the arithmetic is verified).
+- spells.md: the buff `+0x10` flag byte is never read; shapechange and comprehend have no server script; the campfire that never
+  ends is design (bugs.md #16).
+- items.md: nothing open (`CloneItem` settled).
+- renderer.md: nothing open offline (settled 2026-11-06: rain / snow vertex colours are never written, the figure flag 0x200 is
+  write-only, particles are sorted back to front, the alternate animation tracks can never load, the scene refcount holders, the
+  texture kinds); live: the stun pulse, the in-place re-morph, the rain / snow colours on screen.
+- terrain-lighting.md: live: which water change makes the 0.8 s stripes, the water pass blend. (Settled 2026-11-06: the visible
+  terrain is a +-100 m square around the camera's ground point (`SetVisibleArea`; `SetVisibleQuad` is dead), the sky's second
+  colour is a sun glow, the released-texture cache.)
+- ui-framework.md: nothing open (the info panels' `Format` arguments, the font sizes, the cursor compose operands and square
+  cursor frames settled 2026-11-06); `CamCtlClassic` / `CamCtlSimple` are dead.
+- ui-screens.md: nothing open offline (settled 2026-11-06: NPC portraits are quest item icons, shops re-roll after each
+  `QuestComplete`, `Exchange(a, b, c)` = partner offer / our offer / our party, the hero creation limits, the master request id,
+  one exit per talk zone, the battle HUD branches); live: a possible sun square on the minimap rim, a fresh addrbook id.
+- net-transport.md: the delta codec bases are settled (A = creation state, B = last sent state); the master server's reply is
+  untestable (no master exists).
+- script-vm.md / gs-functions.md: nothing open (no `CArchive` is ever made, so every MFC `Serialize` path is dead;
+  `CreateFXSource` loops and `CreateFX` plays once; randomized sound sources never play without the um-engine patch).
+- data-sound.md: RaceModels `+0x158..` (Unk47..50) have no reader; the 60 particle emit / step callbacks are named but not described
+  one by one. (Settled 2026-11-06: the sound descriptor fields, `Quest +0x10`.)
 
 Global:
 
-- 66 functions in functions.tsv are still tagged `guess` (a `?` in the name or purpose); the `Protection_*` functions near the stat
-  scramble are among them.
-- The CRT, MFC 6 and STLport region 0x6E0000-0x73B000 (1657 functions) and the STLport leaf module 0x405000-0x40C000 carry library
-  names only where they were recognised; the rest are generic.
+- Every one of the 13,881 functions in the database has a settled name (no `guess` left since 2026-11-06). Five small code blocks
+  have no function entry in the database (Ghidra missed them); they are described on their pages: 0x41F270 (the lobby's
+  confirmed-exchange handler, ui-screens.md 6), 0x50AAA0 / 0x50CB30 (unreachable animation track loaders, renderer.md 6), 0x5A7140
+  (an unreferenced figure flag wrapper) and 0x6CA170 (the unreferenced `SetVisibleQuad` wrapper).
+- The CRT, MFC 6 and STLport region 0x6E0000-0x73B000 and the STLport leaf module 0x405000-0x40C000 carry library names where
+  they were recognised.
 - Editor leftovers are named but not read as code paths: the 3ds import / figure export 0x447000-0x453000, `Scene3ds_BuildFigures`
-  0x46F1F0, the old `.ani` animation loaders 0x505410-0x508D30, the terrain editing and `.sec` writer functions in 0x6C3000
-  (`TerrainSector_Pack`, `SaveModifiedSectors`, `SetVertexHeight` ...), the script decompiler `GSWorld::Decompile` 0x4D53C0 and the
-  five one-list `Compiler_*` entry points, the dead vertex-buffer path of the renderer, `CamCtlClassic` / `CamCtlSimple`,
-  `OnMsg38_Unused` and the ten script ids with no `Run` case.
-- `net-transport.md` is being written; until it lands, net-notes.md and flows.md "Network receive" are the only map of
-  0x411000-0x444000 and 0x474000-0x481000.
+  0x46F1F0, the old `.ani` animation loaders 0x505410-0x508D30, the terrain editing and `.sec` writer functions in 0x6C3000,
+  the script decompiler `GSWorld::Decompile` 0x4D53C0 and the five one-list `Compiler_*` entry points, the dead vertex-buffer path
+  of the renderer, `CamCtlClassic` / `CamCtlSimple`, `OnMsg38_Unused` and the ten script ids with no `Run` case.
 
 ## Coverage
 
