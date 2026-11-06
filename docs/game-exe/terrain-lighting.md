@@ -634,7 +634,7 @@ one-shot chance %}`. Retail values (read from the exe):
 | 6 | water | 3.0 | 6 | | 14 | swamp | 3.0 | 7 |
 | 7 | road | 3.0 | 6 | | 15 | rock | 1.25 | 4 |
 
-Every redirect is -1; the pan limits are the **ints** 30 / 100 (8, 13, 14, 15, 4, 6 = 100). One pass:
+Every redirect is -1; the pan limits are the floats 30.0 / 100.0 (8, 13, 14, 15, 4, 6 = 100.0). One pass:
 
 1. Listener `P` and forward `F` from the sound manager (g_0x7AF784 +0x250 / +0x25C); listener sector `(sx, sy) = round(P) >> 5`.
 2. For the 3 x 3 sectors around it (`GetSector(x, y, 2, 1)`; a missing one counts as type -1): centre `c = ((x + 0.5) * 32,
@@ -653,8 +653,8 @@ Every redirect is -1; the pan limits are the **ints** 30 / 100 (8, 13, 14, 15, 4
    `SetChannelVolume(handle, volume, pan)`; a new one starts `Play2D("ambient\<world>\<type>\circle.wav", priority 1000, volume,
    pan, loop)`; slots whose type is no longer kept are stopped; the kept types / handles are stored.
 
-Two quirks [V, machine code]: the pan limit is loaded with `mov eax, [ecx*8 + 0x7969E0]; fld dword` (0x6CB804), i.e. the int 30
-/ 100 is read as a float (4e-44 / 1.4e-43), so every pan clamps to 0: the terrain loops are always centred. And the one-shot count
+One quirk [V, machine code + shipped data] (an earlier "int pan limit read as a float" claim of the same day is refuted: the bytes
+at 0x7969E0 are `0x41F00000` = 30.0, a real float, so the loops do pan): the one-shot count
 comes only from the `day` folder (Load counts `ambient\<world>\<type>\day\<i>.wav`), while the other day-times have their own
 numbers of files (vanilla `sfx.res`: Ingos Ice / Snow / SnowBall have 15 day files but 3 night files, Gipat grass 16 / 19), so at
 night most Ingos one-shots name a missing file (nothing plays) and some Gipat night files are never used [I from the shipped
@@ -704,7 +704,7 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
 | this page 10.3 (wcp-net cross note, checked) | "the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code"; `RenderShadowVolume`, `DrawQuadBatchClippedB` | the branch is live: bridge quad owners' parts receive prints and shadows (no per-owner de-dup [I]); the functions are `CWorldClient::BuildShadowReceiverMesh` 0x56C750 and `CRenderDevice::DrawTrianglesTransformed` 0x4EA4A0 |
 | this page 11 + `structs.tsv` AcksAnswer +0xC / +0x1AC | "sound-kind ids 0..0x18; ids 0x16..0x18 have no list"; +0x1AC `linesShopYes` | the id map covers ack ids 0..0x2A (Answers), 0x2C / 0x2D (Others), 0x2E..0x32 (Cryes), table in section 11; +0x1AC holds 0x2C-byte hit-sound records used for id 0x29 |
 | `functions.tsv` CString::MakeUpper 0x700EFE / MakeLower 0x700EEC, `_strupr` 0x6EC8A8 / `_strlwr` 0x6EC81E | the names | swapped: 0x700EFE (35 callers) lower-cases (`_mbslwr`, LCMAP_LOWERCASE), 0x700EEC upper-cases (no caller) |
-| `functions.tsv` 0x6CB390 purpose / this page | ambient loops "pan from the listener's forward vector" | the pan limit is an int read as a float, so every terrain ambient loop is centred (section 11b) |
+| `functions.tsv` 0x6CB390 purpose / this page | ambient loops "pan from the listener's forward vector" | correct; the pan is clamped to the record's float limit `+0x10` (30.0 or 100.0; checked in the exe bytes 2026-11-06: not an int read as a float, as a same-day draft said) (section 11b) |
 
 ## 14. Function index
 

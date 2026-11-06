@@ -13,7 +13,7 @@ Nothing here was run in the game (the work was static); statements about "what t
 
 > **2026-11-01:** the VM / compiler side is now [script-vm.md](script-vm.md) (lexer quirks: identifiers are cut at the longest command-name prefix, number literals are floats; GSWorld error state is +0x1EC text / +0x1F0 code / +0x1F4 line; group iteration order; the ten commands with no Run case; GetBSZValue of section 5 resolved: a stale vtable slot). Where this page disagrees, that one is right.
 >
-> **2026-11-06 deep read** of `SSCScript::Run` / `EvalFloat` / `Tick` and the compiler: `InflictDamage` corrected (n electrical damage, not 7 x n), no `,` between statements or conditions, no script parameters in `For` bodies, `CopyStats` / `CopyItems` crash on an unresolved party; full list in section 7.
+> **2026-11-06 deep read** of `SSCScript::Run` / `EvalFloat` / `Tick` and the compiler: `InflictDamage` corrected (n electrical damage, not 7 x n), no `,` between statements or conditions, no script parameters in `For` bodies, `CopyStats` / `CopyItems` fall back to the default `""` party for an unresolved name (they crash only once a script removed that party); full list in section 7.
 
 ## 1. How a script runs
 
@@ -574,7 +574,7 @@ Honest list of what the code read here does not settle:
 - **Separators**: commas separate arguments and declarations only. Statements and the conditions of an `if` are written one after the other; a `,` between them is a compile error (3 / 9), which, in a `.mob`, silently drops everything from that point on (script-vm.md 4).
 - **For / ForIf** bodies cannot use the parameters of the enclosing `Script` (compile error 7); use a `GlobalVars` variable instead.
 - **PlayMusic** works only while that player's client music system is in zone mode; the client appends `.mp3` to the name and plays it as a forced track.
-- **CopyStats / CopyItems** crash the game (access violation) when a party name cannot be resolved (missing `::` or an unknown party); `AddUnitToParty` / `RemoveUnitFromParty` silently do nothing in that case.
+- **CopyStats / CopyItems**: a party name without `::` or an unknown party resolves to the default `""` party, not to null (verified 2026-11-06, `full/t5-bugs.md` 11), so they act on that party; only after a script removed the `""` party does `CParty::FindHeroById(this = 0)` crash. `AddUnitToParty` / `RemoveUnitFromParty` silently do nothing when nothing resolves.
 
 ## 7. Corrections to earlier notes
 

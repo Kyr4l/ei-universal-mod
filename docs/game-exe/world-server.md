@@ -187,8 +187,10 @@ player's own units); `CWorldClient::CreateHeroUnits` 0x5699C0 is the camp / menu
 
 Consequences [V]: a slot keeps only the zone files of the current allod (and `bz7g`); the zones of an allod left behind are
 forgotten at the next save or load (their `zs.` flag is cleared, so a later visit would be a first visit). A slot's `mission.sav`
-keeps the temporary spell effects of the live zone (the cast list, save chunk 11), while a `<zone>.sav` written on a zone change
-has them stripped by `ResetUnitEffects` first.
+keeps the units exactly as they are, while a `<zone>.sav` written on a zone change first goes through `ResetUnitEffects`, which
+**refills the limb HP** of every living unit (`UnitStats_FillParts` 0x525AF0: body parts with state > 1 get HP = max, crippled parts
+stay) and recomputes its stats (`CUnitServer` slot 19, refreshMax 0): the units of a zone you leave are rested when you come back.
+It does not touch spells (corrected 2026-11-06, `full/t5-bugs.md` 7).
 
 `Session_ReadMissionSave` 0x579E60: `MpFile::ReadContainer`, version < 0x52 `CCamera::Read`, < 0x47 the UI stream, then
 `CWorldServer::LoadSave(stream, 0)`. The version written is `g_0x790260` (0x74); the reader takes the compressed path when the
@@ -511,7 +513,7 @@ rebuilt by `NewZone(mpr, mob, AIGRAPH stream, fromSave = 1)` ("CWorldServer::Loa
 (rate, hour), `+0x100 = 1`, `CAIMap::EndBatch`, `+0x172 = 1`, collects the units standing on cells without a passable neighbour
 (`CAIMap::HasPassableNeighbour`; the list is built and not used [?]) and calls `ReleaseAllObjects` on the four managers;
 `Session_EnterZoneFromParty` runs the catch-up afterwards. `WriteSave` starts with `BroadcastGameTime` in zone kinds 1 / 3 and
-`ReleaseAllObjects` on the managers. Temporary spell effects are stripped by `ResetUnitEffects` 0x5956E0 only in
+`ReleaseAllObjects` on the managers. The limb-HP refill `ResetUnitEffects` 0x5956E0 runs only in
 `Session_SaveZoneToCurrent` (zone change), not in `WriteSave` itself nor in `Session_SaveToSlot` (2.5). The zone kind **is** saved
 (chunk 4) and restored into `+0x12d64`; `Game_EnterZone` writes the same value again through `g_0x7C2CC4` after the load.
 
@@ -724,7 +726,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | world-server.md 2.4 / summary (T5 deep read 2026-11-06) | visited flag `z.<zone>`, last visit `<prefix><zone>`; catch-up `clamp(gtime - last, 0, 1000)` ticks | the variables are `zs.<zone>` (= 1) and `zt.<zone>` (= gtime); catch-up `min(1000, (gtime - zt) * 100)` ticks: 100 ticks per game hour away (x87 `fmul 100.0` at 0x57A506) |
 | world-server.md 2.1 / 4.3 | activation radius `min(sight x mult, life-sense) * 2 + 20` | `max(...)`: the branch-free select at 0x58E0A5..0x58E0D0 keeps the larger value (as the replication radius already said) |
 | world-server.md 2.5 | `scenario.sav` = UI stream, camera, party store; every visited zone file is copied | order = party store, `CInterface` save state, embedded UI stream, camera (writer and reader agree); only zones of the current allod (and `bz7g`) are copied, the others lose their `zs.` flag |
-| world-server.md 4.8 | `ResetUnitEffects` runs before every save; "the zone kind itself is not saved" | `ResetUnitEffects` is called only by `Session_SaveZoneToCurrent` (a slot's `mission.sav` keeps the temporary effects); the zone kind is written and read back into `+0x12d64` (0x59716E) |
+| world-server.md 4.8 | `ResetUnitEffects` runs before every save; "the zone kind itself is not saved" | `ResetUnitEffects` is called only by `Session_SaveZoneToCurrent` (a slot's `mission.sav` keeps the units as they are; the function refills limb HP, it does not drop spell effects); the zone kind is written and read back into `+0x12d64` (0x59716E) |
 | world-server.md 4.8 row 15 | per player: `+0xfc`, party, tracked items, byte `+0x108`, (`+0x120`), list `+0x118` | `+0xfc`, party, dword `+0x100`, loose item ids of the CList `+0xe0`, byte `+0x108` godMode, the synced id list `+0x114` (count `+0x120` + ids) |
 | world-server.md 4.4 | 0xAA01 = objects (0x68) | 0xAA01 = light descriptors (0x68, kind 2); objects are 0xB001 (`CObjectDesc` 0x8c); 0xCC01 sound 0x88, 0xDD01 particle 0x5c, 0xBBBF0000 torch 0xa0 |
 | world-server.md 2.3 / 2.6, functions.tsv 0x57BDF0 | `SetRestrictFlag(record +0x30)` | `SetCaveFlag` 0x58CC70 (`#sky cave`); `Session_HostMpZone` also renames every exit target to "MPGame1" and loads the quest `.mob` only with a live lobby server |

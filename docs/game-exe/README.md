@@ -319,6 +319,14 @@ Conventions shared by all pages:
 - Every page ends with "What is not known", "Corrections to earlier notes" and a function index; the batch rows behind a page are
   `_cpr/claude-re/full/batch-<page>.tsv` and `batch-<page>-structs.tsv`.
 
+## Bugs (`bugs.md`)
+
+`bugs.md` lists the 23 bug candidates of the 2026-11-06 deep read with a second, machine-code verification each: 17 confirmed
+(most cosmetic or unreachable), 4 refuted, 2 design. The ones that matter in the shipped game: the multiplayer decompressor
+trusts the packet's length (remote crash, #8), a long chat line can corrupt the heap (#13, needs a modified client), a dialog voice
+line played a second time is silent (#14), ambient one-shots only pan to one side (#15), most Ingos night one-shots name missing
+files (#19), and a Universal Mod save with a new weapon / armour blueprint crashes the vanilla game when the item is shown (#21).
+
 ## Dead code (`dead-code.tsv`)
 
 842 functions (182 KB; 552 / 152 KB in the game code below 0x6E0000, 290 / 30 KB in the libraries) can never run: no absolute
@@ -385,4 +393,4 @@ Global:
 
 ## Coverage
 
-Coverage (13881 functions): named 13864, guess 17.
+Coverage (13881 functions): named 13862, guess 19.
