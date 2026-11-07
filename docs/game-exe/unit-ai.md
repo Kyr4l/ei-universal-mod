@@ -637,7 +637,7 @@ Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
     `CUnitServer::InitSubobject20` 0x54EAC0 is `MoveRequest::InitCellList` (the stack MoveRequests of the AI path checks).
 
 Non-AI code in this module's address range (0x5DA000-0x5E2000, deep-read 2026-11-06, documented on their own pages): `Movie_PlayIntro` 0x5DA400 is
-really the loading-video **step** (`Movies\progres.bik`, proposed `Movie_StepProgress`), `Movie_PlayProgress` 0x5DA880 the looping loading video,
+really the loading-video **step** (`Movies\progres.bik`, proposed `Movie_StepProgress`), `Movie_PlayProgress` 0x5DA880 the looping loading video (dead [V]: only the unregistered dead_5DAD50 starts it as a thread),
 `Movie_PlayFile` 0x5DB3F0, `Cursors_Register` 0x5DAEA0 (the called-shot cursors `cursor_attack_hd/bd/lh/rh/ll/rl`), the console 0x5DC620-0x5E00D0
 (ui-framework.md 4.7; `filter` sets the log mask `g_0x7C7B68`: 1 AI, 2 EVENT, 4 GRAPHICS, 8 RPG, 0x10 UNITACKS, 0x20 NET) and
 `CFlyingHitPoints::Draw` 0x5E18E0 (combat.md 8).

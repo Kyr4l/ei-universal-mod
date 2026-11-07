@@ -4171,3 +4171,10 @@ CTorchObjectClientSpecific	CTorchObjectSpecific		0x5c	CParticle*	effect	the fire
 CTorchObjectClientSpecific	CTorchObjectSpecific		0x60	int	soundHandle	looping sound handle (CSoundManager::Play3D)
 PerksDb		0x18	0x0	vector	groups	0x18-byte perk-group / skill records {CString +0, CString +4, int +8, vector<CString> +0xC}; global g_0x7AF268 (PerksDb_Init 0x51FB10)
 PerksDb		0x18	0xc	vector	perks	0x44-byte perk records (PerkRecord::SerializeFields); g_0x7AF274 = begin, g_0x7AF278 = end
+CBinkVideo			0x0	pointer	surface	refcounted CDXDirectDrawSurface the frames are copied into (CBinkVideo::Open; released by Close / Close2)
+CBinkVideo			0x4	int	binkSurfaceType	_BinkDDSurfaceType(surface +0x10), passed to _BinkCopyToBuffer
+CBinkVideo			0x8	RECT	destRect	blit target on the back / front buffer: native size centred (g_0x79BCBC == 1) or full width with the aspect height (CBinkVideo::Open)
+CBinkVideo			0x18	pointer	bink	HBINK from _BinkOpen; Frame returns LastFrameNum (+0x10) < Frames (+8) of it
+LogStream	streambuf	0x454	0x4c	uint	mask	log category mask (LogStream::Ctor)
+LogStream	streambuf	0x454	0x50	CString	text	collected text, sent to CInterface::ConsoleAddText and emptied by sync (slot 1)
+LogStream	streambuf	0x454	0x54	char[0x400]	buffer	the streambuf put area (streambuf::streambuf(this, +0x54, 0x400))
