@@ -213,6 +213,15 @@ the end of the text:
 The two token strings are `#` (`0x78DCFC`) and `##` (`0x78DCF8`) [V, bytes read 2026-11-06]. DBCS lead bytes are
 honoured (`GetMbChar`, `_mbsinc`).
 
+Readers [V, T7 g07]: every entry of texts.res is its own text (`OpenText("quest 12")`, `GetString(key)` opens the entry
+`"string " + key`, e.g. `string action_accel`, and falls back to the key itself). `PeekWord` 0x4DF770 (was `ReadWord`) returns the
+next word **without moving the cursor**; `SkipLine` moves past the next LF; `SkipLineAndComments` 0x4DF510 (was
+`SkipToSectionEnd`) skips the rest of the line and the following `##` lines. `ReadLineValue(out, advance)` = the rest of the
+line up to LF / CR; `ReadLines(out, advance)` 0x4DFCB0 = **one** line split into words (spaces / TABs); `ReadUntilHash(out,
+advance)` = everything up to the next `#`, line breaks included. With `advance != 0` the first two then skip the line and the
+`##` lines after it, `ReadUntilHash` leaves the cursor on the `#`; with 0 the cursor stays. The archive list `+0x1C` methods are
+`TextArchiveList::Add / Remove / Clear / OpenFile / ListFiles` (0x4DE930..0x4DEC40).
+
 `CSysInfo::CollectInfo` 0x4DDF28 (`CSysInfo::Init`, vt 0x73D644 slot 2): `GetOsInfo`, `GetSystemInfo` (+0x50), `GetMemoryStatus`
 (+0x30), `DetectCpuFeatures`; flag `+8 |= 8`; platform `+0x84`: 0 -> "Windows 3.11/Win32s" (flag 0x20), 1 -> "Windows 95" (flag 0x40) or,
 build `+0x80` low word >= 1998, "Windows 98" (flag 0x80), 2 -> "Windows NT" (flag 0x100), else "UNKNOWN OS" / "UNKNOWN VERSION" (flags
@@ -779,6 +788,8 @@ Deep-read round 2026-11-06 (30 functions; wrong -> right):
 | this page 5.8 | `UIUnitPreview::Render` draws into a render-target texture for the inventory / trade; `GetOrCreatePortrait` = unit portraits; `PickFaceFigure` only picks a name "by prototype" | `Render` draws the camp hero straight into the frame after a depth clear; `GetOrCreatePortrait` draws the 3D item icon of a slot (rename `DrawItemFigure`); `PickFaceFigure` draws the face figure, the sex test is equality on the model name (rename `DrawFaceFigure`) |
 | decompiles | one name `CString::operator_LPCSTR` | two functions: 0x700AF9 assigns, 0x700D4C appends (rename `operator_plus_assign_LPCSTR`) |
 | this page (case folding) | "upper-cased" for the names folded by 0x700EFE | lower-cased: 0x700EFE (misnamed `CString::MakeUpper` until 2026-11-06) calls `_mbslwr` (LCMAP_LOWERCASE); the real MakeUpper 0x700EEC has no caller |
+| this page 2.7 / `functions.tsv` (T7 g07) | `ReadWord` reads the next word; `SkipToSectionEnd` skips to the section terminator; `ReadLines` reads lines until a terminator; `ReadUntilHash` skips whitespace | `PeekWord` never moves the cursor; `SkipLineAndComments` skips one line plus the `##` lines; `ReadLines` reads one line into words, arg 2 = advance flag; `ReadUntilHash` copies everything up to `#` |
+| `functions.tsv` (T7 g07) | `CTextManager::ClearArchives / FindInArchives`, `TextArchiveList::Add` on the manager | methods of the archive list `+0x1C`: `TextArchiveList::Clear / OpenFile`; `CloseAllArchives` 0x4DEDE0 and `HasFile` 0x4DECE0 are dead |
 
 ## 8. Function index (one line each; the full purposes are in `batch-ui.tsv`)
 
@@ -790,8 +801,8 @@ Application: `main` 0x456440 WinMain; `App_MessageBox` 0x4560D0; `App_LoadMapAnd
 `LoadBoth` 0x45EA00 / `dtor` 0x45E6F0; `NamedFloatMap_Get / Set / Remove / Read` 0x460AF0 / 0x460BC0 / 0x460DB0 / 0x460FE0;
 `IsHeroId` 0x4613A0; `Net_TickAll` 0x4122D0; `GSWorld::GetLastError` 0x456360.
 
-Text / system info (2.7): `CTextManager::OpenText` 0x4DEFC0, `CloseText` 0x4DF020, `SeekSection` 0x4DF030, `SkipToSectionEnd`
-0x4DF510, `SkipLine` 0x4DF6E0, `ReadWord` 0x4DF770, `ReadLineValue` 0x4DF8D0, `ReadLines` 0x4DFCB0; `CSysInfo::Init` 0x4DDF05,
+Text / system info (2.7): `CTextManager::OpenText` 0x4DEFC0, `CloseText` 0x4DF020, `SeekSection` 0x4DF030, `SkipLineAndComments`
+0x4DF510, `SkipLine` 0x4DF6E0, `PeekWord` 0x4DF770, `ReadLineValue` 0x4DF8D0, `ReadLines` 0x4DFCB0; `CSysInfo::Init` 0x4DDF05,
 `CollectInfo` 0x4DDF28.
 
 Key bindings: `KeyBindings_Load` 0x462C10, `Save` 0x462DF0, `FindKeyByAction` 0x462F70; `DInput_Create` 0x65EAD0, `DInputMouse::

@@ -655,6 +655,8 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 | functions.tsv | `SSCVars::AssignValues` 0x4B3900 "the four value CArrays copied"; `SSCVars::AppendNumbers` .. `WriteGroups` 0x4C2B70..0x4C4330 take an SSCVars | `SSCVars::Append`: the parsed `GlobalVars` (cleared) are *appended* to `GSWorld +0xA0`; the Append / Read / Write / Clear helpers act on one `SSCVarBlock` (renamed `SSCNumberBlock_*`, `SSCStringBlock_*`, `SSCObjectBlock_*`, `SSCGroupBlock_*`) [V, T7 g06] |
 | functions.tsv | `SSCCmdArray_DestroyAll` 0x4B2D60 | `qsort(data, count, 4, 0x4B2D80)`: sorts a group by pointer (used after `SSCGroupBlock_Read`) [V, T7 g06] |
 | gs-functions.md 3.4 / 5 / 6, scripting.md, README.md | `InflictDamage` = KillUnit's `Hit_Init` record with [8] / [9] / [11] changed, "up to 7 x n HP" | own record: electrical weight [5] = 1.0 only, [8] 100, [9] n, [10] 1, [11] 1, `TakeHit` (CUnitServer vt[20]) direct; at most n HP; a spell-type hit (gs-functions.md 7) |
+| functions.tsv | `GroupCList_RemoveHead` 0x4C8AF0, `ObjRefCList_RemoveHead` 0x4C9100, `ObjRefCList_AddTail` 0x4C9210 | `RemoveTail` / `RemoveTail` / `AddHead` (they use the tail `+8` / link before the head): `GSWorld::Reset` / `ClearTempResults` pop the temp pools from the tail [V, T7 g07] |
+| functions.tsv | `SSCScriptDecl::CopyCtor` 0x4CB460, `SSCScript::CopyCtor` 0x4CB570, `SSCCmd_CopyCtor2` 0x4CCAA0 | `SSCScriptDecl::Assign` / `SSCScript::Assign` (into constructed objects); 0x4CCAA0 = `SSCCmdBindingsCArray_CopyBindingAt` [V, T7 g07] |
 
 ## 11. Function index (address, name, one line)
 

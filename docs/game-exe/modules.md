@@ -596,9 +596,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004D6340 | 153 | DefineList_Clear | (this = define CList vt 0x73D4C0): every node's two CStrings destroyed, the blocks freed. Was StringPairList_Clear |
 | 0x004D6C50 | 148 | ClipBuf::AddVertex | (float[5] x y z u v) -> index: x / y / z into the SoA xyz array (descriptor +0: blocks of 16 floats = x[4] y[4] z[4] pad[4]; vertex n at block n >> 2 lane n & 3), (u, v) into the uv array (+4, 8 bytes each); count +0x74++; no vert... |
 | 0x004D6CF0 | 105 | ClipBuf::AddTriangle | (v0, v1, v2 float[5]): 3 x AddVertex + 3 ushort indices into the index array +8 (count +0x78) |
-| 0x004D6BA0 | 92 | CTorchObjectSpecific::~CTorchObjectSpecific | vt_CTorchObjectSpecific; Done, releases CString +0x24, base dtor 0x455930 |
+| 0x004D6BA0 | 92 | CTorchObjectSpecific::~CTorchObjectSpecific | fastcall (this): vt = vt_CTorchObjectSpecific, CTorchObjectSpecific::Done, the CString at +0x24 destroyed, base dtor InitVtable_73B8E0_455930. Caller the deleting dtor |
 | 0x004D6840 | 79 | DefinePair_ConstructN | (pairs of 8 {CString name, CString value}, n): both = the empty string g_0x796E48. Was StringPairArray_Construct |
-| 0x004D68B0 | 41 | Quat_StaticInit_Identity3 | sets global quaternion g_0x7AA670 to (1,0,0,0) |
+| 0x004D68B0 | 41 | Quat_StaticInit_Identity3 | static initializer (pointer in the init table at 0x7832CC): g_0x7AA670..0x7AA67C = (1.0f, 0, 0, 0), a file-static identity quaternion |
 | 0x004D65B0 | 40 | SSCCmdBinding_GetAt | (this = binding CArray, index, out {type, slot, varIndex}): the record copied out. Was Record0C_Get |
 | 0x004D6310 | 35 | DefineList_ctor | (this, grow) -> this: empty CList vt 0x73D4C0 of 0x10 nodes {next, prev, CString name, CString value} (the "#define" table of one compile). Was CArray_Ctor_73D4C0 |
 
@@ -618,7 +618,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004D89A0 | 557 | ClipBuf::Finish | xyz count = ceil(v / 4) blocks, index count = the real count, unused lanes filled with vertex 0, the three array pointers detached (the arrays belong to the caster / decal) |
 | 0x004D8780 | 531 | ClipBuf::ReserveForTriangles | (k): n = 3k: uv array count = v + n (8 B each), xyz blocks = v + n/4 + 1 (64 B), indices = i + n (2 B): the count fields are SET to the reserved sizes (Finish trims them) |
 | 0x004D9880 | 530 | Matrix4_Mul | (out, a, b): row-major 4x4 product out = a * b (matrix stacks of the render context: world +0x24, view +0x1C) |
-| 0x004D8EB0 | 411 | ByteVector_Resize | (this, n, fill byte*): vector<byte>::resize(n) (shrinks or inserts fill bytes) |
+| 0x004D8EB0 | 411 | ByteVector_Resize | (this = vector<byte> {begin, end, eos}, n, fill byte*): n < size -> end = begin + n; else inserts n - size fill bytes at the end (in place when capacity allows: move + memset pattern, else Bytes_InsertNRealloc). Callers CString_Sc... |
 | 0x004D96E0 | 403 | CSky::Render | (this = sky holder, ctx, cameraPos): the sky figure (+0) is placed at (camera x, y, z - 16), spun about Z by Game_GetTimeSum() / 3000 rad when +0xC, its matrix +0x54 rebuilt (Quat_ToMatrix4) and pushed on the context's world stack... |
 | 0x004D85F0 | 381 | ShadowProjector::ClipTriangleB | same for object triangles (scratch g_0x7AA690; the dead object-receiver branch) |
 | 0x004D9110 | 344 | CSkyObject::ctor | CFigure-style construction (CObject3D base, vt_CFigure then vt_CSkyObject): the figure's aligned SoA arrays (+0x128.., positions +0x1C0, normals +0x1D0, +0x1E0, index arrays +0x1F0 / +0x200 / +0x210, horizon table +0x220) zeroed, ... |
@@ -629,20 +629,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004DAE30 | 389 | BufferedFile_ReserveWindow | vt 0x73F8A4/0x73F8C8 slot 0 (this, n): grows the window buffer to n + 0x400 bytes, copying the old contents |
+| 0x004DAE30 | 389 | BufferedFile_ReserveWindow | slot 0 of vt 0x73F8A4 (FILE stream) and 0x73F8C8 (abstract base) (this, n): window smaller than n -> a new window of n + 0x400 bytes (old contents copied, cursor / valid end re-based), dirty data flushed (slot 8) and the window re... |
 | 0x004DA200 | 381 | GameBuffer::ReadLength | (this, out string range, max): reads the 1/4-byte variable-length prefix and then the string bytes (assigns a std::string) |
 | 0x004DA380 | 196 | GameBuffer::WriteLength | (this, range{begin,end}*): writes the range length as a 1-byte (n*2) or 4-byte (n*2+1) variable-length prefix, then flags dirty bit 1 |
-| 0x004DABC0 | 188 | GameBuffer::InitWithSize | (this, valid size, capacity): allocates `capacity` bytes, cursor +8 = start, +0x10 = start + size, +0x14 = 0 |
+| 0x004DABC0 | 188 | GameBuffer::InitWithSize | (this, valid size, capacity): dirty bit cleared, a buffer of capacity bytes, cursor = start, end = start + capacity, valid end = start + valid size, file offset 0; (a flush branch that cannot run since the dirty bit was just clear... |
 | 0x004DA040 | 182 | dead_4DA040 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004DAD80 | 162 | dead_4DAD80 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004DA740 | 161 | GameBuffer::WriteGrow | slot 4 (data, n): reallocates to (length + n) * 2 + 0x40, rebases +8 / +0x10 / +0xc, copies n bytes at the cursor +8 and advances it (the overflow path of the inline write). Was GameBuffer::Write |
-| 0x004DA9E0 | 156 | GameBuffer::CopyCtor | (this, src): allocates and copies the source buffer, copies cursor and limits (7 callers) |
-| 0x004DACE0 | 149 | BufferedFile_SeekAbs | (this, offset): flushes the dirty window, reads a new window at the absolute file offset (vt slot 7) and fixes the cursor |
+| 0x004DA9E0 | 156 | GameBuffer::CopyCtor | (this, src) -> this: +0x14 = 0, vt 0x73D624, a new buffer of src capacity (end +0xc - buffer +4) with the contents copied, valid end +0x10 and cursor +8 at the same offsets as in src, flags +0x18 copied. Callers NetPeer::Clone, Ne... |
+| 0x004DACE0 | 149 | BufferedFile_MoveWindow | (this = buffered file {vt, window +4, cursor +8, window end +0xc, valid end +0x10, window file offset +0x14, flags +0x18 (1 dirty, 8 error), FILE* +0x1c}, file offset): flushes the dirty window (vt slot 8), reads min(valid end - c... |
 | 0x004DA860 | 139 | GameBuffer::Seek | slot 6 (pos): valid end +0x10 = max(valid end, cursor); cursor +8 = data + pos, growing the buffer (x2 + 0x40) when pos is past the capacity |
-| 0x004DA170 | 138 | GameBuffer::Read | (this, dest, n): zero-fills dest, copies n bytes from the buffer (via refill through vt slot 3 on underrun); sets error flag 8 on short reads (14 callers) |
+| 0x004DA170 | 138 | GameBuffer::ReadOverrun | (this = GameBuffer {vt, buffer +4, cursor +8, buffer end +0xc, valid end +0x10, file offset +0x14, flags +0x18}, dest, n) -> bytes read: the out-of-line path the inline readers take when cursor + n passes the valid end: flags /= 8... |
 | 0x004DAB40 | 125 | dead_4DAB40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x004DAFC0 | 125 | BufferedFile_GrowWindow | vt 0x73F8A4/0x73F8C8 slot 1 (this, n): grows the window buffer to n + 0x400 bytes and rebases the cursors |
-| 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): reallocates the buffer for pending data + n * 2 + 0x40 |
+| 0x004DAFC0 | 125 | BufferedFile_GrowWindow | slot 1 of vt 0x73F8A4 / 0x73F8C8 (this, n): window size <= n + 0x400 -> a new window of n + 0x400 bytes, old contents copied, cursor +8 and valid end +0x10 re-based (no file I/O) |
+| 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): new buffer of ((file offset +0x14 - buffer) + cursor + n) * 2 + 0x40 bytes (pointer arithmetic as written), old contents up to the buffer end copied, old freed, cursor / valid end re-based, buffer end... |
 
 ## 0x4DB000 - 0x4E1000: CSysInfo + CTextManager
 
@@ -650,20 +650,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004E0150 | 4699 | CTextManager::GetItemTextKeys | (this, item, out name key, out description key, out shape key): per item class (weapon, armor upper/lower with shapes, quick potion / wand, quest, loot, spell, material, modifier, prototype) builds the text-table keys ("item_weapo... |
-| 0x004DDF28 | 1887 | CSysInfo::CollectInfo | (this) GetOsInfo / GetSystemInfo (+0x50) / GetMemoryStatus (+0x30) / DetectCpuFeatures; flags +8: 8, Win32s 0x20, Windows 95 0x40, Windows 98 0x80 (platform 1, build >= 1998), Windows NT 0x100; OS name +0x24, version +0x28, comput... |
-| 0x004DF030 | 1186 | CTextManager::SeekSection | (this, name or 0) -> 1 found / 0 end of text: name 0 = the next word starting with token 0x78DCFC but not with token 0x78DCF8 (MapInfo_Load); one word = the next word equal to it (case-sensitive); several words = the next line who... |
-| 0x004DFCB0 | 848 | CTextManager::ReadLines | (this, out CStringArray, terminator): reads lines until the terminator token or end of text and appends them (32 callers) |
-| 0x004DF8D0 | 674 | CTextManager::ReadLineValue | (this, out string, default): reads the rest of the line (stops at LF/CR); returns 0 at end of text (52 callers) |
+| 0x004E0150 | 4699 | CTextManager::GetItemTexts | (this, item, out name, out description, out category) -> 1: by item kind +0x10 builds a texts.res entry name (proto / material names with spaces -> '_' and lower-cased by 0x700EFE; spell / modifier names untouched), opens it in th... |
+| 0x004DDF28 | 1887 | CSysInfo::CollectInfo | fastcall (this) -> 1: GetOsInfo (OSVERSIONINFOA at +0x74: build +0x80, platform +0x84, CSD text +0x88), GetSystemInfo (+0x50), GetMemoryStatus (+0x30), DetectCpuFeatures; flags +8 /= 8; by platform: 0 "Windows 3.11/Win32s" + "%d.%... |
+| 0x004DF030 | 1186 | CTextManager::SeekSection | (this, name or 0) -> 1 found (cursor at the start of the matching line) / 0 end of text: name 0 = the next line whose first word starts with "#" (0x78DCFC) but not "##" (0x78DCF8); one-word name = the next line whose first word eq... |
+| 0x004DFCB0 | 848 | CTextManager::ReadLines | (this, out CStringArray*, advance flag) -> 0 at end of text, else 1: reads ONE line from the cursor split into words: spaces and TABs separate (empty words dropped), LF or CR ends the line (the last word pushed), DBCS pairs kept; ... |
+| 0x004DF8D0 | 674 | CTextManager::ReadLineValue | (this, out CString*, advance flag) -> 0 at end of text, else 1: out = the characters from the cursor up to the first LF or CR (no trimming, DBCS-aware); when advance != 0 the rest of the line and the following "##" comment lines a... |
 | 0x004DD0D0 | 589 | StringVector_InsertN | STL: vector<std::string>::insert(pos, n, value) in-place path (String_Append / AssignRange shuffles, StringRange_UninitCopy), grow path 0x4DCE90; StringVector_Resize (SpellSetRecord rune lists) |
 | 0x004DCA90 | 580 | CharSetBuckets_Reserve | STL: vector<node*>::reserve(n) of the bucket vector +4..+0xc of the global char hash set g_0x7AB8D8 (CharSet_ctor reserves 101); pool chunk refill inlined |
-| 0x004DB200 | 538 | BufferedFile_Read | slot 3 (buf, n): reads n bytes through the window buffer (+4 base, +8 pos, +0xc end, +0x10 valid end, +0x14 file offset), refilling via slot 7 |
+| 0x004DB200 | 538 | BufferedFile_Read | slot 3 of vt 0x73F8A4 / 0x73F8C8 (this, dest, n) -> bytes read: n larger than the window: dirty data flushed, n bytes read straight from the file at the cursor's position (slot 7, flags /= 8 when short), cursor += n, window slid t... |
 | 0x004DD8A0 | 515 | CharSetBuckets_ctorN | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); CharSetBuckets_Rehash of the global char set g_0x7AB8D8 |
 | 0x004DCE90 | 472 | StringVector_InsertRealloc | STL: vector<std::string>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n) from the pool, StringRange_UninitCopy both halves, old strings freed); the push_back grow path of 27 name-list builders (CollectNames,... |
-| 0x004DF510 | 450 | CTextManager::SkipToSectionEnd | (this): skips lines until a line starting with the section terminator token |
-| 0x004DC670 | 445 | String_ReplaceAny | (this, out, char): copies skipping/replacing characters found in a set (uses 0x4DD3B0 find_first_of) |
-| 0x004DB420 | 434 | BufferedFile_Write | slot 4 (buf, n): writes n bytes into the window buffer, marking it dirty (+0x18 bit 1) and extending the valid end |
-| 0x004DC060 | 402 | String_SplitQuoted | (text, out CStringArray, quote char, sep char, escape char): splits respecting quoted sections |
+| 0x004DF510 | 450 | CTextManager::SkipLineAndComments | fastcall (this) -> 1 more text / 0 end: skips the rest of the current line (past its LF), then while the next line's first word (PeekWord) starts with "##" skips that line too; the cursor ends at the start of the first non-comment... |
+| 0x004DC670 | 445 | String_SplitBracketAware | fastcall (std::string*, out vector<string>*, separator char (stack)): the separator is stored into byte 5 of the static delimiter set g_0x7AB8D0 (built by dead_4DC4F0); loop: find_first_of the set from pos (0x4DD3B0); not found or... |
+| 0x004DB420 | 434 | BufferedFile_Write | slot 4 of vt 0x73F8A4 / 0x73F8C8 (this, src, n) -> bytes written: n larger than the window: dirty data flushed, n bytes written straight to the file at the cursor's position (slot 8, flags /= 8 when short), cursor += n, valid end ... |
+| 0x004DC060 | 402 | String_SplitOutsideBrackets | fastcall (text, out CStringArray*, separator, open char, close char) -> 1: a CString copy with the separator appended, out emptied; walks DBCS-aware (lead byte test 0x6E99F2 = _ismbblead, named _isdigit_mb; _mbsinc): the open char... |
 
 ## 0x4E1000 - 0x4E3000: CVisibilityFog / VisionFog
 
@@ -674,17 +674,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004E1EB0 | 937 | CVisibilityFog::Render | (ctx) -> bool: no cells -> 1; ComputeBounds when > 12000 cells and the bounds flag +0x68 is clear; CViewFrustum::CullBox(ctx +8, bounds +0x1C) == 2 -> 1; static arrays (g_0x7ABA30 16-byte {x, y, z, size 0.4}, g_0x7ABA44 8-byte {co... |
 | 0x004E1770 | 725 | CVisibilityFog::ComputeBounds | min +0x30.. / max +0x3C.. over the cells of the hash map +0x54 (cell position +0xC.., half size), then the centre +0x1C and radius; flag +0x68 = 1 (bounds valid) |
 | 0x004E1C60 | 584 | CVisibilityFog::RebuildCells | (grid {x0, y0, rows ptr, w, h}): marks every cell stale (+0x1C = 0); for every non-zero byte of the grid: key = (y0 + row) << 16 / (x0 + col): an existing cell is marked alive, a new one gets {+8 short x, +0xA short y, +0xC world ... |
-| 0x004E2BC0 | 560 | HashBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
+| 0x004E2BC0 | 560 | HashBuckets_Reserve | (this = STLport hashtable {.., buckets vector +4 / +8 / +0xc, count +0x10}, n): the next prime >= n (binary search in the 28-entry table 0x73B914, 0xFFFFFFFB past it); the bucket vector reserved to it (pool alloc <= 0x80 bytes via... |
 | 0x004E1AB0 | 405 | CVisibilityFog::Tick | slot 6, per tick: every cell: alpha (+0x18) *= 0.5 when stale (+0x1C == 0) else alpha = 1 - (1 - alpha) * 0.5 (eases towards 1); cells below 0.01 are removed (keys collected in g_0x7ABB58); sprite +0x1D = (sprite + 1) % 15; return... |
 | 0x004E2FA0 | 334 | DwordVector_InsertRealloc9 | STL: vector<dword>::insert(pos, n, value) reallocating path (DwordRange_Copy_4E35C0), the push_back grow path of CVisibilityFog::Tick (cell list), DialogScreen::Build / Update and CBattleHud::Update (id lists) |
-| 0x004E13E0 | 328 | CTextManager::GetItemDescription | (this, item, out CString): builds the item description text from the GetItemTextKeys keys and the "format_item1" / "format_item2" strings (when the stack count is below 2) |
+| 0x004E13E0 | 328 | CTextManager::GetItemDescription | (this, item, out CString*) -> 1, 0 when GetItemTexts fails: name / description / category fetched, then the description local is reused for the format: count +0x48 < 2 -> GetString("format_item1") and Format(out, fmt, category, na... |
 | 0x004E2290 | 314 | CVisFogManager::CreateByKind | slot 14 factory: kind -> new CVisibilityFog (vt_CVisibilityFog, 0x69 bytes: CObject + bounds +0x1C.., min +0x30, max +0x3C, cell hash +0x54 (buckets +0x58 / +0x5C, count +0x64), bounds flag +0x68) |
 | 0x004E24E0 | 310 | CVisibilityFog::dtorBody | vt_CVisibilityFog: frees the cell nodes (0x20 bytes, pool g_0x79B230) and buckets +0x58, then the CObject dtor 0x455930 |
-| 0x004E15C0 | 244 | TextArchiveEntry_Create | (std::string*): allocates a 0x18 node from pool g_0x79B22C and copy-constructs the entry |
+| 0x004E15C0 | 244 | TextArchiveEntry_Create | cdecl (value*) -> 0x18 entry from the STLport free list g_0x79B22C (stlport_node_alloc_chunk_alloc(0x18, 20) refill chained when empty): name string copy-constructed at +8 (String_CtorRange2), resource +0x14 = value +0xc. Caller T... |
 | 0x004E2760 | 229 | CVisFogManager::Tick | slot 6: calls vt[6] Tick on every fog of the list +0xB8; a fog returning 0 is unlinked and vt[4] released |
 | 0x004E2620 | 210 | HashTable20_Destroy | hash table of 0x20-byte nodes (the fog cells): frees every chain and the bucket vector |
 | 0x004E28D0 | 190 | CVisFogManager::CreateAndRegister | creates a CVisibilityFog (vt[23](0, -1)), refcount++, appends it to the CList +0xB8 (0xC-byte nodes); returns it |
-| 0x004E2F00 | 146 | HashMapUint_EraseKey | (this, key*): removes all nodes with that key (nodes returned to pool g_0x79B230), count --; returns the number removed |
+| 0x004E2F00 | 146 | HashMapUint_EraseKey | (this = hash_map<uint, ..>, key*) -> removed count: every node of the key's bucket with node +4 == key unlinked and pushed on the 0x20 free list g_0x79B230 (the head checked last), count +0x10 decremented per node. Caller CVisibil... |
 
 ## 0x4E3000 - 0x501000: renderer: D3D7 device, state blocks, vertex buffers, MMX
 
@@ -694,7 +694,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x004F16A0 | 4016 | CD3DLibrary::CullBox | (this = the library g_0x7AF068; bounds record {+0 byte flags: 1 sphere valid, 2 box valid; +4 centre xyz, +0x10 radius, +0x14 min xyz, +0x20 max xyz (extents relative to the centre)}) -> 0 fully inside, 1 partly, 2 outside: the 8 ... |
 | 0x004EA4A0 | 2855 | CRenderDevice::DrawTrianglesTransformed | (positions VertexSoABlock[] (4 vertices per block), uvs 8 B per vertex, blockCount, indices, indexCount, diffuse, specular, bounds or 0, zScale): CD3DLibrary::TransformForDraw 0x4F2650 (CullBox; no bounds = partly -> vt[9] stack 2... |
-| 0x004F93E0 | 2660 | CViewFrustum::BuildCornerRaysEx | 2.7 KB: extended variant of BuildCornerRays with rotation (0x448A10) DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
+| 0x004F93E0 | 2660 | LightParams_ReadMorphed8 | stdcall (out light, cursor**, a, b, c): the 8-corner version of LightParams_ReadMorphed6 for data with the 'FIG' magic (dead_4F8CB0 skips a 0x28-byte header): records of 8 vec3 (0x60 bytes, cursor += 0x60) and 8 scalars (ends at +... |
 | 0x004E9A50 | 2632 | CRenderDevice::DrawMeshBatchBlended | (texA, texB, then the DrawMeshBatch arguments): DrawMeshBatch whose final draw is DrawIndexedTwoPassBlend(texA, texB, ...): the mesh twice, the second pass with texture B alpha-blended over A (the wounds texture of CObject3DClient... |
 | 0x004E4240 | 2623 | CWeather::DrawRain | (this = CWeather at CWorldClient +0x6F4, render context): mode 1 of CEffectSoundObj::Update 0x4E5680: 81 x 81 half-unit cells around the camera (+0x20 world -> +0x210 camera, offsets +0x94), phase = hash table g_0x78DEA4 + ix*172 ... |
 | 0x004E9010 | 2616 | CRenderDevice::DrawMeshBatch | (positions SoA (blocks of 4: 4x,4y,4z,4w), vertBlocks, normals SoA, normalBlocks, diffuse[], specular[], uv[] (8 B), uvCount, components[] {ushort posIdx, colourIdx (= normal index), uvIdx}, compCount, -, -, indices[], indexCount,... |
@@ -709,7 +709,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x501000 - 0x50A000: renderer: I3DFigure / C3DFigureImpl (scene, figure drawing)
 
-142 functions, group `renderer`.
+140 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -719,6 +719,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the OLD (.ani, double-precision) animation node of the 3ds tool chain: frame fraction +0x38 += dt, frame +0x34 ++ at 1, key indices step past their end frames; CFigureManager::MakeAnimationNode / LoadAnimationF... |
 | 0x00505CB0 | 1078 | AnimNodeOld_ReadFromData | (node, cursor*): one node of the old .ani tool-chain animation: rest rotation quaternion (16 B raw) +0xE4, pivot Vec3 +0xF4, u32 n + n Vec3 base morph vertices +0x100 (and the working copy +0xD4), u32 frame count +0x40, u32 + rota... |
 | 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 (RECT, fov or 0): the 16 stack depths of the library +8 reset; P = Mat4_Perspective(fov (camera g_0x79B2A8 default), rect aspect, near, far) on stack 6, V = Mat4_Viewport(rect) on stack 8, identity on 7, stacks 1 and 0 = V... |
+| 0x005041F0 | 982 | I3DFigureImpl::DrawRect2D | slot 19 (x0, y0, x1, y1, alpha, outline) -> 1: texture stage 0 cleared; a transformed quad (FVF 0x1C4, colour alpha << 24) drawn with DrawIndexedTriangles; UI panels / fades |
 | 0x00505901 | 935 | dead_505901 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00504A60 | 923 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
 | 0x00507E80 | 826 | AnimNodeOld_ResetToFirstKey | (node): without a parent +0x1c: the rotation +0xb8 = the first rotation key quat, the position +0xc8 = that rotation applied to the pivot +0x110 (quaternion rotation formula); with a parent: rotation = key0 * parent rotation +0xb8... |
@@ -726,7 +727,6 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00506D00 | 709 | dead_506D00 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00507990 | 699 | AnimNodeOld_StepTimeRecursive | (node, double dt) -> 1: the current morph frame (+0x88 [+0x98]) scaled by dt is accumulated into +0xd4; AnimNodeOld_AdvanceTime(dt); the world position / rotation composed with the parent (as in AnimNodeOld_RefreshRecursive); recu... |
 | 0x00509000 | 628 | dead_509000 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x0050434F | 619 | I3DFigureImpl::DrawRect2D_part2 | tail of I3DRenderer::DrawRect2D split off by Ghidra (the outline line strip drawing) |
 
 ## 0x50A000 - 0x50E000: CAnimationTrack (.anm keys: positions, rotations, morph frames; Evaluate) / CAnimationNode (hierarchy, bound figure part, morph interpolation, UpdateTransform) / CAnimationSystem2 (nodes, animation queue, SetTime / SetAnimation / SetMorphParams / BindPart)
 

@@ -441,9 +441,16 @@ section lookup ignores case, since the shipped texts are written `WEAPON Axe Ada
 | loot | `litem <NAME>` | `item_loot` |
 | material | `material <MATERIAL>` | `item_material` |
 | blueprint ("instr"), by its target | weapon / armor / quick: `instr <PROTO>`; spell: `spell <SPELL>`; modifier: `modifier <NAME>` | `item_weapon_shape`, `item_armor_shape_upper / lower`, `item_wand_shape`, `item_prototype`, `item_modifier` |
+| 0x3008 spell (needs the spell `+0x44`) | `spell <SPELL>` | `item_spell` |
 | 0x3009 quest | `questitem <NAME>` | `item_quest` |
 
-A missing section leaves name and description untouched (no fallback text); the category is filled in any case.
+[V, T7 g07] The function is `CTextManager::GetItemTexts` (was `GetItemTextKeys`: the outs are the texts) and the "section" is a
+whole texts.res **entry** (each text is its own entry; `TextArchiveList::OpenFile` 0x4DEBC0, was `FindInArchives`): the name is
+its first line, the description the rest up to `#`. The three outs are emptied first; the spell / modifier names (0x3007
+blueprints 3 / 4, 0x3008) are used as stored (no `_` / lower-case folding). 0x3007 picks loot / material / blueprint by `+0x4C`
+(0 / 1 / 2) and the blueprint target by `+0x50` (0 weapon .. 4 modifier).
+
+A missing entry leaves name and description empty (no fallback text); the category is filled for every listed kind.
 
 ## 8. What is not known
 
@@ -509,6 +516,9 @@ A missing section leaves name and description untouched (no fallback text); the 
 17. `full/structs.tsv` `ShopStock +0` "world: the CWorld the stock builds items in": it is the stock **party** (`CParty`
     `+0x3c` for the item stock, `+0xac` for the spell stock), set by `ShopStock::ctor` 0x4A66C0 (was `GSPlayerLayer::ctor`) and
     its inlined copy in `CGSPlayer::ctor`; the vt[16] / [18] / [22] calls are CParty slots [V, T7 g06 2026-11-07].
+18. This page section 7.1 (T7 g07): the table lacked kind 0x3008 (`spell <SPELL>` / `item_spell`); "a missing section leaves name
+    and description untouched" -> they are emptied first; `GetItemTextKeys` / `FindInArchives` -> `GetItemTexts` /
+    `TextArchiveList::OpenFile` (whole texts.res entries, not sections).
 
 ## 10. Function index
 

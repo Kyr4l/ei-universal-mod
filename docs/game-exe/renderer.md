@@ -811,6 +811,9 @@ a level change. `UpdateBuffSounds` 0x5112A0 / `BuffSound_Start` 0x5114D0: a loop
 | `figure-format.md` (older format table) | bounds "244 B" at 8, count at 0xF8 | 240 bytes (3 x 0x48 corner groups + 6 radius floats = 0xF0); 8 + 0xF0 = 0xF8 |
 | this page 2.2 (slots 5, 9, 14, 35) and 6 | `SetFog(density, farClip)` [I]; vt[9] "never returns 0", vt[14] returns 0 / 1 / 2; slot 35 "almost certainly fog" | `SetFog(start, end)`; vt[9] returns 0 after projecting to the screen itself; vt[14] always 0; slot 35 is the vertex fog (DLL reverse 2026-11-07, 2.2a) |
 | this page 3.6 Stun (2026-11-06) | "the stun glow is a red specular pulse" | the specular term is written but the game's lighting kernel never reads it: probably no visible pulse [I, live row] |
+| `functions.tsv` (0x4F8D10 / 0x4F93E0) | `CViewFrustum::BuildCornerRays / Ex` "frustum corner vectors" | `LightParams_ReadMorphed6 / 8`: a light record (vector, scalar, two vectors) interpolated from 6-corner (older format) or 8-corner ('FIG', trilinear) complection samples; dead (only the dead 0x4F8CB0 calls them) [V, T7 g08] |
+| `functions.tsv` (0x4F2D40 / 0x4F2E40 / 0x4F7080 / 0x4F7020 / 0x4FAAA0) | `CRenderScene::~body` / `Clear`, `CRenderManager::FindOrAdd` / `ClearNamedMap`, `CRenderScene::EstimateAllTriangles` | `CRenderScene_Base::dtor` / `CRenderScene::dtor`; `CRenderManager::FindOrCreateSceneFromLink` (slot 4: name + complection match, else `CreateSceneFromLink`; slot 3 is `FindOrCreateScene` 0x4F7150) / `ClearScenes` (slot 5); `CRenderManager::EstimateAllTriangles` (slot 2) [V, T7 g07 / g08] |
+| `functions.tsv` (0x500480 / 0x5007C0 / 0x50434F) | `CPoolFlag::~body`, `RcObj_Set1C`, `I3DFigureImpl::DrawRect2D_part2` | `I3DFigure::dtor`, `I3DFigureImpl::SetSunLight`; 0x50434F is not a function (mid-instruction inside `DrawRect2D` 0x5041F0, whose body runs to 0x5045B7) [V, T7 g08] |
 
 ## 8. Function index (one line each; full purposes in the batch file)
 

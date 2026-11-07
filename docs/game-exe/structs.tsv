@@ -1404,7 +1404,7 @@ CWeather			0x5c	pointer	dropColumns	MFC byte array (vt 0x746560, data +0x60): th
 CWeather			0x70	pointer	dropVertsTL	the finished VertexTL (FVF 0x1C4) of the kept drops, count +0x74, capacity +0x78. CORRECTION: was "aligned array"
 CWeather			0x80	pointer	dropIndices	MFC array (vt 0x745F78, data +0x84): the 16-bit index array given to DrawIndexedPrimitive by DrawRain / DrawSnow [I]. CORRECTION: was "MFC map (vt 0x745F78)"
 CWeather			0x94	pointer	cellOffsets	int[81]: the cell offsets of the 81 x 81 weather grid around the camera. CORRECTION: was "array94 aligned array"
-CWeather			0x24	uint	rainSoundId	looping nature\rain_circle.wav of mode 1 (CSoundManager id), stopped by SetRain / StopSound
+CWeather			0x24	uint	rainSoundId	looping nature\rain_circle.wav of mode 1 (CSoundManager id), stopped by SetRain / CWeather::Reset 0x4E3B80 (was named CEffectSoundObj::StopSound); ApplyTargetMode 0x4E4050 (dead) sets its volume to 100. CORRECTION: was "stopped by SetRain / StopSound"
 CWeather			0xa4	int	vertexCount	number of drop vertices generated this frame
 CWeather			0xa8	float	windX	wind x (units per time unit) added to the drop positions (SetWind 0x564190) [I]
 CWeather			0xac	float	windY	wind y
@@ -1413,6 +1413,7 @@ CWeather			0xb4	int	mode	current weather drawn: 0 none, 1 rain (DrawRain), 2 sno
 CWeather			0xb8	int	targetMode	mode requested by SetRain (message 0x70); +0xB4 takes it when 0
 CWeather			0xbc	int	density	drops exist when (n & 63) < density (0..64), stepped by the fade [I]
 CWeather			0xc0	float	changeTime	world time (+0x64 of the world) of the last SetRain
+CWeather			0xc4	float	fadeTime	zeroed by CWeather::Reset and ApplyTargetMode together with density +0xBC = 64 [I: the fade timer of the mode switch]
 ZoneExit		0x3c	0x14	float[4]	leaveRect	'#deploy' or a later '#remove' 4 numbers; CORRECTION: was only "exit rectangle" (+0x14 xMin..): '#remove' writes only this copy
 ZoneExit			0x18	float	yMin	
 ZoneExit			0x1c	float	xMax	
@@ -1623,6 +1624,8 @@ I3DFigureImpl			0x44	int	totalMs
 I3DFigureImpl			0x48	int	frames	
 I3DFigureImpl			0x4c	uint	frameTime	timeGetTime at BeginFrame
 I3DFigureImpl			0x50	uint	lastFrameTime	set by EndFrame
+I3DFigureImpl			0xc	int	field_c	cleared together with +0x10 by I3DFigure::dtor 0x500480 [I]
+I3DFigureImpl			0x10	HMODULE	module	a loaded DLL, FreeLibrary'd by I3DFigure::dtor 0x500480
 CDXDirectDraw		0x50	0x0	pointer	vtable	0x73D770 (base of CRenderDevice)
 CDXDirectDraw			0x8	int	hr	last HRESULT
 CDXDirectDraw			0xc	pointer	ddraw	IDirectDraw7
@@ -1705,7 +1708,7 @@ CStateBlockSet			0x8	pointer	device	IDirect3DDevice7 (AddRef'd)
 CStateBlockSet			0xc	byte[236]	caps	CORRECTION: was "wMaxSimultaneousTextures at +0xC + 0xB2": D3DDEVICEDESC7 from GetCaps; RegisterEffect reads dwTextureOpCaps at caps +0xB4 (this +0xC0) and wMaxSimultaneousTextures at caps +0xBA (this +0xC6) (byte read of 0x4FD3A6..)
 CStateBlockSet			0xf8	byte[20]	effectHash	id -> effect record (RegisterEffect / FindEffect)
 CStateBlockSet			0x10c	pointer	defaultHandles	vector of 9 state-block handles (effects 0..8: BuildDefaultEffect)
-CRenderManager		0x38	0x0	pointer	vtable	0x73D808; the world's figure loader behind the figure manager (slots 3 CreateScene, 4 FindOrCreateScene, 5 ClearNamedMap, 6 GetOrCreateFigure)
+CRenderManager		0x38	0x0	pointer	vtable	0x73D808: 0 deleting dtor, 2 EstimateAllTriangles 0x4FAAA0, 3 FindOrCreateScene 0x4F7150, 4 FindOrCreateSceneFromLink 0x4F7080, 5 ClearScenes 0x4F7020, 6 GetOrCreateFigure 0x4F75E0. CORRECTION: was "slots 3 CreateScene, 4 FindOrCreateScene, 5 ClearNamedMap, 6 GetOrCreateFigure"
 CRenderManager			0x4	int	refcount	
 CRenderManager			0x8	pointer	pipeline	ITLPipeline (renderer +8 -> +0xAC -> +0xC)
 CRenderManager			0xc	pointer	archives	std::list of opened resource files (0x18 nodes {next, prev, name std::string, CMappedResource2* +0x14}: figures.res, menus.res)
@@ -4141,3 +4144,17 @@ NamedParty			0x78	CString	name	the script party name ("" = the default party mad
 PartyList		0x14	0x0	pointer	begin	vector<NamedParty*> begin (16-bit refcounted pointers); end +4, cap +8; ObjPartyRecord +0x24 (g_0x7AA5C4)
 PartyList			0xc	CString	nextName	the party to load at the next PartyList::GetParty (script SetCurrentParty writes it); "" = the default party
 PartyList			0x10	CString	currentName	the party currently in use: PartyList::StoreParty writes into it, GetParty sets it = nextName; ScriptParty_Resolve maps this name to the player's own party (g_0x7AA5D4)
+CDDSurface			0x8	int	hr	last HRESULT (GetDesc 0x4EFEA0)
+CDDSurface			0xc	pointer	owner	set by CreateFromPicture 0x4EFC60, cleared by the dtor
+CDDSurface			0x10	pointer	surface	IDirectDrawSurface7 (Release in the dtor, GetSurfaceDesc vt +0x58)
+CDDSurface			0x14	int	width	DDSURFACEDESC2.dwWidth (GetDesc)
+CDDSurface			0x18	int	height	DDSURFACEDESC2.dwHeight (GetDesc)
+CDDSurface			0x1c	int	bitsPerPixel	ddpfPixelFormat.dwRGBBitCount (GetDesc)
+CSysInfo			0x1c	CString	computerName	GetComputerNameA (CollectInfo 0x4DDF28)
+CSysInfo			0x20	CString	userName	GetUserNameA
+CSysInfo			0x24	CString	osName	"Windows 95" / "Windows 98" / "Windows NT" / "Windows 3.11/Win32s" / "UNKNOWN OS"
+CSysInfo			0x28	CString	osVersion	"%d.%d.%d" (Win32s / NT) or "UNKNOWN VERSION"
+CSysInfo			0x2c	CString	servicePack	OSVERSIONINFOA.szCSDVersion (+0x88)
+CSysInfo			0x30	byte[32]	memoryStatus	MEMORYSTATUS (GlobalMemoryStatus); the only instance g_0x7AB8F8 is never read
+CSysInfo			0x50	byte[36]	systemInfo	SYSTEM_INFO
+CSysInfo			0x74	byte[148]	osVersionInfo	OSVERSIONINFOA (build +0x80, platform +0x84, CSD +0x88)
