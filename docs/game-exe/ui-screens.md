@@ -116,7 +116,10 @@ are case-insensitive and apply to the phrase that follows them (their values are
 - `#show <name> [index] [weapon]`: `AddSpeaker(name, index - 1)` 0x605DE0 (-1 without an index). The third argument is **never
   read** by AddSpeaker, so `weapon` changes nothing (the line only makes a second, identical call). A live unit (by the hash of the
   name) is appended to the speaker vector `+0x294` (an earlier entry of the same unit is removed first), `SendMsg19(1, unit id)` is
-  sent, `CUnit::SetVisibleToAll(0)` when it is the player's unit, brain `+0x978` = callback 0x6023F0. Any other name is an **NPC
+  sent, `CUnit::SetVisibleToAll(0)` when it is the player's unit, and the speaker's CUnitServer (unit `+0x240`) `animDoneCallback
+  +0x978` = 0x6023F0 (`DialogScreen_OnSpeakerAnimDone`: fastcall (CUnitServer); finds the unit by id `+0xc` and, for every 12-byte
+  speaker record of the top screen's `+0x294` vector that holds it, `StartSpeakerAnimation(unit, 0, 0)`: the speaker returns to its
+  idle animation when a one-shot ends) [V]. Any other name is an **NPC
   portrait** and needs an index >= 0 (none = ignored): an older portrait of that name is removed, the name ('_' -> ' ',
   lower-cased) is looked up in `g_0x7C8764` = `ItemsDb +0x8C`, the **quest items' name map** (filled by `ItemsDb::Load` through its
   own members, which is why no other code names the global) [V, 2026-11-06]; unknown names give nothing. The number is the quest
@@ -956,6 +959,7 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | ui-screens.md 11 (tutorial) | `#position x y w [lines]` | `#position x y right [lines]`: the third number is the right edge |
 | ui-screens.md 4 (camp tabs) | "8 tabs across x 0x26C..0x30C (20 px each)" | a 2 x 4 grid of 40 x 30 px cells (x 620..780, y 430..490) |
 | ui-screens.md 13 (CRichEditSurface) / functions.tsv 0x65F170 / 0x65F1C0 | a separate `RichEditScroller` class renders the rich edit | `Draw` is slot 0 of the `CRichEditSurface` vtable 0x742FD8 (the dtor 0x65EDE0 stores the same vt): `FormatRange` / `Draw` / `Start` are `CRichEditSurface` methods |
+| ui-screens.md 3 (`#show`, T7 n03) | brain `+0x978` = callback 0x6023F0 | the speaker's CUnitServer (unit `+0x240`) `animDoneCallback +0x978` = 0x6023F0 `DialogScreen_OnSpeakerAnimDone`: back to the idle speaker animation when a one-shot ends |
 
 ## 16. Function index (one line each; the batch rows carry the detail)
 

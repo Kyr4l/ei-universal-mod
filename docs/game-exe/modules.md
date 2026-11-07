@@ -1078,7 +1078,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0059FDF0 | 3351 | CFigure::AccumulateWorldBounds | (max x*, max y*, max z*, min x*, min y*, min z*): skipped when the part's local position +0x1C has a squared length > 1e8 (parked); else the 8 corners centre + min / max of the BoundsRecord +0x188 are transformed by CObject3D::Bui... |
 | 0x005A18E0 | 2967 | CFigure::ReadBoundsHeader | (cursor, a, b, c, magic): "FIG8" (0x38474946): the 8-variant trilinear interpolation (morph params a, b, c) of the centre +0x160, min +0x16c, max +0x178 (three 0x60-byte groups) and radius +0x184 (0x20 bytes); other magics read th... |
 | 0x005AAE60 | 2867 | PartRecord_ReadBoundsFIG8 | (record (0x38: flags, centre +4, radius +0x10, min / max +0x14..), data, a, b, c, magic): "FIG8": the 8-variant trilinear interpolation of centre, min, max (three 0x60 groups) and radius (0x20); else raw; flag 1 and 0x4F93A0 |
-| 0x005A1210 | 1736 | CFigure::ReadBoundsFIG6 | (cursor, a, b, c): old .fig bounds: three 0x48-byte groups (6 points) + a 0x60 group interpolated with the morph params into the offset +0x18c, +0x198, min +0x19c, max +0x1a8; flags +0x188 /= 3; the cursor advances DEAD CODE: no c... |
+| 0x005A1210 | 1736 | CFigure::ReadBoundsFIG6 | (cursor, a, b, c): old .fig bounds: three 0x48-byte groups (6 points) + a 0x60 group interpolated with the morph params into the offset +0x18c, +0x198, min +0x19c, max +0x1a8; flags +0x188 /= 3; the cursor advances. Dead chain: it... |
 | 0x005AB9A0 | 1646 | PartRecord_ReadBoundsFIG6 | (record, data, a, b, c): the 6-variant interpolation of the old .fig bounds (0x48-byte groups) into the record; flag 1 and 0x4F93A0 |
 | 0x005ACE80 | 1612 | Menus_LoadRects | thiscall (resource loader = the figure manager, RECT out[11]), called once from CFigureManager::Init with out = g_0x7C8048: vt[19]("menus.reg", 0), CFileRegistry::Attach; then 11 times CFileRegistry::GetFloatArray(section, key) in... |
 | 0x0059F8F0 | 1273 | CFigure::ReadFromStream | slot 17 (stream): through stream vt[13] Read: name (u32 length + chars), u32 vertBlocks + VertexSoABlocks into own +0x1C0, u32 normalBlocks + blocks into +0x1D0, u32 uvCount + float[2] into +0x210, a padding u32, u32 componentCoun... |
@@ -1157,17 +1157,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005DC620 | 4571 | Console_ExecuteLine | (line): registers the console commands on first use (string maps: g_0x7C7B28 = always: console, lastfps, exec, execute, kick, ban, rate, localrate, net; g_0x7C7B38 = cheats only (g_0x7C7B64, never in a lobby): help, debuginfo, his... |
 | 0x005E18E0 | 2959 | CFlyingHitPoints::Draw | (renderer): draws the floating damage numbers (list +4 of entries {.., pos, time +0x14, text}; entries older than 3000 ms removed with 0x5E25B0); sets the digits texture (+0 via renderer vt[11], "CFlyingHitPoints::Draw. SetTexture... |
 | 0x005D6630 | 1589 | Brain::BuildFromLogicSlot | (MobLogicSlot (0x4c), index): LogicList_Clear, +0x44 / +0x48 = 100000, +0x4c = 1; +0x38 callForHelpRadius = slot +0x3c (CallForHelpRadiusDefault 7 -> CallForHelpRadius); +0x3c alarmCondition = slot +0x40; Model +0: 1 = AiLogicGuar... |
+| 0x005DB3F0 | 1519 | Movie_PlayFile | (name, flags, p3, p4, p5, withSound): plays a Bink file to the end (handles input to skip, volume g_0x79BCC4, sound system Miles, renderer reset 0x5E5270); returns true when the file could not be opened or playback ended |
 | 0x005D30A0 | 1450 | AiLogicFear::Update | slot 5 (brain): flee origin = the nearest seen enemy when +0x18c (and Brain::CallForHelp(its pos)), else the unit position when inside a spell area, else the remembered spot +0x10 when that is in an area (otherwise the noticed pos... |
-| 0x005DB3F0 | 1435 | Movie_PlayFile | (name, flags, p3, p4, p5, withSound): plays a Bink file to the end (handles input to skip, volume g_0x79BCC4, sound system Miles, renderer reset 0x5E5270); returns true when the file could not be opened or playback ended |
 | 0x005DE460 | 1429 | Console_Show | console `show world_data/render_info/managers` (cheat table): CWorldClient debug overlay flags +0x88 (ClearStateFlag1 / HideManagerStats ...); "Invalid number of parameters" |
 | 0x005D6F90 | 1410 | Brain::TickFollow | (brain; order kind 6): target +0x2c dead or gone -> kind 0; every 8 ticks (+0x6c): moving target (its order 1): predicted position 5 ticks ahead (vt[52] GetPosAt); farther than FollowMinDist 2 from it or its path (own move target ... |
 | 0x005D8310 | 1296 | Brain::Read | (stream, save): ClearLogics; +4 kind, +8 pos, actions +0x14, +0x28, targets +0x2c / +0x30 (object ids), +0x3c alarm condition, +0x44, +0x48, +0x4c, waypoints +0x50 / +0x5c (0xc each), +0x3c, +0x7c count, current index; every logic... |
 | 0x005D53B0 | 1235 | Brain::Tick | (brain; every tick from CUnitServer::Update 0x552300 for every living unit after AiAcknowledge::Tick): ALARM: when +0x34 alarm flag and +0x40 wait > 0: wait--, at 0 with +0x35 alarm slot != 0 -> CWorldServer::ActivateLogicSlot(slo... |
 | 0x005DA880 | 1221 | Movie_PlayProgress | AfxBeginThread body (only from dead_5DAD50): CString path g_0x7AF460 + "Movies\progres.bik"; _BinkSetFrameRate(15, 1), _BinkOpen(path, 0x3000) (fails -> trace, return 0); a 0x20-byte CDXDirectDrawSurface of the movie size (rendere... |
 | 0x005D4170 | 1167 | AiLogicPlayer::Regroup | (brain; AiLogicPlayer::Update when idle): only for units with CUnit +0x438 battle button == 1: keeps attacking the kept target +8 while alive and Brain::TryAttackTarget(direct) (brain kind 3, QueueOrderAttack(target, 6, 0, run 0x1... |
+| 0x005DA400 | 1146 | Movie_StepProgress | loading-screen video step (14 callers, the zone / save loaders between blocks): opens Movies\progres.bik once (Bink handle g_0x7C5550, DD surface g_0x7C551C, centred rect g_0x7C5520), decodes frames up to the target frame (clamped... |
 | 0x005E00D0 | 1143 | Console_Days | console `days ddmmyyyy [DDMMYYYY]` (an easter egg): days between a date of birth and today / a date (CTime), example 25011978 01072000 |
 | 0x005DDFE0 | 1137 | Console_LogMask | console `filter` handler: log channel mask g_0x7C7B68 (1 AI, 2 EVENT, 4 GRAPHICS, 8 RPG, 0x10 UNITACKS, 0x20 NET); no argument prints each channel on / off, "none" clears all, <channel> [on/off]; "Invalid parameters" |
-| 0x005DAEA0 | 1058 | Cursors_Register | (small, p2, smallSet): 0x5E60B0(g_0x7C7BD8 cursor manager, g_0x7AF080, 1 / 2, p2, smallSet); registers the cursor names "cursor_default" .. "cursor_steal" (or the "sm_cursor_*" set) with hot-spot flags (0x10 / 0x20 for the scroll ... |
 
 ## 0x5E2000 - 0x5E3000: IUIEvents defaults + CUIMessageLog (timed chat/message lines)
 
@@ -1297,7 +1297,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x60E000 - 0x645000: UI: camp/inventory/trade/spell+item constructor, hero stats, main menu, save/load, lobby, battle HUD, credits
 
-641 functions, group `ui`.
+640 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1318,7 +1318,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x645000 - 0x65F000: UI: battle HUD strips, scroll bars, edit/list controls, save/load, options, tutorial, key config; DirectInput mouse; RichEdit
 
-377 functions, group `ui`.
+371 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1326,15 +1326,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0064BE80 | 3459 | CQuestLogWin::Build | vt 0x7411BC slot 25: render state 0x18 saved in +0x1EC and set to 1; "obj_0..2" into +0x1D8; CTextListWin (0x3C,0xBE)-(0x180,0x1FE), CScrollBar +0x1BC (0x3C,0x1E)-(0x180,0x96) step 3; art "saveload" + "cross"; surfaces [0] (0x32,0... |
 | 0x0064CC10 | 3412 | CQuestLogWin::ShowMap | (map name): +0x184 = name; extra textures / quads / buttons beyond 2 / 0x15 / 9 removed; zone record +0x14 figure on quad 3 centred (580,190), larger side 300 px; per exit of record +0x4C (0x3C, "none" skipped, index counts all): ... |
 | 0x00655D40 | 2301 | CSaveLoadWin::ScanSaves | rebuilds the slot vector +0x164 (0x44-byte SaveSlotRecord): every directory "<root>saves\save*": folder name -> +4; its "info.sav" (CFileFind; missing -> error flag +0x40 = 1, label "Error Save") read with Stream_CheckHeader4(0x11... |
-| 0x006462A0 | 2203 | CHudUnitInfoPanel::Draw | vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo... |
+| 0x006462A0 | 2205 | CHudUnitInfoPanel::Draw | vt 0x7426F8 slot 20: 2.2 KB: the selected unit's figure (CI3DFigure::Draw with the damaged parts marked via SetPartsValueD4/D8 / flags), progress bars (DrawBar), body parts (DrawParts), stats (DrawStats), spell info (DrawSpellInfo... |
 | 0x006456E0 | 2201 | CHudUnitInfoPanel::Build | 2.2 KB: the sliding unit info panel: tab buttons (w_info1-4 tooltips), "in25arrow" art, body-part colour markers ("#iFF" codes), "infounit_%d" texts, "hl_skull" / "hl_torso" / "hl_leg" / "hl_arm" labels into +0x1B8.., InitGrid / I... |
 | 0x00647040 | 1949 | CHudUnitInfoPanel::DrawStats | 1.9 KB: "%s %d/%d" HP / mana, "move_%d" stance speeds (CUnit::GetStanceSpeed, GetAttackModeSpeed), "dmg_%d", damage list (UIItemInfoWin::FormatDamageList), skills (UnitStats_WeightedSkills7), level, "consider_more%d" / "consider_l... |
 | 0x006548A0 | 1835 | CSaveLoadWin::OnKeyDown | vt 0x741354 slot 9: ignored while sliding; DispatchSlot9; Enter = OnConfirm, Esc = cancel (close 0x100001), PgUp / PgDn +-16 slots, Up / Down +-1 (select.wav, ClampSelection); unhandled keys in save mode (+0x178): editing of the s... |
 | 0x0064DC60 | 1742 | CQuestLogWin::FillObjectives | when +0x1A0 != +0x1A4: g_0x7C8178 = id; "quest <id>" description (beige) + rewards of g_0x7C87B4[id] (white "obj_cost_exp %d" from +0xC, "obj_cost_money %d" from +0x14) + every "#subobj <n>" before the next "#quest" whose "q.<map>... |
-| 0x006567A0 | 1634 | CSaveLoadWin::RefreshSaveList | redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime "%d/%m, %... |
+| 0x006567A0 | 1635 | CSaveLoadWin::RefreshSaveList | redraws surface [0]: 16 rows from the scroll +0x174: label (edited text +0x188 for the selected slot in save mode, with a caret line at the caret position +0x190 unless a special slot) at (0xC,0xB)-(0xBE,0x20), the CTime "%d/%m, %... |
 | 0x00653DD0 | 1629 | CSaveLoadWin::Build | vt 0x741388 slot 25: rect (0,0)-(800,600) (+0xE4 written as the bytes 0x58 0x02 0x00 0x00); art "saveload" + 256x256 scratch figure; quads 0 / 1 / 2 = load-or-save / cancel / delete button art (163..237 / 563..637 / 363..437 x 526... |
 | 0x006503C0 | 1291 | COptionsScreen::Build | vt 0x741FAC slot 25: full-screen (0,0)-(800,600); art "saveload" + a 256x256 scratch surface figure; quads 0 / 1 = OK / cancel button art (213..287 / 513..587 x 526..574), buttons 0 OK (0xD5,0x20E)-(0x11F,0x23E) tip 0x111D4, 1 can... |
-| 0x006570E0 | 1226 | CSaveLoadWin::QuickSave | static (ecx = slot folder name "saveq" / "savea" / "saveb", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMess... |
+| 0x006570E0 | 1228 | CSaveLoadWin::QuickSave | static (ecx = slot folder name "saveq" / "savea" / "saveb", renderFrame): not in a lobby; free disk space check (silent); App_RenderFrame when asked; grabs the back buffer (CUIBlitSurface 800x600 BlitToBack), busy cursor, ShowMess... |
 | 0x00650E40 | 1221 | COptionsScreen::OnKeyDown | vt 0x741F78 slot 9 (vk, char, scancode): ignored while sliding; DispatchSlot9; waiting for a key (+0x3F4): Esc cancels; the scancode & 0x1FF looked up in the key-name table g_0x7857B0 (88 x 0x48: +0 scancode, +4 name, +8 CString) ... |
 
 ## 0x65F000 - 0x664000: CParty (hero records 0x784 bytes with four item arrays: equipped / B / inventory / spells, party items, named variables, map name), HeroRecord save reader, PartyStore (*.mp folder), PartySlot::SaveToFile, RichEdit credits scroller
@@ -1402,7 +1402,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x676000 - 0x683000: CEffect* (sounds, lights, particles, arrows, tornado)
 
-237 functions, group `effects`.
+236 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|

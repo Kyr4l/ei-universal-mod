@@ -635,10 +635,15 @@ Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
     `AiLogicPlayer::Reset` 0x551EC0 is the slot 2 of `AiLogicTamed` (vt 0x73F0C4: the Player dtor in place, then rebuilt as Tamed);
     the Player's own slot 2 is 0x552000 (was `Reset2`); `UnitTaskA_Dtor` 0x5520D0 = `AiLogicPlayer::dtor`.
     `CUnitServer::InitSubobject20` 0x54EAC0 is `MoveRequest::InitCellList` (the stack MoveRequests of the AI path checks).
+21. `functions.tsv` (T7 n03): `StaticInit_Static4_g7C551C` 0x5DA360 "unit-ai / MobLogic TU" -> the Movie TU: g_0x7C551C is the
+    loading-video DirectDraw surface of `Movie_StepProgress` (released by the atexit 0x5DA380) [V].
 
 Non-AI code in this module's address range (0x5DA000-0x5E2000, deep-read 2026-11-06, documented on their own pages): `Movie_PlayIntro` 0x5DA400 is
 really the loading-video **step** (`Movies\progres.bik`, proposed `Movie_StepProgress`), `Movie_PlayProgress` 0x5DA880 the looping loading video (dead [V]: only the unregistered dead_5DAD50 starts it as a thread),
-`Movie_PlayFile` 0x5DB3F0, `Cursors_Register` 0x5DAEA0 (the called-shot cursors `cursor_attack_hd/bd/lh/rh/ll/rl`), the console 0x5DC620-0x5E00D0
+its thread starter `Movie_StartProgressThread_5DAD50` 0x5DAD50 (CreateEventA, AfxBeginThread(Movie_PlayProgress)) and stopper
+`Movie_StopProgressThread_5DADA0` 0x5DADA0 (stop flag g_0x7C5560, WaitForSingleObject, CloseHandle), both unreached [V]; the static
+g_0x7C551C (zeroed by `StaticInit_Static4_g7C551C` 0x5DA360, released once by the atexit 0x5DA380) is Movie_StepProgress's DirectDraw
+surface, not a unit-AI / MobLogic object [V]; `Movie_PlayFile` 0x5DB3F0, `Cursors_Register` 0x5DAEA0 (the called-shot cursors `cursor_attack_hd/bd/lh/rh/ll/rl`), the console 0x5DC620-0x5E00D0
 (ui-framework.md 4.7; `filter` sets the log mask `g_0x7C7B68`: 1 AI, 2 EVENT, 4 GRAPHICS, 8 RPG, 0x10 UNITACKS, 0x20 NET) and
 `CFlyingHitPoints::Draw` 0x5E18E0 (combat.md 8).
 
