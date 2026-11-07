@@ -4325,6 +4325,12 @@ CWinApp			0x8c	LPCTSTR	m_pszHelpFilePath	CWnd::WinHelp
 CWinApp			0x94	HGLOBAL	m_hDevMode	CWinApp::DevModeChange
 CWinApp			0x98	HGLOBAL	m_hDevNames	
 CWinApp			0xb8	int	m_nSafetyPoolSize	AfxUnlockTempMaps
+CWinApp			0x68	HINSTANCE	m_hInstance	AfxWinInit 0x70CF52 (dead); read by CWinApp::SetCurrentHandles
+CWinApp			0x6c	HINSTANCE	m_hPrevInstance	AfxWinInit 0x70CF52 (dead)
+CWinApp			0x70	LPTSTR	m_lpCmdLine	AfxWinInit 0x70CF52 (dead)
+CWinApp			0x74	int	m_nCmdShow	AfxWinInit 0x70CF52 (dead)
+CWinApp			0xa8	CRecentFileList*	m_pRecentFileList	CWinApp::LoadStdProfileSettings 0x70D79E (dead)
+CWinApp			0xb4	int	m_nNumPreviewPages	CWinApp::LoadStdProfileSettings 0x70D79E (dead): GetProfileInt("Settings", "PreviewPages")
 AcksLine		0x28	0x0	int	weight	acks voice-line record (vector element of every Answers / Cryes / Others list): archive tag 2 (4 bytes) in AcksLine28_Serialize / Archive_SerializeRec28Vector 0x6E42F0
 AcksLine			0x4	byte[12]	wavPath	std::string, archive tag 1
 AcksLine			0x10	byte[12]	subtitle	std::string, archive tag 3
@@ -4487,8 +4493,29 @@ AFX_MODULE_STATE			0x34	TCHAR[]	m_szUnregisterList	AfxRegisterClass (DLL only)
 AFX_MODULE_STATE			0x1034	pointer	m_pfnFilterToolTipMessage	CWnd::PreTranslateMessage
 AFX_MODULE_STATE			0x1038	COccManager*	m_pOccManager	CCmdTarget::OnCmdMsg (CN_EVENT), CWnd::IsDialogMessage
 AFX_MODULE_STATE			0x1070	CThreadLocal	m_thread	the AFX_MODULE_THREAD_STATE
+AFX_MODULE_STATE			0x2c	LONG	m_nObjectCount	OLE lock count: AfxOleLockApp 0x70BE17 / AfxOleUnlockApp 0x70BE27 (both dead), AfxOleCanExitApp 0x70BE07
+AFX_MODULE_STATE			0x30	BOOL	m_bUserCtrl	AfxOleSetUserCtrl 0x70BE40 / AfxOleGetUserCtrl 0x70BE4F, AfxOleOnReleaseAllObjects 0x70BDBC
 CFrameWnd			0x50	BOOL	m_bHelpMode	CWinThread::ProcessMessageFilter
 CFrameWnd			0x54	CFrameWnd*	m_pNextFrameWnd	frame list
 CFrameWnd			0x88	int	m_nShowDelay	CWinThread::OnIdle
 CFrameWnd			0x90	UINT	m_nIDTracking	CFrameWnd::IsTracking 0x70787E
 TextureSetList			0x4	pointer	sets	32-byte aligned array of TextureSet* (count +8, capacity +0xc, growth +0x10) [V: dead_51A440 .. dead_51A810, t7 n02]
+CCommandLineInfo	CObject	0x24	0x4	BOOL	m_bShowSplash	vtable 0x747164; ctor 0x70D86D (dead) sets TRUE
+CCommandLineInfo			0x8	BOOL	m_bRunEmbedded	ctor 0x70D86D: FALSE
+CCommandLineInfo			0xc	BOOL	m_bRunAutomated	ctor 0x70D86D: FALSE
+CCommandLineInfo			0x10	int	m_nShellCommand	ctor 0x70D86D: FileNew (0)
+CCommandLineInfo			0x14	CString	m_strFileName	ctor 0x70D86D / dtor 0x70D8C8
+CCommandLineInfo			0x18	CString	m_strPrinterName	
+CCommandLineInfo			0x1c	CString	m_strDriverName	
+CCommandLineInfo			0x20	CString	m_strPortName	
+_AFX_CTL3D_STATE	CNoTrackObject	0x30	0x4	BOOL	m_bCtl3dInited	_afxCtl3dState 0x7CAA88 (factory 0x70C35F, vtable 0x746760); CWinApp::Enable3dControls 0x70D4B6 (dead)
+_AFX_CTL3D_STATE			0x8	HINSTANCE	m_hCtl3dLib	LoadLibraryA("CTL3D32.DLL"), never loaded in the game (Enable3dControls is dead)
+_AFX_CTL3D_STATE			0xc	FARPROC	m_pfnRegister	CTL3D32 ordinal 12
+_AFX_CTL3D_STATE			0x10	FARPROC	m_pfnUnregister	ordinal 13
+_AFX_CTL3D_STATE			0x14	FARPROC	m_pfnAutoSubclass	ordinal 16; AfxInitThread calls it when set
+_AFX_CTL3D_STATE			0x18	FARPROC	m_pfnUnAutoSubclass	ordinal 24
+_AFX_CTL3D_STATE			0x1c	FARPROC	m_pfnColorChange	ordinal 6
+_AFX_CTL3D_STATE			0x20	FARPROC	m_pfnSubclassDlgEx	ordinal 21
+_AFX_CTL3D_STATE			0x24	FARPROC	m_pfnWinIniChange	ordinal 22
+_AFX_CTL3D_STATE			0x28	FARPROC	m_pfnSubclassCtl	ordinal 3
+_AFX_CTL3D_STATE			0x2c	FARPROC	m_pfnSubclassCtlEx	ordinal 25

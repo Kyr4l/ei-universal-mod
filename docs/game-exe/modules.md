@@ -1024,7 +1024,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x58A000 - 0x595000: CWorldServer: object creation from descriptions, object hashes (+0x12d70 all, +0x104 active, +0x12de8 effects, +0x12dd0 named), per-player replication (ReplicateToPlayer), weather / time / day-night, spell casting, hero spawning from CParty records, mercenaries, loot, experience, script VM dtor, CAIMap dtor
 
-118 functions, group `world`.
+116 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1087,7 +1087,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5AD000 - 0x5C6000: CAIMap: terrain / passability grids, collision map, path finders, nav grid, stamps; Alertness
 
-443 functions, group `ai`.
+435 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1108,7 +1108,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5C6000 - 0x5C8000: Mover (unit movement state)
 
-33 functions, group `units`.
+31 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1129,7 +1129,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5C8000 - 0x5D3000: unit AI: perception (aiinfo.res, hearing, vision, smell)
 
-181 functions, group `ai`.
+175 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1150,7 +1150,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5D3000 - 0x5E2000: unit AI: behaviours (Guard / Patrol / Sentry / CorpseWatcher / Tamed) + #say
 
-265 functions, group `ai`.
+259 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1192,7 +1192,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5E3000 - 0x5E7000: chat/console panels (CUIMessageLog edit, CUIConsole), software cursor (CSoftCursor), ScreenFade, CI3DFigure
 
-83 functions, group `renderer`.
+79 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1213,7 +1213,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5E7000 - 0x5EE000: UI: camera input handlers, UIQuadMesh, unit preview/portraits, camp screen widgets
 
-90 functions, group `ui`.
+83 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1234,7 +1234,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5EE000 - 0x5FD000: UI: CInterface screen manager, item/spell/perk info panels, CUIBlitSurface, string-pair arrays, STL leaves
 
-344 functions, group `ui`.
+340 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1276,7 +1276,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x602000 - 0x60E000: UI: dialog screen (speakers, topics, briefing), status-lamp screen, STL leaves
 
-148 functions, group `ui`.
+142 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1297,7 +1297,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x60E000 - 0x645000: UI: camp/inventory/trade/spell+item constructor, hero stats, main menu, save/load, lobby, battle HUD, credits
 
-684 functions, group `ui`.
+638 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1318,7 +1318,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x645000 - 0x65F000: UI: battle HUD strips, scroll bars, edit/list controls, save/load, options, tutorial, key config; DirectInput mouse; RichEdit
 
-389 functions, group `ui`.
+375 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1360,7 +1360,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x664000 - 0x674000: CPlayer / CPlayerClient / CPlayerServer: in-game protocol opcodes (client SendMsgXX / OnMsg_*, server SendMsgXX / OnMsg_*), party sync (MpFile), tracked units and objects, CPlayerManager, CMappedResource (resource file cache), hero record array
 
-382 functions, group `net`.
+378 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1402,7 +1402,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x676000 - 0x683000: CEffect* (sounds, lights, particles, arrows, tornado)
 
-245 functions, group `effects`.
+235 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1423,7 +1423,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x683000 - 0x68C000: CSpell / CSpellContainer / CSpellConstructor / CSpellManager
 
-193 functions, group `spells`.
+189 functions, group `spells`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1444,7 +1444,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
-88 functions, group `renderer`.
+87 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1465,7 +1465,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68F000 - 0x69F000: CTexture / CTextureManager (.mmp), CFileRegistry (binary key/value registry), CIniFile, CWinRegistry, CItemConstructor, STL leaves
 
-351 functions, group `renderer`.
+348 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1486,7 +1486,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x69F000 - 0x6AE000: CItem* + CItemManager + items.idb
 
-303 functions, group `items`.
+279 functions, group `items`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1528,7 +1528,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6B4000 - 0x6C3000: CMusicSystem / CSoundManager / mp3 (Miles)
 
-233 functions, group `sound`.
+232 functions, group `sound`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1591,7 +1591,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-1923 functions, group `crt`.
+1893 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
