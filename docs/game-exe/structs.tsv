@@ -4182,3 +4182,4 @@ LogStream	streambuf	0x454	0x50	CString	text	collected text, sent to CInterface::
 LogStream	streambuf	0x454	0x54	char[0x400]	buffer	the streambuf put area (streambuf::streambuf(this, +0x54, 0x400))
 CCampSkillsWin			0x150	int	selectedHero	index of the hero record in +0x190 used by GetCurrentExp 0x625530 [V]
 CCampSkillsWin			0x190	pointer[3]	heroRecords	std::vector of 0x3C-byte hero records (Array60_InsertRealloc from Build / ResetEdit); record +0x2C / +0x30 / +0x34 floats: current exp = +0x34 + +0x2C - +0x30 (GetCurrentExp 0x625530) [V]
+CHudQuickBar			0x158	CArray	slotArray	MFC CArray of 12-byte POD slot records {byte flag, dword, pointer} (vt 0x7428A0, m_pData +0x15C, m_nSize +0x160, m_nMaxSize +0x164, m_nGrowBy +0x168; Serialize 0x64B1E0, dtor 0x64B1C0) [V]

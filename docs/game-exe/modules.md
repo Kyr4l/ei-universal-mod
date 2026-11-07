@@ -1352,9 +1352,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0065FDE0 | 796 | HeroRecord::Write | (stream): the inverse of HeroRecord::Read: 5 length-prefixed strings +0 +8 +0xc +0x10 +0x14, id +0x1c, UnitStats_WriteSave (0x704 raw), 12 bytes +0x724, 4 x (count + object ids (+0xc) or -1) for +0x730 / +0x740 / +0x750 / +0x760, ... |
 | 0x00662AC0 | 776 | PartySlot::SaveToFile | (this = PartySlot 0x74 {CParty +0, file name +0x70}, dir): the name must be alnum + '.' + ext else dir\name is deleted; MoveFileA(dir\name -> dir\temp.mp), CParty::Write into a CMemStream, MpFile::Writer (0x579B80 compressor, head... |
 | 0x00662FB0 | 767 | PartyStore::LoadAll | clears the slots; FindFirstFileA(dir + "\*.mp"); every file CParty::LoadMp into a temporary CParty; parties with exactly one hero are copied (CParty::CopyCtor) into a new 0x74 slot with the file name at +0x70 |
-| 0x006636D0 | 560 | NamedValueHash_InitBuckets | (this, n): hash constructor helper for the CParty named value hash: bucket vector resized to the next prime >= n (zero-filled), count = 0 |
+| 0x006636D0 | 560 | StringFloatHash_InitBuckets | thiscall (hash, n): STLport hashtable::_M_initialize_buckets: n buckets = lower_bound of n in the 28-entry prime table 0x73B914 (0xFFFFFFFB past the end); the bucket vector +4..+0xC reserved to that size (DwordBuffer_AllocCopy5, o... |
 | 0x0065F2D0 | 473 | PartyStore::dtor | destroys the CString +0x80, the CParty +0x10 (Clear, Done, hash, items, hero records), every 0x74 slot of the vector +4 and the dir CString +0 |
-| 0x00663FA0 | 438 | HeroRecordArray::SetSize | (n, grow): MFC CArray SetSize of 0x784-byte hero records (HeroRecord_ConstructN / 0x65F740 destroy) |
+| 0x00663FA0 | 438 | HeroRecordArray::SetSize | thiscall (array, n, grow): MFC CArray<HeroRecord 0x784>::SetSize: grow != -1 -> +0x10; n 0 -> HeroRecord::dtor on every record, delete, data / size / max = 0; first allocation operator_new(n * 0x784) + HeroRecord_ConstructN; withi... |
 | 0x00662DD0 | 431 | CParty::LoadMp | (file name; dir in this[1]+0x1c): opens dir\name (CFile), MpFile::Reader (header check, decompress) into a CMemStream and CParty::Read(this, stream, 1); false when the reader fails. Was MpFile::Load |
 | 0x006608D0 | 380 | HeroRecord::AddWeapon | (item): CItem::Clone (0x69FF70, through the item's manager) and append to the weapon array +0x730 (count +0x734, max +0x738, grow +0x73c; 32-byte aligned data); returns the clone. Was AddInventoryItem: +0x730 feeds CUnit +0x440 (C... |
 
@@ -1376,7 +1376,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00671B40 | 698 | CMappedResource::OpenFile | slot 4 (name, out size): the cached entry of the name hash +0x44 → refcount ++ and its buffer; else the entry index (0x674850), when memory-mapped the base +0x28 + entry offset, else allocates an entry {name, buffer, size (table +... |
 | 0x0066FD70 | 631 | Formation_ComputeOffsets | (unit list, out Vec3 array): one unit = zero offset; else per unit the unit vector (1 m) from the group's centroid to the unit; added to the move target when the offset point is reachable |
 | 0x00669A30 | 599 | CPlayerClient::OnMsg80_Party | server 0x80 (embedded stream: MpFile::Read(party +0x70, full = 1)): the party replaces the local one, the synced item id list +0x114 is rebuilt from the party item manager (items with +0x28 < +0x2c = damaged), in a session the nam... |
-| 0x0066B570 | 580 | Dwords_Reserve | (n): vector<dword>::reserve (STLport chunk allocator, Dwords_AllocCopy2) |
+| 0x0066B570 | 580 | Dwords_Reserve | thiscall (vector, n): vector<dword>::reserve: n <= capacity -> return; new buffer of n dwords from the size pool g_0x79B224 (with the _S_chunk_alloc refill inlined: 20 blocks from the chunk g_0x79B268..0x79B26C, else operator_new(... |
 | 0x00672FA0 | 580 | Dwords_Reserve2 | STL: vector<dword>::reserve(n) (size pool buffer, copy via Dwords_AllocCopy4); the id vector of CMappedResource::ctor |
 
 ## 0x674000 - 0x676000: resources: CMappedResource / CResourceBase / CMappedFile + CObjectManager
@@ -1398,7 +1398,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006744C0 | 244 | CResourceBase::OpenFile | (name, out size): CloseFile; a loose file of that name on disk (_access) is mmioOpen'd into +0x30 (size from _findfirst) -> loose files override archive entries; else FindEntry and mmioSeek(+0x24, entry offset) with +0x28 = offset... |
 | 0x00675340 | 243 | CObjectManager::ClearProtos | slot 18: every record: resource vt[3] + delete; the vector emptied |
 | 0x00675BE0 | 185 | CEffect::ResetState | zeroes position +0x1c, velocity +0x94..+0xa4, SetSize(0) of the four delta CMemStreams +0xa8/+0xd0/+0xf8/+0x120, last tick +0x148 = -1 |
-| 0x00675560 | 183 | Record10Vector_Destroy | vector<0x10 record {std::string, int}>: destruct strings and free storage |
+| 0x00675560 | 183 | Record10Vector_Destroy | fastcall (vector): for each 0x10-byte record {std::string +0, dword +0xC} of [begin, end +4): String_Free of the string (+ an empty member dtor Nop_424C00); then the buffer freed (pool <= 0x80 bytes or operator_delete); SEH frame;... |
 
 ## 0x676000 - 0x683000: CEffect* (sounds, lights, particles, arrows, tornado)
 
@@ -1437,7 +1437,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0068A0F0 | 580 | DwordVector_Reserve3 | STL: vector<dword>::reserve(n) (size pool buffer, elements copied); the bucket / id vector of CSpellManager::CSpellManager |
 | 0x0068B4C0 | 576 | CSpell::IsValidTarget | (caster, target) -> bool: flags +0x3C low 16 bits: 1 'ff' only friends (the player masks +0x244/+0x248/+0x250 say not enemy), 2 'fe' only enemies, 4 'fh' model unhuma/unhufe, 8 'fg' unmogo, 0x10 'fo' unorma/unorfe, 0x20 'fl' unmol... |
 | 0x006875D0 | 571 | SpellProto::operator_assign | copy-assigns a SpellProto 0x84 (the std::string code / name fields and the numeric spell fields); 3 calls in SpellProtoVector_InsertN |
-| 0x00689B70 | 560 | HashMapUint_RehashPrime | (this, minBuckets): bucket vector grown to the next prime (binary search in 0x73B914) with zero fill |
+| 0x00689B70 | 560 | HashMapUint_InitBuckets | thiscall (hash, n): STLport hashtable::_M_initialize_buckets: lower_bound of n in the prime table 0x73B914 (0xFFFFFFFB past the end), bucket vector +4..+0xC reserved to that size and null-filled, count +0x10 = 0; caller SpellRegis... |
 | 0x00686910 | 543 | SpellProtoVector_InsertRealloc | STL: vector<SpellProto 0x84>::_M_insert_overflow (grow path of insert); used by SpellProtoVector_InsertN |
 | 0x00685F30 | 528 | SpellSetRecordVector_InsertRealloc | STL: vector<SpellSetRecord 0x34>::_M_insert_overflow (grow path of insert: new size-pool buffer, placement copies, old records destroyed); used by SpellSetRecordVector_InsertN |
 | 0x0068A500 | 515 | DwordVector_ctorN5 | STL: vector<node*>(n) zeroed bucket table with the STLport node allocator inlined; the rehash of the spell id -> CSpell map (HashMapUint_Rehash <- CSpellManager::CreateSpellById, SpellRegistry_ctor) |

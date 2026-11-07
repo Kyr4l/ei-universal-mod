@@ -485,3 +485,20 @@ server world and for a humanoid (kind 0x32) whose figure has no `rh3` part; only
 with modded figures (an effect placed at a garbage offset). `CUnitClientSpecific::UpdateSkinTextures` 0x536100 null-checks the
 secondary texture but not the primary one.
 
+
+## 33. Save / Load window: the save list sort uses a non-strict comparator (T7 g13, 2026-11-07)
+
+From the code (comparator and partition checked in the machine code), not reproduced at run time. `CSaveLoadWin::ScanSaves`
+0x655D40 sorts the save slots (+0x164, 0x44-byte records) newest first with an STLport `std::sort` (0x657DF0 .. 0x658C90) whose
+comparator is `!(a.time < b.time)`, i.e. `a.time >= b.time` (Int_LessThan 0x658020 with the result inverted). STLport's unguarded
+loops need a strict ordering:
+
+- Partition_SaveSlot 0x658030 advances `first` while `first.time >= pivot.time` (0x658065..0x658074) and moves `last` back while
+  `pivot.time >= last.time` (0x658076..0x65808C). With equal times either scan can run past the end of the vector.
+- UnguardedLinearInsert_SaveSlot 0x6586E0 moves a record up while `val.time >= prev.time` (0x658710..0x658717). A record whose time
+  equals the newest time walks past the start of the vector.
+
+Both run only with more than 16 save folders. Equal times come from two saves written in the same second, or from "Error Save" slots
+and version-1 info.sav files: ScanSaves never writes their time field, so they all carry the same stack value. Effect: opening the
+Save / Load window reads and swaps records outside the vector, i.e. a crash or heap corruption. Not covered by SpellAddon. Fix: a
+strict comparator (`b.time < a.time`).
