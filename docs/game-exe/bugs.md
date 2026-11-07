@@ -478,3 +478,10 @@ whichever unit happens to be last in its collected list. Fix: store the distance
 From the code, minor. `MagicTrap_CollectUnitsInAreas` 0x52A920 appends the units of every trap area without a duplicate check; in
 reload mode (`CastAtTargets` casting at everything inside) a unit inside two overlapping areas of one trap gets the spell twice.
 
+## 32. Unit attach point / skin textures: two unchecked paths (T7 g10, 2026-11-07)
+
+From the code, low impact. `CUnit::GetAttachPoint2` 0x532860 returns the unit position plus an uninitialised stack vector on a
+server world and for a humanoid (kind 0x32) whose figure has no `rh3` part; only effect code calls it, so on the client it shows only
+with modded figures (an effect placed at a garbage offset). `CUnitClientSpecific::UpdateSkinTextures` 0x536100 null-checks the
+secondary texture but not the primary one.
+

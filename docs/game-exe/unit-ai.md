@@ -536,7 +536,7 @@ with the seen enemies; `Regroup` filter 0 with the attackers; `Fear` filter 1 di
 | `QueueOrderTurnTo(dir[3], speed)` 0x5546B0 | `TickMoveOrder` (idle action turns), script `RotateTo` | queued order kind 2 |
 | `QueueOrderKindB()` 0x555200 | `TickMoveOrder` when the action's `playAnim` byte is set | order 0xb (idle animation) |
 | `QueueOrderAttack(target, 6, 0, msg)` 0x554B30 | `Brain::OrderAttack` (Aggression, ApplyCastOrder), `Regroup`, `CastSupportSpell`; `run = -1` when `CanReachOrderTarget` (player units) else 0x1c; `AttackTarget` / `OrderAttackChecked` pass 2 | hit location 6 = any |
-| `QueueCastOn(slot, target, 0)` 0x554F50 / `QueueCastAt(slot, pos, run)` 0x554D00 | Aggression, ApplyCastOrder, CastSupportSpell, the player casts | brain kind 4 unless `IsQuickItemId` |
+| `QueueCastOn(slot, target, 0)` 0x554F50 / `QueueCastAt(slot, pos, run)` 0x554D00 | Aggression, ApplyCastOrder, CastSupportSpell, the player casts | brain kind 4 unless `IsQuickItemId` (true only for subtype-8 potions / scrolls, not wands; 11.20) |
 | `QueueOrderUseOn / Interact / Interact2 / Talk` | `Brain::OrderInteract` (player messages) | brain kind 5 |
 | `ClearQueuedOrder()` 0x555180 | brain kind 0, `TickFollow` when close | |
 | `MoveToWithParty(goal, group, 0, 1e6)` 0x554830 | `AiLogicPlayer::MoveTo` when followers lag | reachability report only |
@@ -630,6 +630,11 @@ Deep-read round 2026-11-06 (log `_cpr/claude-re/full/t5-read-ai-combat.tsv`):
 18. This page 6.8 (`Evaluate`) and 8.4: "`FindPath(budget 3 d + 10, slope 3)` cost" -> the third argument is `FindPath`'s minDist (3 m), and the cost
     is the mover's `+0x84` corridor cost from `SmoothPathStart` (0 for paths of fewer than 3 cells), not the Dijkstra path cost.
 19. `full/structs.tsv` `AiLogicFear +0x24 kiteSpotValid = 1.0` -> the kiting spot's z, doubling as the validity flag.
+20. `functions.tsv` (t7 g10): `CUnitServer::IsQuickItemId` 0x54B820 "quick item of subtype 5 / 8" -> true only for subtype 8 (potions /
+    scrolls): the code tests "5 or 8" and then "8" again, so a wand (subtype 5) DOES switch the brain to kind 4 (the QueueCastOn row) [V].
+    `AiLogicPlayer::Reset` 0x551EC0 is the slot 2 of `AiLogicTamed` (vt 0x73F0C4: the Player dtor in place, then rebuilt as Tamed);
+    the Player's own slot 2 is 0x552000 (was `Reset2`); `UnitTaskA_Dtor` 0x5520D0 = `AiLogicPlayer::dtor`.
+    `CUnitServer::InitSubobject20` 0x54EAC0 is `MoveRequest::InitCellList` (the stack MoveRequests of the AI path checks).
 
 Non-AI code in this module's address range (0x5DA000-0x5E2000, deep-read 2026-11-06, documented on their own pages): `Movie_PlayIntro` 0x5DA400 is
 really the loading-video **step** (`Movies\progres.bik`, proposed `Movie_StepProgress`), `Movie_PlayProgress` 0x5DA880 the looping loading video,

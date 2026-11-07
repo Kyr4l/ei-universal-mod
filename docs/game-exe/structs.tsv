@@ -1,7 +1,7 @@
 class	parent	size	off	type	name	note
 CObject		0x1c	0x0	pointer	vtable	
 CObject			0x4	int	refcount	items use this int too (not a 16-bit refcount)
-CObject			0x8	uint	flags	CORRECTION (add): bit 0x400000 = visible to the local party (message 0x60 list); in a playable zone (g_0x79BE6C and CPlayer +0x100 == 1) ClassifyCellObjects draws only units with it (client fog of war); bit 0x400 = lighting cache valid (Draw sets it with +0xEC = timeGetTime), bit 0x10 = selected (SelectObject); bit 28 = no animation (CUnitClientSpecific::SetAnimation)
+CObject			0x8	uint	flags	CORRECTION (add): bit 0x800000 on a client unit = talking (a voice entry with the talking flag is playing): set by CUnitClientSpecific::PlaySound, cleared by SoundEntryFinished / StopSounds; CUnit::Read clears it after a load
 CObject			0xc	int	id	-1 before the manager sets it
 CObject			0x10	int	kind	the creation key (0x32..0x34 CUnit, 0x35 CTree ...)
 CObject			0x14	pointer	manager	CBaseManager*
@@ -168,7 +168,7 @@ CUnitServer			0x980	Brain	brain	CORRECTION: was pointer: embedded, 0x190 bytes
 CUnitServer		0xb20	0x20	byte	paused	TickAnimation: time stands still (frozen)
 CUnitServer			0x21	byte	frozenAnim	set by RestartIdleAnim (hit reaction playing)
 CUnitServer			0x24	AnimQueue	currentAnim	{vtable, entries +0x28, count +0x2c, cap, grow, start tick +0x38}; entries 12 bytes {anim, sub, flags, duration, loop}
-CUnitServer			0xc4	ActionRecord	action	see ActionRecord (+0xc4..+0x104)
+CUnitServer			0xc4	UnitAnimState	action	0x38-byte block reset by UnitAnimState_Reset 0x544FD0 (CancelAction) and inline in ResetFields: CArray data +0xc8 / size +0xcc / max +0xd0, +0xd8 / +0xe4 = -1, +0xe8 = 1e38f, +0xf0 = 1, +0xf8 = 8
 CUnitServer			0x108	Hit	pendingHit	the hit record of the current attack (built by ExecuteCombatOrder, fired by CompleteOrder)
 CUnitServer			0x144	byte	idleAnimSaved	a hit reaction replaced the animation; TickState restores +0x148
 CUnitServer			0x145	byte	pathBlocked	partial path / cannot reach
@@ -266,7 +266,7 @@ MoveRequest			0x28	pointer	cellsTail
 MoveRequest			0x2c	int	cellsCount	at most 32 per chunk
 MoveRequest			0x30	pointer	cellsFree	free node list
 MoveRequest			0x34	pointer	cellsPlex	node blocks
-MoveRequest			0x38	int	cellsBlockSize	0x80
+MoveRequest			0x38	int	cellsBlockSize	the CList nBlockSize 0x80 set by MoveRequest::InitCellList 0x54EAC0 (stack MoveRequests of the AI path checks)
 CMover	MoveRequest	0x88	0x3c	pointer	pendingVtbl	CellList: cells of the path not yet delivered to the request
 CMover			0x40	pointer	pendingHead	
 CMover			0x44	pointer	pendingTail	
@@ -531,7 +531,7 @@ CUnitClientSpecific	CUnitSpecific		0x34	float	replayTime	client move replay cloc
 CUnitClientSpecific	CUnitSpecific		0x38	MoveRequest	moveRequest	CORRECTION: was int moveState: the client copy of the server move request (0x3c bytes +0x38..+0x73: kind +0x38 = the old moveState, start +0x3c.., args +0x4c.., cell list vt 0x73EDB0 +0x58, head/tail/count/free/plex +0x5c..+0x6c, block size +0x70 = 0x80); MoveRequest::Clear in Init; ReplayMove feeds it to MoveCurve::Predict (CUnit +0x27c); message 0x0E fills it
 CUnitClientSpecific	CUnitSpecific		0x78	float	fadeAlpha	+1/15 per frame onto the figure parts
 CUnitClientSpecific	CUnitSpecific		0x7c	int	fadeTicks	
-CUnitClientSpecific	CUnitSpecific		0x9c	pointer	voiceQueue	list of 0x20-byte nodes {next, prev, entry, kind, countdown, sound, flag}
+CUnitClientSpecific	CUnitSpecific		0x9c	pointer	voiceQueue	sentinel list of 0x20-byte cells {next, prev, sound id +8, kind +0xc, countdown +0x10 (3, 0 once started), sound handle +0x14 (-1 until started), talking flag +0x18 (kind 0x2B)}; cells on the free list g_0x79B230 (List20_NewNode / List20_Unlink)
 CUnitClientSpecific	CUnitSpecific		0xa0	int[7]	armorIds	equipped item ids (-1 none)
 CUnitClientSpecific	CUnitSpecific		0xbc	int[4]	weaponIds	weapon slot item ids (-1 none)
 CUnitClientSpecific	CUnitSpecific		0xcc	pointer	mouthTexture	
@@ -1364,7 +1364,7 @@ CWorldClient			0x7d8	CString	windowClass	"EvilIslandsClass"
 CWorldClient			0x7dc	CString	windowTitle2	"EvilIslands"
 CWorldClient			0x7e0	CString	pausedTitle	"EvilIslands Paused"
 CWorldClient	CWorld	0x7e4	0x84	int	localObjectIdCounter	= g_0x7AF63C: id counter of the client-only figure objects (kind 0x38): -100000 (0xfffe7960) after Init, post-decremented by every CEffectArrowFigure::Activate / CEffectMoshka::CreateBird before map object manager vt[23] RegisterInstant(0x38, id), so local objects get -100000, -100001 ... and never collide with the server's ids; renderer.md (client effects)
-CWorldClient			0x88	uint	debugOverlayFlags	0xb after the ctor: bit 0 SetStateFlag1 / ClearStateFlag1 (the debug text buffer slot 1 on g_0x78EEF0), bit 1 render stats ("triangles / vertices submitted" watches, HideRenderStats), bit 2 manager stats (HideManagerStats), bit 3 time stats ("Last Event" / "World Time", HideTimeStats); the Set*/Hide* slots only toggle them, no reader in the typed decompiles
+CWorldClient			0x88	uint	debugOverlayFlags	CORRECTION: bit 0 = the "FPS" DebugText line (g_0x78EEF0 is the string "FPS"; CWorldClient::HideFps 0x569A20 removes that key, was ClearStateFlag1)
 CWorldClient			0x90	pointer	zoneExits	data of the MFC CArray +0x8c: 0x3c-byte zone exit records (rect +0x14..+0x20, rotation +0x24, name +0x28, entrance +0x2c); FindZoneExitAt / GetZoneExitCenter / CreateZoneExitEffects index it
 CWorldClient			0x94	int	zoneExitCount	(+0x98 capacity, +0x9c grow)
 CWorldClient			0xa4	pointer	zoneExitEffects	data of the RefArray +0xa0: one kind-0x2038 particle effect per zone exit (CreateZoneExitEffects; UpdateZoneExitEffectStates shows / hides them; the dtor releases them)
@@ -3302,7 +3302,7 @@ UdbRaceModel			0x138	pointer[3]	stepSounds	FLD35 Sounds data Steps (tag 0x23): v
 UdbRaceModel			0x144	pointer[3]	stepSoundCounts	runtime vector<int>: UnitsDb::CountSoundVariants = number of "<stem>N.wav" files per stem (GetStepSoundName)
 UdbRaceModel			0x150	int	idleSoundProbability	FLD37 (tag 0x25)
 UdbRaceModel			0x154	int	attackSoundProbability	FLD38 (tag 0x26)
-UdbRaceModel			0x158	int[4]	field_158	FLD47..50 Unk47-0..Unk50-0 (tags 0x2f..0x32)
+UdbRaceModel			0x158	int[4]	mouthRect	CORRECTION: was field_158 "FLD47..50 Unk47-0..Unk50-0": the lip-sync mouth rectangle on a 256-pixel skin: +0x158 x, +0x15c y (from the bottom: dst y = 256 - y - h), +0x160 width, +0x164 height; CUnitClientSpecific::SetMouthOpen / SetMouthClosed (via CUnit::GetRaceModel 0x530970) copy that rect of the mouth texture into the body texture
 UdbHitLocationSlot		0x10	0x0	CString	hitLocationName	tag 0: a HitLocations record name ("HL <part> Type")
 UdbHitLocationSlot			0x4	int	hitLocationIndex	tag 1 (Unk12-1 in the sheet): replaced at load by the HitLocations row index (-1 unknown)
 UdbHitLocationSlot			0x8	float	weight	tag 2 HL <part> Weight

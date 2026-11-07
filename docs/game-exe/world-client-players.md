@@ -414,12 +414,23 @@ particle at the part (`hd bd lh2 rh2 ll2 rl2`, attach modes 1 / 7 / 3 / 4 / 5 / 
 a blood print (`AddBloodPrint`) under the part, offset randomly by up to `min(+0x144, +0x148, 1)` in 0.02 steps, size
 `(part +0x1a8 + +0x1ac) / 2 * 0.3` by three times that, kind `(type - 1) << 16 | rand(0..1)`.
 
-**`BuildSkinTextures` 0x536670** (callers `UpdateBodyTexture`, `UpdateHeadTexture`): the run-time twin of the skin composition of
+**`BuildSkinTextures` 0x536670** (callers `UpdateSkinTextures` 0x536100 = slot 29, which rebuilds BOTH texture sets of a hero: the
+primary set (mode 1) and the secondary set (mode 0); `UpdateSecondaryTexture` 0x536220 = slot 30, the secondary set only) [V]: the run-time twin of the skin composition of
 `PrebuildUnitSkinsAndModels` (section 8 above), on the replicated equipment `armorIds +0xa0` / `weaponIds +0xbc`. Mode 0: `mo%ds` /
 `prot%ds`, 128, armour slot 0 then the active weapon (`CUnit +0x26c` <= 3). Mode 1: `mo%dp` / `prot%dp`, 256, the base skin
 `<prefix>skin_%.2d.mmp` (`skin_00` when the proto index `+0x18` is out of range), armour slots 3..6, then slots 1 and 2 with the smaller
 `ArmorProto_GetWearOrder` first. Every layer name is `<CUnit +0xa4 prefix><model name>.mmp`; `BuildEquipmentList` gives the 12-byte
 layer records; `ComposeAndSaveLayers(out, records, names, 3, 0, 0x5551)`.
+
+**Voice queue and lip sync** [V t7 g10]: `PlaySound` 0x537D80 (slot 51, id, kind) keeps the queue `+0x9c` (sentinel list of
+`{id, kind, countdown 3, handle, talking flag = kind 0x2B}`): it first drops the queued entries the new kind supersedes (`SoundMatchesKind`:
+0xD over 9, 0xE over 1, 0xF / 0x10 / 0x13 over 3, 0x11 over 5 / 6) and the finished ones (`SoundEntryFinished` 0x537FD0: no channel and no
+pending sound for the handle). With an empty queue the sound starts at once (kinds 2 / 0x1C only when the previous voice `+0x90` is done)
+and a talking entry sets unit flag 0x800000; with a busy queue only kinds 0x1D..0x1F, 0x23..0x26, 0x2A are queued, the rest are dropped.
+`StopSounds` 0x538040 (slot 52) stops all and clears the flag. The mouth texture `+0xcc` (`LoadMouthTexture` 0x538DB0: `%smouth_%.2d`
+heroes / `%smouth` others, kind 0x3D) holds two frames; `SetMouthOpen` / `SetMouthClosed` 0x538ED0 / 0x539010 copy one of them into the
+body texture at the race model's mouth rect (`UdbRaceModel +0x158 / +0x15c` position, `+0x160 / +0x164` size on a 256-wide skin: the sheet fields FLD47..50 "Unk47..50") on every mip level with
+`Texture_BlitRectAllMips` 0x533980 (DirectDraw Blt + GetAttachedSurface; was named `Stream_ReadPackedBlock`).
 
 **`UnitProto::BuildModelPartNames` 0x535CB0** (was `CUnitClientSpecific::BuildArmorModelNames`; `this` is the 0x120 `UnitProto` row;
 only caller `PrebuildUnitSkinsAndModels`, when the look record has no part list of its own): the part table 0x73EC24 is three rows of
@@ -503,6 +514,8 @@ Open after the T5 deep read (2026-11-06):
 | `data-sound.md` 3.1 row 33 / `functions.tsv` | "`+0x118` also selects the animation set (`CUnitClientSpecific::PlayAnimation` 0x537500)" | 0x537500 is slot 46 `PlayHitEffect`; the field it reads is `RaceModel +0x118` Skin Type (hit-sound material), not `UnitProto +0x118` Weapon 1 (reported) |
 | `functions.tsv` | `CUnitClientSpecific::BuildArmorModelNames` 0x535CB0; `CMapObject::PickTest_v22` / `GetScreenRect_v23` | `UnitProto::BuildModelPartNames` (`this` = the 0x120 row); slot 22 = `Draw` without a rect, slot 23 = `Draw` recording the screen rect (batch-t5-wcp-net) |
 | this page 2 / 8 (t7 g02) | message `0x40` = "the active camera position" (`CObject3D::GetActiveTransformPtr`) | `CCamera::GetFocusPoint` 0x40FB20: the camera's look-at target `+0xE0`, or the eye `+0x1C` only while the camera is free / playing a .cam [V] |
+| this page 8.1, functions.tsv (t7 g10) | `BuildSkinTextures` callers `UpdateBodyTexture` / `UpdateHeadTexture`; `Stream_ReadPackedBlock` 0x533980 "bit-packed stream block"; `IsSoundLoaded` 0x537FD0; `ClearTargetCC` 0x538EA0 | `UpdateSkinTextures` (slot 29: both texture sets) / `UpdateSecondaryTexture` (slot 30); 0x533980 = `Texture_BlitRectAllMips` (the lip-sync mouth copy, all mip levels); 0x537FD0 = `SoundEntryFinished`; 0x538EA0 = `ClearMouthTexture` (+0xcc is the mouth texture) |
+| functions.tsv (t7 g10) | `SpellName_Format` 0x5685E0 "spell name", `ArmorName_Format` 0x5686C0 "armor name" | both dead (no caller); 0x5685E0 formats the ARMOR model name, 0x5686C0 the WEAPON model name (prefix + `%s_%.2d.%s.%d`) |
 
 ## 11. Function index
 

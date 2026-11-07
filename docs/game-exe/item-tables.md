@@ -22,5 +22,11 @@ CItemManager::CreateItemByName, CGSPlayer::InitAllowedLists, CCampTradeWin::Draw
 **Not guarded, inventory / shop / tooltip screens only (they run on an item the player opened: not reached while the menu's character views are alive)**: after an
 out-of-range index they carry a NULL record on and no null test follows in the decompile (not proven to crash in each case): CItemWeapon::GetText20 0x6A27E0 (no caller:
 a virtual slot), CItemLoot::GetIconName / GetInitIconName 0x6A4B90 / 0x6A5030, CCampScreen::CanDropItem / OnBuyOrRepair, CCampItemConstr::CreateItem / OnOpen,
-ArmorName_Format (the material), UIItemInfoWin::Refresh, CItemManager::CreateItem. If one of them shows up in a crash dump, the fix is the same as above (a replaced function or a patched inline
+UIItemInfoWin::Refresh, CItemManager::CreateItem (the former entry `ArmorName_Format` 0x5686C0 is dead code: no caller, and it formats the WEAPON model name [V t7 g10]). If one of them shows up in a crash dump, the fix is the same as above (a replaced function or a patched inline
 lookup); um.log (lines starting "um-engine:") names every out-of-range id the replaced functions meet (the first 8).
+
+## Corrections to earlier notes
+
+| file | wrong | right |
+|---|---|---|
+| this page (t7 g10) | `ArmorName_Format` listed among the unguarded reachable lookups | 0x5686C0 has no caller, pointer or raw reference (dead); it guards both indices and formats the weapon model name |
