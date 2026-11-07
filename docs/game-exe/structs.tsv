@@ -172,7 +172,7 @@ CUnitServer			0xc4	UnitAnimState	action	0x38-byte block reset by UnitAnimState_R
 CUnitServer			0x108	Hit	pendingHit	the hit record of the current attack (built by ExecuteCombatOrder, fired by CompleteOrder)
 CUnitServer			0x144	byte	idleAnimSaved	a hit reaction replaced the animation; TickState restores +0x148
 CUnitServer			0x145	byte	pathBlocked	partial path / cannot reach
-CUnitServer			0x146	byte	replanPath	stance / speed changed: BeginMoveTo again
+CUnitServer			0x146	byte	replanPending	re-plan flag (TickState state 0 calls BeginMoveTo again while set); the unreferenced setter 0x548950 sets it to 1 [V: t7 n02]
 CUnitServer			0x148	AnimQueue	savedAnim	+0x15c = saved start tick
 CUnitServer			0x160	uint	pendingHitReaction	direction flags of the last hit, -1 none (RestartIdleAnim)
 CUnitServer			0x16d	byte	running	stance 3 folded into +0x168 = 2 with this flag
@@ -194,8 +194,8 @@ CUnitServer			0x904	float	sightMult	weather x (1 - night + night x infra / 100)
 CUnitServer			0x908	int	tameStage	OnProvoked: 0..3
 CUnitServer			0x90c	int	sideBeforeTaming	
 CUnitServer			0x910	int	tamerSide	
-CUnitServer			0x914	uint	footstepTickMask	EmitFootstep when (tick & mask) == 0: 0 fast .. 0xf slow / standing
-CUnitServer			0x918	pointer	unused918	always 0 (EmitFootstep returns 0)
+CUnitServer			0x914	int	noiseMask	footstep noise mask: 0xF when not walking, else 0 / 1 / 3 / 7 by speed (> 1.2 / 0.6 / 0.3 / 0.15) [V: dead_552840, t7 n02]
+CUnitServer			0x918	pointer	footstepStimulus	the StimulusMap::EmitFootstep record (its +8 / +0xc = x / y updated) [V: dead_5527F0, t7 n02]
 CUnitServer			0x920	pointer	passiveSpellList	CORRECTION: was {next, ?, item, countdown} (TickPassiveSpells): head of the list of nodes {next, prev, item ref, countdown, keep byte} of the equipped items whose spell has flag 0x20000 (ic); rebuilt by 0x5528F0
 CUnitServer			0x938	int	idleVoiceCounter	player units: > 500 then 1/1001 per tick -> message 0x29 (idle voice) unless the player mode is set
 CUnitServer			0x93c	int	lastOrderTick	world tick when the last order was dispatched
@@ -1317,7 +1317,7 @@ CWorldClient			0xd8	IdHash	visibleHash	object id -> node of the visible CList (A
 CWorldClient			0xf0	pointer	screenRects	STL list of {RECT +4, object id +0xc} screen rectangles of the drawn objects (filled by the object renderers; PickObjectsAt / ScreenRects_CollectAt read it)
 CWorldClient			0xf4	pointer	pickRecords	STL vector of 0x18-byte pick records {_, object id +4, ...} built by PickObjectsAt and sorted by view depth; +0xf8 end, +0xfc capacity end (400 reserved)
 CWorldClient			0x100	pointer	pickCursor	current record of the pick iteration (NextPickedObject / NextPickedUnit)
-CWorldClient			0x108	IdHash	debugPolylines	id -> Polyline3D drawn by RenderDebugPolylines
+CWorldClient			0x108	struct	idHash	STLport hash id -> value (buckets +0x10c..+0x110, count +0x118, max id +0x11c) [V: dead_569B60 / dead_569C70 / dead_569CD0, t7 n02]
 CWorldClient			0x120	ObjGrid	gridA	the 16-unit object grid used for rendering and CollectObjectsNear: cells +0x120, rows +0x124, w +0x128, h +0x12c, cellsX +0x130, cellsY +0x134, render window x0 / y0 / x1 / y1 / cx / cy +0x138..+0x14c
 CWorldClient			0x150	ObjGrid	gridB	second 16-unit grid (slot 42 moves objects in it; cleared by LoadZone / ClearVisibleEffects)
 CWorldClient			0x180	pointer	terrain	CTerrain (0xafc bytes, created by Init); terrain size at its +0x10c / +0x110
@@ -1358,7 +1358,7 @@ CWorldClient			0x6f0	float	tickOffset	added to the tick for the session object u
 CWorldClient			0x6f4	CWeather	weather	rain / snow (CWeatherSound, CEffectSoundObj::Update in Render, SetWind)
 CWorldClient			0x7bc	pointer	selectedObjectIds	CORRECTION: was hiddenObjectIds. STL list of the selected object ids (SelectObject 0x566030 / DeselectObject 0x566100); RenderObjects draws a 3D arrow on each with SelectionType 1 and drops dead ones
 CWorldClient			0x7c0	int	scriptEventValue	u32 round(b) of script SendEvent(a, b) via msg 0x12 (-1 after the ctor); write-only, no reader in the exe. CORRECTION: was field7c0 "byte << 24"
-CWorldClient			0x7d0	pointer	hCursor	LoadCursorFromFile("wincurs/Df0000.cur")
+CWorldClient			0x7d0	pointer	defaultCursor	HCURSOR from LoadCursorFromFileA(<root>wincurs\Df0000.cur) [V: dead_5638F0, t7 n02]
 CWorldClient			0x7d4	CString	windowTitle	"EvilIslands"
 CWorldClient			0x7d8	CString	windowClass	"EvilIslandsClass"
 CWorldClient			0x7dc	CString	windowTitle2	"EvilIslands"
@@ -1570,7 +1570,7 @@ GSWorld			0x8c	CArray	declarations	SSCScriptDecl[] (data +0x90, count +0x94; vt 
 GSWorld			0xa0	SSCVars	globals	GlobalVars of every module compiled since Reset (numbers +0xa0, strings +0xc8, objects +0xf0, groups +0x118); the only assignable variables (id 0x78); saved
 GSWorld			0x140	MfcCList	activeScripts	vt 0x73D34C, 0xc8 nodes {SSCScriptDecl copy with bound arguments}: instances created by a script call (Run id 8, AddHead); their pairs are tested every Tick until killed
 GSWorld			0x15c	MfcCList	runningScripts	vt 0x73D340, 0xbc nodes {SSCScript}: WorldScript bodies (StartScript) and then-bodies suspended in a wait (RunProgram); AddHead, run first in Tick
-GSWorld			0x178	MfcCList	generatedPrograms	vt 0x73D364: the WorldScript body of each compile unit, ids 0x80000000 | index (AddProgramNeg 0x4BF900); ResetAndRestart restarts the first one
+GSWorld			0x178	pointer	generatedProgramList	CList of generated SSCPrograms (WorldScript bodies): head +0x17c, tail +0x180, count +0x184, free list +0x188, CPlex +0x18c, block count +0x190, node 0x20 [V: dead_4BFB10 / dead_4D57C0, t7 n02]
 GSWorld			0x194	CArray	areas	GSArea[] (data +0x198, count +0x19c; vt 0x73D334): AddRoundToArea / AddRectToArea / DeleteArea / IsInArea; saved for stream versions > 0x56
 GSWorld			0x1a8	int	running	1 after a successful compile, 0 after Reset: Tick does nothing while 0
 GSWorld			0x1ac	int	moduleId	compile unit counter: ++ after every Compiler_CompileText; names of unit N > 0 are stored as "!N!name" (quest maps, generated quest chains, console lines)
@@ -1580,6 +1580,8 @@ GSWorld			0x1e8	int	forNesting	++ / -- around For / ForIf bodies (and Every / An
 GSWorld			0x1ec	CString	errorText	last compile error ("No errors found" at the start of a compile, "Unknown error" after Reset); GSWorld::GetLastError 0x456360 -> {text, code, line}
 GSWorld			0x1f0	int	errorCode	Compiler_SetError 0x4CF470 code 1..0x11 (CORRECTION of the earlier notes that put the line here)
 GSWorld			0x1f4	int	errorLine	source line of the offending token
+GSWorld			0x144	pointer	activeInstanceHead	CList of active SSCScriptDecl instances: head +0x144, tail +0x148, count +0x14c, free list +0x150, CPlex +0x154, block count +0x158, node 0xC8 (8 link + 0xC0 decl) [V: dead_4BC210 / dead_4BF9F0 / dead_4BFA20, t7 n02]
+GSWorld			0x50	pointer	lightningHead	lightning CList +0x4C: head +0x50, tail +0x54, count +0x58, free +0x5c, CPlex +0x60; node {next, prev, CEffectLightning*, id} [V: dead_4BD150, t7 n02]
 VertexTL		0x20	0x0	float	x	FVF 0x1C4 = XYZRHW, DIFFUSE, SPECULAR, TEX1: every triangle the game draws (DrawMeshBatch, DrawIndexedTriangles, terrain, UI) is pre-transformed to screen pixels
 VertexTL			0x4	float	y	
 VertexTL			0x8	float	z	0..1 depth (z * 0.9999 for the shadow receiver mesh)
@@ -1873,7 +1875,7 @@ CAnimationNode			0x50	pointer	mainTrack
 CAnimationNode			0x54	pointer	track2	alternate tracks (SetTrackAnimationB / C) [?]
 CAnimationNode			0x58	pointer	track3	
 CAnimationNode			0x5c	float[3]	restOffset	the .bon offset blended at the morph params (Interpolate8 / 6): the child's local position
-CAnimationNode			0x68	float[3]	morphParams	s, d, h
+CAnimationNode			0x68	float[3]	restOffset	rest offset x / y / z (SetRestOffset / GetRestOffset 0x50B870 / 0x50B8A0) [V: t7 n02]
 CAnimationNode			0x74	float[3]	worldPos	UpdateTransform output -> part +0x1C
 CAnimationNode			0x80	float[4]	worldRot	-> part +0x34
 CAnimationNode			0x90	pointer	boneMatrices	aligned 0x40 vector (count +0x94, cap +0x98, grow +0x9C); allocated, never filled
@@ -1906,7 +1908,7 @@ CObject3DClientSpecific			0xe4	pointer	secondaryTexName	CString
 CObject3DClientSpecific			0xe8	float	effectTime	invisibility / stun material pulses
 CObject3DClientSpecific			0xec	uint	lastLitTime	timeGetTime when the lighting cache (owner flag 0x400) was filled
 CObject3DClientSpecific			0xf0	float[3]	scale	GetScale (slot 18); != 1 pushes a scale matrix in Draw (CUnitClientSpecific death shrink etc.)
-TextureSet		0x14	0x0	pointer	texture	CTexture* (CWorldClient::FindTexture(kind); kind at CTexture +0x10)
+TextureSet		0x14	0x0	pointer	texture	CTexture* (kind at texture +0x10); materials +4 (count +8, capacity +0xc, growth +0x10) [V: dead_51A900 / dead_51AA40, t7 n02]
 TextureSet			0x4	pointer	slots	MaterialSlot*[] (count +0x8, cap +0xC, grow +0x10)
 MaterialSlot		0x14	0x0	pointer	material	CMaterial* (CWorldClient::FindMaterial(kind); kind at CMaterial +0x10)
 MaterialSlot			0x4	pointer	parts	CFigure*[] (count +0x8, cap +0xC, grow +0x10) drawn with this texture + material
@@ -4489,3 +4491,4 @@ CFrameWnd			0x50	BOOL	m_bHelpMode	CWinThread::ProcessMessageFilter
 CFrameWnd			0x54	CFrameWnd*	m_pNextFrameWnd	frame list
 CFrameWnd			0x88	int	m_nShowDelay	CWinThread::OnIdle
 CFrameWnd			0x90	UINT	m_nIDTracking	CFrameWnd::IsTracking 0x70787E
+TextureSetList			0x4	pointer	sets	32-byte aligned array of TextureSet* (count +8, capacity +0xc, growth +0x10) [V: dead_51A440 .. dead_51A810, t7 n02]

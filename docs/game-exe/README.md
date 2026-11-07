@@ -412,4 +412,4 @@ instruction, and unreachable bytes after a no-return call. They were moved out o
 
 ## Coverage
 
-Coverage (15773 functions): named 15773.
+Coverage (15762 functions): named 15762.

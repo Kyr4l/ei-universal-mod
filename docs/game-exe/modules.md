@@ -592,7 +592,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004D6100 | 521 | SSCScriptDeclCArray_Add | (this = declarations CArray +0x8c, decl*) -> index: grown by one (SSCScriptDecl_ConstructN) and the declaration copied (Compiler_CompileText DeclareScript / undeclared Script). Was SSCScriptDeclArray_Add |
 | 0x004D63E0 | 406 | DefineList::Serialize | slot 2 of 0x73D4C0 (CArchive): {CString name, CString value} nodes (unused). Was StringPairList::Serialize |
 | 0x004D6970 | 406 | CServerSpecificManager::CreateByKind | slot 14 factory (kind): 0x46 CObject3DServer (0x20 bytes, ctor 0x51F240), 0x47 CMapObjectServer (0x94, 0x515610), 0x48 CUnitServer (0xb20, 0x545580), 0x49 CPlayerServer (0x5128, 0x66C540), 0x4b CTorchObjectSpecific (0x58, inline c... |
-| 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clips a triangle against the plane 1 - v >= 0 (Triangle_ClipByPlane5) and adds the 0 / 1 / 2 results; no callers |
+| 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clips a triangle against the plane 1 - v >= 0 (Triangle_ClipByPlane5) and adds the 0 / 1 / 2 results; dead chain: its only callers are in dead_4D7860 (ClipBuf::AddTriangleClipUnitSquare_4D7860) [dead: no live caller] |
 | 0x004D6340 | 153 | DefineList_Clear | (this = define CList vt 0x73D4C0): every node's two CStrings destroyed, the blocks freed. Was StringPairList_Clear |
 | 0x004D6C50 | 148 | ClipBuf::AddVertex | (float[5] x y z u v) -> index: x / y / z into the SoA xyz array (descriptor +0: blocks of 16 floats = x[4] y[4] z[4] pad[4]; vertex n at block n >> 2 lane n & 3), (u, v) into the uv array (+4, 8 bytes each); count +0x74++; no vert... |
 | 0x004D6CF0 | 105 | ClipBuf::AddTriangle | (v0, v1, v2 float[5]): 3 x AddVertex + 3 ushort indices into the index array +8 (count +0x78) |
@@ -610,7 +610,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x004D8000 | 1130 | ShadowProjector::Build | (A, B, C array descriptors, corners SoA float[16] (only 0, 2, 3 read), L light dir, pos caster centre, a radius): L normalised (+0x48, +0x24); AU = Eu' / /Eu'/^2 with Eu' = (corner2 - corner3) minus its L component (+0xC), AV like... |
 | 0x004D74B0 | 911 | ShadowProjector::ClipStage2 | planes v >= 0, 1 - u >= 0, 1 - v >= 0 then emit (the second half of a u-split triangle) |
-| 0x004D7860 | 856 | dead_4D7860 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004D7860 | 856 | ClipBuf::AddTriangleClipUnitSquare_4D7860 | (this = ClipBuf, tri 5-float vertices) ret 4: clips the triangle against u >= 0 (Triangle_ClipByPlane5, in place, the extra piece to static g_0x7AA750), every piece against v >= 0 (extra to g_0x7AA790), then 1 - u >= 0 (extra to g... |
 | 0x004D9360 | 791 | CSkyObject::Recolour | (this, r1 g1 b1, a2 r2 g2 b2 (ints after ftol of the colour floats)): rebuilds the horizon table +0x220 (one float per vertex: sqrt(-normal z) for vertices with z lane >= 1.0 in the SoA positions +0x1C0, else 0) when the vertex co... |
 | 0x004D71D0 | 708 | ShadowProjector::ClipStage3 | planes 1 - u >= 0 then 1 - v >= 0; each result emitted with 3 x ClipBuf::AddVertex + indices |
 | 0x004D7BD0 | 702 | ShadowProjector::ClipStage1 | (tri float[15]): planes cap (L . P + +0x68 >= 0), u >= 0, v >= 0 then Stage3 / Stage2: the prism clip of one triangle |
@@ -633,14 +633,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004DA200 | 381 | GameBuffer::ReadLength | (this, out string range, max): reads the 1/4-byte variable-length prefix and then the string bytes (assigns a std::string) |
 | 0x004DA380 | 196 | GameBuffer::WriteLength | (this, range{begin,end}*): writes the range length as a 1-byte (n*2) or 4-byte (n*2+1) variable-length prefix, then flags dirty bit 1 |
 | 0x004DABC0 | 188 | GameBuffer::InitWithSize | (this, valid size, capacity): dirty bit cleared, a buffer of capacity bytes, cursor = start, end = start + capacity, valid end = start + valid size, file offset 0; (a flush branch that cannot run since the dirty bit was just clear... |
-| 0x004DA040 | 182 | dead_4DA040 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x004DAD80 | 162 | dead_4DAD80 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004DA040 | 182 | CubicBSpline2_SetCoeffs_4DA040 | (this = 2 x 4 floats, p0, p1, p2, p3 Vec2*) ret 0x10: the same B-spline coefficients as 0x4D9F30 for x and y only. No caller [dead: no caller or pointer] |
+| 0x004DAD80 | 162 | BufferedFile_SyncWindow_4DAD80 | (this = buffered file {vt, window +4, cursor +8, window end +0xc, valid end +0x10, window file offset +0x14, flags +0x18}): pos = offset + (cursor - window); nothing when equal to the offset; when dirty (bit 0): bit cleared, [wind... |
 | 0x004DA740 | 161 | GameBuffer::WriteGrow | slot 4 (data, n): reallocates to (length + n) * 2 + 0x40, rebases +8 / +0x10 / +0xc, copies n bytes at the cursor +8 and advances it (the overflow path of the inline write). Was GameBuffer::Write |
 | 0x004DA9E0 | 156 | GameBuffer::CopyCtor | (this, src) -> this: +0x14 = 0, vt 0x73D624, a new buffer of src capacity (end +0xc - buffer +4) with the contents copied, valid end +0x10 and cursor +8 at the same offsets as in src, flags +0x18 copied. Callers NetPeer::Clone, Ne... |
 | 0x004DACE0 | 149 | BufferedFile_MoveWindow | (this = buffered file {vt, window +4, cursor +8, window end +0xc, valid end +0x10, window file offset +0x14, flags +0x18 (1 dirty, 8 error), FILE* +0x1c}, file offset): flushes the dirty window (vt slot 8), reads min(valid end - c... |
 | 0x004DA860 | 139 | GameBuffer::Seek | slot 6 (pos): valid end +0x10 = max(valid end, cursor); cursor +8 = data + pos, growing the buffer (x2 + 0x40) when pos is past the capacity |
 | 0x004DA170 | 138 | GameBuffer::ReadOverrun | (this = GameBuffer {vt, buffer +4, cursor +8, buffer end +0xc, valid end +0x10, file offset +0x14, flags +0x18}, dest, n) -> bytes read: the out-of-line path the inline readers take when cursor + n passes the valid end: flags /= 8... |
-| 0x004DAB40 | 125 | dead_4DAB40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004DAB40 | 125 | GameBuffer::Reserve_4DAB40 | (this = GameBuffer, n) ret 4: when n + 0x400 >= capacity (end +0xc - start +4): a new buffer of n + 0x400 bytes, the old capacity copied and freed, cursor +8 / valid end +0x10 rebased, end = start + n + 0x400. Non-virtual twin of ... |
 | 0x004DAFC0 | 125 | BufferedFile_GrowWindow | slot 1 of vt 0x73F8A4 / 0x73F8C8 (this, n): window size <= n + 0x400 -> a new window of n + 0x400 bytes, old contents copied, cursor +8 and valid end +0x10 re-based (no file I/O) |
 | 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): new buffer of ((file offset +0x14 - buffer) + cursor + n) * 2 + 0x40 bytes (pointer arithmetic as written), old contents up to the buffer end copied, old freed, cursor / valid end re-based, buffer end... |
 
@@ -688,7 +688,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4E3000 - 0x501000: renderer: D3D7 device, state blocks, vertex buffers, MMX
 
-510 functions, group `renderer`.
+515 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -719,14 +719,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the OLD (.ani, double-precision) animation node of the 3ds tool chain: frame fraction +0x38 += dt, frame +0x34 ++ at 1, key indices step past their end frames; CFigureManager::MakeAnimationNode / LoadAnimationF... |
 | 0x00505CB0 | 1078 | AnimNodeOld_ReadFromData | thiscall (AnimNodeOld, cursor*): one node of the old .ani data: rest rotation (16 B raw) +0xe4, pivot +0xf4, u32 n + n Vec3 into the base vertices +0x100 and the working copy +0xd4, frame count +0x40, u32 + rotation keys +0x44 (Al... |
 | 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 (RECT, fov or 0): the 16 stack depths of the library +8 reset; P = Mat4_Perspective(fov (camera g_0x79B2A8 default), rect aspect, near, far) on stack 6, V = Mat4_Viewport(rect) on stack 8, identity on 7, stacks 1 and 0 = V... |
-| 0x005041F0 | 982 | I3DFigureImpl::DrawRect2D | slot 19 (x0, y0, x1, y1, alpha, outline) -> 1: texture stage 0 cleared; a transformed quad (FVF 0x1C4, colour alpha << 24) drawn with DrawIndexedTriangles; UI panels / fades |
-| 0x00505901 | 935 | dead_505901 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005041F0 | 982 | I3DFigureImpl::DrawRect2D | slot 19 (x0, y0, x1, y1, alpha, outline) -> 1, or 0 for an empty rectangle (x1 < x0 or y1 < y0: the jl at 0x504204 / 0x50421A go to the exit 0x5045BA): texture stage 0 cleared; a transformed quad (FVF 0x1C4, colour alpha << 24) dr... |
 | 0x00504A60 | 923 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
+| 0x00505910 | 920 | AnimNodeOld_Read_505910 | (this = AnimNodeOld, stream) ret 4: the stream twin of AnimNodeOld_ReadFromData (stream vt +0x34 = Read): rest rotation +0xe4 (16 B), pivot +0xf4 (12 B), count + count Vec3 into the aligned base-vertex vector +0x100 (count +0x104,... |
 | 0x00507E80 | 826 | AnimNodeOld_ResetToFirstKey | fastcall (AnimNodeOld): pose from rotation key 0 (+0x44 data, read without a count check): root: world rotation +0xb8 = key 0 quaternion, world position +0xc8 = the pivot +0x110 rotated by it (no translation); child: world rotatio... |
-| 0x005061E0 | 727 | dead_5061E0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00506D00 | 709 | dead_506D00 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005061E0 | 727 | AnimNodeOld_ReadPivotBox_5061E0 | (this = AnimNodeOld, stream, a, b, scale) ret 0x10: stores the three arguments at +0x11c / +0x120 / +0x124, reads a 0x48-byte block (18 floats) from the stream (vt +0x34) and from its corner / centre differences, scaled by the flo... |
+| 0x00506D00 | 709 | AnimNodeOld_UpdateWorldTransform_506D00 | fastcall (this = AnimNodeOld) -> 1: no parent (+0x1c == 0): world position +0xc8 = local +0xac, world rotation +0xb8 = local +0x9c; else world position = parent position +0xc8 + the pivot +0x110 rotated by the parent quaternion +0... |
 | 0x00507990 | 699 | AnimNodeOld_StepTimeRecursive | thiscall (AnimNodeOld, double dt) -> 1: the morph frame [+0x98] scaled by dt is added to the working vertices +0xd4; AnimNodeOld_AdvanceTime(node, &dt); world position / rotation composed as in AnimNodeOld_RefreshRecursive; recurs... |
-| 0x00509000 | 628 | dead_509000 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00509000 | 628 | CAnimationSystemOld::AddNode_509000 | (this, node) ret 4 -> 1 / 0: the parent = the last node of +4 whose name +4 strcmp-equals node's parent name +8 (none -> 0); node +0x1c = parent; node appended to the parent's children +0x20 (count +0x24, capacity +0x28, growth +0... |
 
 ## 0x50A000 - 0x50E000: CAnimationTrack (.anm keys: positions, rotations, morph frames; Evaluate) / CAnimationNode (hierarchy, bound figure part, morph interpolation, UpdateTransform) / CAnimationSystem2 (nodes, animation queue, SetTime / SetAnimation / SetMorphParams / BindPart)
 
@@ -745,13 +745,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0050D600 | 444 | CAnimationSystem2::SetTime | (t, frames since the clip start, = world ticks: 1 frame per tick): +0x60 = t (dirty when changed); no current clip (+0x40) but a queue (+0x44, count +0x50): the first queued .adb entry becomes current at time 0; while the current ... |
 | 0x0050B1D0 | 416 | CAnimationNode::dtor | vt = vt_CAnimationNode; the part, main track, track2, track3 released through their vt slot 0x10 and cleared; name / parentName / modelName set to ""; parent = 0; children list reset (CList_Reset6) then its MFC CList shell (vt 0x7... |
 | 0x0050B370 | 406 | CAnimationNode::Init | slot 2 -> 1: names +0x1C / +0x20 / +0x24 = "", parent +0x28 = 0, child list +0x2C reset, bound part +0x48 and tracks +0x4C..+0x58 = 0, world position +0x74 = 0, rotation +0x80 = identity, bone matrix vector +0x90 emptied, morph pa... |
-| 0x0050B6E0 | 391 | dead_50B6E0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0050B6E0 | 391 | CAnimationNode::Reset_50B6E0 | fastcall (this = CAnimationNode): names +0x1c / +0x20 / +0x24 = "none" (0x7846F0), parent +0x28 = 0, the child CList (+0x30 head .. +0x40 CPlex) emptied and its CPlex chain freed, +0x48..+0x58 = 0, world position +0x74 = g_0x7AF11... |
 | 0x0050D7C0 | 351 | CAnimationSystem2::SetMorphParams | (s, d, h): the model record (CFigureManager::GetModel of the owner's model name); every node gets +0x68..+0x70 = (s, d, h) and its rest offset rebuilt (SetNodeRestOffset); +0x68.. of the system = the params; dirty |
-| 0x0050D180 | 342 | dead_50D180 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0050D180 | 342 | CAnimationSystem2::RebuildHierarchy_50D180 | fastcall (this): every node's child CList cleared (children parent = 0, CList_Reset6); then every node whose parent name +0x20 equals another node's name +0x1c and is not yet its child is appended to that node's child CList (0xC C... |
 
 ## 0x50E000 - 0x51A000: CMapObject (net state pack / unpack, buffs, specifics) + CMapObjectClientSpecific (buff visual effects + sounds, light) + CMapObjectServer + CObject3D (parts, figure / .adb animation database, LoadModel / LoadFigures / CreatePart, scale, bounds, effects list) + units prototype lookup (Units_FindProtoByName, Unit_InitStatsFromProto, Unit_ApplyPrototype, Unit_GiveProtoEquipment)
 
-288 functions, group `objects`.
+283 functions, group `objects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -772,7 +772,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x51A000 - 0x520000: CObject3DClientSpecific (texture sets +0x20/+0x24, materials +0x38, skins SetTextureNames, wounds texture + TextureBlend, shadows, invisibility / stun material tweaks, material colour push/pop) + CObject3DServer + perks.pdb database (PerksDb_FindByName / Save) + aligned dword vectors / CString vector helpers
 
-153 functions, group `objects`.
+152 functions, group `objects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -782,18 +782,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0051FF40 | 721 | PerksDb_Save | (this = perks database, CString dir; ret 4) -> 1: printf "Saving database."; opens dir + "perks.pdb" with the CFile vt+0x20 (mode 0x1001 create/write); Archive_Open(archive, file, store, version 1), Db_SaveRecords18(tag 1, groups ... |
 | 0x0051E5D0 | 476 | TexNameRefs_InsertRealloc | (this = vector of 0x14-byte {key, TexNameRef}, pos, value*, n): STLport _M_insert_overflow: new capacity = size + max(size, n) from the size pool (PoolAlloc_Refill when empty) or operator new; TexNameRefs_UninitCopy [begin, pos), ... |
 | 0x0051F5B0 | 471 | CStrings_Resize | (this = vector<CString>, n): shrinks (destroying) or grows with empty CStrings (CStrings_InsertRealloc when the capacity is exceeded) |
-| 0x0051A440 | 389 | dead_51A440 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0051A440 | 389 | TextureSetList::AddTexture_51A440 | (this = TextureSetList {sets +4, count +8, capacity +0xc, growth +0x10}, texture) ret 4 -> 1 / 0: 0 when a set whose texture (+0) has the same kind +0x10 exists; else a new zeroed 0x14 set {texture, materials vector} (refcount of ... |
 | 0x0051C250 | 383 | CObject3DClientSpecific::SetTextureNames | (primary name, secondary name) -> 1: +0xE0 / +0xE4 = the names; for each non-empty name an existing texture of the set's kind with that name (texture manager world vt[34]() 0x692D30) replaces the set's texture (the skin "<prefix>s... |
 | 0x0051F790 | 382 | CStrings_InsertRealloc | (this = vector<CString>, pos, value*, n): STLport _M_insert_overflow: new capacity size + max(size, n) (size pool g_0x79B224 / PoolAlloc_Refill for <= 0x80 bytes, else operator new); CStrings_UninitCopy [begin, pos), n copies (n =... |
 | 0x0051FB50 | 382 | PerksDb_DestroyTables | fastcall (db): every 0x44-byte perk record of +0xC..+0x10: ~CString +0x14, +0xC, +4, +0; the buffer PoolFree'd (capacity +0x14); every 0x18-byte group record of +0..+4: Strings_DestroyRange + vector4_Deallocate of its CString vect... |
 | 0x0051B2F0 | 358 | CObject3DClientSpecific::GetOrCreateTextureSet | (textureNumber) -> set (0x14: +0 CTexture* (CWorldClient::FindTexture(kind)), +4 material slots vector, +8 count, +0xC cap, +0x10 grow): an existing texture of that kind in +0x28 (count +0x2C) returns its set; kinds 1, 3, 4, 6..9,... |
-| 0x0051A5D0 | 352 | dead_51A5D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0051A5D0 | 352 | TextureSetList::AddMaterial_51A5D0 | (this = TextureSetList, material, textureKind) ret 8 -> 1 / 0: the set whose texture kind +0x10 equals textureKind (none -> 0); 0 when the material is already in its vector +4; else appended (AlignedAlloc32_51A170 growth rule) wit... |
 | 0x0051A010 | 311 | AlignedDwords_SetAtGrow3 | the same code as AlignedDwords_SetAtGrow (another instance): index >= count -> grow to index + 1 (32-byte aligned block, raw pointer at [-4], grow +0xC or count/8 clamped 4..0x400), data[index] = value; caller CObject3D::PickAnimD... |
-| 0x0051A900 | 311 | dead_51A900 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0051A900 | 311 | TextureSet::AddMaterial_51A900 | (this = TextureSet {texture +0, materials +4, count +8, capacity +0xc, growth +0x10}, material) ret 4 -> 1 / 0: 0 when already present; else appended (aligned growth rule) with refcount +4 ++. No caller [dead: no caller or pointer... |
 
 ## 0x520000 - 0x529000: unit stats & damage model (perks.pdb, damage types, hit locations)
 
-172 functions, group `units`.
+169 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -803,8 +803,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00526C70 | 895 | UnitStats_WeaponSkill | (stats, damageKind, unit): the attack skill: melee kinds 0..4: perk group = kind bonus + melee byte +0x6cb (+ heroes: weapon proto +0x7b + governing attribute - 25 from the skills table letter d/i/s); 5/6: archery byte +0x6cc + pr... |
 | 0x00525070 | 848 | UnitStats_ApplyDamage | (stats, unit, placement, hit, weapon): part = +0x110 + hit[11]*0xf4, state < 2 -> 0; per type i with dmg = hit[i]*hit[9] > 0: armor tiers (heroes 2..0, others 0) with state (+0x44+0x48t) > 1 absorb hit[10] * tierValue_i (wearing t... |
 | 0x00522CE0 | 822 | UnitStats_PackToRecord | (stats, unit, record 0x108 = CUnit +0x330): +4 exp, +8 exp + accum - spent, +0xc/+0xd/+0xe str/dex/int, +0x10..+0x13 stance speed mults * 127.5, +0x14 base speed * 25.5, +0x15 action speed, +0x16 carry max short, +0xf move type, +... |
-| 0x00527520 | 806 | dead_527520 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00527220 | 763 | dead_527220 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00527520 | 806 | UnitRecord_WeaponSkill_527520 | (this = 0x108-byte unit record, kind, unit) ret 8 -> float: as 0x527220 plus the proto byte +0x7b of the unit's weapon-slot item (CUnit::GetWeaponSlotItem(unit +0x26c), CItem::GetProtoRecord; 0 without one) and the perk value of +... |
+| 0x00527220 | 763 | UnitRecord_WeaponSkillNoWeapon_527220 | (this = 0x108-byte unit record, kind) ret 4 -> float: the record form of 0x526A20: perk level bytes +0xe3[kind], skill bytes +0xdb (melee) / +0xdc (ranged), attribute bytes +0xc strength / +0xd dexterity / +0xe intelligence (- 25)... |
 | 0x00528AB0 | 738 | UnitStats_RaiseSkill | (stats, skill, delta, unit): server units: byte +0x6cb[skill] += delta; the cost is added to the experience accumulator and flushed into total +4 and spent +8; max HP/mana and parts refreshed; Recompute2 |
 | 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | (stats, kind, delta, unit): server units only (unit specific +0x170 vt[12] type 0x39): attributeSkills byte +0x6c8[kind] += delta, the experience cost (pow of the old / new level) goes into expAccumulator +0x700 and a positive acc... |
 | 0x00524CD0 | 712 | UnitStats_Recompute | (stats, carriedWeight): older/simpler recompute (camp / client side): attributes + perk bytes +0x6ea..+0x6ec, +0x44 = -2, part max HP rescale with the health perk, +0x50 = arg, +0x54 carry max, +0x58/+0x5c limb factors, +0x28, +0x... |
@@ -835,7 +835,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x52E000 - 0x533000: CUnit (+ CFakeUnit overrides)
 
-120 functions, group `units`.
+117 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -856,28 +856,28 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x533000 - 0x53A000: CUnitClientSpecific
 
-155 functions, group `units`.
+151 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00536670 | 1970 | CUnitClientSpecific::BuildSkinTextures | (mode, out): composes the body texture: mode 0 "mo%ds"/"prot%ds" (size 0x80) from the armor +0xa0 (0x6A3480 item texture name) and the weapon (0x6A0AA0); mode 1 "mo%dp"/"prot%dp" (0x100): "%sskin_%.2d.mmp" base skin + the items of... |
+| 0x00534B60 | 1724 | CUnitClientSpecific::UpdateAnimSounds | per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound |
 | 0x00537500 | 1661 | CUnitClientSpecific::v46_PlayHitEffect | slot 46 (body part 0..5, intensity = the part's HP-ratio drop, flags = packed stats byte +0x107) from CUnit::ReadNetState section 4 when a part ratio changes: flag 8 or intensity <= 0.0001 -> nothing; hit sound "weapons\<slash/pie... |
 | 0x00535CB0 | 1095 | UnitProto::BuildModelPartNames | (this = 0x120 UnitProto row of g_0x7AF358, armour ids vector, weapon ids vector, out armour/weapon part names, out base part names); only caller PrebuildUnitSkinsAndModels when the look record has no explicit part list. Armour id ... |
 | 0x005381B0 | 1006 | CUnitClientSpecific::Equip | slot 26 (item id; hi word = index into the item database g_0x7C8718 (200-byte entries; +0xc = equipment slot 0..6)): +0xa0[slot] = id and attaches the item's figure / texture to the owner's figure (figure manager g_0x7AF5F4, name ... |
 | 0x00534760 | 953 | CUnitClientSpecific::GetAnimSoundName | (anim record, t0, t1, out, miss): the sound of an animation event (weapon swing / hit / miss sounds "weapons\\..") |
-| 0x00534E49 | 941 | CUnitClientSpecific::UpdateAnimSounds_EH | exception-handling funclet inside CUnitClientSpecific::UpdateAnimSounds 0x534B60; not a real function |
 | 0x005341A0 | 756 | CUnitClientSpecific::Update | per client frame: paused (+0x260) shifts the move request ids, looping (+0x25c) advances +0x258; weapon parts hidden while the current anim has no weapon bits; hidden flag (owner flag 8) by anim class / death; fade +0x78 += 1/15 p... |
-| 0x00534B60 | 745 | CUnitClientSpecific::UpdateAnimSounds | per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound |
 | 0x00535850 | 706 | CUnitClientSpecific::ReplayMove | (this, time, dt): advances the client-side move interpolation (slots 40 / 41) |
 | 0x005385A0 | 695 | CUnitClientSpecific::Unequip | slot 27 (slot 0..6): +0xa0[slot] = -1 and restores the base figure part (figure manager g_0x7AF5F4, name +0xa4, table 0x73EC24 + 0x1c * kind) |
 | 0x00536300 | 682 | CUnitClientSpecific::BuildEquipmentList | (mode, out CArray<12-byte {type, id, model}>): mode 0: SetSize 0 then 2: entry 0 = {0x3005, armorIds[0] +0xA0, armor db record (0x7C8718, 200 bytes, index = id >> 16) +0xC} when valid; entry 1 = {0x3004, weaponIds[owner weaponSlot... |
 | 0x005370F0 | 622 | CUnitClientSpecific::BuildDamageTextures | -> 0 / ComposeAndSaveLayers result: fills a local recipe {key = byte[6] damage levels (AlignedAlloc32_Bytes(6)), layer CStringArray +0x10, size +0x24 = 0x40, 0x80 for kind 0x32}; GetBodyPartDamageLevels(levels) false -> returns 0;... |
 | 0x00536EA0 | 587 | CUnitClientSpecific::GetBodyPartDamageLevels | (out byte[6]): from the record parts (+0x374 + 0x1c i: state, +4 HP short, +6 max): 0 >= 75 %, 1 >= 33 %, 2 < 33 %, 3 <= 1/max; heroes: armor items (db +0xb4 flag) hide the covered parts; others mirror the limb pairs; returns 1 wh... |
 | 0x00538960 | 579 | CUnitClientSpecific::GetAttackParams | slot 50, client mirror from the packed record: [6] = +0x349 (attack), [7] = +0x34b (defence), [2] = +0x34c (weight), [3] = +0x34d, [4] = +0x34d + +0x34e (damage), [5] = +0x34a (spread); armed heroes: from the item id +0xbc[+0x26c]... |
+| 0x00535590 | 480 | CUnitClientSpecific::SetWeaponFigure | slot 25 (weapon index 0..3): the weapon id +0xbc[idx] vs the current +0x26c: attaches the weapon figure (figure manager g_0x7AF5F4 0x5AA5F0 by owner name +0xa4 ...) |
 
 ## 0x53A000 - 0x545000: units database (units.udb prototypes)
 
-161 functions, group `data`.
+169 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -898,7 +898,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x545000 - 0x557000: CUnitServer (update, combat, skills, orders)
 
-277 functions, group `units`.
+263 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -940,7 +940,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x55E000 - 0x565000: CWorld base (managers, time of day, RefListPair +0x60) + CWorldClient (object lists / grids, CBridgeManager walkable quads, sky, day-light tables, CWeather at +0x6f4), CTerrain / CTextManager / CParticleManager / CVisFogManager dtors
 
-212 functions, group `world`.
+214 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -961,7 +961,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x565000 - 0x579000: CWorldClient: LoadZone (terrain / sky / day-light tables / skins), Render / RenderObjects / ClassifyCellObjects / shadows, object picking (screen rects), terrain prints (prints.db), zone exits, hero unit creation, net attach (file / TCP streams), session helpers; STL sort / container instantiations
 
-504 functions, group `world`.
+511 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -996,14 +996,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00579730 | 155 | CDemoScreen::Create2 | identical second copy of CDemoScreen::Create (CUIWindow 0x184 bytes, vt 0x73F7F8, +0x94 = the 0x73F7C4 interface, the CStringArray at +0x188, the byte +0x184 = 1): CInterface::SetPendingScreen(g_0x7C7D50, window). No callers (link... |
 | 0x00579420 | 126 | Session_LeaveGameToMenu | (this, a, CParty): same as request kind 5: CPlayer::SetPartyBlock(client connection owner, party), UnloadZone, CWorldClient::ConnectToLobbyHost; without a lobby server Game_EnterZone("MainMenu", 2) else Lobby_ResetMpGameState; con... |
 | 0x005796B0 | 95 | CDemoScreen::~body | destroys the CString +0x164 and the demo list, then CUIWindow::~body. Was CUIWindow_73F7F8::~body |
-| 0x005797D0 | 63 | dead_5797D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x005793A0 | 62 | dead_5793A0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005797D0 | 63 | Session_SetRecording_5797D0 | (arg) ret 4: arg != 0 -> CPlayerClient::SendMsg02_RequestParty(connection, arg) and g_0x7B007C = 1; arg 0 -> CPlayerClient::StopRecording(connection) and g_0x7B007C = 0. No caller [dead: no caller or pointer] |
+| 0x005793A0 | 62 | Session_PlayRecordedWithParty_5793A0 | (party) ret 4: CPlayer::SetParty(connection +0x1c, party), CWorldClient::PlayRecordedStream(g_0x7AF5B8, g_0x7AFFBC), connection +0x85 = 1. No caller [dead: no caller or pointer] |
 | 0x005793E0 | 62 | Session_PlayRecordedStream | (file): UnloadZone, CWorldClient::AttachDualFileStream (recorded packet playback), connection +0x84 = 1, +0x85 = 0. Caller CUIScreen73F7F8::PlayIntroMovie. Was Game_AttachClientStream |
-| 0x00579370 | 34 | dead_579370 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00579370 | 34 | Session_PlayRecorded_579370 | (): CWorldClient::PlayRecordedStream(g_0x7AF5B8, g_0x7AFFBC), then connection (CWorldClient::GetConnection) +0x85 = 0. No caller [dead: no caller or pointer] |
 
 ## 0x57A000 - 0x58A000: game session: saves, MainMenu, autoexec, scenario/mission.sav, MpState
 
-320 functions, group `app`.
+317 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
