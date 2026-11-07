@@ -9920,24 +9920,24 @@ addr	size	name	status	purpose
 0x005FB8E0	34	NodeFree28_005FB8E0	named	cdecl (entry): PoolFreeBuf_5F32D0(+0x10) frees its string-range key, entry pushed on g_0x79B234. Caller CUIScreen740A2C::~body
 0x005FB910	34	NodeFree28_005FB910	named	cdecl (entry): the same with PoolFreeBuf_5F3310. Caller CUIScreen740A2C::~body
 0x005FB940	467	RbMap_InsertAt_005FB940	named	thiscall (tutorial map<CString, int>, out, x, y parent, value*): STLport _M_insert, byte-identical to StrTree_InsertNode 0x5E11F0 except the call targets: y == header or x != 0 or v < key(y) (strcmp) -> new entry (NodeAlloc18_CopyCtor_5FBE40) left of y, else right; red, inlined rebalance with rotations, count++. Callers RbMap_InsertHint_005FAB80 (4)
-0x005FBB20	365	RbMap_InsertUnique_005FBB20	named	std::map insert_unique: descend comparing keys, insert unless present
+0x005FBB20	365	RbMap_InsertUnique_005FBB20	named	thiscall (tutorial map<CString, int>, out {iterator, bool}, value*): byte-identical to StrSet_Insert 0x5E13D0 except the call targets: STLport _Rb_tree::insert_unique: descends from the root (header +1) comparing strcmp(v key, entry +0x10), steps back one entry (RbTree_Decrement) unless at the leftmost; an equal key -> out = {existing, 0}; else a new entry (NodeAlloc18_CopyCtor_5FBE40) is linked left / right (leftmost +8 / rightmost +0xc of the header updated), RbTree_Rebalance, count +4 ++, out = {new, 1}; caller RbMap_InsertHint_005FAB80
 0x005FBC90	32	StaticInit_NoopGuarded_f5FBC90	named	compiler: per-TU initialiser of a header static object with an empty ctor and an empty dtor (0x4013D0 is a bare ret): sets bit 0 of the shared guard g_0x7CAEE4 and registers the dtor with atexit; no effect (163 copies in the exe)
 0x005FBCB0	30	StringRep_Delete_D	named	scalar deleting destructor (non-virtual): StringRep_Release_D then operator delete when flag & 1
 0x005FBCD0	30	StringAtOffset04_Delete_C	named	scalar deleting destructor (non-virtual): StringAtOffset04_Free_C then operator delete when flag & 1
 0x005FBCF0	30	PoolBuf_Delete_A	named	scalar deleting destructor (non-virtual) of a pooled string-range buffer: PoolFreeBuf_5F32D0 then operator delete when flag & 1 (3 callers)
 0x005FBD10	30	PoolBuf_Delete_B	named	scalar deleting destructor (non-virtual): PoolFreeBuf_5F3310 then operator delete when flag & 1 (2 callers)
-0x005FBD30	77	CStringPair_Destroy_005FBD30	named	destroy two CString members of a small record (SEH frame)
-0x005FBD80	77	CStringPair_Destroy_005FBD80	named	destroy two CString members of a small record (SEH frame)
-0x005FBDD0	77	CStringPair_Destroy_005FBDD0	named	destroy two CString members of a small record (SEH frame)
-0x005FBE20	5	String_Free_Wrap2	named	frees a std::string
-0x005FBE30	8	StringAtOffset04_Free_C	named	free the std::string at this+4
+0x005FBD30	77	CStringPair_Destroy_005FBD30	named	fastcall (record): CString::~CString(+0xc) then (+8) inside an SEH frame; callers CStrPairArray740BFC::Serialize, StringArray_SetAtGrow_631CC0, CUIScreen740B3C::~body and the unwind funclets 0x72A610 / 0x72A61B / 0x72D1F5
+0x005FBD80	77	CStringPair_Destroy_005FBD80	named	fastcall (record): CString::~CString(+0x14) then (+0x10) inside an SEH frame; callers CStrPairArray740BF0::Serialize, CStrPairArray_SetSize_631E70, CUIScreen740B3C::~body and the unwind funclets 0x72A630 / 0x72A63B / 0x72D1FD
+0x005FBDD0	77	CStringPair_Destroy_005FBDD0	named	fastcall (record): byte-identical to 0x5FBD80 except the frame handler: CString::~CString(+0x14) then (+0x10); callers CStrPairArray740BE4::Serialize, CStrPairArray_SetSize_631FF0, CUIScreen740B3C::~body and the unwind funclets 0x72A650 / 0x72A65B / 0x72D205
+0x005FBE20	5	String_Free_Wrap2	named	"thunk: jmp CString::~CString 0x700970 (an MFC CString, ecx = the string); callers ListClear18_005FB810, ListEraseNode18_609A80, DeletingDtor_60ABE0 and an unwind funclet. CORRECTION: was ""frees a std::string"""
+0x005FBE30	8	StringAtOffset04_Free_C	named	"fastcall: CString::~CString(this + 4) (lea ecx,[ecx+4]; jmp 0x700970); callers RbTree_EraseSubtree_005FAFA0, StringAtOffset04_Delete_C and three unwind funclets. CORRECTION: was ""std::string"" (it is an MFC CString)"
 0x005FBE40	196	NodeAlloc18_CopyCtor_5FBE40	named	STL: allocate a 0x18-byte list node from pool g_0x79B22C and copy-construct a CString into it (10 callers); callers RbMap_InsertHint_005FAB80, RbMap_InsertAt_005FB940, RbMap_InsertUnique_005FBB20
 0x005FBF30	22	InitFields2_5FBF30	named	STL: pair<A, B>(const A&, const B&) constructor (+0 = *a, +4 = *b); callers RbMap_InsertHint_005FAB80
 0x005FBF50	81	CStringArray_Construct_5FBF50	named	STL: zero a block and set the CString members of N elements to the empty string; callers CStrPairArray740BFC::Serialize, StringArray_SetAtGrow_631CC0
 0x005FBFB0	82	CStringRecordArray_Construct_5FBFB0	named	STL: zero N 24-byte records and set their CString member to the empty string; callers CStrPairArray740BF0::Serialize, CStrPairArray_SetSize_631E70
 0x005FC010	82	CStringRecordArray_Construct_5FC010	named	STL: same as 0x5FBFB0; callers CStrPairArray740BE4::Serialize, CStrPairArray_SetSize_631FF0
-0x005FC070	31	PtrRange_CopyNullChecked	named	copy [first,last) dwords to dest skipping null destination
-0x005FC090	29	PtrRange_FillNullChecked	named	fill N dwords with *value skipping null destination
+0x005FC070	31	PtrRange_CopyNullChecked	named	fastcall (first, last, dest): copies the dwords [first, last) to dest, skipping the store when dest is null (uninitialized_copy of pointers); byte-identical to Dwords_UninitCopy 0x42B6C0; caller PtrVector_InsertRealloc_5FA9A0
+0x005FC090	29	PtrRange_FillNullChecked	named	fastcall (dest, n, value*): n times *dest = *value (skipped when dest is null), dest += 4 (uninitialized_fill_n of pointers); byte-identical to Dwords_UninitFillN 0x42B6E0; caller PtrVector_InsertRealloc_5FA9A0
 0x005FC0B0	11	DialogScreen::DeletingDtor_sub	named	sub-object (+0x94 IUIEvents) deleting destructor thunk of DialogScreen: this - 0x94 -> primary deleting destructor
 0x005FC0C0	11	CUIScreen740A2C::DeletingDtor_sub	named	sub-object (+0x94 IUIEvents) deleting destructor thunk of CUIScreen740A2C: this - 0x94 -> primary deleting destructor
 0x005FC0D0	11	CTutorialScreen::DeletingDtor_sub	named	sub-object (+0x94 IUIEvents) deleting destructor thunk of CTutorialScreen: this - 0x94 -> primary deleting destructor
@@ -9949,7 +9949,7 @@ addr	size	name	status	purpose
 0x005FC130	11	CUIScreen740B3C::DeletingDtor_sub	named	sub-object (+0x94 IUIEvents) deleting destructor thunk of CUIScreen740B3C: this - 0x94 -> primary deleting destructor
 0x005FC140	11	CUIScreen740840::DeletingDtor_sub	named	sub-object (+0x94 IUIEvents) deleting destructor thunk of CUIScreen740840: this - 0x94 -> primary deleting destructor
 0x005FC150	31	StaticInit_Vec3Zero_g7C7E40	named	per-TU static const zero vector g_0x7C7E40 = (0, 0, 0) (3 floats, a math header constant copied into every TU next to its 1.0f / identity-quaternion copies); unreferenced (every use was folded by the compiler)
-0x005FC170	41	Quat_StaticInit_Identity15	named	sets global quaternion g_0x7C7E30 to (1,0,0,0)
+0x005FC170	41	Quat_StaticInit_Identity15	named	static initializer (pointer 0x7837C0 in the init table): g_0x7C7E30..0x7C7E3C = {1.0, 0, 0, 0} (identity quaternion)
 0x005FC1A0	19	StaticInit_FloatOne_g7C7E28	named	per-TU static const float g_0x7C7E28 = 1.0 (0x3f800000), a math header constant; unreferenced (every use was folded by the compiler)
 0x005FC1C0	9	CI3DFigureHolder::CI3DFigureHolder	named	4-byte holder (+0 CObject3D figure): +0 = 0. Was ZeroFirstDword_5FC1C0
 0x005FC1D0	22	CI3DFigureHolder::Release	named	releases the held object (+0 vt[4]) and clears it. Was SmartPtr_ReleaseVt4
@@ -9962,7 +9962,7 @@ addr	size	name	status	purpose
 0x005FC4F0	75	CI3DFigureHolder::ShowAllParts	named	(show): clears / sets flag 0x80 on every part (+0xD0[], count +0xD4)
 0x005FC540	32	StaticInit_NoopGuarded_f5FC540	named	compiler: per-TU initialiser of a header static object with an empty ctor and an empty dtor (0x4013D0 is a bare ret): sets bit 0 of the shared guard g_0x7CAEE4 and registers the dtor with atexit; no effect (163 copies in the exe)
 0x005FC560	31	StaticInit_Vec3Zero_g7C7E68	named	per-TU static const zero vector g_0x7C7E68 = (0, 0, 0) (3 floats, a math header constant copied into every TU next to its 1.0f / identity-quaternion copies); unreferenced (every use was folded by the compiler)
-0x005FC580	41	Quat_StaticInit_Identity16	named	sets global quaternion g_0x7C7E58 to (1,0,0,0)
+0x005FC580	41	Quat_StaticInit_Identity16	named	static initializer (pointer 0x7837D0 in the init table): g_0x7C7E58..0x7C7E64 = {1.0, 0, 0, 0} (identity quaternion)
 0x005FC5B0	19	StaticInit_FloatOne_g7C7E50	named	per-TU static const float g_0x7C7E50 = 1.0 (0x3f800000), a math header constant; unreferenced (every use was folded by the compiler)
 0x005FC5D0	40	dead_5FC5D0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x005FC600	85	UIButton::Destroy	named	deletes the tooltip control +0x30 (vt[0](1)) and the polygon array +4. Was UIButtonAnim::Destroy
@@ -10001,7 +10001,7 @@ addr	size	name	status	purpose
 0x005FE440	699	CUIBlitSurface::ToGrayscale	named	converts every pixel to luminance (16-bit 565 / 555 and 32-bit) - the frozen background behind message boxes
 0x005FE700	498	CUIWidget::CUIWidget	named	(CInterface): base of every UI window (0x148 bytes, vt 0x740F60 25 slots, IUIEvents sub-object vt 0x740F2C at +0x94): CObject3D transform (+0x1C pos, +0x34 / +0x44 quaternions), +0x98 CInterface, +0x9C handled, +0xA0..+0xD4 zero, +0xD8 rect (800x600), +0xE8 enabled = 1, colour +0x34.. from g_0x7C7E58, +0xEC black and +0xF0 white materials of kind 0x16 (CMaterialManager g_0x7AF740; the quads use +0xEC), empty arrays: +0xF8 textures, +0x108 quad figures, +0x118 blit surfaces, +0x128 buttons, +0x138 figure holders; vt[19] Activate(1)
 0x005FE900	7	IUIEvents::DtorBody4	named	destructor body: vtable back to 0x7401D0 (copy in CUIWidget)
-0x005FE910	30	CUIWidget::~CUIWidget	named	"UI widget base (vtable 0x740F60, 25 slots; typeId 0x45; ClassName ""Sorry, no other way!"") slot 0: deleting dtor (body 0x5FE930)"
+0x005FE910	30	CUIWidget::~CUIWidget	named	slot 0 of vt 0x740F60 (deleting dtor): CUIWidget::~body 0x5FE930, operator_delete(this) when flag & 1, returns this; also reached by jmp from CUIWidget::DeletingDtor_sub
 0x005FE930	599	CUIWidget::~body	named	releases the materials +0xEC/+0xF0/+0xF4, the quad figures (vt[4]), the blit surfaces, the buttons (UIButton::Destroy), the textures (vt[4]), the figure holders, frees the arrays and runs the CObject3D base dtor; 48 callers. Was CUIWindow::~body
 0x005FEB90	96	CUIWidget::Draw	named	slot 20 (renderer): CI3DFigure::Draw for every quad figure +0x108[] then CI3DFigureHolder::RenderAnimated for +0x138[] (the 3D pass inside the scene)
 0x005FEBF0	195	CUIWidget::UpdateHover	named	slot 21: cursor position (CInterface +0x68/+0x6C unscaled to 800x600) tested against every button +0x128[] that has a tooltip control: state +0x180 = 1 on enter, 3 on leave, then CTooltipControl::OnMouseMove
@@ -10033,11 +10033,11 @@ addr	size	name	status	purpose
 0x00600270	41	Time_GetSeconds	named	application timer vt[6] value times 0.001 (35 callers)
 0x006002A0	27	CUIWidget::SetEnabled	named	(on, activate): +0xE8 = on (the dispatch and the child draw skip disabled widgets); with activate calls vt[19] Activate(on); 78 callers. Was CUIWindow::SetEnabled
 0x006002C0	108	CUIWidget::Activate	named	slot 19 (on): off -> every blit surface is suspended (SuspendOrRestore(0): pixels to the heap, DirectDraw surface released), on -> the visible ones (flag 4) are restored; CInterface calls it with 0 on the screen below a pushed one and 1 when it becomes the top again. Was SetVisible
-0x00600330	17	HeapArray_Free_AD	named	array-with-count free
-0x00600350	17	HeapArray_Free_AE	named	array-with-count free
-0x00600370	17	HeapArray_Free_AF	named	array-with-count free
-0x00600390	17	HeapArray_Free_AG	named	array-with-count free
-0x006003B0	17	HeapArray_Free_AH	named	array-with-count free
+0x00600330	17	HeapArray_Free_AD	named	fastcall (array*): data +0 != 0 -> operator_delete(data[-1]) (raw block of a 32-byte aligned buffer); field not cleared; byte-identical to HeapArray_Free_C 0x4534A0; reached only by jmp from the unwind funclet 0x72A6D0 of UIButton::Destroy
+0x00600350	17	HeapArray_Free_AE	named	fastcall (array*): same code as HeapArray_Free_AD (operator_delete(data[-1]) when data != 0); reached only from the unwind funclets of CUIWidget::CUIWidget (state 4) and CUIWidget::~body (state 3)
+0x00600370	17	HeapArray_Free_AF	named	fastcall (array*): same code as HeapArray_Free_AD; reached only from the unwind funclets of CUIWidget::CUIWidget (state 5) and CUIWidget::~body (state 4)
+0x00600390	17	HeapArray_Free_AG	named	fastcall (array*): same code as HeapArray_Free_AD; reached only from the unwind funclets of CUIWidget::CUIWidget (state 6) and CUIWidget::~body (state 5)
+0x006003B0	17	HeapArray_Free_AH	named	fastcall (array*): same code as HeapArray_Free_AD; reached only from the unwind funclets of CUIWidget::CUIWidget (state 7) and CUIWidget::~body (state 6)
 0x006003D0	263	PtrArray_SetSize_6003D0	named	MFC: CArray<void*> SetSize with 32-byte aligned buffer (data +0, size +4, cap +8, grow +0xC)
 0x006004E0	263	PtrArray_SetSize_6004E0	named	MFC: CArray<void*> SetSize (aligned buffer)
 0x006005F0	311	PtrArray_SetAtGrow_6005F0	named	MFC: CArray<void*> SetAtGrow(index, value)
@@ -10049,7 +10049,7 @@ addr	size	name	status	purpose
 0x00600AA0	27	AlignedAlloc32_600AA0	named	MFC: CArray element-buffer allocation of the game (operator new of n elements + 0x24, result aligned to 32 bytes, original pointer stored before the block); size param_1 * 4 + 0x24
 0x00600AC0	11	CUIWidget::DeletingDtor_sub	named	sub-object (+0x94) deleting destructor thunk of CUIWidget (vt 0x740F2C). Was IUIEvents_Widget::~thunk
 0x00600AD0	31	StaticInit_Consts3_600AD0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00600AF0	41	Quat_StaticInit_Identity_00600AF0	named	sets a global quaternion to (1,0,0,0)
+0x00600AF0	41	Quat_StaticInit_Identity_00600AF0	named	static initializer (pointer 0x7837E0 in the init table): g_0x7C7E80..0x7C7E8C = {1.0, 0, 0, 0} (identity quaternion)
 0x00600B20	89	CUIWindow::CUIWindow	named	(CInterface): CUIWidget + child windows array +0x148 (count +0x14C, cap +0x150, grow +0x154) + event handler vector +0x158/+0x15C/+0x160; vt 0x741008 (42 slots) / sub 0x740FD4; the base of every screen (31 callers)
 0x00600B80	30	CUIWindow::DeletingDtor	named	scalar deleting destructor (vt 0x741008)
 0x00600BA0	273	CUIWindow::~body	named	deletes the event handlers (+0x158[] vt[0](1)) and the child windows (+0x148[] vt[0](1)), frees both containers, then CUIWidget::~body; 62 callers
@@ -10075,8 +10075,8 @@ addr	size	name	status	purpose
 0x006019A0	191	CUIWindow::Dispatch_OnKeyUp	named	IUIEvents sub-object (+0x94) slot 11: as Dispatch_OnChar 0x6018E0 (handlers of +0x158 then every enabled child window, no point test) through vtable slot 11; sets handled +0x9C when consumed; 2 callers. Was DispatchSlot11
 0x00601A60	90	CUIWindow::Dispatch_Deactivate	named	sub slot 1: every handler's and every child's slot 1. Was DispatchSlot1
 0x00601AC0	69	CUIWindow::Activate	named	slot 19 (on): CUIWidget::Activate then enabled children vt[19]. Was SetVisible
-0x00601B10	64	PoolFreeVector_00601B10	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x00601B50	17	HeapArray_Free_AI	named	array-with-count free
+0x00601B10	64	PoolFreeVector_00601B10	named	fastcall (vector of dwords {begin, end, cap}): bytes = (cap - begin) & ~3; > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(bytes - 1) >> 3]; byte-identical to Dwords_Free2 0x421500; reached only from the unwind funclet 0x72AA26 of CUIWindow::~body (state 2)
+0x00601B50	17	HeapArray_Free_AI	named	fastcall (array*): same code as HeapArray_Free_AD; reached only from the unwind funclet 0x72AA18 of CUIWindow::~body (state 1)
 0x00601B70	331	PtrVector_InsertRealloc_601B70	named	STL: vector<void*> insert grow path (PtrRange_CopyNullChecked_601E30 / PtrRange_FillNullChecked_601E50)
 0x00601D00	263	PtrArray_SetSize_601D00	named	MFC: CArray<void*> SetSize (aligned buffer)
 0x00601E10	32	StaticInit_Guarded_601E10	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
@@ -10084,7 +10084,7 @@ addr	size	name	status	purpose
 0x00601E50	29	PtrRange_FillNullChecked_601E50	named	STL: fill N dwords skipping null destination
 0x00601E70	11	CUIWindow::DeletingDtor_sub	named	sub-object deleting destructor thunk (vt 0x740FD4)
 0x00601E80	31	StaticInit_Consts3_601E80	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00601EA0	41	Quat_StaticInit_Identity_00601EA0	named	sets a global quaternion to (1,0,0,0)
+0x00601EA0	41	Quat_StaticInit_Identity_00601EA0	named	static initializer (pointer 0x7837EC in the init table): g_0x7C7EA0..0x7C7EAC = {1.0, 0, 0, 0} (identity quaternion)
 0x00601ED0	384	CDemoScreen::OnOpen	named	vt 0x73F7F8 slot 25 of the attract-mode demo screen (0x184 bytes, CUIWindow_73F7F8::Create): once (+0x16C): enumerates 'demo%d.apl' recorded sessions into the CStringArray +0x170; adds a CamCtlFree handler, clears the camera free flag (g_0x79B2B0 &= ~0x40), +0x168 = 0 and PlayIntroMovie. Was CUIWindowDemoList::Scan
 0x00602050	66	CIntroScreen::OnClose	named	vt 0x73F7F8 slot 26 (OnClose): g_0x784750 = 1; +0x16C == 0: Game_ClearCameraFlag20, else Game_CameraDetach and g_0x79B2B0 |= 0x40; Game_ClearConnectionField84; LobbySession_ReleaseActive2. The intro / attract screen (vt 0x73F7F8, sub 0x73F7C4) that plays Movies\<name>.bik and the autoplay.apl camera flights
 0x006020A0	18	CIntroScreen::Draw	named	vt 0x73F7F8 slot 20: WorldClient_Call569E40 only (no widgets)
@@ -10093,7 +10093,7 @@ addr	size	name	status	purpose
 0x00602190	464	CIntroScreen::PlayIntroMovie	named	"g_0x784750 = 0; +0x16C == 0: Movie_PlayFile(""%sMovies\%s.bik"") (App_PostQuit when it fails); else Game_AttachClientStream(""autoplay.apl""), then the clip list at +0x1A3 (CStringArray, count +0x1A7) entry +0x168: ""<name>.apl"" attached as client stream, ""<name>.cam"" stored at +0x164, +0x168 cycles 0..count-1"
 0x00602360	32	StaticInit_Guarded_602360	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x00602380	31	StaticInit_Consts3_602380	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x006023A0	41	Quat_StaticInit_Identity_006023A0	named	sets a global quaternion to (1,0,0,0)
+0x006023A0	41	Quat_StaticInit_Identity_006023A0	named	static initializer (pointer 0x7837F8 in the init table): g_0x7C7EC8..0x7C7ED4 = {1.0, 0, 0, 0} (identity quaternion)
 0x006023D0	19	SetGlobal_007C7EC0_6023D0	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7EC0
 0x006023F0	146	sub_6023F0	named	unregistered function, reached by call / pointer from 0x205B44,0x205F14,0x207A42 (gaps.py 2026-11-06)
 0x00602490	32	DialogScreen::GetUIStreamDword	named	vt 0x7405AC slot 40: reads 4 bytes from the UI save stream g_0x7AFDF8 (CMemStream)
@@ -10114,13 +10114,13 @@ addr	size	name	status	purpose
 0x00603B70	30	CQuestLogWin::DeletingDtor	named	vt 0x7411BC slot 0: scalar deleting dtor of the quest log / travel window (DtorBody 0x603B90). Was vt_7411BC::DeletingDtor
 0x00603B90	309	CQuestLogWin::DtorBody	named	dtor body of the 0x1F0-byte quest log / travel window (vt 0x7411BC, deleting dtor 0x603B70): frees the marker vector +0x1CC/+0x1D4, the exit CArray +0x188/+0x18C, the CStrings +0x184 / +0x170, the map vector +0x164..+0x16C and the two CStringArrays, then CUIWindow::~body. Was DialogScreen::DtorBody (wrong: the dialog screen dtor is vt 0x7405AC slot 0 = 0x5F6B80)
 0x00603CD0	30	CEscMenu::DeletingDtor	named	vt 0x7412A4 slot 0 (CEscMenu, pushed by DialogScreen / CWorldMapScreen / CBattleHud OnKeyDown Esc): runs the dtor body 0x603CF0 (named CUIWindow_741008::DtorBodyC, it is CEscMenu's) then operator delete when flag&1
-0x00603CF0	5	CEscMenu::DtorBody	named	vt 0x7412A4 (CEscMenu, ui-screens.md). Was CUIWindow_741008::DtorBodyC
+0x00603CF0	5	CEscMenu::DtorBody	named	thunk: jmp CUIWindow::~body 0x600BA0 (the menu adds nothing to destroy); caller CEscMenu::DeletingDtor
 0x00603D00	1058	DialogScreen::OnMouseMove	named	vt 0x740578 slot 4: lobby modal +0x2A0 -> cursor 0xD, forwarded; mode 1 hovered topic row -> +0x188 + DrawTopicList; mode 3 cursor 0xE, 4 cursor 0; mode 0 (no button held): an idle living unit (brain +0x190 0 / 0xB, +0x1B4 == 9; not the own lobby unit) -> LoadSpeakersFor, cursor 0xE when it has topics, its name (+0x1D8 cache) drawn at (x-0x7D, y-0x14); else a zone exit under the point -> cursor 0xF when z.<target of exit +0x164> != 1 (the hovered exit's index is not used)
 0x00604130	2827	DialogScreen::Update	named	"vt 0x7405AC slot 24: walk nodes +0x240 (state 1 -> 2 within 0.1 m + OrderTurnTo, 2 -> 0 when facing, 30 s -> teleport); mode 1 topic scroll; modes 0/1: SendMsg19(1, id) for the +0x284 heroes having a 3-part ""b.<hero>.<topic>"" == 1.0 (topic not constr*), else SendMsg19(2, id); exit +0x164 (always 0) with z.<target> != 1 and every living hero inside -> g_0x784750 = 0 + Session_RequestMapChange; mode 2 -> 3 + StartBriefing when no waiting walk node runs; mode 3 next phrase when the voice channel ended or the text timer +0x24C ran out; mode 4 closes the speaker's mouth"
 0x00604C3C	19	sub_604C3C	named	unregistered function, reached by call / pointer from 0x20450E (gaps.py 2026-11-06)
 0x00604C50	4482	DialogScreen::ParseDialogScript	named	"(skipToEnd): continues ""briefing <topic>"" to the next #phrase: #nolips, #show (AddSpeaker), #hide (RemoveSpeakerByName), #animation n, #camera shot [yaw dist h], #phrase name [voice]: ""\aC<FFB331>label:\n\aC<E4D7A7> text\n"" (grey A8A8A8 with #nolips) into +0x248, Play2D(""<t|s random>\briefing\<topic>\<voice>.mp3"", decompress) -> +0x250, timer +0x24C = len * 0.05 (+1 first line); camera SetShot / FocusOn, speaker animation + mouth flag; no further #phrase -> mode 4 + reward lines of g_0x7C87D4[topic] (+0xC exp, +0x10 money, +0x14 items, +0x20 lost + lobby ""z"" topics: player 0's quest items, +0x2C / +0x38 quests, +0x68 specials count); skipToEnd: no voice, SetText of the whole text at the end, portraits removed"
 0x00605DE0	1231	DialogScreen::AddSpeaker	named	"(name, portraitIndex, unused): ""#show"" of ParseDialogScript: a live unit (Game_FindUnitById(String_HashCI)) is re-appended to +0x294 (Record12 {unit, name, byte}), SendMsg19(1, id), SetVisibleToAll(0) for the player unit +0x1A4, brain +0x978 = 0x6023F0; another name needs index >= 0: old portrait removed, name '_'->' ' lower-cased looked up in g_0x7C8764 (node +0x18 = number), ""quitem%04d"" 64x64 into a 256x256 target on quad ""initqu%ditem"" at slot (index mod 7) of 0x74111C / 0x741138, backdrop + border for index < 7, colour 0x82FFFFFF for index > 7, node appended to +0x278. The third argument is never read"
-0x006062B0	8	StringAtOffset04_Free_D	named	free the std::string at this+4
+0x006062B0	8	StringAtOffset04_Free_D	named	"fastcall: CString::~CString(this + 4) (add ecx,4; jmp 0x700970); caller DeletingDtor_60AC00 and an unwind funclet. CORRECTION: was ""std::string"" (an MFC CString)"
 0x006062C0	529	DialogScreen::RemoveSpeakerByName	named	(name, teleport, flag): non-unit name: remove its node (and the three quads) from +0x278; unit: SendMsg19(unit, 2), close the mouth, SetVisibleToAll(1), height 0, Stop, erase from +0x294 and PlaceUnit back to the stored pose +0x210 (third speaker) when it was +0x1AC
 0x006064E0	2645	DialogScreen::SelectAnswer	named	"(isBriefing, flag): +0x27C = isBriefing; ""goodbye"" -> mode 0; ""constr*"" topic -> World_SetConstrCurrent(id from chars 0..6) + Game_SendLeave(5) (enter the camp / constructor); opens the text ""briefing <topic>"" (+0x184): its ""#show"" lines name the second (+0x1A8) and third (+0x1AC) speakers; computes the two facing poses +0x1B0/+0x1BC (2.5 + proto radius apart), centre +0x1C8, the three facing dirs +0x1D4/+0x1E0/+0x1EC, saves the pre-dialog poses +0x210 (third) / +0x228 (second) when flag, PlaceUnit (walk) the player (or the NPC when +0x27D single-speaker) and the third; mode = 2 (walking) or StartBriefing when isBriefing"
 0x00606F40	348	DialogScreen::OnCommand	named	vt 0x7405AC slot 27: 0x10001 (yes on the zone-exit box) = Session_RequestMapChange(+0x164); 0x20001 = push the 0x194 save/load window (vt 0x741388) in save mode; 0x90001 / 0x100001 = leave: CInterface +0x44 = 1, LobbySession_ReleaseActive(2); in a lobby vt+0x90(1) afterwards
@@ -10151,111 +10151,111 @@ addr	size	name	status	purpose
 0x006097C8	19	sub_6097C8	named	unregistered function, reached by call / pointer from 0x209655 (gaps.py 2026-11-06)
 0x006097E0	281	CLobbyStatusBar::OnLButtonDown	named	vt 0x741444 slot 2: button i -> player id +0x150[i]; when the top screen's +0x2A0 (busy flag) is 0: buttons\battle\on_off.wav, LobbyClient::ReleaseLocalRecord when he is the current exchange partner, else CreateLocalRecord(id) and SendNamedEvent(4 or 5) (exchange request); clears the busy flag
 0x00609900	87	CLobbyStatusBar::OnMouseMove	named	vt 0x741444 slot 4: cursor frame 0 while over a player button and the top screen's +0x2A0 busy flag is set
-0x00609960	21	RefPtr16_CopyCtor	named	store pointer and increment its 16-bit refcount (+4)
+0x00609960	21	RefPtr16_CopyCtor	named	thiscall (slot, src slot*): *slot = *src and, when not null, its 16-bit refcount +4 ++; byte-identical to Ref_Init2 0x4263B0; caller CLobbyStatusBar::RebuildPlayerButtons (2)
 0x00609980	173	RefPtr16Vector_Destroy	named	STL: vector<CObject*>::~vector with 16-bit refcounts: decrements +4 of every element (vt slot 0 delete at 0) and returns the buffer to the size pool 0x79B224 (operator_delete above 0x80 bytes); called from two SEH unwind funclets of the lobby screens
 0x00609A30	11	CopyField_0_609A30	named	STL: iterator copy / begin() returned through the out pointer: *out = the pointer at +0
-0x00609A40	40	NodeFree30_00609A40	named	push a 0x30-byte node onto the pool g_0x79b238
+0x00609A40	40	List30_EraseNode	named	cdecl (out it, entry): unlinks the entry (prev->next = next, next->prev = prev), pushes it on the 0x30-byte free list g_0x79B238, *out = next; callers DialogScreen::SelectAnswer (2), DialogScreen::Update. Was NodeFree30_00609A40
 0x00609A70	11	CopyField_0_609A70	named	STL: iterator copy / begin() returned through the out pointer: *out = the pointer at +0
 0x00609A80	52	ListEraseNode18_609A80	named	STL: unlink a std::list node, destroy its CString and push to the 0x18-byte pool
-0x00609AC0	64	PoolFreeVector_00609AC0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x00609B00	256	DialogRecordVector_Destroy	named	destroy N 0x44-byte records {CStrings +0,+4,+0x10,+0x14 and two lists} and free the buffer
+0x00609AC0	64	PoolFreeVector_00609AC0	named	fastcall (vector of 8-byte records {begin, end, cap}): bytes = (cap - begin) & ~7; > 0x80 -> operator_delete, else onto the size pool g_0x79B224[(bytes - 1) >> 3]; byte-identical to Vector8_Deallocate 0x4387D0; reached only from unwind funclets (DialogScreen::OnKeyDown, CQuestLogWin::DtorBody, CQuestLogWin::CQuestLogWin, CWorldMapScreen::OnLButtonDown, CHudClockStrip::OpenTimeDialog)
+0x00609B00	256	SaveSlotVector_Destroy	named	fastcall (vector {begin, end, cap} of 0x44-byte save slot records): for each record CStringArray::~CStringArray(+0x2c) and (+0x18), CString::~CString(+0x14, +0x10, +4, +0); then the buffer (cap - begin) / 0x44 * 0x44 bytes goes to operator_delete (> 0x80) or the size pool g_0x79B224; reached only from the unwind funclet 0x72AF08 of CSaveLoadWin::DtorBody (the slot list). Was DialogRecordVector_Destroy
 0x00609C00	1	dead_609C00	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00609C10	303	HashTable_Ctor_609C10	named	STL: STLport hashtable constructor with initial bucket count (NextPrime)
-0x00609D40	48	RefPtr16_Assign	named	assign refcounted pointer: ++new, --old, delete old via vt[0](1) at zero
-0x00609D70	129	RefPtr16Vector_ErasePrefixShift	named	vector<RefPtr16> erase: shift elements down (assign with refcounts) and destroy the tail
-0x00609E00	57	PoolFreeVector_00609E00	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x00609E40	41	ListInsertBefore_00609E40	named	allocate a list node and link it before param_2, return the iterator
-0x00609E70	41	RbMap_InsertWrapper_00609E70	named	std::map insert wrapper: builds the hint iterator and forwards to the hint/unique insert
+0x00609D40	48	RefPtr16_Assign	named	thiscall (slot, src slot*) -> slot: new pointer stored with its 16-bit refcount +4 ++, the old one's refcount -- and vt[0](1) (deleting dtor) at 0; byte-identical to RcPtrShort_Set 0x4AE2A0; caller CLobbyStatusBar::RebuildPlayerButtons
+0x00609D70	129	RefPtr16Vector_ErasePrefixShift	named	thiscall (vector {begin, end}, first, last) -> first: [last, end) assigned down onto first (new refcount ++, old -- with vt[0](1) at 0), the leftover tail released (Ref_Release8 each), end = first + (end - last); byte-identical to RcPtrShortVector_Erase 0x4A9910; caller CLobbyStatusBar::RebuildPlayerButtons
+0x00609E00	57	PoolFreeVector_00609E00	named	fastcall (vector of dwords): bytes = (cap - begin) & ~3, operator_delete above 0x80 else size pool g_0x79B224; byte-identical to Dwords_Free3 0x421E70; reached only from the unwind funclets of CLobbyStatusBar::DtorBody and RefPtr16Vector_Destroy
+0x00609E40	41	ListInsertBefore_00609E40	named	cdecl (out it, pos, value*): NodeAlloc30_00609F90(value), links the new entry before pos (entry->next = pos, entry->prev = pos->prev, prev->next = entry, pos->prev = entry), *out = entry; byte-identical to List16_InsertBefore 0x404A40; caller DialogScene::PlaceUnit
+0x00609E70	41	RbMap_InsertWrapper_00609E70	named	thiscall (map<int, CString>, out, hint, value*): copies the hint iterator (InitFields1_609EA0) and calls RbMap_InsertUnique_0060A320 (insert with hint); returns out; byte-identical to ObjRefTree_InsertWithHintIter 0x439390; callers DialogScreen::OnMouseMove, DialogScreen::LoadPersonalities, CBattleHud::Build
 0x00609EA0	13	InitFields1_609EA0	named	STL: one-pointer copy constructor (iterator / allocator proxy): *this = *src
-0x00609EB0	41	ListInsertBefore_00609EB0	named	allocate a list node and link it before param_2, return the iterator
-0x00609EE0	81	PoolFreeVector_00609EE0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x00609EB0	41	ListInsertBefore_00609EB0	named	cdecl (out it, pos, CString*): NodeAlloc18_CopyCtor_60A010(value) (0x18 entry holding a CString), linked before pos; *out = entry; caller DialogScreen::AddSpeaker
+0x00609EE0	81	PoolFreeVector_00609EE0	named	fastcall (vector of 0x44-byte records): bytes = (cap - begin) / 0x44 * 0x44, operator_delete above 0x80 else size pool g_0x79B224; byte-identical to vector44_Deallocate 0x520760; reached only from the unwind funclets of CSaveLoadWin::DtorBody and SaveSlotVector_Destroy (0x609B00)
 0x00609F40	1	dead_609F40	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00609F50	57	PoolFreeVector_00609F50	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x00609F90	124	NodeAlloc30_00609F90	named	allocate a 0x30-byte node from the pool (refill 20 via the chunk allocator)
+0x00609F50	57	PoolFreeVector_00609F50	named	fastcall (vector of dwords): same code as PoolFreeVector_00609E00 (operator_delete above 0x80 else size pool g_0x79B224); callers DialogScreen::LoadSpeakersFor, CQuestLogWin::Build, CParty::dtor, CPlayerClient::OnMsg80_Party
+0x00609F90	124	NodeAlloc30_00609F90	named	cdecl (value*): pops a 0x30-byte entry from the free list g_0x79B238 (empty -> stlport_node_alloc_chunk_alloc(0x30, 20) and links the rest of the chunk), copies the 0x28-byte payload (10 dwords) to entry +8; returns the entry; caller ListInsertBefore_00609E40
 0x0060A010	208	NodeAlloc18_CopyCtor_60A010	named	STL: allocate a 0x18-byte list node from pool g_0x79B22C and copy-construct a CString
 0x0060A100	21	PairCtor_60A100	named	STL: _STLP_alloc_proxy / pair<empty allocator, T*> constructor: the allocator byte then the data pointer at +0
-0x0060A120	393	RefPtr16Vector_InsertRealloc	named	vector<RefPtr16> insert grow path (new capacity, UninitCopy / UninitFill)
-0x0060A320	666	RbMap_InsertUnique_0060A320	named	std::map insert_unique: descend comparing keys, insert unless present
-0x0060A5C0	96	RbMapInt_LowerBoundCheck	named	lower_bound by int key (node+0x10) returning end() unless key <= found
-0x0060A620	52	RbMapInt_LowerBound	named	lower_bound by int key (node+0x10)
-0x0060A660	430	Record12Vector_InsertRealloc	named	vector of 12-byte records insert grow path (UninitCopy / UninitFill)
-0x0060A870	21	UIObj741264::DtorBody	named	sets vt 0x741264 and frees buffer +4
-0x0060A890	488	Array28_Serialize	named	vt 0x741264 slot 2: CArchive load/store of an array of 0x1C-byte elements
-0x0060AA80	17	RefPtr16_ConstructAt	named	placement construct a RefPtr16 copy at param_1 (if non-null)
+0x0060A120	393	RefPtr16Vector_InsertRealloc	named	thiscall (vector<16-bit-refcounted pointer>, pos, value*, n): same algorithm as RefVector_InsertNRealloc 0x426F00 (3 byte diffs): new cap = size + max(size, n) (size pool / PoolAlloc_Refill / operator new), copies [begin, pos) (RefPtr16Range_UninitCopy), n copies of *value (RefPtr16Range_UninitFill), copies [pos, end), releases the old elements and frees the old buffer, stores begin / end / cap; caller CLobbyStatusBar::RebuildPlayerButtons
+0x0060A320	666	RbMap_InsertUnique_0060A320	named	thiscall (map<int, CString>, out it, hint, value*): byte-identical to ObjRefTree_InsertWithHint 0x43BBC0 except the call targets: STLport insert_unique(hint, v) on the signed key +0x10: O(1) paths when the hint is begin / end or v lies between hint-1 and hint (RbMap_InsertAt_0060AEE0 or a direct link of NodeAlloc18_CopyCtor_60B500 + rebalance), else RbMap_InsertUnique_0060B0A0 (plain insert_unique); caller RbMap_InsertWrapper_00609E70
+0x0060A5C0	96	RbMapInt_Find	named	thiscall (map, out it, key*): lower bound by the signed key +0x10 from the root (header +4); out = that entry when its key <= *key (equal), else the header (end); byte-identical to IntTree_Find 0x43BF00; callers DialogScreen::OnMouseMove, DialogScreen::ParseDialogScript. Was RbMapInt_LowerBoundCheck
+0x0060A620	52	RbMapInt_LowerBound	named	thiscall (map, out it, key*): out = first entry with key +0x10 >= *key (header when none); byte-identical to IntTree_LowerBound 0x439AA0; callers DialogScreen::OnMouseMove, DialogScreen::LoadPersonalities
+0x0060A660	430	Record12Vector_InsertRealloc	named	thiscall (vector of 12-byte {int, CString, byte} records, pos, value*, n): reallocating fill-insert: new cap = size + max(size, n) (size pool g_0x79B224 / PoolAlloc_Refill up to 0x80 bytes, else operator_new), Record12Range_UninitCopy [begin, pos), one inline copy (n == 1) or Record12Range_UninitFill, Record12Range_UninitCopy [pos, end), CString::~CString of every old element's +4, old buffer freed, begin / end / cap stored; caller DialogScreen::AddSpeaker
+0x0060A870	21	UIObj741264::DtorBody	named	fastcall: vtable = 0x741264 (a CArray of 0x1c-byte POD elements), operator_delete(data +4) when set; caller CQuestLogWin_ExitArray::DeletingDtor and five unwind funclets
+0x0060A890	488	Array28_Serialize	named	slot 2 of vt 0x741264 (this = CArray of 0x1c-byte POD elements, CArchive*): byte-identical to CArray1C_Serialize 0x475310: loading: ReadCount, SetSize inlined (count 0 frees; first allocation zero-filled count*0x1c; growth by grow +0x10 or size/8 clamped 4..0x400), then count*0x1c raw bytes read; storing: WriteCount + raw write
+0x0060AA80	17	RefPtr16_ConstructAt	named	fastcall (dest, src slot*): dest != 0 -> *dest = *src with its 16-bit refcount +4 ++; byte-identical to Ref_InitChecked 0x429060; caller CLobbyStatusBar::RebuildPlayerButtons
 0x0060AAA0	82	RefPtr16Range_CopyBackward	named	STL: copy_backward of refcounted object pointers (16-bit refcount +4: new value ++, old value -- with delete at 0); used by CLobbyStatusBar::RebuildPlayerButtons for its button vector insert
-0x0060AB00	89	Record12_CopyCtor	named	copy-construct a 12-byte record {int, CString, byte} (CString via 0x7006E5)
-0x0060AB60	85	Record12Range_Assign	named	assign [first,last) of 12-byte records {int, CString, byte} to dest (CString assign 0x700AA9)
+0x0060AB00	89	Record12_CopyCtor	named	fastcall (dest, src): dest != 0 -> dest +0 = src +0, CString::CString_const_CString(dest +4, src +4), byte +8 copied; caller DialogScreen::AddSpeaker
+0x0060AB60	85	Record12Range_Assign	named	fastcall (first, last, dest) -> dest end: for each of (last - first) / 12 records: dword +0 copied, CString::operator_CString (assign) of +4, byte +8 copied; caller DialogScreen::EndBriefing
 0x0060ABC0	30	CQuestLogWin_ExitArray::DeletingDtor	named	vt 0x741264 slot 1: deleting dtor of the MFC CArray member CQuestLogWin +0x188 (exits, QuestLogExit records; vt stored by CQuestLogWin::CQuestLogWin and the inlined copies in DialogScreen::OnKeyDown / CWorldMapScreen::OnLButtonDown / CHudClockStrip::OpenTimeDialog); body UIObj741264::DtorBody frees the buffer +4
 0x0060ABE0	30	DeletingDtor_60ABE0	named	MFC: scalar deleting dtor of a record whose only member is a CString (CString::~CString + operator delete when flag&1); DialogScreen area, class unknown
 0x0060AC00	30	DeletingDtor_60AC00	named	STL: scalar deleting dtor of a record holding a std::string at +4 (StringAtOffset04_Free_D + delete when flag&1), 3 callers in the dialog code
 0x0060AC20	302	StringSet_Insert_60AC20	named	STL: insert a string range into a hash set of strings (String_Hash, rehash via HashTable_Resize_60B740, node via NodeAlloc18_StringCtor_60B600)
 0x0060AD50	363	DwordArray_SetAtGrow_60AD50	named	MFC: CArray<DWORD> SetAtGrow(index, value) (plain buffer +4, size +8, cap +0xC)
 0x0060AEC0	17	ZeroDwords_60AEC0	named	STL: zero-fills n dwords (and tail bytes) at the pointer: memset(p, 0, n*k) inlined
-0x0060AEE0	438	RbMap_InsertAt_0060AEE0	named	std::map _M_insert at a parent: create node, link, rebalance (rotate left/right)
-0x0060B0A0	312	RbMap_InsertUnique_0060B0A0	named	std::map insert_unique: descend comparing keys, insert unless present
-0x0060B1E0	266	IntroSort_Int	named	std::__introsort_loop for int ranges (median of 3, heap-sort fallback)
-0x0060B2F0	56	DwordRange_Unique	named	std::unique over an int range, returns new end
-0x0060B330	271	IntroSort_Record12	named	std::__introsort_loop for 12-byte string-keyed records (Median3_String, Partition_Record12, heap-sort fallback)
-0x0060B440	80	SortSmall_Record12	named	insertion sort with threshold 16: sort the first 16 then unguarded-insert the rest
+0x0060AEE0	438	RbMap_InsertAt_0060AEE0	named	thiscall (map<int, CString>, out it, x, parent, value*): byte-identical to ObjRefTree_InsertAt 0x43E140 except the call targets: STLport _M_insert: new entry (NodeAlloc18_CopyCtor_60B500) as the left child of parent when parent is the header, x != 0 or key < parent key +0x10 (root / leftmost updated), else as the right child (rightmost updated); rebalance inlined (recolour, rotate left / right), count +4 ++; caller RbMap_InsertUnique_0060A320 (4)
+0x0060B0A0	312	RbMap_InsertUnique_0060B0A0	named	thiscall (map<int, CString>, out {it, bool}, value*): byte-identical to ObjRefTree_InsertUnique 0x43E3A0 except the call targets: walks to the leaf by key +0x10, checks the predecessor (RbTree_Decrement) for an equal key (-> {it, 0}), else links a NodeAlloc18_CopyCtor_60B500 entry, RbTree_Rebalance, count ++, {entry, 1}; caller RbMap_InsertUnique_0060A320 (2)
+0x0060B1E0	266	IntroSort_Int	named	fastcall (first, last, _, depthLimit): STL __introsort_loop on signed ints: while more than 16 elements: depth 0 -> MakeHeap_Int + sort_heap (AdjustHeap_Int popping the max to the end); else median of first / middle / last-1, Hoare partition around it, recursion on the right part, loop on the left; callers CBattleHud::Update (2), DialogScreen::Update
+0x0060B2F0	56	DwordRange_Unique	named	fastcall (first, last, result) -> new end: STL __unique_copy core: *result = *first, then every element different from *result is stored at ++result; returns result + 1 (result when the range is empty); caller DialogScreen::Update
+0x0060B330	271	IntroSort_Record12	named	fastcall (first, last, _, depthLimit, alloc): STL __introsort_loop over a vector of STLport std::string (12 bytes) ordered case-insensitively (_stricmp_core): while more than 16: depth 0 -> MakeHeap_Record12 + PopHeap_Record12 loop; else Median3_String(first, middle, last-1), the pivot copied (StlString_CtorCopy), Partition_Record12, recursion on the right, loop on the left; callers DialogScreen::LoadSpeakersFor. CORRECTION: the elements are std::strings, not records
+0x0060B440	80	SortSmall_Record12	named	fastcall (first, last, alloc): STL __final_insertion_sort for std::strings: more than 16 -> InsertionSort_Record12 on the first 16, UnguardedInsertionSort_Record12 on the rest; else InsertionSort_Record12 on all; caller DialogScreen::LoadSpeakersFor
 0x0060B490	80	Record12Range_AssignFwd	named	STL: copy [first, last) of 12-byte speaker records {int, CString, byte} forward onto dest (CString::operator= per element); the erase shift of DialogScreen::AddSpeaker / RemoveSpeakerByName
 0x0060B4E0	32	StaticInit_Guarded_60B4E0	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0060B500	198	NodeAlloc18_CopyCtor_60B500	named	STL: allocate a 0x18-byte list node from pool g_0x79B22C and copy-construct a CString (10 callers)
-0x0060B5F0	14	Iter_DerefNode8_N	named	iterator deref, instance N
+0x0060B5F0	14	Iter_DerefNode8_N	named	(tree, out it): out = header->left (+8), i.e. begin(); byte-identical to Iter_DerefNode8_A 0x43C3A0; caller RbMap_InsertUnique_0060A320
 0x0060B600	250	NodeAlloc18_StringCtor_60B600	named	STL: allocate a 0x18-byte node from pool g_0x79B22C and construct a string from a range
 0x0060B720	22	InitFields2_60B720	named	STL: two-field constructor from two sources (pair / hashtable iterator {node, table} or {pointer, allocator byte}): (*param_1, *param_2)
 0x0060B740	348	HashTable_Resize_60B740	named	STL: resize the hash table to NextPrime(n) buckets, rehash chains by String_Hash
 0x0060B8A0	107	InsertionSort_Int	named	STL: __insertion_sort over an int range; the std::sort tail used twice by DialogScreen::Update
 0x0060B910	125	Median3_String	named	STL: __median of three std::strings (compare 0x6F2230), the pivot pick of IntroSort_Record12 (the dialog speaker records sorted by name)
-0x0060B990	305	Partition_Record12	named	std::__unguarded_partition for 12-byte string-keyed records (pivot compare via 0x6F2230)
-0x0060BAD0	62	InsertionSort_Record12	named	std::__insertion_sort over 12-byte records ordered by string
+0x0060B990	305	Partition_Record12	named	fastcall (first, last, pivot std::string by value): STL __unguarded_partition: advances first while _stricmp_core(*first, pivot) < 0, retreats last while pivot < *(last-1), swaps the two strings through a temporary (String_CtorRange / String_AssignRange2 / StlString_dtor2) until they cross; frees the pivot copy (PoolFree); returns first; caller IntroSort_Record12
+0x0060BAD0	62	InsertionSort_Record12	named	fastcall (first, last, alloc): STL __insertion_sort over std::strings: for each element after the first, a copy (StlString_CtorCopy) is passed to LinearInsert_Record12(first, it, value); callers SortSmall_Record12 (2)
 0x0060BB10	22	GetFieldOut_8_60BB10	named	STL: get_allocator(): copies the empty allocator byte at this+8 to *out
 0x0060BB30	515	PtrVector_CtorN_60BB30	named	STL: vector<node*>(n) with the STLport node allocator inlined (size pool 0x79B224, chunk refill 0x406B70): the bucket table of HashTable_Resize_60B740 (the string map of HashMapStr_FindOrInsert2 / StringSet_Insert_60AC20). Was ListCtorInline_0060BB30 (not a list)
-0x0060BD40	39	RefPtr16Range_UninitCopy	named	uninitialized_copy of RefPtr16 [first,last) to dest (increments refcounts)
-0x0060BD70	39	RefPtr16Range_UninitFill	named	uninitialized_fill_n of a RefPtr16 value
+0x0060BD40	39	RefPtr16Range_UninitCopy	named	fastcall (first, last, dest): uninitialized_copy of 16-bit-refcounted pointers (refcount +4 ++ each, null dest skipped); byte-identical to Refs_UninitCopy 0x42AF80; caller RefPtr16Vector_InsertRealloc (2)
+0x0060BD70	39	RefPtr16Range_UninitFill	named	fastcall (dest, n, value*): n copies of a 16-bit-refcounted pointer (refcount ++ each, null dest skipped); byte-identical to Refs_UninitFillN 0x42B630; caller RefPtr16Vector_InsertRealloc
 0x0060BDA0	123	Record12Range_UninitCopy	named	STL: uninitialized_copy of 12-byte speaker records {int, CString, byte}; used by Record12Vector_InsertRealloc (DialogScreen speakers)
 0x0060BE40	124	Record12Range_UninitFill	named	STL: uninitialized_fill_n of a 12-byte speaker record {int, CString, byte}; used by Record12Vector_InsertRealloc (DialogScreen speakers)
-0x0060BEE0	50	UnguardedInsertionSort_Int	named	std::__unguarded_insertion_sort for int ranges
+0x0060BEE0	50	UnguardedInsertionSort_Int	named	fastcall (first, last): STL __unguarded_insertion_sort on signed ints: each element shifted left past larger predecessors without a bound check; caller DialogScreen::Update
 0x0060BF20	328	LinearInsert_Record12	named	STL: __linear_insert for the 12-byte speaker records ordered by their CString; used by InsertionSort_Record12
-0x0060C070	51	UnguardedInsertionSort_Record12	named	std::__unguarded_insertion_sort over 12-byte records
-0x0060C0B0	312	UnguardedLinearInsert_Record12	named	std::__unguarded_linear_insert for a 12-byte record keyed by its CString
+0x0060C070	51	UnguardedInsertionSort_Record12	named	fastcall (first, last, _, alloc): for each std::string in [first, last) a copy (StlString_CtorCopy) goes to UnguardedLinearInsert_Record12; caller SortSmall_Record12
+0x0060C0B0	312	UnguardedLinearInsert_Record12	named	thiscall (pos, value std::string by value): while _stricmp_core(value, *(pos-1)) < 0: *pos = *(pos-1) (inline string assign: byte copy, String_Append for the rest, memmove-erase the excess), pos--; then *pos = value; frees the value buffer (NodeAlloc_FreeBytes); callers LinearInsert_Record12, UnguardedInsertionSort_Record12. CORRECTION: keyed by a std::string compared case-insensitively, not a CString
 0x0060C1F0	185	MakeHeap_Int	named	STL: make_heap over an int range; the heap-select fallback of IntroSort_Int (DialogScreen::Update)
 0x0060C2B0	121	AdjustHeap_Int	named	STL: __adjust_heap for int ranges; used by IntroSort_Int
 0x0060C330	96	MakeHeap_Record12	named	STL: make_heap over the 12-byte speaker records ordered by their CString; used by IntroSort_Record12
-0x0060C390	377	AdjustHeap_Record12	named	std::__adjust_heap for 12-byte string-keyed records (push-heap tail)
+0x0060C390	377	AdjustHeap_Record12	named	fastcall (first, hole, len, value std::string by value): STL __adjust_heap: moves the larger child (by _stricmp_core) up into the hole until the bottom (string assigns inlined, StlString_EraseRange / String_Append), the single left child at the end too, then PushHeap_Record12(first, hole, top, value copy); frees the value (PoolFree); callers MakeHeap_Record12, PopHeapAux_Record12
 0x0060C510	337	PushHeap_Record12	named	STL: __push_heap for the 12-byte speaker records keyed by their CString; used by AdjustHeap_Record12
-0x0060C670	44	PopHeap_Record12	named	std::pop_heap step for 12-byte records
+0x0060C670	44	PopHeap_Record12	named	fastcall (first, last, _, alloc): copies *(last-1) (StlString_CtorCopy) and calls PopHeapAux_Record12(first, last-1, last-1, copy); caller IntroSort_Record12
 0x0060C6A0	263	PopHeapAux_Record12	named	STL: __pop_heap_aux for the 12-byte speaker records keyed by their CString; used by PopHeap_Record12
 0x0060C7B0	11	CSaveLoadWin::SubThunk_DeletingDtor	named	vt 0x741354 slot 0: this-0x94 thunk to the deleting dtor 0x6070A0
 0x0060C7C0	11	CQuestLogWin::SubThunk_DeletingDtor	named	vt 0x741188 slot 0: thunk to 0x603B70 (the 0x1F0-byte quest log / zone map window, vt 0x7411BC)
 0x0060C7D0	11	CLobbyStatusBar::SubThunk_DeletingDtor	named	vt 0x741444 slot 0: thunk to 0x608EB0
 0x0060C7E0	11	CEscMenu::SubThunk_DeletingDtor	named	vt 0x741270 slot 0: thunk to 0x603CD0
 0x0060C7F0	31	StaticInit_Consts3_60C7F0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0060C810	41	Quat_StaticInit_Identity_0060C810	named	sets a global quaternion to (1,0,0,0)
+0x0060C810	41	Quat_StaticInit_Identity_0060C810	named	static initializer (pointer 0x78380C in the init table): g_0x7C7EF0..0x7C7EFC = {1.0, 0, 0, 0} (identity quaternion)
 0x0060C840	15	SetGlobal_007C7EE8_60C840	named	CRT: per-TU static initializer of the math-header float constant 2*pi (6.2832f) at 0x007C7EE8
 0x0060C850	19	SetGlobal_007C7EEC_60C850	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7EEC
 0x0060C870	6549	CCampScreen::Build	named	"vt 0x74091C slot 25 (screen id 5, camp / shop): Game_SetServerPaused(1); merchant +0x198 = g_0x7AA5D8 by id trunc(""constr.current"") (id > 0 not found -> Game_SendEnterWorld; id <= 0 -> no merchant); +0x195 spell shop = CGSPlayer +0xD, +0x196 item shop = +0xC, +0x254 = i.noconstr == 1, then i.offspellconstr / i.onspellconstr / i.offitemconstr / i.onitemconstr == 1 (""on"" tested last, wins); price coefficients +0x21C = CGSPlayer +0x10..+0x30, stocks +0x1C8 = +0xAC / +0x1B4 = +0x3C; figure ""campinfo""; buttons 0 / 1 hero arrows (tips 20200 / 20201), 2 confirm, 3 cancel, 4..11 tabs in a 2 x 4 grid of 40 x 30 cells at x 620..780 / y 430..490 (tips 20100..20107 only for offered tabs); quads 0 / 1 arrows, 2..9 tab icons; surfaces (0,400)-(200,500) and (600,400)-(800,0x1AE); 8 basket parties; the shop panes only when the shop flag is on; camp units: hero record ids +0x1C += 100000000, proto-type 0x32 records -> Game_CreateHeroUnits(list, 1) -> +0x1A0, idle anim entry 0x21 random phase, UpdatePackedStats + armor modifiers, ids restored; SelectNextHero (vt+0xC0); mode names +0x240; first tab 4 / 2 / 0; OnButton + EnterMode; first visit (+0x38): per school min / max UnitStats_MagicSkill -> SetShopLimits, GenerateSpellShop, GenerateItemShop, +0x38 = 0; CMusicSystem::PlayConstructor(zone record +4 or ""gipat"")"
 0x0060E210	45	CCampSubWin::CCampSubWin	named	(ui, camp): CUIWidget ctor + +0x14C = owning CCampScreen (base of CCampBar2, vt 0x741B58 / sub 0x741B24)
 0x0060E240	30	CCampSubWin::DeletingDtor	named	vt 0x741B58 slot 0 (CCampSubWin = the camp sub-window base of the bars / trade / constructor windows, +0x14C owning CCampScreen; vt stored by CCampSubWin::CCampSubWin 0x60E210): body 0x5EE410 (named UIInventoryWin::DtorBody) then operator delete when flag&1
 0x0060E260	30	CCampItemBarBase::DeletingDtor	named	abstract camp item-bar base (vt 0x741A1C, sub-object 0x7419E8; slot 26 RebuildItemList pure, slot 25 ItemAtPoint default 0); derived CCampBar2 0x74197C and CCampFaceBar; CCampScreen::Build writes the vtable inline (no ctor)
-0x0060E280	5	CUIWindow::DtorBodyC	named	destructor body of a CUIWindow subclass
+0x0060E280	5	CCampItemBarBase::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930 (the class derives from CUIWidget directly, not CUIWindow); caller CCampItemBarBase::DeletingDtor and three unwind funclets. Was CUIWindow::DtorBodyC
 0x0060E290	30	CCampBar2::DeletingDtor	named	vt 0x74197C slot 0 (CCampBar2 0x620380, the item strip): body 0x60E2B0 (named CCampSubWin::~body; it sets the id array vt 0x741BC0 at +0x198 and frees +0x19C, so it is CCampBar2's) then operator delete when flag&1
-0x0060E2B0	41	CCampBar2::DtorBody	named	called by vt 0x74197C slot 0; sets the id-array vt 0x741BC0 at +0x198 and frees it. Was CCampSubWin::~body (CCampSubWin::DtorBody is 0x5EE410)
+0x0060E2B0	41	CCampBar2::DtorBody	named	fastcall: the id array at +0x198 gets vtable 0x741BC0 and its data +0x19C is freed (operator_delete), then CUIWidget::~body 0x5FE930; caller CCampBar2::DeletingDtor
 0x0060E2E0	30	CCampBar::DeletingDtor	named	vt 0x7418E0 slot 0 (CCampBar 0x622000, the hero weapon / armor slots): body CUIWindow::DtorBodyD 0x60E300 then operator delete when flag&1
-0x0060E300	5	CUIWindow::DtorBodyD	named	destructor body of a CUIWindow subclass
+0x0060E300	5	CCampBar::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampBar::DeletingDtor. Was CUIWindow::DtorBodyD
 0x0060E310	30	CCampQuickBar::DeletingDtor	named	vt 0x741844 slot 0 (CCampQuickBar 0x622A80, 8 quick / spell slots): body CUIWindow::DtorBodyE 0x60E330 then operator delete when flag&1
-0x0060E330	5	CUIWindow::DtorBodyE	named	destructor body of a CUIWindow subclass
+0x0060E330	5	CCampQuickBar::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampQuickBar::DeletingDtor. Was CUIWindow::DtorBodyE
 0x0060E340	30	CUnitInfoWin::DeletingDtor	named	vt 0x741ABC slot 0 (CUnitInfoWin 0x622DB0, the hero stats pane at CCampScreen +0x1D8): body 0x60E360 (named CCampWin_60E360::~body; releases the CString +0x154) then operator delete when flag&1
-0x0060E360	95	CUnitInfoWin::DtorBody	named	camp unit-info sub-window dtor body (generic body resolved by the sweep)
+0x0060E360	95	CUnitInfoWin::DtorBody	named	fastcall: CStringArray::~CStringArray(+0x15C), CString::~CString(+0x154), then CUIWidget::~body 0x5FE930 (SEH frame); caller CUnitInfoWin::DeletingDtor
 0x0060E3C0	30	CCampSkillsWin::DeletingDtor	named	vt 0x7417A8 slot 0 (CCampSkillsWin 0x624F10): body 0x60E3E0 (named CCampScreen::~body; it frees the 0x3C-byte per-hero edit records +0x190 of the skills window) then operator delete when flag&1
-0x0060E3E0	449	CCampSkillsWin::DtorBody	named	vt 0x7417A8 slot 0; frees the 0x3C per-hero edit records. Was CCampScreen::~body
+0x0060E3E0	449	CCampSkillsWin::DtorBody	named	fastcall: CStringArray::~CStringArray(+0x1A4); PoolFree_N3C_00613630 of the 0x3c-byte edit records [+0x190, cap +0x198); then four vectors of 0x18-byte label records (+0x180..+0x188, +0x174..+0x17C, +0x168..+0x170, +0x15C..+0x164): CStringTriple_Destroy on each element and PoolFree_N18_006135F0 of the buffer; finally CUIWidget::~body 0x5FE930; caller CCampSkillsWin::DeletingDtor
 0x0060E5B0	30	CCampTradeWin::DeletingDtor	named	vt 0x74170C slot 0 (CCampTradeWin 0x6270A0): body CUIWindow::DtorBodyF 0x60E5D0 then operator delete when flag&1
-0x0060E5D0	5	CUIWindow::DtorBodyF	named	destructor body of a CUIWindow subclass
+0x0060E5D0	5	CCampTradeWin::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampTradeWin::DeletingDtor. Was CUIWindow::DtorBodyF
 0x0060E5E0	30	CCampSpellConstrWin::DeletingDtor	named	vt 0x741670 slot 0 (CCampSpellConstrWin 0x6280C0): body 0x60E600 (named CCampWin_60E600::~body; releases a list) then operator delete when flag&1
-0x0060E600	79	CCampSpellConstrWin::DtorBody	named	dtor body (generic body resolved by the sweep)
+0x0060E600	79	CCampSpellConstrWin::DtorBody	named	fastcall: CStringArray::~CStringArray(+0x158) then CUIWidget::~body 0x5FE930 (SEH frame); caller CCampSpellConstrWin::DeletingDtor
 0x0060E650	30	CCampItemConstrWin::DeletingDtor	named	vt 0x7415D4 slot 0 (CCampItemConstrWin 0x628CC0): body CUIWindow::DtorBodyG 0x60E670 then operator delete when flag&1
-0x0060E670	5	CUIWindow::DtorBodyG	named	destructor body of a CUIWindow subclass
+0x0060E670	5	CCampItemConstrWin::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampItemConstrWin::DeletingDtor (0x60E650). Was CUIWindow::DtorBodyG
 0x0060E680	30	CCampRepairWin::DeletingDtor	named	vt 0x741538 slot 0 (CCampRepairWin 0x6279E0): body CUIWindow::DtorBodyH 0x60E6A0 then operator delete when flag&1
-0x0060E6A0	5	CUIWindow::DtorBodyH	named	destructor body of a CUIWindow subclass
+0x0060E6A0	5	CCampRepairWin::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampRepairWin::DeletingDtor. Was CUIWindow::DtorBodyH
 0x0060E6B0	588	CCampScreen::OnClose	named	vt 0x74091C slot 26 (OnClose): unpause the server, renderer state (vt+0x50 (2,0)), remove the camp hero units (Game_RemoveRecordObjects of the party records with ids temporarily +1e8), free +0x1A0, release the constructed previews +0x214/+0x218, UIInventoryWin::SetItem(0) on +0x1DC/+0x164, and release the 8 basket parties (+0x1CC/+0x1D0/+0x1D4/+0x1B8/+0x1BC/+0x1C0/+0x1C4: vt+0xC clear + Release). Was OnOpen
 0x0060E900	116	CCampScreen::OnCommand	named	"vt 0x74091C slot 27 (command id): 0x10001 = the ""yes"" of a message box: the selected hero's (vt+0xCC) first weapon-slot item +0x730 goes back to the party (CParty::AddItem(.., 0, 1), HeroRecord::RemoveInventoryItem, +0x774 = -1), CCampBar2::RebuildList(+0x1E0), vt+0xB8. Was OnCommandReturn"
 0x0060E980	63	CCampScreen::GetTabName	named	"vt 0x74091C slot 41: tab +0x190 -> ""camp_weapons"", ""camp_skills"", ""camp_spell_trade"", ""camp_spell_constr"", ""camp_item_trade"", ""camp_item_constr"", ""camp_repair"" (the tutorial / help page key)"
@@ -10263,7 +10263,7 @@ addr	size	name	status	purpose
 0x0060E9E0	1609	CCampScreen::OnButton	named	(tab 0..7): disables all panes, enables per tab: 0 weapons: +0x1D8 unit info + +0x1E4 slots; 1 skills: +0x1D8, +0x1E8, +0x1F4; 2 spell trade: +0x1DC, +0x1F8, +0x1EC (bar2 +0x1E0 filter 1); 3 spell constr: +0x1DC, +0x1FC, +0x1EC; 4 item trade: +0x1DC, +0x200, +0x1F0 (filter 5); 5 item constr: +0x1DC, +0x204, +0x1F0; 6 repair: +0x1DC, +0x208, +0x1F0; 7 leave: moves the baskets back (Party_MoveAllItems), returns constructor components, buttons\globalmap\transit.wav, Session_LeaveGame; tabs 2..6 fall back to the current tab when disabled (+0x195/+0x196/+0x254); +0x190 = tab (buttons\camp\slot.wav on change), CUnitInfoWin::SetMode(+0x1D8, tab), CCampSkillsWin::SelectPerk(+0x1B0), tab title surface [1] (0,10)-(200,0x1E) = mode name +0x244[tab]; hero arrows (quads 0/1, tooltips 0x4EE8/0x4EE9) hidden in tab 0 without the item constructor; the active tab icon quad gets colour 1.0, the others 0.5; CInterface::ShowTutorialForTopScreen
 0x0060F050	998	CCampScreen::Draw	named	vt 0x74091C slot 20: hovered button 4..11 (tab) -> help page of that tab (UICampHelp::Draw on +0x1DC); in tab 1 the hovered perk (CCampSkillsWin::ItemAtPoint) -> UIItemInfoWin::DrawPerkDetail; else UIInventoryWin::SetItem(hovered item) on the info panel; CUIWindow::Draw
 0x0060F438	5	sub_60F438	named	unregistered function, reached by call / pointer from 0x20F0B3 (gaps.py 2026-11-06)
-0x0060F460	8	StringAtOffset14_Free_B	named	free the std::string at this+0x14
+0x0060F460	8	StringAtOffset14_Free_B	named	"fastcall: CString::~CString(this + 0x14) (add ecx,0x14; jmp 0x700970); reached only from the unwind funclets of CCampScreen::Draw and CCampScreen2::Draw. CORRECTION: was ""std::string"" (an MFC CString)"
 0x0060F470	289	CCampScreen::OnLButtonDown	named	vt 0x7408E8 slot 2 (sub-object): DispatchSlot2; button 0 confirm = EnterMode + OnBuyOrRepair when +0x210 (can confirm); 1 cancel = EnterMode + OnCancel when +0x211; 2 / 3 = hero prev / next arrows: buttons\camp\move.wav, +0x25C = 1 / 2 (pending hero change, applied in Update) and capture (CInterface +0xC = this); 4..11 -> OnButton(tab = i-4)
 0x0060F594	21	sub_60F594	named	unregistered function, reached by call / pointer from 0x20F4A5 (gaps.py 2026-11-06)
 0x0060F5B0	76	CCampScreen::OnLButtonUp	named	vt 0x7408E8 slot 3: DispatchSlot3, then clears the pending hero change +0x25C and the interface capture +0xC. Was OnLButtonDown
@@ -10307,18 +10307,18 @@ addr	size	name	status	purpose
 0x00613400	213	Records18_Destroy3CStrings	named	STL: destroys N 0x18-byte records (CStrings at +0, +4, +8) and frees the buffer (12 callers). Was CStringTripleVector_Destroy_613400
 0x006134E0	1	dead_6134E0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006134F0	24	InitFields4_6134F0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x00613510	89	PoolFreeVector_00613510	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x00613510	89	PoolFreeVector_00613510	named	fastcall (vector of 0x3c-byte records): bytes = (cap - begin) / 0x3c * 0x3c, operator_delete above 0x80 else size pool g_0x79B224; reached only from the unwind funclets of CCampScreen::Build, CCampScreen2::Build and CCampSkillsWin::DtorBody
 0x00613570	1	dead_613570	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00613580	77	PoolFreeVector_00613580	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x00613580	77	PoolFreeVector_00613580	named	fastcall (vector of 0x18-byte records): bytes = (cap - begin) / 0x18 * 0x18, operator_delete above 0x80 else size pool g_0x79B224; byte-identical to vector18_Deallocate 0x520710; reached only from the unwind funclets of CCampSkillsWin::DtorBody (4) and Records18_Destroy3CStrings
 0x006135D0	17	dead_6135D0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006135F0	62	PoolFree_N18_006135F0	named	free an array of N 0x18-byte elements to the size-class pool (<=0x80) or operator delete
-0x00613630	53	PoolFree_N3C_00613630	named	free an array of N 0x3c-byte elements to the size-class pool (<=0x80) or operator delete
+0x006135F0	62	PoolFree_N18_006135F0	named	cdecl (buffer, n): buffer != 0: n * 0x18 > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(n * 0x18 - 1) >> 3]; byte-identical to NodeAlloc_Free18n3 0x43A480; caller CCampSkillsWin::DtorBody (4)
+0x00613630	53	PoolFree_N3C_00613630	named	fastcall (buffer, n): same for n 0x3c-byte elements (operator_delete above 0x80 else size pool g_0x79B224); caller CCampSkillsWin::DtorBody
 0x00613670	23	CCampBar2_IdArray::ctor	named	constructor of the MFC CArray<DWORD> member CCampBar2 +0x198 (the visible item ids RebuildItemList refills): vt 0x741BC0, data / size / cap / grow zeroed; called 3x from CCampScreen::Build (party, spell stock, item stock bars)
 0x00613690	389	CCampBar2_IdArray::Serialize	named	MFC: vt 0x741BC0 slot 2, CArray<DWORD>::Serialize (CArchive load / store) of the CCampBar2 visible id array; never called
 0x00613820	249	StrHashSet_AddCStr_613820	named	STL: build std::string from a C string and insert into the string hash set (613B70)
 0x00613920	240	StrHashSet_AddCStr_613920	named	STL: build std::string from a C string and insert into the string hash set (613C20)
 0x00613A10	30	CCampBar2_IdArray::DeletingDtor	named	vt 0x741BC0 slot 1: deleting dtor of the CArray<DWORD> member CCampBar2 +0x198 (body UIObj741BC0::DtorBody frees the buffer +4) then operator delete when flag&1
-0x00613A30	21	UIObj741BC0::DtorBody	named	sets vt 0x741BC0, frees buffer +4
+0x00613A30	21	UIObj741BC0::DtorBody	named	fastcall: vtable = 0x741BC0 (CArray of dwords), operator_delete(data +4) when set; caller CCampBar2_IdArray::DeletingDtor
 0x00613A50	277	StlString_CtorRange_613A50	named	"STL: construct std::string from a range with length check (""basic_string"")"
 0x00613B70	167	StrHashSet_Insert_613B70	named	STL: insert a string range into a hash set (hash = h*5+c), rehash via StrHashTable_Resize4
 0x00613C20	167	StrHashSet_Insert_613C20	named	STL: same, other instantiation (StrHashTable_Resize5)
@@ -10336,15 +10336,15 @@ addr	size	name	status	purpose
 0x00613DE0	11	CCampTradeWin::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x7416D8 slot 0: this -= 0x94 then CCampTradeWin::DeletingDtor 0x60E5B0
 0x00613DF0	11	CCampSpellConstrWin::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x74163C slot 0: this -= 0x94 then CCampSpellConstrWin::DeletingDtor 0x60E5E0
 0x00613E00	31	StaticInit_Consts3_613E00	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00613E20	41	Quat_StaticInit_Identity_00613E20	named	sets a global quaternion to (1,0,0,0)
+0x00613E20	41	Quat_StaticInit_Identity_00613E20	named	static initializer (pointer 0x783824 in the init table): g_0x7C7F20..0x7C7F2C = {1.0, 0, 0, 0} (identity quaternion)
 0x00613E50	15	SetGlobal_007C7F10_613E50	named	CRT: per-TU static initializer of the math-header float constant 2*pi (6.2832f) at 0x007C7F10
 0x00613E60	19	SetGlobal_007C7F14_613E60	named	CRT: per-TU static initializer of the math-header float constant pi/2 (1.5708f) at 0x007C7F14
 0x00613E80	19	SetGlobal_007C7F18_613E80	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7F18
 0x00613EA0	6425	CCampScreen2::Build	named	"vt 0x74214C slot 25 (Build): the multiplayer party / hero-creation screen (0x220 bytes, pushed by CMainMenu button 5): Databases_Reload; figures ""campinfo"", ""MainMenu00""/""MainMenu00labels"" (holder +0x138[0] at (400,350) depth 8, parts ""but03"" / ""button03_multiplayer""), ""saveload"", ""campm1""..""campm4"" (4 portrait figures 200x200 at (200..600, 100..500)); buttons 0 back (600,400)-(0x2A8,500), 1 start (0x2D0,400)-(800,500), 2 confirm (300,0x1D6)-(0x14A,500), 3 cancel (0x1D6,0x1D6)-(500,500), 4 (0x2A8,0x1AE)-(0x2D0,0x1D6), 5..8 = new / rename / delete / redress rows (0xB4,0x70+0x18*i)-(0x136,..); frames (95,95)-(395,225), (95,235)-(395,505), (405,95)-(705,505); +0x164 UIItemInfoWin, +0x1B0 CUnitInfoWin, +0x1B4 CCampBar hero slots (Build(0)), +0x1B8 CCampQuickBar (BuildSide(0)), +0x1C4 CCampSkillsWin, +0x198 scrollbar (slot list), +0x1BC / +0x1C0 CCampFaceBar (vt 0x741BF4; Setup(+0x1C8 / +0x1D4 parties)), +0x1E8 CEditWin name (0x22E,0x6E)-(0x2B7,0x7E), +0x1EC CEditWin (0,0x7F)-(200,0x8F), voice lists +0x1F8/+0x1FC (male ""lmp_male_voice"") and +0x204/+0x208 (female ""lmp_female_voice"") from ""%s*.mp3""; texts ""lmp_pers_new"" / ""lmp_pers_rename"" / ""lmp_pers_delete"" / ""lmp_pers_redress""; PartyStore::LoadAll(g_0x7C82A0, saves root ""mp\""): the slot list g_0x7C82A4..A8 of 0x74-byte PartySlot records; +0x194 = selected slot (-1 when empty), +0x19C scroll"
 0x006157C0	5	CCampFaceBar::ItemAtPoint_Ret0	named	vt 0x741BF4 slot 25 (CCampFaceBar, the CCampBar2 subclass of CExchangeScreen; CCampBar2's slot 25 is ItemAtPoint 0x621F30): takes the 3 stack args and returns 0 (no item under the point)
 0x006157D0	30	CCampFaceBar::DeletingDtor	named	vt 0x741BF4 slot 0 (CCampFaceBar, vt stored by CExchangeScreen::Build): body CUIWindow::DtorBodyI 0x6157F0 then operator delete when flag&1
-0x006157F0	5	CCampFaceBar::DtorBody	named	dtor body (was DtorBodyI)
-0x00615800	76	CStringPair_Destroy_00615800	named	destroy two CString members of a small record (SEH frame)
+0x006157F0	5	CCampFaceBar::DtorBody	named	thunk: jmp CUIWidget::~body 0x5FE930; caller CCampFaceBar::DeletingDtor
+0x00615800	76	CStringPair_Destroy_00615800	named	fastcall (record): CString::~CString(+4) then (+0) inside an SEH frame; callers CCampScreen2::DtorBody (2) and two unwind funclets
 0x00615850	227	CCampScreen2::OnClose	named	vt 0x74214C slot 26 (OnClose): PartyStore::SaveAll, remove the preview hero units (Game_RemoveRecordObjects), free +0x1A0, UIInventoryWin::SetItem(0). Was OnOpen
 0x00615940	155	CCampScreen2::OnCommand	named	"vt 0x74214C slot 27: 0x10001 (yes of ""lmp_deletepers"") = DeleteSlot; 0x20001 = CParty::Assign(party, slot +0x194 of g_0x7C82A4) + PartySlot::SaveToFile + Layout"
 0x006159E0	834	CCampScreen2::Draw	named	"vt 0x74214C slot 20: mode 0xB (level-up) draws ""camp_level_up"" / ""%+d"" points (CCampSkillsWin::GetPointsLeft) / ""camp_current_exp""; mode 0xA ""lmp_select_voice""; hovered perk -> UIItemInfoWin::DrawPerkDetail, hovered item -> UIInventoryWin::SetItem; UIUnitPreview::Render of the hero; CUIWindow::Draw"
@@ -10369,7 +10369,7 @@ addr	size	name	status	purpose
 0x00618240	363	dead_618240	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006183B0	411	CCampScreen2::OnStart	named	"ok.wav; no slot selected -> CMessageBox ""lmp_no_pers"" / ""lmp_no_pers_msg""; else PartyStore::SaveAll and push the lobby screen (0x260 bytes, vt 0x741CD0)"
 0x00618550	30	CLobbyScreen::DeletingDtor	named	vt 0x741CD0 slot 0 (CLobbyScreen 0x61B2C0, 0x260 bytes; the vt is stored by CCampScreen2::OnStart which pushes the lobby): body 0x618570 (named CCampScreen2::~body; it destroys the 0x34-byte server records of the lobby list +0x168 and the CString +0x224, so it is CLobbyScreen::DtorBody) then operator delete when flag&1
-0x00618570	255	CLobbyScreen::DtorBody	named	body of the vt 0x741CD0 deleting dtor 0x618550 (the vtable CCampScreen2::OnStart stores when it pushes the lobby); destroys the 0x34-byte server records. Was CCampScreen2::~body
+0x00618570	255	CLobbyScreen::DtorBody	named	fastcall: CStringArray::~CStringArray(+0x240) and (+0x228), CString::~CString(+0x224 direct address), the server record vector [+0x168, +0x16C) of 0x34-byte records (CString::~CString +4 and +0 each), its buffer (cap +0x170) to the size pool g_0x79B224 (<= 0x80 bytes) or operator_delete, then CUIWindow::~body 0x600BA0; caller CLobbyScreen::DeletingDtor
 0x00618670	128	CCampScreen2::OnCancel	named	cancel.wav; CUnitInfoWin::SetHeroName(0), CCampSkillsWin::SelectNextAvailable(0,0), Layout(10), edit text reset
 0x006186F0	350	CCampScreen2::OnConfirm	named	new hero confirm: the stat sum (+0x2C+0x34+0x3C = str/dex/int) must be 75 and a name typed, else cancel.wav; selects the slots in the bars, CUnitInfoWin::SetHeroName, Layout(11)
 0x00618850	134	CCampScreen2::CommitUnit	named	vt 0x74214C slot 47: UnitStats_HealAllParts, CObject3D::SetMorphParams (height +0x72C), UpdatePackedStats, CUnitInfoWin::Redraw
@@ -10382,46 +10382,46 @@ addr	size	name	status	purpose
 0x00619150	613	CCampScreen2::LoadSlotSounds	named	stops the voice channel (+0x21C), looks up the hero's voice set in the sound registry (g_0x7AF364) and plays a random sample
 0x006193C0	93	HeroRecord::GetCarryWeight	named	vt 0x74214C slot 53 (CCampScreen2) [this = hero record]: sum of item weights (+0x34) of the three equipped slots +0x1A4/+0x1A8/+0x1AC and the inventory +0x750[+0x754]
 0x00619420	203	StringPairVector_Destroy_619420	named	STL: destroy N 8-byte CString pairs and free
-0x006194F0	64	PoolFreeVector_006194F0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x006194F0	64	PoolFreeVector_006194F0	named	fastcall (vector of dwords): bytes = (cap - begin) & ~3, operator_delete above 0x80 else size pool g_0x79B224; byte-identical to Dwords_Free2 0x421500; reached only from the unwind funclets of CCampScreen2::LoadSlotSounds, CAcksDb::AddEntry, HitSoundTable::PickRandomMatching
 0x00619530	1	dead_619530	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00619540	20	PartySlot::PartySlot	named	CParty::ctor + name +0x70
 0x00619560	76	PartySlot::DtorBody	named	CString +0x70 then CParty::dtor
-0x006195B0	80	PoolFreeVector_006195B0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x006195B0	80	PoolFreeVector_006195B0	named	fastcall (vector of 0x34-byte records): bytes = (cap - begin) / 0x34 * 0x34, operator_delete above 0x80 else size pool g_0x79B224; reached only from the unwind funclets of CLobbyScreen::DtorBody and StringPairVector_Destroy_619420
 0x00619600	24	InitFields4_619600	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
 0x00619620	1	dead_619620	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00619630	212	NodeAlloc28_619630	named	STL: allocate a 0x28-byte node from pool g_0x79B234
-0x00619710	59	PoolFree_N4_00619710	named	free an array of N 0x4-byte elements to the size-class pool (<=0x80) or operator delete
+0x00619710	59	PoolFree_N4_00619710	named	cdecl (buffer, n): buffer != 0: n * 4 > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(n * 4 - 1) >> 3]; byte-identical to NodeAlloc_Free4p 0x4251B0; caller CCampScreen2::LoadSlotSounds
 0x00619750	21	PairCtor_619750	named	STL: _STLP_alloc_proxy / pair<empty allocator, T*> constructor: the allocator byte then the data pointer at +0
-0x00619770	423	PoolAlloc_N24	named	allocate N 0x24-byte elements from the size pool / operator new (423 bytes with inlined refill)
+0x00619770	423	PoolAlloc_N24	named	cdecl (n) -> buffer: STLport allocate of n 0x24-byte elements: 0 -> null; n*0x24 > 0x80 -> operator_new; else pops the size pool g_0x79B224[(bytes - 1) >> 3]; an empty pool is refilled inline (_S_refill / _S_chunk_alloc: carves up to 20 rounded blocks from the chunk g_0x79B268..0x79B26C, or a new chunk of 2 * 20 * size + heap_size/16 bytes (g_0x79B264), stealing larger free lists when operator_new fails, else stlport_node_alloc_chunk_alloc) and links the extra blocks onto the free list; caller CCampScreen2::OnLButtonDown (0x61768C)
 0x00619920	492	PartyRecordVector_InsertRealloc	named	STL: vector<PartySlotRecord 0x74>::_M_insert_overflow (grow path of insert): new buffer of 2n (size pool), uninitialized copies, the old records destroyed; used by CCampScreen2::StartGame and PartyStore::LoadAll (the saved parties list)
 0x00619B90	425	StringPairVector_InsertRealloc	named	STL: vector<CString pair>::_M_insert_overflow (grow path of insert); used twice by CCampScreen2::Build (name / file pairs of the party list)
 0x00619DB0	86	StringPair_CopyCtor	named	copy-constructs a CString pair (+0, +4); used twice by CCampScreen2::Build
 0x00619E10	331	PtrVector_InsertRealloc_619E10	named	STL: vector<void*> insert grow path
 0x00619FA0	3	Nop_619FA0	named	STL: identity helper returning its argument (the allocator proxy address) in the CCampScreen2 slot code
 0x00619FB0	302	StrHashSet_Insert_619FB0	named	STL: insert a string range into a string hash set (String_Hash, rehash HashTable_Resize_61A650)
-0x0061A0E0	52	PoolFreeVector_0061A0E0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x0061A0E0	52	PoolFreeVector_0061A0E0	named	fastcall (byte vector / std::string {begin, end, cap}): bytes = cap - begin; > 0x80 -> operator_delete, else size pool g_0x79B224; byte-identical to StlString_dtor 0x40C720; callers ListClear18_006D99C0, DeletingDtor_6DAF20 and two unwind funclets
 0x0061A120	277	StlString_CtorRange_61A120	named	STL: construct std::string from a range with length check
 0x0061A240	187	IntroSort_CString	named	STL: __introsort_loop over CString elements (strcmp order, recursive, heap-select below depth 0); used by CCampScreen2::Build to sort the party names
-0x0061A300	48	Sort_CString_Small	named	insertion sort with threshold 16 over CString elements
+0x0061A300	48	Sort_CString_Small	named	fastcall (first, last): STL __final_insertion_sort over CString elements: more than 16 -> InsertionSort_CString on the first 16 and UnguardedInsertionSort_CString on the rest, else InsertionSort_CString on all; caller CCampScreen2::Build (2)
 0x0061A330	32	StaticInit_Guarded_61A330	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0061A350	33	PartySlot::Assign	named	CParty::Assign + the name CString at +0x70 (PartySlot = CParty 0x70 + CString name = 0x74 bytes, the mp\ party files)
 0x0061A380	250	NodeAlloc18_StringCtor_61A380	named	STL: allocate a 0x18-byte node from pool g_0x79B22C and construct a string from a range
 0x0061A4A0	125	Median3_CString	named	STL: __median of three CStrings by strcmp; the pivot pick of IntroSort_CString (CCampScreen2::Build)
 0x0061A520	227	Partition_CString	named	STL: __unguarded_partition over CString elements (strcmp); used by IntroSort_CString (CCampScreen2::Build)
-0x0061A610	53	InsertionSort_CString	named	std::__insertion_sort over CString elements
+0x0061A610	53	InsertionSort_CString	named	fastcall (first, last): STL __insertion_sort: for each element after the first a CString copy (CString_const_CString) goes to LinearInsert_CString(first, it, value); caller Sort_CString_Small (2)
 0x0061A650	348	HashTable_Resize_61A650	named	STL: resize hash table to NextPrime(n) buckets (String_Hash, ListCtorInline)
 0x0061A7B0	22	GetFieldOut_8_61A7B0	named	STL: get_allocator(): copies the empty allocator byte at this+8 to *out
-0x0061A7D0	57	PoolFreeVector_0061A7D0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x0061A7D0	57	PoolFreeVector_0061A7D0	named	fastcall (vector of dwords): bytes = (cap - begin) & ~3, operator_delete above 0x80 else size pool g_0x79B224; reached only from the unwind funclets of HashTable_Resize_61A650, DatabaseSet_Destroy3, DatabaseSet_Destroy6, HashTable_Ctor_006D9110
 0x0061A810	1	dead_61A810	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0061A820	515	PtrVector_CtorN_61A820	named	STL: vector<node*>(n) with the STLport node allocator inlined: the bucket table of HashTable_Resize_61A650 (the string sets of StrHashSet_Insert_619FB0 / _6DA830). Was ListCtorInline_0061A820 (not a list)
 0x0061AA30	1	dead_61AA30	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0061AA40	125	PartyRecord_UninitCopy	named	uninitialized_copy of 0x74-byte records {CParty, CString +0x70}
+0x0061AA40	125	PartyRecord_UninitCopy	named	fastcall (first, last, dest) -> dest end: for each 0x74-byte record (null dest skipped): CParty::CopyCtor(dest, src) and CString::CString_const_CString(dest +0x70, src +0x70); dest += 0x74; caller PartyRecordVector_InsertRealloc (2)
 0x0061AB00	126	PartyRecord_UninitFill	named	STL: uninitialized_fill_n of a 0x74 PartySlotRecord (copy ctor per element); used by PartyRecordVector_InsertRealloc
 0x0061ABC0	125	StringPair_UninitCopy	named	STL: uninitialized_copy of CString pairs (8 bytes); used by StringPairVector_InsertRealloc
 0x0061AC80	126	StringPair_UninitFill	named	STL: uninitialized_fill_n of a CString pair; used by StringPairVector_InsertRealloc
-0x0061AD40	212	PartialSort_CString	named	std::partial_sort over CString elements (make_heap + pop_heap)
+0x0061AD40	212	PartialSort_CString	named	fastcall (first, middle, last): STL partial_sort on CStrings (strcmp): make_heap of [first, middle) (AdjustHeap_CString from the last parent down), every element of [middle, last) smaller than *first is swapped in by PopHeapAux_CString, then sort_heap of [first, middle) (PopHeapAux_CString each step); caller CCampScreen2::Build (2)
 0x0061AE20	167	LinearInsert_CString	named	STL: __linear_insert for CString elements; used by InsertionSort_CString
-0x0061AED0	44	UnguardedInsertionSort_CString	named	std::__unguarded_insertion_sort over CString elements
+0x0061AED0	44	UnguardedInsertionSort_CString	named	fastcall (first, last): for each CString of [first, last) a copy goes to LinearInsert_CStr (unguarded linear insert); caller Sort_CString_Small
 0x0061AF00	31	PtrRange_CopyNullChecked_61AF00	named	STL: copy [first,last) dwords to dest skipping null destination
 0x0061AF20	29	PtrRange_FillNullChecked_61AF20	named	STL: fill N dwords skipping null destination
 0x0061AF40	113	PopHeapAux_CString	named	STL: __pop_heap_aux for CString elements; used by PartialSort_CString and IntroSort_CString
@@ -10432,7 +10432,7 @@ addr	size	name	status	purpose
 0x0061B210	11	CCampFaceBar::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x741C60 slot 0: this -= 0x94 then CCampFaceBar::DeletingDtor 0x6157D0
 0x0061B220	11	CLobbyScreen::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x741C9C slot 0: this -= 0x94 then CLobbyScreen::DeletingDtor 0x618550
 0x0061B230	31	StaticInit_Consts3_61B230	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0061B250	41	Quat_StaticInit_Identity_0061B250	named	sets a global quaternion to (1,0,0,0)
+0x0061B250	41	Quat_StaticInit_Identity_0061B250	named	static initializer (pointer 0x783838 in the init table): g_0x7C7F48..0x7C7F54 = {1.0, 0, 0, 0} (identity quaternion)
 0x0061B280	19	SetGlobal_007C7F40_61B280	named	CRT: per-TU static initializer of the math-header float constant pi/2 (1.5708f) at 0x007C7F40
 0x0061B2A0	19	SetGlobal_007C7F44_61B2A0	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7F44
 0x0061B2C0	4110	CLobbyScreen::Build	named	"vt 0x741CD0 slot 25: the multiplayer lobby (0x260 bytes, pushed by CCampScreen2::OnStart): figures ""saveload"", ""scrollbar"", ""MainMenu00"" (+ ""unmoco2"", parts), buttons 0 join (0xA3,0x20E)-(0xED,0x23E) tip 0x9E98, 1 back (0x233..0x27D) tip 0x9E99, 2 direct connect (0x1EA,0x1B9)-(0x26C,0x1D1) tip 0x9EA2, 3 delete (0x1EA,0x1D1..0x1E9) tip 0x9EA3, 4 show-full toggle (0x1B8,0x15A)-(0x29E,0x16F), 5 password (0x1B8,0x172..0x187), 6..9 column sort (0x6A..0x177 x 0x6A..0x7F), 10..13 allod tabs (""lmp_allod_name_%d"", x < 0x14E), 14.. server rows (y < 0x1EC); frames (95,95)-(395,505), (405,95)-(705,415), (405,425)-(705,505); +0x168/+0x16C server record vector (0x34 bytes: +0x14..+0x20 address copy, +0x24 server id, +0x28 wrong-protocol flag, +0x30 password flag), +0x174 selected row, +0x178..+0x184 selected address, +0x188 row scroll (+0x18C scrollbar (0x6C,0x84)-(0x180,0x1EC)), +0x190 second scrollbar, +0x194 CEditWin player name (0x1C2,0x90)-(0x28A,0xA0) (letters/digits, 10 chars, from the party, disabled), +0x198 = 6, +0x19C allod tab, +0x1A0 address text, +0x220 show-full, +0x224 password, +0x23C connect-state latch, +0x244 lobby texts (""lmp_connection_%d"" x 22), +0x254 = 0, +0x258 sort mode; reads config\addrbook.ini (Archive_Open load) into NetClient::SetServerList, LobbyServer_Create, RefreshServerList, LayoutLobby. Was CUIScreen741CD0::Build"
@@ -10460,30 +10460,30 @@ addr	size	name	status	purpose
 0x0061E4E0	162	CConnectProgressWin::Update	named	vt 0x741DD8 slot 24: progress quad width from GameBuffer::ReadCountRatio of the stream, TcpStream::Poll -> LobbyClient::OnServerInfoPacket; closes (CInterface close request 0) when done
 0x0061E590	1	CConnectProgressWin__Update_chunk_61E590	named	a piece of CConnectProgressWin::Update placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
 0x0061E5A0	188	Record_Vector_Clear_61E5A0	named	STL: re-initialise a vector slot to empty strings (+0..+0x20) and destroy the tail
-0x0061E660	572	Record52Vector_PushBack	named	push_back a 0x34-byte record (CString,CString,...), grow via 0x61EC40
-0x0061E8A0	76	CStringPair_Destroy_0061E8A0	named	destroy two CString members of a small record (SEH frame)
-0x0061E8F0	103	Record52_Assign	named	assign a 0x34-byte record {CString,CString, 11 dwords/bytes}
+0x0061E660	572	Record52Vector_InsertDefault	named	thiscall (vector of 0x34-byte lobby server records, pos) -> iterator: inserts a default record (both CStrings empty = g_0x796E48, +0x14..+0x20 zero, the other fields left as they are) at pos: full -> Record52Vector_InsertRealloc(pos, temp, 1); pos == end -> constructed in place; else the last element copy-constructed one further (Record52_CopyCtor), the rest shifted up by Record52_Assign and *pos assigned the default; returns begin + index; caller CLobbyScreen::RefreshServerList. Was Record52Vector_PushBack
+0x0061E8A0	76	CStringPair_Destroy_0061E8A0	named	fastcall (record): CString::~CString(+4) then (+0) inside an SEH frame; callers Record52Range_Assign, Partition_Record52 and ten unwind funclets
+0x0061E8F0	103	Record52_Assign	named	thiscall (dest, src) -> dest: CString assign of +0 and +4 (CString::operator_CString), dwords +8..+0x24 and +0x2C copied, bytes +0x28 and +0x30 copied; callers Partition_Record52 (2), Record52Vector_InsertDefault, LinearInsert_Record52_61F930
 0x0061E960	303	HashTable_Ctor_61E960	named	STL: STLport hashtable constructor with initial bucket count
 0x0061EA90	197	Record52Range_Assign	named	STL: copy [first, last) of 0x34 server list records forward onto dest; the erase shift of CLobbyScreen::RefreshServerList
 0x0061EB60	21	PairCtor_61EB60	named	STL: _STLP_alloc_proxy / pair<empty allocator, T*> constructor: the allocator byte then the data pointer at +0
-0x0061EB80	59	PoolFree_N4_0061EB80	named	free an array of N 0x4-byte elements to the size-class pool (<=0x80) or operator delete
-0x0061EBC0	50	PoolFree_N18_0061EBC0	named	free an array of N 0x18-byte elements to the size-class pool (<=0x80) or operator delete
-0x0061EC00	50	PoolFree_NC_0061EC00	named	free an array of N 0xc-byte elements to the size-class pool (<=0x80) or operator delete
+0x0061EB80	59	PoolFree_N4_0061EB80	named	cdecl (buffer, n): same code as PoolFree_N4_00619710 (operator_delete above 0x80 bytes else size pool g_0x79B224); caller CLobbyScreen::Build
+0x0061EBC0	50	PoolFree_N18_0061EBC0	named	fastcall (buffer, n): n 0x18-byte elements: operator_delete above 0x80 bytes else size pool g_0x79B224; byte-identical to NodeAlloc_Free18o 0x411B30; caller CLobbyScreen::Build
+0x0061EC00	50	PoolFree_NC_0061EC00	named	fastcall (buffer, n): n 0xc-byte elements: operator_delete above 0x80 bytes else size pool g_0x79B224; byte-identical to NodeAlloc_Free0C15 0x426860; caller CLobbyScreen::Build (2)
 0x0061EC40	456	Record52Vector_InsertRealloc	named	STL: vector<ServerListRecord 0x34>::_M_insert_overflow (grow path of insert); used by Record52Vector_PushBack and Record_Vector_Clear_61E5A0 (the lobby server list)
-0x0061EE80	151	Record52_CopyCtor	named	copy-construct a 0x34-byte record {CString,CString,...} (10 callers)
-0x0061EF20	62	PoolFree_NC_0061EF20	named	free an array of N 0xc-byte elements to the size-class pool (<=0x80) or operator delete
+0x0061EE80	151	Record52_CopyCtor	named	thiscall (dest, src) -> dest: CString copy-ctor of +0 and +4, dwords +8..+0x24 and +0x2C, bytes +0x28 / +0x30 copied (SEH frame); 10 callers: IntroSort_Record52 (2), Record52Vector_InsertDefault, Record52Vector_InsertRealloc, the insertion sorts / linear inserts and MakeHeap_Record52
+0x0061EF20	62	PoolFree_NC_0061EF20	named	cdecl (buffer, n): n 0xc-byte elements: operator_delete above 0x80 bytes else size pool g_0x79B224; byte-identical to PoolFree_N12 0x404D10; caller CLobbyScreen::Build
 0x0061EF60	305	IntroSort_Record52	named	STL: __introsort_loop over the 0x34 server list records keyed by their string (recursive, heap-select at depth 0); used by CLobbyScreen::RefreshServerList
 0x0061F0A0	32	StaticInit_Guarded_61F0A0	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
-0x0061F0C0	781	Sort_CStringKey_Small	named	std sort helper for C-string keyed records (switch on count 1..)
+0x0061F0C0	781	Median3_Record52	named	fastcall (a, b, c, sortMode) -> pointer: median of three lobby server records under the lobby's sort column: mode 1 name +0 ascending (strcmp), 2 name descending, 3 / 4 int +8 asc / desc, 5 / 6 int +0x24 (allod) asc / desc, 7 / 8 int +0x10 asc / desc, other modes int +0x2C ascending; returns a, b or c; caller IntroSort_Record52. Was Sort_CStringKey_Small (CORRECTION: it is the pivot pick, not a small-range sort)
 0x0061F3D0	5	sub_61F3D0	named	unregistered function, reached by call / pointer from 0x21F0D7 (gaps.py 2026-11-06)
-0x0061F470	570	Partition_Record52	named	std::__unguarded_partition for 0x34-byte records (strcmp keys)
+0x0061F470	570	Partition_Record52	named	fastcall (first, last, pivot record by value, sortMode): STL __unguarded_partition with the same sort-mode comparator as Median3_Record52 (switch on mode - 1): first advances while *first < pivot, last retreats while pivot < *(last-1); swaps through a temporary copy (Record52_Assign twice, CStringPair_Destroy_0061E8A0) until they cross; destroys the pivot's CStrings and returns first; caller IntroSort_Record52
 0x0061F6AC	63	sub_61F6AC	named	unregistered function, reached by call / pointer from 0x21F4A9 (gaps.py 2026-11-06)
-0x0061F6F0	62	InsertionSort_Record52	named	std::__insertion_sort over 0x34-byte string-keyed records
+0x0061F6F0	62	InsertionSort_Record52	named	fastcall (first, last, mode): STL __insertion_sort over 0x34-byte server records: each element after the first is copied (Record52_CopyCtor) and passed to LinearInsert_Record52_61F930; caller CLobbyScreen::RefreshServerList (2)
 0x0061F730	199	Record52_UninitCopy	named	STL: uninitialized_copy of 0x34 server list records; used by Record52Vector_InsertRealloc
 0x0061F830	200	Record52_UninitFill	named	STL: uninitialized_fill_n of a 0x34 server list record; used by Record52Vector_InsertRealloc
 0x0061F930	431	LinearInsert_Record52_61F930	named	STL: std::__linear_insert for 0x34-byte records
 0x0061FAE0	31	sub_61FAE0	named	unregistered function, reached by call / pointer from 0x21F964 (gaps.py 2026-11-06)
-0x0061FB00	51	UnguardedInsertionSort_Record52	named	std::__unguarded_insertion_sort over 0x34-byte records
+0x0061FB00	51	UnguardedInsertionSort_Record52	named	fastcall (first, last, _, mode): for each record a copy (Record52_CopyCtor) goes to UnguardedLinearInsert_Record52; caller CLobbyScreen::RefreshServerList
 0x0061FB40	237	LinearInsert_Record52	named	STL: __linear_insert for the 0x34 server list records; used by IntroSort_Record52
 0x0061FC30	446	UnguardedLinearInsert_Record52	named	STL: __unguarded_linear_insert for the 0x34 server list records; used by LinearInsert_Record52_61F930 and UnguardedInsertionSort_Record52
 0x0061FDF0	31	sub_61FDF0	named	unregistered function, reached by call / pointer from 0x21FC64 (gaps.py 2026-11-06)
@@ -10494,7 +10494,7 @@ addr	size	name	status	purpose
 0x006202DC	32	sub_6202DC	named	unregistered function, reached by call / pointer from 0x22012C (gaps.py 2026-11-06)
 0x00620300	11	CConnectProgressWin::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x741DA4 slot 0: this -= 0x94 then CConnectProgressWin::DeletingDtor 0x61E440
 0x00620310	31	StaticInit_Consts3_620310	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00620330	41	Quat_StaticInit_Identity_00620330	named	sets a global quaternion to (1,0,0,0)
+0x00620330	41	Quat_StaticInit_Identity_00620330	named	static initializer (pointer 0x783848 in the init table): g_0x7C7F70..0x7C7F7C = {1.0, 0, 0, 0} (identity quaternion)
 0x00620360	19	SetGlobal_007C7F68_620360	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7F68
 0x00620380	1493	CCampBar2::Build	named	(large): rect y = 0 (small) or 500 (large, +0x180), height 100; buttons 0 / 1 = list scroll arrows (0x1E..0x32 and 0x2EE..0x302 at y+0x23..0x41), 2..7 = the 6 category tab icons (3 rows x 2 at x 0..30 / 770..800), 8 = the item row area (y+5..y+0x5F); quads: two bar ends (0..50 / 750..800, uv 0xC0,0xE..0x8E,0x72), 6 tab icons (uv 2,0x82.. / 2,0xAC.. etc.); +0x150 = tab, +0x154/+0x158 scroll, +0x15C..+0x170 per-tab scroll memory, +0x174/+0x178 fade; SetTab(0)
 0x00620960	237	CCampBar2::SetTab	named	(tab 0..5): remembers the scroll of the old tab (+0x15C[tab]), +0x150 = tab, restores its scroll, highlights its icon quad (scale 1.0, others 0.8)
