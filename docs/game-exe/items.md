@@ -393,7 +393,10 @@ The allowed lists travel with the merchant (`CGSPlayer::Serialize` 0x4A6C40, tag
 `ShopStock::Write` 0x69BAC0 / `ShopStock::Read` 0x69B5B0 (were `DwordVector_Serialize_69BAC0` / `CItemConstructor::LoadState`)
 store, each as a count + names, the armour protos `+8`, weapon protos `+0x14`, quick protos `+0x20`, the materials `+0x2c` (name +
 min, max, stock dwords), the spell protos `+0x38` and the perks `+0x44`; on reading, the item and material names are lower-cased
-(0x700EFE) before the map lookups, unknown names are dropped silently and duplicates skipped [V, deep read 2026-11-06].
+(0x700EFE) before the map lookups, unknown names are dropped silently and duplicates skipped [V, deep read 2026-11-06];
+except the materials: their record is pushed with no null or duplicate check, so an unknown material name leaves a record
+with a null material that `GenerateItems` dereferences (bug candidate, T7 g14). The spell and perk names are not lower-cased.
+The two leading CParty calls (vt[22] GetSpellManager, vt[18] GetItemManager) discard their results [V, T7 g14].
 
 `ShopStock::GenerateItems` 0x69AE20 (proto vector, min, max, out, kind 0 weapons / 1 armours / 2 quick items; callers
 `GenerateWeapons` / `GenerateArmors` / `GenerateQuickItems` 0x69B570 / 0x69B550 / 0x69B590) [V, deep read 2026-11-06]:
@@ -519,6 +522,9 @@ A missing entry leaves name and description empty (no fallback text); the catego
 18. This page section 7.1 (T7 g07): the table lacked kind 0x3008 (`spell <SPELL>` / `item_spell`); "a missing section leaves name
     and description untouched" -> they are emptied first; `GetItemTextKeys` / `FindInArchives` -> `GetItemTexts` /
     `TextArchiveList::OpenFile` (whole texts.res entries, not sections).
+19. This page section 7 (`ShopStock::Read` 0x69B5B0): "unknown names are dropped and duplicates skipped" holds for the armour,
+    weapon, quick, spell and perk lists only; materials are appended unchecked (null material for an unknown name) and only the
+    item / material names are lower-cased [V, T7 g14 2026-11-07].
 
 ## 10. Function index
 

@@ -502,3 +502,17 @@ Both run only with more than 16 save folders. Equal times come from two saves wr
 and version-1 info.sav files: ScanSaves never writes their time field, so they all carry the same stack value. Effect: opening the
 Save / Load window reads and swaps records outside the vector, i.e. a crash or heap corruption. Not covered by SpellAddon. Fix: a
 strict comparator (`b.time < a.time`).
+
+## 34. Merchant stock from a save: an unknown material name is kept as a null material (T7 g14, 2026-11-07)
+
+From the code (machine code checked), not reproduced at run time. `ShopStock::Read` 0x69B5B0 reads the merchant's allowed lists by
+name (saved by `CGSPlayer::Serialize` tag 5). The armour / weapon / quick / spell / perk loops skip a name whose lookup returns 0
+(e.g. 0x69B650 / 0x69B7B4). The material loop does not: the material map `operator[]` 0x69D290 (map 0x7C86D8) is called at
+0x69B888 and the record {material, min, max, stock} is appended to +0x2C at 0x69B8B9 with no test. `ShopStock::GenerateItems`
+0x69AE20 then reads `*(record.material + 4)` without a null check and crashes. Only reached when a save names a material the
+current items database no longer has (an old save loaded after a mod renamed or removed a material); vanilla data never hits it.
+Not covered by SpellAddon. Fix: skip the record when the lookup returns 0, as the other five lists do.
+
+Latent, no effect found: the hand-written item proto copy helpers skip some fields (weapon 0x6A8FB0 / 0x6AB9C0: +0x84 / +0x88;
+armour 0x6A9370 / 0x6ABE20: +0xB4..+0xC7; quick 0x6ABF60: +0x6C / +0x74 / +0x78 and the spell name; quest 0x6AAE40 / 0x6AC240: the
+zones vector). The loaders copy only default-constructed protos and then fill each record in place, so nothing shows in the game.

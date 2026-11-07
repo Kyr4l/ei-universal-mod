@@ -472,7 +472,8 @@ mips, fill 0 and 0x5551 or 0x4444.
 `CFileRegistry` (`Open` 0x6945A0: `CMappedFile`, magic 0x45AB3EFB; `FindData(section, key, type)` 0x6946D0: hash = sum of
 `tolower(c)` % bucket count, 6-byte buckets `{u16 next, u32 offset}`, section then key tables, names with u16 lengths compared
 case-insensitively, key entry `{u8 type, u16 len, name, value}`, types 0 int / 1 float / 2 string / 0x80 float[] / 0x81 int[] /
-0x82 string[]; `reg-format.md`); `CIniFile` = `GetPrivateProfileString` wrappers (`GetString` 0x696030, `GetIntArray`, `GetVec3` (0x696B20 / 0x696C50 are really `GetWordArray` / `GetDwordArray`: variable-length arrays),
+0x82 string[]; `reg-format.md`); `CIniFile` = `GetPrivateProfileString` wrappers (`GetString` 0x696030, `GetIntArray`, `GetVec3` (0x696B20 / 0x696C50 are really `GetWordArray` / `GetDwordArray`: variable-length arrays; the further list readers
+0x6963F0 / 0x696610 / 0x6969F0 / 0x696D80 fill byte / word / MFC byte / MFC dword arrays and are dead [V, T7 g14]),
 `WriteString` 0x696E60 ...); `CWinRegistry` = `RegOpenKeyEx / RegQueryValueEx` wrappers (`GetDWord` 0x698610, `GetBinFloat` 0x698750,
 `GetString` 0x6976B0, the Set* twins) under the HKCU key the AppSettings use.
 
@@ -668,7 +669,7 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
 ## 12. What is not known
 
 * ~~The MMP extra block~~ settled [V]: `hdr[0x48]` bytes after the header are copied to `CTexture +0x2C` by `LoadMipChain`
-  0x690430 and only freed afterwards (`Init`, `FreeMipTables`, the dtor); the texture side never reads them (it only needs the
+  0x690430 and only freed afterwards (`Init`, the dtor; `FreeMipTables` 0x691070 is dead code [V, T7 g14]); the texture side never reads them (it only needs the
   size, in `GetMipOffset`). The block is the **skin-cache key**: `ComposeAndSaveLayers` writes the layer recipe there and compares
   it on the next build to reuse the cached `textures\<name>.mmp` (corrected 2026-11-06; shipped archive files have none).
 * ~~The sun object's `+0x24` in the under-water sun attenuation (4.2)~~ settled live 2026-11-07: 0.
@@ -712,6 +713,9 @@ folders]. `water` and `lava` have no day folder (count 0: loop only).
 | this page 9 | branch widths 2.45..5.95; branches from `lerp(from, to, f)`; textures "6 frames each"; glow quads "along the bolt direction", frame `(tick / 2) % 15` | widths 2.45..5.25; branches start at `f * from + (1 - f) * to` (80 / 70 / 50 / 20 / 10 / 10 % along); 6 is the texture kind; the glow quads stack towards the camera; frame `(world tick + round(15 x) + 2i) % 15` |
 | this page 10.3 (wcp-net cross note, checked) | "the object-receiver branch (`ClipTriangleB`, list `CWorldClient +0x1F4`) is dead code"; `RenderShadowVolume`, `DrawQuadBatchClippedB` | the branch is live: bridge quad owners' parts receive prints and shadows (no per-owner de-dup [V live 2026-11-06]); the functions are `CWorldClient::BuildShadowReceiverMesh` 0x56C750 and `CRenderDevice::DrawTrianglesTransformed` 0x4EA4A0 |
 | this page 11 + `structs.tsv` AcksAnswer +0xC / +0x1AC | "sound-kind ids 0..0x18; ids 0x16..0x18 have no list"; +0x1AC `linesShopYes` | the id map covers ack ids 0..0x2A (Answers), 0x2C / 0x2D (Others), 0x2E..0x32 (Cryes), table in section 11; +0x1AC holds 0x2C-byte hit-sound records used for id 0x29 |
+| `structs.tsv` CBitmapDib, `functions.tsv` CBitmapDib::LoadFile 0x6D4D40 | size 0x48, file / mapping / view at +0x3C / +0x40 / +0x44 | size 0x3C (runtime class "CDib" g_0x796CD0); the handles are +0x2C / +0x30 / +0x34, HPALETTE +0x38, CreateDIBSection HBITMAP +8 [V, T7 g14] |
+| `functions.tsv` CBitmapDib 0x6D54D0 / 0x6D5480 / 0x6D4A60 | DeleteObjects / Bitmap_CreateDDB (CreateDIBitmap) / GetStaticHeader | CreatePalette (LOGPALETTE from the RGBQUADs) / Bitmap_CreateDibSection (dead) / GetRuntimeClass [V, T7 g14] |
+| `functions.tsv` 0x694130, 0x694520, 0x6946B0 | StringHashSet_ClearNodes / Record_InitFields / MappedResource_ResetKeep | CTextureManager release-cache CList RemoveAll / CFileRegistry::ctor / CFileRegistry::Close [V, T7 g14] |
 | `functions.tsv` CString::MakeUpper 0x700EFE / MakeLower 0x700EEC, `_strupr` 0x6EC8A8 / `_strlwr` 0x6EC81E | the names | swapped: 0x700EFE (35 callers) lower-cases (`_mbslwr`, LCMAP_LOWERCASE), 0x700EEC upper-cases (no caller) |
 | `functions.tsv` 0x6CB390 purpose / this page | ambient loops "pan from the listener's forward vector" | correct; the pan is clamped to the record's float limit `+0x10` (30.0 or 100.0; checked in the exe bytes 2026-11-06: not an int read as a float, as a same-day draft said) (section 11b) |
 

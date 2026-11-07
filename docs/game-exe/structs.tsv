@@ -568,8 +568,8 @@ WeaponProto			0x98	float[7]	damageFactors	damage type distribution (CItem::GetPr
 WeaponProto			0x70	float[2]	field_70	tag 0x16 (Unk22-0/1)
 WeaponProto			0x78	byte[3]	field_78	tag 0x1b (Unk27)
 WeaponProto			0x7d	byte[3]	skillBonusRest	+0x7d..+0x7f: rest of the tag 0x1c byte[8] +0x7b (Unk28); +0x7b melee, +0x7c archery already listed; +0x80.. = attributeSkillBonus
-WeaponProto			0x84	float	attackModifier	Attack (tag 0x1d): client AttackParams[6] via ItemId_GetProto [I]
-WeaponProto			0x88	float	defenceModifier	Defence (tag 0x1e): AttackParams[7] [I]
+WeaponProto			0x84	float	attackModifier	Attack (tag 0x1d): client AttackParams[6] via ItemId_GetProto [I]; not copied by WeaponProto::operator_assign 0x6A8FB0 / WeaponProto_UninitCopyRange 0x6AB9C0 [V]
+WeaponProto			0x88	float	defenceModifier	Defence (tag 0x1e): AttackParams[7] [I]; not copied by the copy helpers either [V]
 WeaponProto			0x8c	float	range	Range (tag 0x17) -> CItemWeapon +0x58
 WeaponProto			0x90	float	damageMin	D.Min (tag 0x18) * material Damage -> CItemWeapon +0x50
 WeaponProto			0x94	float	damageSpread	D.Max (tag 0x19): the code adds it to the min (max = min + spread)
@@ -1080,11 +1080,11 @@ ArmorProto			0x8c	uint	mainFlags	tag 0x15 [8] (Unk21-8), ORed with the material 
 ArmorProto			0x90	float	addAbsorb	A. Absorb. (tag 0x16 [0])
 ArmorProto			0x94	float[7]	addValues	A. Piercing..General (tag 0x16 [1..7]) -> CItemArmor +0x68
 ArmorProto			0xb0	uint	addFlags	tag 0x16 [8] (Unk22-8)
-ArmorProto			0xb4	byte	applyWounds	Apply Wounds (tag 0x17)
+ArmorProto			0xb4	byte	applyWounds	Apply Wounds (tag 0x17); +0xB4..+0xC7 (applyWounds, wearOrder, the byte tags) are not copied by ArmorProto::operator_assign 0x6A9370 / ArmorProto_UninitFillN 0x6ABE20 [V]
 ArmorProto			0xb8	int	wearOrder	Wear Order (tag 0x18), ArmorProto_GetWearOrder
 ArmorProto			0xbc	byte[3]	field_bc	tag 0x19 (Unk25)
 ArmorProto			0xbf	byte[8]	field_bf	tag 0x1a (Unk26)
-QuickProto	ItemProtoBase	0x8c	0x6c	int	subtype	ItemID (tag 0x15): 2 consumable (order 10), 5 charged magic item, 8 wand / scroll / spell container
+QuickProto	ItemProtoBase	0x8c	0x6c	int	subtype	ItemID (tag 0x15): 2 consumable (order 10), 5 charged magic item, 8 wand / scroll / spell container; QuickProto_UninitCopyRange 0x6ABF60 copies only +0x70 and +0x80..+0x8A (not +0x6c / +0x74 / +0x78 / the spellName text) [V]
 QuickProto			0x70	int	gdLevel	GD Level (tag 0x16) -> CItemQuick +0x4c
 QuickProto			0x74	float	damage	Damage (tag 0x17)
 QuickProto			0x78	float	field_78	tag 0x18 (Unk24)
@@ -1092,7 +1092,7 @@ QuickProto			0x7c	CString	spellName	Spell (tag 0x19): created and embedded for s
 QuickProto			0x80	byte[3]	attributeModifiers	Science / Stealing / ? modifiers (tag 0x1a; never written by DBEditor)
 QuickProto			0x83	byte[8]	field_83	tag 0x1b (Unk27, always empty)
 QuestProto	ItemProtoBase	0x7c	0x6c	int	scriptId	ScriptID (tag 0x15) -> CItemQuest +0x4c
-QuestProto			0x70	pointer	zones	STL vector<CString> (begin +0x70, end +0x74, cap +0x78): Zones (tag 0x16); FilterQuestItems keeps the item only in a listed zone
+QuestProto			0x70	pointer	zones	STL vector<CString> (begin +0x70, end +0x74, cap +0x78): Zones (tag 0x16); FilterQuestItems keeps the item only in a listed zone; constructed empty, not copied, by QuestProto::operator_assign 0x6AAE40 / QuestProto_UninitCopyRange 0x6AC240 [V]
 LootProto	ItemProtoBase	0x78	0x6c	int	category	TypeID (tag 0x15): 1 material, 2 instruction
 LootProto			0x70	int	refTable	tag 0x16: 0 weapons 1 armors 2 quick 3 spells 4 perks
 LootProto			0x74	int	refIndex	tag 0x17
@@ -2120,7 +2120,7 @@ CTexture			0x3c	uint[8]	pixelFormat	DDPIXELFORMAT (dwSize 0x20, flags, fourcc, b
 CTexture			0x5c	pointer	surface	CDXDirectDrawSurface* (refcounted): the managed texture; +0x10 of it = IDirectDrawSurface7
 CTexture			0x60	pointer	pixelMap	system copy used by the textured shadow fill (never set by the mmp path)
 CTexture			0x64	int	lastUse	time stamp for PurgeOlderThan
-CTextureManager	CObjectManager	0xf0	0xbc	pointer	vtable2	secondary vtable 0x743D18 (Serialize of the id list)
+CTextureManager	CObjectManager	0xf0	0xbc	pointer	vtable2	vtable 0x743D18 of the CList object +0xBC..+0xD4 = the texture release cache (DestroyObject appends textures with flags & 0x38; TakeFromReleaseCache and TextureReleaseCache_RemoveAll 0x694130 empty it). CORRECTION: was "secondary vtable (Serialize of the id list)"
 CTextureManager			0xc0	pointer	listHead	CList of loaded textures, oldest first (TrimCache evicts from the head)
 CTextureManager			0xc4	pointer	listTail	
 CTextureManager			0xc8	int	listCount	
@@ -2316,19 +2316,24 @@ WaterLevelRecord		0x10	0x0	int	materialId	terrain material index
 WaterLevelRecord			0x4	int	stepsLeft	
 WaterLevelRecord			0x8	float	level	current height; WaterLevels::Read applies it with CTerrain::SetMaterialHeight
 WaterLevelRecord			0xc	float	step	per tick
-CBitmapDib		0x48	0x0	pointer	vtable	0x744288
+CBitmapDib		0x3c	0x0	pointer	vtable	0x744288 (slot 0 GetRuntimeClass, 2 Serialize); MFC runtime class "CDib" g_0x796CD0 (size 0x3C, schema 0, CreateObject 0x6D49E0, base CObject). CORRECTION: size was 0x48 (CreateObject allocates 0x3C; Free clears +4..+0x38)
 CBitmapDib			0x4	pointer	palette	RGBQUAD* (header + 0x28)
 CBitmapDib			0xc	pointer	pixels	
 CBitmapDib			0x10	pointer	header	BITMAPINFOHEADER* (own 0x28 / 0x34 bytes or inside the mapped file)
-CBitmapDib			0x14	int	field_14	
+CBitmapDib			0x14	pointer	headerGlobal	HGLOBAL of the header when ownsHeader +0x18 = 2 (GlobalUnlock / GlobalFree in Free). CORRECTION: was field_14 (int)
 CBitmapDib			0x18	int	ownsHeader	1 = operator new
 CBitmapDib			0x1c	int	ownsPixels	
 CBitmapDib			0x20	int	imageSize	biSizeImage or rows * stride
 CBitmapDib			0x24	int	paletteEntries	
 CBitmapDib			0x28	int	maskBytes	0xC for 16 / 32 bpp (BI_BITFIELDS masks after the header)
-CBitmapDib			0x3c	pointer	fileHandle	LoadFile mapping: CreateFile
-CBitmapDib			0x40	pointer	mappingHandle	
-CBitmapDib			0x44	pointer	mappedView	
+CBitmapDib			0x3c	pointer	fileHandle	CORRECTION: not a field (the object is 0x3C bytes): LoadFile stores the file / mapping / view at +0x2c / +0x30 / +0x34
+CBitmapDib			0x40	pointer	mappingHandle	CORRECTION: not a field; it is +0x30
+CBitmapDib			0x44	pointer	mappedView	CORRECTION: not a field; it is +0x34
+CBitmapDib			0x8	pointer	dibSection	HBITMAP from CreateDIBSection (Bitmap_CreateDibSection 0x6D5480); DeleteObject in Free
+CBitmapDib			0x2c	pointer	fileHandle	LoadFile 0x6D4D40: CreateFile handle (closed by Free / FileMapping_Close)
+CBitmapDib			0x30	pointer	mappingHandle	CreateFileMapping handle
+CBitmapDib			0x34	pointer	mappedView	MapViewOfFile view (UnmapViewOfFile in Free)
+CBitmapDib			0x38	pointer	hPalette	HPALETTE from CBitmapDib::CreatePalette 0x6D54D0; selected by the Bitmap_Draw* helpers, DeleteObject in Free
 CInterface		0xB0	0x0	int	screenWidth	pixels of the primary surface; UiScale uses +0/+4 (Init)
 CInterface		0xB0	0x4	int	screenHeight	
 CInterface		0xB0	0x8	pointer	device	CDXDirectDraw g_0x7AF080 (+0x54 = the D3D device wrapper: vt[20] SetRenderState)
@@ -4092,7 +4097,11 @@ MapAllodRecord		0x2c	0x0	CString	name	'#allod <name>' word 2 (gipat)
 MapAllodRecord		0x2c	0x4	CString[5]	lines	first word of each of the 5 lines after '#allod' (+4 .. +0x14)
 MapAllodRecord		0x2c	0x18	CDWordArray	zoneIndices	indices of the '#zone' records naming this allod (vtable +0x18, data +0x1C, count +0x20)
 AcksCry			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2E..0x32 -> +0x20 Agress, +0x2C Suspect, +0x38 Kill, +0x44 Rest, +0x50 InAgress
+AcksCry		0x5c	0x0	byte[12]	name	std::string (StlString_dtor2 in AcksCry::dtor 0x6DC920; copied by AcksCry::CopyCtor 0x6DFA90)
 AcksOther			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2C -> +0x20 Talk, 0x2D -> +0x2C Rest
+AcksOther		0x38	0x0	byte[12]	name	std::string (NodeAlloc_FreeBytes in AcksOther::dtor 0x6DCAF0)
+AcksOther			0x20	pointer[3]	talkLines	vector of 0x28 records with three std::strings (+4, +0x10, +0x1C) (list 0x2C, Talk)
+AcksOther			0x2c	pointer[3]	restLines	same record type (list 0x2D, Rest)
 CDifficultyBox	CMessageBox	0x184	0x180	int	choice	difficulty choice: 0 hard (default in Build), 1 easy; OK copies it into g_0x79BEC0
 CHudMinimap	CUIWidget	0x1B4	0x14C	float[2]	centre	camera point (g_0x79B388 / 38C) in metres, set by Init 0x642E80
 CHudMinimap	CUIWidget	0x1B4	0x15C	float[2]	mapSize	zone record +0x20 / +0x24 sectors * 32 (Build 0x641F20)
@@ -4183,3 +4192,15 @@ LogStream	streambuf	0x454	0x54	char[0x400]	buffer	the streambuf put area (stream
 CCampSkillsWin			0x150	int	selectedHero	index of the hero record in +0x190 used by GetCurrentExp 0x625530 [V]
 CCampSkillsWin			0x190	pointer[3]	heroRecords	std::vector of 0x3C-byte hero records (Array60_InsertRealloc from Build / ResetEdit); record +0x2C / +0x30 / +0x34 floats: current exp = +0x34 + +0x2C - +0x30 (GetCurrentExp 0x625530) [V]
 CHudQuickBar			0x158	CArray	slotArray	MFC CArray of 12-byte POD slot records {byte flag, dword, pointer} (vt 0x7428A0, m_pData +0x15C, m_nSize +0x160, m_nMaxSize +0x164, m_nGrowBy +0x168; Serialize 0x64B1E0, dtor 0x64B1C0) [V]
+CFileRegistry		0x18	0x0	int	externalBuffer	1 after Attach (in-memory buffer), 0 for a mapped file: Close / Validate close the mapping only when 0 (ctor 0x694520)
+CFileRegistry			0x4	byte[16]	mappedFile	CMappedFile {handle -1 when closed, mapping, view, size} (InitFields4_6756B0 in the ctor)
+CFileRegistry			0x14	pointer	data	registry image: dword magic 0x45AB3EFB at +0, u16 section count at +4, 6-byte section table at +8
+CLightManager	CBaseManager		0xc0	pointer	ownedObject	released through vt+0x10 by CLightManager::DtorBody 0x68D990
+CLightManager			0xcc	int	field_cc	zeroed by DtorBody after the list is freed
+CLightManager			0xd4	pointer	lightList	STLport list sentinel (0xC nodes, Record0C_BufferFree5) freed by DtorBody
+SoundAmbientSlot		0x38	0x4	CStringArray	names	constructed by SoundAmbientSlot::ctor 0x6B63D0 (__ehvec_ctor of the 16 slots at CSoundManager +0x26C)
+SoundStreamSlot		0x4c	0x4	CStringArray	names	constructed by SoundStreamSlot::ctor 0x6B63F0 (__ehvec_ctor of the 8 slots at CSoundManager +0x5F0)
+PrintRecord28	CObject	0x28	0x0	pointer	vtable	0x744264, slot 0 PrintRecord28::Serialize 0x6D41D0 (prints.db record)
+PrintRecord28			0x4	byte[12]	name	std::string, archive tag 1
+PrintRecord28			0x10	int[3]	block2	archive tag 2, sub-tags 1..3
+PrintRecord28			0x1c	int[3]	block3	archive tag 3, sub-tags 1..3
