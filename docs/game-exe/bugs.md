@@ -526,3 +526,22 @@ key's delta; `Scene3ds_WeldVertices` 0x44C4A0 assumes mesh i belongs to node i w
 `AnimNodeOld_AdvanceFrame` 0x506FD0 tests the frame after the wrap, so its queued-clip branch can never run;
 `AnimNodeOld_StepFrameRecursive` 0x507160 adds two morph frames per step; `RemoveChild` / `DetachChildByName` 0x508610 / 0x508670
 drop the result of the recursive call, so a hit deeper than one level returns 0.
+
+## 36. Defects in unreferenced code found by the gap batches (T7 n01..n05, 2026-11-07)
+
+From the code; none of this runs in the shipped game (nothing calls, jumps to or points at these functions). Listed so nobody wires
+the code back in as it is.
+
+| addr | defect |
+|---|---|
+| 0x403D30 `CBaseManager::RegisterWithId_403D30` | an id already in use overwrites the idMap +0x1C entry, but the new object is not added to the list +0x34 / nodeMap +0x50 (the jump at 0x403D6B skips it) |
+| 0x4B5650 `SSCCmd::EvalString_4B5650` | always ends in `FatalError("Function does not return string at SSCCmd::CalcFunction")` |
+| 0x509410 `CAnimationSystemOld::DetachNodeByName_509410` | writes 0 to address 0 (0x5094A6) when the node is not a direct child of the root |
+| 0x5353F0 `CUnitClientSpecific::ActiveWeaponKindMask_5353F0` | a weapon index past the table reads address 0xC (0x535452) |
+| 0x50CF40 `CAnimationSystem2::RemoveNode_50CF40` | the parent is dereferenced without a null check (0x50CF5A) |
+| 0x532650 / 0x5326B0 / 0x532710 / 0x532770 `CUnit::ProtoModelFolder` / `ProtoClassValueA..C` | `cmp eax, 0xe; jbe` allows index 14 in 14-entry tables |
+| 0x4F2B40 `D3D_FvfVertexSize_4F2B40` | bit tests instead of compares: some blend-weight and texture-set counts give wrong sizes |
+| 0x4EAFD0 `CRenderDevice::ReadDepthPixel_4EAFD0` | always reads a full dword, so 16- and 24-bit depth buffers mix neighbour bytes |
+| 0x4EFF30 `CDDSurface::LoadMmpFile_4EFF30` | a failed LoadPicture returns without fclose |
+| 0x5B35F0 `StampMap::AllocNode_5B35F0`, 0x5C8FC0 `Stimulus_Alloc_5C8FC0` | the new list element is overwritten with an uninitialised stack local |
+| 0x62C050 `CCreditsScreen::Close_62C050` | passes the debug fill value 0xCCCCCCCC to `CInterface::RequestPopScreen` |
