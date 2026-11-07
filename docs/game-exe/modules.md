@@ -1591,7 +1591,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-1926 functions, group `crt`.
+1923 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1599,7 +1599,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006F17D4 | 1825 | _output | CRT (output.c _output(stream, format, args)): the printf engine: state table 0x7476B0 / 0x7476D0, flags - + space # 0, width / precision (* from args), h l I64 L size, %c %C %s %S %Z %d %i %u %o %x %X %p %n %e %f %g %E %G (through... |
 | 0x006FB9C0 | 1668 | dead_6FB9C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x006E3780 | 1585 | AcksAnswer::Serialize | (this = AcksAnswer 0x1C4, archive): tag 1 name string +0; tags 10..0x26 the voice-line vectors through Archive_SerializeRec28Vector (+0x20, +0x2C, .. in a fixed tag -> offset order, e.g. 0x14 -> +0xA4, 0x21 -> +0xB0, 0x24 -> +0x98... |
-| 0x0070592E | 1198 | CWnd::OnWndMsg | vt slot 39: the central message dispatcher (commands, notifications, sys colors, ctl colors) via message maps, 1.2 KB |
+| 0x0070592E | 1198 | CWnd::OnWndMsg | MFC 6: CWnd::OnWndMsg(msg, wParam, lParam, LRESULT*) (slot 39): WM_COMMAND -> OnCommand (vt +0x78); WM_NOTIFY -> OnNotify (vt +0x7C); WM_ACTIVATE -> _AfxHandleActivate; WM_SETCURSOR -> _AfxHandleSetCursor; then the message map (Ge... |
 | 0x006F9989 | 1185 | _strgtold12 | CRT (strgtold.c __strgtold12(_LDBL12*, &end, str, mult12, scale, decpt, implicit_E)): state machine over sign, digits, decimal point (locale *_decimal_point), exponent (e / E / d / D), up to 21 significant digits into a buffer, th... |
 | 0x006F2F30 | 1142 | sub_6F2F30 | unregistered function, reached by call / pointer from 0x398382 (gaps.py 2026-11-06) |
 | 0x006EE4B3 | 1007 | _expandtime | MSVC6 CRT: static _expandtime(spec, tm, &out, &left, lc_time): one strftime letter: a / A / b / B names from lc_time (+0 / +0x1C / +0x38 / +0x68), c / x / X through _store_winword with the ww_ formats, d H I j m M S U W w y Y numb... |

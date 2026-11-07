@@ -4298,12 +4298,31 @@ AFX_MODULE_THREAD_STATE	CNoTrackObject		0x14	CHandleMap*	m_pmapHWND
 AFX_MODULE_THREAD_STATE			0x18	CHandleMap*	m_pmapHMENU	created by 0x707BFA (CTempMenu); that function is named AfxGetHandleMap_Gdi in functions.tsv but is afxMapHMENU
 AFX_MODULE_THREAD_STATE			0x1c	CHandleMap*	m_pmapHDC	created by 0x708D07 (CTempDC, 2 handles)
 AFX_MODULE_THREAD_STATE			0x20	CHandleMap*	m_pmapHGDIOBJ	created by 0x709FEE (CTempGdiObject). CORRECTION: 0x709FEE was named AfxGetHandleMap_Menu
-AFX_MODULE_THREAD_STATE			0x28	pointer	m_pfnNewHandler	AfxThrowMemoryException
-AUX_DATA		0x6c	0x18	int	cxPixelsPerInch	afxData 0x7C90C8 +0x18 = 0x7C90E0 (default LOGPIXELSX of DPtoHIMETRIC without a DC)
+AFX_MODULE_THREAD_STATE			0x28	pointer	m_pfnNewHandler	AfxNewHandler 0x70058F (calls AfxThrowMemoryException 0x6FE389, returns 0). CORRECTION: was "AfxThrowMemoryException" (0x70058F's old name)
+AFX_MODULE_THREAD_STATE			0x4	CWinThread*	m_pCurrentWinThread	AfxGetThread 0x70228B / AfxEndThread
+AFX_MODULE_THREAD_STATE			0x8	CFrameWnd*	m_frameList	head; next frame at CFrameWnd +0x54 (CWinThread::OnIdle)
+AFX_MODULE_THREAD_STATE			0x10	int	m_nTempMapLock	AfxLockTempMaps / AfxUnlockTempMaps
+AFX_MODULE_THREAD_STATE			0x24	CHandleMap*	m_pmapHIMAGELIST	DeleteTemp in AfxUnlockTempMaps
+AUX_DATA		0x6c	0x18	int	cxPixelsPerInch	
 AUX_DATA			0x3c	HCURSOR	hcurWait	0x7C9104, CWinApp::DoWaitCursor
 AUX_DATA			0x50	HBITMAP	hbmMenuDot	0x7C9118 (AfxLoadDotBitmap; deleted by AUX_DATA::~AUX_DATA 0x70E181)
 AUX_DATA			0x5c	int	bWin4	0x7C9124
+AUX_DATA			0x8	int	cxIcon	afxData 0x7C90C8; UpdateSysMetrics 0x703E56
+AUX_DATA			0xc	int	cyIcon	
+AUX_DATA			0x1c	int	cyPixelsPerInch	
+AUX_DATA			0x20	HBRUSH	hbrWindowFrame	UpdateSysColors 0x703E12
+AUX_DATA			0x24	HBRUSH	hbrBtnFace	
+AUX_DATA			0x28	COLORREF	clrBtnFace	
+AUX_DATA			0x2c	COLORREF	clrBtnShadow	
+AUX_DATA			0x30	COLORREF	clrBtnHilite	
+AUX_DATA			0x34	COLORREF	clrBtnText	
+AUX_DATA			0x38	COLORREF	clrWindowFrame	
 CWinApp	CWinThread	0xc0	0x78	char*	m_pszAppName	the game never constructs a CWinApp (CWinApp::CWinApp 0x70D654 unreferenced); only CWinApp::DoMessageBox runs with this = NULL
+CWinApp			0x84	BOOL	m_bHelpMode	CWinApp::WinHelp
+CWinApp			0x8c	LPCTSTR	m_pszHelpFilePath	CWnd::WinHelp
+CWinApp			0x94	HGLOBAL	m_hDevMode	CWinApp::DevModeChange
+CWinApp			0x98	HGLOBAL	m_hDevNames	
+CWinApp			0xb8	int	m_nSafetyPoolSize	AfxUnlockTempMaps
 AcksLine		0x28	0x0	int	weight	acks voice-line record (vector element of every Answers / Cryes / Others list): archive tag 2 (4 bytes) in AcksLine28_Serialize / Archive_SerializeRec28Vector 0x6E42F0
 AcksLine			0x4	byte[12]	wavPath	std::string, archive tag 1
 AcksLine			0x10	byte[12]	subtitle	std::string, archive tag 3
@@ -4325,14 +4344,19 @@ CHandleMap			0x4	CMapPtrToPtr	m_permanentMap	dtor 0x6E6D08
 CHandleMap			0x20	CMapPtrToPtr	m_temporaryMap	iterated by DeleteTemp 0x70373B
 CHandleMap			0x40	size_t	m_nOffset	offset of the handle(s) in the wrapper object (DeleteTemp clears it)
 CHandleMap			0x44	int	m_nHandles	2 for CDC (second handle cleared too)
+CHandleMap			0x3c	CRuntimeClass*	m_pClass	CTempWnd 0x7469B0 / CTempMenu 0x7471B0 ..; CreateObject for temporary wrappers (CHandleMap::FromHandle 0x70367C)
 CSimpleException	CException	0x98	0x4	BOOL	m_bAutoDelete	SetField_4_70205D in the ctors 0x6E68C9 / 0x6E6916 / 0x6E6AEA / 0x6E6B37
 CSimpleException			0xc	BOOL	m_bInitialized	0 in the ctors
 CSimpleException			0x10	BOOL	m_bLoaded	0 in the ctors
 CSimpleException			0x94	UINT	m_nResourceID	ctor argument 2
 CSimpleException			0x14	char[128]	m_szMessage	AfxLoadString(m_nResourceID +0x94, +0x14, 0x80) in InitString 0x6FE31D; copied out by GetErrorMessage 0x6FE346
 CFileException	CException	0x14	0x10	CString	m_strFileName	dtor 0x6E6335
+CFileException			0x8	int	m_cause	CFileException cause (1 generic .. 14 endOfFile); vtable 0x745E4C
+CFileException			0xc	LONG	m_lOsError	
 CArchiveException	CException	0x10	0xc	CString	m_strFileName	dtor 0x6E6BA1
 CFile	CObject	0x10	0xc	CString	m_strFileName	SetFilePath 0x6E6361
+CFile			0x4	HANDLE	m_hFile	-1 = hFileNull
+CFile			0x8	BOOL	m_bCloseOnDelete	
 _tiddata		0x74	0x0	DWORD	_tid	MSVC6 CRT per-thread data (TLS slot 0x797B70, calloc(1, 0x74) in _mtinit 0x6F004C / _getptd 0x6F00D1): GetCurrentThreadId
 _tiddata			0x4	HANDLE	_thandle	-1 for the main thread (_mtinit / _getptd)
 _tiddata			0x14	DWORD	_holdrand	rand seed, 1 in _initptd 0x6F00BE
@@ -4374,3 +4398,94 @@ streambuf			0x28	char*	gptr	get pointer
 streambuf			0x2c	char*	egptr	get area end
 streambuf			0x30	int	lockc	-1 = locking on (ostream::flush 0x6FC346 locks +0x34)
 streambuf			0x34	CRITICAL_SECTION	lock	_mtlockinit in the ctors, _mtlockterm in ~streambuf
+CWordArray	CObject	0x14	0x0	pointer	vtable	0x745F78 (runtime class "CWordArray"); +4 m_pData, +8 m_nSize, +0xC m_nMaxSize, +0x10 m_nGrowBy as CArray; 2-byte elements
+CDWordArray	CObject	0x14	0x0	pointer	vtable	0x7464B8 ("CDWordArray"); CArray layout, 4-byte elements
+CByteArray	CObject	0x14	0x0	pointer	vtable	0x746560 ("CByteArray"); CArray layout, 1-byte elements
+CUIntArray	CObject	0x14	0x0	pointer	vtable	0x7467A0 ("CUIntArray"; the functions 0x6FF933..0x6FFB7E were named CPtrArray); CArray layout
+CPtrArray	CObject	0x14	0x0	pointer	vtable	0x746FB0 ("CPtrArray"; the functions 0x6FFC8E..0x6FFED9 were named CUIntArray); only built by the dead CArchive::MapObject
+CPtrList	CObject	0x1c	0x0	pointer	vtable	0x746FE8 ("CPtrList"); ctor at the unregistered 0x6FFFE9, never called
+CPtrList			0x4	pointer	m_pNodeHead	node {pNext +0, pPrev +4, data +8}
+CPtrList			0x8	pointer	m_pNodeTail	
+CPtrList			0xc	int	m_nCount	
+CPtrList			0x10	pointer	m_pNodeFree	free list
+CPtrList			0x14	CPlex*	m_pBlocks	freed by CPlex::FreeDataChain 0x6FE90F
+CPtrList			0x18	int	m_nBlockSize	
+CMapPtrToPtr	CObject	0x1c	0x0	pointer	vtable	0x74689C ("CMapPtrToPtr")
+CMapPtrToPtr			0x4	pointer	m_pHashTable	CAssoc* [m_nHashTableSize]; CAssoc {pNext +0, key +4, value +8}
+CMapPtrToPtr			0x8	uint	m_nHashTableSize	17 by default; hash = (key >> 4) % size
+CMapPtrToPtr			0xc	int	m_nCount	
+CMapPtrToPtr			0x10	pointer	m_pFreeList	
+CMapPtrToPtr			0x14	CPlex*	m_pBlocks	
+CMapPtrToPtr			0x18	int	m_nBlockSize	
+CStringData		0xc	0x0	int	nRefs	-1 = locked (LockBuffer 0x700E6A); the data pointer of a CString points 0xC past this header
+CStringData			0x4	int	nDataLength	
+CStringData			0x8	int	nAllocLength	64 / 128 / 256 / 512 = CFixedAlloc pools 0x7C8B80 / 0x7C8B58 / 0x7C8B30 / 0x7C8B08 (FreeData 0x70085F)
+CStdioFile	CFile	0x14	0x10	FILE*	m_pStream	vtable 0x7464F0
+CException	CObject	0x8	0x4	BOOL	m_bAutoDelete	CException::Delete 0x702069 deletes when > 0
+AFX_EXCEPTION_LINK		0x8	0x0	pointer	m_pLinkPrev	TRY-block link (ctor 0x7020F1, AfxTryCleanup 0x70212F)
+AFX_EXCEPTION_LINK			0x4	CException*	m_pException	
+CCmdTarget	CObject	0x1c	0x4	DWORD	m_dwRef	ctor 0x703EAE sets 1
+CCmdTarget			0x8	pointer	m_pOuterUnknown	
+CCmdTarget			0xc	DWORD	m_xInnerUnknown	
+CCmdTarget			0x10	pointer	m_xDispatch	vtbl of the COleDispatchImpl (disconnected by ~CCmdTarget 0x703EC8)
+CCmdTarget			0x14	BOOL	m_bResultExpected	
+CCmdTarget			0x18	pointer	m_xConnPtContainer	
+CWnd	CCmdTarget	0x3c	0x1c	HWND	m_hWnd	vtable 0x746DA8 (46 slots)
+CWnd			0x20	HWND	m_hWndOwner	
+CWnd			0x24	UINT	m_nFlags	WF_TOOLTIPS 1, WF_CONTINUEMODAL 0x10, WF_OLECTLCONTAINER 0x100
+CWnd			0x28	WNDPROC	m_pfnSuper	GetSuperWndProcAddr 0x705235 returns its address
+CWnd			0x2c	int	m_nModalResult	
+CWnd			0x30	pointer	m_pDropTarget	
+CWnd			0x34	COleControlContainer*	m_pCtrlCont	dialog-item wrappers forward to it
+CWnd			0x38	COleControlSite*	m_pCtrlSite	window wrappers (ShowWindow, SetFocus, GetStyle ..) forward to it
+CWinThread	CCmdTarget	0x68	0x1c	CWnd*	m_pMainWnd	vtable 0x7466E0 (31 slots); built by AfxBeginThread 0x7022A0 (CSoundManager / CSoftCursor threads)
+CWinThread			0x20	CWnd*	m_pActiveWnd	
+CWinThread			0x24	BOOL	m_bAutoDelete	
+CWinThread			0x28	HANDLE	m_hThread	
+CWinThread			0x2c	DWORD	m_nThreadID	
+CWinThread			0x30	MSG	m_msgCur	0x1C bytes; ExitInstance returns its wParam +0x38
+CWinThread			0x4c	pointer	m_pThreadParams	
+CWinThread			0x50	AFX_THREADPROC	m_pfnThreadProc	
+CWinThread			0x54	pointer	m_lpfnOleTermOrFreeLib	
+CWinThread			0x5c	CPoint	m_ptCursorLast	IsIdleMessage 0x70262A
+CWinThread			0x64	UINT	m_nMsgLast	
+CCmdUI		0x28	0x0	pointer	vtable	0x7469A0 {Enable, SetCheck, SetRadio, SetText}
+CCmdUI			0x4	UINT	m_nID	
+CCmdUI			0x8	UINT	m_nIndex	
+CCmdUI			0xc	CMenu*	m_pMenu	
+CCmdUI			0x10	CMenu*	m_pSubMenu	
+CCmdUI			0x14	CWnd*	m_pOther	
+CCmdUI			0x18	BOOL	m_bEnableChanged	
+CCmdUI			0x1c	BOOL	m_bContinueRouting	
+CCmdUI			0x20	UINT	m_nIndexMax	
+CCmdUI			0x24	CMenu*	m_pParentMenu	
+CTestCmdUI	CCmdUI	0x2c	0x28	BOOL	m_bEnabled	vtable 0x746E88
+CDataExchange		0xc	0x0	BOOL	m_bSaveAndValidate	ctor 0x706F53
+CDataExchange			0x4	CWnd*	m_pDlgWnd	
+CDataExchange			0x8	HWND	m_hWndLastControl	
+_AFX_THREAD_STATE			0xc	pointer	m_pSafetyPoolBuffer	refilled by AfxUnlockTempMaps to CWinApp m_nSafetyPoolSize
+_AFX_THREAD_STATE			0x10	AFX_EXCEPTION_CONTEXT	m_exceptionContext	m_pLinkTop (AfxGetExceptionContext 0x702107)
+_AFX_THREAD_STATE			0x14	CWnd*	m_pWndInit	window being created (AfxHookWindowCreate)
+_AFX_THREAD_STATE			0x2c	HHOOK	m_hHookOldCbtFilter	
+_AFX_THREAD_STATE			0x30	HHOOK	m_hHookOldMsgFilter	
+_AFX_THREAD_STATE			0x34	MSG	m_lastSentMsg	hwnd +0x34, message +0x38, wParam +0x3C, lParam +0x40, time +0x44, pt +0x48 (AfxCallWndProc, CWnd::Default)
+_AFX_THREAD_STATE			0x50	HWND	m_hTrackingWindow	CMenu::TrackPopupMenu
+_AFX_THREAD_STATE			0x54	HMENU	m_hTrackingMenu	
+_AFX_THREAD_STATE			0xb8	HWND	m_hLockoutNotifyWindow	CWnd::OnCommand / OnNotify / UpdateData
+_AFX_THREAD_STATE			0xbc	BOOL	m_bInMsgFilter	ProcessMessageFilter
+_AFX_THREAD_STATE			0xcc	CToolTipCtrl*	m_pToolTip	AfxTermThread, CancelToolTips, OnNcDestroy
+_AFX_THREAD_STATE			0x108	CControlBar*	m_pLastStatus	CancelToolTips
+AFX_MODULE_STATE			0x4	CWinApp*	m_pCurrentWinApp	AfxGetApp; NULL in this game (no CWinApp)
+AFX_MODULE_STATE			0x8	HINSTANCE	m_hCurrentInstanceHandle	CWnd::CreateEx
+AFX_MODULE_STATE			0xc	HINSTANCE	m_hCurrentResourceHandle	AfxLoadString
+AFX_MODULE_STATE			0x14	BYTE	m_bDLL	afxContextIsDLL
+AFX_MODULE_STATE			0x18	LONG	m_fRegisteredClasses	AfxEndDeferRegisterClass
+AFX_MODULE_STATE			0x1c	CTypedSimpleList	m_classList	AfxClassInit 0x700674
+AFX_MODULE_STATE			0x34	TCHAR[]	m_szUnregisterList	AfxRegisterClass (DLL only)
+AFX_MODULE_STATE			0x1034	pointer	m_pfnFilterToolTipMessage	CWnd::PreTranslateMessage
+AFX_MODULE_STATE			0x1038	COccManager*	m_pOccManager	CCmdTarget::OnCmdMsg (CN_EVENT), CWnd::IsDialogMessage
+AFX_MODULE_STATE			0x1070	CThreadLocal	m_thread	the AFX_MODULE_THREAD_STATE
+CFrameWnd			0x50	BOOL	m_bHelpMode	CWinThread::ProcessMessageFilter
+CFrameWnd			0x54	CFrameWnd*	m_pNextFrameWnd	frame list
+CFrameWnd			0x88	int	m_nShowDelay	CWinThread::OnIdle
+CFrameWnd			0x90	UINT	m_nIDTracking	CFrameWnd::IsTracking 0x70787E

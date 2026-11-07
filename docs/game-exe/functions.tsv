@@ -14767,515 +14767,512 @@ addr	size	name	status	purpose
 0x006FE837	92	CTime::Format_UINT	named	MFC (CString CTime::Format(UINT nFormatID) const): LoadString then CTime::Format(LPCTSTR) 0x6FE795; lib, unused (no call, no pointer, no raw hit). CORRECTION: was CTime::FormatGmtime [dead: no caller or pointer]
 0x006FE893	92	CTime::FormatGmt_UINT	named	MFC (CString CTime::FormatGmt(UINT nFormatID) const): LoadString then FormatGmt(LPCTSTR) 0x6FE7E6; lib, unused. CORRECTION: was CTime::FormatLocal [dead: no caller or pointer]
 0x006FE8EF	32	CPlex_Create	named	MFC (static CPlex* CPlex::Create(CPlex*& pHead, nMax, cbElement)): operator new(nMax * cbElement + 4), links the block at the head of the chain (pNext = old head), returns it; used by every MFC CList / CMap node pool (148 callers)
-0x006FE90F	22	List_FreeChain	named	frees a singly linked chain of blocks (355 callers)
-0x006FE925	23	InitVtable_745F5C_6FE925	named	stores vtable 0x00745F5C and initializes 5 field(s) (constructor/reset step)
-0x006FE93C	28	vt_745F5C::DeletingDtor_6FE93C	named	scalar deleting destructor: runs FUN_006fe958 then operator delete when flag&1
-0x006FE958	62	CStringArray::~CStringArray	named	destroys the elements and frees the array (vtable 0x745F5C); 591 callers
-0x006FE996	34	CStringArray_DestroyElements2	named	~CString for n elements (second copy)
-0x006FE9B8	285	CStringArray::SetSize	named	CStringArray::SetSize(n, grow): grows with memmove, constructs new empty CStrings; 77 callers
-0x006FEAD5	44	CString_InitN2	named	initializes n CStrings to the empty string (second copy)
-0x006FEB01	54	CStringArray::Append	named	appends another CStringArray
-0x006FEB37	42	CStringArray_CopyElements2	named	CString::operator= for n elements (second copy)
-0x006FEB61	40	CStringArray::Copy	named	copies another CStringArray; 53 callers
-0x006FEB89	69	FreeExtra	named	
-0x006FEBCE	44	CStringArray::SetAtGrow_LPCSTR	named	SetAtGrow(index, LPCSTR); 50 callers
-0x006FEBFA	44	CStringArray::SetAtGrow_CString	named	SetAtGrow(index, CString); 86 callers
-0x006FEC26	118	CStringArray::InsertAt	named	CStringArray::InsertAt(index, count): shifts up and constructs empty strings
-0x006FEC9C	103	CStringArray::InsertAt_LPCSTR_count	named	InsertAt(index, string, count) with temporary CString
-0x006FED03	57	CStringArray::InsertAt_CString_count	named	InsertAt(index, string, count)
-0x006FED3C	92	CStringArray::RemoveAt	named	removes n elements at an index (destroy + memmove)
-0x006FED98	153	CStringArray::InsertAt_array	named	inserts a whole CStringArray at an index (EH frame)
-0x006FEE31	105	CStringArray::Serialize	named	vt slot 2: archive count + each string (ReadWideString / WriteString)
-0x006FEE9A	23	InitVtable_745F78_6FEE9A	named	stores vtable 0x00745F78 and initializes 5 field(s) (constructor/reset step)
-0x006FEEB1	28	vt_745F78::DeletingDtor_6FEEB1	named	scalar deleting destructor: runs FUN_006feecd then operator delete when flag&1
-0x006FEECD	45	CObject_Dtor_745F78	named	SEH dtor: vtable 0x745F78, frees the buffer at +4
-0x006FEEFA	275	CArray_SetSize_A	named	MFC CArray::SetSize (growth with memmove) for 4-byte elements
-0x006FF00D	57	CWordArray::Append	named	appends another WORD array (size, copy)
-0x006FF046	43	CWordArray::Copy	named	copies another WORD array
-0x006FF071	67	FreeExtra	named	
-0x006FF0B4	41	CWordArray::SetAtGrow	named	SetAtGrow(index, value) for WORD elements
-0x006FF0DD	140	CWordArray::InsertAt	named	InsertAt(index, value, count) for WORD elements
+0x006FE90F	22	CPlex::FreeDataChain	named	MFC 6: CPlex::FreeDataChain (thiscall, this = first block): walks the pNext chain (+0) and operator deletes every block; 355 callers (inlined CList / CMap RemoveAll of game containers). Name was List_FreeChain
+0x006FE925	23	CStringArray::CStringArray	named	MFC 6: CStringArray ctor: vtable 0x745F5C, m_pData +4 / m_nSize +8 / m_nMaxSize +0xC / m_nGrowBy +0x10 = 0; 225 call sites
+0x006FE93C	28	CStringArray::`scalar_deleting_dtor'	named	MFC 6: CStringArray scalar deleting dtor (vtable 0x745F5C slot 1): ~CStringArray 0x6FE958, operator delete when flag & 1
+0x006FE958	62	CStringArray::~CStringArray	named	MFC 6: CStringArray dtor: vtable 0x745F5C, _DestructElements(m_pData +4, m_nSize +8) then delete[] m_pData
+0x006FE996	34	CStringArray::_DestructElements	named	MFC 6 (array_s.cpp static): _DestructElements(CString* p, int n): ~CString on n elements; callers SetSize, ~CStringArray, RemoveAt. Name was CStringArray_DestroyElements2
+0x006FE9B8	285	CStringArray::SetSize	named	MFC 6: CStringArray::SetSize(nNewSize, nGrowBy = -1): stores nGrowBy +0x10 when != -1; 0 -> destruct + free; no data -> new n*4 + _ConstructElements; within m_nMaxSize -> construct / destruct the difference; else grow by nGrowBy or (size / 8 clamped 4..1024), memcpy old data, construct the new tail, free the old buffer
+0x006FEAD5	44	CStringArray::_ConstructElements	named	MFC 6 (array_s.cpp static): _ConstructElements(CString* p, int n): memcpy afxEmptyString (0x796E48, the empty data pointer) into n slots. Name was CString_InitN2
+0x006FEB01	54	CStringArray::Append	named	MFC 6: CStringArray::Append(const CStringArray& src): SetSize(old + src size), _CopyElements to the tail, returns the old size; caller TextArchiveList::ListFiles
+0x006FEB37	42	CStringArray::_CopyElements	named	MFC 6 (array_s.cpp static): _CopyElements(CString* dst, const CString* src, int n): CString::operator= per element. Name was CStringArray_CopyElements2
+0x006FEB61	40	CStringArray::Copy	named	MFC 6: CStringArray::Copy(const CStringArray& src): SetSize(src size), _CopyElements
+0x006FEB89	69	CStringArray::FreeExtra	named	MFC 6: CStringArray::FreeExtra: when m_nSize != m_nMaxSize, new[] m_nSize*4 + memcpy (0 when empty), frees the old buffer, m_nMaxSize = m_nSize; lib, unused (refs / dword empty; the one raw hit is the 0x74 byte of `mov esi,[esp+8]` at 0x6FEB63 inside Copy) [dead: no caller or pointer]
+0x006FEBCE	44	CStringArray::SetAtGrow_LPCSTR	named	MFC 6: CStringArray::SetAtGrow(index, LPCTSTR): SetSize(index + 1) when index >= m_nSize, then CString::operator=(LPCSTR) on the slot; 51 call sites
+0x006FEBFA	44	CStringArray::SetAtGrow_CString	named	MFC 6: CStringArray::SetAtGrow(index, const CString&): grows like above, then CString::operator=(const CString&); 96 call sites
+0x006FEC26	118	CStringArray::InsertEmpty	named	MFC 6: CStringArray::InsertEmpty(index, count) (protected): index >= m_nSize -> SetSize(index + count); else SetSize(size + count), memmove the tail up and _ConstructElements the gap; callers the two InsertAt(index, element, count). Name was CStringArray::InsertAt
+0x006FEC9C	103	CStringArray::InsertAt_LPCSTR_count	named	MFC 6: CStringArray::InsertAt(index, LPCTSTR, count): InsertEmpty, temp CString(LPCSTR), assigns it count times; lib, unused [dead: no caller or pointer]
+0x006FED03	57	CStringArray::InsertAt_CString_count	named	MFC 6: CStringArray::InsertAt(index, const CString&, count): InsertEmpty, then operator= count times; callers CUIConsole::OnChar and the InsertAt(array) overload
+0x006FED3C	92	CStringArray::RemoveAt	named	MFC 6: CStringArray::RemoveAt(index, count): _DestructElements the range, memmove the tail down, m_nSize -= count
+0x006FED98	153	CStringArray::InsertAt_array	named	MFC 6: CStringArray::InsertAt(start, CStringArray* p): when p size > 0, InsertAt(start, p->GetAt(0), size) then SetAt(start + i, p->GetAt(i)) for every i (GetAt by value 0x4698C0); lib, unused [dead: no caller or pointer]
+0x006FEE31	105	CStringArray::Serialize	named	MFC 6: CStringArray::Serialize(CArchive&) (vtable 0x745F5C slot 2): storing (mode +0x14 bit 0 clear) -> WriteCount(m_nSize) and ar << each string (0x708447); loading -> ReadCount, SetSize, ar >> each string (0x708517); only reached from the vtable (no CArchive is ever built)
+0x006FEE9A	23	CWordArray::CWordArray	named	MFC 6: CWordArray ctor: vtable 0x745F78 (CWordArray, see Serialize slot 2), m_pData / m_nSize / m_nMaxSize / m_nGrowBy (+4..+0x10) = 0; callers TerrainSector_Draw, CWorldClient::ctor, DrawParticleQuads, static init 0x79B668
+0x006FEEB1	28	CWordArray::`scalar_deleting_dtor'	named	MFC 6: CWordArray scalar deleting dtor (vtable 0x745F78 slot 1): ~CWordArray 0x6FEECD, operator delete when flag & 1
+0x006FEECD	45	CWordArray::~CWordArray	named	MFC 6: CWordArray dtor: vtable 0x745F78, delete[] m_pData +4; called by game dtors (CWeather, CWorldClient, ..) and unwind funclets. Name was CObject_Dtor_745F78
+0x006FEEFA	275	CWordArray::SetSize	named	MFC 6: CWordArray::SetSize(nNewSize, nGrowBy): same algorithm as CStringArray::SetSize with 2-byte elements and memset 0 for new slots (grow by size/8 clamped 4..1024). Name was CArray_SetSize_A
+0x006FF00D	57	CWordArray::Append	named	MFC 6: CWordArray::Append(src): SetSize(old + n), memcpy n*2 bytes to the tail, returns the old size; lib, unused [dead: no caller or pointer]
+0x006FF046	43	CWordArray::Copy	named	MFC 6: CWordArray::Copy(src): SetSize(n), memcpy n*2 bytes; dead chain: only from dead_446330
+0x006FF071	67	CWordArray::FreeExtra	named	MFC 6: CWordArray::FreeExtra: shrinks the buffer to m_nSize words (new + memcpy, free old, m_nMaxSize = m_nSize); lib, unused [dead: no caller or pointer]
+0x006FF0B4	41	CWordArray::SetAtGrow	named	MFC 6: CWordArray::SetAtGrow(index, WORD): SetSize(index + 1) when needed, stores the word; lib, unused (the one raw hit 0x6FF12A is inside the call instruction at 0x6FF129) [dead: no caller or pointer]
+0x006FF0DD	140	CWordArray::InsertAt	named	MFC 6: CWordArray::InsertAt(index, WORD, count): grows (SetSize), memmove the tail, memset the gap, stores the value count times; dead chain: only from CWordArray::InsertAt(int, CWordArray*) at the unregistered 0x6FF19F inside dead_6FF169
 0x006FF169	126	dead_6FF169	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FF1E7	83	CWordArray::Serialize	named	vt slot 2: archive read (count + data) / write
-0x006FF23A	23	InitVtable_7464B8_6FF23A	named	stores vtable 0x007464B8 and initializes 5 field(s) (constructor/reset step)
-0x006FF251	28	vt_7464B8::DeletingDtor_6FF251	named	scalar deleting destructor: runs FUN_006ff26d then operator delete when flag&1
-0x006FF26D	45	CObject_Dtor_7464B8	named	SEH dtor: vtable 0x7464B8, frees the buffer at +4
-0x006FF29A	281	CArray_SetSize_B	named	MFC CArray::SetSize, instance B
-0x006FF3B3	58	CDWordArray::Append	named	appends another DWORD array
-0x006FF3ED	44	CDWordArray::Copy	named	copies another DWORD array
-0x006FF419	69	FreeExtra	named	
-0x006FF45E	39	CDWordArray::SetAtGrow	named	SetAtGrow(index, value) for DWORD elements
-0x006FF485	146	CDWordArray::InsertAt	named	InsertAt(index, value, count) for DWORD elements
+0x006FF1E7	83	CWordArray::Serialize	named	MFC 6: CWordArray::Serialize (vtable 0x745F78 slot 2): storing -> WriteCount + CArchive::Write(m_pData, n*2); loading -> ReadCount, SetSize, CArchive::Read; only from the vtable
+0x006FF23A	23	CDWordArray::CDWordArray	named	MFC 6: CDWordArray ctor: vtable 0x7464B8 (CDWordArray, Serialize slot 2 uses 4-byte elements), +4..+0x10 = 0; callers StrRecs18_ConstructN, Chunk3ds_ReadFaceMaterials, sub_70C0F8
+0x006FF251	28	CDWordArray::`scalar_deleting_dtor'	named	MFC 6: CDWordArray scalar deleting dtor (vtable 0x7464B8 slot 1): ~CDWordArray 0x6FF26D, operator delete when flag & 1
+0x006FF26D	45	CDWordArray::~CDWordArray	named	MFC 6: CDWordArray dtor: vtable 0x7464B8, delete[] m_pData +4. Name was CObject_Dtor_7464B8
+0x006FF29A	281	CDWordArray::SetSize	named	MFC 6: CDWordArray::SetSize(nNewSize, nGrowBy): 4-byte elements, new slots zeroed with memset, growth size/8 clamped 4..1024, memcpy + free on reallocation. Name was CArray_SetSize_B
+0x006FF3B3	58	CDWordArray::Append	named	MFC 6: CDWordArray::Append(src): SetSize(old + n), memcpy n*4 bytes to the tail, returns the old size; lib, unused [dead: no caller or pointer]
+0x006FF3ED	44	CDWordArray::Copy	named	MFC 6: CDWordArray::Copy(src): SetSize(n), memcpy n*4 bytes; caller StringPair_Assign
+0x006FF419	69	CDWordArray::FreeExtra	named	MFC 6: CDWordArray::FreeExtra: shrinks the buffer to m_nSize dwords; lib, unused [dead: no caller or pointer]
+0x006FF45E	39	CDWordArray::SetAtGrow	named	MFC 6: CDWordArray::SetAtGrow(index, DWORD): SetSize(index + 1) when needed, stores the value; lib, unused [dead: no caller or pointer]
+0x006FF485	146	CDWordArray::InsertAt	named	MFC 6: CDWordArray::InsertAt(index, DWORD, count): SetSize, memmove the tail up, memset the gap, stores the value count times; dead chain: only from dead_6FF517 (the InsertAt(int, CDWordArray*) overload)
 0x006FF517	126	dead_6FF517	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FF595	85	CDWordArray::Serialize	named	vt slot 2: archive read/write of the DWORD array
-0x006FF5EA	23	InitVtable_746560_6FF5EA	named	stores vtable 0x00746560 and initializes 5 field(s) (constructor/reset step)
-0x006FF601	28	vt_746560::DeletingDtor_6FF601	named	scalar deleting destructor: runs FUN_006ff61d then operator delete when flag&1
-0x006FF61D	45	CObject_Dtor_746560	named	SEH dtor: vtable 0x746560, frees the buffer at +4 (18 callers)
-0x006FF64A	247	CArray_SetSize_C	named	MFC CArray::SetSize, instance C
-0x006FF741	53	CByteArray::Append	named	appends another BYTE array
-0x006FF776	40	CByteArray::Copy	named	copies another BYTE array
-0x006FF79E	62	FreeExtra	named	
-0x006FF7DC	39	CByteArray::SetAtGrow	named	SetAtGrow(index, value) for BYTE elements
-0x006FF803	113	CByteArray::InsertAt	named	InsertAt(index, value, count) for BYTE elements
-0x006FF874	48	CString_ShiftTail	named	memmove the tail of the string buffer after an erase
+0x006FF595	85	CDWordArray::Serialize	named	MFC 6: CDWordArray::Serialize (vtable 0x7464B8 slot 2): storing -> WriteCount + CArchive::Write(n*4); loading -> ReadCount, SetSize, CArchive::Read; only from the vtable
+0x006FF5EA	23	CByteArray::CByteArray	named	MFC 6: CByteArray ctor: vtable 0x746560 (CByteArray, byte Serialize in slot 2), +4..+0x10 = 0; callers CWorldClient::ctor, TerrainSector_ctor, DrawParticleQuads, static inits
+0x006FF601	28	CByteArray::`scalar_deleting_dtor'	named	MFC 6: CByteArray scalar deleting dtor (vtable 0x746560 slot 1): ~CByteArray 0x6FF61D, operator delete when flag & 1
+0x006FF61D	45	CByteArray::~CByteArray	named	MFC 6: CByteArray dtor: vtable 0x746560, delete[] m_pData +4; game dtors and unwind funclets. Name was CObject_Dtor_746560
+0x006FF64A	247	CByteArray::SetSize	named	MFC 6: CByteArray::SetSize(nNewSize, nGrowBy): 1-byte elements, new bytes zeroed, growth size/8 clamped 4..1024. Name was CArray_SetSize_C
+0x006FF741	53	CByteArray::Append	named	MFC 6: CByteArray::Append(src): SetSize(old + n), memcpy n bytes, returns the old size; lib, unused [dead: no caller or pointer]
+0x006FF776	40	CByteArray::Copy	named	MFC 6: CByteArray::Copy(src): SetSize(n), memcpy n bytes; lib, unused [dead: no caller or pointer]
+0x006FF79E	62	CByteArray::FreeExtra	named	MFC 6: CByteArray::FreeExtra: shrinks the buffer to m_nSize bytes; lib, unused (raw hit = the 0x74 byte at 0x6FF778 inside Copy) [dead: no caller or pointer]
+0x006FF7DC	39	CByteArray::SetAtGrow	named	MFC 6: CByteArray::SetAtGrow(index, BYTE): SetSize(index + 1) when needed, stores the byte; caller TerrainSector_BuildMesh
+0x006FF803	113	CByteArray::InsertAt	named	MFC 6: CByteArray::InsertAt(index, BYTE, count): SetSize, memmove, memset, stores the byte count times; dead chain: only from dead_6FF8A4 (the InsertAt(int, CByteArray*) overload)
+0x006FF874	48	CByteArray::RemoveAt	named	MFC 6: CByteArray::RemoveAt(index, count): memmove the bytes after the range down, m_nSize +8 -= count; lib, unused. CORRECTION: was CString_ShiftTail [dead: no caller or pointer]
 0x006FF8A4	66	dead_6FF8A4	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FF8E6	77	CByteArray::Serialize	named	vt slot 2: archive read/write of the BYTE array
-0x006FF933	23	InitVtable_7467A0_6FF933	named	stores vtable 0x007467A0 and initializes 5 field(s) (constructor/reset step)
-0x006FF94A	28	vt_7467A0::DeletingDtor_6FF94A	named	scalar deleting destructor: runs FUN_006ff966 then operator delete when flag&1
-0x006FF966	45	CObject_Dtor_7467A0	named	SEH dtor: vtable 0x7467A0, frees the buffer at +4
-0x006FF993	281	CArray_SetSize_D	named	MFC CArray::SetSize, instance D
-0x006FFAAC	58	CPtrArray::Append	named	appends another pointer array
-0x006FFAE6	44	CPtrArray::Copy	named	copies another pointer array
-0x006FFB12	69	FreeExtra	named	
-0x006FFB57	39	CPtrArray::SetAtGrow	named	SetAtGrow(index, ptr)
-0x006FFB7E	146	CPtrArray::InsertAt	named	InsertAt(index, ptr, count)
+0x006FF8E6	77	CByteArray::Serialize	named	MFC 6: CByteArray::Serialize (vtable 0x746560 slot 2): storing -> WriteCount + CArchive::Write(n); loading -> ReadCount, SetSize, CArchive::Read; only from the vtable
+0x006FF933	23	CUIntArray::CUIntArray	named	"MFC 6: CUIntArray ctor: vtable 0x7467A0 (its GetRuntimeClass 0x70C3BF returns the class ""CUIntArray"" 0x746778), +4..+0x10 = 0; callers CIniFile::GetByteArrayMfc / GetWordArray / GetDwordArray (temporary arrays)"
+0x006FF94A	28	CUIntArray::`scalar_deleting_dtor'	named	MFC 6: CUIntArray scalar deleting dtor (vtable 0x7467A0 slot 1): ~CUIntArray 0x6FF966, operator delete when flag & 1
+0x006FF966	45	CUIntArray::~CUIntArray	named	MFC 6: CUIntArray dtor: vtable 0x7467A0, delete[] m_pData +4; callers the three CIniFile array getters and their unwind funclets. Name was CObject_Dtor_7467A0
+0x006FF993	281	CUIntArray::SetSize	named	MFC 6: CUIntArray::SetSize(nNewSize, nGrowBy): 4-byte elements zero-filled, growth size/8 clamped 4..1024; callers CIniFile array getters (live) and dead code. Name was CArray_SetSize_D
+0x006FFAAC	58	CUIntArray::Append	named	MFC 6: CUIntArray::Append(src): SetSize(old + n), memcpy n*4, returns the old size; lib, unused. CORRECTION: was CPtrArray::Append (vtable 0x7467A0 is CUIntArray) [dead: no caller or pointer]
+0x006FFAE6	44	CUIntArray::Copy	named	MFC 6: CUIntArray::Copy(src): SetSize(n), memcpy n*4; lib, unused. CORRECTION: was CPtrArray::Copy [dead: no caller or pointer]
+0x006FFB12	69	CUIntArray::FreeExtra	named	MFC 6: CUIntArray::FreeExtra: shrinks the buffer to m_nSize elements; lib, unused [dead: no caller or pointer]
+0x006FFB57	39	CUIntArray::SetAtGrow	named	MFC 6: CUIntArray::SetAtGrow(index, UINT): SetSize(index + 1) when needed, stores the value; lib, unused. CORRECTION: was CPtrArray::SetAtGrow [dead: no caller or pointer]
+0x006FFB7E	146	CUIntArray::InsertAt	named	MFC 6: CUIntArray::InsertAt(index, UINT, count): SetSize, memmove, memset, stores count times; dead chain: only from dead_6FFC10 (RemoveAt + InsertAt(int, CUIntArray*)). CORRECTION: was CPtrArray::InsertAt
 0x006FFC10	126	dead_6FFC10	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FFC8E	23	InitVtable_746FB0_6FFC8E	named	stores vtable 0x00746FB0 and initializes 5 field(s) (constructor/reset step)
-0x006FFCA5	28	vt_746FB0::DeletingDtor_6FFCA5	named	scalar deleting destructor: runs FUN_006ffcc1 then operator delete when flag&1
-0x006FFCC1	45	CObject_Dtor_746FB0	named	SEH dtor: vtable 0x746FB0, frees the buffer at +4
-0x006FFCEE	281	CArray_SetSize_E	named	MFC CArray::SetSize, instance E
-0x006FFE07	58	CUIntArray::Append	named	appends another UINT array
-0x006FFE41	44	CUIntArray::Copy	named	copies another UINT array
-0x006FFE6D	69	FreeExtra	named	
-0x006FFEB2	39	CUIntArray::SetAtGrow	named	SetAtGrow(index, value)
-0x006FFED9	146	CUIntArray::InsertAt	named	InsertAt(index, value, count)
+0x006FFC8E	23	CPtrArray::CPtrArray	named	"MFC 6: CPtrArray ctor: vtable 0x746FB0 (GetRuntimeClass 0x70D624 -> ""CPtrArray"" 0x746F88), +4..+0x10 = 0; dead chain: only from CArchive::MapObject (m_pLoadArray), the vtable is stored nowhere else"
+0x006FFCA5	28	CPtrArray::`scalar_deleting_dtor'	named	MFC 6: CPtrArray scalar deleting dtor (vtable 0x746FB0 slot 1): ~CPtrArray, delete when flag & 1; dead chain (the vtable is only installed by the dead ctor 0x6FFC8E)
+0x006FFCC1	45	CPtrArray::~CPtrArray	named	MFC 6: CPtrArray dtor: vtable 0x746FB0, delete[] m_pData +4; dead chain: only from the deleting dtor 0x6FFCA5 (no CPtrArray is ever built). Name was CObject_Dtor_746FB0
+0x006FFCEE	281	CPtrArray::SetSize	named	MFC 6: CPtrArray::SetSize(nNewSize, nGrowBy): 4-byte elements zero-filled, growth size/8 clamped 4..1024; dead chain: callers CPtrArray InsertAt / Append / Copy / SetAtGrow and the dead CArchive::MapObject. Name was CArray_SetSize_E
+0x006FFE07	58	CPtrArray::Append	named	MFC 6: CPtrArray::Append(src): SetSize(old + n), memcpy n*4, returns the old size; lib, unused. CORRECTION: was CUIntArray::Append (vtable 0x746FB0 is CPtrArray) [dead: no caller or pointer]
+0x006FFE41	44	CPtrArray::Copy	named	MFC 6: CPtrArray::Copy(src): SetSize(n), memcpy n*4; lib, unused. CORRECTION: was CUIntArray::Copy [dead: no caller or pointer]
+0x006FFE6D	69	CPtrArray::FreeExtra	named	MFC 6: CPtrArray::FreeExtra: shrinks the buffer to m_nSize pointers; lib, unused [dead: no caller or pointer]
+0x006FFEB2	39	CPtrArray::SetAtGrow	named	MFC 6: CPtrArray::SetAtGrow(index, void*): SetSize(index + 1) when needed, stores the pointer; lib, unused. CORRECTION: was CUIntArray::SetAtGrow [dead: no caller or pointer]
+0x006FFED9	146	CPtrArray::InsertAt	named	MFC 6: CPtrArray::InsertAt(index, void*, count): SetSize, memmove, memset, stores count times; dead chain: callers CArchive::ReadObject / MapObject / ReadClass (dead) and dead_6FFF6B. CORRECTION: was CUIntArray::InsertAt
 0x006FFF6B	161	dead_6FFF6B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070000C	28	vt_746FE8::DeletingDtor_70000C	named	scalar deleting destructor: runs FUN_00700048 then operator delete when flag&1
-0x00700028	32	CPtrList::RemoveAll	named	frees the list nodes and resets the head/tail/count (+0xC)
-0x00700048	41	CPtrList_Dtor	named	CPtrList destructor: RemoveAll under an EH frame (vtable 0x746FE8)
-0x00700071	88	CPtrList::NewNode	named	CPtrList::NewNode: takes a node from the free list or allocates a CPlex block of 12-byte nodes
-0x007000C9	25	CPtrList::FreeNode	named	puts a node on the free list and resets the list when empty
-0x007000E2	42	CPtrList::AddHead	named	AddHead(element): new node linked at the head
-0x0070010C	41	CPtrList::AddTail	named	AddTail(element): new node linked at the tail
+0x0070000C	28	CPtrList::`scalar_deleting_dtor'	named	MFC 6: CPtrList scalar deleting dtor (vtable 0x746FE8 slot 1): ~CPtrList 0x700048, operator delete when flag & 1; reached only through the vtable (the CPtrList ctor sits at the unregistered 0x6FFFE9 inside dead_6FFF6B, so no CPtrList is ever built)
+0x00700028	32	CPtrList::RemoveAll	named	MFC 6: CPtrList::RemoveAll: m_pNodeHead +4 / m_pNodeTail +8 / m_nCount +0xC / m_pNodeFree +0x10 = 0, CPlex::FreeDataChain(m_pBlocks +0x14), m_pBlocks = 0; callers ~CPtrList, FreeNode
+0x00700048	41	CPtrList::~CPtrList	named	MFC 6: CPtrList dtor: vtable 0x746FE8, RemoveAll (EH frame); only from the deleting dtor. Name was CPtrList_Dtor
+0x00700071	88	CPtrList::NewNode	named	MFC 6: CPtrList::NewNode(pPrev, pNext): free list +0x10 empty -> CPlex::Create(&m_pBlocks +0x14, m_nBlockSize +0x18, 0xC) and chains the nodes; pops a node, pPrev +4 / pNext +0, m_nCount++, data +8 = 0; dead chain: callers AddHead / AddTail (dead) and dead_7001A2
+0x007000C9	25	CPtrList::FreeNode	named	MFC 6: CPtrList::FreeNode(node): pushes it on the free list +0x10, m_nCount--, RemoveAll when the count hits 0; callers RemoveHead and dead_7001A2
+0x007000E2	42	CPtrList::AddHead	named	MFC 6: CPtrList::AddHead(void*): NewNode(0, head), data +8, links before the old head (or sets tail when empty), returns the node; dead chain: only from dead_700135 / dead_7001A2
+0x0070010C	41	CPtrList::AddTail	named	MFC 6: CPtrList::AddTail(void*): NewNode(tail, 0), data +8, links after the old tail (or sets head), returns the node; dead chain: only from dead_700135 / dead_7001A2
 0x00700135	73	dead_700135	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070017E	36	CPtrList::RemoveHead	named	removes the head node and returns its element
+0x0070017E	36	CPtrList::RemoveHead	named	MFC 6: CPtrList::RemoveHead: unlinks the head node (new head prev = 0, or tail = 0 when empty), FreeNode, returns its data; caller AFX_MODULE_THREAD_STATE dtor (socket notification list, never created in this game)
 0x007001A2	288	dead_7001A2	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007002C2	39	CMap_Ctor	named	CMap constructor: stores the hash table size, inits the block list
-0x007002E9	28	vt_74689C::DeletingDtor_7002E9	named	scalar deleting destructor: runs FUN_00700375 then operator delete when flag&1
-0x00700305	69	CMapPtrToPtr::InitHashTable	named	allocates the bucket array (size n) and zeroes it
-0x0070034A	43	CMapPtrToPtr::RemoveAll	named	frees the buckets and associations of an MFC pointer map
-0x00700375	41	CMapPtrToPtr_Dtor	named	CMapPtrToPtr destructor: RemoveAll under an EH frame (vtable 0x74689C)
-0x0070039E	77	CMapPtrToPtr::NewAssoc	named	takes an association from the free list or allocates a CPlex block of 12-byte entries
-0x007003EB	25	CMapPtrToPtr::FreeAssoc	named	returns an association to the free list; resets when empty
-0x00700404	50	CMap_HashFind	named	CMap<void*,...>: hash bucket (key>>4 % size) and chain search
-0x00700436	51	CMap_Lookup	named	CMap<void*,...>: lookup by key, returns the association or 0
-0x00700469	34	CMap_Lookup_Value	named	CMap lookup returning the value through an out pointer; true when found
-0x0070048B	80	CMapPtrToPtr::SetAt	named	SetAt(key, value): find or create the association (InitHashTable on first use)
-0x007004DB	66	CMapPtrToPtr::RemoveKey	named	removes the association for a key (hash chain unlink, free)
-0x0070051D	114	CMap_GetNextAssoc	named	CMap::GetNextAssoc: advances the position to the next association
-0x0070058F	8	AfxThrowMemoryException	named	throws CMemoryException
+0x007002C2	39	CMapPtrToPtr::CMapPtrToPtr	named	"MFC 6: CMapPtrToPtr ctor(nBlockSize): vtable 0x74689C (runtime class ""CMapPtrToPtr""), m_pHashTable +4 = 0, m_nHashTableSize +8 = 17, m_nCount +0xC / m_pFreeList +0x10 / m_pBlocks +0x14 = 0, m_nBlockSize +0x18 = arg; callers the CHandleMap ctor 0x703617 (x2) and the dead CArchive MapObject / ReadClass. Name was CMap_Ctor"
+0x007002E9	28	CMapPtrToPtr::`scalar_deleting_dtor'	named	MFC 6: CMapPtrToPtr scalar deleting dtor (vtable 0x74689C slot 1): ~CMapPtrToPtr 0x700375, delete when flag & 1
+0x00700305	69	CMapPtrToPtr::InitHashTable	named	MFC 6: CMapPtrToPtr::InitHashTable(nHashSize, bAllocNow): frees the old table +4; bAllocNow -> new nHashSize*4 zeroed; m_nHashTableSize +8 = nHashSize
+0x0070034A	43	CMapPtrToPtr::RemoveAll	named	MFC 6: CMapPtrToPtr::RemoveAll: frees the hash table +4, m_nCount +0xC = m_pFreeList +0x10 = 0, CPlex::FreeDataChain(m_pBlocks +0x14), m_pBlocks = 0
+0x00700375	41	CMapPtrToPtr::~CMapPtrToPtr	named	MFC 6: CMapPtrToPtr dtor: vtable 0x74689C, RemoveAll (EH frame); callers ~CHandleMap 0x6E6D08 (x2), deleting dtor, unwind funclets. Name was CMapPtrToPtr_Dtor
+0x0070039E	77	CMapPtrToPtr::NewAssoc	named	MFC 6: CMapPtrToPtr::NewAssoc: free list +0x10 empty -> CPlex::Create(&m_pBlocks +0x14, m_nBlockSize +0x18, 0xC) and chains the new CAssoc {pNext, key, value}; pops one, m_nCount++, key = value = 0; caller SetAt
+0x007003EB	25	CMapPtrToPtr::FreeAssoc	named	MFC 6: CMapPtrToPtr::FreeAssoc(pAssoc): pushes it on the free list, m_nCount--, RemoveAll when the count reaches 0; caller RemoveKey
+0x00700404	50	CMapPtrToPtr::GetAssocAt	named	MFC 6: CMapPtrToPtr::GetAssocAt(key, UINT& nHash): nHash = (key >> 4) % m_nHashTableSize; walks the bucket chain for key (+4), returns the CAssoc or 0 (0 when no table). Name was CMap_HashFind
+0x00700436	51	CMapPtrToPtr::GetValueAt	named	MFC 6: CMapPtrToPtr::GetValueAt(key): hash (key >> 4) % size, chain search, returns the value +8 or NULL; used by the CHandleMap lookups (CWnd::FromHandlePermanent, FromHandle, AfxLookupGdiHandle ..). Name was CMap_Lookup
+0x00700469	34	CMapPtrToPtr::Lookup	named	MFC 6: CMapPtrToPtr::Lookup(key, void*& rValue): GetAssocAt; found -> rValue = value, returns TRUE, else FALSE; dead chain: only from the dead CArchive::ReadClass. Name was CMap_Lookup_Value
+0x0070048B	80	CMapPtrToPtr::SetAt	named	MFC 6: CMapPtrToPtr::operator[](key) (what SetAt inlines): GetAssocAt; missing -> InitHashTable(m_nHashTableSize) on first use, NewAssoc, key, push on the bucket; returns &value (+8); callers CHandleMap / CWnd::Attach / CDC / CGdiObject Attach, CArchive (dead)
+0x007004DB	66	CMapPtrToPtr::RemoveKey	named	MFC 6: CMapPtrToPtr::RemoveKey(key): unlinks the association from its bucket chain, FreeAssoc, returns TRUE (FALSE when absent); callers CWnd / CMenu / CDC / CGdiObject Detach
+0x0070051D	114	CMapPtrToPtr::GetNextAssoc	named	MFC 6: CMapPtrToPtr::GetNextAssoc(POSITION& rPos, void*& rKey, void*& rValue): BEFORE_START (-1) -> first non-empty bucket; returns key / value and advances rPos to the next chain entry or the next non-empty bucket (0 at the end); callers CHandleMap::DeleteTemp 0x70373B, CMap_FreeAllExcept
+0x0070058F	8	AfxNewHandler	named	MFC 6: AfxNewHandler(size_t): AfxThrowMemoryException (0x6FE389) then returns 0; stored as the new-handler by AFX_MODULE_THREAD_STATE::ctor (+0x1A) and in data 0x796E14. CORRECTION: was AfxThrowMemoryException (that is 0x6FE389, named ThrowMemoryException)
 0x00700597	6	dead_700597	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070059D	18	AfxSetAllocHook	named	swaps the global allocation hook pointer and returns the previous
-0x007005AF	41	operator_new	named	operator new: malloc, on failure AfxThrowMemoryException (2549 callers)
-0x007005D8	11	operator_delete	named	operator delete (frees via free_); 4957 callers
-0x007005E3	6	CObject_GetClassName	named	"returns the string ""CObject"" (RTTI-less class name stub for the base)"
-0x007005E9	18	CObject_IsKindOf	named	checks the runtime class chain: calls the class getter then IsInChain
+0x0070059D	18	AfxSetNewHandler	named	MFC 6 (afxmem.cpp, static build): AfxSetNewHandler(_PNH): swaps the global _afxNewHandler 0x796E14 (initially AfxNewHandler 0x70058F) and returns the old one; callers CHandleMap::FromHandle 0x70367C, AfxGetModuleThreadState, the GDI / DC handle-map getters (install AfxCriticalNewHandler around their allocations). CORRECTION: was AfxSetAllocHook
+0x007005AF	41	operator_new	named	MFC 6 (afxmem.cpp): operator new(size): loops malloc; on failure calls _afxNewHandler 0x796E14 (AfxNewHandler throws CMemoryException) and retries while it returns non-zero; returns the block or 0; 2621 call sites
+0x007005D8	11	operator_delete	named	MFC 6: operator delete(p) = free(p); 5051 call sites
+0x007005E3	6	CObject::GetRuntimeClass	named	MFC 6: CObject::GetRuntimeClass: returns &CObject::classCObject 0x745D20; slot 0 of many vtables (0x73B8D4, 0x73BE74, ..). Name was CObject_GetClassName
+0x007005E9	18	CObject::IsKindOf	named	MFC 6: CObject::IsKindOf(const CRuntimeClass*): this->GetRuntimeClass() (vt slot 0) then CRuntimeClass::IsDerivedFrom 0x7006C6; callers CWnd::ProcessWndProcException (CUserException test), dead_7005FB, dead CArchive::ReadObject
 0x007005FB	32	dead_7005FB	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070061B	56	CWnd_ForEachChild	named	iterates the child list at +0xC under an EH frame
+0x0070061B	56	CRuntimeClass::CreateObject	named	MFC 6: CRuntimeClass::CreateObject: m_pfnCreateObject +0xC NULL -> 0; else calls it inside a TRY block (catch -> 0) and returns the object; callers AfxBeginThread 0x702321, CHandleMap::FromHandle 0x70367C, dead CArchive::ReadObject. CORRECTION: was CWnd_ForEachChild
 0x00700661	19	dead_700661	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00700674	38	AfxFreeLocalObject	named	returns an object to the thread-local pool under the global lock
-0x0070069A	44	AfxFreeLocalObject_B	named	returns an object to the thread-local pool (method form)
-0x007006C6	25	IsInChain	named	true when the target pointer occurs in the linked chain starting at this
+0x00700674	38	AfxClassInit	named	MFC 6: AfxClassInit(CRuntimeClass*): AfxGetModuleState, AfxLockGlobals(0), m_classList (+0x1C).AddHead(class), AfxUnlockGlobals(0); callers the static class registrations (CDib, CStringArray, CWordArray, CDWordArray, CByteArray). CORRECTION: was AfxFreeLocalObject
+0x0070069A	44	AFX_CLASSINIT::AFX_CLASSINIT	named	MFC 6: AFX_CLASSINIT ctor(CRuntimeClass*): same body as AfxClassInit (lock, module state m_classList +0x1C AddHead, unlock), returns this; lib, unused (the game's static inits call AfxClassInit directly). CORRECTION: was AfxFreeLocalObject_B [dead: no caller or pointer]
+0x007006C6	25	CRuntimeClass::IsDerivedFrom	named	MFC 6: CRuntimeClass::IsDerivedFrom(base) (static-lib form): walks this -> m_pBaseClass +0x10 until it meets base (TRUE) or NULL (FALSE); callers CObject::IsKindOf, dead CArchive::ReadClass. Name was IsInChain
 0x007006DF	6	dead_7006DF	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007006E5	51	CString::CString_const_CString	named	copy constructor: shares the buffer or copies when locked; 418 callers
-0x00700718	10	StaticInit_Plex_A	named	static init stub: block allocator 0x50 (init + atexit)
-0x00700722	15	StaticInit_CPlex_50	named	static init: CPlex_Ctor(&g_0x7C8B80, 0x50, 0x40)
-0x00700731	12	StaticInit_CPlex_50_Atexit	named	atexit registration for the 0x50-byte block allocator
+0x007006E5	51	CString::CString_const_CString	named	MFC 6: CString copy ctor: source refcount (data -0xC) >= 0 -> share the buffer + InterlockedIncrement (IAT 0x73B254); locked buffer -> starts empty (afxEmptyString 0x796E48) and assigns the text (operator=(LPCSTR)); 419 call sites
+0x00700718	10	StaticInit_afxAlloc64	named	MFC 6 (strcore.cpp): static initializer of _afxAlloc64 (CRT init table 0x783004): CFixedAlloc ctor 0x700722 then registers its atexit dtor 0x700731. Name was StaticInit_Plex_A
+0x00700722	15	StaticInit_afxAlloc64_Ctor	named	MFC 6: _afxAlloc64 = CFixedAlloc(0x50 = ROUND4(65 + sizeof(CStringData)), 64) at 0x7C8B80 (CString pool for <= 64 chars). Name was StaticInit_CPlex_50
+0x00700731	12	StaticInit_afxAlloc64_Atexit	named	MFC 6: atexit(sub_70073D) = the _afxAlloc64 destructor. Name was StaticInit_CPlex_50_Atexit
 0x0070073D	10	sub_70073D	named	unregistered function, reached by call / pointer from 0x300732 (gaps.py 2026-11-06)
-0x00700747	10	StaticInit_Plex_B	named	static init stub: block allocator 0x90
-0x00700751	18	StaticInit_CPlex_90	named	static init: CPlex_Ctor(&g_0x7C8B58, 0x90, 0x40)
-0x00700763	12	StaticInit_CPlex_90_Atexit	named	atexit registration for the 0x90-byte block allocator
+0x00700747	10	StaticInit_afxAlloc128	named	MFC 6 (strcore.cpp): static initializer of _afxAlloc128 (CRT init table 0x783008): ctor 0x700751 + atexit 0x700763. Name was StaticInit_Plex_B
+0x00700751	18	StaticInit_afxAlloc128_Ctor	named	MFC 6: _afxAlloc128 = CFixedAlloc(0x90 = ROUND4(129 + 12), 64) at 0x7C8B58. Name was StaticInit_CPlex_90
+0x00700763	12	StaticInit_afxAlloc128_Atexit	named	MFC 6: atexit(sub_70076F) = the _afxAlloc128 destructor. Name was StaticInit_CPlex_90_Atexit
 0x0070076F	10	sub_70076F	named	unregistered function, reached by call / pointer from 0x300764 (gaps.py 2026-11-06)
-0x00700779	10	StaticInit_Plex_C	named	static init stub: block allocator 0x110
-0x00700783	18	StaticInit_CPlex_110	named	static init: CPlex_Ctor(&g_0x7C8B30, 0x110, 0x40)
-0x00700795	12	StaticInit_CPlex_110_Atexit	named	atexit registration for the 0x110-byte block allocator
+0x00700779	10	StaticInit_afxAlloc256	named	MFC 6 (strcore.cpp): static initializer of _afxAlloc256 (CRT init table 0x78300C): ctor 0x700783 + atexit 0x700795. Name was StaticInit_Plex_C
+0x00700783	18	StaticInit_afxAlloc256_Ctor	named	MFC 6: _afxAlloc256 = CFixedAlloc(0x110 = ROUND4(257 + 12), 64) at 0x7C8B30. Name was StaticInit_CPlex_110
+0x00700795	12	StaticInit_afxAlloc256_Atexit	named	MFC 6: atexit(sub_7007A1) = the _afxAlloc256 destructor. Name was StaticInit_CPlex_110_Atexit
 0x007007A1	10	sub_7007A1	named	unregistered function, reached by call / pointer from 0x300796 (gaps.py 2026-11-06)
-0x007007AB	10	StaticInit_Plex_D	named	static init stub: block allocator 0x210
-0x007007B5	18	StaticInit_CPlex_210	named	static init: CPlex_Ctor(&g_0x7C8B08, 0x210, 0x40)
-0x007007C7	12	StaticInit_CPlex_210_Atexit	named	atexit registration for the 0x210-byte block allocator
+0x007007AB	10	StaticInit_afxAlloc512	named	MFC 6 (strcore.cpp): static initializer of _afxAlloc512 (CRT init table 0x783010): ctor 0x7007B5 + atexit 0x7007C7. Name was StaticInit_Plex_D
+0x007007B5	18	StaticInit_afxAlloc512_Ctor	named	MFC 6: _afxAlloc512 = CFixedAlloc(0x210 = ROUND4(513 + 12), 64) at 0x7C8B08. Name was StaticInit_CPlex_210
+0x007007C7	12	StaticInit_afxAlloc512_Atexit	named	MFC 6: atexit(sub_7007D3) = the _afxAlloc512 destructor. Name was StaticInit_CPlex_210_Atexit
 0x007007D3	10	sub_7007D3	named	unregistered function, reached by call / pointer from 0x3007C8 (gaps.py 2026-11-06)
-0x007007DD	130	CString::AllocBuffer	named	CString::AllocBuffer(len): picks the CPlex pool by size (0x40/0x80/0x100/0x200) or operator new
-0x0070085F	72	CPlex_FreeBySize	named	returns a node to the CPlex pool matching its size (0x40/0x80...)
-0x007008A7	49	CString::Release_A	named	releases the CString buffer when the refcount drops to zero (CPlex pool)
-0x007008D8	35	CStringData::Release	named	releases a CString data block pointer when the refcount hits zero
-0x007008FB	30	CString::Empty	named	CString::Empty(): release and point to the shared empty string; 86 callers
-0x00700919	46	CString::CopyBeforeWrite	named	copy-on-write: if the data block is shared, allocates a private copy
-0x00700947	41	CString::AllocBeforeWrite	named	ensures a private buffer of at least n characters
-0x00700970	42	CString::~CString	named	CString destructor: decrement the refcount of the data block; free when <= 0 (6270 callers)
-0x0070099A	68	CString::ConcatCopy_One	named	concatenates a buffer and a CString data into a new CString
-0x007009DE	82	CString::CString_LPCSTR	named	CString constructor from a C string or a resource id (high word 0); 342 callers
+0x007007DD	130	CString::AllocBuffer	named	MFC 6: CString::AllocBuffer(nLen): 0 -> afxEmptyString 0x796E48; <= 64 / 128 / 256 / 512 -> CFixedAlloc::Alloc from _afxAlloc64 0x7C8B80 / 128 0x7C8B58 / 256 0x7C8B30 / 512 0x7C8B08 with nAllocLength +8 = the pool size; larger -> operator new(nLen + 13), nAllocLength = nLen; nRefs +0 = 1, nDataLength +4 = nLen, terminating 0; m_pchData = data + 0xC
+0x0070085F	72	CString::FreeData	named	MFC 6: CString::FreeData(CStringData* in ecx, FASTCALL): nAllocLength +8 == 64 / 128 / 256 / 512 -> CFixedAlloc::Free to the matching pool, else operator delete. CORRECTION: was CPlex_FreeBySize
+0x007008A7	49	CString::Release	named	MFC 6: CString::Release(): data != _afxDataNil (0x796E4C) and InterlockedDecrement(nRefs) <= 0 -> FreeData; then m_pchData = afxEmptyString. Name was CString::Release_A
+0x007008D8	35	CString::Release_static	named	MFC 6: static CString::Release(CStringData*) (stdcall): not _afxDataNil and InterlockedDecrement <= 0 -> FreeData; callers Insert / Replace / ConcatInPlace / GetBuffer (old buffer after a regrow). Name was CStringData::Release
+0x007008FB	30	CString::Empty	named	MFC 6: CString::Empty: nothing when nDataLength (-8) is 0; refcount >= 0 -> Release; locked -> operator=(afxChNil 0x7C8BA8); 90 call sites
+0x00700919	46	CString::CopyBeforeWrite	named	MFC 6: CString::CopyBeforeWrite: nRefs (-0xC) > 1 -> Release, AllocBuffer(old length), memcpy length + 1 from the old data
+0x00700947	41	CString::AllocBeforeWrite	named	MFC 6: CString::AllocBeforeWrite(nLen): shared (nRefs > 1) or nLen > nAllocLength (-4) -> Release + AllocBuffer(nLen); callers AssignCopy, operator=(LPCWSTR)
+0x00700970	42	CString::~CString	named	MFC 6: CString dtor: data != _afxDataNil and InterlockedDecrement(nRefs) <= 0 -> FreeData; 6270+ call sites
+0x0070099A	68	CString::AllocCopy	named	MFC 6: CString::AllocCopy(CString& dest, nCopyLen, nCopyIndex, nExtraLen): nCopyLen + nExtraLen == 0 -> dest = afxEmptyString; else dest.AllocBuffer(sum) and memcpy nCopyLen chars from m_pchData + nCopyIndex; callers Mid / Left / Right. CORRECTION: was CString::ConcatCopy_One
+0x007009DE	82	CString::CString_LPCSTR	named	MFC 6: CString(LPCTSTR): starts empty; HIWORD(lpsz) == 0 -> LoadString(LOWORD) (resource id); else lstrlen (IAT 0x73B250), AllocBuffer + memcpy; 343 call sites
 0x00700A30	76	dead_700A30	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00700A7C	45	CString::AssignCopy	named	CString::AssignCopy(len, src): allocates if needed and copies
-0x00700AA9	80	CString::operator_CString	named	assignment with refcount sharing (locked buffers are copied); 895 callers
-0x00700AF9	39	CString::operator_LPCSTR	named	assigns a C string (AssignCopy lstrlen); 366 callers
-0x00700B20	65	CString::operator_LPCWSTR	named	assigns a wide string (converted with WideCharToMultiByte)
-0x00700B61	62	CString::ConcatCopy	named	concatenates two buffers into a new CString
-0x00700B9F	102	operator_LPCSTR_CString	named	C string + CString concatenation (EH frame); 176 callers
-0x00700C05	116	operator_CString_CString	named	CString + CString concatenation (EH frame); 321 callers
-0x00700C79	116	operator_CString_LPCSTR	named	CString + C string concatenation (EH frame); 35 callers
-0x00700CED	95	CString::ConcatInPlace	named	CString::ConcatInPlace(len, src): appends in place when unshared and fits, else ConcatCopy
-0x00700D4C	39	CString::operator_plus_assign_LPCSTR	named	appends a C string (ConcatInPlace); was a second function named CString::operator_LPCSTR next to the assignment 0x700AF9, which made decompiles ambiguous (e.g. CUIMessageLog::AddMessage, UIItemInfoWin::DrawSpellItemInfo)
-0x00700D73	21	CString::operator_char	named	appends one character; 21 callers
-0x00700D88	24	Thunk_FUN_00700ced_700D88	named	forwards to FUN_00700ced
-0x00700DA0	79	CString::GetBuffer	named	CString::GetBuffer(minLen): unshare and grow, returns the writable buffer; 30 callers
-0x00700DEF	40	CString::ReleaseBuffer	named	CString::ReleaseBuffer(newLen=-1): sets the length (lstrlen when -1); 25 callers
-0x00700E17	32	CString::GetBufferSetLength	named	CString::GetBufferSetLength(len): buffer of exactly len characters; 30 callers
+0x00700A7C	45	CString::AssignCopy	named	MFC 6: CString::AssignCopy(nSrcLen, lpszSrc): AllocBeforeWrite(nSrcLen), memcpy, nDataLength (-8) = nSrcLen, terminating 0
+0x00700AA9	80	CString::operator_CString	named	MFC 6: CString::operator=(const CString&): same data -> nothing; either side locked (nRefs < 0, this not _afxDataNil) -> AssignCopy; else Release, share the source data and InterlockedIncrement its nRefs; returns *this
+0x00700AF9	39	CString::operator_LPCSTR	named	MFC 6: CString::operator=(LPCTSTR): AssignCopy(lstrlen or 0 for NULL, lpsz); returns *this
+0x00700B20	65	CString::operator_LPCWSTR	named	MFC 6: CString::operator=(LPCWSTR): wcslen, AllocBeforeWrite(len * 2), _wcstombsz 0x700F63 (len * 2 + 1 bytes), ReleaseBuffer(-1); caller operator>>(CArchive&, CString&) 0x708517 (wide strings)
+0x00700B61	62	CString::ConcatCopy	named	MFC 6: CString::ConcatCopy(nSrc1Len, lpszSrc1, nSrc2Len, lpszSrc2): total 0 -> nothing, else AllocBuffer(total) and memcpy both parts; callers the operator+ family and ConcatInPlace
+0x00700B9F	102	operator_plus_CString_CString	named	MFC 6: operator+(const CString&, const CString&): temp CString, ConcatCopy(s1 length -8, s1, s2 length, s2), copy-constructs the result, ~temp (EH frame); 176 call sites. CORRECTION: was operator_LPCSTR_CString (both arguments are CStrings)
+0x00700C05	116	operator_plus_CString_LPCSTR	named	MFC 6: operator+(const CString&, LPCTSTR): ConcatCopy(s length, s, lstrlen(lpsz) or 0, lpsz) into a temp, copy-constructs the result; 324 call sites. CORRECTION: was operator_CString_CString (second argument goes through lstrlen)
+0x00700C79	116	operator_plus_LPCSTR_CString	named	MFC 6: operator+(LPCTSTR, const CString&): ConcatCopy(lstrlen(lpsz), lpsz, s length, s), copy-constructs the result; 35 call sites. CORRECTION: was operator_CString_LPCSTR (first argument goes through lstrlen)
+0x00700CED	95	CString::ConcatInPlace	named	MFC 6: CString::ConcatInPlace(nSrcLen, lpszSrc): 0 -> nothing; unshared and fits in nAllocLength -> memcpy at the end, nDataLength += n, terminator; else ConcatCopy(old, src) into a new buffer and static Release of the old data
+0x00700D4C	39	CString::operator_plus_assign_LPCSTR	named	MFC 6: CString::operator+=(LPCTSTR): ConcatInPlace(lstrlen or 0, lpsz); returns *this
+0x00700D73	21	CString::operator_plus_assign_char	named	MFC 6: CString::operator+=(TCHAR): ConcatInPlace(1, &ch); returns *this; 21 call sites. Name was CString::operator_char
+0x00700D88	24	CString::operator_plus_assign_CString	named	MFC 6: CString::operator+=(const CString&): ConcatInPlace(s length -8, s data); returns *this; many UI callers. Name was Thunk_FUN_00700ced_700D88
+0x00700DA0	79	CString::GetBuffer	named	MFC 6: CString::GetBuffer(nMinBufLength): shared or too small -> AllocBuffer(max(n, length)), memcpy length + 1, restore nDataLength, static Release of the old data; returns m_pchData
+0x00700DEF	40	CString::ReleaseBuffer	named	MFC 6: CString::ReleaseBuffer(nNewLength): CopyBeforeWrite; -1 -> lstrlen; nDataLength = n, terminator
+0x00700E17	32	CString::GetBufferSetLength	named	MFC 6: CString::GetBufferSetLength(nNewLength): GetBuffer(n), nDataLength = n, terminator; returns m_pchData
 0x00700E37	51	dead_700E37	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00700E6A	18	CString::FreeExtra_Lock	named	GetBuffer(0) then marks locked (-1 refcount)
-0x00700E7C	21	CString::LockBuffer	named	sets the ref count to -1... marks the buffer locked (unless it is the shared empty string)
-0x00700E91	14	Thunk_FUN_00700e9f_700E91	named	forwards to FUN_00700e9f
-0x00700E9F	45	CString::Find_Char	named	CString::Find(char, start) via _mbschr
-0x00700ECC	32	CString::FindOneOf	named	CString::FindOneOf(set) via a multibyte strpbrk
-0x00700EEC	18	CString::MakeUpper	named	CString upper-case in place: CopyBeforeWrite + 0x6EC81E (LCMapString LCMAP_UPPERCASE 0x200, mbctype _SBLOW 0x20 -> casemap); was named MakeLower
-0x00700EFE	18	CString::MakeLower	named	"CString lower-case in place: CopyBeforeWrite + 0x6EC8A8 (LCMapString LCMAP_LOWERCASE 0x100, mbctype _SBUP 0x10 -> casemap); was named MakeUpper (35 callers: every one lower-cases, e.g. Material_ParseName 0x44A2A0 compares with lower-case strings ""um"", ""le"" ...)"
-0x00700F10	18	CString::MakeReverse	named	CString::MakeReverse
-0x00700F22	25	CString::SetAt	named	CString::SetAt(index, ch)
-0x00700F3B	20	CString::AnsiToOem	named	CString::AnsiToOem (CharToOemA in place)
-0x00700F4F	20	CString::OemToAnsi	named	CString::OemToAnsi (OemToCharA in place)
-0x00700F63	54	WideCharToMultiByte_wrap	named	converts a wide string to the ANSI code page (length query when no buffer)
+0x00700E6A	18	CString::LockBuffer	named	MFC 6: CString::LockBuffer: GetBuffer(0), nRefs (-0xC) = -1 (locked), returns the buffer; caller Compiler_CompileText. CORRECTION: was CString::FreeExtra_Lock
+0x00700E7C	21	CString::UnlockBuffer	named	MFC 6: CString::UnlockBuffer: nRefs = 1 unless the data is _afxDataNil 0x796E4C; caller Compiler_CompileText. CORRECTION: was CString::LockBuffer (it unlocks)
+0x00700E91	14	CString::Find_char	named	MFC 6: CString::Find(TCHAR ch) = Find(ch, 0). Name was Thunk_FUN_00700e9f_700E91
+0x00700E9F	45	CString::Find_char_start	named	MFC 6: CString::Find(TCHAR ch, int nStart): nStart >= length -> -1; else _mbschr(m_pchData + nStart, ch), returns its index or -1. Name was CString::Find_Char
+0x00700ECC	32	CString::FindOneOf	named	MFC 6: CString::FindOneOf(lpszCharSet): _mbspbrk(m_pchData, set) -> index or -1; caller ScrollText_ParseEscape
+0x00700EEC	18	CString::MakeUpper	named	MFC 6: CString::MakeUpper: CopyBeforeWrite + _mbsupr 0x6EC81E; lib, unused [dead: no caller or pointer]
+0x00700EFE	18	CString::MakeLower	named	MFC 6: CString::MakeLower: CopyBeforeWrite + _mbslwr 0x6EC8A8; 30+ callers (text lookups, ShopStock::Read, ..)
+0x00700F10	18	CString::MakeReverse	named	MFC 6: CString::MakeReverse: CopyBeforeWrite + _mbsrev 0x6EC932; lib, unused [dead: no caller or pointer]
+0x00700F22	25	CString::SetAt	named	MFC 6: CString::SetAt(nIndex, ch): CopyBeforeWrite, m_pchData[nIndex] = ch; caller Compiler_ParseModulePrefix
+0x00700F3B	20	CString::AnsiToOem	named	MFC 6: CString::AnsiToOem: CopyBeforeWrite + CharToOemA(buf, buf); lib, unused [dead: no caller or pointer]
+0x00700F4F	20	CString::OemToAnsi	named	MFC 6: CString::OemToAnsi: CopyBeforeWrite + OemToCharA(buf, buf); lib, unused [dead: no caller or pointer]
+0x00700F63	54	_wcstombsz	named	MFC 6: _wcstombsz(char* mbstr, LPCWSTR wcstr, size_t count): count 0 with a buffer -> 0; else WideCharToMultiByte(CP_ACP, 0, wcstr, -1, mbstr, count, 0, 0) and forces a terminator at result - 1; callers CString::operator=(LPCWSTR), dead_700A30. Name was WideCharToMultiByte_wrap
 0x00700F99	157	dead_700F99	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00701036	26	InitVtable_796E48_701036	named	stores vtable 0x00796E48 and initializes 4 field(s) (constructor/reset step)
-0x00701050	28	vt_745DF4::DeletingDtor_701050	named	scalar deleting destructor: runs FUN_0070112b then operator delete when flag&1
-0x0070106C	31	CArchive_Init	named	CArchive-like init: empty string at +0xC, vtable 0x745DF4, +4 = owner
-0x0070108B	160	CFile::CFile_path_flags	named	CFile ctor opening a file (Open; throws CFileException)
-0x0070112B	72	CFile::~CFile_EH	named	destructor body with an EH frame: closes the handle; 112 callers
-0x00701173	117	CFile::Duplicate	named	vt slot 9: duplicates the file object (new CFile with the same handle)
-0x007011E8	285	CFile::Open	named	vt slot 8: CreateFile with mode flags, AfxFullPath; throws CFileException (AfxMapError); 285 bytes
-0x00701305	58	CFile::Read	named	vt slot 13: ReadFile, throws CFileException on error; 13 callers
-0x0070133F	75	CFile::Write	named	vt slot 14: WriteFile, throws CFileException on error; 10 callers
-0x0070138A	47	CFile::Seek	named	vt slot 10: SetFilePointer, throws on error
-0x007013B9	41	CFile::GetPosition	named	vt slot 3: SetFilePointer(0, FILE_CURRENT), throws on error
-0x007013E2	33	CFile::Flush	named	vt slot 18: FlushFileBuffers, throws on error
-0x00701403	65	CFile::Close	named	vt slot 19: CloseHandle, clears the file name, throws on error; 24 callers
-0x00701444	32	CFile::Close_Handle	named	vt slot 17: CloseHandle and clear the name
-0x00701464	41	CFile::LockRange	named	vt slot 15: LockFile, throws on error
-0x0070148D	41	CFile::UnlockRange	named	vt slot 16: UnlockFile, throws on error
-0x007014B6	44	CFile::SetLength	named	vt slot 11: Seek then SetEndOfFile, throws on error
-0x007014E2	45	CFile::GetLength	named	vt slot 12: Seek(0,end), Seek(0,begin)... returns the length through virtual Seek
-0x0070150F	5	vt_745DF4::Nop_70150F	named	empty function (returns immediately)
+0x00701036	26	CFile::CFile	named	"MFC 6: CFile default ctor: m_strFileName +0xC = empty, m_hFile +4 = -1 (hFileNull), m_bCloseOnDelete +8 = 0, vtable 0x745DF4 (runtime class ""CFile""); callers DualFileMsgStream, CSaveLoadWin, World_LoadAIGraphStream, .. Name was InitVtable_796E48_701036"
+0x00701050	28	CFile::`scalar_deleting_dtor'	named	MFC 6: CFile scalar deleting dtor (vtable 0x745DF4 slot 1): ~CFile 0x70112B, delete when flag & 1
+0x0070106C	31	CFile::CFile_hFile	named	MFC 6: CFile(int hFile) ctor: empty name, m_hFile +4 = hFile, m_bCloseOnDelete +8 = 0, vtable 0x745DF4; callers CFile::Duplicate, CStdioFile(FILE*) 0x701BAB. CORRECTION: was CArchive_Init
+0x0070108B	160	CFile::CFile_path_flags	named	MFC 6: CFile(LPCTSTR, UINT nOpenFlags): CFile init, local CFileException (vtable 0x745E4C, cause 0, m_lOsError -1); Open(path, flags, &e) fails -> AfxThrowFileException(e.m_cause, e.m_lOsError, e.m_strFileName) 0x7031D5; callers Isaac_SeedFromFiles, CInterface::OnKeyDown, CRichEditSurface::StreamInFile
+0x0070112B	72	CFile::~CFile	named	MFC 6: CFile dtor: vtable 0x745DF4; m_hFile != -1 and m_bCloseOnDelete -> Close (vt-free direct call 0x701403); ~m_strFileName; 112 call sites. Name was CFile::~CFile_EH
+0x00701173	117	CFile::Duplicate	named	MFC 6: CFile::Duplicate (vtable 0x745DF4 slot 9): new CFile(-1) (0x10 bytes), DuplicateHandle(GetCurrentProcess, m_hFile, .., DUPLICATE_SAME_ACCESS); failure -> delete it, CFileException::ThrowOsError(GetLastError) 0x7030F0; copies m_bCloseOnDelete; only from the vtable
+0x007011E8	285	CFile::Open	named	MFC 6: CFile::Open(path, nOpenFlags, CFileException*) (slot 8): resets the handle / name, drops typeText 0x8000, m_strFileName = AfxFullPath(path); access by flags & 3 (GENERIC_READ / WRITE / both), share by flags & 0x70 (deny write -> FILE_SHARE_READ, deny read -> WRITE, deny none -> both), bInheritHandle = !(flags & 0x80), modeCreate 0x1000 -> CREATE_ALWAYS or OPEN_ALWAYS (modeNoTruncate 0x2000), else OPEN_EXISTING; CreateFileA; failure -> exception m_lOsError +0xC = GetLastError, m_cause +8 = OsErrorToException 0x703296, m_strFileName +0x10, returns FALSE; success m_hFile +4, m_bCloseOnDelete +8 = TRUE
+0x00701305	58	CFile::Read	named	MFC 6: CFile::Read(buf, n) (slot 13): 0 -> 0; ReadFile(m_hFile +4); failure -> ThrowOsError(GetLastError); returns the bytes read
+0x0070133F	75	CFile::Write	named	MFC 6: CFile::Write(buf, n) (slot 14): WriteFile; failure -> ThrowOsError(GetLastError, m_strFileName); short write -> AfxThrowFileException(diskFull 13, -1, m_strFileName) 0x7031D5
+0x0070138A	47	CFile::Seek	named	MFC 6: CFile::Seek(lOff, nFrom) (slot 10): SetFilePointer; -1 -> ThrowOsError(GetLastError); returns the new position; also called directly by Isaac_SeedFromFiles
+0x007013B9	41	CFile::GetPosition	named	MFC 6: CFile::GetPosition (slot 3): SetFilePointer(m_hFile, 0, 0, FILE_CURRENT); -1 -> ThrowOsError
+0x007013E2	33	CFile::Flush	named	MFC 6: CFile::Flush (slot 18): no-op for hFileNull; FlushFileBuffers, failure -> ThrowOsError
+0x00701403	65	CFile::Close	named	MFC 6: CFile::Close (slot 19): CloseHandle when open (bError = failure), m_hFile = -1, m_bCloseOnDelete = 0, m_strFileName.Empty(); bError -> ThrowOsError(GetLastError); called directly by ~CFile and game file code
+0x00701444	32	CFile::Abort	named	MFC 6: CFile::Abort (slot 17): CloseHandle when open, m_hFile = -1, name emptied, never throws; also called by CStdioFile::Open on failure. CORRECTION: was CFile::Close_Handle
+0x00701464	41	CFile::LockRange	named	MFC 6: CFile::LockRange(dwPos, dwCount) (slot 15): LockFile, failure -> ThrowOsError; only from the vtable
+0x0070148D	41	CFile::UnlockRange	named	MFC 6: CFile::UnlockRange(dwPos, dwCount) (slot 16): UnlockFile, failure -> ThrowOsError; only from the vtable (raw hit at 0x70147C inside LockRange is an instruction byte)
+0x007014B6	44	CFile::SetLength	named	MFC 6: CFile::SetLength(dwNewLen) (slot 11, also CStdioFile slot 11): Seek(len, begin) via vt +0x28, SetEndOfFile, failure -> ThrowOsError
+0x007014E2	45	CFile::GetLength	named	MFC 6: CFile::GetLength (slot 12): cur = Seek(0, current), len = Seek(0, end), Seek(cur, begin), returns len (all through vt +0x28); also called directly by texture / camera loaders
+0x0070150F	5	CFile::GetBufferPtr	named	MFC 6: CFile::GetBufferPtr(nCommand, nCount, ppBufStart, ppBufMax) (slot 20 of CFile and CStdioFile): returns 0 (no buffering support). CORRECTION: was vt_745DF4::Nop_70150F
 0x00701514	64	dead_701514	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00701554	66	AfxCoGetClassObjectFromDll	named	loads the in-process server DLL and creates the class factory instance
-0x00701596	157	AfxGetClassObjectFromDll	named	finds the server via CLSID registry, LoadLibrary and DllGetClassObject
-0x00701633	111	AfxStringFromCLSID	named	"formats a GUID as ""{%08X-%04X-...}"" into a CString"
-0x007016A2	172	AfxGetInProcServer32	named	registry: reads CLSID\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\{...}\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\InProcServer32 into a CString
-0x0070174E	290	AfxGetShellExtension	named	SHGetFileInfo then a COM class object lookup for shell attributes
-0x00701870	208	AfxFullPath	named	GetFullPathName into the buffer, error handling under an EH frame
-0x00701940	198	AfxGetFullPathName	named	copies a path into a 0x104 buffer and normalizes it (multibyte aware)
-0x00701A06	195	AfxCmpMenuString	named	compares menu strings case-insensitively (DBCS aware)
-0x00701AC9	86	AfxGetFileTitle	named	GetFileTitleA of a path into the buffer (or a local buffer)
-0x00701B1F	90	AfxGetModuleShortFileName	named	GetModuleFileName + GetShortPathName into a CString
-0x00701B79	22	CFile_Ctor	named	CFile ctor: base init then vtable 0x7464F0, handle +0x10 = 0
-0x00701B8F	28	vt_7464F0::DeletingDtor_701B8F	named	scalar deleting destructor: runs CStdioFile::~CStdioFile then operator delete when flag&1
-0x00701BAB	41	CFile_CtorFromHandle	named	CFile ctor from an existing stream: _get_osfhandle of the stream's fd
-0x00701BD4	153	CStdioFile::CStdioFile_path_flags	named	CStdioFile ctor opening the file (EH frame)
-0x00701C6D	67	CStdioFile::~CStdioFile	named	CStdioFile destructor: Close then ~CFile; 21 callers
-0x00701CB0	212	CStdioFile::Open	named	vt slot 8: CFile::Open then _fdopen / _alloc_osfhnd; closes and throws on failure
-0x00701D84	108	CStdioFile::Read	named	vt slot 13: fread, error mapping (_doserrno -> AfxThrowFileException)
-0x00701DF0	51	CStdioFile::Write	named	vt slot 14: fwrite, throws on short write
-0x00701E23	43	CStdioFile::WriteString	named	vt slot 21: fputs, throws on error
-0x00701E4E	69	CStdioFile::ReadString_buf_n	named	vt slot 23: fgets, throws on error
-0x00701E93	195	CStdioFile::ReadString_CString	named	vt slot 22: reads a line into a CString in 0x80-char chunks
-0x00701F56	56	CStdioFile::Seek	named	vt slot 10: fseek, throws on error
-0x00701F8E	42	CStdioFile::Flush_Throw	named	vt slot 3: fflush_lk, throws on error
-0x00701FB8	40	CStdioFile::Flush	named	vt slot 18: fflush, throws on error
-0x00701FE0	54	CStdioFile::Close	named	vt slot 19: fclose, clears the handle
-0x00702016	37	CStdioFile::Close	named	vt slot 17: fclose(stream at +0x10) when owned, reset handle fields
-0x0070203B	8	CFile::Unsupported_A	named	vt slot 9: throws CNotSupportedException
-0x00702043	8	CFile::Unsupported_B	named	vt slot 15: throws CNotSupportedException
-0x0070204B	8	CFile::Unsupported_C	named	vt slot 16: throws CNotSupportedException
-0x00702053	10	ClearField_4_702053	named	stores a constant into this+4
-0x0070205D	12	SetField_4_70205D	named	stores the argument into this+4 (undefined4)
-0x00702069	18	CObject_DeleteIfPositive	named	if refcount-like field +4 > 0: call virtual delete (slot 1)
+0x00701554	66	AfxCoCreateInstanceFromDll	named	MFC 6 (filecore.cpp, static-lib COM helper): (rclsid, pUnkOuter, riid, ppv): gets the IClassFactory (IID 0x748248) through 0x701596, CreateInstance (vt +0xC), Release (vt +8); dead chain: only from the dead AfxResolveShortcut 0x70174E. CORRECTION of the name: was AfxCoGetClassObjectFromDll (it creates the instance)
+0x00701596	157	AfxGetClassObjectFromDll	named	"MFC 6 (filecore.cpp): (rclsid, riid, ppv): *ppv = 0; CLSID string (0x701633), InProcServer32 path from the registry (0x7016A2), LoadLibraryA, GetProcAddress ""DllGetClassObject"" and calls it; REGDB_E_CLASSNOTREG 0x80040154 when not registered / not loadable, CO_E_ERRORINDLL 0x800401F9 without the export; dead chain (only from 0x701554)"
+0x00701633	111	AfxStringFromCLSID	named	"MFC 6 (filecore.cpp): _AfxStringFromCLSID(rclsid) -> CString: wsprintfA ""{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}""; dead chain (only from 0x701596)"
+0x007016A2	172	AfxGetInProcServer32	named	MFC 6 (filecore.cpp): _AfxGetInProcServer(lpszCLSID, CString&): RegOpenKey HKCR\CLSID\<clsid>\InProcServer32, RegQueryValueEx default value into a MAX_PATH buffer, TRUE on success, closes the 3 keys; dead chain (only from 0x701596)
+0x0070174E	290	AfxResolveShortcut	named	MFC 6 (filecore.cpp): AfxResolveShortcut(CWnd* pWnd, lpszFileIn, lpszFileOut, cchPath): out[0] = 0; SHGetFileInfoA(SHGFI_ATTRIBUTES) and SFGAO_LINK -> creates CLSID_ShellLink 0x745DE0 / IID_IShellLink 0x745DD0, QueryInterface IPersistFile 0x748258, Load(wide path), Resolve(pWnd hwnd +0x1C, SLR_ANY_MATCH), GetPath(out, cch); TRUE when resolved; lib, unused. CORRECTION: was AfxGetShellExtension [dead: no caller or pointer]
+0x00701870	208	AfxFullPath	named	MFC 6: AfxFullPath(lpszPathOut, lpszFileIn): GetFullPathNameA (MAX_PATH); failure -> lstrcpyn + FALSE; AfxGetRoot, GetVolumeInformationA: no FS_CASE_IS_PRESERVED -> CharUpperA, no FS_UNICODE_STORED_ON_DISK -> FindFirstFile and copies the real file-name case over the file part; returns TRUE; callers CFile::Open, CFile::GetStatus(path), CRecentFileList::Add
+0x00701940	198	AfxGetRoot	named	"MFC 6: AfxGetRoot(lpszPath, CString& strRoot): copies the path into a MAX_PATH buffer and cuts it after the root (""\\server\share\"" for UNC paths, else the first component + '\'), multibyte aware (_mbsinc); caller AfxFullPath. CORRECTION: was AfxGetFullPathName"
+0x00701A06	195	AfxComparePath	named	MFC 6: AfxComparePath(lpszPath1, lpszPath2): lstrcmpiA != 0 -> FALSE; on DBCS systems (GetSystemMetrics SM_DBCSENABLED 0x2A) also requires equal lengths and, via GetStringTypeExA CT_CTYPE1 / CT_CTYPE3, equal CTYPE1 for every full-width (C3_FULLWIDTH) character; else TRUE; caller CRecentFileList::Add. CORRECTION: was AfxCmpMenuString
+0x00701AC9	86	AfxGetFileTitle	named	MFC 6: AfxGetFileTitle(lpszPathName, lpszTitle, nMax): GetFileTitleA (comdlg thunk 0x6FC044) into the buffer (local MAX_PATH buffer when lpszTitle is NULL); failure -> AfxGetFileName fallback 0x70D0D2; NULL buffer -> returns the needed length + 1; callers CRecentFileList::GetDisplayName, CFile::GetFileTitle 0x702CB3
+0x00701B1F	90	AfxGetModuleShortFileName	named	MFC 6: AfxGetModuleShortFileName(hInst, CString&): GetModuleFileNameA, GetShortPathNameA into the CString buffer (long name when it fails), ReleaseBuffer; lib, unused [dead: no caller or pointer]
+0x00701B79	22	CStdioFile::CStdioFile	named	"MFC 6: CStdioFile default ctor: CFile::CFile 0x701036, m_pStream +0x10 = 0, vtable 0x7464F0 (runtime class ""CStdioFile""); callers KeyBindings_Load / Save, Console_ListVar / LoadVar / Execute, CAcksDb::DumpScenack, CInterface::Init / Destroy. CORRECTION: was CFile_Ctor"
+0x00701B8F	28	CStdioFile::`scalar_deleting_dtor'	named	MFC 6: CStdioFile scalar deleting dtor (vtable 0x7464F0 slot 1): ~CStdioFile 0x701C6D, delete when flag & 1
+0x00701BAB	41	CStdioFile::CStdioFile_FILE	named	MFC 6: CStdioFile(FILE* pOpenStream): CFile(hFileNull), vtable 0x7464F0, m_pStream +0x10 = stream, m_hFile +4 = _get_osfhandle(stream->_file +0x10); lib, unused. CORRECTION: was CFile_CtorFromHandle [dead: no caller or pointer]
+0x00701BD4	153	CStdioFile::CStdioFile_path_flags	named	MFC 6: CStdioFile(LPCTSTR, UINT nOpenFlags): CFile init, vtable 0x7464F0, local CFileException; Open fails -> AfxThrowFileException(e.m_cause, e.m_lOsError, e.m_strFileName) 0x7031D5; caller Compiler_ReadFile
+0x00701C6D	67	CStdioFile::~CStdioFile	named	MFC 6: CStdioFile dtor: vtable 0x7464F0; m_pStream +0x10 and m_bCloseOnDelete +8 -> Close 0x701FE0; then ~CFile 0x70112B
+0x00701CB0	212	CStdioFile::Open	named	"MFC 6: CStdioFile::Open(path, flags, pException) (vtable 0x7464F0 slot 8): m_pStream = 0; CFile::Open(path, flags & ~typeText); fopen mode: modeCreate -> ""w"" / ""a"" (modeNoTruncate), modeWrite -> ""a"", else ""r"", '+' for read-write, then 'b' (typeBinary 0x8000) or 't'; _open_osfhandle(m_hFile, _O_TEXT unless binary), _fdopen -> m_pStream; failure -> exception m_lOsError = _doserrno, m_cause = OsErrorToException, CFile::Abort, FALSE"
+0x00701D84	108	CStdioFile::Read	named	MFC 6: CStdioFile::Read(buf, n) (slot 13): 0 -> 0; fread(buf, 1, n, m_pStream); 0 read and not EOF (_flag 0x10) -> AfxThrowFileException(generic 1, _doserrno, name); stream error (_flag 0x20) -> clearerr + same throw; returns the count
+0x00701DF0	51	CStdioFile::Write	named	MFC 6: CStdioFile::Write(buf, n) (slot 14): fwrite(buf, 1, n); short -> AfxThrowFileException(generic 1, _doserrno, name)
+0x00701E23	43	CStdioFile::WriteString	named	MFC 6: CStdioFile::WriteString(LPCTSTR) (slot 21): fputs(lpsz, m_pStream) == EOF -> AfxThrowFileException(diskFull 13, _doserrno, name); callers KeyBindings_Save, Console_ListVar, CInterface::Destroy
+0x00701E4E	69	CStdioFile::ReadString_buf_n	named	MFC 6: CStdioFile::ReadString(LPTSTR, UINT nMax) (slot 23): fgets(buf, nMax, m_pStream); NULL and not EOF -> clearerr + AfxThrowFileException(generic 1, _doserrno, name); returns the fgets result; caller Compiler_ReadFile
+0x00701E93	195	CStdioFile::ReadString_CString	named	MFC 6: CStdioFile::ReadString(CString&) (slot 22): empties the string, reads in 0x80-char chunks (fgets 0x81 into GetBuffer) until a chunk ends with '\n' or is short; NULL and not EOF -> clearerr + throw generic; drops the trailing '\n'; returns TRUE when something was read; callers KeyBindings_Load, Console_LoadVar / Execute, CInterface::Init
+0x00701F56	56	CStdioFile::Seek	named	MFC 6: CStdioFile::Seek(lOff, nFrom) (slot 10): fseek != 0 -> AfxThrowFileException(badSeek 9, _doserrno, name); returns ftell
+0x00701F8E	42	CStdioFile::GetPosition	named	MFC 6: CStdioFile::GetPosition (slot 3): ftell(m_pStream); -1 -> AfxThrowFileException(invalidFile 6, _doserrno, name). CORRECTION: was CStdioFile::Flush_Throw
+0x00701FB8	40	CStdioFile::Flush	named	MFC 6: CStdioFile::Flush (slot 18): m_pStream and fflush != 0 -> AfxThrowFileException(diskFull 13, _doserrno, name)
+0x00701FE0	54	CStdioFile::Close	named	MFC 6: CStdioFile::Close (slot 19): fclose(m_pStream) when open, m_hFile = -1, m_bCloseOnDelete = 0, m_pStream = 0; fclose error -> AfxThrowFileException(diskFull 13, _doserrno, name); called directly by ~CStdioFile and the game (KeyBindings, Console, CAcksDb::DumpScenack, CInterface)
+0x00702016	37	CStdioFile::Abort	named	MFC 6: CStdioFile::Abort (slot 17): fclose(m_pStream) when open and m_bCloseOnDelete, m_hFile = -1, m_pStream = 0, m_bCloseOnDelete = 0, never throws. CORRECTION: was a second CStdioFile::Close
+0x0070203B	8	CStdioFile::Duplicate	named	MFC 6: CStdioFile::Duplicate (slot 9): AfxThrowNotSupportedException (0x6FE3A2), returns NULL. Name was CFile::Unsupported_A
+0x00702043	8	CStdioFile::LockRange	named	MFC 6: CStdioFile::LockRange(dwPos, dwCount) (slot 15): AfxThrowNotSupportedException. Name was CFile::Unsupported_B
+0x0070204B	8	CStdioFile::UnlockRange	named	MFC 6: CStdioFile::UnlockRange(dwPos, dwCount) (slot 16): AfxThrowNotSupportedException. Name was CFile::Unsupported_C
+0x00702053	10	CException::CException	named	MFC 6: CException default ctor (no vtable store, abstract base): m_bAutoDelete +4 = TRUE; callers the local CFileException of the CFile / CStdioFile path ctors, AfxThrowFileException, AfxThrowArchiveException. CORRECTION: was ClearField_4_702053
+0x0070205D	12	CException::CException_bAutoDelete	named	MFC 6: CException(BOOL bAutoDelete): m_bAutoDelete +4 = arg; callers the CResourceException / CUserException / CMemoryException / CNotSupportedException ctors. Name was SetField_4_70205D
+0x00702069	18	CException::Delete	named	MFC 6: CException::Delete: m_bAutoDelete +4 > 0 -> virtual scalar deleting dtor (vt +4, flag 1); called from catch blocks (raw hits inside CRuntimeClass::CreateObject, CWinThread idle, HookWndProc, ..) and AfxCallWndProc. CORRECTION: was CObject_DeleteIfPositive
 0x0070207B	33	dead_70207B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070209C	85	CException::ReportError	named	vt slot 4: GetErrorMessage then AfxMessageBox with the text or a default
-0x007020F1	22	AfxPushThreadObject	named	links a new object into the per-thread list
-0x00702107	40	AfxGetThreadState_Alloc	named	per-thread state (+0x10), preserves GetLastError across the TLS lookup
-0x0070212F	30	AfxPopThreadObject	named	removes the head of the per-thread list and releases it
+0x0070209C	85	CException::ReportError	named	MFC 6: CException::ReportError(nType, nError) (vt slot 4 of CException-derived vtables 0x745E4C, 0x74647C, ..): GetErrorMessage (vt +0xC) into a 0x200 buffer -> AfxMessageBox(text, nType, nHelp); else AfxMessageBox(nError or AFX_IDP_NO_ERROR_AVAILABLE 0xF020, nType, nHelp); only from vtables
+0x007020F1	22	AFX_EXCEPTION_LINK::AFX_EXCEPTION_LINK	named	MFC 6: AFX_EXCEPTION_LINK ctor (the TRY macro): m_pException +4 = 0, m_pLinkPrev +0 = context->m_pLinkTop, m_pLinkTop = this; callers Isaac_SeedFromFiles, Compiler_ReadFile, CBitmapDib::LoadStream / WriteBmp / LoadMmpMipLevel / LoadMmpLevelFromStream (MFC TRY blocks). CORRECTION: was AfxPushThreadObject
+0x00702107	40	AfxGetExceptionContext	named	MFC 6: AfxGetExceptionContext: saves GetLastError, _afxThreadState (CThreadLocalObject 0x7C90C0) GetData, restores the error, returns &state->m_exceptionContext (+0x10). CORRECTION: was AfxGetThreadState_Alloc
+0x0070212F	30	AfxTryCleanup	named	MFC 6: AfxTryCleanup (end of a TRY block / ~AFX_EXCEPTION_LINK): top link's m_pException != 0 -> CException::Delete; m_pLinkTop = link->m_pLinkPrev; callers the CBitmapDib loaders, Compiler_ReadFile, Isaac_SeedFromFiles, thunk_AfxPopThreadObject. CORRECTION: was AfxPopThreadObject
 0x0070214D	16	dead_70214D	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070215D	135	CWinThread::InitThread	named	thread startup: message filter hook, CWnd attach, runs InitInstance (EH frame)
+0x0070215D	135	_AfxThreadEntry	named	MFC 6 (thrdcore.cpp): _AfxThreadEntry(_AFX_THREAD_STARTUP*) (the _beginthreadex proc pushed by CWinThread::CreateThread): local CWnd threadWnd; copies the module state into the new thread state, sets m_pCurrentWinThread (module thread state +0x1070 local, +4), AfxInitThread 0x7023C5; attaches the app main window HWND to threadWnd when the thread has no m_pMainWnd; then (block 0x702214) SetEvent(hEvent), waits hEvent2, runs m_pfnThreadProc +0x50 (m_pThreadParams +0x4C) or InitInstance (vt +0x50) -> Run (vt +0x54) / ExitInstance (vt +0x68), Detach, AfxEndThread(result, TRUE). CORRECTION: was CWinThread::InitThread
 0x0070220E	6	sub_70220E	named	unregistered function, reached by call / pointer from 0x302209 (gaps.py 2026-11-06)
-0x00702214	119	CWinThread::ThreadExit	named	signals the event and waits for the handle, then AfxEndThread
-0x0070228B	21	AfxGetThread	named	returns the CWinThread of the current thread (or the app thread)
-0x007022A0	129	AfxBeginThread_Create	named	allocates a CWinThread(0x68) and starts it (EH frame)
-0x00702321	95	AfxBeginThread	named	AfxBeginThread(proc, param, priority, stack, flags, security)
-0x00702380	69	AfxEndThread	named	ends the current thread: idle cleanup, _endthread_core with the exit code
-0x007023C5	95	AfxHookMessageFilter	named	installs a WH_MSGFILTER hook (SetWindowsHookEx -1) for the thread unless the module state disables it
-0x00702424	130	CWinThread::ProcessWndProcException_Idle	named	idle processing: lock temp maps, delete temp objects (EH frame)
-0x007024B4	226	CWinThread::CreateThread	named	_beginthreadex with an event handshake and the AFX thread startup struct
-0x00702596	18	CWnd_DestroyChild	named	if the child (+0x24) exists: virtual delete
-0x007025A8	3	vt_7466E0::Nop_7025A8	named	empty function (returns immediately)
-0x007025AB	127	CWnd_MessageLoopIdle	named	vt slot 21: processes pending idle messages in a loop (PumpMessage until idle)
-0x0070262A	89	CWnd_PreTranslateSize	named	vt slot 25: stores size info for sizes 0x200/0xA0 when changed
-0x00702683	4	vt_7466E0::GetField_38_702683	named	returns the field at this+0x38
-0x00702687	267	CWinApp::EnableModeless_Impl	named	vt slot 24: shows/hides windows and updates the modal state counters
+0x00702214	119	_AfxThreadEntry_chunk_702214	named	Chunk (not a separate function): tail block of _AfxThreadEntry 0x70215D (uses its ebp frame, edi = startup, esi = thread; reached only by its 5 conditional / plain jumps; the old name CWinThread::ThreadExit described this tail: SetEvent, WaitForSingleObject, thread proc or InitInstance / Run / ExitInstance, AfxEndThread)
+0x0070228B	21	AfxGetThread	named	MFC 6: AfxGetThread: module thread state m_pCurrentWinThread (+4), else the module state's m_pCurrentWinApp (+4); 20+ CWnd / frame callers
+0x007022A0	129	AfxBeginThread	named	MFC 6: AfxBeginThread(AFX_THREADPROC, pParam, nPriority, nStackSize, dwCreateFlags, lpsa) (worker thread): new CWinThread(pfn, pParam) (0x68 bytes, 0x70C259), CreateThread(flags | CREATE_SUSPENDED, stack, sa); failure -> Delete (vt +0x78), 0; SetThreadPriority(m_hThread +0x28), ResumeThread unless CREATE_SUSPENDED; callers CSoftCursor::Start, CSoundManager::Open, dead_5DAD50. CORRECTION: was AfxBeginThread_Create
+0x00702321	95	AfxBeginThread_class	named	MFC 6: AfxBeginThread(CRuntimeClass*, nPriority, nStackSize, dwCreateFlags, lpsa) (UI thread): CRuntimeClass::CreateObject (NULL -> AfxThrowMemoryException 0x6FE389), m_pThreadParams +0x4C = 0, CreateThread suspended, priority, resume; lib, unused [dead: no caller or pointer]
+0x00702380	69	AfxEndThread	named	MFC 6: AfxEndThread(nExitCode, bDelete): current CWinThread (module thread state +4): m_lpfnOleTermOrFreeLib +0x54 (TRUE, FALSE) when set, bDelete -> Delete (vt +0x78), clears m_pCurrentWinThread; AfxTermThread(0) 0x702424; _endthreadex(nExitCode); callers CSoundManager::MusicThreadProc / SequenceThreadProc, _AfxThreadEntry
+0x007023C5	95	AfxInitThread	named	MFC 6: AfxInitThread: not a DLL context (module state +0x14 == 0) -> thread state m_hHookOldMsgFilter +0x30 = SetWindowsHookExA(WH_MSGFILTER -1, _AfxMsgFilterHook 0x70289B, 0, GetCurrentThreadId), CTL3D auto-subclass callback (process-local 0x7CAA88 +0x14) with the instance handle, touches the thread-local CTL3D object 0x7CAA84; callers _AfxThreadEntry, dead_70CF52. CORRECTION: was AfxHookMessageFilter
+0x00702424	130	AfxTermThread	named	MFC 6: AfxTermThread(hInstTerm): AfxLockTempMaps + AfxUnlockTempMaps(-1); hInstTerm == 0 -> thread state m_pToolTip +0xCC: DestroyWindow (vt +0x58), delete, = 0; _afxThreadData 0x7C9084 -> CThreadSlotData::DeleteValues(hInst, 0); inside try/catch; caller AfxEndThread. CORRECTION: was CWinThread::ProcessWndProcException_Idle
+0x007024B4	226	CWinThread::CreateThread	named	MFC 6: CWinThread::CreateThread(dwCreateFlags, nStackSize, lpsa): startup block {thread state, this, hEvent, hEvent2, flags}, two auto-reset events, _beginthreadex(sa, stack, _AfxThreadEntry, &startup, flags | CREATE_SUSPENDED, &m_nThreadID +0x2C) -> m_hThread +0x28; resume, wait hEvent, SuspendThread when CREATE_SUSPENDED was asked; startup error -> wait + close, FALSE; else SetEvent(hEvent2), TRUE; callers the two AfxBeginThread
+0x00702596	18	CWinThread::Delete	named	MFC 6: CWinThread::Delete (vtable 0x7466E0 slot 30, also the CWinApp vtable 0x74713C): m_bAutoDelete +0x24 -> virtual scalar deleting dtor (vt +4, flag 1). CORRECTION: was CWnd_DestroyChild
+0x007025A8	3	CWinThread::InitInstance	named	MFC 6: CWinThread::InitInstance (vtable 0x7466E0 slot 20): returns FALSE. Name was vt_7466E0::Nop_7025A8
+0x007025AB	127	CWinThread::Run	named	MFC 6: CWinThread::Run (slot 21): bIdle = TRUE, lIdleCount = 0; while idle and no PeekMessage(m_msgCur +0x30, PM_NOREMOVE): OnIdle (vt +0x60) with lIdleCount++ until it returns FALSE; then PumpMessage (vt +0x5C) loop (FALSE -> return ExitInstance vt +0x68), IsIdleMessage (vt +0x64) re-arms idle; caller CWinApp::Run 0x707A13. CORRECTION: was CWnd_MessageLoopIdle
+0x0070262A	89	CWinThread::IsIdleMessage	named	MFC 6: CWinThread::IsIdleMessage(MSG*) (slot 25, also CWinApp 0x747128): WM_MOUSEMOVE 0x200 / WM_NCMOUSEMOVE 0xA0 at the same point and with the same message as last time (m_ptCursorLast +0x5C/+0x60, m_nMsgLast +0x64) -> FALSE (else stores them, TRUE); WM_PAINT 0xF and WM_SYSTIMER 0x118 -> FALSE; else TRUE. CORRECTION: was CWnd_PreTranslateSize
+0x00702683	4	CWinThread::ExitInstance	named	MFC 6: CWinThread::ExitInstance (slot 26): returns m_msgCur.wParam (+0x38). Name was vt_7466E0::GetField_38_702683
+0x00702687	267	CWinThread::OnIdle	named	MFC 6: CWinThread::OnIdle(lCount) (slot 24): lCount <= 0 -> visible m_pMainWnd +0x1C gets WM_IDLEUPDATECMDUI 0x363 through AfxCallWndProc 0x704768 and SendMessageToDescendants; every frame of the module thread state frame list (+8, next +0x54) other than the main window: m_nShowDelay +0x88 handling (ShowWindow), same idle update, m_nShowDelay = -1; lCount >= 0 and no temp-map lock (+0x10) -> AfxLockTempMaps + AfxUnlockTempMaps(TRUE); returns lCount < 0; callers CWinApp::OnIdle 0x707AE3. CORRECTION: was CWinApp::EnableModeless_Impl
 0x00702792	12	dead_702792	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070279E	123	CCmdTarget::OnCmdMsg_Search	named	walks the message map chain looking for a message entry
-0x00702819	93	CWinThread::IsIdleMessage	named	vt slot 22: command-target search for a message, then owner/top-level window checks
-0x00702876	37	AfxInternalProcessWndProcException	named	MFC: handles exceptions inside a window procedure (WM_CREATE returns -1)
-0x0070289B	88	AfxMsgFilterHook	named	WH_MSGFILTER hook proc: forwards to the thread's ProcessMessageFilter
-0x007028F3	75	CWinApp::IsHelpKey	named	true for an F1 (0x70) key-down without Shift/Ctrl/Alt modifiers
+0x0070279E	123	CWinThread::DispatchThreadMessageEx	named	MFC 6: CWinThread::DispatchThreadMessageEx(MSG*): walks GetMessageMap (vt +0x28) and its base maps; message < 0xC000 -> AfxFindMessageEntry(entries, msg, 0, 0); registered messages -> entries for 0xC000 whose nSig points at the registered id; found -> calls the handler (this, wParam, lParam), TRUE; else FALSE; callers PreTranslateMessage 0x702819, dead_702792 (DispatchThreadMessage). CORRECTION: was CCmdTarget::OnCmdMsg_Search
+0x00702819	93	CWinThread::PreTranslateMessage	named	MFC 6: CWinThread::PreTranslateMessage(MSG*) (vtable 0x7466E0 slot 22, also CWinApp 0x74711C): thread message (hwnd 0) -> DispatchThreadMessageEx; CWnd::WalkPreTranslateTree(main window hwnd, msg) 0x70683B; else when the message window's top-level parent (0x70605C) is not the main window -> mainWnd->PreTranslateMessage (vt +0x90); FALSE otherwise. CORRECTION: was CWinThread::IsIdleMessage
+0x00702876	37	CWinThread::ProcessWndProcException	named	MFC 6: CWinThread::ProcessWndProcException(CException*, const MSG*) (slot 27): WM_CREATE -> -1; WM_PAINT -> ValidateRect(hwnd, NULL), 0; else 0; also called by CWinApp::ProcessWndProcException 0x707A6C. CORRECTION: was AfxInternalProcessWndProcException
+0x0070289B	88	_AfxMsgFilterHook	named	MFC 6: _AfxMsgFilterHook(code, wParam, lParam) (WH_MSGFILTER proc installed by AfxInitThread): not a DLL context and (code >= 0 or MSGF_DDEMGR 0x8001) and a current thread -> pThread->ProcessMessageFilter(code, lParam) (vt +0x70); else CallNextHookEx(thread state m_hHookOldMsgFilter +0x30, ..). Name was AfxMsgFilterHook
+0x007028F3	75	IsHelpKey	named	MFC 6 (thrdcore.cpp static): IsHelpKey(LPMSG): WM_KEYDOWN 0x100 + VK_F1 0x70, not a repeat (HIWORD(lParam) & KF_REPEAT 0x4000) and Shift / Ctrl / Alt all up (GetKeyState >= 0); caller ProcessMessageFilter. Name was CWinApp::IsHelpKey
 0x0070293E	43	dead_70293E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00702969	330	CWinThread::ProcessMessageFilter	named	vt slot 28: filters messages (help key, modal dialog, enabled check)
-0x00702AB3	27	CWinApp::EnableModeless	named	vt slot 29: if no modal state, activates the active window
-0x00702ACE	64	CWinThread::PumpMessage	named	vt slot 23: GetMessage; returns 0 on WM_QUIT, else translates and dispatches
-0x00702B0E	132	CString::LoadString	named	loads a string resource into a CString, growing the buffer
-0x00702B92	39	AfxLoadString	named	LoadStringA(module instance, id, buf, n)
-0x00702BB9	120	AfxGetFileNameFromPath_Alt	named	copies a path component into a CString buffer (multibyte)
-0x00702C31	130	CFileFind::GetFileStatus_Path	named	vt slot 4: fills the file status via CFileFind and returns the path (EH frame)
-0x00702CB3	130	CFile::GetFileName	named	vt slot 5: gets the file title into a CString
-0x00702D35	47	CFile::GetFileTitle_String	named	returns the file title in a CString (via FillFileStatus)
-0x00702D64	218	CFileFind::FillFileStatus	named	GetFileStatus: lstrcpyn of the path, FindFirstFile, converts times to CTime
-0x00702E3E	178	CFile::GetStatus_Static	named	static GetStatus(path, status): AfxFullPath + FindFirstFile + times
-0x00702EF0	178	CFile::TimeToFileTime	named	converts a CTime-like value to FILETIME (SystemTimeToFileTime), throws on error
-0x00702F61	6	EHBlock_702F61	named	exception-handling block (funclet) inside of FUN_00702EF0 (0x00702EF0)
+0x00702969	330	CWinThread::ProcessMessageFilter	named	MFC 6: CWinThread::ProcessMessageFilter(code, LPMSG) (slot 28): NULL msg / MSGF_DDEMGR -> FALSE; MSGF_MENU 2: top-level frame (0x706169) tracking (0x70787E) in help mode (+0x50) and Enter / WM_LBUTTONUP -> SendMessage(main, WM_COMMAND, ID_HELP 0xE146), TRUE; MSGF_DIALOGBOX / menu: afxData.nWinVer 0x7C911C < 0x333 and IsHelpKey -> ID_HELP; dialog box key messages with m_pActiveWnd +0x20 enabled -> PreTranslateMessage (vt +0x58) on a copy, guarded by thread state m_bInMsgFilter +0xBC
+0x00702AB3	27	CWinThread::GetMainWnd	named	MFC 6: CWinThread::GetMainWnd (vtable 0x7466E0 slot 29, CWinApp 0x747138): m_pActiveWnd +0x20, else m_pMainWnd +0x1C, else CWnd::FromHandle(GetActiveWindow()) 0x704929. CORRECTION: was CWinApp::EnableModeless
+0x00702ACE	64	CWinThread::PumpMessage	named	MFC 6: CWinThread::PumpMessage (slot 23): GetMessageA(&m_msgCur +0x30) == 0 (WM_QUIT) -> FALSE; skips WM_KICKIDLE 0x36A; PreTranslateMessage (vt +0x58) else TranslateMessage + DispatchMessageA; TRUE
+0x00702B0E	132	CString::LoadString	named	MFC 6: CString::LoadString(nID): AfxLoadString into a 256-char stack buffer; fits (256 - len > 2) -> assign; else retries with GetBuffer(512, 768, ..) until it fits, ReleaseBuffer; returns len > 0
+0x00702B92	39	AfxLoadString	named	MFC 6: AfxLoadString(nID, lpszBuf, nMaxBuf): LoadStringA(module state m_hCurrentResourceHandle +0xC, ..); 0 -> buf[0] = 0; returns the length
+0x00702BB9	120	AfxExtractSubString	named	MFC 6: AfxExtractSubString(CString& r, lpszFullString, iSubString, chSep): skips iSubString separators (_mbschr), copies up to the next separator (or the end) into r via GetBufferSetLength + memcpy; FALSE (r emptied) when there are fewer parts or no string; lib, unused (the raw hit is a byte inside itself). CORRECTION: was AfxGetFileNameFromPath_Alt [dead: no caller or pointer]
+0x00702C31	130	CFile::GetFileName	named	MFC 6: CFile::GetFileName (vtable 0x745DF4 slot 4, CStdioFile slot 4, 0x746660): GetStatus(status) 0x702D64, AfxGetFileName(status.m_szFullName, buf, 256) 0x70D0D2, returns the CString. CORRECTION: was CFileFind::GetFileStatus_Path
+0x00702CB3	130	CFile::GetFileTitle	named	MFC 6: CFile::GetFileTitle (slot 5): GetStatus, AfxGetFileTitle(status.m_szFullName, buf, 256) 0x701AC9, returns the CString. CORRECTION: was CFile::GetFileName
+0x00702D35	47	CFile::GetFilePath	named	MFC 6: CFile::GetFilePath (slot 6): GetStatus, returns CString(status.m_szFullName). CORRECTION: was CFile::GetFileTitle_String
+0x00702D64	218	CFile::GetStatus	named	MFC 6: CFile::GetStatus(CFileStatus&) const: zeroes the 0x118-byte status, lstrcpyn m_strFileName into m_szFullName +0x12; open file -> GetFileTime + GetFileSize (m_size +0xC; failure -> FALSE), m_attribute +0x10 = GetFileAttributesA (0 when no name / error), CTime(FILETIME) for m_ctime +0 / m_atime +8 / m_mtime +4, empty ctime / atime = mtime; TRUE; callers CFile::GetFileName / GetFileTitle / GetFilePath. CORRECTION: was CFileFind::FillFileStatus
+0x00702E3E	178	CFile::GetStatus_static	named	MFC 6: static CFile::GetStatus(LPCTSTR, CFileStatus&): AfxFullPath into m_szFullName (failure -> empty, FALSE); FindFirstFileA (none -> FALSE), FindClose; m_attribute = attributes & 0x7F, m_size, CTime of the three times (fallbacks as above); TRUE; lib, unused. Name was CFile::GetStatus_Static [dead: no caller or pointer]
+0x00702EF0	178	AfxTimeToFileTime	named	MFC 6 (filest.cpp static): AfxTimeToFileTime(const CTime&, LPFILETIME): CTime::GetLocalTm (0x6FE547) fields -> SYSTEMTIME (year + 1900, month + 1, ..), SystemTimeToFileTime and LocalFileTimeToFileTime, each failure -> CFileException::ThrowOsError(GetLastError); dead chain: only from the dead CFile::SetStatus 0x702FA3. CORRECTION: was CFile::TimeToFileTime
 0x00702FA2	1	dead_702FA2	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00702FA3	301	CFile::SetStatus	named	SetFileAttributes/SetFileTime from a CFileStatus, throws on failure
+0x00702FA3	301	CFile::SetStatus	named	MFC 6: static CFile::SetStatus(LPCTSTR, const CFileStatus&): GetFileAttributesA (error -> ThrowOsError); clears read-only first when needed (SetFileAttributesA); when m_mtime is set converts mtime / atime / ctime (AfxTimeToFileTime), opens the file (CreateFileA GENERIC_READ|WRITE, OPEN_EXISTING), SetFileTime, CloseHandle (each failure throws); finally SetFileAttributesA(new attributes); lib, unused [dead: no caller or pointer]
 0x007030D0	32	dead_7030D0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007030F0	33	AfxThrowFileException	named	maps the error code and throws the CFileException
+0x007030F0	33	CFileException::ThrowOsError	named	MFC 6: static CFileException::ThrowOsError(LONG lOsError, LPCTSTR lpszFileName): lOsError != 0 -> AfxThrowFileException(OsErrorToException(lOsError) 0x703296, lOsError, name) 0x7031D5; callers every CFile method (Read / Write / Seek / Close / Flush / Lock ..), Duplicate, the dead SetStatus / AfxTimeToFileTime and dead_701514. CORRECTION: was AfxThrowFileException
 0x00703111	36	dead_703111	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703135	160	CFileException::GetErrorMessage	named	"vt slot 3: builds the message (""an unnamed file"" when no name)"
-0x007031D5	106	AfxAllocNode14	named	allocates a 0x14-byte object (throws on failure), sets CString, EH frame
+0x00703135	160	CFileException::GetErrorMessage	named	"MFC 6: CFileException::GetErrorMessage(lpszError, nMaxError, pnHelpContext) (vtable 0x745E4C slot 3): *pnHelpContext = m_cause +8 + AFX_IDP_FILE_NONE 0xF1A0; file name m_strFileName +0x10 or the ""unnamed file"" string AFX_IDS_UNNAMED_FILE 0xF006; AfxFormatString1(msg, m_cause + 0xF1A0, name) 0x70B2AC; lstrcpyn into the buffer; TRUE"
+0x007031D5	106	AfxThrowFileException	named	MFC 6: AfxThrowFileException(int cause, LONG lOsError, LPCTSTR lpszFileName): new CFileException (0x14 bytes: CException ctor, vtable 0x745E4C, m_cause +8, m_lOsError +0xC, m_strFileName +0x10 = name) and _CxxThrowException(&p, ThrowInfo 0x77F440); called by the CFile / CStdioFile ctors, Read / Write / Seek / Flush / Close / ReadString and ThrowOsError. CORRECTION: was AfxAllocNode14
 0x0070323F	1	dead_70323F	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703240	86	AfxMapError_A	named	maps a Win32 error code (small range) to an MFC exception cause
-0x00703296	502	AfxMapError_B	named	maps a Win32 error code (0x10B..0x3E4 range) to an MFC exception cause
+0x00703240	86	CFileException::ErrnoToException	named	MFC 6: static CFileException::ErrnoToException(int nErrno): EPERM 1 / EACCES 13 -> accessDenied 5, ENOENT 2 / ENFILE 23 -> fileNotFound 2, EIO 5 / EINVAL 22 -> hardIO 10, EBADF 9 -> invalidFile 6, EMFILE 24 -> tooManyOpenFiles 4, ENOSPC 28 -> diskFull 13, EDEADLOCK 36 -> sharingViolation 11, else generic 1; dead chain: only from dead_703111 (ThrowErrno). CORRECTION: was AfxMapError_A
+0x00703296	502	CFileException::OsErrorToException	named	MFC 6: static CFileException::OsErrorToException(LONG lOsErr): big switch over Win32 error codes (0..0x10B, 0x3E3..0x3E7; jump tables 0x70348C / 0x7034F0) -> CFileException cause (fileNotFound 2, badPath 3, tooManyOpenFiles 4, accessDenied 5, invalidFile 6, removeCurrentDir 7, directoryFull 8, badSeek 9, hardIO 10, sharingViolation 11, lockViolation 12, diskFull 13, endOfFile 14, none 0), default generic 1; callers CFile::Open, CStdioFile::Open, ThrowOsError. CORRECTION: was AfxMapError_B
 0x0070348C	136	sub_70348C	named	unregistered function, reached by call / pointer from 0x3032CF (gaps.py 2026-11-06)
-0x00703514	9	AfxLockTempMaps	named	increments the module thread-state lock count
-0x0070351D	250	AfxUnlockTempMaps	named	decrements the temp-map lock; at zero deletes the temporary CWnd/CMenu maps and frees memory
-0x00703617	101	CWinThread_Ctor_Maps	named	constructs the thread's maps (CMap 10 and 4 buckets) under an EH frame
-0x0070367C	174	CWnd::FromHandle_Create	named	CMap lookup by HWND; creates the temporary CWnd with the allocation hook (EH frame)
-0x0070373B	101	CWnd::DestroyAllChildren	named	iterates the child map (CMap_GetNextAssoc) destroying each window, then RemoveAll
+0x00703514	9	AfxLockTempMaps	named	MFC 6: AfxLockTempMaps: AfxGetModuleThreadState()->m_nTempMapLock (+0x10)++; callers AfxTermThread, CWinThread::OnIdle (the raw hit in the jump table 0x70348C is data)
+0x0070351D	250	AfxUnlockTempMaps	named	MFC 6: AfxUnlockTempMaps(bDeleteTemps): m_nTempMapLock-- ; at 0 with bDeleteTemps: (unless -1) the current thread's m_lpfnOleTermOrFreeLib +0x54 (FALSE, FALSE); CHandleMap::DeleteTemp on the HGDIOBJ +0x20 / HDC +0x1C / HMENU +0x18 / HWND +0x14 / HIMAGELIST +0x24 maps; then refills the thread's safety-pool buffer (+0xC) to the app's m_nSafetyPoolSize +0xB8 (_msize / free / malloc); returns lock != 0
+0x00703617	101	CHandleMap::CHandleMap	named	MFC 6: CHandleMap ctor(CRuntimeClass* pClass, size_t nOffset, int nHandles): m_permanentMap +4 = CMapPtrToPtr(10), m_temporaryMap +0x20 = CMapPtrToPtr(4) with InitHashTable(7, FALSE), vtable 0x74685C, m_pClass +0x3C, m_nOffset +0x40, m_nHandles +0x44; callers AfxGetModuleThreadState (HWND map), the GDI / DC / HGDIOBJ map getters. CORRECTION: was CWinThread_Ctor_Maps
+0x0070367C	174	CHandleMap::FromHandle	named	MFC 6: CHandleMap::FromHandle(h): NULL -> NULL; permanent map GetValueAt; temporary map hit -> refreshes the stored handle(s) at m_nOffset (+ the second when m_nHandles == 2); else AfxSetNewHandler(AfxCriticalNewHandler 0x70AB1A), m_pClass->CreateObject (NULL -> AfxThrowMemoryException), m_temporaryMap[h] = obj, restores the handler, stores the handle(s) into the object; callers CWnd::FromHandle 0x704929, CDC / CGdiObject::FromHandle, AfxInitHandleMaps_Gdi. CORRECTION: was CWnd::FromHandle_Create
+0x0070373B	101	CHandleMap::DeleteTemp	named	MFC 6: CHandleMap::DeleteTemp: NULL map -> nothing; walks m_temporaryMap +0x20 (GetNextAssoc), clears the handle(s) at m_nOffset +0x40 (two when m_nHandles +0x44 == 2), deletes each temporary wrapper (vt +4, flag 1); then RemoveAll; callers AfxUnlockTempMaps (x5), ~CHandleMap 0x6E6D08, dead_7037A0. CORRECTION: was CWnd::DestroyAllChildren
 0x007037A0	65	dead_7037A0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007037E1	23	CWnd::ForwardVirtual21	named	vt slot 37: forwards to the proxy object's virtual slot 21
+0x007037E1	23	CWnd::OnAmbientProperty	named	MFC 6: CWnd::OnAmbientProperty(COleControlSite*, DISPID, VARIANT*) (vtable 0x746DA8 slot 37, also CTempWnd 0x746EC4): forwards the 3 arguments to m_pCtrlCont +0x34 (vt +0x54); only from the vtables. CORRECTION: was CWnd::ForwardVirtual21
 0x007037F8	56	dead_7037F8	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703830	50	CWnd::CheckRadioButton_703830	named	MFC CWnd wrapper: CheckRadioButton on the HWND at +0x1C, or the forwarding object at +0x34 when present
-0x00703862	42	CWnd::GetDlgItem_703862	named	MFC CWnd wrapper: GetDlgItem on the HWND at +0x1C, or the forwarding object at +0x34 when present
+0x00703830	50	CWnd::CheckRadioButton	named	MFC 6: CWnd::CheckRadioButton(first, last, check): m_pCtrlCont +0x34 NULL -> CheckRadioButton(m_hWnd +0x1C, ..), else container vt +0x68; lib, unused (raw hit 0x703844 is inside `push [ecx+0x1C]`) [dead: no caller or pointer]
+0x00703862	42	CWnd::GetDlgItem	named	MFC 6: CWnd::GetDlgItem(nID): no m_pCtrlCont -> CWnd::FromHandle(GetDlgItem(m_hWnd, nID)), else container vt +0x70; dead chain: only from dead_705368 (the raw hit 0x703844 is the 0x71 byte of `push [ecx+0x1C]` inside CheckRadioButton)
 0x0070388C	46	CWnd__GetDlgItem_703862_chunk_70388C	named	a piece of CWnd::GetDlgItem_703862 placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x007038BA	50	CWnd::GetDlgItemInt_7038BA	named	MFC CWnd wrapper: GetDlgItemInt on the HWND at +0x1C, or the forwarding object at +0x34 when present
-0x007038EC	50	CWnd::GetDlgItemTextA_7038EC	named	MFC CWnd wrapper: GetDlgItemTextA on the HWND at +0x1C, or the forwarding object at +0x34 when present
-0x0070391E	56	CWnd::SendDlgItemMessageA_70391E	named	MFC CWnd wrapper: SendDlgItemMessageA on the HWND at +0x1C, or the forwarding object at +0x34 when present
-0x00703956	53	CWnd::SetDlgItemInt_703956	named	MFC CWnd wrapper: SetDlgItemInt on the HWND at +0x1C, or the forwarding object at +0x34 when present
+0x007038BA	50	CWnd::GetDlgItemInt	named	MFC 6: CWnd::GetDlgItemInt(nID, lpTrans, bSigned): GetDlgItemInt or container vt +0x74; lib, unused (raw hit 0x703894 is inside the call at 0x703893 of the GetDlgItem(int, HWND*) overload 0x70388C) [dead: no caller or pointer]
+0x007038EC	50	CWnd::GetDlgItemText	named	MFC 6: CWnd::GetDlgItemText(nID, lpStr, nMaxCount): GetDlgItemTextA or container vt +0x78; lib, unused (raw hit 0x7038CE is an instruction byte) [dead: no caller or pointer]
+0x0070391E	56	CWnd::SendDlgItemMessage	named	MFC 6: CWnd::SendDlgItemMessage(nID, msg, wParam, lParam): SendDlgItemMessageA or container vt +0x7C; lib, unused (raw hit 0x703900 is an instruction byte) [dead: no caller or pointer]
+0x00703956	53	CWnd::SetDlgItemInt	named	MFC 6: CWnd::SetDlgItemInt(nID, nValue, bSigned): SetDlgItemInt or container vt +0x80; lib, unused (raw hit 0x703940 is an instruction byte) [dead: no caller or pointer]
 0x0070398B	86	dead_70398B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007039E1	79	CWnd::RedrawWindow	named	RedrawWindow(hwnd, update rect, region, flags) or the proxy
-0x00703A30	51	CWnd::PreTranslateInput	named	IsDialogMessage for dialogs or delegates to the thread object
-0x00703A63	26	CWnd::GetStyle	named	GetWindowLong(GWL_STYLE) or the proxy
-0x00703A7D	26	CWnd::GetExStyle	named	GetWindowLong(GWL_EXSTYLE) or the proxy
+0x007039E1	79	CWnd::ScrollWindowEx	named	MFC 6: CWnd::ScrollWindowEx(dx, dy, lpRectScroll, lpRectClip, CRgn* prgnUpdate, lpRectUpdate, flags): ScrollWindowEx(m_hWnd, .., region handle +4, ..); with a control container and SW_SCROLLCHILDREN (flags & 1) -> container vt +0x58 (dx, dy); returns the result; lib, unused. CORRECTION: was CWnd::RedrawWindow [dead: no caller or pointer]
+0x00703A30	51	CWnd::IsDialogMessage	named	MFC 6: CWnd::IsDialogMessage(LPMSG): WF_OLECTLCONTAINER (m_nFlags +0x24 & 0x100) -> module state m_pOccManager +0x1038 vt +0x24 (this, msg); else IsDialogMessageA(m_hWnd, msg); dead chain: only from dead_707349 (CWnd::PreTranslateInput). CORRECTION: was CWnd::PreTranslateInput
+0x00703A63	26	CWnd::GetStyle	named	MFC 6: CWnd::GetStyle: m_pCtrlSite +0x38 NULL -> GetWindowLongA(m_hWnd, GWL_STYLE), else site vt +0x70; 10+ CWnd callers
+0x00703A7D	26	CWnd::GetExStyle	named	MFC 6: CWnd::GetExStyle: GetWindowLongA(GWL_EXSTYLE) or site vt +0x74; callers CalcWindowRect, ScreenToClientRect, dead_709817
 0x00703A97	49	dead_703A97	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703AC8	49	CWnd::ModifyStyleEx_Wrap	named	ModifyStyleEx(remove, add, flags) on the HWND or the proxy
+0x00703AC8	49	CWnd::ModifyStyleEx_member	named	MFC 6: CWnd::ModifyStyleEx(dwRemove, dwAdd, nFlags) member: no m_pCtrlSite +0x38 -> static ModifyStyleEx(m_hWnd, ..) 0x7045DB, else site vt +0x7C; lib, unused. Name was CWnd::ModifyStyleEx_Wrap [dead: no caller or pointer]
 0x00703AF9	39	dead_703AF9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00703B20	142	dead_703B20	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703BAE	65	CWnd::MoveWindow	named	MoveWindow(x,y,w,h,repaint) or the proxy
-0x00703BEF	79	CWnd::SetWindowPos	named	SetWindowPos(after,x,y,w,h,flags) or the proxy
-0x00703C3E	39	CWnd::ShowWindow	named	ShowWindow(cmd) or the proxy
-0x00703C65	27	CWnd::IsWindowEnabled	named	IsWindowEnabled or the proxy
-0x00703C80	39	CWnd::EnableWindow	named	EnableWindow(flag) or the proxy
-0x00703CA7	33	CWnd::SetFocus_703CA7	named	MFC CWnd wrapper: SetFocus on the HWND at +0x1C, or the forwarding object at +0x38 when present
-0x00703CC8	39	CWnd::ForwardArgs	named	forwards variable arguments to the proxy object's virtual slot 22
+0x00703BAE	65	CWnd::MoveWindow	named	MFC 6: CWnd::MoveWindow(x, y, w, h, bRepaint): MoveWindow(m_hWnd, ..) or site vt +0x98; lib, unused [dead: no caller or pointer]
+0x00703BEF	79	CWnd::SetWindowPos	named	MFC 6: CWnd::SetWindowPos(pWndInsertAfter, x, y, cx, cy, flags): SetWindowPos(m_hWnd, after ? after->m_hWnd : 0, ..) or site vt +0x9C; callers CWnd::CenterWindow, CWinApp::HideApplication (raw hit inside MoveWindow is an instruction byte)
+0x00703C3E	39	CWnd::ShowWindow	named	MFC 6: CWnd::ShowWindow(nCmdShow): ShowWindow(m_hWnd) or site vt +0xA0; callers CWinThread::OnIdle, CFrameWnd::ShowOwnedWindows, CWinApp::HideApplication
+0x00703C65	27	CWnd::IsWindowEnabled	named	MFC 6: CWnd::IsWindowEnabled: IsWindowEnabled(m_hWnd) or site vt +0xA4
+0x00703C80	39	CWnd::EnableWindow	named	MFC 6: CWnd::EnableWindow(bEnable): EnableWindow(m_hWnd) or site vt +0xA8; callers CCmdUI::Enable, CWnd::EnableScrollBarCtrl
+0x00703CA7	33	CWnd::SetFocus	named	MFC 6: CWnd::SetFocus: CWnd::FromHandle(SetFocus(m_hWnd)) or site vt +0xAC; callers CCmdUI::Enable, CWnd::OnSysCommand. Name was CWnd::SetFocus_703CA7
+0x00703CC8	39	CWnd::InvokeHelper	named	MFC 6: CWnd::InvokeHelper(this, dispid, wFlags, vtRet, pvRet, pbParamInfo, ...) (cdecl varargs): m_pCtrlSite +0x38 -> site InvokeHelperV (vt +0x58) with the va_list; dead chain: only from dead_703CEF. CORRECTION: was CWnd::ForwardArgs
 0x00703CEF	64	dead_703CEF	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703D2F	37	CWnd::GetFocusChild	named	proxy-based focus query
+0x00703D2F	37	CWnd::GetDSCCursor	named	MFC 6: CWnd::GetDSCCursor: no m_pCtrlSite -> NULL; site->EnableDSC (vt +0xB0), returns site->m_pDataSourceControl (+0x88)->GetCursor (vt 0); lib, unused. CORRECTION: was CWnd::GetFocusChild [dead: no caller or pointer]
 0x00703D54	52	dead_703D54	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00703D88	61	CWnd::NotifyParent_Lookup	named	looks up the parent's CWnd in a CMap and notifies it (virtual slot 35)
-0x00703DC5	31	CWnd::NotifyParent	named	notifies the parent proxy (virtual slot 35)
-0x00703DE4	46	CWnd::Detach_Lookup	named	looks up the window in a CMap and clears its owner link
-0x00703E12	68	CWnd::LoadSysColors	named	reads the system colors (COLOR_BTNFACE, BTNSHADOW, ...) into the object
-0x00703E56	88	AfxUpdateSysMetrics	named	reads SM_CXSCREEN/SM_CYSCREEN and refreshes the border metrics
-0x00703EAE	26	InitFields6_703EAE	named	initializes 6 field(s) from constants/arguments (1, 0, 0, 0)
-0x00703EC8	43	CWnd::ForEachChildEH	named	child-window iteration under an EH frame
-0x00703EF3	263	CWnd::ComputeLayout	named	layout helper filling a rect array from size/ratio parameters (263 bytes)
-0x00703FFA	271	CCmdTarget::OnCmdMsg	named	vt slot 3: finds the message map entry (AfxFindMessageEntry) and dispatches; handles layout
-0x00704109	6	vt_7466E0::Nop_704109	named	empty function (returns immediately)
-0x0070410F	5	vt_7466E0::Nop_70410F	named	empty function (returns immediately)
-0x00704114	3	vt_7466E0::Nop_704114	named	empty function (returns immediately)
-0x00704117	3	vt_7466E0::Nop_704117	named	empty function (returns immediately)
-0x0070411A	8	vt_7466E0::Nop_70411A	named	empty function (returns immediately)
-0x00704122	21	AfxEndModalLock_Inc	named	module state: virtual slot 36 with +1
-0x00704137	21	AfxEndModalLock_Dec	named	module state: virtual slot 36 with -1
+0x00703D88	61	CWnd::AttachControlSite	named	MFC 6: CWnd::AttachControlSite(CHandleMap* pMap): this and no m_pCtrlSite -> parent CWnd = pMap permanent map (+4) GetValueAt(GetParent(m_hWnd)); its m_pCtrlCont +0x34 -> container vt +0x8C(this) (attach the matching site); callers CWnd::FromHandle 0x704929, CWnd::Attach 0x70496E. CORRECTION: was CWnd::NotifyParent_Lookup
+0x00703DC5	31	CWnd::AttachControlSite_parent	named	MFC 6: CWnd::AttachControlSite(CWnd* pWndParent): no m_pCtrlSite and parent m_pCtrlCont +0x34 -> container vt +0x8C(this); dead chain: only from dead_70796F. CORRECTION: was CWnd::NotifyParent
+0x00703DE4	46	COleControlContainer::AttachControlSite	named	MFC 6: COleControlContainer::AttachControlSite(CWnd* pWnd) (this = container): site = m_siteMap (+0x20).GetValueAt(pWnd->m_hWnd); found -> detaches it from its old window (old->m_pCtrlSite +0x38 = 0 when it pointed at the site), pWnd->m_pCtrlSite = site, site->m_pWndCtrl +0x24 = pWnd; lib, unused (no OLE control container is linked in). CORRECTION: was CWnd::Detach_Lookup [dead: no caller or pointer]
+0x00703E12	68	AUX_DATA::UpdateSysColors	named	MFC 6: AUX_DATA::UpdateSysColors (afxData 0x7C9100..): clrBtnFace +0x28 / clrBtnShadow +0x2C / clrBtnHilite +0x30 / clrBtnText +0x34 / clrWindowFrame +0x38 = GetSysColor(15 / 16 / 20 / 18 / 6), hbrBtnFace +0x24 / hbrWindowFrame +0x20 = GetSysColorBrush(15 / 6); callers CWnd::OnSysColorChange, AUX_DATA ctor. CORRECTION: was CWnd::LoadSysColors
+0x00703E56	88	AUX_DATA::UpdateSysMetrics	named	MFC 6: AUX_DATA::UpdateSysMetrics: cxIcon +8 / cyIcon +0xC = GetSystemMetrics(SM_CXICON / SM_CYICON), the version-dependent border metrics (0x70D158 or 0x70D188 by +0x68), screen DC LOGPIXELSX / LOGPIXELSY -> +0x18 / +0x1C; callers CWnd::OnDisplayChange, AUX_DATA ctor. Name was AfxUpdateSysMetrics
+0x00703EAE	26	CCmdTarget::CCmdTarget	named	MFC 6: CCmdTarget ctor body: m_dwRef +4 = 1, m_pOuterUnknown +8 = 0, m_xInnerUnknown +0xC = 0, m_xDispatch.m_vtbl +0x10 = 0, m_bResultExpected +0x14 = TRUE, m_xConnPtContainer +0x18 = 0; callers the CWnd and CWinThread ctors. CORRECTION: was InitFields6_703EAE
+0x00703EC8	43	CCmdTarget::~CCmdTarget	named	MFC 6: CCmdTarget dtor: m_xDispatch.m_vtbl +0x10 set -> COleDispatchImpl::Disconnect (vt +0x1C on &m_xDispatch) (EH frame); callers ~CWnd 0x704FE3, ~CWinThread, unwind funclets. CORRECTION: was CWnd::ForEachChildEH
+0x00703EF3	263	_AfxDispatchCmdMsg	named	MFC 6 (cmdtarg.cpp): _AfxDispatchCmdMsg(pTarget, nID, nCode, pfn, pExtra, nSig, pHandlerInfo): handler-info query -> fills {pTarget, pfn}, TRUE; else calls pfn with the arguments of its signature (AfxSig_vv, bv, vw, vW, vpv, bpv, bwpv, ...; CCmdUI kinds also clear m_bContinueRouting +0x1C); returns the result or TRUE; caller CCmdTarget::OnCmdMsg. CORRECTION: was CWnd::ComputeLayout
+0x00703FFA	271	CCmdTarget::OnCmdMsg	named	MFC 6: CCmdTarget::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo) (slot 3 of CWinThread / CWnd / CTempWnd / CWinApp vtables): CN_EVENT -2 -> afxOccManager (module state +0x1038) vt +4; CN_OLECOMMAND -3 -> OLE command map (vt +0x2C) search by command group GUID (memcmp 16) and id, sets the command's flags; else msg = HIWORD(nCode) (0 or CN_UPDATE_COMMAND_UI -> WM_COMMAND), walks GetMessageMap (vt +0x28) with AfxFindMessageEntry and dispatches through _AfxDispatchCmdMsg; FALSE when unhandled
+0x00704109	6	CCmdTarget::IsInvokeAllowed	named	MFC 6: CCmdTarget::IsInvokeAllowed(DISPID) (slot 5 of the CWinThread / CWnd / CTempWnd / CWinApp vtables): returns TRUE. Name was vt_7466E0::Nop_704109
+0x0070410F	5	CCmdTarget::GetDispatchIID	named	MFC 6: CCmdTarget::GetDispatchIID(IID*) (slot 6): returns FALSE. Name was vt_7466E0::Nop_70410F
+0x00704114	3	CCmdTarget::GetTypeInfoCount	named	MFC 6: CCmdTarget::GetTypeInfoCount (slot 7): returns 0. Name was vt_7466E0::Nop_704114
+0x00704117	3	CCmdTarget::GetTypeLibCache	named	MFC 6: CCmdTarget::GetTypeLibCache (slot 8): returns NULL. Name was vt_7466E0::Nop_704117
+0x0070411A	8	CCmdTarget::GetTypeLib	named	MFC 6: CCmdTarget::GetTypeLib(lcid, ppTypeLib) (slot 9): returns TYPE_E_CANTLOADLIBRARY 0x80029C4A. Name was vt_7466E0::Nop_70411A
+0x00704122	21	CCmdTarget::BeginWaitCursor	named	MFC 6: CCmdTarget::BeginWaitCursor: AfxGetApp() (module state +4)->DoWaitCursor(1) (vt +0x90); caller CWnd::WinHelp 0x7057AD. CORRECTION: was AfxEndModalLock_Inc
+0x00704137	21	CCmdTarget::EndWaitCursor	named	MFC 6: CCmdTarget::EndWaitCursor: AfxGetApp()->DoWaitCursor(-1) (vt +0x90); tail of CWaitCursor::~CWaitCursor 0x6E7143, caller CWnd::WinHelp. CORRECTION: was AfxEndModalLock_Dec
 0x0070414C	21	dead_70414C	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00704161	6	CWnd::GetMessageMap_A	named	vt slot 10: returns the message map 0x7468D8
-0x00704167	6	CWnd::GetThisMessageMap_B	named	vt slot 12: returns the message map 0x7468F8
-0x0070416D	6	CWnd::GetThisMessageMap_C	named	vt slot 15: returns 0x746928
-0x00704173	6	CWnd::GetThisMessageMap_D	named	vt slot 14: returns 0x746960
-0x00704179	50	CWinThread::ReleaseTypeLib	named	locks global 0xD and unlocks the type-lib cache
-0x007041AB	4	vt_7466E0::Nop_7041AB	named	empty function (returns immediately)
-0x007041AF	5	vt_7466E0::Nop_7041AF	named	empty function (returns immediately)
-0x007041B4	6	CWnd::GetThisMessageMap_E	named	vt slot 13: returns 0x746978
-0x007041BA	5	vt_7466E0::Nop_7041BA	named	empty function (returns immediately)
-0x007041BF	5	vt_7466E0::Nop_7041BF	named	empty function (returns immediately)
-0x007041C4	6	CWnd::GetThisMessageMap_F	named	vt slot 11: returns 0x746988
+0x00704161	6	CCmdTarget::GetMessageMap	named	MFC 6: CCmdTarget::GetMessageMap (slot 10 of the CWinThread vtable 0x7466E0; CWinThread has no map of its own): returns &CCmdTarget::messageMap 0x7468D8 (base NULL; it is also the base of CWnd::messageMap). Name was CWnd::GetMessageMap_A
+0x00704167	6	CCmdTarget::GetDispatchMap	named	MFC 6: CCmdTarget::GetDispatchMap (slot 12 of the four CCmdTarget-derived vtables): returns &CCmdTarget::dispatchMap 0x7468F8. Name was CWnd::GetThisMessageMap_B
+0x0070416D	6	CCmdTarget::GetEventSinkMap	named	MFC 6: CCmdTarget::GetEventSinkMap (slot 15): returns &CCmdTarget::eventsinkMap 0x746928. Name was CWnd::GetThisMessageMap_C
+0x00704173	6	CCmdTarget::GetInterfaceMap	named	MFC 6: CCmdTarget::GetInterfaceMap (slot 14): returns &CCmdTarget::interfaceMap 0x746960. Name was CWnd::GetThisMessageMap_D
+0x00704179	50	CCmdTarget::OnFinalRelease	named	MFC 6: CCmdTarget::OnFinalRelease (slot 4 of CWinThread 0x7466E0 / CWinApp 0x7470D4): AfxLockGlobals(CRIT_TYPELIBCACHE 13), GetTypeLibCache (vt +0x20) -> CTypeLibCache::Unlock, AfxUnlockGlobals(13), delete this (vt +4, flag 1). CORRECTION: was CWinThread::ReleaseTypeLib
+0x007041AB	4	CCmdTarget::OnCreateAggregates	named	MFC 6: CCmdTarget::OnCreateAggregates (slot 16): returns TRUE. Name was vt_7466E0::Nop_7041AB
+0x007041AF	5	CCmdTarget::GetInterfaceHook	named	MFC 6: CCmdTarget::GetInterfaceHook(const void*) (slot 17): returns NULL. Name was vt_7466E0::Nop_7041AF
+0x007041B4	6	CCmdTarget::GetConnectionMap	named	MFC 6: CCmdTarget::GetConnectionMap (slot 13): returns &CCmdTarget::connectionMap 0x746978. Name was CWnd::GetThisMessageMap_E
+0x007041BA	5	CCmdTarget::GetConnectionHook	named	MFC 6: CCmdTarget::GetConnectionHook(const IID&) (slot 19): returns NULL. Name was vt_7466E0::Nop_7041BA
+0x007041BF	5	CCmdTarget::GetExtraConnectionPoints	named	MFC 6: CCmdTarget::GetExtraConnectionPoints(CPtrArray*) (slot 18): returns FALSE. Name was vt_7466E0::Nop_7041BF
+0x007041C4	6	CCmdTarget::GetCommandMap	named	MFC 6: CCmdTarget::GetCommandMap (slot 11): returns &CCmdTarget::commandMap 0x746988 (OLE command map). Name was CWnd::GetThisMessageMap_F
 0x007041CA	10	dead_7041CA	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007041D4	38	CCmdUI::CCmdUI	named	command-UI ctor (vtable 0x7469A0)
-0x007041FA	144	CCmdUI::Enable_Impl	named	vt slot 0: enables a window or menu item, restoring focus as needed
-0x0070428A	98	CCmdUI::Enable	named	vt slot 1: sends the toolbar/control enable messages (0x87, 0xF1)
-0x007042EC	86	CCmdUI::SetCheck	named	vt slot 2: sets the checked state in a menu/toolbar (uses the check bitmap)
-0x00704342	87	CCmdUI::SetText	named	vt slot 3: sets the window text or the menu item text for a command UI
-0x00704399	97	CCmdUI::Test	named	tests a command id against the object's id (0 means all)
-0x007043FA	5	StaticInit_DragListMsg_Thunk	named	"static init thunk: registers ""commctrl_DragListMsg"""
-0x007043FF	17	StaticInit_DragListMsg	named	"RegisterWindowMessageA(""commctrl_DragListMsg"") into g_0x7CAA64"
-0x00704410	10	StaticInit_Global0_Group	named	static init of the global CWnd (handle 0) and its atexit
-0x0070441A	13	StaticInit_CWnd_Global0	named	static init: CWnd constructed with handle 0 at g_0x7CAA28
-0x00704427	12	StaticInit_Atexit_A	named	atexit registration (MFC static)
+0x007041D4	38	CCmdUI::CCmdUI	named	MFC 6: CCmdUI ctor: vtable 0x7469A0, m_nID +4, m_nIndex +8, m_pMenu +0xC, m_pSubMenu +0x10, m_pOther +0x14, m_bEnableChanged +0x18, m_bContinueRouting +0x1C, m_nIndexMax +0x20, m_pParentMenu +0x24 = 0; callers CCmdUI-derived ctor 0x705EA0, CWnd::UpdateDialogControls
+0x007041FA	144	CCmdUI::Enable	named	MFC 6: CCmdUI::Enable(bOn) (vtable 0x7469A0 slot 0): menu item (m_pMenu +0xC, no m_pSubMenu +0x10) -> EnableMenuItem(hMenu +4, m_nIndex +8, MF_BYPOSITION | (bOn ? MF_ENABLED : MF_GRAYED|MF_DISABLED)); control m_pOther +0x14: disabling the focused control first moves the focus (GetNextDlgTabItem of its parent), then CWnd::EnableWindow; m_bEnableChanged +0x18 = TRUE. Name was CCmdUI::Enable_Impl
+0x0070428A	98	CCmdUI::SetCheck	named	MFC 6: CCmdUI::SetCheck(nCheck) (slot 1): menu -> CheckMenuItem(MF_BYPOSITION | (nCheck ? MF_CHECKED : 0)); control answering WM_GETDLGCODE 0x87 with DLGC_BUTTON 0x2000 -> BM_SETCHECK 0xF1(nCheck). CORRECTION: was CCmdUI::Enable
+0x007042EC	86	CCmdUI::SetRadio	named	MFC 6: CCmdUI::SetRadio(bOn) (slot 2): SetCheck(bOn != 0) (vt +4); menu item -> loads afxData.hbmMenuDot 0x7C9118 on first use (AfxLoadDotBitmap 0x70D245) and SetMenuItemBitmaps(MF_BYPOSITION, 0, dot). CORRECTION: was CCmdUI::SetCheck
+0x00704342	87	CCmdUI::SetText	named	MFC 6: CCmdUI::SetText(lpszText) (slot 3): menu item -> GetMenuState and ModifyMenuA(MF_BYPOSITION | MF_STRING, keeping the other state bits, m_nID +4, text); control -> AfxSetWindowText(hwnd, text) 0x70A9FC
+0x00704399	97	CCmdUI::DoUpdate	named	MFC 6: CCmdUI::DoUpdate(CCmdTarget* pTarget, bDisableIfNoHndler): m_nID 0 or LOWORD 0xFFFF -> TRUE; m_bEnableChanged = 0, pTarget->OnCmdMsg(m_nID, CN_UPDATE_COMMAND_UI -1, this, 0) (vt +0xC); with bDisableIfNoHndler and no Enable call: OnCmdMsg(m_nID, CN_COMMAND 0, this, &info) and Enable(result); returns the first result; caller CWnd::UpdateDialogControls. CORRECTION: was CCmdUI::Test
+0x007043FA	5	StaticInit_CWnd_m_nMsgDragList	named	MFC 6 (wincore.cpp): CRT initializer (table 0x783B9C) jumping to 0x7043FF. Name was StaticInit_DragListMsg_Thunk
+0x007043FF	17	StaticInit_CWnd_m_nMsgDragList_Body	named	"MFC 6: CWnd::m_nMsgDragList 0x7CAA64 = RegisterWindowMessageA(""commctrl_DragListMsg""). Name was StaticInit_DragListMsg"
+0x00704410	10	StaticInit_wndTop	named	MFC 6 (wincore.cpp): CRT initializer (table 0x783BA0) of CWnd::wndTop: ctor 0x70441A + atexit 0x704427. Name was StaticInit_Global0_Group
+0x0070441A	13	StaticInit_wndTop_Ctor	named	MFC 6: const CWnd CWnd::wndTop((HWND)HWND_TOP 0) at 0x7CAA28 (CWnd(HWND) 0x704546). Name was StaticInit_CWnd_Global0
+0x00704427	12	StaticInit_wndTop_Atexit	named	MFC 6: atexit(sub_704433) = wndTop destructor. Name was StaticInit_Atexit_A
 0x00704433	27	sub_704433	named	unregistered function, reached by call / pointer from 0x304428 (gaps.py 2026-11-06)
-0x0070444E	10	StaticInit_Global1_Group	named	static init of the global CWnd (handle 1) and its atexit
-0x00704458	13	StaticInit_CWnd_Global1	named	static init: CWnd constructed with handle 1 at g_0x7CA9E8
-0x00704465	12	StaticInit_Atexit_B	named	atexit registration (MFC static)
+0x0070444E	10	StaticInit_wndBottom	named	MFC 6: CRT initializer (table 0x783BA4) of CWnd::wndBottom: ctor 0x704458 + atexit 0x704465. Name was StaticInit_Global1_Group
+0x00704458	13	StaticInit_wndBottom_Ctor	named	MFC 6: const CWnd CWnd::wndBottom((HWND)HWND_BOTTOM 1) at 0x7CA9E8. Name was StaticInit_CWnd_Global1
+0x00704465	12	StaticInit_wndBottom_Atexit	named	MFC 6: atexit(sub_704471) = wndBottom destructor. Name was StaticInit_Atexit_B
 0x00704471	27	sub_704471	named	unregistered function, reached by call / pointer from 0x304466 (gaps.py 2026-11-06)
-0x0070448C	10	StaticInit_GlobalM1_Group	named	static init of the global CWnd (handle -1) and its atexit
-0x00704496	13	StaticInit_CWnd_GlobalM1	named	static init: CWnd constructed with handle -1 at g_0x7CA9A8 (wndTop)
-0x007044A3	12	StaticInit_Atexit_C	named	atexit registration (MFC static)
+0x0070448C	10	StaticInit_wndTopMost	named	MFC 6: CRT initializer (table 0x783BA8) of CWnd::wndTopMost: ctor 0x704496 + atexit 0x7044A3. Name was StaticInit_GlobalM1_Group
+0x00704496	13	StaticInit_wndTopMost_Ctor	named	MFC 6: const CWnd CWnd::wndTopMost((HWND)HWND_TOPMOST -1) at 0x7CA9A8. CORRECTION: the old purpose called it wndTop
+0x007044A3	12	StaticInit_wndTopMost_Atexit	named	MFC 6: atexit(sub_7044AF) = wndTopMost destructor. Name was StaticInit_Atexit_C
 0x007044AF	27	sub_7044AF	named	unregistered function, reached by call / pointer from 0x3044A4 (gaps.py 2026-11-06)
-0x007044CA	10	StaticInit_GlobalM2_Group	named	static init of the global CWnd (handle -2) and its atexit
-0x007044D4	13	StaticInit_CWnd_GlobalM2	named	static init: CWnd constructed with handle -2 at g_0x7CA968 (wndBottom)
-0x007044E1	12	StaticInit_Atexit_D	named	atexit registration (MFC static)
+0x007044CA	10	StaticInit_wndNoTopMost	named	MFC 6: CRT initializer (table 0x783BAC) of CWnd::wndNoTopMost: ctor 0x7044D4 + atexit 0x7044E1. Name was StaticInit_GlobalM2_Group
+0x007044D4	13	StaticInit_wndNoTopMost_Ctor	named	MFC 6: const CWnd CWnd::wndNoTopMost((HWND)HWND_NOTOPMOST -2) at 0x7CA968. CORRECTION: the old purpose called it wndBottom
+0x007044E1	12	StaticInit_wndNoTopMost_Atexit	named	MFC 6: atexit(sub_7044ED) = wndNoTopMost destructor. Name was StaticInit_Atexit_D
 0x007044ED	27	sub_7044ED	named	unregistered function, reached by call / pointer from 0x3044E2 (gaps.py 2026-11-06)
-0x00704508	34	CWnd::CWnd	named	CWnd ctor (vtable 0x746DA8), zero 0x20 bytes of members
-0x0070452A	28	vt_746DA8::DeletingDtor_70452A	named	scalar deleting destructor: runs CWnd::~CWnd then operator delete when flag&1
-0x00704546	44	CWnd::CWnd_hwnd	named	CWnd ctor attaching a window handle (+0x1C)
-0x00704572	79	ModifyStyle_Helper	named	reads GetWindowLong, clears and sets bits, writes back when changed (returns 0 if unchanged)
-0x007045C1	26	CWnd::ModifyStyle	named	ModifyStyle_Helper(hwnd, GWL_STYLE, remove, add)
-0x007045DB	26	CWnd::ModifyStyleEx	named	ModifyStyle_Helper(hwnd, GWL_EXSTYLE, remove, add)
-0x007045F5	35	CWnd::GetWindowRectAndStyle	named	GetWindowRect plus the window style
-0x00704618	121	CWnd::CenterIfAtOrigin	named	centers the window when it sits at the given origin and is visible/enabled
-0x00704691	97	CWnd::NeedsActivate	named	true when the parent windows differ (activation helper)
-0x007046F2	118	CWnd::ActivateOwnerOnClick	named	on a mouse-button message activates the last active popup of the owner
-0x00704768	170	CWnd::HookWndProc	named	installs the MFC window procedure (EH frame, thread state)
+0x00704508	34	CWnd::CWnd	named	MFC 6: CWnd default ctor: CCmdTarget ctor 0x703EAE, vtable 0x746DA8, zeroes the 0x20 bytes +0x1C..+0x3B (m_hWnd, m_hWndOwner, m_nFlags, m_pfnSuper, m_nModalResult, m_pDropTarget, m_pCtrlCont, m_pCtrlSite); callers _AfxThreadEntry, CWnd::OnWndMsg, UpdateDialogControls, CTempWnd ctor
+0x0070452A	28	CWnd::`scalar_deleting_dtor'	named	MFC 6: CWnd scalar deleting dtor (vtable 0x746DA8 slot 1): ~CWnd 0x704FE3, delete when flag & 1
+0x00704546	44	CWnd::CWnd_hwnd	named	MFC 6: CWnd(HWND) ctor: as the default ctor, then m_hWnd +0x1C = hWnd; callers the wndTop / wndBottom / wndTopMost / wndNoTopMost statics, CWnd::OnWndMsgProxy 0x7068AA
+0x00704572	79	_AfxModifyStyle	named	MFC 6 (wincore.cpp static): _AfxModifyStyle(hWnd, nStyleOffset, dwRemove, dwAdd, nFlags): GetWindowLongA, new = (old & ~remove) | add; unchanged -> FALSE; SetWindowLongA; nFlags -> SetWindowPos(0, 0, 0, 0, 0, nFlags | SWP_NOSIZE|NOMOVE|NOZORDER|NOACTIVATE 0x17); TRUE. Name was ModifyStyle_Helper
+0x007045C1	26	CWnd::ModifyStyle	named	MFC 6: static CWnd::ModifyStyle(hWnd, dwRemove, dwAdd, nFlags) = _AfxModifyStyle(hWnd, GWL_STYLE, ..); dead chain: only from dead_703A97 (the member ModifyStyle)
+0x007045DB	26	CWnd::ModifyStyleEx	named	MFC 6: static CWnd::ModifyStyleEx(hWnd, dwRemove, dwAdd, nFlags) = _AfxModifyStyle(hWnd, GWL_EXSTYLE, ..); dead chain: only from the dead member ModifyStyleEx 0x703AC8
+0x007045F5	35	_AfxPreInitDialog	named	MFC 6 (wincore.cpp static): _AfxPreInitDialog(CWnd*, LPRECT lpRectOld, DWORD* pdwStyleOld): GetWindowRect + GetStyle before WM_INITDIALOG; callers AfxCallWndProc 0x704768, _AfxActivationWndProc 0x704A0B. CORRECTION: was CWnd::GetWindowRectAndStyle
+0x00704618	121	_AfxPostInitDialog	named	MFC 6 (wincore.cpp static): _AfxPostInitDialog(CWnd*, const RECT& rectOld, DWORD dwStyleOld): only when the dialog was not visible before, is neither visible nor a child now, did not move, has no enabled owner (GW_OWNER) and CheckAutoCenter (vt +0xAC) says so -> CenterWindow(NULL). CORRECTION: was CWnd::CenterIfAtOrigin
+0x00704691	97	_AfxHandleActivate	named	MFC 6 (wincore.cpp static): _AfxHandleActivate(CWnd*, nState, CWnd* pWndOther): not a child -> top-level parent (0x70605C) of both; different -> SendMessage(top, WM_ACTIVATETOPLEVEL 0x36E, nState, &{hWnd, hWndOther}); callers 0x704A0B (WM_ACTIVATE) and CWnd::OnWndMsg. CORRECTION: was CWnd::NeedsActivate
+0x007046F2	118	_AfxHandleSetCursor	named	MFC 6 (wincore.cpp static): _AfxHandleSetCursor(CWnd*, nHitTest, nMsg): HTERROR (-2) on a button-down (0x201 / 0x207 / 0x204) -> last active popup of the top-level parent, when it is not the foreground window and is enabled -> SetForegroundWindow, TRUE; else FALSE. CORRECTION: was CWnd::ActivateOwnerOnClick
+0x00704768	170	AfxCallWndProc	named	MFC 6: AfxCallWndProc(CWnd*, hWnd, nMsg, wParam, lParam): saves the thread state m_lastSentMsg (+0x34, 7 dwords) and stores the new message; WM_DESTROY (2) with m_pCtrlCont -> container OnUIActivate(NULL) (vt +0x5C); WM_INITDIALOG 0x110 -> _AfxPreInitDialog; pWnd->WindowProc (vt +0x98); WM_INITDIALOG -> _AfxPostInitDialog; catch CException -> CWinThread::ProcessWndProcException (catch funclet 0x704812); restores m_lastSentMsg (block 0x70483C) and returns lResult; callers CWinThread::OnIdle, AfxWndProc 0x7049D6, _AfxCbtFilterHook, SendMessageToDescendants. CORRECTION: was CWnd::HookWndProc
 0x00704839	3	sub_704839	named	unregistered function, reached by call / pointer from 0x304834 (gaps.py 2026-11-06)
-0x0070483C	31	CWnd::SaveRegisters	named	copies 7 saved dwords into the object (EH/ctor helper)
-0x0070485B	53	AfxSaveMessageTimePos	named	stores GetMessageTime / GetMessagePos in the thread state
-0x00704890	39	CWnd::ReplayLastMessage	named	re-dispatches the saved message via virtual slot 40 using the thread state (15 callers)
-0x007048B7	114	AfxGetModuleThreadState	named	returns the module/thread state, creating the CMap holder on first use
-0x00704929	39	CWnd::GetFromTemporaryMap	named	finds or creates the CWnd for the current handle in the temporary map
-0x00704950	30	CWnd::FromHandlePermanent	named	looks up the permanent CWnd for an HWND in the handle map
-0x0070496E	57	CWnd::Attach	named	attaches an HWND and registers it in the permanent map
-0x007049A7	46	CWnd::Detach	named	removes the handle from the permanent map and clears +0x1C
-0x007049D5	1	vt_746DA8::Nop_7049D5	named	empty function (returns immediately)
-0x007049D6	47	CWnd::OnWndMsg_Early	named	handles message 0x360 and permanent-window lookup before dispatch
-0x00704A05	6	Nop_704A05	named	empty function (returns immediately)
-0x00704A0B	291	AfxCbtWndProc	named	"AFX window procedure: GetProp(""AfxOldWndProc423""), dispatches messages"
-0x00704B6A	124	CWnd::OnCtlColor_Impl	named	handles WM_CTLCOLOR* messages using the gray brush for owner-draw controls
-0x00704BE6	502	AfxCbtFilterHook	named	"WH_CBT hook proc: on HCBT_CREATEWND subclasses the new window (""AfxOldWndProc423"" property), attaches the CWnd"
-0x00704DDC	76	AfxHookWindowCreate	named	installs a WH_CBT hook for the thread (SetWindowsHookEx 5) so MFC can subclass new windows
-0x00704E28	66	AfxUnhookWindowCreate	named	removes the WH_CBT hook when the module state requests it
-0x00704E6A	71	CWnd::CreateEx_Raw	named	CreateWindowEx wrapper (parent handle resolved from CWnd)
-0x00704EB1	198	CWnd::CreateEx_Impl	named	CreateWindowEx with the CBT hook installed and removed; 198 bytes
-0x00704F77	32	CWnd::PreCreateWindow	named	"vt slot 23: registers window classes (""AfxWnd42s"") when none is set"
-0x00704F97	76	CWnd::Create_Wrapper	named	vt slot 21: CreateEx with class, name, style, rect, parent, id, param
-0x00704FE3	124	CWnd::~CWnd_Impl	named	CWnd destructor: unhooks and destroys the window (13 callers)
-0x0070505F	30	CWnd::ClearTemporaryAndReplay	named	deletes the temporary member (+0x34) then replays the message
-0x0070507D	274	CWnd::PostNcDestroy_Impl	named	clears window state, detaches and resets thread state references (274 bytes)
-0x0070518F	1	vt_746DA8::Nop_70518F	named	empty function (returns immediately)
-0x00705190	17	CWnd::CallVirtual22	named	vt slot 4: forwards to virtual slot 22 when the HWND exists
-0x007051A1	77	CWnd::DestroyWindow	named	vt slot 22: removes the HWND from the permanent map, calls DestroyWindow, detaches
-0x007051EE	71	CWnd::DefWindowProc	named	vt slot 40: CallWindowProc on the saved WNDPROC or the default
-0x00705235	4	vt_746DA8::GetAddrOfField_28_705235	named	returns this+0x28 (address of an embedded sub-object)
-0x00705239	31	CWnd::OnAfxHook	named	vt slot 36: calls the module hook callback (+0x1034) with the message
-0x00705258	87	CWnd::SendIdleMessage	named	sends WM_USER+1 (0x401) to the main window
-0x007052AF	113	CWnd::HitTest	named	vt slot 25: child window at a point -> returns its id
-0x00705320	72	CWnd::GetWindowText	named	GetWindowText into a CString (GetBufferSetLength/ReleaseBuffer)
+0x0070483C	31	AfxCallWndProc_chunk_70483C	named	Chunk (not a separate function): exit block of AfxCallWndProc 0x704768 (restores the 7 saved m_lastSentMsg dwords from [ebp-0x40], pops the SEH frame, returns [ebp+0x18]); reached by its jumps (and the catch funclet). Name was CWnd::SaveRegisters
+0x0070485B	53	CWnd::GetCurrentMessage	named	MFC 6: static CWnd::GetCurrentMessage: thread state m_lastSentMsg (+0x34): time +0x44 = GetMessageTime, pt +0x48 / +0x4C = GetMessagePos (sign-extended words); returns &m_lastSentMsg; callers 0x706BFC (OnDevModeChange), CWnd::OnDisplayChange. CORRECTION: was AfxSaveMessageTimePos
+0x00704890	39	CWnd::Default	named	MFC 6: CWnd::Default: DefWindowProc (vt +0xA0) with the thread state's last sent message / wParam / lParam (+0x38 / +0x3C / +0x40); 15+ handler callers. CORRECTION: was CWnd::ReplayLastMessage
+0x007048B7	114	afxMapHWND	named	MFC 6: afxMapHWND(bCreate): module thread state m_pmapHWND +0x14; missing and bCreate -> under AfxSetNewHandler(AfxCriticalNewHandler) new CHandleMap(0x48 bytes)(RUNTIME_CLASS(CTempWnd) 0x7469B0, offsetof(m_hWnd) 0x1C, 1); returns the map. CORRECTION: was AfxGetModuleThreadState (that is 0x70CEB2)
+0x00704929	39	CWnd::FromHandle	named	MFC 6: static CWnd::FromHandle(HWND): afxMapHWND(TRUE)->FromHandle(h) 0x70367C, then pWnd->AttachControlSite(map) 0x703D88; returns the (maybe temporary) CWnd; 38 call sites. CORRECTION: was CWnd::GetFromTemporaryMap
+0x00704950	30	CWnd::FromHandlePermanent	named	MFC 6: static CWnd::FromHandlePermanent(HWND): afxMapHWND(FALSE) -> permanent map (+4) GetValueAt(h), NULL without a map
+0x0070496E	57	CWnd::Attach	named	MFC 6: CWnd::Attach(HWND): NULL -> FALSE; afxMapHWND(TRUE) permanent map [h] = this, m_hWnd +0x1C = h, AttachControlSite(map); TRUE; callers _AfxThreadEntry, _AfxCbtFilterHook, CWnd::SubclassWindow
+0x007049A7	46	CWnd::Detach	named	MFC 6: CWnd::Detach: m_hWnd != 0 -> permanent map RemoveKey (when the map exists), m_hWnd = 0; m_pCtrlSite +0x38 = 0; returns the old HWND
+0x007049D5	1	CWnd::PreSubclassWindow	named	MFC 6: CWnd::PreSubclassWindow (vtable 0x746DA8 slot 20, CTempWnd too): empty. Name was vt_746DA8::Nop_7049D5
+0x007049D6	47	AfxWndProc	named	MFC 6: AfxWndProc(hWnd, nMsg, wParam, lParam) (the MFC window procedure, returned by AfxGetAfxWndProc): WM_QUERYAFXWNDPROC 0x360 -> 1; else AfxCallWndProc(CWnd::FromHandlePermanent(hWnd), hWnd, ..). CORRECTION: was CWnd::OnWndMsg_Early
+0x00704A05	6	AfxGetAfxWndProc	named	"MFC 6: AfxGetAfxWndProc: returns &AfxWndProc 0x7049D6; callers _AfxCbtFilterHook (x2), CWnd::SubclassWindow. Name was Nop_704A05 (""empty function"" was wrong)"
+0x00704A0B	291	_AfxActivationWndProc	named	"MFC 6 (wincore.cpp): _AfxActivationWndProc(hWnd, nMsg, wParam, lParam) (subclass proc for non-MFC windows created while hooked; pushed by _AfxCbtFilterHook): old proc = GetPropA(""AfxOldWndProc423""); WM_INITDIALOG -> _AfxPreInitDialog, CallWindowProcA, _AfxPostInitDialog; WM_ACTIVATE -> _AfxHandleActivate; WM_SETCURSOR -> _AfxHandleSetCursor (handled -> 0); WM_NCDESTROY -> restores GWL_WNDPROC, RemovePropA, GlobalDeleteAtom; else CallWindowProcA(old, ..). CORRECTION: was AfxCbtWndProc"
+0x00704B6A	124	_AfxGrayBackgroundWndProc	named	MFC 6 (wincore.cpp): _AfxGrayBackgroundWndProc(hWnd, nMsg, wParam, lParam) (subclass proc used when _afxWinState (0x7CAA8C) has a dialog background brush +4): WM_CTLCOLORLISTBOX..STATIC (0x134..0x138) -> CWnd::GrayCtlColor(hDC, hCtl, msg - 0x132, brush, text colour +8) 0x706E34, returns the brush when it applies; else _AfxActivationWndProc. CORRECTION: was CWnd::OnCtlColor_Impl
+0x00704BE6	502	_AfxCbtFilterHook	named	"MFC 6: _AfxCbtFilterHook(code, wParam, lParam) (WH_CBT proc installed by AfxHookWindowCreate): only HCBT_CREATEWND 3 (else CallNextHookEx(thread state m_hHookOldCbtFilter +0x2C)); pending CWnd (thread state m_pWndInit +0x14) -> Attach, PreSubclassWindow (vt +0x50), GetSuperWndProcAddr (vt +0x80), optional CTL3D subclass (0x7CAA88 +0x20, WM_QUERY3DCONTROLS 0x36F) and subclass GWL_WNDPROC to AfxWndProc storing the old proc, m_pWndInit = 0; other windows (not ""ime"", not CS_IME, not WS_EX_MDICHILD..) get the ""AfxOldWndProc423"" property + atom and _AfxActivationWndProc / _AfxGrayBackgroundWndProc; DLL contexts unhook after one window. Name was AfxCbtFilterHook"
+0x00704DDC	76	AfxHookWindowCreate	named	MFC 6: AfxHookWindowCreate(CWnd*): thread state m_pWndInit +0x14 already this -> nothing; no CBT hook yet (+0x2C) -> SetWindowsHookExA(WH_CBT 5, _AfxCbtFilterHook, 0, GetCurrentThreadId) (failure -> AfxThrowMemoryException); m_pWndInit = pWnd; caller CWnd::CreateEx 0x704EB1
+0x00704E28	66	AfxUnhookWindowCreate	named	MFC 6: AfxUnhookWindowCreate: DLL context with a hook -> UnhookWindowsHookEx, m_hHookOldCbtFilter = 0; m_pWndInit still set -> clears it, FALSE (the window was never hooked); else TRUE
+0x00704E6A	71	CWnd::CreateEx_rect	named	MFC 6: CWnd::CreateEx(dwExStyle, class, name, style, const RECT&, CWnd* pParent, nID, lpParam): converts the rect to x / y / cx / cy and the parent to its HWND, calls CreateEx 0x704EB1; lib, unused. Name was CWnd::CreateEx_Raw [dead: no caller or pointer]
+0x00704EB1	198	CWnd::CreateEx	named	MFC 6: CWnd::CreateEx(dwExStyle, class, name, style, x, y, cx, cy, hWndParent, nIDorHMenu, lpParam): fills a CREATESTRUCT (hInstance = module state +8), PreCreateWindow (vt +0x5C) failure -> PostNcDestroy (vt +0xA4), FALSE; AfxHookWindowCreate(this), CreateWindowExA, AfxUnhookWindowCreate (not hooked -> PostNcDestroy); returns hWnd != 0; callers CWnd::Create 0x704F97 and the dead rect overload. Name was CWnd::CreateEx_Impl
+0x00704F77	32	CWnd::PreCreateWindow	named	"MFC 6: CWnd::PreCreateWindow(CREATESTRUCT&) (vtable 0x746DA8 slot 23): no class -> AfxEndDeferRegisterClass(AFX_WND_REG 1) and lpszClass = ""AfxWnd42s""; TRUE"
+0x00704F97	76	CWnd::Create	named	MFC 6: CWnd::Create(class, name, style, const RECT&, CWnd* pParent, nID, pContext) (slot 21): CreateEx(0, class, name, style | WS_CHILD 0x40000000, rect -> x / y / cx / cy, parent HWND, nID, pContext). Name was CWnd::Create_Wrapper
+0x00704FE3	124	CWnd::~CWnd	named	MFC 6: CWnd dtor: vtable 0x746DA8; m_hWnd set and not one of the static wndTop / wndBottom / wndTopMost / wndNoTopMost (0x7CAA28 / 0x7CA9E8 / 0x7CA9A8 / 0x7CA968) -> DestroyWindow 0x7051A1; deletes m_pCtrlCont +0x34; clears m_pCtrlSite->m_pWndCtrl (+0x24) when it is this; ~CCmdTarget. Name was CWnd::~CWnd_Impl
+0x0070505F	30	CWnd::OnDestroy	named	MFC 6: CWnd::OnDestroy (WM_DESTROY entry of the CWnd message map, data 0x746C3C): deletes m_pCtrlCont +0x34, = 0, Default(). CORRECTION: was CWnd::ClearTemporaryAndReplay
+0x0070507D	274	CWnd::OnNcDestroy	named	MFC 6: CWnd::OnNcDestroy (WM_NCDESTROY message-map entry, data 0x746BAC): this thread's m_pMainWnd +0x1C -> (app main window, not a DLL, AfxOleCanExitApp) AfxPostQuitMessage(0), cleared; m_pActiveWnd +0x20 cleared; m_pDropTarget +0x30 Revoke (vt +0x50); deletes m_pCtrlCont; WF_TOOLTIPS -> TTM_DELTOOL 0x405 on the thread tooltip (+0xCC); Default(); restores the super wndproc when GWL_WNDPROC is unchanged; Detach; PostNcDestroy (vt +0xA4). CORRECTION: was CWnd::PostNcDestroy_Impl
+0x0070518F	1	CWnd::PostNcDestroy	named	MFC 6: CWnd::PostNcDestroy (vtable 0x746DA8 slot 41, CTempWnd too): empty. Name was vt_746DA8::Nop_70518F
+0x00705190	17	CWnd::OnFinalRelease	named	MFC 6: CWnd::OnFinalRelease (slot 4): m_hWnd -> DestroyWindow (vt +0x58) else PostNcDestroy (vt +0xA4). CORRECTION: was CWnd::CallVirtual22
+0x007051A1	77	CWnd::DestroyWindow	named	MFC 6: CWnd::DestroyWindow (slot 22): no m_hWnd -> FALSE; remembers whether it is in the permanent map; m_pCtrlSite -> site DestroyControl (vt +0x50) else ::DestroyWindow; not permanent -> Detach; returns the result; also called by ~CWnd
+0x007051EE	71	CWnd::DefWindowProc	named	MFC 6: CWnd::DefWindowProc(msg, wParam, lParam) (slot 40): m_pfnSuper +0x28 or *GetSuperWndProcAddr() (vt +0x80) -> CallWindowProcA(proc, m_hWnd, ..); else DefWindowProcA
+0x00705235	4	CWnd::GetSuperWndProcAddr	named	MFC 6: CWnd::GetSuperWndProcAddr (slot 32): returns &m_pfnSuper (+0x28). Name was vt_746DA8::GetAddrOfField_28_705235
+0x00705239	31	CWnd::PreTranslateMessage	named	MFC 6: CWnd::PreTranslateMessage(MSG*) (slot 36): module state m_pfnFilterToolTipMessage +0x1034 (msg, this) when set; returns FALSE. CORRECTION: was CWnd::OnAfxHook
+0x00705258	87	CWnd::CancelToolTips	named	MFC 6: static CWnd::CancelToolTips(bKeys): thread tooltip (+0xCC) with a window -> SendMessage(TTM_ACTIVATE 0x401, FALSE); bKeys and m_pLastStatus +0x108 and the left button up -> SetStatusText(-1) (vt +0xDC); caller sub_706A91. CORRECTION: was CWnd::SendIdleMessage
+0x007052AF	113	CWnd::OnToolHitTest	named	MFC 6: CWnd::OnToolHitTest(CPoint, TOOLINFO*) (vtable 0x746DA8 slot 25): child under the point (_AfxChildWindowFromPoint 0x70A987), none -> -1; id = GetDlgCtrlID; TOOLINFO with cbSize >= 0x28 -> TTF_IDISHWND, hwnd = m_hWnd, uId = child, lpszText = LPSTR_TEXTCALLBACK, and TTF_NOTBUTTON|TTF_CENTERTIP unless the child answers WM_GETDLGCODE with DLGC_BUTTON; returns the id. CORRECTION: was CWnd::HitTest
+0x00705320	72	CWnd::GetWindowText	named	MFC 6: CWnd::GetWindowText(CString&): no m_pCtrlSite -> GetWindowTextLengthA, GetBufferSetLength, GetWindowTextA, ReleaseBuffer; else site vt +0x88; dead chain: only from dead_705368
 0x00705368	219	dead_705368	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00705443	42	CWnd::OnReplyDefault_F	named	reply handler variant
+0x00705443	42	CWnd::OnCompareItem	named	MFC 6: CWnd::OnCompareItem(int, LPCOMPAREITEMSTRUCT) (WM_COMPAREITEM 0x39 entry of the CWnd message map 0x746A00): ReflectLastMsg(hwndItem +8, &lResult) 0x7068AA -> lResult, else Default(). CORRECTION: was CWnd::OnReplyDefault_F
 0x0070546D	32	sub_70546D	named	unregistered function, reached by call / pointer from 0x346B64 (gaps.py 2026-11-06)
-0x0070548D	43	CWnd::OnReplyDefault_A	named	reply handler: DefaultReply or ReplayLastMessage
-0x007054B8	43	CWnd::OnReplyDefault_B	named	reply handler variant
-0x007054E3	84	CWnd::OnSizeHelper	named	size/command helper using thread state fields (+0x50/+0x54)
-0x00705537	99	CMenu::GetSubMenuByID	named	finds a submenu of an HMENU by item id (recursive)
-0x0070559A	120	CWnd::OnInitMenuPopup	named	handles WM_INITMENUPOPUP: updates menu item states via command UI
-0x00705612	145	AfxRegisterClassOnce	named	GetClassInfo; if missing RegisterClass under the global lock; 145 bytes
-0x00705767	70	CWnd::SendLayoutMsg	named	sends a layout message (0x19) with the saved cursor position
-0x007057AD	226	CWnd::RunModalLoop	named	vt slot 27: modal message loop (idle processing, descendants messages, end modal)
-0x0070588F	6	CWnd::GetMessageMap	named	vt slot 10: returns the message map 0x7469F8
-0x00705895	64	AfxFindMessageEntry	named	MFC: scans a message map for a message/code/id entry
+0x0070548D	43	CWnd::OnCharToItem	named	MFC 6: CWnd::OnCharToItem(nChar, CListBox*, nIndex) (WM_CHARTOITEM 0x2F map entry): list box and SendChildNotifyLastMsg(&lResult) 0x70687D -> lResult, else Default(). CORRECTION: was CWnd::OnReplyDefault_A
+0x007054B8	43	CWnd::OnVKeyToItem	named	MFC 6: CWnd::OnVKeyToItem(nKey, CListBox*, nIndex) (WM_VKEYTOITEM 0x2E map entry): same pattern as OnCharToItem. CORRECTION: was CWnd::OnReplyDefault_B
+0x007054E3	84	CMenu::TrackPopupMenu	named	MFC 6: CMenu::TrackPopupMenu(nFlags, x, y, CWnd* pWnd, lpRect): saves the thread state m_hTrackingWindow +0x50 / m_hTrackingMenu +0x54, sets them to pWnd's HWND / m_hMenu (+4), TrackPopupMenu(m_hMenu, nFlags, x, y, 0, hWnd, lpRect), restores them; lib, unused. CORRECTION: was CWnd::OnSizeHelper [dead: no caller or pointer]
+0x00705537	99	_AfxFindPopupMenuFromID	named	MFC 6 (wincore.cpp static): _AfxFindPopupMenuFromID(CMenu*, nID): for every item: sub-menu (CMenu::FromHandle(GetSubMenu) 0x707C6C) -> recurse, found -> return it; GetMenuItemID == nID -> CMenu::FromHandlePermanent(m_hMenu) 0x707C81; NULL when not found; caller CWnd::OnMeasureItem 0x70559A. CORRECTION: was CMenu::GetSubMenuByID
+0x0070559A	120	CWnd::OnMeasureItem	named	MFC 6: CWnd::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT) (WM_MEASUREITEM 0x2C entry of the CWnd message map): ODT_MENU -> menu = thread m_hTrackingMenu +0x54 when tracking this window, else GetMenu; CMenu::FromHandle, _AfxFindPopupMenuFromID(itemID) -> pMenu->MeasureItem (vt +0x10); controls -> GetDescendantWindow(m_hWnd, CtlID, TRUE) 0x7061FA and SendChildNotifyLastMsg; else Default(). CORRECTION: was CWnd::OnInitMenuPopup
+0x00705612	145	AfxRegisterClass	named	MFC 6: AfxRegisterClass(WNDCLASS*): GetClassInfoA(hInstance +0x10, lpszClassName +0x24) finds it -> TRUE; RegisterClassA failure -> FALSE; in a DLL context appends the class name and '\n' to the module state m_szUnregisterList +0x34 under AfxLockGlobals(1); TRUE; callers AfxEndDeferRegisterClass (x3), _AfxRegisterWithIcon. Name was AfxRegisterClassOnce
+0x00705767	70	CWnd::OnNTCtlColor	named	MFC 6: CWnd::OnNTCtlColor(wParam = hDC, lParam = hWnd) (map entries for WM_CTLCOLORMSGBOX..STATIC 0x132..0x138): AFX_CTLCOLOR {hWnd, hDC, nCtlType = last sent message - 0x132} -> WindowProc(WM_CTLCOLOR 0x19, 0, &ctl) (vt +0x98). CORRECTION: was CWnd::SendLayoutMsg
+0x007057AD	226	CWnd::WinHelp	named	MFC 6: CWnd::WinHelp(dwData, nCmd) (vtable 0x746DA8 slot 27): BeginWaitCursor; IsFrameWnd (vt +0xB0) -> ExitHelpMode (vt +0xF0); WM_CANCELMODE 0x1F to this window and its descendants, to the top-level parent and its descendants, and to the capture window; WinHelpA(hwnd, app m_pszHelpFilePath +0x8C, nCmd, dwData) failure -> AfxMessageBox(AFX_IDP_FAILED_TO_LAUNCH_HELP 0xF107); EndWaitCursor. CORRECTION: was CWnd::RunModalLoop (RunModalLoop is not virtual in this MFC; slots 28 / 29 are ContinueModal / EndModalLoop)
+0x0070588F	6	CWnd::GetMessageMap	named	MFC 6: CWnd::GetMessageMap (slot 10 of CWnd / CTempWnd): returns &CWnd::messageMap 0x7469F8 {base 0x7468D8 = CCmdTarget::messageMap, entries 0x746A00}
+0x00705895	64	AfxFindMessageEntry	named	MFC 6: AfxFindMessageEntry(lpEntry, nMsg, nCode, nID): walks the 0x18-byte AFX_MSGMAP_ENTRY array until nSig +0x10 == 0; returns the entry with nMessage == nMsg, nCode == code and nID <= id <= nLastID, else NULL; callers CWnd::OnWndMsg, CCmdTarget::OnCmdMsg, CWinThread::DispatchThreadMessageEx
 0x007058D5	21	dead_7058D5	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007058EA	68	CWnd::OnWndMsg_Stub	named	vt slot 38: tries two virtual handlers and returns the result
-0x0070592E	1198	CWnd::OnWndMsg	named	vt slot 39: the central message dispatcher (commands, notifications, sys colors, ctl colors) via message maps, 1.2 KB
+0x007058EA	68	CWnd::WindowProc	named	MFC 6: CWnd::WindowProc(msg, wParam, lParam) (slot 38): OnWndMsg (vt +0x9C) with &lResult; not handled -> DefWindowProc (vt +0xA0); returns lResult. CORRECTION: was CWnd::OnWndMsg_Stub
+0x0070592E	1198	CWnd::OnWndMsg	named	MFC 6: CWnd::OnWndMsg(msg, wParam, lParam, LRESULT*) (slot 39): WM_COMMAND -> OnCommand (vt +0x78); WM_NOTIFY -> OnNotify (vt +0x7C); WM_ACTIVATE -> _AfxHandleActivate; WM_SETCURSOR -> _AfxHandleSetCursor; then the message map (GetMessageMap) through the global message cache _afxMsgCache 0x7C9140 (AfxLockGlobals), AfxFindMessageEntry (registered messages via 0xC000 entries), and the big AfxSig switch (CDC / CWnd / CMenu temporaries via FromHandle, WM_SETTINGCHANGE GetVersion check, ..); returns TRUE when handled
 0x00705DDC	192	sub_705DDC	named	unregistered function, reached by call / pointer from 0x305B05 (gaps.py 2026-11-06)
-0x00705EA0	25	CCmdUI_Derived_Ctor	named	CCmdUI ctor with vtable 0x746E88 and +0x28 = 1
-0x00705EB9	17	vt_746E88::InitFields2_705EB9	named	initializes 2 field(s) from constants/arguments (1, param_1)
-0x00705ECA	3	vt_746E88::Nop_705ECA	named	empty function (returns immediately)
-0x00705ECD	3	vt_746E88::Nop_705ECD	named	empty function (returns immediately)
-0x00705ED0	3	vt_746E88::Nop_705ED0	named	empty function (returns immediately)
-0x00705ED3	140	CWnd::OnCommand	named	vt slot 30: dispatches WM_COMMAND (command id vs control notification)
-0x00705F5F	122	CWnd::OnNotify	named	vt slot 31: dispatches WM_NOTIFY via the control id
-0x00705FD9	62	CWnd::GetTopLevelParent	named	walks GetParent until no CWnd is found
-0x00706017	69	AfxGetParentOwner	named	returns the owner or the parent HWND of a window
-0x0070605C	40	CWnd::GetTopLevelOwner	named	walks AfxGetParentOwner up to the top-level owner window
+0x00705EA0	25	CTestCmdUI::CTestCmdUI	named	MFC 6 (wincore.cpp): CTestCmdUI ctor: CCmdUI ctor, vtable 0x746E88, m_bEnabled +0x28 = TRUE; caller CWnd::OnCommand (the raw hit inside sub_705DDC is an instruction byte). CORRECTION: was CCmdUI_Derived_Ctor
+0x00705EB9	17	CTestCmdUI::Enable	named	MFC 6: CTestCmdUI::Enable(bOn) (vtable 0x746E88 slot 0): m_bEnableChanged +0x18 = TRUE, m_bEnabled +0x28 = bOn. Name was vt_746E88::InitFields2_705EB9
+0x00705ECA	3	CTestCmdUI::SetCheck	named	MFC 6: CTestCmdUI::SetCheck(int) (slot 1): empty (ret 4). Name was vt_746E88::Nop_705ECA
+0x00705ECD	3	CTestCmdUI::SetRadio	named	MFC 6: CTestCmdUI::SetRadio(BOOL) (slot 2): empty. Name was vt_746E88::Nop_705ECD
+0x00705ED0	3	CTestCmdUI::SetText	named	MFC 6: CTestCmdUI::SetText(LPCTSTR) (slot 3): empty. Name was vt_746E88::Nop_705ED0
+0x00705ED3	140	CWnd::OnCommand	named	MFC 6: CWnd::OnCommand(wParam, lParam) (vtable 0x746DA8 slot 30): menu / accelerator (lParam 0): nID 0 -> FALSE; CTestCmdUI state test through OnCmdMsg(nID, CN_UPDATE_COMMAND_UI) (vt +0xC), disabled -> TRUE (eaten); control notification: thread state m_hLockoutNotifyWindow +0xB8 == m_hWnd -> TRUE, else ReflectLastMsg(hWndCtrl) 0x7068AA -> TRUE; then OnCmdMsg(nID, nCode, 0, 0)
+0x00705F5F	122	CWnd::OnNotify	named	MFC 6: CWnd::OnNotify(wParam, NMHDR*, LRESULT*) (slot 31): nID = GetDlgCtrlID(hwndFrom); lockout window -> TRUE; ReflectLastMsg(hwndFrom, pResult) -> TRUE; else OnCmdMsg(nID, MAKELONG(code, WM_NOTIFY 0x4E), &AFX_NOTIFY{pResult, pNMHDR}, 0)
+0x00705FD9	62	CWnd::GetParentFrame	named	MFC 6: CWnd::GetParentFrame: no HWND -> NULL; walks CWnd::FromHandle(GetParent(..)) upwards until a window whose IsFrameWnd (vt +0xB0) is TRUE; NULL otherwise; caller CWnd::GetTopLevelFrame 0x706169 (x2). CORRECTION: was CWnd::GetTopLevelParent
+0x00706017	69	AfxGetParentOwner	named	MFC 6: AfxGetParentOwner(HWND): permanent CWnd -> its GetOwner() (0x6E7111) HWND; else WS_CHILD -> GetParent, otherwise GetWindow(GW_OWNER 4); caller CWnd::GetTopLevelParent
+0x0070605C	40	CWnd::GetTopLevelParent	named	MFC 6: CWnd::GetTopLevelParent: no HWND -> NULL; follows AfxGetParentOwner to the top and returns CWnd::FromHandle of it; callers _AfxHandleActivate, _AfxHandleSetCursor, CWinThread::PreTranslateMessage, CWnd::WinHelp, OnSysCommand, .. CORRECTION: was CWnd::GetTopLevelOwner
 0x00706084	116	dead_706084	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007060F8	52	CWnd::IsForegroundOwner	named	true when the foreground window is this window's owner or its popup
-0x0070612C	33	ActivateTopParent	named	
-0x0070614D	28	EHBlock_70614D	named	exception-handling block (funclet) inside of ActivateTopParent (0x0070612C)
-0x00706169	65	CWnd::GetParentFrameOrTop	named	returns the top-level window of a child chain (virtual slot 44 test)
+0x007060F8	52	CWnd::IsTopParentActive	named	MFC 6: CWnd::IsTopParentActive: FromHandle(GetForegroundWindow()) == FromHandle(GetLastActivePopup(top-level parent)); lib, unused. CORRECTION: was CWnd::IsForegroundOwner [dead: no caller or pointer]
+0x0070612C	33	CWnd::ActivateTopParent	named	MFC 6: CWnd::ActivateTopParent: top-level parent; the foreground window is neither this window nor a parent of it (IsChild) -> SetForegroundWindow(top-level parent); lib, unused [dead: no caller or pointer]
+0x00706169	65	CWnd::GetTopLevelFrame	named	MFC 6: CWnd::GetTopLevelFrame: no HWND -> NULL; this when IsFrameWnd (vt +0xB0) else GetParentFrame; then climbs GetParentFrame to the outermost frame; caller CWinThread::ProcessMessageFilter. CORRECTION: was CWnd::GetParentFrameOrTop
 0x007061AA	80	dead_7061AA	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007061FA	121	CWnd::GetDescendantByID	named	recursive GetDlgItem search through child windows
-0x00706273	125	CWnd::SendMessageToDescendants	named	sends a message to all children (optionally recursive/permanent only)
-0x007062F0	5	vt_746DA8::Nop_7062F0	named	empty function (returns immediately)
-0x007062F5	48	CWnd::ScrollWindow_Wrap	named	scroll helper: resolves the target HWND then the Win32 call
-0x00706325	40	CWnd::ScrollHelper_B	named	same pattern with one argument
-0x0070634D	51	CWnd::ScrollHelper_C	named	same pattern with four arguments
-0x00706380	48	CWnd::GetScrollRange	named	GetScrollRange on the resolved HWND
-0x007063B0	67	CWnd::EnableScrollBar_Impl	named	EnableScrollBar for horizontal/vertical/both (recursion for SB_BOTH)
+0x007061FA	121	CWnd::GetDescendantWindow	named	MFC 6: static CWnd::GetDescendantWindow(hWnd, nID, bOnlyPerm): GetDlgItem direct child (then its children recursively) -> FromHandle or (bOnlyPerm) FromHandlePermanent; else depth-first over GetTopWindow / GW_HWNDNEXT children; NULL when not found; caller CWnd::OnMeasureItem. CORRECTION: was CWnd::GetDescendantByID
+0x00706273	125	CWnd::SendMessageToDescendants	named	MFC 6: static CWnd::SendMessageToDescendants(hWnd, msg, wParam, lParam, bDeep, bOnlyPerm): for every child (GetTopWindow, GW_HWNDNEXT): bOnlyPerm -> AfxCallWndProc on the permanent CWnd, else SendMessageA; bDeep -> recurses; callers CWinThread::OnIdle, CWnd::WinHelp, OnSysColorChange, OnDevModeChange, OnDisplayChange, ..
+0x007062F0	5	CWnd::GetScrollBarCtrl	named	MFC 6: CWnd::GetScrollBarCtrl(int) (vtable 0x746DA8 slot 26): returns NULL. Name was vt_746DA8::Nop_7062F0
+0x007062F5	48	CWnd::SetScrollPos	named	MFC 6: CWnd::SetScrollPos(nBar, nPos, bRedraw): GetScrollBarCtrl(nBar) (vt +0x68) -> SetScrollPos(ctrl hwnd, SB_CTL, ..), else SetScrollPos(m_hWnd, nBar, ..); lib, unused. CORRECTION: was CWnd::ScrollWindow_Wrap [dead: no caller or pointer]
+0x00706325	40	CWnd::GetScrollPos	named	MFC 6: CWnd::GetScrollPos(nBar): GetScrollBarCtrl (vt +0x68) -> GetScrollPos(ctrl, SB_CTL) else GetScrollPos(m_hWnd, nBar); lib, unused. CORRECTION: was CWnd::ScrollHelper_B [dead: no caller or pointer]
+0x0070634D	51	CWnd::SetScrollRange	named	MFC 6: CWnd::SetScrollRange(nBar, nMin, nMax, bRedraw): scroll-bar control (SB_CTL) or own bar; lib, unused. CORRECTION: was CWnd::ScrollHelper_C [dead: no caller or pointer]
+0x00706380	48	CWnd::GetScrollRange	named	MFC 6: CWnd::GetScrollRange(nBar, lpMin, lpMax): control (SB_CTL) or own bar; dead chain: only from the dead CWnd::GetScrollLimit 0x70648D
+0x007063B0	67	CWnd::EnableScrollBarCtrl	named	MFC 6: CWnd::EnableScrollBarCtrl(nBar, bEnable): SB_BOTH 3 -> SB_HORZ then SB_VERT; scroll-bar control -> EnableWindow, else ShowScrollBar(m_hWnd, nBar, bEnable); lib, unused (only its own recursion). CORRECTION: was CWnd::EnableScrollBar_Impl [dead: no caller or pointer]
 0x007063F3	77	dead_7063F3	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00706440	77	CWnd::GetScrollInfo	named	GetScrollInfo with a version check (Win98+)
-0x0070648D	71	CWnd::GetScrollLimit	named	max scroll position = max - (page - 1) from range and info
-0x007064D4	127	CWnd::GetUpdateRegionClient	named	RedrawWindow/GetWindow loop converting a rect to client coordinates for the visible window
-0x00706553	39	EHBlock_706553	named	exception-handling block (funclet) inside of FUN_007064D4 (0x007064D4)
-0x0070657A	314	CWnd::RepositionBars_Impl	named	computes and applies child bar positions (layout)
-0x007066B4	154	CWnd::GetChildRectInParent	named	rectangle of a child in the parent's client coordinates
-0x0070674E	43	CWnd::CalcWindowRect	named	AdjustWindowRectEx with style, extended style and menu flag
-0x00706779	194	CWnd::OnSysCommand	named	handles SC_ commands 0xF040/0xF050 and sets focus
-0x0070683B	66	CWnd::IsChildOf	named	walks the parent chain looking for a matching CWnd
-0x0070687D	45	CWnd::DefaultReply	named	virtual slot 42 with the saved message (9 callers)
-0x007068AA	164	CWnd::OnWndMsgProxy	named	finds the permanent CWnd for an HWND and forwards, creating a temporary one (EH frame)
-0x0070694E	91	CWnd::OnChildNotify	named	vt slot 42: forwards to the owner or SendMessage(+0x2000)
-0x007069A9	232	CWnd::OnChildNotifyDefault	named	dispatches WM_COMMAND/WM_NOTIFY child notifications via OnCmdMsg
+0x00706440	77	CWnd::GetScrollInfo	named	MFC 6: CWnd::GetScrollInfo(nBar, LPSCROLLINFO, nMask): afxData.nWinVer 0x7C911C < 0x333 -> FALSE; scroll-bar control -> SB_CTL; cbSize = 0x1C, fMask = nMask, GetScrollInfo; dead chain: only from the dead GetScrollLimit
+0x0070648D	71	CWnd::GetScrollLimit	named	MFC 6: CWnd::GetScrollLimit(nBar): GetScrollRange, GetScrollInfo(SIF_PAGE) -> nMax -= max(nPage - 1, 0); returns nMax; lib, unused [dead: no caller or pointer]
+0x007064D4	127	CWnd::ScrollWindow	named	MFC 6: CWnd::ScrollWindow(dx, dy, lpRect, lpClipRect): hidden window without rects -> moves every child by (dx, dy) (GW_CHILD / GW_HWNDNEXT, ScreenToClient, SetWindowPos 0x15); else ::ScrollWindow; then (block 0x706553) m_pCtrlCont and no lpRect -> container ScrollChildren (vt +0x58); lib, unused. CORRECTION: was CWnd::GetUpdateRegionClient [dead: no caller or pointer]
+0x0070657A	314	CWnd::RepositionBars	named	MFC 6: CWnd::RepositionBars(nIDFirst, nIDLast, nIDLeftOver, nFlags, lpRectParam, lpRectClient, bStretch): client rect (or lpRectClient), BeginDeferWindowPos(8) unless reposQuery, WM_SIZEPARENT 0x361 to every child with an id in range, then the left-over child gets the remaining rect (reposExtra adds the param rect) via AfxRepositionWindow, EndDeferWindowPos; reposQuery -> returns the rect; lib, unused. CORRECTION: was CWnd::RepositionBars_Impl [dead: no caller or pointer]
+0x007066B4	154	AfxRepositionWindow	named	MFC 6: AfxRepositionWindow(AFX_SIZEPARENTPARAMS* lpLayout, hWnd, lpRect): current rect in parent coordinates; unchanged -> nothing; DeferWindowPos into lpLayout->hDWP when there is one, else SetWindowPos(SWP_NOACTIVATE|SWP_NOZORDER 0x14); dead chain: only from the dead RepositionBars. CORRECTION: was CWnd::GetChildRectInParent
+0x0070674E	43	CWnd::CalcWindowRect	named	MFC 6: CWnd::CalcWindowRect(lpClientRect, nAdjustType) (vtable 0x746DA8 slot 24): GetExStyle (adjustBorder 0 -> drops WS_EX_CLIENTEDGE 0x200), AdjustWindowRectEx(rect, GetStyle, FALSE, exStyle)
+0x00706779	194	CWnd::HandleFloatingSysCommand	named	MFC 6: CWnd::HandleFloatingSysCommand(nID, lParam): top-level parent; SC_NEXTWINDOW / SC_PREVWINDOW (0xF040 / 0xF050) with VK_F6 -> parent SetFocus, TRUE; SC_CLOSE 0xF060 or SC_KEYMENU 0xF100 with lParam -> saves the focus, SetActiveWindow(parent), forwards WM_SYSCOMMAND 0x112 to it, restores activation / focus when the windows still exist, TRUE; else FALSE; lib, unused. CORRECTION: was CWnd::OnSysCommand [dead: no caller or pointer]
+0x0070683B	66	CWnd::WalkPreTranslateTree	named	MFC 6: static CWnd::WalkPreTranslateTree(hWndStop, MSG*): from pMsg->hwnd up through GetParent: permanent CWnd PreTranslateMessage (vt +0x90) TRUE -> TRUE; stops at hWndStop; FALSE; caller CWinThread::PreTranslateMessage. CORRECTION: was CWnd::IsChildOf
+0x0070687D	45	CWnd::SendChildNotifyLastMsg	named	MFC 6: CWnd::SendChildNotifyLastMsg(LRESULT*): OnChildNotify (vt +0xA8) with the thread state's last sent message / wParam / lParam; callers ReflectLastMsg, OnCharToItem / OnVKeyToItem / OnMeasureItem / OnHScroll / OnVScroll / OnCtlColor. CORRECTION: was CWnd::DefaultReply
+0x007068AA	164	CWnd::ReflectLastMsg	named	MFC 6: static CWnd::ReflectLastMsg(hWndChild, LRESULT*): permanent CWnd -> SendChildNotifyLastMsg; else an OLE control site in the parent's m_pCtrlCont (+0x34) site map (+0x20) -> temporary CWnd(hWndChild) with m_pCtrlSite = site, SendChildNotifyLastMsg, m_hWnd cleared, destroyed (EH frame); else FALSE; callers OnCommand, OnNotify, OnCompareItem, OnDeleteItem, OnParentNotify, OnDragList, dead_705368. CORRECTION: was CWnd::OnWndMsgProxy
+0x0070694E	91	CWnd::OnChildNotify	named	MFC 6: CWnd::OnChildNotify(msg, wParam, lParam, pResult) (vtable 0x746DA8 slot 42): OLE control (m_pCtrlSite +0x38) -> SendMessage(m_hWnd, OCM__BASE 0x2000 + msg, ..), WM_CTLCOLOR* with a 0 result -> FALSE, else stores the result, TRUE; ordinary window -> ReflectChildNotify
+0x007069A9	232	CWnd::ReflectChildNotify	named	MFC 6: CWnd::ReflectChildNotify(msg, wParam, lParam, pResult): WM_COMMAND -> CCmdTarget::OnCmdMsg(0, MAKELONG(code, WM_REFLECT_BASE 0xBC00 + 0x111)); WM_NOTIFY -> OnCmdMsg(0, MAKELONG(code, 0xBC4E), &AFX_NOTIFY); WM_HSCROLL / VSCROLL / DRAWITEM..VKEYTOITEM / COMPAREITEM / PARENTNOTIFY -> CWnd::OnWndMsg(0xBC00 + msg); WM_CTLCOLOR* -> OnWndMsg(0xBC19 reflected WM_CTLCOLOR, AFX_CTLCOLOR); else FALSE. CORRECTION: was CWnd::OnChildNotifyDefault
 0x00706A91	79	sub_706A91	named	unregistered function, reached by call / pointer from 0x346BC4 (gaps.py 2026-11-06)
-0x00706AE0	125	CWnd::OnSysColorChange	named	reloads system colors when this is the main window, then broadcasts
-0x00706B5D	83	CWnd::OnDisplayChange_Main	named	display-change handler for the main window
-0x00706BB0	76	CWnd::OnSettingChange_Main	named	setting-change handler for the main window
-0x00706BFC	75	OnDevModeChange	named	
-0x00706C47	100	CWnd::OnSysCommand_Esc	named	handles key combination (no Shift/Ctrl/Alt) sending command 0xE146
-0x00706CAB	73	CWnd::OnDisplayChange	named	updates system metrics on WM_DISPLAYCHANGE and broadcasts
-0x00706CF4	42	CWnd::OnReplyDefault_G	named	reply handler variant
-0x00706D1E	33	CWnd::OnReplyDefault_C	named	reply handler: DefaultReply or ReplayLastMessage
-0x00706D3F	33	CWnd::OnReplyDefault_D	named	reply handler variant
-0x00706D60	74	CWnd::FlushTimerMessages	named	PeekMessage/DispatchMessage loop for WM_TIMER (0x121)
-0x00706DAA	39	CWnd::OnReplyDefault_E	named	reply handler variant
-0x00706DD1	99	CWnd::OnCtlColor	named	reply handler: DefaultReply or the gray-brush control color
-0x00706E34	117	AfxDrawGrayBitmap	named	draws a bitmap/icon with a gray look unless the control is a combobox or disabled
+0x00706AE0	125	CWnd::OnSysColorChange	named	MFC 6: CWnd::OnSysColorChange (WM_SYSCOLORCHANGE 0x15 map entry): the app's main window -> afxData (0x7C90C8) UpdateSysColors; not a DLL and this thread's main window -> CTL3D colour-change callback (_afxCtl3dState 0x7CAA88 +0x1C); non-child -> SendMessageToDescendants(WM_SYSCOLORCHANGE, deep, perm only); Default()
+0x00706B5D	83	CWnd::OnSettingChange	named	MFC 6: CWnd::OnSettingChange(uFlags, lpszSection) (WM_SETTINGCHANGE 0x1A map entry): inlined OnWinIniChange (CTL3D WinIniChange callback +0x24 for this thread's main window), gen_bGotScrollLines 0x7C913C = FALSE, OnDisplayChange(0, 0). CORRECTION: was CWnd::OnDisplayChange_Main
+0x00706BB0	76	CWnd::OnWinIniChange	named	MFC 6: CWnd::OnWinIniChange(lpszSection): not a DLL and this thread's main window -> CTL3D WinIniChange callback (+0x24); OnDisplayChange(0, 0); lib, unused (OnSettingChange inlines it). CORRECTION: was CWnd::OnSettingChange_Main [dead: no caller or pointer]
+0x00706BFC	75	CWnd::OnDevModeChange	named	MFC 6: CWnd::OnDevModeChange(lpDeviceName) (WM_DEVMODECHANGE 0x1B map entry): the app's main window -> CWinApp::DevModeChange(name) 0x707B4D; non-child -> SendMessageToDescendants with the current message (GetCurrentMessage). Name was OnDevModeChange
+0x00706C47	100	CWnd::OnHelpInfo	named	MFC 6: CWnd::OnHelpInfo(HELPINFO*) (WM_HELPINFO 0x53 map entry): non-child with a main window and Shift / Ctrl / Alt up -> SendMessage(main, WM_COMMAND, ID_HELP 0xE146), TRUE; else Default(). CORRECTION: was CWnd::OnSysCommand_Esc
+0x00706CAB	73	CWnd::OnDisplayChange	named	MFC 6: CWnd::OnDisplayChange(WPARAM, LPARAM) (WM_DISPLAYCHANGE 0x7E map entry): main window -> afxData UpdateSysMetrics 0x703E56; non-child -> SendMessageToDescendants(current message); Default(); also called by OnSettingChange / OnWinIniChange
+0x00706CF4	42	CWnd::OnDragList	named	MFC 6: CWnd::OnDragList(WPARAM, LPARAM lpInfo) (registered-message entry for CWnd::m_nMsgDragList): ReflectLastMsg(DRAGLISTINFO hWnd +4, &lResult) -> lResult, else Default(). CORRECTION: was CWnd::OnReplyDefault_G
+0x00706D1E	33	CWnd::OnHScroll	named	MFC 6: CWnd::OnHScroll(nSBCode, nPos, CScrollBar*) (WM_HSCROLL 0x114 map entry): scroll-bar control -> SendChildNotifyLastMsg(NULL), handled -> done; else Default(). CORRECTION: was CWnd::OnReplyDefault_C
+0x00706D3F	33	CWnd::OnVScroll	named	MFC 6: CWnd::OnVScroll(nSBCode, nPos, CScrollBar*) (WM_VSCROLL 0x115 map entry): same as OnHScroll. CORRECTION: was CWnd::OnReplyDefault_D
+0x00706D60	74	CWnd::OnEnterIdle	named	MFC 6: CWnd::OnEnterIdle(nWhy, CWnd*) (WM_ENTERIDLE 0x121 map entry): dispatches every pending WM_ENTERIDLE (PeekMessageA(.., 0x121, 0x121, PM_REMOVE) + DispatchMessageA), then Default(). CORRECTION: was CWnd::FlushTimerMessages (0x121 is WM_ENTERIDLE, not WM_TIMER)
+0x00706DAA	39	CWnd::OnCtlColor	named	MFC 6: CWnd::OnCtlColor(CDC*, CWnd* pWnd, nCtlColor) (WM_CTLCOLOR 0x19 map entry): pWnd->SendChildNotifyLastMsg(&lResult) -> lResult (brush), else Default(). CORRECTION: was CWnd::OnReplyDefault_E
+0x00706DD1	99	CWnd::OnGrayCtlColor	named	MFC 6: CWnd::OnGrayCtlColor(CDC*, CWnd*, nCtlColor): child reflection first; else CWnd::GrayCtlColor(pDC->m_hDC +4, hwnd, nCtlColor, _afxWinState m_hDlgBkBrush +4, m_crDlgTextClr +8) -> the brush, else Default(); lib, unused. CORRECTION: was CWnd::OnCtlColor [dead: no caller or pointer]
+0x00706E34	117	CWnd::GrayCtlColor	named	MFC 6: static CWnd::GrayCtlColor(hDC, hWnd, nCtlColor, hbrGray, clrText): no DC / brush, or CTLCOLOR_MSGBOX 0 / EDIT 1 / SCROLLBAR 5 -> FALSE; LISTBOX 2 only for a combo box's list (_AfxIsComboBoxControl 0x70A912); SetBkColor(brush colour from GetObjectA LOGBRUSH), SetTextColor(clrText or COLOR_WINDOWTEXT when -1); TRUE; callers _AfxGrayBackgroundWndProc, OnGrayCtlColor. CORRECTION: was AfxDrawGrayBitmap (settles the lib01 question)
 0x00706EA9	8	dead_706EA9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00706EB1	94	CWnd::ExecuteDlgInit	named	dialog init helper under an EH frame and thread state
+0x00706EB1	94	CWnd::UpdateData	named	MFC 6: CWnd::UpdateData(bSaveAndValidate): CDataExchange dx(this, bSave) 0x706F53; thread state m_hLockoutNotifyWindow +0xB8 = m_hWnd while DoDataExchange (vt +0x84) runs inside try/catch (tail block 0x706F36 restores it); returns bOK; lib, unused. CORRECTION: was CWnd::ExecuteDlgInit [dead: no caller or pointer]
 0x00706F33	3	sub_706F33	named	unregistered function, reached by call / pointer from 0x306F10,0x306F2E (gaps.py 2026-11-06)
-0x00706F36	29	CWnd::RestoreFrame	named	EH helper: restores a saved field and returns
-0x00706F53	22	InitFields3_706F53	named	initializes 3 field(s) from constants/arguments (0, param_2, param_1)
-0x00706F69	437	CWnd::CenterWindow	named	centers the window over its owner/monitor (xMonitorFromWindow, SetWindowPos)
-0x0070711E	4	vt_746DA8::Nop_70711E	named	empty function (returns immediately)
-0x00707122	80	CWnd::LoadDialogTemplate	named	FindResource RT_DIALOG (0xF0) then parses the template
-0x00707172	210	CWnd::ParseDialogTemplate	named	parses a dialog template body (items and extra data)
-0x00707244	261	CWnd::UpdateDialogControls	named	iterates children building CCmdUI for each and dispatching OnCmdMsg (261 bytes)
+0x00706F36	29	CWnd::UpdateData_chunk_706F36	named	Chunk (not a separate function): exit block of CWnd::UpdateData 0x706EB1 (restores m_hLockoutNotifyWindow from [ebp-0x18], pops the SEH frame, returns [ebp+8]); reached by its jump at 0x706F0D (and the catch). Name was CWnd::RestoreFrame
+0x00706F53	22	CDataExchange::CDataExchange	named	MFC 6: CDataExchange ctor(CWnd* pDlgWnd, bSaveAndValidate): m_bSaveAndValidate +0, m_pDlgWnd +4, m_hWndLastControl +8 = 0; dead chain: only from the dead CWnd::UpdateData. CORRECTION: was InitFields3_706F53
+0x00706F69	437	CWnd::CenterWindow	named	MFC 6: CWnd::CenterWindow(pAlternateOwner): child -> centre in the parent's client area; else over the owner (GW_OWNER / alternate / main window when it is visible and not minimised) inside its monitor work area (xMonitorFromWindow / xGetMonitorInfo 0x6E6F22 / 0x6E6F8D), clamped to the work area; SetWindowPos(SWP_NOSIZE|NOZORDER|NOACTIVATE); caller _AfxPostInitDialog
+0x0070711E	4	CWnd::CheckAutoCenter	named	MFC 6: CWnd::CheckAutoCenter (vtable 0x746DA8 slot 43): returns TRUE. Name was vt_746DA8::Nop_70711E
+0x00707122	80	CWnd::ExecuteDlgInit	named	MFC 6: CWnd::ExecuteDlgInit(LPCTSTR lpszResourceName): FindResourceA(module resource handle, name, RT_DLGINIT 0xF0), LoadResource, LockResource, then ExecuteDlgInit(lpResource) 0x707172 (TRUE when there is no resource); lib, unused. CORRECTION: was CWnd::LoadDialogTemplate [dead: no caller or pointer]
+0x00707172	210	CWnd::ExecuteDlgInit_res	named	MFC 6: CWnd::ExecuteDlgInit(LPVOID lpResource): walks the DLGINIT records {nIDC, nMsg, dwLen, data}: 0x1234 / 0x401 / 0x403 OLE control init messages flag that WM_INITIALUPDATE must be broadcast, LB_ADDSTRING 0x180 / CB_ADDSTRING 0x143 -> SendDlgItemMessage (-1 / errors -> FALSE); finally SendMessageToDescendants(WM_INITIALUPDATE) when OLE controls were seen; dead chain: only from 0x707122. CORRECTION: was CWnd::ParseDialogTemplate
+0x00707244	261	CWnd::UpdateDialogControls	named	MFC 6: CWnd::UpdateDialogControls(pTarget, bDisableIfNoHndler): CCmdUI state + temporary CWnd; for every child (GetTopWindow / GW_HWNDNEXT): its id; a permanent CWnd that handles CN_UPDATE_COMMAND_UI itself (OnCmdMsg) is skipped; buttons other than radio / check / group (WM_GETDLGCODE, style 3 / 6 / 7 / 9) skip the disable rule; CCmdUI::DoUpdate(pTarget, ..); lib, unused [dead: no caller or pointer]
 0x00707349	48	dead_707349	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00707379	351	CFrameWnd::ShowOwnedWindows	named	shows/hides owned windows depending on the show state flags
-0x007074D8	7	CWnd::IsInModalLoop	named	returns flag bit 0x10 of +0x24
-0x007074DF	36	CWnd::EndModalLoop	named	sets the result at +0x2C and posts the quit when in a modal loop
-0x00707503	5	vt_746DA8::Nop_707503	named	empty function (returns immediately)
-0x00707508	65	AfxRegisterWithIcon	named	fills a WNDCLASS with an icon id then AfxRegisterClassOnce
-0x00707549	119	AfxInitCommonControls	named	loads COMCTL32.DLL and calls InitCommonControlsEx
-0x007075C0	695	AfxEndDeferRegisterClass	named	registers the AfxWnd42s / AfxOleControl42s / AfxControlBar42s window classes by flag mask
-0x00707877	3	vt_746DA8::Nop_707877	named	empty function (returns immediately)
+0x00707379	351	CWnd::RunModalLoop	named	MFC 6: CWnd::RunModalLoop(dwFlags): MLF_SHOWONIDLE for a hidden window, sets WF_MODALLOOP|WF_CONTINUEMODAL in m_nFlags +0x24; idle phase: shows the window once, WM_ENTERIDLE 0x121 to the parent, WM_KICKIDLE 0x36A to itself; pump phase through the thread's PumpMessage (vt +0x5C; WM_QUIT -> AfxPostQuitMessage(0), -1), shows on WM_SYSTIMER / WM_SYSKEYDOWN, stops when ContinueModal (vt +0x70) is FALSE, IsIdleMessage (vt +0x64) re-arms idle; returns m_nModalResult +0x2C; lib, unused. CORRECTION: was CFrameWnd::ShowOwnedWindows [dead: no caller or pointer]
+0x007074D8	7	CWnd::ContinueModal	named	MFC 6: CWnd::ContinueModal (vtable 0x746DA8 slot 28): returns m_nFlags +0x24 & WF_CONTINUEMODAL 0x10. CORRECTION: was CWnd::IsInModalLoop
+0x007074DF	36	CWnd::EndModalLoop	named	MFC 6: CWnd::EndModalLoop(nResult) (slot 29): m_nModalResult +0x2C = nResult; WF_CONTINUEMODAL set -> clears it and PostMessageA(m_hWnd, WM_NULL, 0, 0)
+0x00707503	5	CWnd::SetOccDialogInfo	named	MFC 6: CWnd::SetOccDialogInfo(_AFX_OCC_DIALOG_INFO*) (slot 45): returns FALSE. Name was vt_746DA8::Nop_707503
+0x00707508	65	_AfxRegisterWithIcon	named	MFC 6 (wincore.cpp static): _AfxRegisterWithIcon(WNDCLASS*, lpszClassName, nIDIcon): class name, hIcon = LoadIconA(resource handle, nIDIcon) or LoadIconA(0, IDI_APPLICATION), AfxRegisterClass; callers AfxEndDeferRegisterClass (x2). Name was AfxRegisterWithIcon
+0x00707549	119	_AfxInitCommonControls	named	"MFC 6: _AfxInitCommonControls(LPINITCOMMONCONTROLSEX, fToRegister): COMCTL32.DLL module (GetModuleHandleA, else LoadLibraryA); GetProcAddress ""InitCommonControlsEx"" -> calls it, else (old comctl32) InitCommonControls (ord 17) when only the old classes are asked for; FreeLibrary of a loaded copy; 13 calls from AfxEndDeferRegisterClass. Name was AfxInitCommonControls"
+0x007075C0	695	AfxEndDeferRegisterClass	named	"MFC 6: AfxEndDeferRegisterClass(fToRegister): drops the classes already in module state m_fRegisteredClasses +0x18 (nothing left -> TRUE); WNDCLASS (0x28 bytes): lpfnWndProc = DefWindowProcA, hInstance = module state +8, hCursor = afxData.hcurArrow 0x7C9108; AFX_WND_REG 1 ""AfxWnd42s"", AFX_WNDOLECONTROL_REG 0x20, AFX_WNDCONTROLBAR_REG 2, AFX_WNDMDIFRAME_REG 4 ""AfxMDIFrame42s"" (icon 0x7A01), AFX_WNDFRAMEORVIEW_REG 8 ""AfxFrameOrView42s"" (icon 0x7A02) through AfxRegisterClass / _AfxRegisterWithIcon; the common-control groups (0x10 = ICC 0x3FC0, 0x40, 0x80, ... 13 calls) through _AfxInitCommonControls; stores the new mask, returns whether everything asked for is registered; caller CWnd::PreCreateWindow"
+0x00707877	3	CWnd::IsFrameWnd	named	MFC 6: CWnd::IsFrameWnd (vtable 0x746DA8 slot 44): returns FALSE. Name was vt_746DA8::Nop_707877
 0x0070787A	4	dead_70787A	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070787E	31	AfxIsMessageBoxResult	named	true when the stored result is a normal result (not 0xE001/0xE002)
-0x0070789D	74	CWnd::CallFilterHook	named	module/thread hook call with a code (-1 special) when hooks are active
-0x007078E7	53	CWnd::CallWndHook	named	calls the registered window hook with the HWND and a parameter
+0x0070787E	31	CFrameWnd::IsTracking	named	MFC 6: CFrameWnd::IsTracking: m_nIDTracking +0x90 != 0 and not AFX_IDS_HELPMODEMESSAGE 0xE002 / AFX_IDS_IDLEMESSAGE 0xE001; caller CWinThread::ProcessMessageFilter. CORRECTION: was AfxIsMessageBoxResult
+0x0070789D	74	CWnd::SubclassCtl3d	named	MFC 6: CWnd::SubclassCtl3d(nControlType): not a DLL; _afxCtl3dState (0x7CAA88): -1 -> m_pfnSubclassCtl +0x28 (m_hWnd), else m_pfnSubclassCtlEx +0x2C (m_hWnd, type); FALSE without CTL3D; lib, unused. CORRECTION: was CWnd::CallFilterHook [dead: no caller or pointer]
+0x007078E7	53	CWnd::SubclassDlg3d	named	MFC 6: CWnd::SubclassDlg3d(dwMask): not a DLL and CTL3D m_pfnSubclassDlgEx +0x20 -> (m_hWnd, dwMask); else FALSE; lib, unused (raw hit is an instruction byte of SubclassCtl3d). CORRECTION: was CWnd::CallWndHook [dead: no caller or pointer]
 0x0070791C	16	dead_70791C	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070792C	67	CWnd::SubclassWindow	named	attaches an HWND, subclasses its WNDPROC and stores the old one
+0x0070792C	67	CWnd::SubclassWindow	named	MFC 6: CWnd::SubclassWindow(HWND): Attach (FALSE on failure), PreSubclassWindow (vt +0x50), SetWindowLongA(GWL_WNDPROC, AfxGetAfxWndProc()) and stores the old proc in *GetSuperWndProcAddr() (vt +0x80) when empty; TRUE; dead chain: only from dead_70796F (SubclassDlgItem)
 0x0070796F	103	dead_70796F	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x007079D6	40	CWnd::UnsubclassWindow	named	restores the old WNDPROC and detaches
-0x007079FE	15	CPlex_FreeBlock	named	returns a block to the global CPlex pool 0x7CA940
-0x00707A0D	6	CWnd::GetMessageMap_G	named	vt slot 10: returns 0x747018
-0x00707A13	34	CWinApp::OnIdleExit	named	vt slot 21: when no main window and module state allows, AfxPostQuitMessage(0)
-0x00707A35	55	CFrameWnd::PostQuitHelper	named	vt slot 38: posts WM_USER+0x6A to the thread window and calls virtual slot 27
-0x00707A6C	119	CWnd::ProcessWndProcException	named	vt slot 27: handles exceptions inside window procedures (WM_CREATE/WM_PAINT)
-0x00707AE3	106	CWinApp::CloseAllDocuments	named	vt slot 24: tidy-up/close helper
-0x00707B4D	173	CPrintDialog::SelectPrinter	named	locks DEVNAMES, matches the printer name and opens the printer (OpenPrinter/DocumentProperties)
-0x00707BFA	114	AfxGetHandleMap_Gdi	named	returns the thread's GDI handle map (state +0x18), creating it on first use
-0x00707C6C	21	AfxInitHandleMaps_Gdi	named	creates the GDI handle map and temp CWnd
-0x00707C81	30	AfxLookupGdiHandle	named	looks up a GDI object in the permanent handle map
+0x007079D6	40	CWnd::UnsubclassWindow	named	MFC 6: CWnd::UnsubclassWindow: restores *GetSuperWndProcAddr() as GWL_WNDPROC, clears it, Detach, returns the HWND; lib, unused (raw hit is an instruction byte inside dead_70796F)
+0x007079FE	15	CTempWnd::operator_delete	named	MFC 6: class operator delete of CTempWnd (DECLARE_FIXED_ALLOC): CFixedAlloc::Free on its pool 0x7CA940 (0x3C-byte blocks, the pool CTempWnd::CreateObject 0x70D363 / deleting dtor 0x70D3A3 use); reached from the unwind funclet at 0x73A3D3 (failed construction). CORRECTION: was CPlex_FreeBlock
+0x00707A0D	6	CWinApp::GetMessageMap	named	MFC 6: CWinApp::GetMessageMap (vtable 0x7470C4 slot 10): returns &CWinApp::messageMap 0x747018; dead chain: only from the CWinApp vtable (no CWinApp is ever constructed). Name was CWnd::GetMessageMap_G
+0x00707A13	34	CWinApp::Run	named	MFC 6: CWinApp::Run (vtable 0x7470C4 slot 21): no m_pMainWnd +0x1C and AfxOleGetUserCtrl -> AfxPostQuitMessage(0); then CWinThread::Run 0x7025AB; dead chain: only from the CWinApp vtable. CORRECTION: was CWinApp::OnIdleExit
+0x00707A35	55	CWinApp::WinHelp	named	MFC 6: CWinApp::WinHelp(dwData, nCmd) (vtable 0x7470C4 slot 38): main window; m_bHelpMode +0x84 = FALSE; PostMessage(WM_KICKIDLE 0x36A); mainWnd->WinHelp (vt +0x6C); dead chain: only from the CWinApp vtable. CORRECTION: was CFrameWnd::PostQuitHelper
+0x00707A6C	119	CWinApp::ProcessWndProcException	named	MFC 6: CWinApp::ProcessWndProcException(CException*, const MSG*) (vtable 0x7470C4 slot 27): WM_CREATE / WM_PAINT -> CWinThread::ProcessWndProcException 0x702876; else nIDP = AFX_IDP_INTERNAL_FAILURE 0xF108 (WM_COMMAND from a menu -> AFX_IDP_COMMAND_FAILURE 0xF109, result TRUE); CMemoryException (class 0x7465A0) -> ReportError(MB_ICONEXCLAMATION|MB_SYSTEMMODAL), any non-CUserException (0x746158) -> ReportError(MB_ICONSTOP) (vt +0x10); dead chain: only from the CWinApp vtable. CORRECTION: was CWnd::ProcessWndProcException
+0x00707AE3	106	CWinApp::OnIdle	named	MFC 6: CWinApp::OnIdle(lCount) (vtable 0x7470C4 slot 24): lCount <= 0 -> CWinThread::OnIdle(lCount) and every document template's OnIdle through m_pDocManager +0x80 (GetFirstDocTemplatePosition vt +0x10 / GetNextDocTemplate vt +0x14 / template vt +0x88); lCount 1 -> CWinThread::OnIdle(1); returns lCount < 1; dead chain: only from the CWinApp vtable. CORRECTION: was CWinApp::CloseAllDocuments
+0x00707B4D	173	CWinApp::DevModeChange	named	MFC 6: CWinApp::DevModeChange(lpDeviceName): m_hDevNames +0x98 names the same printer (GlobalLock, DEVNAMES wDeviceOffset +2, lstrcmpA) -> OpenPrinterA, frees m_hDevMode +0x94 (AfxGlobalFree 0x70AAE4), DocumentPropertiesA size query, GlobalAlloc(GHND), DocumentPropertiesA(DM_OUT_BUFFER) (failure -> freed, 0), ClosePrinter; caller CWnd::OnDevModeChange (only for the app's main window, so never in this game). CORRECTION: was CPrintDialog::SelectPrinter
+0x00707BFA	114	afxMapHMENU	named	MFC 6: afxMapHMENU(bCreate): module thread state m_pmapHMENU +0x18; missing and bCreate -> under AfxSetNewHandler(AfxCriticalNewHandler) new CHandleMap(RUNTIME_CLASS(CTempMenu) 0x7471B0, offsetof(CMenu, m_hMenu) 4, 1); returns the map; callers CMenu::FromHandle / FromHandlePermanent / Detach, dead_707C9F. CORRECTION: was AfxGetHandleMap_Gdi (settled in lib01: the MENU handle map)
+0x00707C6C	21	CMenu::FromHandle	named	MFC 6: static CMenu::FromHandle(HMENU): afxMapHMENU(TRUE)->FromHandle(h) (temporary CMenu when not permanent); callers CWnd::OnWndMsg (x3), _AfxFindPopupMenuFromID, CWnd::OnMeasureItem. CORRECTION: was AfxInitHandleMaps_Gdi
+0x00707C81	30	CMenu::FromHandlePermanent	named	MFC 6: static CMenu::FromHandlePermanent(HMENU): afxMapHMENU(FALSE) permanent map (+4) GetValueAt, NULL without a map; callers _AfxFindPopupMenuFromID, dead_705368. CORRECTION: was AfxLookupGdiHandle
 0x00707C9F	45	dead_707C9F	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00707CCC	42	CMenu::Detach	named	MFC: CMenu::Detach (fastcall this): hMenu = m_hMenu +4; when set, removes it from the permanent map of afxMapHMENU (0x707BFA, thread state +0x18; that callee is named AfxGetHandleMap_Gdi but creates the CTempMenu map) by CMapPtrToPtr::RemoveKey; m_hMenu = 0; returns hMenu
 0x00707CF6	22	CMenu::DestroyMenu	named	MFC: CMenu::DestroyMenu: m_hMenu +4 == 0 -> FALSE; else ::DestroyMenu(Detach())

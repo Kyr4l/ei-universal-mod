@@ -6,7 +6,11 @@ CWnd, CWinThread / AfxBeginThread, AfxMessageBox, the thread / module state code
 STLport: the 8 log streams (g_0x7C55A8..g_0x7C5810, LogStream vt 0x740034) and the net log g_0x79B91C are the classic Microsoft
 iostream `ostream` over a `streambuf` subclass (ios 0x50 bytes: bp +4, state +8, x_tie +0x20, x_flags +0x24, precision +0x28, fill
 +0x2C, width +0x30, lock +0x34 / +0x38; streambuf 0x4C bytes: base +0x10 .. egptr +0x2C, lock +0x30 / +0x34; ctors / operators
-0x6FC0B0..0x6FD013) [V, T7 lib03]. Every container
+0x6FC0B0..0x6FD013) [V, T7 lib03]. MFC threads do run: the worker-thread `AfxBeginThread` 0x7022A0 is called by
+`CSoundManager::Open` and `CSoftCursor::Start`, so `CWinThread::CreateThread` 0x7024B4, `_AfxThreadEntry` 0x70215D and `AfxEndThread`
+0x702380 are live; no `CPtrArray` (only the dead CArchive::MapObject builds one) and no `CPtrList` is ever constructed. MFC array
+vtables: CStringArray 0x745F5C, CWordArray 0x745F78, CDWordArray 0x7464B8, CByteArray 0x746560, CUIntArray 0x7467A0, CPtrArray
+0x746FB0 (the CUIntArray / CPtrArray method names were swapped before) [V, T7 lib04]. Every container
 below appears inline in classes, so its layout IS the class layout at that offset. Sizes are for x86-32.
 
 | STLport 4.x type | size | layout (offsets from the member) |
@@ -30,9 +34,9 @@ below appears inline in classes, so its layout IS the class layout at that offse
 - The acks.db records are STLport template instances in 0x6E0000..0x6E6000: `HashSet_CopyFrom_6E00F0` = hashtable::_M_copy_from,
   `HashSet_Assign_6E14E0` = hashtable::operator=, and per record type (AcksAnswer 0x1C4, AcksCry 0x5C, AcksOther 0x38, AcksLine 0x28 =
   {weight, 3 strings}, AcksLine2C 0x2C) the std::copy (forward), copy_backward, uninitialized_copy / fill_n and the vector operator= /
-  resize / erase / _M_fill_insert / _M_insert_overflow; the old *_CopyBackward names were forward copies [V, T7 lib02].
+  resize / erase / _M_fill_insert / _M_insert_overflow; the old `*_CopyBackward` names were forward copies [V, T7 lib02].
 - Globals: `_S_free_list[16]` at **0x79B224** (lists for 8, 16, ..., 128 bytes), `_S_start_free` **0x79B268**, `_S_end_free` **0x79B26C**,
-  `_S_heap_size` **0x79B264**. Blocks > 128 bytes go straight to `malloc` = **0x7005AF** (1966 callers) / `free` = **0x7005D8**.
+  `_S_heap_size` **0x79B264**. Blocks > 128 bytes go straight to MFC `operator new` = **0x7005AF** (1966 callers; malloc, retried through `_afxNewHandler` 0x796E14 = AfxNewHandler 0x70058F, which throws CMemoryException) / `operator delete` = **0x7005D8** (free) [V, T7 lib04; was named malloc / free].
 - Pattern of an inlined `allocate(n)`: `if (n > 128) malloc(n) else { list = &free_list[(n-1)>>3]; p = *list; if (p) *list = *p; else p = refill(n) }`.
   Pattern of `deallocate(p, n)`: `if (n > 128) free(p) else { *p = *list; *list = p; }`.
 
