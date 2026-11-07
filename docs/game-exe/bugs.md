@@ -465,3 +465,16 @@ a directory walk on C:: the index is `rand() % (count - 1)` (0x49F6E5 `dec ecx`,
 divides by zero (crash at start-up), and a walk with no readable file loops forever. Only a nearly empty C: drive (a minimal Wine prefix)
 can hit it.
 
+## 30. Magic traps with a single target hit the LAST unit in range, not the nearest (T7 g09, 2026-11-07)
+
+CONFIRMED in the machine code, not tested live. `CMagicTrapObject::CastAtTargets` 0x52A4B0, single-target mode (`+0x28c` set):
+the loop over the collected units (0x52A59E..0x52A5DD) computes the squared distance to the trap point and compares it with the
+constant 1e30 at 0x73E73C (`fcomp` 0x52A5C6); when it is smaller it keeps that unit (`mov ebp, edx` 0x52A5D9) but never lowers the
+limit, so every unit passes and the one kept is the last of the list. Effect: a trap meant to strike the closest unit strikes
+whichever unit happens to be last in its collected list. Fix: store the distance as the new limit after keeping the unit.
+
+## 31. Magic traps: a unit standing in two overlapping areas is cast at twice (T7 g09, 2026-11-07)
+
+From the code, minor. `MagicTrap_CollectUnitsInAreas` 0x52A920 appends the units of every trap area without a duplicate check; in
+reload mode (`CastAtTargets` casting at everything inside) a unit inside two overlapping areas of one trap gets the spell twice.
+

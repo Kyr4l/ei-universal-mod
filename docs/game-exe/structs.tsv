@@ -14,7 +14,7 @@ CObject3D			0x94	pointer	renderSpecific	CObject3DClientSpecific*
 CObject3D			0x98	pointer	animSystem	CAnimationSystem2*
 CObject3D			0xa0	pointer	animDb	the mapped .adb of the model (AnimDb)
 CObject3D			0xa4	CString	modelName	char* ; "<model>.adb" is loaded from it
-CObject3D			0xa8	byte[24]	effects	MFC CList (vt 0x73DE4C) of attached CEffect (head +0xAC, count +0xB4)
+CObject3D			0xa8	CList	effects	effect CList object: head +0xAC, tail +0xB0, count +0xB4, free +0xB8, plex +0xBC, block size +0xC0 (CObject3D::AttachEffect / DetachEffect / DetachAllEffects)
 CObject3D			0xc0	int	effectsGrow	10
 CObject3D			0xd0	pointer	parts	CFigure*[] (32-byte aligned; count +0xD4, cap +0xD8, grow +0xDC): the drawn parts (AddPart / CreatePart)
 CObject3D			0xe0	pointer	pendingParts	CFigure*[] (count +0xE4, cap +0xE8, grow +0xEC): parts named but not yet created (Activate creates them)
@@ -1890,7 +1890,7 @@ CObject3DClientSpecific			0x20	pointer	primarySet	TextureSet for texture kinds 1
 CObject3DClientSpecific			0x24	pointer	secondarySet	TextureSet for the other kinds (items' own textures, kind 2)
 CObject3DClientSpecific			0x28	pointer	textures	CTexture*[] (count +0x2C, cap +0x30, grow +0x34)
 CObject3DClientSpecific			0x38	pointer	materials	CMaterial*[] (count +0x3C, cap +0x40, grow +0x44)
-CObject3DClientSpecific			0x48	int	registeredMaterials	-1 none (RegisterMaterials)
+CObject3DClientSpecific			0x48	int	registeredMaterials	also the cursor of CObject3DClientSpecific::NextMaterial 0x51B6F0 (index into materials +0x38)
 CObject3DClientSpecific			0x4c	pointer	shadowReceiverA	shadow receiver arrays (RenderShadow; count +0x50 ...)
 CObject3DClientSpecific			0x5c	pointer	shadowReceiverB	
 CObject3DClientSpecific			0x6c	pointer	shadowReceiverC	
@@ -4158,3 +4158,15 @@ CSysInfo			0x2c	CString	servicePack	OSVERSIONINFOA.szCSDVersion (+0x88)
 CSysInfo			0x30	byte[32]	memoryStatus	MEMORYSTATUS (GlobalMemoryStatus); the only instance g_0x7AB8F8 is never read
 CSysInfo			0x50	byte[36]	systemInfo	SYSTEM_INFO
 CSysInfo			0x74	byte[148]	osVersionInfo	OSVERSIONINFOA (build +0x80, platform +0x84, CSD +0x88)
+CTorchObjectSpecific			0x20	int	effectKind	Set1 a (particle kind for CParticleManager::CreateParticleSystem in the client override SetEffect)
+CTorchObjectSpecific			0x24	CString	soundName	SetName (slot 18); the client plays it as a looping 3D sound
+CTorchObjectSpecific			0x28	float	effectScale	Set1 c (CParticle::ScaleParams in SetEffect)
+CTorchObjectSpecific			0x2c	float	lightB	Set2 b; the client uses +0x2C * 5 as the sound radius
+CTorchObjectSpecific			0x30	float[4]	lightQ	Set2 q (4 floats)
+CTorchObjectSpecific			0x40	float[3]	effectOffset	Set1 pos: effect position = owner position + offset
+CTorchObjectSpecific			0x4c	float[3]	lightV	Set2 v (3 floats)
+CTorchObjectClientSpecific	CTorchObjectSpecific		0x58	CObject*	light	light object (flag 0x80 = removed from the terrain)
+CTorchObjectClientSpecific	CTorchObjectSpecific		0x5c	CParticle*	effect	the fire effect; slot 15 updates it 60 times at creation (pre-warm)
+CTorchObjectClientSpecific	CTorchObjectSpecific		0x60	int	soundHandle	looping sound handle (CSoundManager::Play3D)
+PerksDb		0x18	0x0	vector	groups	0x18-byte perk-group / skill records {CString +0, CString +4, int +8, vector<CString> +0xC}; global g_0x7AF268 (PerksDb_Init 0x51FB10)
+PerksDb		0x18	0xc	vector	perks	0x44-byte perk records (PerkRecord::SerializeFields); g_0x7AF274 = begin, g_0x7AF278 = end

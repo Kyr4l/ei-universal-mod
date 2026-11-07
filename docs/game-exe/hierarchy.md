@@ -36,7 +36,7 @@ Fields so far: +0xa4 name (char*), +0xc4 offset (3f, reset from +0x1ac), +0xd0 a
 32-byte aligned), +0x100 RECT, +0x128 offset (3f, slot 48), +0x170 "specific" (CMapObjectServer / ClientSpecific, typeId 0x47:
 its +0x1c = owner back pointer, +4 refcount), +0x174 = 5, +0x178 = 1.0f, +0x17c struct (0x5233B0 init / 0x522C50 copy),
 +0x194 (0x50FE70 init), +0x198/+0x19c array of 0x14-byte items (0x688550 read, 0x6885A0 write), +0x1a8 string, +0x1ac 3f, +0x1c0 = -1, +0x1c4 (0x50FA30/0x47FB70).
-Slots 18..61: see functions.tsv (CMapObject::*). Known: 19 SetSpecific, 20 Assign, 21/29 flag bits, 30 ResetOffset, 48 PlaceOnTerrain,
+Slots 18..61: see functions.tsv (CMapObject::*). Known: 19 SetSpecific, 20 Assign, 21/29 flag bits, 30 ResetOffset, 48 GetGroundedPos (fills an out point, moves nothing; CUnit adds its height) [V],
 51 SnapZ, 52/53 GetLocalPos, 55 -> specific vt[17]. The world object: 0x455950(this) -> its vt[27](x,y) = terrain height.
 
 ## The root fields, settled
