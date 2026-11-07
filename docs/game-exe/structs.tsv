@@ -2297,7 +2297,7 @@ CAcksDb			0x44	pointer	othersEnd
 CAcksDb			0x48	pointer	othersCapacity	
 CAcksDb			0x4c	pointer	othersByName	
 AcksAnswer		0x1c4	0x0	pointer	name	std::string (the NPC / actor key)
-AcksAnswer			0xc	pointer	listsById	CORRECTION: was "sound kind id (0..0x18) -> list": ack id -> list map built by CAcksDb::Load 0x6D7620: ids 0..0x15 -> +0x20 + id*0xC, 0x16..0x1B -> 0, 0x1C..0x1F -> +0x128..+0x14C, 0x20 -> +0x170, 0x21 -> +0x17C, 0x22 -> +0x188, 0x23 -> +0x158, 0x24 -> +0x164, 0x27 -> +0x194, 0x28 -> +0x1A0, 0x2A -> +0x1B8 (0x29 = +0x1AC read directly by CUnit::PlayAck)
+AcksAnswer			0xc	byte[20]	listsById	STLport hashtable {3 functor bytes +0xC..+0xE, bucket vector +0x10..+0x18, count +0x1C}: copied by HashSet_Assign_6E14E0 / HashSet_CopyFrom_6E00F0, never serialized (rebuilt by CAcksDb::Load)
 AcksAnswer			0x20	byte[264]	lists	0x16 lists of 0xC bytes {begin, end, cap} of 0x28-byte voice-line records {wav path, weight, subtitle, text id} for ids 0..0x15 (database-format.md fields 10..44)
 AcksAnswer			0x128	pointer[3]	linesBored	Answers field 32 Bored (the one AcksUniqueType(21) list: lines carry the extra cooldown subfield 10): vector {begin, end, cap} of voice-line records like +0x20 (ctor InitFields4_6DD550, dtor PoolFreeVector_006DD570); the 0x16-list note of +0x20 stops at field 31: fields 32..44 continue here at +0x20 + (field - 10) * 0xc (database-format.md acks)
 AcksAnswer			0x134	pointer[3]	linesUnknown33	field 33 Unknown
@@ -4098,6 +4098,7 @@ MapAllodRecord		0x2c	0x4	CString[5]	lines	first word of each of the 5 lines afte
 MapAllodRecord		0x2c	0x18	CDWordArray	zoneIndices	indices of the '#zone' records naming this allod (vtable +0x18, data +0x1C, count +0x20)
 AcksCry			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2E..0x32 -> +0x20 Agress, +0x2C Suspect, +0x38 Kill, +0x44 Rest, +0x50 InAgress
 AcksCry		0x5c	0x0	byte[12]	name	std::string (StlString_dtor2 in AcksCry::dtor 0x6DC920; copied by AcksCry::CopyCtor 0x6DFA90)
+AcksCry			0x20	pointer[3]	agressLines	vector<AcksLine>; with +0x2C, +0x38, +0x44, +0x50: archive tags 10..14 (AcksCry::Serialize 0x6E3FD0)
 AcksOther			0xc	pointer	listsById	ack id -> list map (CAcksDb::Load): 0x2C -> +0x20 Talk, 0x2D -> +0x2C Rest
 AcksOther		0x38	0x0	byte[12]	name	std::string (NodeAlloc_FreeBytes in AcksOther::dtor 0x6DCAF0)
 AcksOther			0x20	pointer[3]	talkLines	vector of 0x28 records with three std::strings (+4, +0x10, +0x1C) (list 0x2C, Talk)
@@ -4303,3 +4304,31 @@ AUX_DATA			0x3c	HCURSOR	hcurWait	0x7C9104, CWinApp::DoWaitCursor
 AUX_DATA			0x50	HBITMAP	hbmMenuDot	0x7C9118 (AfxLoadDotBitmap; deleted by AUX_DATA::~AUX_DATA 0x70E181)
 AUX_DATA			0x5c	int	bWin4	0x7C9124
 CWinApp	CWinThread	0xc0	0x78	char*	m_pszAppName	the game never constructs a CWinApp (CWinApp::CWinApp 0x70D654 unreferenced); only CWinApp::DoMessageBox runs with this = NULL
+AcksLine		0x28	0x0	int	weight	acks voice-line record (vector element of every Answers / Cryes / Others list): archive tag 2 (4 bytes) in AcksLine28_Serialize / Archive_SerializeRec28Vector 0x6E42F0
+AcksLine			0x4	byte[12]	wavPath	std::string, archive tag 1
+AcksLine			0x10	byte[12]	subtitle	std::string, archive tag 3
+AcksLine			0x1c	byte[12]	textId	std::string, archive tag 4 (Rec28_Dtor 0x6E3330 frees +0x1C, +0x10, +4)
+AcksLine2C	AcksLine	0x2c	0x28	int	envFlags	archive tag 10 (Archive_SerializeRec2CVector 0x6E4410); the AcksAnswer +0x1AC hit-sound list uses this record (the existing AcksAnswer row calls +0x28 the environment flags, +0 the percent)
+CFileFind	CObject	0x1c	0x4	WIN32_FIND_DATA*	m_pFoundInfo	current find data (0x140 bytes): GetFileName +0x2C, GetLength +0x20, times +4 / +0xC / +0x14 (0x6E6513..0x6E68AA)
+CFileFind			0x8	WIN32_FIND_DATA*	m_pNextInfo	swapped with +4 by FindNextFile 0x6E6653
+CFileFind			0xc	HANDLE	m_hContext	FindFirstFileA handle; CloseContext 0x6E6429 = FindClose
+CFileFind			0x10	BOOL	m_bGotLast	0 in FindFile
+CFileFind			0x14	CString	m_strRoot	_fullpath directory of the pattern (FindFile 0x6E6433)
+CFileFind			0x18	char	m_chDirSeparator	'\\' (ctor 0x6E6370)
+CFixedAlloc		0x28	0x0	uint	m_nAllocSize	ctor 0x6E6BCD
+CFixedAlloc			0x4	uint	m_nBlockSize	nodes per CPlex block
+CFixedAlloc			0x8	CPlex*	m_pBlocks	CPlex chain (FreeAll 0x6E6C09 frees it)
+CFixedAlloc			0xc	void*	m_pNodeFree	free node list (Alloc 0x6E6C31 / Free 0x6E6CC0)
+CFixedAlloc			0x10	CRITICAL_SECTION	m_protect	0x18 bytes
+CHandleMap		?	0x0	pointer	vtable	0x74685C (only slot: deleting dtor 0x6E6CEC)
+CHandleMap			0x4	CMapPtrToPtr	m_permanentMap	dtor 0x6E6D08
+CHandleMap			0x20	CMapPtrToPtr	m_temporaryMap	iterated by DeleteTemp 0x70373B
+CHandleMap			0x40	size_t	m_nOffset	offset of the handle(s) in the wrapper object (DeleteTemp clears it)
+CHandleMap			0x44	int	m_nHandles	2 for CDC (second handle cleared too)
+CSimpleException	CException	0x98	0x4	BOOL	m_bAutoDelete	SetField_4_70205D in the ctors 0x6E68C9 / 0x6E6916 / 0x6E6AEA / 0x6E6B37
+CSimpleException			0xc	BOOL	m_bInitialized	0 in the ctors
+CSimpleException			0x10	BOOL	m_bLoaded	0 in the ctors
+CSimpleException			0x94	UINT	m_nResourceID	ctor argument 2
+CFileException	CException	0x14	0x10	CString	m_strFileName	dtor 0x6E6335
+CArchiveException	CException	0x10	0xc	CString	m_strFileName	dtor 0x6E6BA1
+CFile	CObject	0x10	0xc	CString	m_strFileName	SetFilePath 0x6E6361

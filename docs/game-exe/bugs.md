@@ -387,7 +387,7 @@ icon is drawn: inventory, shop, trade, camp).
 
 CONFIRMED in code; not reachable with vanilla, Universal-Mod or LostInAstral data. Effect with such data: crash when a shop restocks.
 
-- Material type test: `_stricoll(proto +0x10, "none")` (decompile line 133); equal -> `CItemConstructor::SetMaterial(0)` (LAB_0069b283),
+- Material type test: `_mbsicmp(proto +0x10, "none")` (0x6E8767, MBCS case-insensitive; was named `_stricoll`) (decompile line 133); equal -> `CItemConstructor::SetMaterial(0)` (LAB_0069b283),
   then `param_3 = CItemConstructor::FinishItem` (line 277) and at once `*(param_3 + 4) += 1` (line 279) with no null test. FinishItem
   0x6A5CF0 releases the item and returns 0 for a weapon / armour without a material, so that line writes to address 4.
 - Data (offline, field 3 = M.Type of every record): vanilla items.idb (database.res and databaselmp.res): weapons Stone / Metal /

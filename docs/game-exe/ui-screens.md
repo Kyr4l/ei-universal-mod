@@ -91,7 +91,7 @@ Modes `+0x16C` [V]: 0 world, 1 topic list, 2 walking into place, 3 briefing text
 | OnCommand 0x606F40 | 0x10001 (leave-zone yes) = `Session_RequestMapChange(+0x164)`; 0x20001 = push CSaveLoadWin in save mode; 0x90001 / 0x100001 = leave the game (`CInterface +0x44` = 1, `LobbySession_ReleaseActive(2)`) |
 
 `SelectAnswer(isBriefing, savePoses)` 0x6064E0 [V, deep read 2026-11-06]: `+0x27C` = isBriefing; no player unit `+0x1A4` -> mode 0.
-"goodbye" -> mode 0. A topic whose first 6 characters are "constr" (case-insensitive `_stricoll` of `CString::Left(6)`; the
+"goodbye" -> mode 0. A topic whose first 6 characters are "constr" (case-insensitive `_mbsicmp` 0x6E8767 of `CString::Left(6)`; the
 lower-casing `CString::MakeLower` 0x700EFE (was named MakeUpper) belongs to 0x6078C0, not here) -> merchant id = `atol(topic.Mid(7))`
 (so "constr_5" -> 5; 0x6FD9B4, named `CString::Left`, is `CString::Mid(nFirst)`); when `g_0x7AA5D8` has that merchant,
 `World_SetConstrCurrent(id)` + `Game_SendLeave(5)` (enter the camp); mode 0 either way. Otherwise the text `briefing <topic>` is
@@ -337,7 +337,7 @@ allowed there).
   complex) <= maxSkill **and** trunc(blueprint mana + sum(PerkProto `+0x10` mana)) <= maxMana. So the limits are the best hero's
   skill and mana budget, not the selected hero's.
 - Item: a blueprint (`Sub0to2`) or a usable item only into an empty list `+0x1C0`; a material only when no usable item is in and a
-  blueprint is: the first material's name (MaterialProto `+4`) must equal the blueprint proto's material type (`+0x10`, `_stricoll`),
+  blueprint is: the first material's name (MaterialProto `+4`) must equal the blueprint proto's material type (`+0x10`, `_mbsicmp` 0x6E8767, case-insensitive),
   later ones must be the same material row and the number of material entries already in must be < proto Components `+0x4C`
   (blueprint proto row `+0x54` in the weapon / armor / quick table by blueprint `+0x50` = 0 / 1 / 2); a spell container only when the
   preview `+0x214` exists, the container holds a spell, the preview is a quick item (0x3006) or the spell has perk ic / it
@@ -947,7 +947,7 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | ui-screens.md 3 (Build) / functions.tsv 0x6024B0 / structs.tsv DialogScreen +0x27E | topic panel "(155..416 x 580..645)"; music `CMusicZone::PlayBattle`; +0x27E "0 in player mode 5 or when the UI stream is empty" | topic panel (155,416)-(645,580); `CMusicSystem::PlayBriefing`; +0x27E = 1 only on a fresh build (empty stream) with client mode != 5 (deep read 2026-11-06) |
 | ui-screens.md 3 (ParseDialogScript) / structs.tsv DialogScreen +0x250 | voice "<root>\briefing\<name>\<n>.mp3" via `PlaySound3D`; `#show <unit> [idx] [weapon]` as if the word mattered | `Play2D("<t or s, random>\briefing\<topic>\<n>.mp3")`; one `#phrase` per call, directives apply to the next phrase; `[weapon]` of `#show` has no effect (AddSpeaker never reads its third argument, machine code) |
 | ui-screens.md 3 (end of a briefing) / functions.tsv 0x608450 | `StartDialogLine`: "every `b.<x>.<topic>` variable equal to the topic fires" the script event | renamed `EndBriefing`; only the **first** 3-part `b.<x>.<topic>` whose third part equals the topic fires `CWorldServer::OnNamedEvent` (the loop exits after it) |
-| ui-screens.md 3 (SelectAnswer) | the constr test lower-cases the topic (`MakeLower`) | SelectAnswer compares `Left(6)` with `_stricoll` (case-insensitive); the merchant id is `atol(topic.Mid(7))` |
+| ui-screens.md 3 (SelectAnswer) | the constr test lower-cases the topic (`MakeLower`) | SelectAnswer compares `Left(6)` with `_mbsicmp` 0x6E8767 (case-insensitive; was named `_stricoll`, T7 lib02); the merchant id is `atol(topic.Mid(7))` |
 | functions.tsv 0x6FD9B4 | `CString::Left` "via Mid(0, count)" | `CString::Mid(nFirst)` = Mid(nFirst, length - nFirst): the tail from index nFirst (machine code: `sub eax, [ebp+0xc]`) |
 | ui-screens.md 9 (quest log map list) / functions.tsv 0x64BE80 | with allowTravel the map list is "every zone of the `z.` variables" | every zone with an open quest: 3-part `q.<zone>.<quest>` == 1.0 in the caption zone's allod (prefix "q.", 0x783D7C) |
 | ui-screens.md 9 (ShowMap) | "the nearest exit is pre-selected"; the map "150 px for the larger zone size" | only with travel times, the exit with the smallest time; otherwise none; the larger side spans 300 px (150 is the half size) |

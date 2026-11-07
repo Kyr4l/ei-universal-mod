@@ -13824,502 +13824,494 @@ addr	size	name	status	purpose
 0x006DFA90	580	AcksCry::CopyCtor	named	thiscall (src): std::string +0 copy (String_CtorRange), hash set +0xC copy (HashSetCopy_Ctor_6DEC40), then for the five line vectors +0x20 / +0x2C / +0x38 / +0x44 / +0x50: AcksLineVector_CtorN(count) and StrRecord28_CopyRange of the source records (finish set from its result); returns this; caller AcksCryesVector_InsertRealloc. Was DbSubRecord_CopyCtor
 0x006DFCE0	568	AcksOthersVector_InsertRealloc	named	STL: vector<Others record 0x38>::_M_insert_overflow (grow path of insert: AcksLineRecord_CopyCtor copies, old records destroyed); used by AcksOthersVector_AssignN (CAcksDb +0x40)
 0x006DFFC0	263	StlString_CtorCopy_6DFFC0	named	STL: copy-construct std::string for a database record (length_error)
-0x006E0028	6	EHBlock_6E0028	named	exception-handling block (funclet) inside of StlString_CtorCopy_6DFFC0 (0x006DFFC0)
-0x006E00D0	24	InitFields4_6E00D0	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
-0x006E00F0	347	DwordVector_InsertN_Core	named	vector<dword> insert-n-copies core (grow, copy, fill; STLport _M_insert_overflow style)
-0x006E02B0	334	DwordVector_InsertRange_I	named	vector<dword> insert range (instance I)
-0x006E0440	201	DwordVector_AllocCopy_006E0440	named	allocate N dwords from the pool (refill inlined) and copy/fill a range
-0x006E0510	3	Nop_6E0510	named	empty function (returns immediately)
-0x006E0520	29	Rec28_DestroyRange	named	destroy 0x28-byte records [first,last) (calls Rec28_Dtor)
-0x006E0540	1006	DbTableRecord_CopyBackward_A	named	copy-assign 0x1C4-byte DbTableRecord range backward
-0x006E0930	860	Rec5C_CopyBackward	named	copy-assign 0x5C-byte records backward (strings, hash set, list)
-0x006E0C90	622	Rec38_CopyBackward	named	copy-assign 0x38-byte records backward
-0x006E0F00	24	NodeFree10_006E0F00	named	push a 0x10-byte node onto the pool g_0x79b228
-0x006E0F20	755	Rec38_Assign	named	copy-assign one 0x38-byte record (string, list, vector, record)
-0x006E1220	479	Rec5C_Assign	named	copy-assign one 0x5C-byte record
-0x006E1400	223	Bytes_AssignRange	named	vector<byte>::assign(first,last) with growth
-0x006E14E0	137	ListClear10_006E14E0	named	clear a std::list / hash buckets returning nodes to the 0x10-byte pool
-0x006E1570	1002	DbTableRecord_CopyBackward_B	named	copy-assign 0x1C4-byte DbTableRecord range backward (second instance)
-0x006E1960	509	Rec28Vector_Assign	named	vector<0x28 record>::operator= (reallocate or assign+destroy tail); 120 callers
-0x006E1B60	443	Rec2CVector_Assign	named	vector<0x2C record>::operator=
-0x006E1D20	119	DbTableRecord_CopyRange	named	copy-construct DbTableRecord (0x1C4 bytes) from [first,last) into dest
-0x006E2070	3	Nop_6E2070	named	empty function (returns immediately)
-0x006E2080	29	Rec2C_DestroyRange	named	destroy 0x2C-byte records [first,last)
-0x006E20A0	117	DbTableRecord_FillN	named	copy-construct n DbTableRecord (0x1C4 bytes) from a template
-0x006E23F0	290	Rec5C_CopyRange	named	copy-construct 0x5C-byte records (string + hash set + db record + list) from [first,last)
-0x006E2640	292	Rec5C_FillN	named	copy-construct n 0x5C-byte records from a template
-0x006E2890	243	Rec38_CopyRange	named	copy-construct 0x38-byte records (string + hash set + db record + list) from [first,last)
-0x006E2A70	240	Rec38_FillN	named	copy-construct n 0x38-byte records from a template
-0x006E2C50	222	StrRecord28_CopyRange	named	copy-construct 0x28-byte {dword, std::string, ...} records from [first,last) into dest (39 callers)
-0x006E2D80	228	StrRecord2C_CopyRange	named	copy-construct 0x2C-byte {dword, std::string, ...} records from [first,last)
-0x006E2ED0	240	Rec28_AllocCopy	named	allocate n 0x28-byte records (node allocator or operator new) and copy-construct from a range
-0x006E3010	413	Rec28_CopyBackward	named	copy-assign 0x28-byte records backward over an overlapping range (strings + vectors)
-0x006E31B0	243	Rec2C_AllocCopy	named	allocate n 0x2C-byte records and copy-construct from a range
-0x006E32F0	30	DeletingDtor_6E32F0	named	scalar deleting destructor: runs FUN_006e3330 then operator delete when flag&1
-0x006E3310	30	DeletingDtor_6E3310	named	scalar deleting destructor: runs FUN_006e3390 then operator delete when flag&1
-0x006E3330	92	Rec28_Dtor	named	destroy a 0x28-byte record: free the two vectors (+0x10, +0x1C) with PoolFree and the string
-0x006E3390	92	Rec2C_Dtor	named	destroy a 0x2C-byte record: free the two vectors and the string
-0x006E33F0	429	Rec2C_CopyBackward	named	copy-assign 0x2C-byte records backward over an overlapping range
-0x006E35A0	312	Rec28_Assign	named	copy-assign one 0x28-byte record (dword, string, vector<byte>, ...)
-0x006E36E0	64	TaggedRecord_SerializeA	named	archive: tags 1 string(+4), 2 dword(+0), 3 string(+0x10), 4 string(+0x1C)
-0x006E3720	79	TaggedRecord_SerializeB	named	archive: tags 1..4 as TaggedRecord_SerializeA plus tag 10 dword at +0x28
+0x006E00D0	24	StlVectorBase_Ctor_6E00D0	named	STLport: _Vector_base(const allocator&) for a 4-byte element vector: start +0 = finish +4 = 0, _M_end_of_storage alloc-proxy byte +8 = *alloc then +8 = 0; called inside the hashtable copy ctor StlString_CtorCopy_6DFFC0 (block after 0x6E0028)
+0x006E00F0	347	HashSet_CopyFrom_6E00F0	named	"STLport: hashtable::_M_copy_from(ht): buckets.clear (CopyDwords(end,end,begin)), reserve to ht's bucket count (PoolAlloc / DwordVector_AllocCopy_006E0440 + PoolFreeDwords of the old), insert that many null buckets (DwordVector_InsertN_006DDFE0), then per bucket clone the node chain with NodeAlloc10_006DA070 (key/value copied from node+4), num_elements +0x10 = ht +0x10. this = &hashtable +4-based {+4 buckets vector, +0x10 count}; used by every acks record copy / assign. CORRECTION: was ""vector<dword> insert-n-copies core"""
+0x006E02B0	334	DwordVector_InsertOverflow_6E02B0	named	STLport: vector<dword>::_M_insert_overflow(pos, x, n): new length = size + max(size, n), STLport node allocator (free list 0x79B224 by (bytes-1)>>3, PoolAlloc_Refill) or operator new for > 0x80 bytes, copy [begin,pos), n copies of x, copy [pos,end), free the old block, set begin / end / end_of_storage; caller DwordVector_InsertN_006DDFE0 (bucket vector growth)
+0x006E0440	201	DwordVector_AllocCopy_006E0440	named	STLport: vector<dword>::_M_allocate_and_copy(n, first, last): n dwords from the node allocator (inlined refill: stlport_node_alloc_chunk_alloc 20 chunks, rest chained onto the free list) or operator new, then copies [first,last); returns the block; callers PtrVector_CtorN_6DDD90, HashSet_CopyFrom_6E00F0
+0x006E0510	3	StlValueType_Null_6E0510	named	STLport: `xor eax,eax; ret` = value_type(first) / _Destroy tag helper returning (T*)0; called right before each record range destroy (AcksCryesVector_Destroy x5, AcksOthersVector_Destroy, the *_CopyRange / *_FillN cleanup paths)
+0x006E0520	29	AcksLine28_DestroyRange	named	STLport: _Destroy(first, last) for 0x28-byte voice-line records: Rec28_Dtor on each (fastcall ecx = first, edx = last)
+0x006E0540	1006	AcksAnswerRange_Copy_A	named	"STLport: std::copy(first, last, dest) for AcksAnswer 0x1C4 records, FORWARD: per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector_Assign for the 32 line vectors +0x2C..+0x1A0, Rec2CVector_Assign +0x1AC, Rec28Vector_Assign +0x1B8; returns dest end; callers AcksAnswersVector_Serialize, AcksAnswersVector_Resize. CORRECTION: was ""copy backward"""
+0x006E0930	860	AcksCryRange_Copy	named	"STLport: std::copy forward for AcksCry 0x5C records: string assign +0 (String_AssignRange2), HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= for +0x20 and +0x2C, Rec28Vector_Assign +0x38/+0x44/+0x50; caller AcksCryesVector_Serialize. CORRECTION: was ""copy backward"""
+0x006E0C90	622	AcksOtherRange_Copy	named	"STLport: std::copy forward for AcksOther 0x38 records: string +0, inline hashtable::operator= +0xC (nodes to the 16-byte free list via NodeFree10_006E0F00, count +0x1C = 0, HashSet_CopyFrom_6E00F0), inline vector<line 0x28>::operator= +0x20, Rec28Vector_Assign +0x2C; callers AcksOthersVector_Serialize / _Resize. CORRECTION: was ""copy backward"""
+0x006E0F00	24	NodeFree10_006E0F00	named	STLport: node allocator deallocate of a 16-byte block: push onto the free list head 0x79B228 (_S_free_list[1]) when not null; caller AcksOtherRange_Copy
+0x006E0F20	755	AcksCry_Assign	named	"STLport/compiler: AcksCry (0x5C) operator=: string +0, hashtable +0xC (ListClear10_006DDD30, copy the 3 functor bytes, HashSet_CopyFrom_6E00F0), vector<line 0x28>::operator= inline for +0x20 / +0x2C, Rec28Vector_Assign +0x38/+0x44/+0x50; caller AcksCryesVector_AssignN x2. CORRECTION: was Rec38_Assign ""0x38-byte record"" (the 0x38 one is 0x6E1220)"
+0x006E1220	479	AcksOther_Assign	named	"STLport/compiler: AcksOther (0x38) operator=: string +0 (inline assign / StlString_EraseRange / append), hashtable +0xC, vector<line 0x28>::operator= inline +0x20, Rec28Vector_Assign +0x2C; caller AcksOthersVector_AssignN (stride 0x38). CORRECTION: was Rec5C_Assign ""0x5C-byte record"""
+0x006E1400	223	AcksNameHash_Assign	named	"compiler operator= of the {std::string name +0, hash set +0xC} head (0x20 bytes) of an acks record: string assign (copy then String_Append / erase tail via memmove), hashtable::operator= inline (nodes to free list 0x79B228, count +0x1C = 0, functor bytes, HashSet_CopyFrom_6E00F0); returns this; caller AcksOthersVector_AssignN (fill loop). CORRECTION: was ""vector<byte>::assign"""
+0x006E14E0	137	HashSet_Assign_6E14E0	named	"STLport: hashtable::operator=(ht) (this != &ht): every bucket chain to the 16-byte free list 0x79B228, bucket = 0, count +0x10 = 0, copy the 3 hash/equal/key functor bytes, HashSet_CopyFrom_6E00F0; returns this; used by all acks record copies. CORRECTION: was ""clear a std::list"""
+0x006E1570	1002	AcksAnswerRange_CopyBackward	named	STLport: std::copy_backward(first, last, dest_end) for AcksAnswer 0x1C4 records (the real backward one): from the end, per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector_Assign for +0x2C..+0x1A0, Rec2CVector_Assign +0x1AC, Rec28Vector_Assign +0x1B8; returns the new dest begin; caller AcksAnswersVector_Resize (insert shift)
+0x006E1960	509	AcksLine28Vector_Assign	named	STLport: vector<AcksLine 0x28>::operator=(v): this == &v -> this; larger than capacity -> Rec28_AllocCopy, destroy old (Rec28_Dtor), PoolFree, new begin / eos; size < n -> assign the first size (dword +0, String_AssignRange2 +4, String_Assign +0x10 / +0x1C) then StrRecord28_CopyRange the rest; else Rec28_Assign n and destroy the tail; end = begin + n*0x28; 120 call sites (acks record copies)
+0x006E1B60	443	AcksLine2CVector_Assign	named	STLport: vector<AcksLine2C 0x2C>::operator=: same shape as AcksLine28Vector_Assign with stride 0x2C (Rec2C_AllocCopy / Rec2C_Dtor / PoolFree, element assign Rec28_Assign = the shared 0x28 head, StrRecord2C_CopyRange for the extra); callers AcksLineRange_Assign2, AcksAnswerRange_Copy_A / _CopyBackward
+0x006E1D20	119	AcksAnswerRange_UninitCopy	named	STLport: uninitialized_copy(first, last, dest) for AcksAnswer 0x1C4: DbTableRecord_CopyCtor (= AcksAnswer::CopyCtor) per record; the catch(...) block after it destroys the partial record (StlValueType_Null_6E0510 / AcksLine28_DestroyRange, 0x6E2070 / AcksLine2C_DestroyRange) and rethrows; returns dest end; callers AcksAnswersVector_Resize, AcksAnswersVector_InsertRealloc
+0x006E2070	3	StlValueType_Null_6E2070	named	STLport: `xor eax,eax; ret` value_type null helper (2C instance) called before AcksLine2C_DestroyRange in the catch blocks of AcksAnswerRange_UninitCopy (0x6E1DDC) and AcksAnswerRange_UninitFillN (reached only from those catch blocks, not dead)
+0x006E2080	29	AcksLine2C_DestroyRange	named	STLport: _Destroy(first, last) for 0x2C voice-line records (Rec2C_Dtor each, fastcall); called from the catch blocks of AcksAnswerRange_UninitCopy / _UninitFillN (destroying the +0x1AC vector of a half-built AcksAnswer)
+0x006E20A0	117	AcksAnswerRange_UninitFillN	named	STLport: uninitialized_fill_n(dest, n, x) for AcksAnswer 0x1C4 (DbTableRecord_CopyCtor per slot, catch block destroys and rethrows); returns dest end; callers AcksAnswersVector_Resize, AcksAnswersVector_InsertRealloc
+0x006E23F0	290	AcksCryRange_UninitCopy	named	STLport: uninitialized_copy for AcksCry 0x5C: StlString_CtorCopy +0, HashSetCopy_Ctor_6DEC40 +0xC, line vector +0x20 (ListCtorInline_006DEF90(n) + StrRecord28_CopyRange), DbRecord40_CopyCtor_6DED40 (vector<line> copy ctor) +0x2C/+0x38/+0x44/+0x50; callers AcksCryesVector_AssignN, AcksCryesVector_InsertRealloc
+0x006E2640	292	AcksCryRange_UninitFillN	named	STLport: uninitialized_fill_n for AcksCry 0x5C (same member copies as AcksCryRange_UninitCopy from one template); returns dest end; callers AcksCryesVector_AssignN, AcksCryesVector_InsertRealloc
+0x006E2890	243	AcksOtherRange_UninitCopy	named	STLport: uninitialized_copy for AcksOther 0x38: string +0, HashSetCopy_Ctor_6DECC0 +0xC, line vector +0x20 (ListCtorInline_006DEF90 + StrRecord28_CopyRange), DbRecord40_CopyCtor_6DED40 +0x2C; callers AcksOthersVector_AssignN, AcksOthersVector_InsertRealloc
+0x006E2A70	240	AcksOtherRange_UninitFillN	named	STLport: uninitialized_fill_n for AcksOther 0x38 (same member copies from one template); callers AcksOthersVector_AssignN, AcksOthersVector_InsertRealloc
+0x006E2C50	222	AcksLine28Range_UninitCopy	named	STLport: uninitialized_copy for AcksLine 0x28 {dword +0, string +4, string +0x10, string +0x1C}: dword copy, String_CtorRange +4 / +0x10, StlString_CtorCopy +0x1C; returns dest end; 39 call sites (AcksAnswer::CopyCtor x17, AcksCry::CopyCtor, the vector assigns)
+0x006E2D80	228	AcksLine2CRange_UninitCopy	named	STLport: uninitialized_copy for AcksLine2C 0x2C (the 0x28 line + dword +0x28); callers AcksLineRecord2C_CopyCtor, AcksLine2CVector_Assign, Rec2C_AllocCopy
+0x006E2ED0	240	Rec28_AllocCopy	named	STLport: vector<AcksLine 0x28>::_M_allocate_and_copy(n, first, last): n*0x28 bytes from the node allocator (<= 0x80: free list 0x79B224[(bytes-1)>>3], refill 20 via stlport_node_alloc_chunk_alloc) or operator new, then AcksLine28Range_UninitCopy; returns the block
+0x006E3010	413	AcksLine28Range_Copy_A	named	"STLport: std::copy(first, last, dest) for AcksLine 0x28, FORWARD: dword +0 and three inline string assigns (+4, +0x10, +0x1C: byte copy, Thunk_String_Append_42AFB0 for the rest or erase the tail with memmove of the NUL); returns dest end; 14 call sites. CORRECTION: was ""copy backward over an overlapping range (strings + vectors)"""
+0x006E31B0	243	Rec2C_AllocCopy	named	STLport: vector<AcksLine2C 0x2C>::_M_allocate_and_copy(n, first, last) (node allocator or operator new, then AcksLine2CRange_UninitCopy); caller AcksLine2CVector_Assign
+0x006E32F0	30	AcksLine28_DeletingDtor	named	scalar deleting dtor of AcksLine 0x28: Rec28_Dtor, operator delete when flag & 1 (called with 0 as a plain destroy in the vector code, 21x from AcksAnswer::~AcksAnswer)
+0x006E3310	30	AcksLine2C_DeletingDtor	named	scalar deleting dtor of AcksLine2C 0x2C: Rec2C_Dtor, delete when flag & 1; callers AcksAnswer::~AcksAnswer, Rec2CVector_Resize
+0x006E3330	92	Rec28_Dtor	named	"AcksLine 0x28 dtor (fastcall): frees the three std::string buffers +0x1C, +0x10 (PoolFree) and +4 (inline: > 0x80 bytes operator delete, else push onto free list 0x79B224[(cap-1)>>3]). CORRECTION: was ""two vectors and the string"""
+0x006E3390	92	Rec2C_Dtor	named	AcksLine2C 0x2C dtor: same code as Rec28_Dtor (strings +0x1C, +0x10, +4); callers AcksLine2CVector_Assign, AcksLine2C_DestroyRange, AcksLine2C_DeletingDtor, Archive_SerializeRec2CVector, two jumps from a funclet after __break_b
+0x006E33F0	429	AcksLine28Range_Copy_B	named	STLport: std::copy forward for AcksLine 0x28 (second instance of AcksLine28Range_Copy_A, stride 0x28 = 10 dwords: dword +0, strings +4/+0x10/+0x1C); callers AcksOtherRange_Copy, AcksOther_Assign, AcksCryRange_Copy, AcksCry_Assign. CORRECTION: was Rec2C_CopyBackward (0x2C, backward)
+0x006E35A0	312	AcksLine28_Assign	named	"compiler operator= of AcksLine 0x28 {dword +0, string +4, string +0x10, string +0x1C}: dword copy, three inline string assigns (byte copy, String_Append for the rest, erase the tail with memmove of the NUL); returns this; also used for the 0x28 head of AcksLine2C (the 0x2C callers copy +0x28 themselves). CORRECTION: was ""(dword, string, vector<byte>, ...)"""
+0x006E36E0	64	AcksLine28_Serialize	named	(this = AcksLine 0x28, archive): Archive_SerializeStrTag tag 1 = +4, Archive_SerializeBytes tag 2 = dword +0 (4 bytes), tag 3 = string +0x10, tag 4 = string +0x1C; the same body is inlined everywhere (TaggedRecord_SerializeInTag); no call, jump or pointer [dead: no caller or pointer]
+0x006E3720	79	AcksLine2C_Serialize	named	(this = AcksLine2C 0x2C, archive): tags 1..4 as AcksLine28_Serialize plus tag 10 = dword +0x28; inlined in Archive_SerializeRec2CVector; no call, jump or pointer [dead: no caller or pointer]
 0x006E3770	15	dead_6E3770	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E3780	1585	TaggedRecordSet_SerializeC	named	archive: string tag 1 and seven Rec28 vector tags 10..14+, 1.5 KB
-0x006E3DC0	524	TaggedRecordSet_SerializeB	named	archive: string tag 1, counted vector tag 10, bytes
-0x006E3FD0	799	TaggedRecordSet_Serialize	named	archive: tag 1 string, tag 10 counted vector of 0x28 records (read: clear + fill, write: count)
-0x006E42F0	277	Archive_SerializeRec28Vector	named	archive: counted vector of 0x28 records under a tag (read: resize + fill; write: count + each); 28 callers
-0x006E4410	296	Archive_SerializeRec2CVector	named	archive: counted vector of 0x2C records under a tag
-0x006E4540	32	StaticInit_Guarded_6E4540	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x006E4560	341	Rec28Vector_Resize	named	vector<0x28 record>::resize(n) filling with a default record built from two strings
-0x006E46C0	296	Rec28Vector_Clear	named	destroy all elements, erase the range and set end = begin
-0x006E47F0	292	Rec2CVector_Resize	named	vector<0x2C record>::resize(n)
-0x006E4920	295	Rec28Vector_EraseRange	named	erase [pos,end) of a vector<0x28 record>: shift down and destroy the tail
-0x006E4A50	655	Rec28Vector_InsertN	named	vector<0x28 record>::insert(pos, n, value) with reallocation
-0x006E4CE0	594	Rec2CVector_InsertN	named	vector<0x2C record>::insert(pos, n, value)
-0x006E4F40	85	TaggedRecord_SerializeInTag	named	Archive_BeginTag(tag) then the four fields (strings +4/+0x10/+0x1C, dword +0), EndTag; 11 callers
-0x006E4FA0	413	Rec28_Move_A	named	move/copy-assign 0x28-byte records forward over the range using memmove for the vector part
-0x006E5140	303	StrRecord_CopyCtor	named	copy-construct a {dword, string, string...} record
-0x006E5270	429	Rec28Vector_InsertRange	named	vector<0x28 record>::insert(pos, first, last)
-0x006E5490	499	Rec2CVector_InsertRange	named	vector<0x2C record>::insert(pos, first, last)
-0x006E5710	429	Rec28_Move_B	named	copy-assign 0x28-byte records (second instance)
-0x006E58C0	419	Rec2C_Move	named	copy-assign 0x2C-byte records
-0x006E5A70	222	StrRecord28_CopyRange_B	named	copy-construct 0x28-byte string records (second instance)
-0x006E5BA0	230	StrRecord28_FillN	named	copy-construct n 0x28-byte string records from a template
-0x006E5CE0	228	StrRecord2C_CopyRange_B	named	copy-construct 0x2C-byte string records (second instance)
-0x006E5E30	234	StrRecord2C_FillN	named	copy-construct n 0x2C-byte string records from a template
+0x006E3780	1585	AcksAnswer::Serialize	named	(this = AcksAnswer 0x1C4, archive): tag 1 name string +0; tags 10..0x26 the voice-line vectors through Archive_SerializeRec28Vector (+0x20, +0x2C, .. in a fixed tag -> offset order, e.g. 0x14 -> +0xA4, 0x21 -> +0xB0, 0x24 -> +0x98) and Archive_SerializeRec2CVector (tag 0x20 -> +0x1AC); tags 0x27..0x2C inline (+0x170, +0x17C, +0x1B8, +0x188, +0x194, +0x1A0: on read Rec28Vector_Clear / erase + Rec28Vector_Resize(count tag 1), then TaggedRecord_SerializeInTag per line); caller AcksAnswersVector_Serialize
+0x006E3DC0	524	AcksOther::Serialize	named	(this = AcksOther 0x38, archive): tag 1 name +0; tag 10 line vector +0x20 and tag 11 line vector +0x2C (BeginTag, on read erase (AcksLine28Range_Copy) + count tag 1 + resize, per line tag 1 {1 string +4, 2 dword +0, 3 string +0x10, 4 string +0x1C}, EndTag); the hash +0xC is not stored; caller AcksOthersVector_Serialize
+0x006E3FD0	799	AcksCry::Serialize	named	(this = AcksCry 0x5C, archive): tag 1 name +0; tags 10..14 the five line vectors +0x20/+0x2C/+0x38/+0x44/+0x50 (read: Rec28Vector_Clear + resize to the count, then the per-line tags 1..4); caller AcksCryesVector_Serialize
+0x006E42F0	277	Archive_SerializeRec28Vector	named	(archive, tag, vector<AcksLine 0x28>): BeginTag(tag); read mode (DbArchive +0x58 loading): erase all (AcksLine28Range_Copy_B + Rec28_Dtor), count = Archive_CountTag(1), Rec28Vector_Resize; write: count = size; per line sets the occurrence counter of the current section (DbArchive sectionList +0x50, back element +4, field +0x14) to the line number so the i-th tag-1 child is addressed, then serializes tag 1 {1 +4, 2 +0, 3 +0x10, 4 +0x1C}; EndTag; 28 calls from AcksAnswer::Serialize
+0x006E4410	296	Archive_SerializeRec2CVector	named	(archive, tag, vector<AcksLine2C 0x2C>): same as Archive_SerializeRec28Vector with Rec2CVector_Resize and the extra tag 10 = dword +0x28 per line; caller AcksAnswer::Serialize (tag 0x20)
+0x006E4540	32	StaticInit_Guarded_6E4540	named	C++ dynamic initializer (in the initializer table at 0x783B70): sets once-bit 0 of 0x7CAEE4, then atexit(0x4013D0) unconditionally (0x4013D0 is a bare `ret`: an empty static destructor)
+0x006E4560	341	AcksLine28Vector_Resize	named	STLport: vector<AcksLine 0x28>::resize(n, AcksLine()): default line = dword + three empty strings (String_CtorN 8-byte buffers); n < size -> erase the tail (AcksLine28Range_Copy_B + AcksLine28_DeletingDtor(0)), else Rec28Vector_InsertN(end, n - size, default); frees the temporaries; 14 call sites (the acks Serialize functions)
+0x006E46C0	296	AcksLine28Vector_Clear	named	STLport: vector<AcksLine 0x28>::clear() (fastcall): Rec28_Dtor on each element, end = begin
+0x006E47F0	292	AcksLine2CVector_Resize	named	STLport: vector<AcksLine2C 0x2C>::resize(n, default) (shrink: Rec2C_Move + AcksLine2C_DeletingDtor(0); grow: Rec2CVector_InsertN); caller Archive_SerializeRec2CVector
+0x006E4920	295	AcksLine28Vector_Erase	named	STLport: vector<AcksLine 0x28>::erase(first, last): copy [last, end) down onto first (dword + three inline string assigns), Rec28_Dtor the old tail, end = new end; returns first; 8 call sites (the acks Serialize functions)
+0x006E4A50	655	Rec28Vector_InsertN	named	STLport: vector<AcksLine 0x28>::_M_fill_insert(pos, n, x): when capacity is enough, copy x first (aliasing), then either uninitialized-copy the last n up (StrRecord28_CopyRange_B), shift the middle with AcksLine28_Assign backwards and assign x into the hole, or StrRecord28_FillN the excess past end + move [pos,end) + assign; otherwise Rec28Vector_InsertRange (_M_insert_overflow); caller AcksLine28Vector_Resize
+0x006E4CE0	594	Rec2CVector_InsertN	named	STLport: vector<AcksLine2C 0x2C>::_M_fill_insert(pos, n, x) (same shape, StrRecord_CopyCtor + dword +0x28 for the x copy, StrRecord2C_CopyRange_B / StrRecord2C_FillN, AcksLine28_Assign + +0x28); else Rec2CVector_InsertRange; caller AcksLine2CVector_Resize
+0x006E4F40	85	TaggedRecord_SerializeInTag	named	(archive, tag, AcksLine 0x28*): BeginTag(tag) then tag 1 string +4, tag 2 dword +0, tag 3 string +0x10, tag 4 string +0x1C, EndTag; 11 calls from AcksAnswer::Serialize / AcksCry::Serialize
+0x006E4FA0	413	AcksLine28Range_Copy_C	named	"STLport: std::copy forward for AcksLine 0x28 (third instance: dword + three inline string assigns); returns dest end; caller AcksOther::Serialize (erase). CORRECTION: was ""move ... using memmove for the vector part"""
+0x006E5140	303	StrRecord_CopyCtor	named	AcksLine 0x28 copy ctor: dword +0, String_CtorRange2 +4 / +0x10, StlString_CtorCopy +0x1C (each with the alloc-proxy init); callers Rec2CVector_InsertN, Rec28Vector_InsertRange, Rec2CVector_InsertRange
+0x006E5270	429	Rec28Vector_InsertRange	named	"STLport: vector<AcksLine 0x28>::_M_insert_overflow(pos, x, n): new length = size + max(size, n) (node allocator / operator new), StrRecord28_CopyRange_B [begin,pos), x once (StrRecord_CopyCtor) or StrRecord28_FillN n, [pos,end), destroy + free the old block, set begin / end / eos. CORRECTION: was ""insert(pos, first, last)"""
+0x006E5490	499	Rec2CVector_InsertRange	named	"STLport: vector<AcksLine2C 0x2C>::_M_insert_overflow(pos, x, n) (same with stride 0x2C, StrRecord2C_CopyRange_B / StrRecord2C_FillN). CORRECTION: was ""insert(pos, first, last)"""
+0x006E5710	429	AcksLine28Range_Copy_D	named	STLport: std::copy forward for AcksLine 0x28 (fourth instance); callers Archive_SerializeRec28Vector, AcksLine28Vector_Resize (erase)
+0x006E58C0	419	AcksLine2CRange_Copy	named	STLport: std::copy forward for AcksLine2C 0x2C (dword, three strings, dword +0x28); callers Archive_SerializeRec2CVector, AcksLine2CVector_Resize
+0x006E5A70	222	StrRecord28_CopyRange_B	named	STLport: uninitialized_copy for AcksLine 0x28 (second instance of AcksLine28Range_UninitCopy); callers Rec28Vector_InsertN, Rec28Vector_InsertRange
+0x006E5BA0	230	StrRecord28_FillN	named	STLport: uninitialized_fill_n for AcksLine 0x28 (dword, String_CtorRange +4/+0x10, StlString_CtorCopy +0x1C per slot); returns dest end
+0x006E5CE0	228	StrRecord2C_CopyRange_B	named	STLport: uninitialized_copy for AcksLine2C 0x2C (second instance); callers Rec2CVector_InsertN, Rec2CVector_InsertRange
+0x006E5E30	234	StrRecord2C_FillN	named	STLport: uninitialized_fill_n for AcksLine2C 0x2C; callers Rec2CVector_InsertN, Rec2CVector_InsertRange
 0x006E5F80	354	dead_6E5F80	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E60E2	6	WSOCK32_htons	named	import thunk: ws2 ordinal 9 htons
-0x006E60E8	6	WSOCK32_gethostbyname	named	import thunk: ordinal 52 gethostbyname
-0x006E60EE	6	WSOCK32_ioctlsocket	named	import thunk: ordinal 10 ioctlsocket
-0x006E60F4	6	WSOCK32_ntohs	named	import thunk: ordinal 15 ntohs
-0x006E60FA	6	WSOCK32_gethostbyaddr	named	import thunk: ordinal 51 gethostbyaddr
-0x006E6100	6	WSOCK32_gethostname	named	import thunk: ordinal 57 gethostname
-0x006E6106	6	WSOCK32_WSAStartup	named	import thunk: ordinal 115 WSAStartup
-0x006E610C	6	WSOCK32_WSACleanup	named	import thunk: ordinal 116 WSACleanup
-0x006E6112	6	WSOCK32_closesocket	named	import thunk: ordinal 3 closesocket
-0x006E6118	6	WSOCK32_setsockopt	named	import thunk: ordinal 21 setsockopt
-0x006E611E	6	WSOCK32_inet_ntoa	named	import thunk: ordinal 12 inet_ntoa
-0x006E6124	6	WSOCK32_bind	named	import thunk: ordinal 2 bind
-0x006E612A	6	WSOCK32_socket	named	import thunk: ordinal 23 socket
-0x006E6130	6	WSOCK32_sendto	named	import thunk: ordinal 20 sendto
-0x006E6136	6	WSOCK32_recvfrom	named	import thunk: ordinal 17 recvfrom
-0x006E613C	6	WSOCK32_connect	named	import thunk: ordinal 4 connect
-0x006E6142	6	WSOCK32_recv	named	import thunk: ordinal 16 recv
-0x006E6148	5	WSOCK32_send	named	import thunk: ordinal 19 send
-0x006E614A	6	EHBlock_6E614A	named	exception-handling block (funclet) inside of FUN_006E6148 (0x006E6148)
-0x006E614E	6	WSOCK32_select	named	import thunk: ordinal 18 select
-0x006E6154	6	WSOCK32_listen	named	import thunk: ordinal 13 listen
-0x006E615A	6	WSOCK32_accept	named	import thunk: ordinal 1 accept
-0x006E6160	1	WSOCK32_WSAFDIsSet	named	import thunk stub: ordinal 151 __WSAFDIsSet
-0x006E6162	6	EHBlock_6E6162	named	exception-handling block just after of FUN_006E6160 (0x006E6160)
-0x006E6166	6	DSOUND_DirectSoundEnumerateA	named	import thunk: DSOUND ordinal 2 DirectSoundEnumerateA
-0x006E616C	6	DDRAW_DirectDrawEnumerateExA	named	import thunk: DirectDrawEnumerateExA
-0x006E6172	5	DDRAW_DirectDrawCreateEx	named	import thunk: DirectDrawCreateEx
-0x006E6174	6	EHBlock_6E6174	named	exception-handling block (funclet) inside of FUN_006E6172 (0x006E6172)
+0x006E60E2	6	WSOCK32_htons	named	import thunk: jmp [0x73B704] = WSOCK32 ordinal 9 htons
+0x006E60E8	6	WSOCK32_gethostbyname	named	import thunk: jmp [0x73B700] = WSOCK32 ordinal 52 gethostbyname
+0x006E60EE	6	WSOCK32_ioctlsocket	named	import thunk: jmp [0x73B6FC] = WSOCK32 ordinal 10 ioctlsocket
+0x006E60F4	6	WSOCK32_ntohs	named	import thunk: jmp [0x73B6F8] = WSOCK32 ordinal 15 ntohs
+0x006E60FA	6	WSOCK32_gethostbyaddr	named	import thunk: jmp [0x73B6F4] = WSOCK32 ordinal 51 gethostbyaddr
+0x006E6100	6	WSOCK32_gethostname	named	import thunk: jmp [0x73B6F0] = WSOCK32 ordinal 57 gethostname
+0x006E6106	6	WSOCK32_WSAStartup	named	import thunk: jmp [0x73B6EC] = WSOCK32 ordinal 115 WSAStartup
+0x006E610C	6	WSOCK32_WSACleanup	named	import thunk: jmp [0x73B6E8] = WSOCK32 ordinal 116 WSACleanup
+0x006E6112	6	WSOCK32_closesocket	named	import thunk: jmp [0x73B6E4] = WSOCK32 ordinal 3 closesocket
+0x006E6118	6	WSOCK32_setsockopt	named	import thunk: jmp [0x73B6E0] = WSOCK32 ordinal 21 setsockopt
+0x006E611E	6	WSOCK32_inet_ntoa	named	import thunk: jmp [0x73B708] = WSOCK32 ordinal 12 inet_ntoa
+0x006E6124	6	WSOCK32_bind	named	import thunk: jmp [0x73B6DC] = WSOCK32 ordinal 2 bind
+0x006E612A	6	WSOCK32_socket	named	import thunk: jmp [0x73B6D4] = WSOCK32 ordinal 23 socket
+0x006E6130	6	WSOCK32_sendto	named	import thunk: jmp [0x73B70C] = WSOCK32 ordinal 20 sendto
+0x006E6136	6	WSOCK32_recvfrom	named	import thunk: jmp [0x73B6CC] = WSOCK32 ordinal 17 recvfrom
+0x006E613C	6	WSOCK32_connect	named	import thunk: jmp [0x73B6C8] = WSOCK32 ordinal 4 connect
+0x006E6142	6	WSOCK32_recv	named	import thunk: jmp [0x73B6D8] = WSOCK32 ordinal 16 recv
+0x006E6148	5	WSOCK32_send	named	import thunk: jmp [0x73B6D0] = WSOCK32 ordinal 19 send (6 bytes, not 5)
+0x006E614E	6	WSOCK32_select	named	import thunk: jmp [0x73B6C4] = WSOCK32 ordinal 18 select
+0x006E6154	6	WSOCK32_listen	named	import thunk: jmp [0x73B6B8] = WSOCK32 ordinal 13 listen
+0x006E615A	6	WSOCK32_accept	named	import thunk: jmp [0x73B6BC] = WSOCK32 ordinal 1 accept
+0x006E6160	1	WSOCK32_WSAFDIsSet	named	import thunk: jmp [0x73B6C0] = WSOCK32 ordinal 151 __WSAFDIsSet (6 bytes, not 1); callers dead_47D190 only
+0x006E6166	6	DSOUND_DirectSoundEnumerateA	named	import thunk: jmp [0x73B04C] = DSOUND ordinal 2 DirectSoundEnumerateA; callers CSoundManager::Open, dead_6B69C0
+0x006E616C	6	DDRAW_DirectDrawEnumerateExA	named	import thunk: jmp [0x73B038] = DDRAW!DirectDrawEnumerateExA; caller DDraw_EnumerateDrivers
+0x006E6172	5	DDRAW_DirectDrawCreateEx	named	import thunk: jmp [0x73B03C] = DDRAW!DirectDrawCreateEx (6 bytes, not 5)
 0x006E6180	73	sub_6E6180	named	unregistered function, reached by call / pointer from 0x345D14 (gaps.py 2026-11-06)
-0x006E61F0	6	DINPUT_DirectInputCreateEx	named	import thunk: DirectInputCreateEx
+0x006E61F0	6	DINPUT_DirectInputCreateEx	named	import thunk: jmp [0x73B044] = DINPUT!DirectInputCreateEx; caller DInputMouse::Create
 0x006E61F6	30	DINPUT_DirectInputCreateEx_chunk_6E61F6	named	a piece of DINPUT_DirectInputCreateEx placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006E6214	35	MemWriter_PutByte	named	MFC-style memory stream: write 1 byte at +0x24 (grow via 0x7089D1 when past +0x28)
-0x006E6237	39	MemWriter_PutWord	named	write 2 bytes
-0x006E625E	38	MemWriter_PutDword	named	write 4 bytes
-0x006E6284	47	MemReader_GetByte	named	read 1 byte at +0x24 (refill via 0x708A4D)
-0x006E62B3	51	MemReader_GetWord	named	read 2 bytes
-0x006E62E6	50	MemReader_GetDword	named	read 4 bytes
+0x006E6214	35	CArchive::operator<<(BYTE)	named	MFC: CArchive::operator<<(BYTE): if m_lpBufCur +0x24 + 1 > m_lpBufMax +0x28 call 0x7089D1 (CArchive::Flush), store the byte, m_lpBufCur++; returns *this; callers CArchive::WriteString. CORRECTION: was MemWriter_PutByte
+0x006E6237	39	CArchive::operator<<(WORD)	named	MFC: CArchive::operator<<(WORD): Flush (0x7089D1) when 2 bytes do not fit before +0x28, store the word at +0x24, += 2; returns *this; callers WriteObject, WriteString, WriteClassInfo, WriteCount, WriteObjectEntry
+0x006E625E	38	CArchive::operator<<(DWORD)	named	MFC: CArchive::operator<<(DWORD/LONG): Flush when 4 bytes do not fit, store, += 4; returns *this
+0x006E6284	47	CArchive::operator>>(BYTE&)	named	MFC: CArchive::operator>>(BYTE&): if m_lpBufCur + 1 > m_lpBufMax call 0x708A4D (CArchive::FillBuffer(1 - (max - cur))), copy the byte out, cur++; returns *this; callers ReadString, ReadClassTag
+0x006E62B3	51	CArchive::operator>>(WORD&)	named	MFC: CArchive::operator>>(WORD&) (FillBuffer when 2 bytes are not buffered); callers ReadClassName, ReadClassTag, ReadCount, ReadObjectPtr
+0x006E62E6	50	CArchive::operator>>(DWORD&)	named	MFC: CArchive::operator>>(DWORD&/LONG&) (FillBuffer when 4 bytes are not buffered); callers ReadClassTag, ReadCount, ReadObjectPtr, dead_6FE576
 0x006E6318	1	dead_6E6318	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E6319	28	vt_745E4C::DeletingDtor_6E6319	named	scalar deleting destructor: runs FUN_006e6335 then operator delete when flag&1
-0x006E6335	44	CFileFind_Dtor_EH	named	SEH-framed destructor body: vtable 0x745E4C, free the string at +0x10
-0x006E6361	15	vt_745DF4::Thunk_FUN_00700af9_6E6361	named	forwards to FUN_00700af9
-0x006E6370	33	InitVtable_796E48_6E6370	named	stores vtable 0x00796E48 and initializes 6 field(s) (constructor/reset step)
-0x006E6391	28	vt_745EE8::DeletingDtor_6E6391	named	scalar deleting destructor: runs FUN_006e63ad then operator delete when flag&1
-0x006E63AD	60	CFileFind::~CFileFind	named	SEH-framed destructor: vtable 0x745EE8, Close, free the strings; 35 callers
-0x006E63E9	64	CFileFind::CloseContext	named	frees the find-data block (+4)
-0x006E6429	10	CFileFind::Close	named	vt 0x745EE8 slot 18: FindClose(handle at +0xC)
-0x006E6433	224	CFileFind::FindFile	named	"vt slot 16: allocates the 0x140-byte find data, builds the pattern from the path (default ""*.*"") and FindFirstFileA"
-0x006E6513	26	CFileFind::MatchesAttribute	named	vt slot 14: (find data attributes & mask) != 0
-0x006E652D	36	CFileFind::GetLastWriteTime	named	vt slot 11: copies the FILETIME at find-data+0xC
-0x006E6551	36	CFileFind::GetLastAccessTime	named	vt slot 9: copies the FILETIME at find-data+0x14
-0x006E6575	36	CFileFind::GetCreationTime	named	vt slot 13: copies the FILETIME at find-data+4
-0x006E6599	43	CFileFind::GetLastWriteTimeCTime	named	vt slot 10: converts the FILETIME at +0xC to a CTime
-0x006E65C4	43	CFileFind::GetLastAccessTimeCTime	named	vt slot 8: converts the FILETIME at +0x14 to a CTime
-0x006E65EF	43	CFileFind::GetCreationTimeCTime	named	vt slot 12: converts the FILETIME at +4 to a CTime
-0x006E661A	57	CFileFind::IsDots	named	"vt slot 15: true when the found name is ""."" or "".."""
-0x006E6653	59	CFileFind::FindNextFile	named	vt slot 17: allocates the 0x140-byte find data and calls FindNextFileA
-0x006E668E	121	CFileFind::GetFileURL	named	file:// + file path (vt slot 6)
-0x006E6707	27	vt_745EE8::Thunk_FUN_007006e5_6E6707	named	forwards to FUN_007006e5
-0x006E6722	152	CFileFind::GetFilePath	named	root + found name, adding the backslash when missing (vt slot 4)
-0x006E67BA	145	CFileFind::GetFileTitle	named	vt slot 5: found name without the extension (CString)
-0x006E684B	95	CFileFind::GetFileName	named	copies the found name into a CString (vt slot 3)
-0x006E68AA	14	CFileFind::GetLength	named	returns the file size field (find-data +0x20)
+0x006E6319	28	CFileException::DeletingDtor	named	"MFC: CFileException scalar deleting dtor (vtable 0x745E4C slot 1, runtime class ""CFileException"" size 0x14): ~CFileException, delete when flag & 1"
+0x006E6335	44	CFileException::~CFileException	named	MFC: CFileException dtor: vtable 0x745E4C, m_strFileName (CString +0x10) dtor under an EH frame; reached from the deleting dtor and two unwind funclets. CORRECTION: was CFileFind_Dtor_EH
+0x006E6361	15	CFile::SetFilePath	named	MFC: CFile::SetFilePath(LPCTSTR): m_strFileName (CString +0xC) = path (CString::operator=(LPCSTR)); virtual slot 7 of CFile (0x745DF4) and two derived file vtables (0x74650C, 0x74666C)
+0x006E6370	33	CFileFind::CFileFind	named	MFC: CFileFind ctor (fastcall): vtable 0x745EE8, m_pFoundInfo +4 = m_pNextInfo +8 = m_hContext +0xC = 0, m_strRoot +0x14 = afxEmptyString (0x796E48), m_chDirSeparator +0x18 = '\\'; callers CSaveLoadWin::ScanSaves, CCamera::StartRecording, Campaign_ScanMissionFiles, Lobby_QueueMapFileTransfer, Game_MapFileExists ..
+0x006E6391	28	CFileFind::DeletingDtor	named	MFC: CFileFind scalar deleting dtor (vtable 0x745EE8 slot 1): ~CFileFind, delete when flag & 1
+0x006E63AD	60	CFileFind::~CFileFind	named	MFC: CFileFind dtor: vtable 0x745EE8, Close() (0x6E63E9), m_strRoot +0x14 dtor; 35 call sites (every directory scan)
+0x006E63E9	64	CFileFind::Close	named	MFC: CFileFind::Close(): delete m_pFoundInfo +4 and m_pNextInfo +8 (set 0), and when m_hContext +0xC is neither 0 nor -1 call the virtual CloseContext (slot 18 +0x48) and clear it. CORRECTION: was CFileFind::CloseContext (the names of 0x6E63E9 and 0x6E6429 were swapped)
+0x006E6429	10	CFileFind::CloseContext	named	MFC: CFileFind::CloseContext() (virtual slot 18): FindClose(m_hContext +0xC). CORRECTION: was CFileFind::Close
+0x006E6433	224	CFileFind::FindFile	named	"MFC: CFileFind::FindFile(name, unused) (slot 16): Close(); m_pNextInfo = new WIN32_FIND_DATA (0x140), m_bGotLast +0x10 = 0, name NULL -> ""*.*"" (0x7905B4), lstrcpy into cFileName, m_hContext = FindFirstFileA; on INVALID_HANDLE_VALUE Close() and SetLastError; else m_strRoot = _fullpath(name) cut at the last '\\' or '/' (m_chDirSeparator from it); returns TRUE / FALSE"
+0x006E6513	26	CFileFind::MatchesMask	named	MFC: CFileFind::MatchesMask(DWORD mask) (slot 14): m_pFoundInfo && (dwFileAttributes & mask) != 0. CORRECTION of the name: was MatchesAttribute
+0x006E652D	36	CFileFind::GetLastAccessTime(FILETIME*)	named	MFC: CFileFind::GetLastAccessTime(FILETIME*) (slot 11): copies ftLastAccessTime (find data +0xC) when m_pFoundInfo and the pointer are set, returns TRUE / FALSE. CORRECTION: was GetLastWriteTime (+0xC is ftLastAccessTime; names of 0x6E652D and 0x6E6551 were swapped)
+0x006E6551	36	CFileFind::GetLastWriteTime(FILETIME*)	named	MFC: CFileFind::GetLastWriteTime(FILETIME*) (slot 9): copies ftLastWriteTime (find data +0x14). CORRECTION: was GetLastAccessTime
+0x006E6575	36	CFileFind::GetCreationTime(FILETIME*)	named	MFC: CFileFind::GetCreationTime(FILETIME*) (slot 13): copies ftCreationTime (find data +4)
+0x006E6599	43	CFileFind::GetLastAccessTime(CTime&)	named	MFC: CFileFind::GetLastAccessTime(CTime&) (slot 10): CTime(ftLastAccessTime +0xC, -1) into the reference; returns m_pFoundInfo != NULL. CORRECTION: was GetLastWriteTimeCTime
+0x006E65C4	43	CFileFind::GetLastWriteTime(CTime&)	named	MFC: CFileFind::GetLastWriteTime(CTime&) (slot 8): CTime(ftLastWriteTime +0x14, -1). CORRECTION: was GetLastAccessTimeCTime
+0x006E65EF	43	CFileFind::GetCreationTime(CTime&)	named	MFC: CFileFind::GetCreationTime(CTime&) (slot 12): CTime(ftCreationTime +4, -1)
+0x006E661A	57	CFileFind::IsDots	named	"MFC: CFileFind::IsDots() (slot 15): m_pFoundInfo set, MatchesMask(FILE_ATTRIBUTE_DIRECTORY 0x10) through the vtable, and cFileName is ""."" or ""..""; callers Isaac_PickRandomFile, CCampScreen2::StartGame, CSaveLoadWin::ScanSaves"
+0x006E6653	59	CFileFind::FindNextFile	named	MFC: CFileFind::FindNextFile() (slot 17): FALSE when m_hContext is 0; allocates m_pFoundInfo (0x140) when null, swaps m_pFoundInfo / m_pNextInfo, returns FindNextFileA(m_hContext, m_pNextInfo)
+0x006E668E	121	CFileFind::GetFileURL	named	"MFC: CFileFind::GetFileURL() (slot 6): CString ""file://"" + GetFilePath() (slot 4); returns the CString by hidden pointer"
+0x006E6707	27	CFileFind::GetRoot	named	MFC: CFileFind::GetRoot() (slot 7): returns a copy of m_strRoot (+0x14). CORRECTION: was a thunk name
+0x006E6722	152	CFileFind::GetFilePath	named	MFC: CFileFind::GetFilePath() (slot 4): m_strRoot + (m_chDirSeparator when the root does not end with '\\' or '/') + GetFileName() (slot 3)
+0x006E67BA	145	CFileFind::GetFileTitle	named	MFC: CFileFind::GetFileTitle() (slot 5): GetFileName() then _splitpath(name, 0, 0, fname, 0) into a CString buffer (0x104)
+0x006E684B	95	CFileFind::GetFileName	named	MFC: CFileFind::GetFileName() (slot 3): CString of m_pFoundInfo->cFileName (+0x2C), empty when no find data
+0x006E68AA	14	CFileFind::GetLength	named	MFC: CFileFind::GetLength(): nFileSizeLow (find data +0x20) or 0; callers Isaac_PickRandomFile, SavesCurrent_ScanSize
 0x006E68B8	17	dead_6E68B8	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E68C9	42	CDC_Ctor_746	named	MFC CDC-like object constructor (vtable 0x74646C): SetField_4, zero +0xC/+0x10, +0x94 = arg
-0x006E68F3	28	vt_74646C::DeletingDtor_6E68F3	named	scalar deleting destructor: runs FUN_006e690f then operator delete when flag&1
-0x006E690F	7	SetVtable_74646C_6E690F	named	stores the vtable 0x0074646C into the object (base-class constructor/destructor step)
-0x006E6916	42	CDC_Ctor_74648	named	MFC CDC-like object constructor (vtable 0x746484)
-0x006E6940	28	vt_746484::DeletingDtor_6E6940	named	scalar deleting destructor: runs FUN_006e695c then operator delete when flag&1
-0x006E695C	7	SetVtable_746484_6E695C	named	stores the vtable 0x00746484 into the object (base-class constructor/destructor step)
-0x006E6963	16	vt_7463B4::DeletingDtor_6E6963	named	scalar deleting destructor: runs UIObj7463D4::DtorBody_ then operator delete when flag&1
-0x006E6973	12	EHBlock_6E6973	named	exception-handling block (funclet) inside of FUN_006E6963 (0x006E6963)
-0x006E697F	20	vt_7461B0::Thunk_PtVisible_6E697F	named	forwards to PtVisible
-0x006E6993	16	vt_7461B0::Thunk_RectVisible_6E6993	named	forwards to RectVisible
-0x006E69A3	28	vt_7461B0::Thunk_TextOutA_6E69A3	named	forwards to TextOutA
-0x006E69BF	37	vt_7461B0::Thunk_ExtTextOutA_6E69BF	named	forwards to ExtTextOutA
-0x006E69E4	56	CDC::TabbedTextOutA	named	vt slot 25: TabbedTextOutA on the HDC at +4; stores the size in the result
-0x006E6A1C	28	vt_7461B0::Thunk_DrawTextA_6E6A1C	named	forwards to DrawTextA
-0x006E6A38	48	CDC::GrayStringA	named	vt slot 27: GrayStringA with the brush handle of the CBrush argument
-0x006E6A68	28	vt_7461B0::Thunk_Escape_6E6A68	named	forwards to Escape
-0x006E6A84	13	InitVtable_7463D4_6E6A84	named	stores vtable 0x007463D4 and initializes 2 field(s) (constructor/reset step)
-0x006E6A91	28	vt_74649C::DeletingDtor_6E6A91	named	scalar deleting destructor: runs FUN_006e6aad then operator delete when flag&1
-0x006E6AAD	41	CMenu_Dtor_EH	named	SEH-framed destructor body (vtable 0x7463D4)
-0x006E6AD6	20	AfxGetThreadCall	named	AfxGetThread()->virtual slot 29 (0x74), else 0
-0x006E6AEA	42	CDC_Ctor_7465F8	named	MFC CDC-like object constructor (vtable 0x7465F8)
-0x006E6B14	28	vt_7465F8::DeletingDtor_6E6B14	named	scalar deleting destructor: runs FUN_006e6b30 then operator delete when flag&1
-0x006E6B30	7	SetVtable_7465F8_6E6B30	named	stores the vtable 0x007465F8 into the object (base-class constructor/destructor step)
-0x006E6B37	42	CDC_Ctor_746610	named	MFC CDC-like object constructor (vtable 0x746610)
-0x006E6B61	28	vt_746610::DeletingDtor_6E6B61	named	scalar deleting destructor: runs FUN_006e6b7d then operator delete when flag&1
-0x006E6B7D	7	SetVtable_746610_6E6B7D	named	stores the vtable 0x00746610 into the object (base-class constructor/destructor step)
+0x006E68C9	42	CResourceException::CResourceException	named	"MFC: CResourceException(bAutoDelete, nResourceID) (CSimpleException ctor inlined): m_bAutoDelete +4 (SetField_4_70205D), +0xC = +0x10 = 0 (m_bInitialized / m_bLoaded), m_nResourceID +0x94, vtable 0x74646C (""CResourceException"", size 0x98); caller StaticInit_ResourceException. CORRECTION: was CDC_Ctor_746 (""CDC-like"")"
+0x006E68F3	28	CResourceException::DeletingDtor	named	MFC: CResourceException scalar deleting dtor (vtable 0x74646C slot 1): dtor body (vtable store only), delete when flag & 1
+0x006E690F	7	CResourceException::~CResourceException	named	MFC: CResourceException dtor (fastcall): stores vtable 0x74646C (the CSimpleException / CException dtors are empty); also the tail of sub_70BF22
+0x006E6916	42	CUserException::CUserException	named	"MFC: CUserException(bAutoDelete, nResourceID): same CSimpleException init (+4, +0xC = +0x10 = 0, +0x94 resource id), vtable 0x746484 (""CUserException"", 0x98); caller StaticInit_UserException. CORRECTION: was CDC_Ctor_74648"
+0x006E6940	28	CUserException::DeletingDtor	named	MFC: CUserException scalar deleting dtor (vtable 0x746484 slot 1)
+0x006E695C	7	CUserException::~CUserException	named	MFC: CUserException dtor: stores vtable 0x746484; also the tail of sub_70BF5A
+0x006E6963	16	CPen::DeletingDtor	named	"MFC: CPen scalar deleting dtor (vtable 0x7463B4 slot 1, ""CPen""): MfcCGdiObject::~body (0x5E38F0: CGdiObject dtor, DeleteObject), delete when flag & 1"
+0x006E697F	20	CDC::PtVisible	named	MFC: CDC::PtVisible(x, y) (virtual): ::PtVisible(m_hDC +4, x, y); in the vtables of CDC (0x7461B0) and its 4 derived DC classes
+0x006E6993	16	CDC::RectVisible	named	MFC: CDC::RectVisible(LPCRECT): ::RectVisible(m_hDC, rect) (virtual)
+0x006E69A3	28	CDC::TextOut	named	MFC: CDC::TextOut(x, y, text, count): ::TextOutA(m_hDC, ..) (virtual)
+0x006E69BF	37	CDC::ExtTextOut	named	MFC: CDC::ExtTextOut(x, y, options, rect, text, count, dx): ::ExtTextOutA(m_hDC, ..) (virtual)
+0x006E69E4	56	CDC::TabbedTextOut	named	MFC: CDC::TabbedTextOut(x, y, text, count, nTabs, tabs, origin) -> CSize (hidden result: cx = (short)LOWORD, cy = (short)HIWORD of ::TabbedTextOutA(m_hDC, ..)) (virtual)
+0x006E6A1C	28	CDC::DrawText	named	MFC: CDC::DrawText(text, count, rect, format): ::DrawTextA(m_hDC, ..) (virtual)
+0x006E6A38	48	CDC::GrayString	named	MFC: CDC::GrayString(CBrush*, proc, data, count, x, y, w, h): ::GrayStringA(m_hDC, brush ? brush->m_hObject +4 : 0, ..) (virtual)
+0x006E6A68	28	CDC::Escape	named	MFC: CDC::Escape(escape, count, in, out): ::Escape(m_hDC, ..) (virtual)
+0x006E6A84	13	CGdiObject::CGdiObject	named	"MFC: CGdiObject ctor (fastcall): m_hObject +4 = 0, vtable 0x7463D4 (""CGdiObject""); 5 inline temporaries in CDC::DrawGrayBitmap_Impl"
+0x006E6A91	28	CRgn::DeletingDtor	named	"MFC: CRgn scalar deleting dtor (vtable 0x74649C slot 1, ""CRgn""): CGdiObject dtor 0x6E6AAD, delete when flag & 1"
+0x006E6AAD	41	CGdiObject::~CGdiObject	named	MFC: CGdiObject dtor (EH frame): vtable 0x7463D4, CGdiObject::DeleteObject(); also reached from 5 unwind funclets (after dead_739BAA). CORRECTION: was CMenu_Dtor_EH
+0x006E6AD6	20	AfxGetMainWnd	named	MFC: AfxGetMainWnd(): AfxGetThread() ? thread->GetMainWnd() (virtual slot 29 +0x74) : NULL; callers CWinThread::ProcessMessageFilter, CWnd::CenterWindow, CFrameWnd::PostQuitHelper, AfxHandleStatusMessage .. CORRECTION: was AfxGetThreadCall
+0x006E6AEA	42	CMemoryException::CMemoryException	named	"MFC: CMemoryException(bAutoDelete, nResourceID) (CSimpleException init, vtable 0x7465F8 ""CMemoryException""); caller StaticInit_MemoryException. CORRECTION: was CDC_Ctor_7465F8"
+0x006E6B14	28	CMemoryException::DeletingDtor	named	MFC: CMemoryException scalar deleting dtor (vtable 0x7465F8 slot 1)
+0x006E6B30	7	CMemoryException::~CMemoryException	named	MFC: CMemoryException dtor: stores vtable 0x7465F8; also the tail of sub_70C1DD
+0x006E6B37	42	CNotSupportedException::CNotSupportedException	named	MFC: CNotSupportedException(bAutoDelete, nResourceID) (vtable 0x746610); caller StaticInit_NotSupportedException. CORRECTION: was CDC_Ctor_746610
+0x006E6B61	28	CNotSupportedException::DeletingDtor	named	MFC: CNotSupportedException scalar deleting dtor (vtable 0x746610 slot 1)
+0x006E6B7D	7	CNotSupportedException::~CNotSupportedException	named	MFC: CNotSupportedException dtor: stores vtable 0x746610; also the tail of sub_70C215
 0x006E6B84	1	dead_6E6B84	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E6B85	28	vt_746808::DeletingDtor_6E6B85	named	scalar deleting destructor: runs FUN_006e6ba1 then operator delete when flag&1
-0x006E6BA1	44	CObject_Dtor_EH_746808	named	SEH-framed destructor body (vtable 0x746808): free the string at +0xC
-0x006E6BCD	40	CPlex_Ctor	named	MFC block allocator init: block size, count, free list, InitializeCriticalSection
-0x006E6BF5	20	CPlex_Dtor	named	flush the free list then DeleteCriticalSection
-0x006E6C09	40	CPlex_FreeAll	named	under the critical section: free the block list (+8) and clear counters
-0x006E6C31	121	CPlex_Alloc	named	MFC block allocator: under the critical section take or allocate a block (SEH frame)
-0x006E6CC0	44	CPlex_Free	named	MFC block allocator: push a block onto the free list under the critical section
-0x006E6CEC	28	DeletingDtor_6E6CEC	named	scalar deleting destructor: runs FUN_006e6d08 then operator delete when flag&1
-0x006E6D08	72	CFont_Dtor_EH	named	SEH-framed destructor body (vtable 0x74685C)
-0x006E6D50	216	Multimon_Init	named	dynamically binds GetSystemMetrics / MonitorFromWindow / MonitorFromRect / MonitorFromPoint / GetMonitorInfo / EnumDisplayMonitors from USER32 (multi-monitor stubs)
+0x006E6B85	28	CArchiveException::DeletingDtor	named	"MFC: CArchiveException scalar deleting dtor (vtable 0x746808 slot 1, ""CArchiveException"" size 0x10)"
+0x006E6BA1	44	CArchiveException::~CArchiveException	named	MFC: CArchiveException dtor: vtable 0x746808, m_strFileName (CString +0xC) dtor. CORRECTION: was CObject_Dtor_EH_746808
+0x006E6BCD	40	CFixedAlloc::CFixedAlloc	named	MFC: CFixedAlloc(nAllocSize, nBlockSize): +0 alloc size, +4 block size, m_pBlocks +8 = m_pNodeFree +0xC = 0, InitializeCriticalSection(+0x10); 8 static initializers (StaticInit_CPlex_*: the CString / handle map allocators). CORRECTION: was CPlex_Ctor (CPlex is the block chain it uses)
+0x006E6BF5	20	CFixedAlloc::~CFixedAlloc	named	MFC: CFixedAlloc dtor (fastcall): FreeAll(), DeleteCriticalSection(+0x10); tail-jumped from 8 atexit stubs. CORRECTION: was CPlex_Dtor
+0x006E6C09	40	CFixedAlloc::FreeAll	named	MFC: CFixedAlloc::FreeAll(): under the lock, CPlex::FreeDataChain(m_pBlocks +8) (List_FreeChain), m_pBlocks = m_pNodeFree = 0. CORRECTION: was CPlex_FreeAll
+0x006E6C31	121	CFixedAlloc::Alloc	named	MFC: CFixedAlloc::Alloc(): under the lock (EH frame), when m_pNodeFree +0xC is empty CPlex_Create(&m_pBlocks, nBlockSize, nAllocSize) and chain its nodes (backwards) onto the free list; pops and returns one node; callers CString::AllocBuffer and 4 handle-map / temp-object allocators. CORRECTION: was CPlex_Alloc
+0x006E6CC0	44	CFixedAlloc::Free	named	MFC: CFixedAlloc::Free(p): when p, push it onto m_pNodeFree +0xC under the lock; callers CPlex_FreeBySize (CString::FreeData), CTempDC / CTempGdiObject / CTempWnd / CTempMenu deleting dtors. CORRECTION: was CPlex_Free
+0x006E6CEC	28	CHandleMap::DeletingDtor	named	MFC: CHandleMap scalar deleting dtor (vtable 0x74685C: its only slot): ~CHandleMap, delete when flag & 1
+0x006E6D08	72	CHandleMap::~CHandleMap	named	MFC: CHandleMap dtor: vtable 0x74685C, DeleteTemp() (0x70373B, named CWnd::DestroyAllChildren), then the CMapPtrToPtr dtors of m_temporaryMap +0x20 and m_permanentMap +4. CORRECTION: was CFont_Dtor_EH
+0x006E6D50	216	InitMultipleMonitorStubs	named	"multimon.h (MFC): InitMultipleMonitorStubs(): once (flag 0x7CAA80), GetModuleHandle(""USER32"") and GetProcAddress GetSystemMetrics / MonitorFromWindow / MonitorFromRect / MonitorFromPoint / EnumDisplayMonitors / GetMonitorInfoA into 0x7CAA68..0x7CAA7C; any missing -> all null, FALSE; later calls return GetMonitorInfo != NULL"
 0x006E6E28	78	dead_6E6E28	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E6E76	86	xMonitorFromPoint	named	multi-monitor stub: MonitorFromPoint or a single-monitor fallback using GetSystemMetrics
-0x006E6ECC	86	xMonitorFromRect	named	multi-monitor stub: MonitorFromRect or single-monitor fallback
-0x006E6F22	106	xMonitorFromWindow	named	multi-monitor stub: MonitorFromWindow or fallback (IsIconic / flags)
-0x006E6F4D	6	EHBlock_6E6F4D	named	exception-handling block (funclet) inside of FUN_006E6F22 (0x006E6F22)
-0x006E6F8D	147	xGetMonitorInfo	named	"multi-monitor stub: GetMonitorInfo or fallback (""DISPLAY"", primary monitor flag 0x12340042)"
-0x006E7020	241	xEnumDisplayMonitors	named	multi-monitor stub: EnumDisplayMonitors or single callback fallback
-0x006E7111	23	CWnd::GetOwner	named	owner window or the parent
-0x006E7128	3	vt_746DA8::Nop_6E7128	named	empty function (returns immediately)
-0x006E712B	12	CWnd::Disable	named	vt slot 34: EnableWindow(hwnd at +0x1C, FALSE)
-0x006E7137	12	CWnd::Enable	named	vt slot 35: EnableWindow(hwnd at +0x1C, TRUE)
-0x006E7143	13	CWnd_Cleanup_EH	named	cleanup chain calling two helpers (0x70CE8C, 0x704137)
-0x006E7150	28	vt_7471FC::DeletingDtor_6E7150	named	scalar deleting destructor: runs FUN_006e716c then operator delete when flag&1
-0x006E716C	41	CObject_Dtor_EH_7471FC	named	SEH-framed destructor body (vtable 0x7471FC)
+0x006E6E76	86	xMonitorFromPoint	named	multimon.h: xMonitorFromPoint(pt, flags): real MonitorFromPoint when bound, else the primary pseudo-monitor 0x12340042 when flags & 3 or the point is on the screen (GetSystemMetrics 0/1), else NULL; lib, unused (no call, jump or pointer) [dead: no caller or pointer]
+0x006E6ECC	86	xMonitorFromRect	named	multimon.h: xMonitorFromRect(rect, flags): real MonitorFromRect or 0x12340042 when flags & 3 or the rect overlaps the screen, else NULL; caller xMonitorFromWindow
+0x006E6F22	106	xMonitorFromWindow	named	multimon.h: xMonitorFromWindow(hwnd, flags): real MonitorFromWindow, else flags & 3 -> 0x12340042, else the window rect (GetWindowPlacement when IsIconic) through xMonitorFromRect; caller CWnd::CenterWindow x2
+0x006E6F8D	147	xGetMonitorInfo	named	"multimon.h: xGetMonitorInfo(hmon, info): real GetMonitorInfoA, else for 0x12340042 with cbSize >= 0x28: rcMonitor = (0, 0, SM_CXSCREEN, SM_CYSCREEN), rcWork = SPI_GETWORKAREA (0x30), dwFlags = MONITORINFOF_PRIMARY, and szDevice ""DISPLAY"" when cbSize >= 0x48; caller CWnd::CenterWindow x2"
+0x006E7020	241	xEnumDisplayMonitors	named	multimon.h: xEnumDisplayMonitors(hdc, clip, proc, data): real EnumDisplayMonitors or one callback for the primary pseudo-monitor; lib, unused (no call, jump or pointer) [dead: no caller or pointer]
+0x006E7111	23	CWnd::GetOwner	named	MFC: CWnd::GetOwner(): m_hWndOwner +0x20 or GetParent(m_hWnd +0x1C), mapped with CWnd::FromHandle (GetFromTemporaryMap); caller AfxGetParentOwner
+0x006E7128	3	CWnd::DoDataExchange	named	MFC: CWnd::DoDataExchange(CDataExchange*) = empty (`ret 4`), CWnd vtable 0x746DA8 slot 33 (after GetSuperWndProcAddr slot 32 = this+0x28) and a derived vtable 0x746F48
+0x006E712B	12	CWnd::BeginModalState	named	MFC: CWnd::BeginModalState() (vt slot 34): EnableWindow(m_hWnd +0x1C, FALSE). CORRECTION: was CWnd::Disable
+0x006E7137	12	CWnd::EndModalState	named	MFC: CWnd::EndModalState() (vt slot 35): EnableWindow(m_hWnd, TRUE). CORRECTION: was CWnd::Enable
+0x006E7143	13	CWaitCursor::~CWaitCursor	named	MFC: CWaitCursor dtor = AfxGetApp()->EndWaitCursor(): AfxGetModuleState()->m_pCurrentWinApp (+4) into ecx, tail-jump to 0x704137 (CCmdTarget::EndWaitCursor = app->DoWaitCursor(-1) through vt +0x90; named AfxEndModalLock_Dec); reached only from the unwind funclet 0x73A350 (after dead_73A212). CORRECTION: was CWnd_Cleanup_EH
+0x006E7150	28	CMenu::DeletingDtor	named	"MFC: CMenu scalar deleting dtor (vtable 0x7471FC slot 1, ""CMenu"")"
+0x006E716C	41	CMenu::~CMenu	named	MFC: CMenu dtor (EH frame): vtable 0x7471FC, CMenu::DestroyMenu(). CORRECTION: was CObject_Dtor_EH_7471FC
 0x006E7195	11	sub_6E7195	named	unregistered function, reached by call / pointer from 0x307E43 (gaps.py 2026-11-06)
-0x006E71A0	93	CMenu::GetMenuStringA	named	GetMenuStringA into a CString (length query then fill)
-0x006E71FD	126	_onexit_impl	named	CRT: appends a function to the atexit table (locked); used by atexit
-0x006E727B	18	atexit	named	CRT: registers a function to run at exit (via _onexit); 388 callers
-0x006E728D	47	CRT_InitHeapBlock	named	CRT startup: _malloc(0x80) for the handler table, amsg_exit(0x18) on failure
-0x006E72BC	23	CRT_InitFloat	named	CRT startup: float hooks, CPU feature probe, FP init
-0x006E72D3	1	vt_7975A4::Nop_6E72D3	named	empty function (returns immediately)
-0x006E72D4	56	CRT_InitFloatHooks	named	fills the CRT floating-point conversion hook table (__cfltcvt, __fassign...)
+0x006E71A0	93	CMenu::GetMenuString	named	MFC: CMenu::GetMenuString(nIDItem, CString&, nFlags): length = GetMenuStringA(m_hMenu +4, id, 0, 0, flags); < 1 -> Empty(); else buffer 2*len+2, GetMenuStringA into it, ReleaseBuffer; returns the length; caller CRecentFileList::UpdateMenu
+0x006E71FD	126	_onexit	named	MSVC6 CRT: _onexit(func) under _lockexit: when the table (begin 0x7CC294, end 0x7CC290) is full (_msize) grow it by 0x10 bytes (_expand_or_realloc = realloc), append func; returns func or NULL
+0x006E727B	18	atexit	named	MSVC6 CRT: atexit(func) = (_onexit(func) == NULL) ? -1 : 0; 388 callers (static destructors)
+0x006E728D	47	__onexitinit	named	MSVC6 CRT: __onexitinit (C initializer table 0x783BBC): the onexit table = malloc(0x80) (32 entries), _amsg_exit(0x18 _RT_ONEXIT) on failure, first entry 0, end = begin
+0x006E72BC	23	_fpmath	named	MSVC6 CRT: _fpmath (pointer _FPinit 0x7975A0, called by _cinit): _cfltcvt_init, _adjust_fdiv 0x7CAAD4 = _ms_p5_mp_test_fdiv (0x6EEFCC), _setdefaultprecision (0x6EEF7C)
+0x006E72D3	1	_fpclear	named	MSVC6 CRT: _fpclear() = empty (`ret`); the _FPmtinit / _FPmtterm pointers 0x7975A4 / 0x7975A8
+0x006E72D4	56	_cfltcvt_init	named	MSVC6 CRT: _cfltcvt_init(): _cfltcvt_tab 0x797B10[0..5] = _cfltcvt 0x6EF3A5, _cropzeros 0x6EF04F, _fassign 0x6EF0B5, _forcdecpt 0x6EEFF5, _positive 0x6EF09D, _cfltcvt
 0x006E730C	16	dead_6E730C	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E7320	20	CRT_acos_wrap	named	acos wrapper: stores the FPU argument and calls the checker
+0x006E7320	20	_CIacos	named	MSVC6 CRT: _CIacos (x87 intrinsic acos of ST0): store ST0 as a double on the stack, _fload_withFB (0x6EF6D8: exponent bits into eax), then the acos core 0x6E733D; callers CObject3D::LookAtPlanar / AlignToDirection, CCamera::TurnTowards.., AnimNode_MakeRelativeToParent ..
 0x006E7334	9	dead_6E7334	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E733D	174	acos_checked	named	"acos domain/NaN handling with _matherr (""acos"")"
-0x006E73EB	9	_purecall_amsg	named	CRT: __amsg_exit(0x19) = pure virtual call (fills abstract vtable slots)
-0x006E73F4	45	SEH_JumpToHandler	named	CRT: indirect jump to an exception handler address
+0x006E733D	174	_acos_core	named	"MSVC6 CRT: acos core shared by _CIacos and acos(double) (entry 0x6E7334): |x| < 1 -> fpatan(sqrt((1-x)(1+x)), x); x = +-1 -> 0 or pi; |x| > 1 / NaN -> _startOneArgErrorHandling(""acos"" 0x7975B0, _DOMAIN) unless _fastflag 0x7CAAD0 (then _math_exit); FPU control word restored when != 0x27F"
+0x006E73EB	9	_purecall	named	MSVC6 CRT: _purecall() = _amsg_exit(0x19 _RT_PUREVIRT); the slot of every pure virtual in the abstract vtables (0x73B89C ..)
+0x006E73F4	45	_JumpToContinuation	named	MSVC6 C++ EH (lowhelpr.asm): _JumpToContinuation(target, pRN): pop one SEH registration (fs:[0] = next), esp = [pRN - 4], ebp = pRN + 0xC, jmp target; caller _CatchIt (__InternalCxxFrameHandler chain)
 0x006E7421	7	dead_6E7421	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E7428	7	SEH_InterlockedJump_A	named	CRT: locked no-op then jump to the handler
-0x006E742F	7	SEH_InterlockedJump_B	named	CRT: locked no-op then jump to the handler
-0x006E7436	7	SEH_InterlockedJump_C	named	CRT: locked no-op then jump to the handler
-0x006E743D	79	SEH_ClearUnwindFlag	named	exception record: clears the EH_UNWINDING flag bit (flags &= ~2)
-0x006E748C	54	_except_handler3	named	MSVC SEH frame handler (calls the scope-table walker); 2941 callers
+0x006E7428	7	_CallMemberFunction0	named	MSVC6 C++ EH: _CallMemberFunction0(pthis, pmfn) = `pop eax; pop ecx; xchg [esp], eax; jmp eax` (this-call of a dtor); caller _CallMemberFunction_Dtor (DestructExceptionObject)
+0x006E742F	7	_CallMemberFunction1	named	MSVC6 C++ EH: _CallMemberFunction1(pthis, pmfn, arg) (same stub; copy ctor call); caller _CopyExceptionObject
+0x006E7436	7	_CallMemberFunction2	named	MSVC6 C++ EH: _CallMemberFunction2(pthis, pmfn, arg, vbflag) (same stub; copy ctor with virtual bases); caller _CopyExceptionObject
+0x006E743D	79	_UnwindNestedFrames	named	MSVC6 C++ EH: _UnwindNestedFrames(pRN, pExcept): save fs:[0], RtlUnwind(pRN, return point 0x6E7465, pExcept, 0) (thunk 0x6FB9A8), ExceptionFlags &= ~EXCEPTION_UNWINDING (2), relink the saved registration on top; callers __CxxCatchHandler (TranslatorGuardHandler), _CatchIt
+0x006E748C	54	__CxxFrameHandler	named	"MSVC6 C++ EH: __CxxFrameHandler (eax = FuncInfo from the per-function stub `mov eax, FuncInfo; jmp`): __InternalCxxFrameHandler(pExcept, pRN, pContext, pDC, FuncInfo, 0, 0, 0); ~2960 stub jumps. CORRECTION: was _except_handler3 (the SEH handler is the unregistered 0x6F05D4, after the ""VC20XC00"" tag at dead_6F05CC)"
 0x006E74C2	26	SEH_ClearUnwindFlag_chunk_6E74C2	named	a piece of SEH_ClearUnwindFlag placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006E74DC	84	__CxxFrameHandler_Call	named	C++ EH: calls the handler with a nested frame (uses __CallSettingFrame)
-0x006E7530	34	__CxxNestedHandler	named	C++ EH nested exception handler
-0x006E754A	6	EHBlock_6E754A	named	exception-handling block (funclet) inside of FUN_006E7530 (0x006E7530)
-0x006E7553	2	EHBlock_6E7553	named	exception-handling block (funclet) inside of FUN_006E7530 (0x006E7530)
-0x006E7555	182	_CallCatchBlock	named	C++ EH: calls a catch block with a frame
-0x006E760B	114	__CxxCatchHandler	named	C++ EH: handler for exceptions inside a catch block (checks unwinding flags 0x66)
+0x006E74DC	84	_CallCatchBlock2	named	MSVC6 C++ EH: _CallCatchBlock2(pRN, pFuncInfo, handler, CatchDepth, NLGCode): pushes a CatchGuardRN {next, CatchGuardHandler 0x6E7530, pFuncInfo, pRN, CatchDepth + 1}, continuation = _CallSettingFrame(handler, pRN, NLGCode) (0x6F0000), pops it, returns the continuation. CORRECTION: was __CxxFrameHandler_Call
+0x006E7530	34	CatchGuardHandler	named	MSVC6 C++ EH: CatchGuardHandler(pExcept, pRN, pContext, pDC): __InternalCxxFrameHandler(pExcept, pRN->RN +0xC, pContext, 0, pRN->pFuncInfo +8, pRN->CatchDepth +0x10, pRN, 0); the function really ends at 0x6E7554 (0x6E7553 = its `pop ebp; ret`). CORRECTION: was __CxxNestedHandler
+0x006E7553	2	CatchGuardHandler_tail	named	not a separate function: `pop ebp; ret` = the last 2 bytes of CatchGuardHandler 0x6E7530 (its size should be 0x25), reached by fall-through. CORRECTION: was an exception-handling funclet
+0x006E7555	182	_CallSETranslator	named	MSVC6 C++ EH: _CallSETranslator(pExcept, pRN, pContext, pDC, pFuncInfo, CatchDepth, pMarkerRN): pushes a TranslatorGuardRN (handler TranslatorGuardHandler 0x6E760B, continuation 0x6E75DD), calls the thread's _se_translator (ptd +0x68) with (ExceptionCode, &EXCEPTION_POINTERS), pops it, returns 0 (DidUnwind path returns through the guard). CORRECTION: was _CallCatchBlock
+0x006E760B	114	TranslatorGuardHandler	named	MSVC6 C++ EH: TranslatorGuardHandler(pExcept, pRN, pContext): unwinding (flags & 0x66) -> DidUnwind +0x24 = 1, return 1; else __InternalCxxFrameHandler(.., pRN->RN +0xC, .., 0, pFuncInfo +8, CatchDepth +0x10, pMarkerRN +0x14, TRUE), _UnwindNestedFrames when not yet unwound, jump to the continuation +0x18. CORRECTION: was __CxxCatchHandler
 0x006E767D	3	dead_6E767D	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E7680	123	__CxxFindTryBlock	named	C++ EH: finds the try-block state range for the current state
-0x006E76FC	32	__global_unwind2	named	MSVC SEH: RtlUnwind-based global unwind
+0x006E7680	123	_GetRangeOfTrysToCheck	named	MSVC6 C++ EH: _GetRangeOfTrysToCheck(pFuncInfo, CatchDepth, curState, &start, &end): walks the try-block map (+0x10, count +0xC, 0x14-byte entries) backwards, skipping CatchDepth levels whose tryHigh < state <= catchHigh; terminate() on corruption; returns &map[start]; callers _FindHandler, CatchGuardHandler path. CORRECTION: was __CxxFindTryBlock
+0x006E76FC	32	__global_unwind2	named	MSVC6 SEH (exsup.asm): __global_unwind2(pFrame) = RtlUnwind(pFrame, return label, 0, 0) (thunk 0x6FB9A8) saving ebx/esi/edi/ebp; caller _except_handler3 (unregistered 0x6F05D4)
 0x006E771C	34	sub_6E771C	named	unregistered function, reached by call / pointer from 0x2E7749,0x2E77B2 (gaps.py 2026-11-06)
-0x006E773E	104	__local_unwind2	named	MSVC SEH: unwinds the local try-level chain up to a target level
-0x006E77A6	35	__abnormal_termination	named	MSVC SEH: reports whether the try block is exiting through an exception
-0x006E77C9	9	__NLG_Notify1	named	MSVC SEH: records the non-local goto notification (eax/ebp)
-0x006E77D2	24	__NLG_Notify	named	MSVC SEH: records the notification code from the caller frame
-0x006E77EA	13	_srand	named	CRT: seeds the per-thread rand state
-0x006E77F7	34	rand	named	CRT: LCG x = x*0x343FD + 0x269EC3, returns (x>>16)&0x7FFF; 61 callers
-0x006E7819	58	_CxxThrowException	named	MSVC C++ EH: throw (builds the EXCEPTION_RECORD from the throw info and calls RaiseException); 435 callers
-0x006E7853	119	_beginthread	named	CRT: allocates the per-thread data (0x74 bytes), CreateThread(start, arg), returns the handle
-0x006E78CA	116	_initptd	named	CRT per-thread data init: TlsSetValue(tls index), call init hook
-0x006E793E	20	SEH_FilterExit	named	MSVC __except filter stub: stores the exception code and calls the dispatcher
-0x006E7952	11	SEH_ExceptExit	named	MSVC __except handler body: __exit(code)
-0x006E795D	60	_freeptd_call	named	CRT: calls the per-thread cleanup hook and TlsGetValue-based free
-0x006E795F	6	EHBlock_6E795F	named	exception-handling block (funclet) inside of FUN_006E795D (0x006E795D)
+0x006E773E	104	__local_unwind2	named	MSVC6 SEH: __local_unwind2(pRN, stop): pushes a guard registration (_unwind_handler 0x6E771C, -2), walks the scope table (+8) from trylevel +0xC to stop: trylevel = enclosing level, entries with no filter call their __finally handler after _NLG_Notify(0x101); callers _except_handler3, realloc / seh longjmp unwind stubs
+0x006E77A6	35	_abnormal_termination	named	MSVC6 SEH: _abnormal_termination(): 1 when the top registration is the _unwind_handler guard (0x6E771C) whose saved trylevel equals the frame's current one (inside a __finally run by an unwind), else 0; caller _CxxCleanupFunclet
+0x006E77C9	9	_NLG_Notify1	named	MSVC6 SEH: _NLG_Notify1(code in the stack slot): fills _NLG_Destination 0x7975B8 {+4 handler eax, +8 code ecx, +0xC frame ebp} for debuggers; caller _CallSettingFrame x2
+0x006E77D2	24	_NLG_Notify	named	MSVC6 SEH: _NLG_Notify(code): same as _NLG_Notify1 with ecx = [ebp + 8]; callers __local_unwind2, _except_handler3
+0x006E77EA	13	srand	named	MSVC6 CRT: srand(seed): _getptd()->_holdrand (+0x14) = seed; caller Isaac_SeedFromFiles x2
+0x006E77F7	34	rand	named	MSVC6 CRT: rand(): ptd +0x14 = x * 0x343FD + 0x269EC3, returns (x >> 16) & 0x7FFF; 61 callers
+0x006E7819	58	_CxxThrowException	named	MSVC6 C++ EH: _CxxThrowException(pObject, pThrowInfo): copies the template EXCEPTION_RECORD 0x747260 (code 0xE06D7363, EXCEPTION_NONCONTINUABLE, 3 params, magic 0x19930520), params[1] = object, params[2] = throw info, RaiseException; ~435 call sites (the DirectX init error throws ..)
+0x006E7853	119	_beginthread	named	"MSVC6 CRT: _beginthread(start, stack, arg): ptd = calloc(1, 0x74), _initptd (0x6F0xxx ""_initptd_defaults""), ptd->_initaddr +0x48 = start, _initarg +0x4C = arg, CreateThread(NULL, stack, _threadstart, ptd, CREATE_SUSPENDED, &ptd->_tid), _thandle +4, ResumeThread; on failure free ptd, _dosmaperr, return -1; callers StlAllocHeader8, TcpSocketRef::dtor"
+0x006E78CA	116	_threadstart	named	MSVC6 CRT: _threadstart(ptd) (the CreateThread proc of _beginthread): TlsSetValue(__tlsindex 0x797B70, ptd) or _amsg_exit(0x10 _RT_THREAD), _FPmtinit (0x7975A4), __try { ptd->_initaddr(ptd->_initarg); _endthread(); } __except(_XcptFilter) { _exit(code) }. CORRECTION: was _initptd
+0x006E793E	20	_threadstart_filter	named	MSVC6 CRT: the __except filter of _threadstart (scope entry 0x747284): code = exception code, return _XcptFilter(code, GetExceptionInformation()) (0x6F0454). CORRECTION: was SEH_FilterExit
+0x006E7952	11	_threadstart_handler	named	MSVC6 CRT: the __except handler of _threadstart (scope entry 0x747288): esp = saved, _exit(code) (0x6E8DB8). CORRECTION: was SEH_ExceptExit
+0x006E795D	60	_endthread	named	MSVC6 CRT: _endthread(): _FPmtterm (0x7975A8), ptd = _getptd() (0x6F00D1; _amsg_exit(0x10) when null), CloseHandle(ptd->_thandle) when not -1, _freeptd(ptd), ExitThread(0); caller _threadstart. CORRECTION: was _freeptd_call
 0x006E7999	3	dead_6E7999	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E79A0	664	memmove	named	CRT memmove/memcpy with overlap handling (word-copy fast paths); 180 callers
+0x006E79A0	664	memmove	named	MSVC6 CRT: memmove(dst, src, n) (memcpy.asm built with MEM_MOVE: copies backwards when dst overlaps above src, dword copies with jump tables for the 0..3 byte heads / tails); the copy used by the game / STLport code (180 call sites); the CRT / MFC use the identical copy 0x6EC3A0
 0x006E7C38	70	dead_6E7C38	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E7C81	22	dead_6E7C81	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E7C98	13	sub_6E7C98	named	unregistered function, reached by call / pointer from 0x2E7C84 (gaps.py 2026-11-06)
 0x006E7CA8	19	sub_6E7CA8	named	unregistered function, reached by call / pointer from 0x2E7C88 (gaps.py 2026-11-06)
 0x006E7CBC	25	sub_6E7CBC	named	unregistered function, reached by call / pointer from 0x2E7C8C (gaps.py 2026-11-06)
-0x006E7CD5	17	InitVtable_747290_6E7CD5	named	stores vtable 0x00747290 and initializes 3 field(s) (constructor/reset step)
-0x006E7CE6	28	vt_747290::DeletingDtor_6E7CE6	named	scalar deleting destructor: runs exception::~exception then operator delete when flag&1
+0x006E7CD5	17	exception::exception	named	MSVC6 CRT: std::exception::exception() (fastcall): _m_what +4 = 0, _m_doFree +8 = 0, vtable 0x747290; callers the STLport logic_error / length_error ctors and the string length-error throws
+0x006E7CE6	28	exception::DeletingDtor	named	MSVC6 CRT: std::exception scalar deleting dtor (vtable 0x747290 slot 0): ~exception, delete when flag & 1
 0x006E7D02	61	dead_6E7D02	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E7D3F	74	exception::exception_const_exception	named	copy-construct a std::exception (vtable 0x747290): copy the message buffer
-0x006E7D89	31	operator	named	
-0x006E7DA8	22	exception::~exception	named	std::exception destructor: frees the message buffer
-0x006E7DBE	13	exception::what	named	"vt 0x747290 slot 1: returns the stored message or ""Unknown exception"""
-0x006E7DCB	41	type_info::~type_info	named	destructor: lock, free the cached name, unlock
-0x006E7DF4	28	DeletingDtor_6E7DF4	named	scalar deleting destructor: runs FUN_006e7dcb then operator delete when flag&1
+0x006E7D3F	74	exception::exception(const_exception&)	named	MSVC6 CRT: std::exception copy ctor: vtable 0x747290, _m_doFree = src +8; when set: new strlen+1 and strcpy the message, else share the pointer +4; the copy ctor of the throw info 0x749C68; callers sub_40C510 / 40C540 / 40C570 / 429130, operator=
+0x006E7D89	31	exception::operator=	named	MSVC6 CRT: std::exception::operator=(const exception&): this != &rhs -> ~exception then the copy ctor; returns this; lib, unused (no call, jump or pointer) [dead: no caller or pointer]
+0x006E7DA8	22	exception::~exception	named	MSVC6 CRT: std::exception dtor: vtable 0x747290, delete _m_what +4 when _m_doFree +8; callers the STLport exception dtor thunks, the deleting dtor, operator=
+0x006E7DBE	13	exception::what	named	"MSVC6 CRT: std::exception::what() (vtable slot 1): _m_what or ""Unknown exception"""
+0x006E7DCB	41	type_info::~type_info	named	MSVC6 CRT: type_info dtor: vtable type_info::vftable, under _lock(0x1B _TYPEINFO_LOCK) free the cached undecorated name +4
+0x006E7DF4	28	type_info::DeletingDtor	named	MSVC6 CRT: type_info scalar deleting dtor (vtable 0x7472B0)
 0x006E7E10	106	dead_6E7E10	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E7E80	254	strncpy	named	CRT strncpy (zero-pads)
-0x006E7F7E	207	ceil_or_floor	named	CRT math helper (double): NaN/Inf handling and rounding via FPU rounding-mode control
+0x006E7E80	254	strncpy	named	MSVC6 CRT: strncpy(dst, src, n) (asm: dword-wise copy, zero-pads the rest of n); callers CFileRegistry::GetString, tzset, LobbyServer::SetPassword, the STLport exception ctors
+0x006E7F7E	207	floor	named	MSVC6 CRT: floor(x): _ctrlfp(0x173F = round down, all masked); Inf -> x, QNaN -> _handle_qnan1(OP 0xB), SNaN -> _except1; else r = _frnd(x); r == x or inexact masked -> r, else _except1(FP_P 0x10, OP_FLOOR 0xB, x, r); callers CCamera::SampleSmoothHeight, Perk_ComputeCost, CWorldClient::UpdateDayLight, CAnimationSystemOld::Advance. CORRECTION: was ceil_or_floor
 0x006E804D	139	atol	named	CRT atol: skips white space, an optional sign, then accumulates decimal digits into a 32-bit int (ctype table g_0x797DD8, locale-aware); same algorithm as the CRT atoi at 0x6E911A. Was _mbschr_like
 0x006E80D8	11	atol_stdcall_wrapper	named	CRT wrapper (pushes its stack argument and calls atol 0x6E804D); script GetObjectByID (string -> id) and Compiler_ParseModulePrefix use it. Was Thunk_FUN_006e804d_6E80D8
 0x006E80E3	186	dead_6E80E3	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E81A0	25	CRT__CIpow	named	CRT x87 intrinsic _CIpow: pow(ST1, ST0) (fxch, both stored as doubles, dispatcher 0x6E81C2); 45 callers (MaxHP/MaxMana 1.1^L, perk costs, gamma, camera zoom...). CORRECTION: was atan2_wrap
 0x006E81B9	9	dead_6E81B9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E81C2	467	CRT__cintrindisp2	named	CRT x87 two-argument intrinsic dispatcher used by _CIpow (checks the control word, calls the double routine). CORRECTION: was atan2_core
-0x006E8395	40	_ftol_round_check	named	CRT math: returns when the FPU value is integral (round(x)==x)
-0x006E83C0	20	asin_wrap	named	CRT asin wrapper
+0x006E8395	40	_isintTOS	named	MSVC6 CRT (pow intrinsic helper): tests ST0: not an integer -> pop, cl = 0; integer -> cl = 1, times 0.5 (0x797600) still integer -> cl = 2 (even); caller the _CIpow dispatcher (CRT__cintrindisp2). CORRECTION: was _ftol_round_check
+0x006E83C0	20	_CIasin	named	MSVC6 CRT: _CIasin (x87 intrinsic asin of ST0): store as double, _fload_withFB, asin core 0x6E83DD; callers CCamera::SetDirection, CTerrain::SetWindStrength, CTerrain::SetWind
 0x006E83D4	9	dead_6E83D4	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E83DD	174	asin_checked	named	"CRT asin domain/NaN handling with _matherr (""asin"")"
-0x006E848B	175	strcmp	named	CRT strcmp (373 callers)
-0x006E853C	39	_ftol	named	CRT: float to 64-bit int truncation helper (505 callers)
-0x006E8570	47	_chkstk	named	CRT stack probe: touches pages when the frame exceeds 4 KB (22 callers)
-0x006E859F	104	__ehvec_ctor	named	C++ EH: array constructor loop with exception-safe cleanup (87 callers)
-0x006E8607	24	__ehvec_ctor_body	named	C++ EH: vector constructor loop body (calls __vec_loop when not unwinding)
-0x006E861F	60	__vec_loop	named	CRT: calls a constructor/destructor function pointer n times (array new/delete helper)
-0x006E865B	10	_EH_exit_filter_stub	named	C++ EH funclet filter
-0x006E8665	24	SEH_SetTryLevelFF	named	sets the SEH try level to -1 (exception-handler epilogue)
-0x006E867D	22	_IsCxxException	named	C++ EH: true for exception code 0xE06D7363 (-0x1F928C9D)
-0x006E8693	106	__ehvec_ctor	named	CRT vector-new constructor helper (array, size, count, ctor, dtor): StaticInit 0x5C41C0 calls it with (array, 0x3c, 0x51, ctor 0x5C4210, NavPortalTables_Dtor); was __ehvec_dtor (sweep B)
-0x006E86FD	24	__ehvec_dtor_body	named	C++ EH: vector destructor loop body
-0x006E8715	82	sprintf	named	CRT: sprintf (string stream with _output); 59 callers
-0x006E8767	405	_stricoll	named	CRT: locale string collation compare (118 callers)
-0x006E88FC	340	qsort	named	CRT qsort (quicksort with insertion sort for short runs)
-0x006E8A50	78	qsort_shortsort	named	CRT qsort: insertion-style sort of a short range with a comparator
-0x006E8A9E	44	_swab_like	named	swaps/copies bytes between two buffers for n bytes (CRT helper)
-0x006E8AD0	33	_allshr	named	CRT: 64-bit arithmetic shift right
-0x006E8B00	31	_allshl	named	CRT: 64-bit shift left
-0x006E8B1F	207	fmod_like	named	CRT math: double function with Inf/NaN special cases (x87)
-0x006E8BEE	327	_splitpath	named	CRT: splits a path into drive, dir, name, ext
-0x006E8D35	36	_set_new_handler	named	CRT: stores the new handler under lock 9, returns the old one
+0x006E83DD	174	_asin_core	named	"MSVC6 CRT: asin core shared with asin(double) (entry 0x6E83D4): |x| < 1 -> fpatan(x, sqrt((1-x)(1+x))); +-1 -> +-pi/2; domain error -> _startOneArgErrorHandling(""asin"" 0x797610, 0xE) unless _fastflag"
+0x006E848B	175	strcmp	named	MSVC6 CRT: strcmp(a, b) (asm, dword-aligned compare) -> -1 / 0 / 1; ~400 call sites
+0x006E853C	39	_ftol	named	MSVC6 CRT: _ftol: ST0 to a 64-bit integer in edx:eax with truncation (control word RC = chop 0xC00 temporarily, fistp qword); ~500 call sites
+0x006E8570	47	_chkstk	named	MSVC6 CRT: _chkstk (_alloca_probe): eax = frame size, touches every 4 KB page down from esp, then moves esp and jumps back to the return address; 27 call sites (big stack frames)
+0x006E859F	104	__ehvec_dtor	named	MSVC6 C++ EH: `eh vector destructor iterator'(ptr, size, count, pDtor) (4 arguments, ret 0x10): ptr += size*count, then backwards pDtor(ptr -= size) count times under __try; the __finally 0x6E8607 calls __ArrayUnwind when it did not finish; 87 call sites (delete[] of arrays with dtors). CORRECTION: was __ehvec_ctor
+0x006E8607	24	__ehvec_dtor_finally	named	MSVC6 C++ EH: the __finally block of __ehvec_dtor (scope entry 0x7472C0): not success -> __ArrayUnwind(ptr, size, count, pDtor). CORRECTION: was __ehvec_ctor_body
+0x006E861F	60	__ArrayUnwind	named	MSVC6 C++ EH: __ArrayUnwind(ptr, size, count, pDtor): __try destroys the remaining elements backwards, __except(ArrayUnwindFilter) swallows non-C++ exceptions; callers the __finally blocks of __ehvec_dtor / __ehvec_ctor. CORRECTION: was __vec_loop
+0x006E865B	10	__ArrayUnwind_filter	named	MSVC6 C++ EH: the __except filter of __ArrayUnwind (scope entry 0x7472CC): ArrayUnwindFilter(GetExceptionInformation()). CORRECTION: was _EH_exit_filter_stub
+0x006E8665	24	__ArrayUnwind_handler	named	MSVC6 C++ EH: the __except handler of __ArrayUnwind (scope entry 0x7472D0): restore esp, trylevel -1, return. CORRECTION: was SEH_SetTryLevelFF
+0x006E867D	22	ArrayUnwindFilter	named	"MSVC6 C++ EH: ArrayUnwindFilter(pExPtrs): code 0xE06D7363 (a C++ exception thrown by a dtor during unwinding) -> jmp terminate (0x6F01E4), else EXCEPTION_CONTINUE_SEARCH (0). CORRECTION: was _IsCxxException (""true for 0xE06D7363""): it terminates instead"
+0x006E8693	106	__ehvec_ctor	named	MSVC6 C++ EH: `eh vector constructor iterator'(ptr, size, count, pCtor, pDtor) (5 arguments, ret 0x14): pCtor on each element forward under __try; the __finally 0x6E86FD unwinds the built ones with __ArrayUnwind on an exception; callers NetConnection::ctor, NavGrid::Ctor, NetPeer::ctor, CSoundManager::ctor, TerrainSector_ctor ..
+0x006E86FD	24	__ehvec_ctor_finally	named	MSVC6 C++ EH: the __finally block of __ehvec_ctor (scope entry 0x7472E0): not success -> __ArrayUnwind(ptr, size, i built, pDtor). CORRECTION: was __ehvec_dtor_body
+0x006E8715	82	sprintf	named	MSVC6 CRT: sprintf(buf, fmt, ...): string FILE {ptr = base = buf, cnt 0x7FFFFFFF, flag 0x42 _IOWRT|_IOSTRG}, _output, then the terminating NUL (_flsbuf(0) when cnt runs out); returns the count; callers AppSettings Read/Write (ini, registry), NetAddress::ToString, UnitProto::BuildModelPartName ..
+0x006E8767	405	_mbsicmp	named	MSVC6 CRT: _mbsicmp(s1, s2): SBCS code page (__mbcodepage 0x7CC06C == 0) -> _stricmp (_stricmp_core 0x6F2230); else under _lock(0x19 _MB_CP_LOCK) compares character by character, lead bytes (_mbctype 0x7CC181 & 4) upper-cased through __crtLCMapStringA(LCMAP_UPPERCASE 0x200), single bytes with _SBUP (0x10) mapped through _mbcasemap 0x7CC080; 0x7FFFFFFF on a map error; 118 callers (save list keys, dialog script, console). CORRECTION: was _stricoll
+0x006E88FC	340	qsort	named	MSVC6 CRT: qsort(base, num, width, cmp): non-recursive quicksort with an explicit stack (median-of-three pivot, cutoff 8 -> shortsort), swap 0x6E8A9E; callers Scene3ds_BuildIndexedComponents, HuffmanCoder::BuildTree, ObjRefCArray_Sort, CellOffsets_Build, CTerrain::SetSunLight ..
+0x006E8A50	78	shortsort	named	MSVC6 CRT: qsort's shortsort(lo, hi, width, cmp): selection sort: find the largest of [lo, hi] by cmp, swap it to hi, hi -= width; caller qsort
+0x006E8A9E	44	qsort_swap	named	MSVC6 CRT: qsort's static swap(a, b, width): byte-wise exchange of two elements when a != b; callers qsort, shortsort. CORRECTION: was _swab_like
+0x006E8AD0	33	_allshr	named	MSVC6 CRT: _allshr: edx:eax >>= cl (arithmetic; >= 64 -> sign fill, >= 32 -> sar of the high dword); caller Scene3ds_BuildIndexedComponents
+0x006E8B00	31	_allshl	named	MSVC6 CRT: _allshl: edx:eax <<= cl (>= 64 -> 0); callers Scene3ds_BuildIndexedComponents, _input
+0x006E8B1F	207	ceil	named	MSVC6 CRT: ceil(x): same code as floor with control word 0x1B3F (round up, 0x797620) and OP_CEIL 0xC; callers main (1000 / frame-rate setting), Perk_ComputeCost. CORRECTION: was fmod_like
+0x006E8BEE	327	_splitpath	named	MSVC6 CRT: _splitpath(path, drive, dir, fname, ext) (MBCS aware via _ismbblead, copies at most _MAX_DRIVE / _MAX_DIR / _MAX_FNAME / _MAX_EXT); callers main, CResourceBase::ListFiles, CFileFind::GetFileTitle
+0x006E8D35	36	_set_new_handler	named	MSVC6 CRT: _set_new_handler(pnh): under _lock(9 _HEAP_LOCK) swap _pnhHeap 0x7CAAD8, return the old; caller main x2
 0x006E8D59	6	dead_6E8D59	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E8D5F	27	_callnewh	named	CRT: calls the new-handler (set_new_handler hook) and reports whether to retry
-0x006E8D7A	45	_cinit	named	CRT startup: init hook, run the C initializers (0x783BB8..BCC) and C++ initializers (0x783000..BB4)
-0x006E8DA7	17	_exit	named	CRT: _exit(code) without cleanup
-0x006E8DB8	17	exit_	named	CRT: exit(code) with cleanup (the __exit entry)
+0x006E8D5F	27	_callnewh	named	MSVC6 CRT: _callnewh(size): _pnhHeap set and pnh(size) != 0 -> 1 (retry), else 0; callers _nh_malloc, realloc, calloc, dead_6ED9A7
+0x006E8D7A	45	_cinit	named	MSVC6 CRT: _cinit(): _FPinit (0x7975A0 = _fpmath) when set, _initterm(__xi_a 0x783BB8, __xi_z 0x783BCC) (C initializers), _initterm(__xc_a 0x783000, __xc_z 0x783BB4) (C++ static ctors); caller entry
+0x006E8DA7	17	exit	named	MSVC6 CRT: exit(code) = doexit(code, 0, 0) (atexit table, pre-terminators and terminators, then ExitProcess); callers FatalError, FatalErrorHr, main, I3DFigureImpl::LoadLibraries, CDXDirectDraw .. CORRECTION: was _exit (names of 0x6E8DA7 / 0x6E8DB8 were swapped)
+0x006E8DB8	17	_exit	named	MSVC6 CRT: _exit(code) = doexit(code, 1, 0) (quick: terminators only, no atexit functions); callers abort, raise, _amsg_exit path, the _threadstart / _beginthreadex __except handlers. CORRECTION: was exit_
 0x006E8DC9	30	dead_6E8DC9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E8DE7	163	doexit	named	CRT: exit core: run onexit table and terminators (locked), flush, then TerminateProcess/ExitProcess
+0x006E8DE7	163	doexit	named	MSVC6 CRT: doexit(code, quick, retcaller): _lockexit; when _C_Exit_Done 0x7CAB1C is set TerminateProcess(self); _C_Termination_Done 0x7CAB18 = 1, _exitflag 0x7CAB14 = retcaller; !quick -> the onexit table in reverse then _initterm(__xp_a 0x783BD0, __xp_z 0x783BD8); _initterm(__xt_a 0x783BDC, __xt_z 0x783BE4); !retcaller -> _C_Exit_Done = 1, ExitProcess(code); else _unlockexit and return; callers exit, _exit, _cexit / _c_exit (dead_6E8DC9)
 0x006E8E8A	2	doexit_chunk_6E8E8A	named	a piece of doexit placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006E8E8C	9	_lockexit	named	CRT: lock 0xD (the exit lock)
-0x006E8E95	9	_unlockexit	named	CRT: unlock 0xD
-0x006E8E9E	26	_initterm	named	CRT: calls each non-null function pointer in [first,last)
-0x006E8EB8	49	fclose	named	CRT: fclose(stream) under the stream lock
-0x006E8EE9	76	_fclose_lk	named	CRT stdio: close a FILE (flush, release buffer, _close)
-0x006E8F35	47	fread_lk	named	CRT stdio: locks the stream then fread core
-0x006E8F64	232	fread	named	CRT: fread(buf, size, count, stream)
-0x006E904C	138	_chsize_like	named	CRT lowio: seek to end and compute size (_filelength) under the handle lock
-0x006E90D6	49	_fsopen	named	CRT: _fsopen(path, mode, shflag): allocate a FILE and open it
-0x006E9107	19	_stat_like_wrap	named	CRT: calls the file-info routine with flag 0x40
+0x006E8E8C	9	_lockexit	named	MSVC6 CRT: _lockexit() = _lock(0xD _EXIT_LOCK1)
+0x006E8E95	9	_unlockexit	named	MSVC6 CRT: _unlockexit() = _unlock(0xD)
+0x006E8E9E	26	_initterm	named	MSVC6 CRT: _initterm(begin, end): calls every non-null function pointer in [begin, end); callers _cinit, doexit
+0x006E8EB8	49	fclose	named	MSVC6 CRT: fclose(stream): string stream (_flag & 0x40 _IOSTRG) -> _flag = 0, EOF; else _lock_file, _fclose_lk, _unlock_file; callers CStdioFile::Close, BufferedFile_Close / _Open, main, CAIMap::DumpPassability ..
+0x006E8EE9	76	_fclose_lk	named	MSVC6 CRT: _fclose_lk(stream): when open (_flag & 0x83): _flush, _freebuf, _close(_file) (< 0 -> EOF), free _tmpfname; _flag = 0; returns 0 / EOF
+0x006E8F35	47	fread	named	MSVC6 CRT: fread(buf, size, count, stream) = _lock_file, _fread_lk (0x6E8F64), _unlock_file; callers main, BufferedFile_RawRead, CStdioFile::Read, dead_4EFF30 / 4EFFF0. CORRECTION: was fread_lk (the names of 0x6E8F35 / 0x6E8F64 were swapped)
+0x006E8F64	232	_fread_lk	named	MSVC6 CRT: _fread_lk(buf, size, count, stream): total = size*count; copies from the buffer, refills big chunks directly with _read (bufsize 0x1000 when unbuffered) or _filbuf; sets _IOEOF / _IOERR; returns the complete items read. CORRECTION: was fread
+0x006E904C	138	_filelength	named	MSVC6 CRT: _filelength(fh): valid handle (< _nhandle 0x7CB020 and FOPEN in __pioinfo 0x7CAF20) -> under _lock_fh: here = _lseek_lk(fh, 0, SEEK_CUR), end = _lseek_lk(fh, 0, SEEK_END), seek back when different; returns end or -1; else errno EBADF, _doserrno 0, -1; callers main, dead_4EFF30 / 4EFFF0. CORRECTION: was _chsize_like
+0x006E90D6	49	_fsopen	named	MSVC6 CRT: _fsopen(path, mode, shflag): _getstream (locked free FILE), _openfile, _unlock_file; returns the FILE or NULL; caller fopen
+0x006E9107	19	fopen	named	MSVC6 CRT: fopen(path, mode) = _fsopen(path, mode, _SH_DENYNO 0x40); callers main, BufferedFile_Open, CAIMap::DumpPassability, dead_4EFF30. CORRECTION: was _stat_like_wrap
 0x006E911A	87	atof	named	CRT atof: skips white space (ctype bit 8), _fltin into a result block and returns the double at +0x10 in ST0 (disassembly: fld qword [eax+0x10]); Compiler_ParseCommand stores it as float (fstp dword) = script number literals keep their fraction. Was atoi
-0x006E9180	56	strncmp	named	CRT strncmp
+0x006E9180	56	strncmp	named	MSVC6 CRT: strncmp(a, b, n): scans a for the NUL within n, compares that many bytes (repe cmpsb) -> -1 / 0 / 1; callers Compiler_Tokenize / CompileText, StringFloatMap_CollectPrefix, Brain::BuildIdleActions, CPlayerClient message handlers ..
 0x006E91B8	8	dead_6E91B8	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E91C0	111	_toupper_lk	named	CRT: toupper with the locale lock
-0x006E922F	204	toupper	named	CRT: toupper with locale
-0x006E92FB	46	_isalnum	named	CRT: alnum class test (0x103) with locale
+0x006E91C0	111	toupper	named	"MSVC6 CRT: toupper(c) (the locking wrapper): ""C"" locale (__lc_handle[LC_CTYPE] 0x7CABF0 == 0) -> 'a'..'z' - 0x20; else _lock_locale (__unguarded_readlc_active 0x7CC054 / __setlc_active 0x7CC050, lock 0x13) around _toupper_lk; callers CResourceBase::ListFiles, WildcardMatch, String_HashCI, _atodbl parse, ostream double output. CORRECTION: was _toupper_lk (the names of 0x6E91C0 / 0x6E922F were swapped)"
+0x006E922F	204	_toupper_lk	named	"MSVC6 CRT: _toupper_lk(c): ""C"" locale ASCII; else when c is lower (_pctype 0x797DD8 & 2, or _isctype for MBCS __mb_cur_max 0x797FE4 > 1) map one or two bytes (lead byte by _pctype 0x8000) with __crtLCMapStringA(LCMAP_UPPERCASE); returns c unchanged when not lower; caller toupper. CORRECTION: was toupper"
+0x006E92FB	46	isalpha	named	MSVC6 CRT: isalpha(c) = _isctype(c, _ALPHA 0x103) when __mb_cur_max > 1, else _pctype[c] & 0x103; callers CEditWin::OnChar, CMappedFile::Open (drive letter). CORRECTION: was _isalnum (alnum would be mask 0x107)
 0x006E9329	80	dead_6E9329	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E9379	40	CRT_isdigit	named	CRT: ctype bit 4 (_DIGIT) test with locale = isdigit; GSLexer_ClassifyToken uses it to spot number literals. Was _isalpha_like (wrong bit name)
 0x006E93A1	45	dead_6E93A1	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E93CE	40	CRT_isspace	named	CRT: ctype bit 8 (_SPACE) test with locale = isspace; Compiler_Tokenize and the #define scanner skip white space with it. Was _isdigit_like (wrong bit name)
 0x006E93F6	86	dead_6E93F6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E944C	46	_isprint_like	named	CRT: class 0x157 test with locale
+0x006E944C	46	isprint	named	MSVC6 CRT: isprint(c) = class mask 0x157 (_BLANK|_PUNCT|_ALPHA|_DIGIT) via _isctype or _pctype; caller IsValidNameString. CORRECTION: was _isprint_like
 0x006E947A	86	dead_6E947A	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E94D0	143	dead_6E94D0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E955F	65	printf	named	CRT: printf(fmt, ...) to stdout under the stream lock
+0x006E955F	65	printf	named	MSVC6 CRT: printf(fmt, ...): _lock_file2(1, stdout 0x798080), _stbuf, _output, _ftbuf, unlock; returns the count; callers Chunk3ds_ReadMaterial / _ReadPercentage, PerksDb_Save, dead_4A08A0 (debug output, goes nowhere in the GUI exe)
 0x006E95A0	10	dead_6E95A0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E95AA	10	_CIfmod	named	x87 fmod thunk (Ghidra says _CIlog_like); hour = fmod(...,24)
-0x006E95B4	30	_math_dispatch	named	CRT math: dispatches on the FPU type flag and calls the worker
-0x006E95D2	44	fseek_lk	named	CRT stdio: locks the stream then fseek core
-0x006E95FE	141	fseek	named	CRT: fseek(stream, offset, origin)
-0x006E968B	47	fwrite_lk	named	CRT stdio: locks the stream then fwrite core
-0x006E96BA	266	fwrite	named	CRT: fwrite(buf, size, count, stream)
-0x006E97C4	34	fflush_lk	named	CRT stdio: locks the stream then _flsbuf_like
-0x006E97E6	353	_flsbuf_like	named	CRT stdio: flush/reset a stream buffer when switching read/write
-0x006E9947	23	_mbsinc	named	CRT: advances a pointer by one multibyte character (lead-byte table 0x7CC180); 67 callers
+0x006E95AA	10	_CIfmod	named	MSVC6 CRT: _CIfmod (x87 intrinsic fmod(ST1, ST0)): edx = the fmod descriptor 0x797630, jmp _cintrindisp2 (0x6F2B80); callers CWeather::DrawSnow, CWorldClient::UpdateDayLight (hour = fmod(.., 24)), CCampScreen::Update, TerrainSector_Animate, SSCCmd::EvalFloat ..
+0x006E95B4	30	_fmod_fprem	named	MSVC6 CRT: the fmod worker of the descriptor (pointer 0x797640): fxch, fprem loop until C2 clears (the FDIV-bug safe _adj_fprem 0x6F37FC when _adjust_fdiv 0x7CAAD4 == 1), fstp st(1). CORRECTION: was _math_dispatch
+0x006E95D2	44	fseek	named	MSVC6 CRT: fseek(stream, offset, origin) = _lock_file, _fseek_lk (0x6E95FE), _unlock_file; callers BufferedFile_RawRead / _RawWrite / _Open, CStdioFile::Seek. CORRECTION: was fseek_lk (names of 0x6E95D2 / 0x6E95FE swapped)
+0x006E95FE	141	_fseek_lk	named	MSVC6 CRT: _fseek_lk(stream, offset, origin): not open or bad origin -> errno EINVAL, -1; clear _IOEOF; SEEK_CUR -> offset += _ftell_lk, origin SET; _flush; read/write stream -> clear _IOREAD|_IOWRT, else read+buffered small-buffer streams get _bufsiz 0x200; _lseek(_file) -> 0 / -1. CORRECTION: was fseek
+0x006E968B	47	fwrite	named	MSVC6 CRT: fwrite(buf, size, count, stream) = _lock_file, _fwrite_lk (0x6E96BA), _unlock_file; callers BufferedFile_RawWrite, CStdioFile::Write, dead_4DB980 / 4DBAC0. CORRECTION: was fwrite_lk (names swapped)
+0x006E96BA	266	_fwrite_lk	named	MSVC6 CRT: _fwrite_lk(buf, size, count, stream): copies into the buffer, flushes, writes whole buffer-size chunks directly with _write, the rest through _flsbuf; _IOERR on short writes; returns the complete items written; callers fwrite, fputs. CORRECTION: was fwrite
+0x006E97C4	34	ftell	named	MSVC6 CRT: ftell(stream) = _lock_file, _ftell_lk (0x6E97E6), _unlock_file; callers BufferedFile_Open, CStdioFile::Seek, CStdioFile::Flush_Throw (CStdioFile::GetPosition). CORRECTION: was fflush_lk
+0x006E97E6	353	_ftell_lk	named	MSVC6 CRT: _ftell_lk(stream): _cnt < 0 -> 0; pos = _lseek(_file, 0, SEEK_CUR); unbuffered -> pos - _cnt; else adjusts by the buffered bytes (text mode: counts '\n' in the buffer for the CR bytes, reads the end of the file for the read case); errno EINVAL when not open; callers ftell, _fseek_lk (SEEK_CUR). CORRECTION: was _flsbuf_like
+0x006E9947	23	_mbsinc	named	MSVC6 CRT: _mbsinc(p): p + 2 when *p is a lead byte (_mbctype 0x7CC181 & _MLEAD 4), else p + 1; 67 callers (CTextManager parsing, CString::FormatV, CUIMessageLog::AddMessage ..)
 0x006E995E	34	dead_6E995E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E9980	114	dead_6E9980	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E99F2	17	_isdigit_mb	named	CRT: tests the digit class bit (4) for a character
+0x006E99F2	17	_ismbblead	named	MSVC6 CRT: _ismbblead(c) = _x_ismbbtype(c, 0, _MLEAD 4) (lead byte of the current multibyte code page); callers CTextManager::ReadLineValue / ReadLines / SkipLineAndComments, CUIMessageLog::AddMessage, CUIBlitSurface::DrawWrappedText. CORRECTION: was _isdigit_mb
 0x006E9A03	56	dead_6E9A03	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E9A3B	49	_isctype_mb	named	CRT: tests a character class mask for a (possibly double-byte) character
-0x006E9A6C	21	_ismbbkana	named	CRT: tests the locale table 0x797DD8 for bit 0x8000
+0x006E9A3B	49	_x_ismbbtype	named	MSVC6 CRT: x_ismbbtype(c, cmask, kmask): 1 when _mbctype[c+1] & kmask, or (cmask && _ctype[c+1] (0x797DE2) & cmask), else 0; callers _ismbblead and the dead _ismbb* wrappers 0x6E995E / 0x6E9980 / 0x6E9A03. CORRECTION: was _isctype_mb
+0x006E9A6C	21	isleadbyte	named	MSVC6 CRT: isleadbyte(c) = _pctype (0x797DD8)[c] & _LEADBYTE 0x8000; callers String_SplitWhitespace, CTextManager::PeekWord / ReadLineValue / ReadUntilHash / ReadLines, CUIMessageLog::AddMessage. CORRECTION: was _ismbbkana
 0x006E9A81	31	dead_6E9A81	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006E9AA0	150	dead_6E9AA0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E9B36	45	_itoa	named	CRT: int to string in a given radix (10 uses the sign)
-0x006E9B63	92	_itoa_s_core	named	CRT: converts an unsigned to decimal text (sign prefix when negative)
-0x006E9BBF	42	_ultoa	named	CRT: unsigned to string in a radix
+0x006E9B36	45	_itoa	named	MSVC6 CRT: _itoa(val, buf, radix) = xtoa(val, buf, radix, radix == 10 && val < 0); returns buf; callers CSysInfo::CollectInfo x4, setlocale (code page number)
+0x006E9B63	92	xtoa	named	MSVC6 CRT: static xtoa(val, buf, radix, is_neg): '-' and negate when is_neg, digits val % radix ('0'..'9', 'a'.. via + 'W') written backwards, NUL, then reversed in place; callers _itoa, _ltoa, _ultoa (dead_6E9BE9). CORRECTION: was _itoa_s_core
+0x006E9BBF	42	_ltoa	named	MSVC6 CRT: _ltoa(val, buf, radix): same code as _itoa (sign for radix 10); lib, unused (no call, jump or pointer). CORRECTION: was _ultoa (the unsigned one is dead_6E9BE9, is_neg 0)
 0x006E9BE9	27	dead_6E9BE9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006E9C04	49	_i64toa	named	CRT: 64-bit signed to string
-0x006E9C35	134	_ltoa_core	named	CRT: 64-bit integer to string core (radix, sign)
-0x006E9CBB	27	_ui64toa	named	CRT: 64-bit unsigned to string
-0x006E9CE0	88	memset	named	CRT memset (46 callers)
-0x006E9D40	7	strcpy	named	CRT strcpy (word-at-a-time)
-0x006E9D50	224	strcat	named	CRT strcat
-0x006E9E30	429	_setmbcp	named	CRT: sets the multibyte code page (locked): tables, lcid, ctype
-0x006E9FDD	74	getSystemCP	named	CRT: _setmbcp helper: resolves -2 (OEM) / -3 (ANSI) / explicit code page
-0x006EA027	51	CPtoLCID	named	CRT: maps a code page (932/936/949/950) to a LCID
-0x006EA05A	41	_setmbcp_clear	named	CRT: zeroes the multibyte ctype table (0x7CC180, 256 bytes)
-0x006EA083	389	_setmbcp_tables	named	CRT locale: builds the multibyte lead-byte and case tables for the code page (GetCPInfo)
+0x006E9C04	49	_i64toa	named	MSVC6 CRT: _i64toa(val64, buf, radix) = x64toa(val, buf, radix, radix == 10 && val < 0); lib, unused (no call, jump or pointer) [dead: no caller or pointer]
+0x006E9C35	134	x64toa	named	MSVC6 CRT: static x64toa(val64, buf, radix, is_neg) (64-bit xtoa with _aullrem / _aulldiv); dead chain: only from the dead _i64toa / _ui64toa. CORRECTION: was _ltoa_core
+0x006E9CBB	27	_ui64toa	named	MSVC6 CRT: _ui64toa(val64, buf, radix) = x64toa(.., 0); lib, unused (no call, jump or pointer) [dead: no caller or pointer]
+0x006E9CE0	88	memset	named	MSVC6 CRT: memset(dst, c, n) (asm: byte fill to dword alignment, rep stosd with the byte replicated, tail bytes); returns dst; callers the MFC CArray::SetSize instances, CSysInfo ..
+0x006E9D40	7	strcpy	named	MSVC6 CRT: strcpy(dst, src) (strcat.asm entry: edi = dst, jumps into strcat's dword copy loop 0x6E9DB1); returns dst
+0x006E9D50	224	strcat	named	MSVC6 CRT: strcat(dst, src): finds the end of dst dword-wise, then the shared copy loop; returns dst; callers _NMSG_WRITE, _setlocale_getall, _mbsncat_like
+0x006E9E30	429	_setmbcp	named	MSVC6 CRT: _setmbcp(cp) under _lock(0x19): cp = getSystemCP(cp); same as the current __mbcodepage 0x7CC058 -> 0; known CJK page (table 0x797688, 0x30 bytes per entry: lead-byte ranges, mbulinfo) -> fill _mbctype 0x7CC180 from the ranges; else GetCPInfo lead bytes (MaxCharSize > 1) or setSBCS; then __mblcid 0x7CC284 = CPtoLCID, setSBUpLow; returns 0, or -1 for an unknown page; callers CTextManager::Init (the game's text code page), __initmbctable
+0x006E9FDD	74	getSystemCP	named	MSVC6 CRT: static getSystemCP(cp): -2 -> GetOEMCP, -3 -> GetACP, -4 -> __lc_codepage 0x7CAC00 (fSystemSet 0x7CAB20 = 1 for these), else cp
+0x006EA027	51	CPtoLCID	named	MSVC6 CRT: static CPtoLCID(cp): 932 -> 0x411, 936 -> 0x804, 949 -> 0x412, 950 -> 0x404, else 0
+0x006EA05A	41	setSBCS	named	MSVC6 CRT: static setSBCS(): _mbctype (0x101 bytes at 0x7CC180) = 0, __mbcodepage = __ismbcodepage 0x7CC06C = __mblcid = 0, __mbulinfo 0x7CC060..68 = 0. CORRECTION: was _setmbcp_clear
+0x006EA083	389	setSBUpLow	named	MSVC6 CRT: static setSBUpLow(): with GetCPInfo(__mbcodepage) -> character types (__crtGetStringTypeA) and upper / lower maps (__crtLCMapStringA LCMAP_LOWERCASE / UPPERCASE, lead bytes blanked) into _mbctype _SBUP 0x10 / _SBLOW 0x20 and _mbcasemap 0x7CC080; without it plain ASCII ranges. CORRECTION: was _setmbcp_tables
 0x006EA208	16	dead_6EA208	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EA218	28	_setmbcp_default	named	CRT: sets the default multibyte code page once (-3)
-0x006EA234	582	setlocale	named	CRT: setlocale(category, name): LC_COLLATE/CTYPE/... dispatch under lock 0x13
-0x006EA47A	283	_setlocale_get	named	CRT locale: duplicates the current locale string for setlocale(NULL)
-0x006EA595	185	_setlocale_getall	named	"CRT locale: builds the composite ""LC_ALL"" string"
-0x006EA64E	280	_setlocale_set	named	CRT locale: sets one category from a locale name
+0x006EA218	28	__initmbctable	named	MSVC6 CRT: __initmbctable() (C initializer 0x783BC0, also from _setargv / _setenvp / _wincmdln): once (0x7CC28C) _setmbcp(-3 = ANSI code page). CORRECTION: was _setmbcp_default
+0x006EA234	582	setlocale	named	"MSVC6 CRT: setlocale(category 0..5, locale): under _lock(0x13 _SETLOCALE_LOCK) with __setlc_active 0x7CC050++ (waits for __unguarded_readlc_active 0x7CC054); LC_ALL with NULL -> _setlocale_get_all; ""LC_xxx=..;"" lists -> _setlocale_set_cat per named category; a plain name -> _expandlocale then _setlocale_set_cat for every category that differs; one category -> query its name or _setlocale_set_cat; returns the locale string or NULL; caller CTextManager::Init"
+0x006EA47A	283	_setlocale_set_cat	named	MSVC6 CRT: static _setlocale_set_cat(category, locale): _expandlocale into a full name + LC_ID + code page, malloc a copy, swap it into __lc_category[cat].locale (0x79788C + cat*12), __lc_handle 0x7CABE8[cat] and __lc_id 0x7CAC30[cat] (6 bytes), LC_CTYPE also __lc_codepage 0x7CAC00; calls the category init function (table +8), restores the old values and frees the copy when it fails; returns the name or NULL. CORRECTION: was _setlocale_get
+0x006EA595	185	_setlocale_get_all	named	"MSVC6 CRT: static _setlocale_get_all(): (re)allocates the LC_ALL buffer (0x351 bytes at __lc_category[0]) and builds ""LC_COLLATE=..;LC_CTYPE=..;.."" with _strcats; when every category has the same name returns that name instead (frees the buffer). CORRECTION: was _setlocale_getall"
+0x006EA64E	280	_expandlocale	named	"MSVC6 CRT: static _expandlocale(expr, output, LC_ID*, cp*): ""C"" -> ""C"" with zero ids; cached last result (0x797800 / 0x79777C) reused; else __lc_strtolc + __get_qualified_locale + __lc_lctostr into the cache, then copies the name, the LC_ID and the code page out; NULL on failure. CORRECTION: was _setlocale_set"
 0x006EA766	3	sub_6EA766	named	unregistered function, reached by call / pointer from 0x397890 (gaps.py 2026-11-06)
-0x006EA769	37	_mbsncat_like	named	CRT: appends n strings from the stack arguments with strcat
-0x006EA78E	204	_setlocale_init_cat	named	CRT locale: fills a 0x88-byte locale structure from a name string
-0x006EA85A	83	_setlocale_build_name	named	"CRT locale: builds the ""LC_xxx=..."" name string"
-0x006EA8AD	215	free_	named	CRT: free(block) (115 callers)
-0x006EA917	9	_unlock_locale_a	named	CRT: unlock 9 (locale lock)
-0x006EA96F	9	_unlock_locale_b	named	CRT: unlock 9
+0x006EA769	37	_strcats	named	MSVC6 CRT: static _strcats(out, n, ...): strcat of the n string arguments onto out; callers _setlocale_get_all, __lc_lctostr. CORRECTION: was _mbsncat_like
+0x006EA78E	204	__lc_strtolc	named	"MSVC6 CRT: __lc_strtolc(LC_STRINGS* out (0x88 bytes: language 0x40, country 0x40, code page 0x10), name): memset, splits ""language_country.codepage"" on ""_."" (0x747328) with length checks (< 0x40 / < 0x10); -1 on a malformed name, 0 on success; caller _expandlocale. CORRECTION: was _setlocale_init_cat"
+0x006EA85A	83	__lc_lctostr	named	"MSVC6 CRT: __lc_lctostr(out, LC_STRINGS*): strcpy the language, then _strcats ""_"" + country and ""."" + code page when present; caller _expandlocale. CORRECTION: was _setlocale_build_name"
+0x006EA8AD	215	free	named	MSVC6 CRT: free(p): NULL -> return; __active_heap 0x7CAF0C == 3 (V6 small-block heap) -> under _lock(9 _HEAP_LOCK) __sbh_find_block + __sbh_free_block; == 2 (V5 heap) -> __old_sbh_find_region + __old_sbh_free_block; not a small block -> HeapFree(_crtheap); 115 callers. CORRECTION of the name: was free_
+0x006EA917	9	free_finally_sbh	named	MSVC6 CRT: __finally block of free's V6 section (scope entry 0x747338) = _unlock(9 _HEAP_LOCK); also called inline on the normal path. CORRECTION: was _unlock_locale_a (it is the heap lock)
+0x006EA96F	9	free_finally_oldsbh	named	MSVC6 CRT: __finally block of free's V5 section (scope entry 0x747344) = _unlock(9). CORRECTION: was _unlock_locale_b
 0x006EA984	18	dead_6EA984	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EA996	93	wcstombs	named	CRT: wide char string to multibyte (locked)
-0x006EA9F3	431	wcstombs_core	named	CRT: wide to multibyte conversion with WideCharToMultiByte
-0x006EABA2	47	wcsnlen_like	named	CRT: counts wide characters up to n or NUL
-0x006EABD1	18	malloc	named	CRT: malloc(size) via __nh_malloc with the new-handler mode
-0x006EABE3	44	__nh_malloc	named	CRT: loops HeapAlloc and the new handler until success
-0x006EAC0F	231	free	named	CRT heap: free block (small-block heap, lock 9)
-0x006EAC76	9	_unlock_heap_a	named	CRT: unlock 9
-0x006EACD5	9	_unlock_heap_b	named	CRT: unlock 9
+0x006EA996	93	wcstombs	named	MSVC6 CRT: wcstombs(dst, wsrc, n): _lock_locale (0x13 when setlocale is active) around _wcstombs_lk; dead chain: only from dead_4DEE60
+0x006EA9F3	431	_wcstombs_lk	named	"MSVC6 CRT: _wcstombs_lk(dst, wsrc, n): ""C"" locale -> narrow each wchar (EILSEQ 0x2A above 0xFF); else WideCharToMultiByte(__lc_codepage, WC_COMPOSITECHECK | WC_SEPCHARS 0x220, ..) with default-char detection (count only when dst is NULL, wcsncnt for the n limit); dead chain: only from wcstombs (dead_4DEE60). CORRECTION: was wcstombs_core"
+0x006EABA2	47	wcsncnt	named	MSVC6 CRT: static wcsncnt(ws, n): number of wchars up to and including the NUL, at most n; dead chain (only from _wcstombs_lk). CORRECTION: was wcsnlen_like
+0x006EABD1	18	malloc	named	MSVC6 CRT: malloc(size) = _nh_malloc(size, _newmode 0x7CAC7C)
+0x006EABE3	44	_nh_malloc	named	MSVC6 CRT: _nh_malloc(size, nhFlag): size <= 0xFFFFFFE0: loop _heap_alloc(size) until non-null; when it fails and nhFlag, retry while _callnewh(size) != 0; else NULL; caller malloc
+0x006EAC0F	231	_heap_alloc	named	MSVC6 CRT: _heap_alloc(size): V6 heap (__active_heap 3) and size <= __sbh_threshold 0x7CAF04 -> __sbh_alloc_block under _lock(9); V5 heap (2): size rounded up to 16 (0 -> 16), <= __old_sbh_threshold 0x79AC14 -> __old_sbh_alloc(paras); else HeapAlloc(_crtheap, 0, rounded size); caller _nh_malloc. CORRECTION: was free (it allocates)
+0x006EAC76	9	_heap_alloc_finally_sbh	named	MSVC6 CRT: __finally block of _heap_alloc's V6 section (scope entry 0x747350) = _unlock(9). CORRECTION: was _unlock_heap_a
+0x006EACD5	9	_heap_alloc_finally_oldsbh	named	MSVC6 CRT: __finally block of _heap_alloc's V5 section = _unlock(9) (called inline after __old_sbh_alloc). CORRECTION: was _unlock_heap_b
 0x006EACF6	21	dead_6EACF6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EAD0B	289	modf_like	named	CRT math: double function with a second output (x87) and special cases
-0x006EAE30	133	strstr	named	CRT strstr
-0x006EAEB0	60	fprintf	named	CRT: fprintf(stream, fmt, ...)
-0x006EAEEC	52	sscanf_like	named	CRT: _input(string stream) with the string length as the buffer
-0x006EAF20	70	_access	named	CRT: GetFileAttributes-based access check (write bit)
-0x006EAF66	93	_close	named	CRT lowio: close(handle) under the handle lock
-0x006EAFC3	131	_close_core	named	CRT lowio: closes the OS handle (std handles 1/2 share logic), frees the table entry, maps errors
-0x006EB046	101	_read	named	CRT lowio: read(handle, buf, n) under the handle lock
-0x006EB0AB	473	_read_core	named	CRT lowio: read with text-mode CRLF translation
-0x006EB284	101	_lseek	named	CRT lowio: lseek(handle, offset, origin) under lock
-0x006EB2E9	115	_lseek_core	named	CRT lowio: SetFilePointer on the handle, errno on failure
-0x006EB35C	23	_open_wrap	named	CRT: _sopen with default share mode 0x40
-0x006EB373	719	_sopen	named	CRT lowio: _sopen(path, oflag, shflag, pmode): CreateFile, handle table, text/binary detection
-0x006EB642	101	_write	named	CRT lowio: write(handle, buf, n) under the handle lock
-0x006EB6A7	395	_write_core	named	CRT lowio: write with text-mode LF to CRLF translation
-0x006EB832	205	_findfirst	named	CRT: FindFirstFileA -> _finddata (attributes, times via __timet_from_ft, size, name)
-0x006EB8FF	200	_findnext	named	CRT: FindNextFileA -> _finddata
+0x006EAD0B	289	modf	named	MSVC6 CRT: modf(x, double* ip): Inf -> *ip = x, returns _copysign(0, x); NaN -> *ip = NaN, _except1 / _handle_qnan1 with OP 0x1C; else *ip = truncated integer part (_frnd under round-to-zero control word 0x7978D0), returns x - *ip; callers CAnimationTrack::Evaluate, CWorldClient::UpdateDayLight. CORRECTION: was modf_like
+0x006EAE30	133	strstr	named	MSVC6 CRT: strstr(s, find) (asm: first-character scan then compare loop); returns the match or NULL; callers CObject3D::FindPartByNameStart / CollectPartsByNameStart, _mbsstr, __heap_select
+0x006EAEB0	60	fprintf	named	MSVC6 CRT: fprintf(stream, fmt, ...): _lock_file, _stbuf, _output, _ftbuf, _unlock_file; returns the count; caller CAIMap::DumpPassability x4
+0x006EAEEC	52	sscanf	named	MSVC6 CRT: sscanf(str, fmt, ...): string FILE {ptr = base = str, cnt = strlen, flag 0x49 _IOREAD|_IOSTRG|_IOMYBUF}, _input; caller CInterface::Init. CORRECTION: was sscanf_like
+0x006EAF20	70	_access	named	MSVC6 CRT: _access(path, mode): GetFileAttributesA; -1 -> _dosmaperr, -1; read-only (attr & 1) and mode & 2 (write) -> errno EACCES 0xD, _doserrno 5, -1; else 0; callers CWorldServer::LoadZone x4, SaveGame_BeginLoad, CResourceBase::OpenFile
+0x006EAF66	93	_close	named	MSVC6 CRT: _close(fh): valid open handle -> _lock_fh, _close_lk, _unlock_fh; else errno EBADF 9, _doserrno 0, -1; callers CMappedResource dtor / Release, CMappedResource2::dtor, _fclose_lk, _sopen
+0x006EAFC3	131	_close_lk	named	MSVC6 CRT: _close_lk(fh): CloseHandle(_get_osfhandle(fh)) except when fh is 1 or 2 and stdout / stderr share one OS handle; _free_osfhnd, osfile flags = 0; error -> _dosmaperr, -1; else 0. CORRECTION of the name: was _close_core
+0x006EB046	101	_read	named	MSVC6 CRT: _read(fh, buf, n): valid handle -> _lock_fh, _read_lk, _unlock_fh; else EBADF, -1; callers CMappedResource::Open / OpenFile, _fread_lk, _filbuf
+0x006EB0AB	473	_read_lk	named	MSVC6 CRT: _read_lk(fh, buf, n): handles the peeked pipe character (osfile FPIPE / pipech +5), ReadFile, ERROR_ACCESS_DENIED -> EBADF, ERROR_BROKEN_PIPE -> 0; text mode (FTEXT 0x80): CR LF -> LF in place, a lone CR before the buffer end peeks the next byte (seek back or pipech), ^Z (0x1A) sets FEOFLAG and ends; returns the bytes delivered; callers _read, _sopen (the ^Z check). CORRECTION of the name: was _read_core
+0x006EB284	101	_lseek	named	MSVC6 CRT: _lseek(fh, offset, origin): valid handle -> _lock_fh, _lseek_lk, _unlock_fh; else EBADF, -1; callers _ftell_lk, _fseek_lk, _flsbuf, CMappedResource::Open / OpenFile / CloseFile
+0x006EB2E9	115	_lseek_lk	named	MSVC6 CRT: _lseek_lk(fh, offset, origin): SetFilePointer(_get_osfhandle(fh), offset, NULL, origin); error -> _dosmaperr, -1; else clears FEOFLAG (osfile & ~2) and returns the position; callers _filelength, _chsize, _sopen, _read_lk, _write_lk, _lseek. CORRECTION of the name: was _lseek_core
+0x006EB35C	23	_open	named	MSVC6 CRT: _open(path, oflag, pmode) = _sopen(path, oflag, _SH_DENYNO 0x40, pmode); caller CMappedResource::Open. CORRECTION: was _open_wrap
+0x006EB373	719	_sopen	named	MSVC6 CRT: _sopen(path, oflag, shflag, pmode): maps oflag / shflag to CreateFileA access, share and disposition (O_CREAT/O_EXCL/O_TRUNC, temporary / random / sequential hints), _alloc_osfhnd, file type (FILE_TYPE_CHAR -> FDEV, PIPE -> FPIPE), _set_osfhnd, O_APPEND / O_TEXT flags; text + read-write: seeks to the last byte and strips a trailing ^Z with _chsize; returns the handle or -1 (_dosmaperr); callers _open, _openfile
+0x006EB642	101	_write	named	MSVC6 CRT: _write(fh, buf, n): valid handle -> _lock_fh, _write_lk, _unlock_fh; else EBADF, -1; callers _flsbuf, _flush, _fwrite_lk, CMappedResource::CloseFile
+0x006EB6A7	395	_write_lk	named	MSVC6 CRT: _write_lk(fh, buf, n): FAPPEND -> seek to the end; text mode: LF -> CR LF through a 0x400-byte stack buffer, WriteFile per chunk; binary: one WriteFile; errors: ERROR_ACCESS_DENIED -> EBADF, a device with 0 written and the first byte ^Z -> 0, else ENOSPC 0x1C; returns the source bytes written; callers _write, _chsize. CORRECTION of the name: was _write_core
+0x006EB832	205	_findfirst	named	MSVC6 CRT: _findfirst(spec, _finddata_t*): FindFirstFileA; attrib (FILE_ATTRIBUTE_NORMAL 0x80 -> 0), time_create / time_access / time_write via __timet_from_ft, size = nFileSizeLow, name strcpy; returns the find HANDLE, or -1 with errno (ENOENT / ENOMEM / EINVAL); caller CResourceBase::OpenFile
+0x006EB8FF	200	_findnext	named	MSVC6 CRT: _findnext(handle, _finddata_t*): FindNextFileA and the same field copies; 0 or -1; lib, unused (no call, jump or pointer) [dead: no caller or pointer]
 0x006EB9C7	32	dead_6EB9C7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EB9E7	100	__timet_from_ft	named	CRT: FILETIME to time_t (local time conversion)
+0x006EB9E7	100	__timet_from_ft	named	MSVC6 CRT: __timet_from_ft(FILETIME*): 0 for a zero time... else FileTimeToLocalFileTime + FileTimeToSystemTime + __loctotime_t(y, m, d, h, min, s, -1); -1 on failure; callers _findfirst, _findnext
 0x006EBA4B	8	dead_6EBA4B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EBA53	111	_tolower_lk	named	CRT: tolower with locale lock
-0x006EBAC2	203	tolower	named	CRT: tolower with locale
-0x006EBB8D	19	_statfp_a	named	CRT FPU: returns the status word as CRT flags
-0x006EBBA0	20	_statfp_b	named	CRT FPU: returns the status word as CRT flags (second)
-0x006EBBB4	53	_controlfp	named	CRT: _controlfp(new, mask): reads, combines and writes the FPU control word
-0x006EBBE9	22	Thunk_FUN_006ebbb4_6EBBE9	named	forwards to FUN_006ebbb4
+0x006EBA53	111	tolower	named	"MSVC6 CRT: tolower(c) (the locking wrapper): ""C"" locale -> 'A'..'Z' + 0x20; else _lock_locale around _tolower_lk; callers CFileRegistry::FindData, CResourceBase::FindEntry / CreateAccelTable, String_SumCharClass, _forcdecpt. CORRECTION: was _tolower_lk (names of 0x6EBA53 / 0x6EBAC2 were swapped)"
+0x006EBAC2	203	_tolower_lk	named	"MSVC6 CRT: _tolower_lk(c): ""C"" locale ASCII; else upper (_pctype & 1 or _isctype) -> __crtLCMapStringA(LCMAP_LOWERCASE) of one or two bytes; callers _stricmp_core, _strnicmp / _stricmp lock-free cores, tolower. CORRECTION: was tolower"
+0x006EBB8D	19	_statusfp	named	MSVC6 CRT: _statusfp(): fnstsw -> _abstract_sw; lib, unused (no call, jump or pointer). CORRECTION: was _statfp_a [dead: no caller or pointer]
+0x006EBBA0	20	_clearfp	named	MSVC6 CRT: _clearfp(): fnstsw then fnclex, returns _abstract_sw of the old status; lib, unused (no call, jump or pointer). CORRECTION: was _statfp_b [dead: no caller or pointer]
+0x006EBBB4	53	_control87	named	MSVC6 CRT: _control87(new, mask): old = _abstract_cw(fnstcw); cw = (old & ~mask) | (new & mask); fldcw(_hw_cw(cw)); returns cw; callers CTerrain::TraceRayToGround x4, TerrainSector_Relight x3, CTerrain::SnapQuadsToGround x3, _controlfp. CORRECTION: was _controlfp
+0x006EBBE9	22	_controlfp	named	MSVC6 CRT: _controlfp(new, mask) = _control87(new, mask & ~_EM_DENORMAL 0x80000); caller _setdefaultprecision (0x6EEF7C). CORRECTION: was Thunk_FUN_006ebbb4
 0x006EBBFF	43	dead_6EBBFF	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EBC2A	146	_statfp_to_cw	named	CRT: converts FPU control bits to the CRT status mask (variant)
-0x006EBCBC	137	_controlfp_from_status	named	CRT: converts the CRT mask to the hardware FPU control word bits
-0x006EBD45	53	_statfp_byte	named	CRT: converts a status byte to the CRT mask
-0x006EBD7A	33	_copysign	named	CRT: copysign(x, y)
-0x006EBD9B	37	_chgsign	named	CRT: negates a double
+0x006EBC2A	146	_abstract_cw	named	MSVC6 CRT: _abstract_cw(hw control word): x87 bits -> CRT abstract bits (exception masks _EM_*, rounding _RC_*, precision _PC_*, infinity _IC_AFFINE); caller _control87. CORRECTION: was _statfp_to_cw
+0x006EBCBC	137	_hw_cw	named	MSVC6 CRT: _hw_cw(abstract cw): CRT abstract control bits -> x87 control word bits; caller _control87. CORRECTION: was _controlfp_from_status
+0x006EBD45	53	_abstract_sw	named	MSVC6 CRT: _abstract_sw(x87 status word): IE/DE/ZE/OE/UE/PE -> _SW_INVALID / _SW_DENORMAL / _SW_ZERODIVIDE / _SW_OVERFLOW / _SW_UNDERFLOW / _SW_INEXACT; callers _statusfp, _clearfp (both dead) -> dead chain
+0x006EBD7A	33	_copysign	named	MSVC6 CRT: _copysign(x, y): x with the sign bit of y; callers CTerrain::SetSunLight x3, modf, ldexp
+0x006EBD9B	37	_chgsign	named	MSVC6 CRT: _chgsign(x): flips the sign bit; lib, unused (no call, jump or pointer) [dead: no caller or pointer]
 0x006EBDC0	22	dead_6EBDC0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EBDD6	231	sqrt_like	named	CRT math: unary double function with Inf/NaN handling
-0x006EBEBD	661	pow_like	named	CRT math: binary double function (pow) with NaN/Inf/zero special cases, 661 bytes
+0x006EBDD6	231	_logb	named	MSVC6 CRT: _logb(x) (likely; OP 0x25): control word 0x133F, Inf / NaN special cases, x == 0 -> -HUGE with FP_Z (_except1(4, ..)), else the unbiased exponent from _decomp; lib, unused (no call, jump or pointer). CORRECTION: was sqrt_like [dead: no caller or pointer]
+0x006EBEBD	661	_scalb	named	MSVC6 CRT: _scalb(x, exp) (likely; OP 0x26): x * 2^exp through the exponent field (_decomp / _set_exp), overflow / underflow to +-HUGE / 0 with _except1(0x12, ..); lib, unused (no call, jump or pointer). CORRECTION: was pow_like [dead: no caller or pointer]
 0x006EC152	66	dead_6EC152	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EC194	146	_fpclass_like	named	CRT math: classifies Inf/NaN of a double
-0x006EC226	233	entry	named	PE entry point (mainCRTStartup/WinMainCRTStartup): GetVersion, heap and lowio init, _cinit, parses the command line, calls main (0x456440), exit
-0x006EC30F	20	EHBlock_6EC30F	named	exception-handling block (funclet) inside of FUN_006EC226 (0x006EC226)
-0x006EC323	11	_EH_amsg_exit_stub	named	CRT funclet: records the code and exits via __exit
-0x006EC32E	34	_amsg_exit	named	CRT: prints the runtime error message n and exits
+0x006EC194	146	_fpclass	named	MSVC6 CRT: _fpclass(x): Inf/NaN through _sptype (0x6F10B0: PINF -> 0x200, NINF -> 4, QNAN -> 2, SNAN -> 1); denormal -> 0x10 / 0x80, zero -> 0x20 / 0x40, normal -> 8 / 0x100 (negative / positive); caller _fpmath_is_even_integer (pow). CORRECTION: was _fpclass_like
+0x006EC226	233	WinMainCRTStartup	named	MSVC6 CRT: the PE entry point WinMainCRTStartup: GetVersion -> _osver / _winminor / _winmajor / _winver (0x7CAAE0..EC), _heap_init(1) (fast_error_exit 0x1C), _mtinit (fast_error_exit 0x10), __try { _ioinit, _acmdln 0x7CC04C = GetCommandLineA, _aenvptr 0x7CAB30 = __crtGetEnvironmentStringsA, _setargv, _setenvp, _cinit, GetStartupInfoA, lpszCmdLine = _wincmdln, nShowCmd = wShowWindow or SW_SHOWDEFAULT 10, exit(main(GetModuleHandleA(NULL), NULL, cmdline, show)) (0x456440 is the game's WinMain) } __except(_XcptFilter) { _exit(code) }; no reference (the PE AddressOfEntryPoint)
+0x006EC30F	20	WinMainCRTStartup_filter	named	"MSVC6 CRT: the __except filter of WinMainCRTStartup (scope entry 0x747364): code = exception code, return _XcptFilter(code, GetExceptionInformation()). CORRECTION: was an exception-handling funclet ""EHBlock"""
+0x006EC323	11	WinMainCRTStartup_handler	named	MSVC6 CRT: the __except handler of WinMainCRTStartup (scope entry 0x747368): esp = saved, _exit(code) (0x6E8DB8). CORRECTION: was _EH_amsg_exit_stub
+0x006EC32E	34	_amsg_exit	named	MSVC6 CRT: _amsg_exit(rterrnum): __app_type 0x7CAB38 == _CONSOLE_APP? 1 -> _FF_MSGBANNER (0x6F8648); _NMSG_WRITE(rterrnum) (0x6F8681, a message box for the GUI app), then (*_aexit_rtn 0x7978E0 = _exit)(255); callers _setenvp, __onexitinit, _purecall, _threadstart, _endthread, _getptd ..
 0x006EC350	3	_amsg_exit_chunk_6EC350	named	a piece of _amsg_exit placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006EC353	35	_fatal_exit	named	CRT: prints the message (if enabled) and terminates
+0x006EC353	35	fast_error_exit	named	MSVC6 CRT: static fast_error_exit(rterrnum) (crt0.c): __app_type == 1 -> _FF_MSGBANNER; _NMSG_WRITE(rterrnum); ExitProcess(255) (IAT 0x73B350); caller WinMainCRTStartup x2 (heap / thread init failure). CORRECTION: was _fatal_exit
 0x006EC376	1	_fatal_exit_chunk_6EC376	named	a piece of _fatal_exit placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006EC378	31	_EH_prolog	named	MSVC C++ EH prolog helper: builds the exception registration frame (114 callers)
-0x006EC3A0	664	memmove_dup	named	CRT memmove duplicate (second linked copy used by the C++ side); 60 callers
+0x006EC378	31	_EH_prolog	named	MSVC6 CRT: _EH_prolog: builds the C++ EH frame for the caller (push -1, push eax = handler stub, push fs:[0], fs:[0] = esp, ebp = the frame, returns through the saved address); ~114 MFC / CRT callers
+0x006EC3A0	664	memcpy	named	MSVC6 CRT: memcpy(dst, src, n): the second linked copy of the memcpy.asm code (identical to memmove 0x6E79A0, overlap-safe); used by the CRT / MFC objects (CString::FreeExtra / Insert / Replace / ConcatCopy, realloc, setlocale ..). CORRECTION of the name: was memmove_dup
 0x006EC638	70	dead_6EC638	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EC6D5	29	wcslen	named	CRT wcslen
-0x006EC6F2	151	_mbschr	named	CRT: strchr for multibyte code pages (locked)
-0x006EC789	149	_mbsspn_like	named	CRT: multibyte-aware string search helper
-0x006EC81E	138	_mbsupr	named	"CRT: upper-case a string in place (MBCS: _SBLOW bytes through the casemap, lead bytes through LCMapStringA LCMAP_UPPERCASE 0x200); was named _strlwr / ""lower-case"""
-0x006EC8A8	138	_mbslwr	named	"CRT: lower-case a string in place (MBCS, locale aware: _SBUP bytes through the casemap, lead bytes through LCMapStringA LCMAP_LOWERCASE 0x100); was named _strupr / ""upper-case"""
-0x006EC932	106	_strrev_mb	named	CRT: strrev with multibyte handling
-0x006EC99C	114	strrchr	named	CRT strrchr with multibyte handling
-0x006ECA0E	165	_fullpath	named	CRT: GetFullPathNameA into the user buffer or a malloc'd one (0x104)
-0x006ECAB3	118	_mbsstr	named	CRT: strstr for multibyte code pages (falls back to strstr when SBCS)
-0x006ECB29	143	_stricmp	named	CRT: case-insensitive string compare (locale aware)
-0x006ECBB8	143	_strnicoll_like	named	CRT: locale string compare helper
-0x006ECC47	81	sprintf_va	named	CRT: vsprintf-style formatting into a buffer
-0x006ECC98	22	_mbclen	named	CRT: byte length of a multibyte character at the pointer (1 or 2)
-0x006ECCB0	123	strlen	named	CRT strlen (57 callers)
-0x006ECD2B	239	_strnicmp	named	CRT: case-insensitive strncmp with locale lock
-0x006ECE1A	143	_stricmp_like	named	CRT: locale-aware comparison helper
-0x006ECEA9	143	_isdigit_lk	named	CRT: character class 8 test with the locale
-0x006ECF38	11	abs	named	CRT abs(int)
-0x006ECF43	291	_alloc_osfhnd	named	CRT lowio: finds a free handle table slot (allocating a 32-handle block as needed)
-0x006ED066	124	_set_osfhnd	named	CRT lowio: stores an OS handle in the handle table (and std handle redirects)
-0x006ED0E2	127	_free_osfhnd	named	CRT lowio: releases a handle table entry and resets the std handle
-0x006ED161	66	_get_osfhandle	named	CRT lowio: handle number to HANDLE (errno EBADF if invalid)
-0x006ED1A3	167	_alloc_osfhnd_open	named	CRT lowio: registers an opened OS handle with mode flags (append, text, pipe)
-0x006ED24A	95	_lock_fh	named	CRT lowio: lazily creates and enters the per-handle critical section
-0x006ED2A9	34	_unlock_fh	named	CRT: LeaveCriticalSection on the file-handle lock of handle n
-0x006ED2CB	115	_dosmaperr	named	CRT: maps a Win32 error code to errno/_doserrno
-0x006ED33E	9	_errno	named	CRT: &per-thread errno (ptd+8)
-0x006ED347	9	__doserrno	named	CRT: &per-thread _doserrno (ptd+0xC)
-0x006ED350	243	_fdopen	named	CRT stdio: associate a FILE with a handle number and mode string
-0x006ED443	65	setbuf_core	named	CRT stdio: sets the stream buffer state (unbuffered default)
-0x006ED484	78	fputs	named	CRT stdio: fputs(string, stream) via fwrite
-0x006ED4D2	98	fgets	named	CRT stdio: fgets(buf, n, stream)
-0x006ED534	47	fflush	named	CRT stdio: fflush(stream) (NULL flushes all)
-0x006ED563	46	fflush_core	named	CRT stdio: flush a stream (and commit when flagged)
-0x006ED591	92	_flush	named	CRT stdio: writes the pending buffer of a FILE (write via _write)
-0x006ED5ED	9	_flushall_wrap	named	CRT: _flsall(1)
-0x006ED5F6	164	_flsall_core	named	CRT stdio: walks all FILE streams flushing (flag 0: only writable) under lock 2; returns the count
-0x006ED69A	781	_expand_or_realloc	named	CRT heap: realloc core (grow in place or malloc+copy+free), small-block heap aware
-0x006ED825	9	_unlock_stdio_a	named	CRT: unlock 9
-0x006ED973	11	_unlock_stdio_b	named	CRT: unlock 9
+0x006EC6D5	29	wcslen	named	MSVC6 CRT: wcslen(ws): number of wchars before the NUL
+0x006EC6F2	151	_mbschr	named	MSVC6 CRT: _mbschr(s, c): SBCS -> strchr; else under _lock(0x19) walks characters (lead bytes compare the 2-byte value) and returns the match (also the NUL position when c == 0) or NULL; callers CString::Find(char), CString::TrimRight(LPCSTR), AfxGetFileNameFromPath_Alt, _putenv
+0x006EC789	149	_mbspbrk	named	MSVC6 CRT: _mbspbrk(s, set): SBCS -> strpbrk; else under _lock(0x19) the first character of s (double-byte aware) found in set, or NULL; caller CString::FindOneOf. CORRECTION: was _mbsspn_like
+0x006EC81E	138	_mbsupr	named	MSVC6 CRT: _mbsupr(s) under _lock(0x19): single bytes with _SBLOW (0x20) -> _mbcasemap 0x7CC080, lead-byte pairs -> __crtLCMapStringA(LCMAP_UPPERCASE 0x200); returns s (NULL on a map error); caller CString::MakeUpper
+0x006EC8A8	138	_mbslwr	named	MSVC6 CRT: _mbslwr(s): single bytes with _SBUP (0x10) -> _mbcasemap, lead-byte pairs -> LCMAP_LOWERCASE; caller CString::MakeLower
+0x006EC932	106	_mbsrev	named	MSVC6 CRT: _mbsrev(s): SBCS -> _strrev; else first swaps the two bytes of every double-byte character, then reverses the whole string, so characters stay intact; caller CString::MakeReverse. CORRECTION: was _strrev_mb
+0x006EC99C	114	_mbsrchr	named	MSVC6 CRT: _mbsrchr(s, c): SBCS -> strrchr (0x6F3xxx strrchr_); else the last match walking whole characters; callers CFileFind::FindFile x2, CString::ReverseFind, CWinApp::SetCurrentHandles. CORRECTION of the name: was strrchr
+0x006ECA0E	165	_fullpath	named	MSVC6 CRT: _fullpath(buf, path, max): buf NULL -> malloc(_MAX_PATH 0x104) (ENOMEM); GetFullPathNameA; longer than max -> ERANGE, NULL (frees the own buffer); returns buf; caller CFileFind::FindFile
+0x006ECAB3	118	_mbsstr	named	MSVC6 CRT: _mbsstr(s, find): SBCS -> strstr; else under _lock(0x19) compares at each character start (double-byte aware); callers CString::Replace(LPCSTR, LPCSTR) x3, CString::Find(LPCSTR)
+0x006ECB29	143	_mbsspn	named	MSVC6 CRT: _mbsspn(s, set): SBCS -> strspn; else under _lock(0x19) the length of the leading run of characters that are all in set; caller 0x6FDxxx named CString::Collate_Mid (= CString::SpanIncluding). CORRECTION: was _stricmp
+0x006ECBB8	143	_mbscspn	named	MSVC6 CRT: _mbscspn(s, set): SBCS -> strcspn; else the length of the leading run with no character from set; caller the function named CString::CollateNoCase_Mid (= CString::SpanExcluding). CORRECTION: was _strnicoll_like
+0x006ECC47	81	vsprintf	named	MSVC6 CRT: vsprintf(buf, fmt, va): string FILE (flag 0x42, cnt 0x7FFFFFFF), _output, NUL; caller CString::FormatV. CORRECTION: was sprintf_va
+0x006ECC98	22	_mbclen	named	MSVC6 CRT: _mbclen(p) = 2 for a lead byte (_mbctype & 4), else 1; caller CString::FormatV
+0x006ECCB0	123	strlen	named	MSVC6 CRT: strlen(s) (asm, dword-at-a-time NUL detection); ~58 call sites
+0x006ECD2B	239	_mbsnbcmp	named	"MSVC6 CRT: _mbsnbcmp(s1, s2, n): SBCS -> strncmp; else under _lock(0x19) compares up to n bytes, double-byte characters as 16-bit values (case-sensitive); caller CString::FormatV (the ""I64"" size prefix, string 0x745F44). CORRECTION: was _strnicmp"
+0x006ECE1A	143	_ismbcdigit	named	MSVC6 CRT: _ismbcdigit(c): c < 0x100 -> _DIGIT (4) via _isctype / _pctype; double-byte c -> __crtGetStringTypeA(CT_CTYPE1) of the two bytes & 4; caller CString::FormatV x2 (width / precision digits). CORRECTION: was _stricmp_like
+0x006ECEA9	143	_ismbcspace	named	MSVC6 CRT: _ismbcspace(c): same with _SPACE (8); callers CString::TrimLeft x2, CString::TrimRight. CORRECTION: was _isdigit_lk
+0x006ECF38	11	abs	named	MSVC6 CRT: abs(n) (cdq / xor / sub); callers CDC::DPtoLP_x / _y, CFont::HeightFromPointSize
+0x006ECF43	291	_alloc_osfhnd	named	MSVC6 CRT: _alloc_osfhnd() under _lock(0x12 _OSFHND_LOCK): first ioinfo slot (0x24 bytes, 32 per block in __pioinfo 0x7CAF20) without FOPEN, lazily InitializeCriticalSection under _lock(0x11), lock it, osfhnd = -1; when all blocks are full allocate a new block of 32 (malloc 0x480), _nhandle 0x7CB020 += 32; returns the handle number (locked) or -1; callers _sopen, _open_osfhandle
+0x006ED066	124	_set_osfhnd	named	MSVC6 CRT: _set_osfhnd(fh, osfhandle): valid fh with osfhnd == -1 -> store it (console app __app_type 0x7978E4 == 1: also SetStdHandle for 0/1/2); else EBADF, -1; callers _sopen, _open_osfhandle
+0x006ED0E2	127	_free_osfhnd	named	MSVC6 CRT: _free_osfhnd(fh): open and set -> osfhnd = -1 (console app: SetStdHandle(std, NULL) for 0/1/2), 0; else EBADF, -1; caller _close_lk
+0x006ED161	66	_get_osfhandle	named	MSVC6 CRT: _get_osfhandle(fh): the OS HANDLE of an open handle, else EBADF, _doserrno 0, -1; callers _close_lk x4, _lseek_lk, _chsize, _commit, CFile_CtorFromHandle (CStdioFile)
+0x006ED1A3	167	_open_osfhandle	named	MSVC6 CRT: _open_osfhandle(osfhandle, flags): FAPPEND (O_APPEND 8 -> 0x20), FTEXT (O_TEXT 0x4000 -> 0x80), FNOINHERIT (0x80 -> 0x10); GetFileType (0 -> _dosmaperr, -1; char -> FDEV 0x40, pipe -> FPIPE 8); _alloc_osfhnd, _set_osfhnd, osfile = flags | FOPEN, _unlock_fh; caller CStdioFile::Open. CORRECTION: was _alloc_osfhnd_open
+0x006ED24A	95	_lock_fh	named	MSVC6 CRT: _lock_fh(fh): lazily InitializeCriticalSection of the ioinfo lock (+0xC, init flag +8) under _lock(0x11), then EnterCriticalSection; callers _filelength, _close, _read, _lseek, _write, _alloc_osfhnd, _chsize, _commit
+0x006ED2A9	34	_unlock_fh	named	MSVC6 CRT: _unlock_fh(fh): LeaveCriticalSection(ioinfo +0xC)
+0x006ED2CB	115	_dosmaperr	named	MSVC6 CRT: _dosmaperr(oserr): _doserrno = oserr, errno from the 45-entry table (0x797xxx), else ranges ERROR_WRITE_PROTECT..SHARING_BUFFER_EXCEEDED -> EACCES, INVALID_STARTING_CODESEG..INFLOOP_IN_RELOC_CHAIN -> ENOEXEC, else EINVAL
+0x006ED33E	9	_errno	named	MSVC6 CRT: _errno() = &_getptd()->_terrno (+8); ~50 call sites
+0x006ED347	9	__doserrno	named	MSVC6 CRT: __doserrno() = &_getptd()->_tdoserrno (+0xC)
+0x006ED350	243	_fdopen	named	MSVC6 CRT: _fdopen(fh, mode): valid open fh, _getstream; mode 'r' / 'w' / 'a' (+ '+', 't' / 'b', 'c' commit / 'n' nocommit) -> _flag; _file = fh; _unlock_file; returns the FILE or NULL; caller CStdioFile::Open
+0x006ED443	65	clearerr	named	MSVC6 CRT: clearerr(stream): _lock_file, _flag &= ~(_IOERR|_IOEOF) (0x30), clears FEOFLAG (2) in the handle's osfile (or the dummy __badioinfo 0x7982E0), _unlock_file; callers CStdioFile::Read / ReadString x2. CORRECTION: was setbuf_core
+0x006ED484	78	fputs	named	MSVC6 CRT: fputs(s, stream): len = strlen, _lock_file, _stbuf, _fwrite_lk(s, 1, len), _ftbuf, unlock; 0 or EOF; caller CStdioFile::WriteString
+0x006ED4D2	98	fgets	named	MSVC6 CRT: fgets(buf, n, stream): n < 1 -> NULL; under _lock_file reads characters (buffer or _filbuf) until n-1, '\n' (kept) or EOF; NUL-terminates; NULL when nothing was read; callers CStdioFile::ReadString x2
+0x006ED534	47	fflush	named	MSVC6 CRT: fflush(stream): NULL -> flsall(FFLUSHNULL 0); else _lock_file, _fflush_lk, _unlock_file; callers CStdioFile::Flush, ostream flush (2)
+0x006ED563	46	_fflush_lk	named	MSVC6 CRT: _fflush_lk(stream): _flush != 0 -> EOF; _IOCOMMIT (0x4000) -> _commit(_file) ? EOF : 0; callers fflush, flsall x2. CORRECTION of the name: was fflush_core
+0x006ED591	92	_flush	named	MSVC6 CRT: _flush(stream): a write stream (_flag & 3 == _IOWRT) with a buffer (_IOMYBUF|_IOYOURBUF 0x108): _write the pending bytes (ptr - base); full write -> read/write streams drop _IOWRT; short -> _IOERR, EOF; then ptr = base, cnt = 0; callers _fclose_lk, _fseek_lk, _fwrite_lk, _fflush_lk, _ftbuf
+0x006ED5ED	9	_flushall	named	MSVC6 CRT: _flushall() = flsall(FLUSHALL 1); caller sub_6F2442. CORRECTION: was _flushall_wrap
+0x006ED5F6	164	flsall	named	MSVC6 CRT: static flsall(mode) under _lock(2 _IOB_SCAN_LOCK): every open stream of __piob (0x7CB024, _nstream 0x7CC040) under _lock_file2: FLUSHALL (1) -> _fflush_lk and count successes; FFLUSHNULL (0) -> only write streams, error -> EOF; returns the count or 0 / EOF; callers fflush, _flushall. CORRECTION: was _flsall_core
+0x006ED69A	781	realloc	named	MSVC6 CRT: realloc(p, size): NULL -> malloc; 0 -> free, NULL; V6 heap: under _lock(9) __sbh_resize_block in place, else __sbh_alloc_block + memcpy + __sbh_free_block, else HeapAlloc + copy; not small -> HeapReAlloc (16-byte rounded); V5 heap through __old_sbh_*; retries with _callnewh when _newmode; callers _onexit, _putenv x2, CMemFile::Realloc. CORRECTION: was _expand_or_realloc
+0x006ED825	9	realloc_finally_sbh	named	MSVC6 CRT: __finally block of realloc's V6 section = _unlock(9 _HEAP_LOCK) (also called inline). CORRECTION: was _unlock_stdio_a (it is the heap lock)
+0x006ED973	11	realloc_finally_oldsbh	named	MSVC6 CRT: __finally block of realloc's V5 section = _unlock(9), edi = 0. CORRECTION: was _unlock_stdio_b
 0x006ED9A7	34	dead_6ED9A7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006ED9C9	107	_beginthreadex	named	CRT: _beginthreadex(security, stack, start, arg, flags, id)
-0x006EDA34	125	_threadstart_init	named	CRT: per-thread data setup for a new thread (TlsSetValue, amsg_exit 0x10)
-0x006EDAB1	20	SEH_FilterExit_B	named	MSVC __except filter stub (second)
-0x006EDAC5	11	SEH_ExceptExit_B	named	MSVC __except handler body: __exit(code)
-0x006EDAD0	48	_endthread_core	named	CRT: end of thread: calls the exit hook, frees ptd, ExitThread
+0x006ED9C9	107	_beginthreadex	named	MSVC6 CRT: _beginthreadex(security, stack, start, arg, flags, &tid): ptd = calloc(1, 0x74), _initptd, _thandle = -1, _initaddr +0x48 = start, _initarg +0x4C = arg, CreateThread(security, stack, _threadstartex, ptd, flags, tid); failure -> free, _dosmaperr, 0; caller CWinThread::CreateThread
+0x006EDA34	125	_threadstartex	named	MSVC6 CRT: _threadstartex(ptd): TlsSetValue(__tlsindex, ptd) or _amsg_exit(0x10), ptd->_tid = GetCurrentThreadId(), _FPmtinit, __try { _endthreadex(start(arg)) } __except(_XcptFilter) { _exit(code) }. CORRECTION: was _threadstart_init
+0x006EDAB1	20	_threadstartex_filter	named	MSVC6 CRT: __except filter of _threadstartex (scope entry 0x74738C): _XcptFilter(code, GetExceptionInformation()). CORRECTION: was SEH_FilterExit_B
+0x006EDAC5	11	_threadstartex_handler	named	MSVC6 CRT: __except handler of _threadstartex (scope entry 0x747390): restore esp, _exit(code). CORRECTION: was SEH_ExceptExit_B
+0x006EDAD0	48	_endthreadex	named	MSVC6 CRT: _endthreadex(retcode): _FPmtterm, ptd = _getptd() (_amsg_exit(0x10) when null), _freeptd(ptd), ExitThread(retcode) (the thread handle is not closed, unlike _endthread); callers _threadstartex, AfxEndThread. CORRECTION: was _endthread_core
 0x006EDB00	2	_endthread_core_chunk_6EDB00	named	a piece of _endthread_core placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006EDB02	14	_fcloseall_wrap	named	CRT: calls the stream-close helper with 1
+0x006EDB02	14	mktime	named	MSVC6 CRT: mktime(tm*) = _make_time_t(tm, 1) (local time); callers CTime::CTime(y, m, d, h, mi, s, dst), CTime::CTime(dosDate, dosTime). CORRECTION: was _fcloseall_wrap
 0x006EDB10	14	dead_6EDB10	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EDB1E	484	_flsall	named	CRT stdio: flushes all streams (or only the writable ones)
-0x006EDD02	220	_tzset_check	named	CRT time: compares GetLocalTime and GetSystemTime to detect DST/timezone change
-0x006EDDDE	266	_getbuf_alloc	named	CRT stdio: allocates a stream buffer for a handle (malloc 4 KB)
-0x006EDEE8	352	_stbuf	named	CRT stdio: temporarily sets a stream buffer for printf output
-0x006EE048	143	_strdate_init	named	"CRT time: builds the weekday/month name table copy (""Sunday;Monday;...""), allocates and fills it"
-0x006EE0D7	149	_get_month_names	named	"CRT locale: duplicates the month name tables (""January;February;..."")"
-0x006EE16C	562	_get_time_strings	named	"CRT locale: duplicates the locale time strings (day/month names, ""M/d/yy"")"
-0x006EE39E	27	_output_wrapper	named	CRT: calls the printf formatter (_output) without a locale
-0x006EE3B9	250	strftime	named	CRT: strftime core with locale lock
-0x006EE4B3	1007	_strftime_core	named	CRT time: strftime format letter dispatch
-0x006EE8A2	39	_cftoe_copy	named	CRT float formatter: copies characters to the output buffer with remaining counter
-0x006EE8C9	111	_cftoe_exponent	named	"CRT float formatter: writes the ""e+XXX"" exponent part"
-0x006EE938	73	_cftoe_digits	named	CRT float formatter: writes decimal digits of an integer into the buffer
-0x006EE981	719	_expandtime	named	"CRT time: expands a strftime format string (""am/pm"", day/month names)"
-0x006EEC50	43	_strdup	named	CRT: strdup via malloc+strcpy
-0x006EEC7B	214	_msize	named	CRT heap: returns the allocated size of a block
-0x006EECE5	9	_unlock_9_a	named	CRT: unlock 9
+0x006EDB1E	484	_make_time_t	named	MSVC6 CRT: static _make_time_t(tm*, ultflag): normalises month / year (years 70..138 = 1970..2038), days from the cumulative table _days 0x79ADA8 (+1 in leap years after February), adds mday / hours / minutes / seconds with overflow checks (-1 on overflow); local: __tzset, += _timezone, localtime() to fill tm_isdst etc. and the DST bias; gmt (dead_6EDB10 = _mkgmtime): gmtime(); rewrites *tm; returns the time_t. CORRECTION: was _flsall
+0x006EDD02	220	time	named	MSVC6 CRT: time(timeptr): GetLocalTime; when the cached system minute (0x7CAB48..54) changed, GetSystemTime + GetTimeZoneInformation -> dstflag 0x7CAB40 (-1 unknown, 1 when daylight with a date and bias, else 0); t = __loctotime_t(local fields, dstflag); *timeptr = t when non-null; returns t; caller CTime::GetCurrentTime. CORRECTION: was _tzset_check
+0x006EDDDE	266	gmtime	named	MSVC6 CRT: gmtime(const time_t*): negative -> NULL; per-thread tm buffer ptd->_gmtimebuf (+0x40, malloc 0x24, fallback static 0x7CAB58); 4-year blocks of 126230400 s (0x7861F80) from 1970, leap handling, month from _lpdays / _days, yday / wday / hour / min / sec, isdst 0; returns the tm; callers localtime x3, _make_time_t, the CTime GetGmtTm-style helpers. CORRECTION: was _getbuf_alloc
+0x006EDEE8	352	localtime	named	MSVC6 CRT: localtime(const time_t*): negative -> NULL; __tzset; for times well inside the range (> 3 days, < 0x7FFC0B7E) gmtime(t), _isindst -> subtract _dstbias 0x79ACC8, subtract _timezone 0x79ACC0, renormalise sec / min / hour / day / month / year; else adjusts the time_t first and uses gmtime; tm_isdst set; returns the tm; callers _make_time_t x2, CTime::GetLocalTm, two ostream / time helpers. CORRECTION: was _stbuf
+0x006EE048	143	_Getdays	named	"MSVC6 CRT: _Getdays() (for the C++ <xlocale>): malloc'd "":Sun:Sunday:Mon:Monday:..."" from the current __lc_time data (0x797A58: 7 abbreviated + 7 full names); lib, unused (no call, jump or pointer). CORRECTION: was _strdate_init [dead: no caller or pointer]"
+0x006EE0D7	149	_Getmonths	named	"MSVC6 CRT: _Getmonths(): malloc'd "":Jan:January:..."" (12 abbreviated + 12 full month names of __lc_time); lib, unused (no call, jump or pointer). CORRECTION: was _get_month_names [dead: no caller or pointer]"
+0x006EE16C	562	_Gettnames	named	MSVC6 CRT: _Gettnames(): malloc'd deep copy of the whole __lc_time_data (day / month names, am / pm, the ww_ date / time formats) with the strings packed after the struct; lib, unused (no call, jump or pointer). CORRECTION: was _get_time_strings [dead: no caller or pointer]
+0x006EE39E	27	strftime	named	MSVC6 CRT: strftime(buf, max, fmt, tm) = _Strftime(buf, max, fmt, tm, NULL); callers CTime::Format (two helpers named CTime::Format_Stbuf / Format_GetBuf). CORRECTION: was _output_wrapper
+0x006EE3B9	250	_Strftime	named	MSVC6 CRT: _Strftime(buf, max, fmt, tm, lc_time): _lock_locale; walks fmt: '%' (optional '#' alternate flag 0x7CC044) -> _expandtime(spec, tm, &out, &left, lc_time or __lc_time_curr), other characters copied (lead bytes as pairs); returns the length written, or 0 (buffer emptied) when it does not fit. CORRECTION: was strftime
+0x006EE4B3	1007	_expandtime	named	MSVC6 CRT: static _expandtime(spec, tm, &out, &left, lc_time): one strftime letter: a / A / b / B names from lc_time (+0 / +0x1C / +0x38 / +0x68), c / x / X through _store_winword with the ww_ formats, d H I j m M S U W w y Y numbers via _store_num, p am/pm, z / Z the time zone name (__tzset, _tzname), '%' literal. CORRECTION: was _strftime_core
+0x006EE8A2	39	_store_str	named	MSVC6 CRT: static _store_str(src, &out, &left): copies while left > 0 and *src; caller _expandtime. CORRECTION: was _cftoe_copy
+0x006EE8C9	111	_store_num	named	MSVC6 CRT: static _store_num(num, digits, &out, &left): '#' alternate form (0x7CC048) -> no leading zeros via _store_number, else exactly `digits` zero-padded digits; caller _expandtime. CORRECTION: was _cftoe_exponent
+0x006EE938	73	_store_number	named	MSVC6 CRT: static _store_number(num, &out, &left): writes the decimal digits backwards then reverses them in place; caller _store_num. CORRECTION: was _cftoe_digits
+0x006EE981	719	_store_winword	named	MSVC6 CRT: static _store_winword(format, tm, &out, &left, lc_time): expands a Windows date / time picture (d / dd / ddd / dddd -> d / a / A, M.. -> m / b / B, y / yy / yyyy, h / hh / H / HH, m / mm, s / ss, t / tt am-pm, quoted literal text) by calling _expandtime with the mapped letter; compares the am/pm strings with _stricmp (0x6F2230); caller _expandtime x2 (%c / %x / %X). CORRECTION: was _expandtime
+0x006EEC50	43	_strdup	named	MSVC6 CRT: _strdup(s): NULL -> NULL; malloc(strlen + 1) and strcpy; callers CWinApp::SetCurrentHandles x4, CWinApp::SetAppName x2, CWinApp::CWinApp, _copy_environ
+0x006EEC7B	214	_msize	named	MSVC6 CRT: _msize(p): V6 heap: under _lock(9) __sbh_find_block -> block size from the header (p[-1] - 9), V5: __old_sbh_find_region -> paragraphs * 16, else HeapSize(_crtheap); callers _onexit x2, AfxUnlockTempMaps x2, sub_70AB1A
+0x006EECE5	9	_msize_finally_sbh	named	MSVC6 CRT: __finally block of _msize's V6 section = _unlock(9). CORRECTION: was _unlock_9_a
 0x006EED51	15	dead_6EED51	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EED60	9	_unlock_9_b	named	CRT: unlock 9
-0x006EED69	280	realloc	named	CRT: realloc(block, size)
-0x006EEDFB	9	_unlock_9_c	named	CRT: unlock 9
+0x006EED60	9	_msize_finally_oldsbh	named	MSVC6 CRT: __finally block of _msize's V5 section = _unlock(9). CORRECTION: was _unlock_9_b
+0x006EED69	280	_expand	named	MSVC6 CRT: _expand(p, size): resize in place only: V6 heap __sbh_resize_block (p or NULL), V5 __old_sbh_mark_alloc / __old_sbh_shrink_block, else HeapReAlloc(_crtheap, HEAP_REALLOC_IN_PLACE_ONLY 0x10, p, size rounded to 16) (tail 0x6EEE99); size > 0xFFFFFFE0 -> NULL; caller sub_70AB1A. CORRECTION: was realloc
+0x006EEDFB	9	_expand_finally_sbh	named	MSVC6 CRT: __finally block of _expand's V6 section = _unlock(9). CORRECTION: was _unlock_9_c
 0x006EEE81	15	dead_6EEE81	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EEE90	9	_unlock_9_d	named	CRT: unlock 9
-0x006EEE99	52	realloc_core	named	CRT heap: HeapReAlloc with 16-byte rounding
-0x006EEED0	172	memcmp	named	CRT memcmp
-0x006EEF7C	18	_fpinit_call	named	CRT startup: sets the FPU control word via _controlfp (0x10000, 0x30000)
-0x006EEF8E	62	Nop_6EEF8E	named	empty function (returns immediately)
-0x006EEFCC	41	_isa_available_init	named	CRT startup: IsProcessorFeaturePresent probe from KERNEL32
-0x006EEFF5	90	_cftof_hook_a	named	CRT float formatter: locates the exponent character
+0x006EEE90	9	_expand_finally_oldsbh	named	MSVC6 CRT: __finally block of _expand's V5 section = _unlock(9). CORRECTION: was _unlock_9_d
+0x006EEE99	52	_expand_heaprealloc_tail	named	not a separate function: the tail of _expand (jumped to from it, uses its ebp frame): size 0 -> 1, HeapReAlloc(_crtheap 0x7CAF08, HEAP_REALLOC_IN_PLACE_ONLY, [ebp+8], size rounded to 16), result returned through the frame. CORRECTION: was realloc_core
+0x006EEED0	172	memcmp	named	MSVC6 CRT: memcmp(a, b, n) (asm: dword compare then bytes) -> -1 / 0 / 1; caller CCmdTarget::OnCmdMsg (IsEqualGUID of the interface ids)
+0x006EEF7C	18	_setdefaultprecision	named	MSVC6 CRT: _setdefaultprecision() = _controlfp(_PC_53 0x10000, _MCW_PC 0x30000) (53-bit FPU precision); callers _fpmath, dead_6EBBFF. CORRECTION: was _fpinit_call
+0x006EEF8E	62	_ms_p5_test_fdiv	named	"MSVC6 CRT: _ms_p5_test_fdiv(): computes x - (x / y) * y with the Pentium FDIV test constants (0x7474F8 / 0x747500); > 0 -> 1 (the FDIV bug is present), else 0; reached by a tail jump from _ms_p5_mp_test_fdiv. CORRECTION: was Nop_6EEF8E (""empty function"")"
+0x006EEFCC	41	_ms_p5_mp_test_fdiv	named	"MSVC6 CRT: _ms_p5_mp_test_fdiv(): GetModuleHandle(""KERNEL32"") + GetProcAddress(""IsProcessorFeaturePresent"") -> IsProcessorFeaturePresent(PF_FLOATING_POINT_PRECISION_ERRATA 0), else _ms_p5_test_fdiv(); the result is _adjust_fdiv; caller _fpmath. CORRECTION: was _isa_available_init"
+0x006EEFF5	90	_forcdecpt	named	MSVC6 CRT: _forcdecpt(buf) (_cfltcvt_tab[3], used by printf '#'): skip to 'e' or past the digits, insert the locale decimal point (*__decimal_point 0x797FE8) shifting the rest right. CORRECTION: was _cftof_hook_a
 0x006EF04F	102	sub_6EF04F	named	unregistered function, reached by call / pointer from 0x2E72DF (gaps.py 2026-11-06)
-0x006EF0B5	62	__fassign	named	
-0x006EF0F3	97	_cftof	named	CRT float formatter: %f conversion into a buffer
-0x006EF154	194	_cftof_core	named	"CRT float formatter: %f digit placement (""e+000"" fallback)"
-0x006EF216	85	_cftog_wrap	named	CRT float formatter: %g conversion helper
-0x006EF26B	167	_cftog_core	named	CRT float formatter: %g trimming of trailing zeros
-0x006EF312	147	_cftog	named	CRT float formatter: %g conversion choosing %f or %e
-0x006EF3A5	81	__cfltcvt	named	
-0x006EF3F6	37	_shift_string	named	CRT float formatter: memmove the string right by n characters (inserts room)
-0x006EF420	103	_trandisp1	named	CRT math: transcendental dispatch (single-argument NaN/zero cases)
+0x006EF0B5	62	_fassign	named	MSVC6 CRT: _fassign(flag, arg, number) (_cfltcvt_tab[2], used by scanf): flag -> _atodbl into a double, else _atoflt into a float
+0x006EF0F3	97	_cftoe	named	"MSVC6 CRT: _cftoe(double*, buf, precision, caps): _fltout2, _fptostr(buf + (precision > 0) + (sign '-'), precision + 1), _cftoe2 (""d.ddde+XXX""); caller _cfltcvt ('e' / 'E'). CORRECTION: was _cftof"
+0x006EF154	194	_cftoe2	named	"MSVC6 CRT: static _cftoe2(buf, precision, caps, STRFLT, g_fmt): (for %g first shifts for the point), places the sign, the leading digit, the decimal point, then 'e' / 'E' and the 3-digit signed exponent (""e+000"" template); callers _cftoe, _cftog. CORRECTION: was _cftof_core"
+0x006EF216	85	_cftof	named	MSVC6 CRT: _cftof(double*, buf, precision): _fltout2, _fptostr(buf + (sign), decpt + precision), _cftof2; caller _cfltcvt ('f'). CORRECTION: was _cftog_wrap
+0x006EF26B	167	_cftof2	named	MSVC6 CRT: static _cftof2(buf, precision, STRFLT, g_fmt): sign, '0' + point for values below 1 (with leading zeros via _shift), inserts the decimal point after decpt digits; callers _cftof, _cftog. CORRECTION: was _cftog_core
+0x006EF312	147	_cftog	named	MSVC6 CRT: _cftog(double*, buf, precision, caps): _fltout2 + _fptostr(precision); exponent < -4 or >= precision -> _cftoe2 (g format), else _cftof2 (drops the extra rounding digit); caller _cfltcvt ('g' / 'G')
+0x006EF3A5	81	_cfltcvt	named	MSVC6 CRT: _cfltcvt(double*, buf, format, precision, caps) (_cfltcvt_tab[0] and [5]): 'e' / 'E' -> _cftoe, 'f' -> _cftof, else _cftog. CORRECTION of the name: was __cfltcvt with a VS2003 signature
+0x006EF3F6	37	_shift	named	MSVC6 CRT: static _shift(s, dist): memmove(s + dist, s, strlen(s) + 1) when dist != 0; callers _cftof2 x3, _cftoe2. CORRECTION: was _shift_string
+0x006EF420	103	_trandisp1	named	MSVC6 CRT (87disp.asm): _trandisp1: one-argument transcendental dispatcher: control word 0x133F (or the saved one for descriptor type 5), fxam ST0, class through the table 0x797B4C, jump to the descriptor's per-class handler (edx = function descriptor); callers __cintrindisp1, __ctrandisp1
 0x006EF487	140	_trandisp2	named	CRT math: transcendental dispatch (two arguments)
 0x006EF513	74	dead_6EF513	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006EF524	7	vt_797640::Ret_float10_0_6EF524	named	returns the constant (float10)0

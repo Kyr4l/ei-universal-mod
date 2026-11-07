@@ -23,6 +23,10 @@ below appears inline in classes, so its layout IS the class layout at that offse
 - Fixed node pools seen inline: free list 0x79B228 = 16-byte nodes (hashtable / list<dword> nodes), 0x79B22C = 24-byte nodes (the
   archive section list); `__stl_prime_list` 0x73B914 (28 primes, 0xFFFFFFFB past the end), used by `_M_next_size` 0x40AE00 and every
   `resize` / `_M_initialize_buckets` [V].
+- The acks.db records are STLport template instances in 0x6E0000..0x6E6000: `HashSet_CopyFrom_6E00F0` = hashtable::_M_copy_from,
+  `HashSet_Assign_6E14E0` = hashtable::operator=, and per record type (AcksAnswer 0x1C4, AcksCry 0x5C, AcksOther 0x38, AcksLine 0x28 =
+  {weight, 3 strings}, AcksLine2C 0x2C) the std::copy (forward), copy_backward, uninitialized_copy / fill_n and the vector operator= /
+  resize / erase / _M_fill_insert / _M_insert_overflow; the old *_CopyBackward names were forward copies [V, T7 lib02].
 - Globals: `_S_free_list[16]` at **0x79B224** (lists for 8, 16, ..., 128 bytes), `_S_start_free` **0x79B268**, `_S_end_free` **0x79B26C**,
   `_S_heap_size` **0x79B264**. Blocks > 128 bytes go straight to `malloc` = **0x7005AF** (1966 callers) / `free` = **0x7005D8**.
 - Pattern of an inlined `allocate(n)`: `if (n > 128) malloc(n) else { list = &free_list[(n-1)>>3]; p = *list; if (p) *list = *p; else p = refill(n) }`.

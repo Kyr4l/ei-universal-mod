@@ -406,4 +406,4 @@ states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 23
 
 ## Coverage
 
-Coverage (15759 functions): named 15759.
+Coverage (15751 functions): named 15751.
