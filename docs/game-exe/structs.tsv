@@ -4329,6 +4329,48 @@ CSimpleException	CException	0x98	0x4	BOOL	m_bAutoDelete	SetField_4_70205D in the
 CSimpleException			0xc	BOOL	m_bInitialized	0 in the ctors
 CSimpleException			0x10	BOOL	m_bLoaded	0 in the ctors
 CSimpleException			0x94	UINT	m_nResourceID	ctor argument 2
+CSimpleException			0x14	char[128]	m_szMessage	AfxLoadString(m_nResourceID +0x94, +0x14, 0x80) in InitString 0x6FE31D; copied out by GetErrorMessage 0x6FE346
 CFileException	CException	0x14	0x10	CString	m_strFileName	dtor 0x6E6335
 CArchiveException	CException	0x10	0xc	CString	m_strFileName	dtor 0x6E6BA1
 CFile	CObject	0x10	0xc	CString	m_strFileName	SetFilePath 0x6E6361
+_tiddata		0x74	0x0	DWORD	_tid	MSVC6 CRT per-thread data (TLS slot 0x797B70, calloc(1, 0x74) in _mtinit 0x6F004C / _getptd 0x6F00D1): GetCurrentThreadId
+_tiddata			0x4	HANDLE	_thandle	-1 for the main thread (_mtinit / _getptd)
+_tiddata			0x14	DWORD	_holdrand	rand seed, 1 in _initptd 0x6F00BE
+_tiddata			0x24	char*	_errmsg	freed by _freeptd 0x6F0138
+_tiddata			0x28	char*	_namebuf0	tmpnam buffer, freed by _freeptd
+_tiddata			0x30	char*	_namebuf1	tmpfile buffer, freed by _freeptd
+_tiddata			0x38	char*	_asctimebuf	freed by _freeptd
+_tiddata			0x40	struct tm*	_gmtimebuf	freed by _freeptd
+_tiddata			0x44	char*	_cvtbuf	ecvt / fcvt buffer, freed by _freeptd
+_tiddata			0x50	void*	_pxcptacttab	exception-action table: _XcptActTab 0x797B78 by default (_initptd); _XcptFilter 0x6F0454 / raise use it; freed when a private copy
+_tiddata			0x54	void*	_tpxcptinfoptrs	EXCEPTION_POINTERS* saved by _XcptFilter / raise (__pxcptinfoptrs 0x6F7FC9 returns its address)
+_tiddata			0x58	int	_tfpecode	float exception code 0x81..0x8A set by _XcptFilter for SIGFPE
+_tiddata			0x60	void*	_terminate	per-thread terminate handler called by terminate 0x6F01E4
+_tiddata			0x68	void*	_translator	SE translator tested by FindHandlerForForeignException 0x6EFA2A
+_tiddata			0x6c	void*	_curexception	current C++ exception record (CallCatchBlock 0x6EFC60 saves / sets it; rethrow reads it in FindHandler)
+_tiddata			0x70	void*	_curcontext	current exception context, same users
+ios		0x50	0x0	pointer	vtable	MS classic iostream ios (vt 0x7482E8; the ostream ios part uses 0x748280, ostream_withassign 0x748290); ctor 0x6FCDB1, dtor 0x6FCEDC
+ios			0x4	streambuf*	bp	ios::init 0x6FCF26 sets it; deleted in ~ios when x_delbuf
+ios			0x8	int	state	goodbit 0 / eofbit 1 / failbit 2 / badbit 4; 4 while bp is 0; opfx / osfx / put set 2 or 6
+ios			0x1c	int	x_delbuf	the ios owns bp (deleted by ~ios / init / operator=(streambuf*))
+ios			0x20	ostream*	x_tie	flushed by ostream::opfx 0x6FC1F9
+ios			0x24	long	x_flags	format flags: left 2, internal 8, oct 0x20, hex 0x40, showbase 0x80, showpoint 0x100, uppercase 0x200, showpos 0x400, scientific 0x800, fixed 0x1000, unitbuf 0x2000, stdio 0x4000
+ios			0x28	int	x_precision	6 by default (ios ctor); used by operator<<(double) 0x6FC7FA
+ios			0x2c	char	x_fill	' ' by default; writepad 0x6FC68E pads with it
+ios			0x30	int	x_width	field width, reset to 0 by osfx 0x6FC26D
+ios			0x34	int	x_lockc	-1 = locking on (opfx / osfx / flush lock +0x38 when < 0)
+ios			0x38	CRITICAL_SECTION	lock	_mtlockinit in the ios ctors
+streambuf		0x4c	0x0	pointer	vtable	MS classic iostream streambuf (vt 0x7482AC: 0 dtor, 1 sync, 2 setbuf, 3 seekoff, 4 seekpos, 5 xsputn, 6 xsgetn, 7 overflow, 8 underflow, 9 pbackfail, 10 doallocate); the game's LogStream vt 0x740034 derives from it; ctor 0x6FCAD2
+streambuf			0x4	int	x_allocbuf	base buffer owned (setb 0x6FCCE8, ~streambuf deletes it)
+streambuf			0x8	int	x_unbuf	unbuffered: 1 when the ctor / setbuf gets no buffer
+streambuf			0xc	int	x_lastc	-1 in the ctors
+streambuf			0x10	char*	base	buffer start
+streambuf			0x14	char*	ebuf	buffer end
+streambuf			0x18	char*	pbase	put area start (sync 0x6FCC86)
+streambuf			0x1c	char*	pptr	put pointer (sputc 0x6FC12C / xsputn 0x6FCB99)
+streambuf			0x20	char*	epptr	put area end
+streambuf			0x24	char*	eback	get area start (sputbackc 0x6FCD8C)
+streambuf			0x28	char*	gptr	get pointer
+streambuf			0x2c	char*	egptr	get area end
+streambuf			0x30	int	lockc	-1 = locking on (ostream::flush 0x6FC346 locks +0x34)
+streambuf			0x34	CRITICAL_SECTION	lock	_mtlockinit in the ctors, _mtlockterm in ~streambuf

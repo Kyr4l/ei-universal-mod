@@ -2,7 +2,11 @@
 
 game.exe links STLport statically, and MFC 6 too (0x6E0000..0x70E000: CString, CArchive, CMemFile, CDC / CGdiObject wrappers,
 CWnd, CWinThread / AfxBeginThread, AfxMessageBox, the thread / module state code). No CWinApp is ever constructed (CWinApp::CWinApp
-0x70D654 has no caller) and no CArchive either (CArchive::CArchive 0x7086C0 is unused) [V, T7 lib05]. Every container
+0x70D654 has no caller) and no CArchive either (CArchive::CArchive 0x7086C0 is unused) [V, T7 lib05]. The streams are NOT
+STLport: the 8 log streams (g_0x7C55A8..g_0x7C5810, LogStream vt 0x740034) and the net log g_0x79B91C are the classic Microsoft
+iostream `ostream` over a `streambuf` subclass (ios 0x50 bytes: bp +4, state +8, x_tie +0x20, x_flags +0x24, precision +0x28, fill
++0x2C, width +0x30, lock +0x34 / +0x38; streambuf 0x4C bytes: base +0x10 .. egptr +0x2C, lock +0x30 / +0x34; ctors / operators
+0x6FC0B0..0x6FD013) [V, T7 lib03]. Every container
 below appears inline in classes, so its layout IS the class layout at that offset. Sizes are for x86-32.
 
 | STLport 4.x type | size | layout (offsets from the member) |

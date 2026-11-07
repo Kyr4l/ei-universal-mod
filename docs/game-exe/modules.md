@@ -1595,17 +1595,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006F6F2C | 2597 | _input | CRT: scanf core (format parser: %d %s %c %f %x, scansets, width, whitespace), 2.6 KB |
-| 0x006F17D4 | 1825 | _output | CRT: printf core (format parser: flags, width, precision, %d %s %c %f %e %g %x...), 184 blocks |
+| 0x006F6F2C | 2597 | _input | CRT (input.c _input(stream, format, args)): the scanf engine: white space (_whiteout), literal matching, %[*][width][h l L I64] c s [ ] d i o x X u n e f g p, DBCS lead bytes, hex via _hextodec, floats through _fassign; returns th... |
+| 0x006F17D4 | 1825 | _output | CRT (output.c _output(stream, format, args)): the printf engine: state table 0x7476B0 / 0x7476D0, flags - + space # 0, width / precision (* from args), h l I64 L size, %c %C %s %S %Z %d %i %u %o %x %X %p %n %e %f %g %E %G (through... |
 | 0x006FB9C0 | 1668 | dead_6FB9C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x006E3780 | 1585 | AcksAnswer::Serialize | (this = AcksAnswer 0x1C4, archive): tag 1 name string +0; tags 10..0x26 the voice-line vectors through Archive_SerializeRec28Vector (+0x20, +0x2C, .. in a fixed tag -> offset order, e.g. 0x14 -> +0xA4, 0x21 -> +0xB0, 0x24 -> +0x98... |
 | 0x0070592E | 1198 | CWnd::OnWndMsg | vt slot 39: the central message dispatcher (commands, notifications, sys colors, ctl colors) via message maps, 1.2 KB |
-| 0x006F9989 | 1185 | _strgtold12 | CRT float: parses a decimal string into a 12-byte extended number (sign, digits, exponent), 1.2 KB |
+| 0x006F9989 | 1185 | _strgtold12 | CRT (strgtold.c __strgtold12(_LDBL12*, &end, str, mult12, scale, decpt, implicit_E)): state machine over sign, digits, decimal point (locale *_decimal_point), exponent (e / E / d / D), up to 21 significant digits into a buffer, th... |
 | 0x006F2F30 | 1142 | sub_6F2F30 | unregistered function, reached by call / pointer from 0x398382 (gaps.py 2026-11-06) |
 | 0x006EE4B3 | 1007 | _expandtime | MSVC6 CRT: static _expandtime(spec, tm, &out, &left, lc_time): one strftime letter: a / A / b / B names from lc_time (+0 / +0x1C / +0x38 / +0x68), c / x / X through _store_winword with the ww_ formats, d H I j m M S U W w y Y numb... |
 | 0x006E0540 | 1006 | AcksAnswerRange_Copy_A | STLport: std::copy(first, last, dest) for AcksAnswer 0x1C4 records, FORWARD: per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector_Assign for the 32 line vectors +0x2C..+0x... |
 | 0x006E1570 | 1002 | AcksAnswerRange_CopyBackward | STLport: std::copy_backward(first, last, dest_end) for AcksAnswer 0x1C4 records (the real backward one): from the end, per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector... |
 | 0x006E0930 | 860 | AcksCryRange_Copy | STLport: std::copy forward for AcksCry 0x5C records: string assign +0 (String_AssignRange2), HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= for +0x20 and +0x2C, Rec28Vector_Assign +0x38/+0x44/+0x50; caller AcksCry... |
-| 0x006F3E9F | 846 | _setlocale_ctype_names | CRT locale: derives language/country/codepage from a locale name (846 bytes) |
-| 0x006FDC12 | 845 | CString::FormatV | CString::FormatV: parses the format ("%*.*f" ...), sizes the buffer, then vsprintf; 845 bytes |
-| 0x006F62D5 | 815 | __sbh_heap_check | CRT small-block heap: validates the region table (IsBadWritePtr etc.) |
+| 0x006F3E9F | 846 | _get_lc_time | CRT (inittime.c _get_lc_time(__lc_time_data*)): fills the LC_TIME table from the LC_TIME lcid (0x7CAC4E) / ANSI code page through _getlocaleinfo: abbreviated day names 0x31..0x37 (+0..+0x18), day names 0x2A..0x30, abbreviated mont... |
+| 0x006FDC12 | 845 | CString::FormatV | MFC (void CString::FormatV(lpszFormat, va_list)): estimates the maximum length by parsing every % item (flags, width / precision incl. '*', size prefixes h l I64 F N, types c C s S d i u x X o e f g G p n; strings by their length,... |
+| 0x006F62D5 | 815 | __sbh_heap_check | CRT (sbheap.c __sbh_heap_check): validates every region (IsBadWritePtr of the headers and group data, size chains, bucket links and counts against the bitmaps); returns 0 or a negative error code; lib, unused (no call, no pointer,... |

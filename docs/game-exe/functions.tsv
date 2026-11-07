@@ -14312,461 +14312,461 @@ addr	size	name	status	purpose
 0x006EF3A5	81	_cfltcvt	named	MSVC6 CRT: _cfltcvt(double*, buf, format, precision, caps) (_cfltcvt_tab[0] and [5]): 'e' / 'E' -> _cftoe, 'f' -> _cftof, else _cftog. CORRECTION of the name: was __cfltcvt with a VS2003 signature
 0x006EF3F6	37	_shift	named	MSVC6 CRT: static _shift(s, dist): memmove(s + dist, s, strlen(s) + 1) when dist != 0; callers _cftof2 x3, _cftoe2. CORRECTION: was _shift_string
 0x006EF420	103	_trandisp1	named	MSVC6 CRT (87disp.asm): _trandisp1: one-argument transcendental dispatcher: control word 0x133F (or the saved one for descriptor type 5), fxam ST0, class through the table 0x797B4C, jump to the descriptor's per-class handler (edx = function descriptor); callers __cintrindisp1, __ctrandisp1
-0x006EF487	140	_trandisp2	named	CRT math: transcendental dispatch (two arguments)
+0x006EF487	140	_trandisp2	named	CRT x87 (87disp): two-argument special-case dispatch: control word 0x133F (type 5 keeps the caller's precision bits), fxam on ST0 and ST1, each class mapped through the byte table 0x797B4C, jumps through the caller's case table [edx+0x10+index] (edx = e.g. the _CIfmod table 0x797630); [ebp-0x94] = table, error code [ebp-0x90] = 0; from __cintrindisp2 / __ctrandisp2
 0x006EF513	74	dead_6EF513	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EF524	7	vt_797640::Ret_float10_0_6EF524	named	returns the constant (float10)0
-0x006EF55D	2	_fpmath_nan_a	named	CRT math: NaN/infinity result helper
-0x006EF55F	40	EHBlock_6EF55F	named	exception-handling block (funclet) inside of FUN_006EF55D (0x006EF55D)
-0x006EF587	63	_nan2	named	CRT math: quiet NaN construction
-0x006EF5C6	19	_fpmath_default_result	named	CRT math: result loader for the error paths
-0x006EF5D9	10	EHBlock_6EF5D9	named	exception-handling block (funclet) inside of FUN_006EF5C6 (0x006EF5C6)
+0x006EF524	7	_rtzeropop2_6EF524	named	CRT x87 (87disp) case-table target (fmod table slot 0x797650): fstp st0 twice, fldz -> pops both operands and returns +0. Not a vtable method. CORRECTION: was vt_797640::Ret_float10_0
+0x006EF55D	2	_nosnan2	named	CRT x87 (87disp) case-table target (fmod table): NOS is the NaN: fxch, then falls into _tosnan2 0x6EF55F
+0x006EF55F	40	_tosnan2	named	CRT x87 (87disp) case-table target (fmod table slots 0x797648 / 0x797658 / 0x797678): stores ST0 as 80-bit at [ebp-0x9e], quiet bit (byte [ebp-0x97] & 0x40) set -> error code 7, signalling -> 1 (domain), faddp returns the (quietened) NaN. A function entry, not an exception funclet. CORRECTION: was EHBlock_6EF55F (funclet)
+0x006EF587	63	_nan2	named	CRT x87 (87disp) case-table target: both operands NaN: error code 7 only when ST0 and ST1 are both quiet (bit 0x40 of the top mantissa byte), else 1; faddp returns a NaN
+0x006EF5C6	19	_rtindfpop	named	CRT x87 (87disp) case-table target: pops both operands, loads the real indefinite (real10 at 0x797B30 = -QNaN), error code [ebp-0x90] := 1 unless already > 0; returns with or cl,cl (sign flag for the caller)
+0x006EF5D9	10	_rtindf_seterr	named	CRT x87 (87disp): tail of _rtindfpop: error code [ebp-0x90] = 1, or cl,cl, ret; also called from the code at 0x6EF513 / 0x6F14F5 (dispatch targets). Not an exception funclet. CORRECTION: was EHBlock_6EF5D9
 0x006EF5E3	7	dead_6EF5E3	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EF5F0	23	_fpmath_store	named	CRT math: stores the FPU result to the stack frame
-0x006EF607	60	__startOneArgErrorHandling	named	CRT math: begins the error path for a one-argument function (matherr)
-0x006EF650	21	_exp2_core	named	CRT math: 2^x using f2xm1 and fscale
-0x006EF665	23	Nop_6EF665	named	empty function (returns immediately)
-0x006EF67C	25	_ctrlfp_status	named	CRT math: returns the invalid-operation status code for the exception mask
-0x006EF695	67	__fload_withFB	named	CRT math: loads the operand with the FPU fall-back handling
-0x006EF6D8	22	_exponent_bits	named	CRT math: extracts the exponent bits (0x7ff00000 mask) of a double
-0x006EF6EE	13	Nop_6EF6EE	named	empty function (returns immediately)
-0x006EF6FB	42	__math_exit	named	
+0x006EF5F0	23	_startTwoArgErrorHandling	named	CRT x87: error path of two-argument math functions: builds the exception record at [ebp-0x20] (type eax, name ecx, arg1 [ebp+0x10], arg2 [ebp+0x18], result = fstp ST0), calls the matherr dispatcher 0x6F969F(edx = opcode, &record, &saved CW), reloads the result, restores the CW unless it is 0x27F. CORRECTION: was _fpmath_store
+0x006EF607	60	__startOneArgErrorHandling	named	CRT x87: same as 0x6EF5F0 for one-argument functions (no arg2): exception record [ebp-0x20], 0x6F969F(edx, &record, &CW), fld result, fldcw unless 0x27F; from acos / asin / sqrt checked paths, _math_exit, _check_range_exit
+0x006EF650	21	_twoToTOS	named	CRT x87: ST0 = 2^ST0: frndint, f2xm1 of the fraction, +1, fscale by the integer part. CORRECTION: was _exp2_core (same meaning)
+0x006EF665	23	_load_CW	named	"CRT x87: loads the control word (arg & 0x300) | 0x7F: keeps the precision bits, masks every exception, rounds to nearest. Not empty. CORRECTION: was Nop_6EF665 ""empty function"""
+0x006EF67C	25	_convertTOStoQNaN	named	CRT x87: eax = high dword of the NaN: quiet bit 0x80000 set -> returns 7; signalling -> fadd qword 0x747540 (quietens it) and returns 1 (domain error)
+0x006EF695	67	__fload_withFB	named	CRT x87: loads the double at [edx]; when the exponent is 0x7FF (Inf / NaN) builds the 80-bit value by hand (exponent 0x7FFF + sign, mantissa << 11) so a signalling NaN loads without raising invalid; returns eax = high dword
+0x006EF6D8	22	_checkTOS_exponent	named	CRT x87: returns ([esp+8] & 0x7FF00000), or the whole high dword when the exponent is 0x7FF (Inf / NaN); from acos / asin / sqrt entries. CORRECTION: was _exponent_bits (same meaning)
+0x006EF6EE	13	_fast_exit	named	"CRT x87: math-function exit: fldcw [esp] unless it is 0x27F, pop edx (the saved CW), ret. Not empty. CORRECTION: was Nop_6EF6EE ""empty function"""
+0x006EF6FB	42	__math_exit	named	CRT x87: math-function exit with inexact check: saved CW [esp] != 0x27F and its bit 0x20 set and status PE (0x20) set -> __startOneArgErrorHandling(8); else fldcw [esp]; pop edx, ret
 0x006EF725	20	dead_6EF725	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006EF739	163	_fpmath_scale_denormal	named	CRT math: scales denormal results (fscale 1536) for the error path
-0x006EF7DC	155	__InternalCxxFrameHandler	named	C++ EH: validates the function info (magic 0x19930520), finds the try blocks and runs the handler
-0x006EF877	435	_FindHandler	named	C++ EH: main handler search: try-block lookup, catch matching, unwinding (435 bytes)
-0x006EFA2A	170	_CatchGuardHandler	named	C++ EH: handler registered for a catch block (finds try block, calls _CallCatchBlock)
-0x006EFAD4	93	_FindAndUnlinkFrame	named	C++ EH: searches the unwind map for a frame entry
-0x006EFB31	103	_UnwindNestedFrames	named	C++ EH: walks the unwind map between two states calling the cleanup actions
-0x006EFB98	10	_EH_filter_stub_C	named	C++ EH funclet filter
-0x006EFBA2	45	_EH_unwind_stub_A	named	C++ EH funclet stub (unwind to level -1)
-0x006EFBCF	22	_IsCxxException2	named	C++ EH: true when the exception code is 0xE06D7363
-0x006EFBE5	123	_CatchIt	named	C++ EH: matches a thrown type against catch types and calls the catch block
-0x006EFC60	165	__CxxFrameHandler_Impl	named	C++ EH: frame handler body (uses ptd state, calls FrameHandler call)
-0x006EFD05	10	_EH_check_exception_object	named	C++ EH funclet: calls _IsExceptionObjectToBeDestroyed
-0x006EFD0F	24	_EH_unwind_stub_B	named	C++ EH funclet stub: __local_unwind2 to -1
+0x006EF739	163	_check_range_exit	named	CRT x87: range check of ST0 before the exit: exponent 0 -> fscale by the 0x74756C constant, error 4 (underflow; fmul 0x74757C when below 0x74755C), exponent 0x7FF -> fscale by 0x747564, error 3 (overflow; fmul 0x747574); errors go to _startTwoArgErrorHandling when edx = 0x1D (pow) else __startOneArgErrorHandling; otherwise the inexact check of __math_exit. Entry 0x6EF725 is the overflow-only variant. CORRECTION: was _fpmath_scale_denormal
+0x006EF7DC	155	__InternalCxxFrameHandler	named	CRT C++ EH (frame.cpp): FuncInfo magic != 0x19930520 -> terminate; not unwinding (flags & 0x66 == 0): when the FuncInfo has try blocks (+0xC): a C++ exception with a newer magic and a ThrowInfo forward handler (+8) is passed to it, else _FindHandler; unwinding with an unwind map (+4) and no catch depth -> __FrameUnwindToState(frame, ctx, funcinfo, -1); returns 1 (ExceptionContinueSearch)
+0x006EF877	435	_FindHandler	named	CRT C++ EH: FindHandler: state = frame +8 (range-checked, else terminate); a rethrow (code 0xE06D7363, 3 params, magic, ThrowInfo 0) takes the current exception / context from ptd +0x6C / +0x70 (none -> return; bad pointer -> terminate); for a C++ exception: every try block covering the state (__CxxFindTryBlock), every catch handler (0x10 bytes) x every catchable type of ThrowInfo +0xC -> TypeMatch 0x6EFAD4 -> CatchIt; nothing found and destruct flag -> __DestructExceptionObject; foreign exceptions -> FindHandlerForForeignException 0x6EFA2A
+0x006EFA2A	170	FindHandlerForForeignException	named	CRT C++ EH (frame.cpp FindHandlerForForeignException): a SE translator in ptd +0x68 that handles it (_CallSETranslator, named _CallCatchBlock here) -> return; else for every try block covering the state whose LAST catch handler is catch(...) (type 0 or empty name) -> CatchIt with no conversion. CORRECTION: was _CatchGuardHandler (that is a different frame.cpp function)
+0x006EFAD4	93	TypeMatch	named	CRT C++ EH (frame.cpp TypeMatch(HandlerType*, CatchableType*, ThrowInfo*)): 1 when the handler type (+4) is 0 / catch(...) (empty name +8); else same type descriptor or equal decorated names (strcmp at +8), and the qualifiers fit: by-reference-only catchable (flag 2) needs a reference handler (8), const throw (ThrowInfo bit 1) needs a const handler (1), volatile (2) a volatile handler (2); else 0. CORRECTION: was _FindAndUnlinkFrame (searches the unwind map)
+0x006EFB31	103	__FrameUnwindToState	named	CRT C++ EH (frame.cpp __FrameUnwindToState(pRN, pDC, pFuncInfo, targetState)): from the frame state (+8) walks the unwind map (FuncInfo +8, 8-byte {toState, action}) to the target state, calling every action with _CallSettingFrame(action, pRN, 0x103) inside __try (filter FrameUnwindFilter 0x6EFB98); bad state -> terminate; stores the final state at +8. CORRECTION: was _UnwindNestedFrames (the RtlUnwind helper, which CatchIt calls as SEH_ClearUnwindFlag)
+0x006EFB98	10	_FrameUnwindFilter_stub	named	CRT C++ EH: SEH filter expression of __FrameUnwindToState (scope table 0x74758C): FrameUnwindFilter 0x6EFBCF(exception pointers [ebp-0x14])
+0x006EFBA2	45	_FrameUnwindToState_except	named	CRT C++ EH: __except body of __FrameUnwindToState (scope table 0x747590): restores esp and resumes the unwind loop (next state from the unwind map, actions through _CallSettingFrame 0x103, terminate on a bad state), then stores the state at frame +8
+0x006EFBCF	22	FrameUnwindFilter	named	CRT C++ EH (frame.cpp FrameUnwindFilter): a C++ exception (0xE06D7363) thrown by a destructor during unwinding -> terminate 0x6F01E4 (does not return); any other code returns 0 (EXCEPTION_CONTINUE_SEARCH). CORRECTION: was _IsCxxException2
+0x006EFBE5	123	CatchIt	named	CRT C++ EH (frame.cpp CatchIt): BuildCatchObject 0x6EFDA5 when there is a catchable type, _UnwindNestedFrames (RtlUnwind to the marker frame, named SEH_ClearUnwindFlag), __FrameUnwindToState to the try-block low state, state = high + 1, CallCatchBlock 0x6EFC60(.., handler +0xC, catch depth, 0x100) and jumps to the returned continuation address
+0x006EFC60	165	CallCatchBlock	named	CRT C++ EH (frame.cpp CallCatchBlock): saves ptd +0x6C / +0x70 (current exception / context) and sets them to this exception, runs the catch funclet (__CxxFrameHandler_Call = _CallCatchBlock2 / _CallSettingFrame 0x100) inside __try / __except(ExFilterRethrow) / __finally (0x6EFD2D); returns the continuation address. CORRECTION: was __CxxFrameHandler_Impl
+0x006EFD05	10	_ExFilterRethrow_stub	named	CRT C++ EH: SEH filter expression of CallCatchBlock (scope table 0x7475A8): ExFilterRethrow 0x6EFD7B(exception pointers)
+0x006EFD0F	24	_CallCatchBlock_except	named	CRT C++ EH: __except body of CallCatchBlock (scope table 0x7475AC): cleanUp flag [ebp-0x2C] = 0 (a rethrow: the object stays alive), __local_unwind2 to -1 (runs the __finally), returns 0
 0x006EFD27	6	sub_6EFD27	named	unregistered function, reached by call / pointer from 0x3475A0 (gaps.py 2026-11-06)
-0x006EFD2D	78	_CxxCleanupFunclet	named	C++ EH: restores per-thread EH state after catch (ptd+0x6C/0x70)
-0x006EFD7B	42	_IsExceptionObjectToBeDestroyed	named	C++ EH: checks for the MSVC C++ exception code 0xE06D7363 with 3 parameters and magic 0x19930520
-0x006EFDA5	440	_CopyExceptionObject	named	C++ EH: copies the thrown object for the catch parameter (copy ctor / memmove, pointer adjust)
-0x006EFF5D	4	vt_7475B4::Nop_6EFF5D	named	empty function (returns immediately)
-0x006EFF61	8	_EH_terminate_stub_A	named	C++ EH funclet: terminate
-0x006EFF69	86	_CallMemberFunction_Dtor	named	C++ EH: calls the destructor stored in the throw info (locked jump)
-0x006EFFBF	9	_EH_flag_test	named	C++ EH: returns whether the argument byte is non-zero
-0x006EFFC8	8	_EH_terminate_stub_B	named	C++ EH funclet: terminate
-0x006EFFD0	35	__CxxAdjustPointer	named	C++ EH: adjusts a thrown object pointer by a PMD (displacement / vbase)
-0x006F0000	76	__CallSettingFrame_12	named	C++ EH: calls a catch/funclet with the frame register set up (NLG notify)
-0x006F004C	84	_mtinit	named	CRT startup: init locks, TlsAlloc, allocate the main thread's ptd (0x74 bytes)
+0x006EFD2D	78	_CallCatchBlock_finally	named	CRT C++ EH: __finally of CallCatchBlock: restores the saved ptd +0x6C / +0x70; when the exception is an MSVC C++ one, not rethrown ([ebp-0x24] == 0) and cleanUp is set, __DestructExceptionObject(exception, abnormal_termination()). CORRECTION: was _CxxCleanupFunclet
+0x006EFD7B	42	ExFilterRethrow	named	CRT C++ EH (frame.cpp ExFilterRethrow): returns 1 (EXCEPTION_EXECUTE_HANDLER) for an MSVC C++ exception (0xE06D7363, 3 params, magic 0x19930520) with ThrowInfo 0 = a rethrow, else 0. CORRECTION: was _IsExceptionObjectToBeDestroyed
+0x006EFDA5	440	BuildCatchObject	named	CRT C++ EH (frame.cpp BuildCatchObject(pExcept, pRN, pCatch, pConv)): returns when the handler has no type / no name / no catch-object displacement; target = frame + 0xC + displacement; reference catch (flag 8) stores the adjusted pointer; pointer type (catchable flag 1) copies the pointer; simple type memmoves size +0x14 bytes from the AdjustPointer'ed object; class with copy ctor (+0x18) calls it (virtual-base form when flag 4); bad pointers checked with _IsBadReadPtr / _IsBadWritePtr / _IsBadCodePtr; an exception inside -> terminate. CORRECTION: was _CopyExceptionObject
+0x006EFF5D	4	_BuildCatchObject_filter	named	"CRT C++ EH: SEH filter expression of BuildCatchObject (scope table 0x7475B4): returns 1 (EXCEPTION_EXECUTE_HANDLER). CORRECTION: was vt_7475B4::Nop ""empty function"" (it is not a vtable and it returns 1)"
+0x006EFF61	8	_BuildCatchObject_except	named	CRT C++ EH: __except body of BuildCatchObject (scope table 0x7475B8): terminate 0x6F01E4. CORRECTION: was _EH_terminate_stub_A (same meaning)
+0x006EFF69	86	__DestructExceptionObject	named	CRT C++ EH (frame.cpp __DestructExceptionObject(pExcept, fThrowNotAllowed)): calls the ThrowInfo destructor (ThrowInfo +4 = pmfnUnwind, ThrowInfo = record +0x1C) on the object (record +0x18) through _CallMemberFunction0, inside __try / __except(fThrowNotAllowed) -> terminate. CORRECTION: was _CallMemberFunction_Dtor
+0x006EFFBF	9	_DestructExceptionObject_filter	named	CRT C++ EH: SEH filter expression of __DestructExceptionObject (scope table 0x7475C4): returns the fThrowNotAllowed argument byte ([ebp+0xC]) != 0
+0x006EFFC8	8	_DestructExceptionObject_except	named	CRT C++ EH: __except body of __DestructExceptionObject (scope table 0x7475C8): terminate 0x6F01E4
+0x006EFFD0	35	__CxxAdjustPointer	named	CRT C++ EH (frame.cpp AdjustPointer(obj, PMD)): obj + mdisp; when pdisp >= 0 also + pdisp + *(*(obj + pdisp) + vdisp) (virtual base)
+0x006F0000	76	__CallSettingFrame_12	named	CRT C++ EH (lowhelpr.asm _CallSettingFrame(funclet, pRN, NLG code)): sets ebp to the frame, _NLG_Notify, calls the funclet, NLG code 0x100 is reported as 2 on the second notify, returns the funclet's eax (catch continuation address)
+0x006F004C	84	_mtinit	named	CRT startup (tidtable.c _mtinit): _mtinitlocks, TlsAlloc -> 0x797B70, calloc(1, 0x74) _tiddata, TlsSetValue, _initptd, +0 tid = GetCurrentThreadId, +4 thandle = -1; returns 1, 0 on failure; from entry
 0x006F00A0	30	dead_6F00A0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F00BE	19	_initptd_defaults	named	CRT: initializes a per-thread data block (locale pointer 0x797B78, flag 1)
-0x006F00D1	103	_getptd	named	CRT: returns the per-thread data pointer (TlsGetValue; allocates if missing); 24 callers
-0x006F0138	160	_freeptd	named	CRT: frees a per-thread data block and its locale/time strings
+0x006F00BE	19	_initptd	named	"CRT (tidtable.c _initptd): ptd +0x50 _pxcptacttab = _XcptActTab 0x797B78, +0x14 _holdrand = 1. CORRECTION: was _initptd_defaults ""locale pointer 0x797B78"" (it is the exception-action table)"
+0x006F00D1	103	_getptd	named	CRT (tidtable.c _getptd): saves GetLastError, TlsGetValue(0x797B70); missing -> calloc(1, 0x74) + TlsSetValue + _initptd + tid / thandle -1, failure -> _amsg_exit(0x10); restores the last error; returns the _tiddata
+0x006F0138	160	_freeptd	named	CRT (tidtable.c _freeptd(ptd)): ptd 0 -> TlsGetValue; frees _errmsg +0x24, _namebuf0 +0x28, _namebuf1 +0x30, _asctimebuf +0x38, _gmtimebuf +0x40, _cvtbuf +0x44, _pxcptacttab +0x50 (when not _XcptActTab 0x797B78), then the block; TlsSetValue(0)
 0x006F01D8	12	_terminate_unwind_a_chunk_6F01D8	named	a piece of _terminate_unwind_a placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006F01E4	72	_getptd_terminate_state	named	CRT C++ EH: reads/updates the per-thread terminate state
-0x006F022C	4	vt_7475E0::Nop_6F022C	named	empty function (returns immediately)
-0x006F0230	21	_terminate_unwind_a	named	CRT funclet stub
+0x006F01E4	72	terminate	named	CRT C++ EH (hooks.cpp terminate): calls the per-thread terminate handler ptd +0x60 when set (inside __try), then abort(); also the default __pInconsistency (pointer at 0x797B74). CORRECTION: was _getptd_terminate_state
+0x006F022C	4	_terminate_filter	named	"CRT C++ EH: SEH filter expression of terminate 0x6F01E4 (scope table 0x7475E0): returns 1 (EXCEPTION_EXECUTE_HANDLER). CORRECTION: was vt_7475E0::Nop ""empty function"" (not a vtable, returns 1)"
+0x006F0230	21	_terminate_except	named	CRT C++ EH: __except body of terminate (scope table 0x7475E4): abort() (an exception in the terminate handler); the raw hit from _freeptd is a jnp byte inside another instruction
 0x006F0245	24	dead_6F0245	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F025D	61	terminate	named	CRT: terminate() calls the terminate handler (or abort)
-0x006F029A	4	vt_7475F8::Nop_6F029A	named	empty function (returns immediately)
-0x006F029E	21	_terminate_unwind_b	named	CRT funclet stub
-0x006F02B3	70	_CxxUnhandledExceptionFilter	named	CRT: unhandled exception filter for C++ exceptions (code 0xE06D7363), else runs the previous one
-0x006F02F9	17	_install_unhandled_filter	named	CRT startup: SetUnhandledExceptionFilter(the CRT filter)
+0x006F025D	61	_inconsistency	named	CRT C++ EH (hooks.cpp _inconsistency): calls __pInconsistency (pointer 0x797B74, default terminate 0x6F01E4) inside __try / __except(1), then terminate; called by FindHandler / __CxxFindTryBlock / __InternalCxxFrameHandler / __FrameUnwindToState / BuildCatchObject on a corrupt EH state. CORRECTION: was terminate (that is 0x6F01E4)
+0x006F029A	4	_inconsistency_filter	named	"CRT C++ EH: SEH filter expression of _inconsistency (scope table 0x7475F8): returns 1. CORRECTION: was vt_7475F8::Nop ""empty function"""
+0x006F029E	21	_inconsistency_except	named	CRT C++ EH: __except body of _inconsistency (scope table 0x7475FC): continues with terminate 0x6F01E4
+0x006F02B3	70	_CxxUnhandledExceptionFilter	named	CRT: top-level filter: an MSVC C++ exception (0xE06D7363, 3 params, magic 0x19930520) -> terminate; else the previous filter saved at 0x7CAB7C when it is valid code (_IsBadCodePtr); else 0
+0x006F02F9	17	_install_unhandled_filter	named	CRT initializer (pointer 0x783BC8 in the init table): 0x7CAB7C = SetUnhandledExceptionFilter(_CxxUnhandledExceptionFilter)
 0x006F030A	13	sub_6F030A	named	unregistered function, reached by call / pointer from 0x383BE0 (gaps.py 2026-11-06)
-0x006F0317	289	calloc	named	CRT: calloc(count, size) via the heap (small-block or HeapAlloc zeroed)
-0x006F03B0	9	_unlock_9_f	named	CRT: unlock 9
-0x006F0434	5	_unlock_9_e	named	CRT: unlock 9
-0x006F0439	9	_unlock_9_g	named	CRT: unlock 9
+0x006F0317	289	calloc	named	CRT: calloc(num, size): n = num * size, rounded to 16 (0 -> 1) when <= 0xFFFFFFE0; heap mode 0x7CAF0C 3 -> __sbh_alloc_block under lock 9 when n <= threshold 0x7CAF04 then memset 0, mode 2 -> old sbh when <= 0x79AC14, else HeapAlloc(0x7CAF08, HEAP_ZERO_MEMORY); failure + _newmode 0x7CAC7C -> _callnewh and retry; returns the block or 0
+0x006F03B0	9	_unlock_9_f	named	CRT: _unlock(9) (heap lock) after the small-block allocation in calloc
+0x006F0434	5	_unlock_9_e	named	CRT: __finally of calloc (scope table 0x747614): _unlock(9)
+0x006F0439	9	_unlock_9_g	named	CRT: _unlock(9) after the old-sbh allocation in calloc
 0x006F0442	18	dead_6F0442	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F0454	318	_XcptFilter	named	CRT: signal-style exception filter (finds the action by code and calls it)
-0x006F0592	58	_find_xcptact	named	CRT: looks up the exception code in the signal action table (stride 12)
+0x006F0454	318	_XcptFilter	named	CRT (winxfltr.c _XcptFilter(code, pointers)): action = _find_xcptact(code, ptd +0x50); none or SIG_DFL -> UnhandledExceptionFilter; 5 (SIG_DIE) -> SIG_DFL, returns 1; SIG_IGN (1) -> -1; else saves ptd +0x54 pointers, SIGFPE (8): resets the FPE entries (0x797BF0 .. + 0x797BF4) and sets ptd +0x58 _tfpecode 0x81..0x8A from the float exception code, calls handler(8, code); other signals: clears the action and calls handler(sig); returns -1 (EXCEPTION_CONTINUE_EXECUTION)
+0x006F0592	58	_find_xcptact	named	CRT (winxfltr.c xcptlookup): first 12-byte entry {code, signal, action} of the table whose code matches, among 0x797BFC entries; 0 when none
 0x006F05CC	197	dead_6F05CC	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F0691	27	seh_longjmp_unwind_4	named	
-0x006F06AC	41	_mtinitlocks	named	CRT: initializes the CRT lock table critical sections
-0x006F06D5	108	_mtdeletelocks	named	CRT: deletes and frees the CRT lock table critical sections
-0x006F0741	97	_lock	named	CRT: lazily creates and enters lock n (53 callers)
-0x006F07A2	21	_unlock	named	CRT: LeaveCriticalSection on lock n (69 callers)
+0x006F0691	27	seh_longjmp_unwind_4	named	CRT (__seh_longjmp_unwind@4(jmp_buf)): __local_unwind2(jb +0x18 registration, jb +0x1C try level); lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F06AC	41	_mtinitlocks	named	CRT (mlock.c _mtinitlocks): InitializeCriticalSection on the four preallocated locks 0x797C44, 0x797C34, 0x797C24, 0x797C04
+0x006F06D5	108	_mtdeletelocks	named	CRT (mlock.c _mtdeletelocks): DeleteCriticalSection + free every allocated lock of the table 0x797C00..0x797CC0 except the 4 static ones, then deletes those; lib, dead chain: only from dead_6F00A0 (_mtterm, no reference)
+0x006F0741	97	_lock	named	CRT (mlock.c _lock(n)): lock table 0x797C00[n] empty -> malloc(0x18) (failure -> _amsg_exit(0x11)), under lock 0x11 (_LOCKTAB) InitializeCriticalSection + store, or free when another thread won; then EnterCriticalSection
+0x006F07A2	21	_unlock	named	CRT (mlock.c _unlock(n)): LeaveCriticalSection(0x797C00[n])
 0x006F07B7	24	dead_6F07B7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F07D0	129	strcmp_core	named	CRT strcmp (word-at-a-time)
+0x006F07D0	129	strcmp_core	named	CRT: strcmp(s1, s2) (asm strcmp.asm: aligns s1, then compares a dword at a time); returns -1 / 0 / 1
 0x006F0851	2	dead_6F0851	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F0854	84	_math_err_unary	named	CRT math: one-argument error path: errno then _math_error_dispatch
-0x006F08A8	96	_math_err_binary	named	CRT math: two-argument error path
-0x006F0908	152	_math_dispatch_a	named	CRT math: dispatch/err handler for a one-argument x87 function
-0x006F09A0	165	_math_dispatch_b	named	CRT math: dispatch/err handler for a two-argument x87 function
-0x006F0A45	691	_fpmath_mulext	named	CRT math: extended-precision multiply/split helper (reads status words), 691 bytes
-0x006F0CF8	535	_fp_prepare_args	named	CRT math: x87 argument classification/setup (denormal handling) before pow/exp
-0x006F0F0F	136	_math_error_dispatch	named	CRT math: maps the error code to errno and invokes the matherr callback
-0x006F0F97	40	_set_errno_math	named	CRT math: sets errno (EDOM 0x21 or ERANGE) from the error type
-0x006F0FBF	37	_lookup_math_name	named	CRT math: looks up an entry in the {code, value} table 0x797CC0
-0x006F0FE4	45	_fpstatus_to_flags	named	CRT math: converts FPU exception flag bits to the CRT error code
-0x006F1011	18	__frnd	named	CRT math: round to integer in FPU mode
-0x006F1023	41	_ldexp_like	named	CRT math: sets the exponent field of a double (frexp inverse)
-0x006F104C	20	_frexp_exp	named	CRT math: extracts the unbiased exponent of a double
+0x006F0854	84	_handle_qnan1	named	CRT (fpexcept.c _handle_qnan1(opcode, x, savedcw)): _matherr flag 0x79AE10 clear -> _umatherr(_DOMAIN 1, opcode, ..); else errno = EDOM (0x21) and restores the CW (_ctrlfp_read = _rstorfp); returns x. CORRECTION: was _math_err_unary
+0x006F08A8	96	_handle_qnan2	named	CRT (fpexcept.c _handle_qnan2(opcode, x, y, savedcw)): as _handle_qnan1 for two arguments; returns x + y (propagates the NaN). CORRECTION: was _math_err_binary
+0x006F0908	152	_except1	named	CRT (fpexcept.c _except1(flags, opcode, arg, result, savedcw)): when _handle_exc cannot settle the exception, _raise_exc (_FPIEEE record, operand format 1) gives the result; error = _errcode(flags); _matherr flag clear and an error -> _umatherr; else _set_errno + restore the CW; returns the result. CORRECTION: was _math_dispatch_a
+0x006F09A0	165	_except2	named	CRT (fpexcept.c _except2(flags, opcode, arg1, arg2, result, savedcw)): same as _except1 with two operands (record operand 2 = arg2, format bits 3). CORRECTION: was _math_dispatch_b
+0x006F0A45	691	_raise_exc	named	"CRT (fpexcept.c _raise_exc(_FPIEEE_RECORD*, pcw, flags, opcode, pop1, presult)): exception code from the flags (P 0x10 -> 0xC000008F inexact, U 2 -> 0xC0000093, O 1 -> 0xC0000091, Z 4 -> 0xC000008E, I 8 -> 0xC0000090) with the cause bits, enable bits from ~cw, status bits from _statusfp, rounding / precision from the CW, opcode << 5, operands; _clrfp, RaiseException(code, 0, 1, &record); then copies the handler's rounding / precision back into the CW and returns the result from the record +0x40. CORRECTION: was _fpmath_mulext ""multiply / split helper"""
+0x006F0CF8	535	_handle_exc	named	CRT (fpexcept.c _handle_exc(flags, presult, cw)): settles masked exceptions in place: invalid / zero-divide masked -> cleared; overflow masked -> +-inf or +-DBL_MAX by the rounding mode (cw & 0xC00); underflow masked -> denormalises the result (frexp exponent - 0x600, shifted mantissa, sets inexact), precision masked -> cleared; _set_statfp for the cleared flags; returns true when nothing is left to raise. CORRECTION: was _fp_prepare_args
+0x006F0F0F	136	_umatherr	named	CRT (fpexcept.c _umatherr(type, opcode, arg1, arg2, retval, cw)): function name = _getfname(opcode); known -> builds a struct _exception, restores the CW, calls _matherr 0x6F97D6 (the default returns 0) and sets errno when it returns 0; unknown -> restore CW + _set_errno; returns retval. CORRECTION: was _math_error_dispatch
+0x006F0F97	40	_set_errno	named	CRT (fpexcept.c _set_errno(matherrtype)): _DOMAIN 1 -> errno EDOM 0x21; _SING 2 / _OVERFLOW 3 -> ERANGE 0x22; others unchanged
+0x006F0FBF	37	_getfname	named	CRT (fpexcept.c _getfname(opcode)): name pointer of the {opcode, name} pair in the table 0x797CC0..0x797D98, 0 when absent. CORRECTION: was _lookup_math_name (same meaning)
+0x006F0FE4	45	_errcode	named	CRT (fpexcept.c _errcode(flags)): 0x20 -> _TLOSS 5, invalid 8 -> _DOMAIN 1, zero-divide 4 -> _SING 2, overflow 1 -> _OVERFLOW 3, underflow 2 -> _UNDERFLOW 4, else 0. CORRECTION: was _fpstatus_to_flags
+0x006F1011	18	__frnd	named	CRT (_frnd(x)): fld x, frndint in the current rounding mode
+0x006F1023	41	_set_exp	named	CRT (util.c _set_exp(x, exp)): x with the exponent field replaced by exp + 0x3FE (sign and mantissa kept). CORRECTION: was _ldexp_like
+0x006F104C	20	_get_exp	named	CRT (util.c _get_exp(x)): unbiased exponent ((hi >> 20) & 0x7FF) - 0x3FE. CORRECTION: was _frexp_exp
 0x006F1060	44	dead_6F1060	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F108C	36	_scalb_like	named	CRT math: sets the biased exponent field of a double
-0x006F10B0	90	_fpclass	named	CRT math: classifies a double (infinity, NaN) returning 1 or 2
-0x006F110A	193	frexp	named	CRT math: frexp-style split of a double into mantissa and exponent
-0x006F11CB	14	_statusfp_read_a	named	CRT math: reads the FPU status word
-0x006F11D9	15	_statusfp_read_b	named	CRT math: reads the FPU status word (second)
-0x006F11E8	35	_ctrlfp_read	named	CRT math: reads the FPU control word (30 callers)
-0x006F120B	86	Nop_6F120B	named	empty function (returns immediately)
-0x006F1261	117	_isctype	named	CRT: character class test via ctype table 0x797DD8 or GetStringTypeA (31 callers)
-0x006F12E0	52	_allmul	named	CRT: 64-bit multiply
+0x006F108C	36	_set_bexp	named	CRT (util.c _set_bexp(x, bexp)): x with the exponent field replaced by the biased exponent bexp << 4 in the high word (sign and mantissa kept); lib, unused (no call, no pointer, no raw hit). CORRECTION: was _scalb_like [dead: no caller or pointer]
+0x006F10B0	90	_sptype	named	CRT (util.c _sptype(x)): 1 = +INF (0x7FF00000:0), 2 = -INF, 3 = quiet NaN (high word & 0x7FF8 == 0x7FF8), 4 = signalling NaN, 0 = anything else. CORRECTION: was _fpclass (that returns _FPCLASS_* bits)
+0x006F110A	193	_decomp	named	CRT (util.c _decomp(x, &exp)): mantissa in [0.5, 1) and the exponent of x: 0 -> 0 / exp 0; denormals normalised by shifting (exponent from -0x3FD down), sign kept; called by _handle_exc, pow, hypot, sqrt, ldexp. CORRECTION: was frexp (the CRT frexp wraps this with the CW save)
+0x006F11CB	14	_statfp	named	CRT (fpctrl.c _statfp): fnstsw, returns the x87 status word. CORRECTION: was _statusfp_read_a
+0x006F11D9	15	_clrfp	named	CRT (fpctrl.c _clrfp): fnstsw then fnclex: returns the status word and clears the exception flags. CORRECTION: was _statusfp_read_b
+0x006F11E8	35	_ctrlfp	named	"CRT (fpctrl.c _ctrlfp(newctrl, mask)): fnstcw old, fldcw (old & ~mask) | (newctrl & mask), returns the old control word (_rstorfp / _maskfp use it). CORRECTION: was _ctrlfp_read ""reads the control word"""
+0x006F120B	86	_set_statfp	named	"CRT (fpctrl.c _set_statfp(flags)): raises the x87 exception flags by real operations: 1 -> fistp of the big constant 0x797DC0 (invalid), 8 -> fstp of 0x797DC0 to double (overflow), 0x10 -> fstp of 0x797DCC (underflow), 4 -> 1/0 (zero divide), 0x20 -> fldpi stored to double (inexact). Not empty. CORRECTION: was Nop_6F120B ""empty function"""
+0x006F1261	117	_isctype	named	CRT (isctype.c _isctype(c, mask)): c + 1 <= 0x100 -> _pctype 0x797DD8[c] & mask; else a DBCS lead byte (_pctype[c >> 8] & 0x8000) gives a 2-byte string, __crtGetStringTypeA(CT_CTYPE1, ..) -> type & mask (0 on failure)
+0x006F12E0	52	_allmul	named	CRT (llmul.asm _allmul(a, b)): 64-bit multiply (one mul when both high dwords are 0, else three)
 0x006F1320	272	dead_6F1320	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006F1430	78	_fpmath_classify_a_chunk_6F1430	named	a piece of _fpmath_classify_a placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006F147E	114	_fpmath_classify_a	named	CRT math: classifies an x87 operand (compare with limits), part of pow/exp
-0x006F14C1	52	_fpmath_is_integer	named	CRT math: whether the operand is an integer and its parity (returns 2/..)
+0x006F147E	114	_exp_split	named	CRT x87 (87tran.asm exp path): |ST0| compared with the limit 0x79800E (too big -> overflow piece 0x6F1430), else splits ST0 into an integer part (frndint, sign in dl) and |fraction|, returns f2xm1(|fraction|); called from the exp table target 0x6F1331 (table 0x79803A) through code registered as dead_6F1320. CORRECTION: was _fpmath_classify_a
+0x006F14C1	52	_isintTOS	named	CRT x87 (87tran.asm): ST0 an integer? 0 = no, 1 = odd, 2 = even (ST0 * 0.5 also an integer, constant 0x798022); lib, dead chain: only from the pow / power entries 0x6F1376 / 0x6F13ED of the unreferenced x87 pow code (dead_6F1320; only exp 0x6F1331 and 0x6F1471 are in a dispatch table). CORRECTION: was _fpmath_is_integer
 0x006F14F5	50	dead_6F14F5	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F1527	304	_fpmath_pow_special_c	named	CRT math: pow special cases for negative bases and integer exponents
-0x006F1657	101	_fpmath_is_even_integer	named	CRT math: pow helper: tests whether y is an even/odd integer
-0x006F16BC	280	_flsbuf	named	CRT stdio: _flsbuf(ch, stream): write the buffered data and store the character
-0x006F17D4	1825	_output	named	CRT: printf core (format parser: flags, width, precision, %d %s %c %f %e %g %x...), 184 blocks
+0x006F1527	304	_powhlp	named	CRT (powhlp.c _powhlp(x, y, &result)): special cases of pow with an infinite operand: y = +INF: |x| > 1 -> INF, |x| < 1 -> 0; y = -INF the reverse; |x| = 1 -> indefinite 0x797DA0 and returns 1 (domain); x = +INF: y > 0 -> INF, y < 0 -> 0, y = 0 -> 1; x = -INF: the same with the sign of an odd integer y (_d_inttype; -0 = 0x797DB8); returns 0 otherwise; from pow 0x6E81C2 (0x6E82D5) and the unreferenced x87 stub 0x6F14F5. CORRECTION: was _fpmath_pow_special_c
+0x006F1657	101	_d_inttype	named	CRT (powhlp.c _d_inttype(y)): 0 when y is a denormal (_fpclass & 0x90) or not an integer, 1 = odd integer, 2 = even (y / 2 also integral, __frnd). CORRECTION: was _fpmath_is_even_integer
+0x006F16BC	280	_flsbuf	named	CRT (_flsbuf.c _flsbuf(ch, stream)): stream not writable (_IOWRT|_IORW clear) or in error -> flag 0x20, -1; a read/write stream at EOF switches to write; no buffer and not stdout/stderr on a tty (0x798080 / 0x7980A0) -> _getbuf; buffered: _write the pending bytes and store ch, else _write 1 byte; returns ch & 0xFF or -1 with _IOERR
+0x006F17D4	1825	_output	named	CRT (output.c _output(stream, format, args)): the printf engine: state table 0x7476B0 / 0x7476D0, flags - + space # 0, width / precision (* from args), h l I64 L size, %c %C %s %S %Z %d %i %u %o %x %X %p %n %e %f %g %E %G (through _cfltcvt pointers), DBCS lead bytes copied as pairs; pads with write_multi_char; returns the count or -1
 0x006F1EF5	27	sub_6F1EF5	named	unregistered function, reached by call / pointer from 0x2F1845 (gaps.py 2026-11-06)
-0x006F1F15	53	_putc_wrapper	named	CRT printf: write_char helper decrementing the stream count
-0x006F1F4A	49	_write_multi_char	named	CRT printf: writes a character n times
-0x006F1F7B	56	_write_string	named	CRT printf: writes n characters from a buffer
-0x006F1FB3	13	va_arg_dword	named	CRT printf: fetches the next 4-byte vararg and advances
-0x006F1FC0	16	va_arg_qword	named	CRT printf: fetches the next 8-byte vararg
-0x006F1FD0	14	va_arg_short	named	CRT printf: fetches the next 2-byte vararg
-0x006F1FDE	272	__crtLCMapStringA	named	CRT locale: LCMapString A/W wrapper with code page conversion
-0x006F20EE	4	vt_747754::Nop_6F20EE	named	empty function (returns immediately)
-0x006F20F2	176	_output_unwind_A	named	CRT printf funclet: SEH unwind stub for the formatter
-0x006F21A2	4	vt_747760::Nop_6F21A2	named	empty function (returns immediately)
-0x006F21A6	92	_output_unwind_B	named	CRT printf funclet: SEH unwind stub
-0x006F2202	43	_strnlen	named	CRT: length of a string limited by n
-0x006F2230	208	_stricmp_core	named	CRT: case-insensitive compare of two strings (tolower table)
-0x006F2300	154	strncpy_lk	named	CRT: strncpy with the locale lock when MBCS
-0x006F239A	168	_ioinit_stdio	named	CRT startup: sizes and allocates the stream table
+0x006F1F15	53	_write_char	named	CRT (output.c write_char(ch, stream, &count)): --cnt >= 0 -> store at _ptr++, else _flsbuf; result -1 -> count = -1, else ++count. CORRECTION: was _putc_wrapper
+0x006F1F4A	49	_write_multi_char	named	CRT (output.c write_multi_char(ch, n, stream, &count)): write_char n times, stops at an error
+0x006F1F7B	56	_write_string	named	CRT (output.c write_string(str, n, stream, &count)): write_char for n characters of str, stops at an error
+0x006F1FB3	13	va_arg_dword	named	CRT (output.c get_int_arg(&args)): returns the next 4-byte argument and advances the pointer by 4
+0x006F1FC0	16	va_arg_qword	named	CRT (output.c get_int64_arg(&args)): returns the next 8-byte argument and advances by 8
+0x006F1FD0	14	va_arg_short	named	CRT (output.c get_short_arg(&args)): advances by 4 and returns the low 16 bits of that argument
+0x006F1FDE	272	__crtLCMapStringA	named	CRT (aw_map.c __crtLCMapStringA(lcid, flags, src, n, dst, dstn, codepage, bError)): first call probes LCMapStringW (mode 0x7CABE0 = 1 W, 2 A, else return 0); A mode -> LCMapStringA; W mode: n limited by strncnt, MultiByteToWideChar into _alloca buffers, LCMapStringW (LCMAP_SORTKEY 0x400 output direct, else back through WideCharToMultiByte); returns the length or 0
+0x006F20EE	4	_crtLCMapStringA_filter1	named	"CRT: SEH filter expression of the first _alloca __try in __crtLCMapStringA (scope table 0x747754): returns 1 (EXCEPTION_EXECUTE_HANDLER). CORRECTION: was vt_747754::Nop ""empty function"" (not a vtable, returns 1)"
+0x006F20F2	176	_crtLCMapStringA_except1	named	"CRT: __except body of the first _alloca in __crtLCMapStringA (scope table 0x747758): source wide buffer [ebp-0x24] = 0 (stack overflow), then the function's continuation (buffer 0 -> returns 0; else MultiByteToWideChar + LCMapStringW). CORRECTION: was _output_unwind_A ""printf funclet"" (it belongs to __crtLCMapStringA)"
+0x006F21A2	4	_crtLCMapStringA_filter2	named	"CRT: SEH filter expression of the second _alloca __try in __crtLCMapStringA (scope table 0x747760): returns 1. CORRECTION: was vt_747760::Nop ""empty function"""
+0x006F21A6	92	_crtLCMapStringA_except2	named	"CRT: __except body of the second _alloca (output wide buffer) in __crtLCMapStringA (scope table 0x747764): try level -1, restores the SEH chain and returns 0. CORRECTION: was _output_unwind_B ""printf funclet"""
+0x006F2202	43	_strnlen	named	CRT (aw_map.c strncnt(s, n)): length of s, at most n (returns n when no terminator within n); code identical to _strnlen_b 0x6FB49D
+0x006F2230	208	_stricmp_core	named	CRT: _stricmp(s1, s2): C locale (LC_CTYPE handle 0x7CABF0 == 0) -> ASCII case fold A-Z inline; else locale refcount 0x7CC054 (lock 0x13 while a setlocale is running 0x7CC050) and tolower per character; returns <0 / 0 / >0
+0x006F2300	154	_mbsnbcpy	named	CRT (mbsnbcpy.c _mbsnbcpy(dst, src, n)): no MBCS code page (0x7CC06C == 0) -> strncpy; else under lock 0x19 copies at most n bytes keeping DBCS pairs whole (lead byte = _mbctype 0x7CC181 bit 4; a lead byte without room is replaced by 0) and pads the rest with zeros; returns dst; from _splitpath. CORRECTION: was strncpy_lk
+0x006F239A	168	__initstdio	named	CRT initializer (pointer 0x783BC4): _nstream 0x7CC040 (0 -> 0x200, < 0x14 -> 0x14), __piob 0x7CB024 = calloc(_nstream, 4) (retry with 0x14, then _amsg_exit(0x1A)), entries 0..19 = &_iob[i] (0x798060, 0x20 each), stdin / stdout / stderr whose OS handle is -1 or 0 get _file = -1. CORRECTION: was _ioinit_stdio (same meaning)
 0x006F2442	20	sub_6F2442	named	unregistered function, reached by call / pointer from 0x383BD4 (gaps.py 2026-11-06)
-0x006F2456	47	_lock_file	named	CRT stdio: enter the per-FILE lock
-0x006F2485	35	_lock_file2	named	CRT stdio: enter the lock for stream index n
-0x006F24A8	47	_unlock_file	named	CRT stdio: leave the per-FILE lock (stdio table or the stream's own critical section)
-0x006F24D7	35	_unlock_file2	named	CRT stdio: leave the lock for stream index n
-0x006F24FA	43	_freebuf	named	CRT stdio: frees a stream buffer allocated by the CRT
-0x006F2525	220	_filbuf	named	CRT stdio: _filbuf(stream): refill the read buffer via _read
-0x006F2601	444	_ioinit	named	CRT startup: allocates the lowio handle table (0x480-byte block of 32), sets up the standard handles
-0x006F27BD	84	_ioterm	named	CRT shutdown: frees the lowio handle table blocks
-0x006F2811	368	_openfile	named	CRT stdio: parses the mode string (r/w/a/+/b/t) and opens the file into a FILE
-0x006F2981	200	_getstream	named	CRT stdio: finds a free FILE slot in the stream table (allocating blocks), locking it
-0x006F2A49	127	_fltin_parse	named	CRT float: parses a number string into a double
-0x006F2AC8	141	_stbuf_core	named	CRT stdio: gives stdout/stderr a temporary buffer for printf when it is a device
-0x006F2B55	42	_ftbuf	named	CRT stdio: restores the stream after temporary buffering (flush, reset)
-0x006F2B80	62	__cintrindisp2	named	CRT math: two-argument intrinsic dispatch then error handler
-0x006F2BBE	61	__cintrindisp1	named	
-0x006F2BFB	72	__ctrandisp2	named	
-0x006F2C43	7	_fpmath_exception_stub	named	CRT math funclet: clears the status bit and tests the control state
-0x006F2C4A	305	_fpmath_intrin_err	named	CRT math: post-call error handling for intrinsics
-0x006F2D7B	51	__ctrandisp1	named	
-0x006F2DAE	60	__fload	named	CRT math: loads a double operand into the FPU handling Inf/NaN
-0x006F2DF0	279	_fpmath_normalize	named	CRT math: normalizes an extended-precision value (shift loop)
+0x006F2456	47	_lock_file	named	CRT (_file.c _lock_file(FILE*)): a stream inside _iob 0x798060..0x7982C0 -> _lock(index + 0x1C); else EnterCriticalSection(stream + 0x20) (_FILEX)
+0x006F2485	35	_lock_file2	named	CRT (_file.c _lock_file2(i, FILE*)): i < 0x14 -> _lock(i + 0x1C); else EnterCriticalSection(stream + 0x20)
+0x006F24A8	47	_unlock_file	named	CRT (_file.c _unlock_file(FILE*)): _iob stream -> _unlock(index + 0x1C); else LeaveCriticalSection(stream + 0x20)
+0x006F24D7	35	_unlock_file2	named	CRT (_file.c _unlock_file2(i, FILE*)): i < 0x14 -> _unlock(i + 0x1C); else LeaveCriticalSection(stream + 0x20)
+0x006F24FA	43	_freebuf	named	CRT (_freebuf.c _freebuf(FILE*)): a read/write stream (_flag & 0x83) with a CRT buffer (_IOMYBUF 8) -> free(_base), clears _IOMYBUF / _IOSETVBUF (0x408), _ptr = _base = 0, _cnt = 0
+0x006F2525	220	_filbuf	named	CRT (_filbuf.c _filbuf(FILE*)): readable and not in error / not writing: sets _IOREAD, _getbuf when no buffer, _read(_file, _base, _bufsiz) -> _cnt; 0 / -1 -> _IOEOF / _IOERR and -1; a text-mode CRLF handle (osfile & 0x82 == 0x82) sets 0x2000; grows a 0x200 _IOMYBUF buffer to 0x1000; returns the first byte and advances _ptr
+0x006F2601	444	_ioinit	named	CRT (ioinit.c _ioinit): malloc(0x480) = the first ioinfo block of 32 x 0x24 (_osfhnd -1, _osfile 0, pipech 10) -> __pioinfo 0x7CAF20, _nhandle 0x7CB020 = 32 (failure -> _amsg_exit(0x1B)); inherits handles from STARTUPINFO lpReserved2 (count + osfile bytes + handles, more blocks up to 0x800), then stdin / stdout / stderr from GetStdHandle (GetFileType: char device 0x40, pipe 8), SetHandleCount(_nhandle); from entry
+0x006F27BD	84	_ioterm	named	CRT (ioinit.c _ioterm): for every ioinfo block in __pioinfo 0x7CAF20..0x7CB020: DeleteCriticalSection of each initialised entry lock (+0xC), free the block, clear the slot; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F2811	368	_openfile	named	CRT (_open.c _openfile(name, mode, shflag, FILE*)): mode 'r' / 'w' (O_CREAT|O_TRUNC 0x301) / 'a' (0x109) with _commode 0x7CADA4, then '+' (_O_RDWR, _IORW), option letters b t c n S R T D (and U), each at most once; _sopen(name, oflag, shflag, 0x1A4); fills the FILE (_flag _IOREAD / _IOWRT / _IORW + commit, _file, _cnt 0, _ptr = _base = 0); returns the stream or 0
+0x006F2981	200	_getstream	named	CRT (stream.c _getstream): under lock 2 (_IOB_SCAN_LOCK) scans __piob[0.._nstream): an empty slot gets malloc(0x38) (_FILEX) + InitializeCriticalSection(+0x20); a used one is taken when not in use (_flag & 0x83 == 0) after _lock_file2; locks the stream, resets _file -1, _cnt, _flag, _base, _ptr, _tmpfname; returns it or 0
+0x006F2A49	127	_fltin2	named	CRT (fltintrn: _fltin2(FLT*, str)): _strgtold12 to a 12-byte long double, _ld12tod to a double; flags 0x80 underflow (SLD_UNDERFLOW or result 1), 0x100 overflow, 0x200 no digits (value 0); FLT {flags +0, nbytes +4 = end - str, dval +0x10}; from atof. CORRECTION: was _fltin_parse
+0x006F2AC8	141	_stbuf	named	CRT (_sftbuf.c _stbuf(FILE*)): only for stdout / stderr (0x798080 / 0x7980A0) on a tty: ++_cflush 0x7CABE4, no buffer yet -> a shared 0x1000 buffer _stdbuf 0x7CAC08[i] (malloc; failure -> the 2-byte _charbuf at +0x14), _flag |= 0x1102; returns 1 when it gave a temporary buffer, else 0. CORRECTION: was _stbuf_core
+0x006F2B55	42	_ftbuf	named	CRT (_sftbuf.c _ftbuf(flag, FILE*)): when _stbuf gave a buffer (flag) and _IOFLRTN (0x1000) is set: _flush, clears _IOFLRTN | _IOYOURBUF, _bufsiz = _ptr = _base = 0
+0x006F2B80	62	__cintrindisp2	named	CRT x87 (87cdisp.asm _cintrindisp2): intrinsic two-operand dispatch (operands on the FPU stack): frame, _trandisp2(table edx), then the shared error check 0x6F2C4A; from _CIfmod
+0x006F2BBE	61	__cintrindisp1	named	CRT x87 (87cdisp.asm _cintrindisp1): one-operand intrinsic dispatch: _trandisp1 then the error check 0x6F2C4A; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F2BFB	72	__ctrandisp2	named	CRT x87 (87cdisp.asm _ctrandisp2): two-operand C-call dispatch: __fload both stack doubles, _trandisp2, then 0x6F2C43; lib, dead chain: only from dead_6E95A0 (the unreferenced non-intrinsic fmod stub)
+0x006F2C43	7	_ctrandisp_errcheck	named	CRT x87 (87cdisp.asm): entry of the shared error check for the C-call dispatchers: clears bit 0 of [ebp-0x2C8] (arguments come from the stack frame, not the FPU) and falls into 0x6F2C4A; lib, dead chain: only from __ctrandisp2 / __ctrandisp1 (both dead). CORRECTION: was _fpmath_exception_stub
+0x006F2C4A	305	_trandisp_errcheck	named	CRT x87 (87cdisp.asm): shared error check after a dispatched function: _fastflag 0x7CAAD0 set -> return; error code [ebp-0x90]: > 0 -> that type; -1 / -2 -> range check (exponent 0 -> _UNDERFLOW 4 with fscale +1536, 0x7FF -> _OVERFLOW 3 with fscale -1536); else inexact unmasked and PE set -> 8; then fills the _exception record (opcode = table +0 + 1, args from the frame unless they came on the FPU, result) and calls _87except 0x6F969F(type = table +0xE, ..). CORRECTION: was _fpmath_intrin_err
+0x006F2D7B	51	__ctrandisp1	named	CRT x87 (87cdisp.asm _ctrandisp1): one-operand C-call dispatch: __fload, _trandisp1, 0x6F2C43; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F2DAE	60	__fload	named	CRT x87 (87cdisp.asm _fload): loads the double arg; Inf / NaN (exponent 0x7FF) built by hand as an 80-bit value (exponent 0x7FFF + sign, mantissa << 11) so a signalling NaN loads without an exception; lib, dead chain: only from __ctrandisp2 / __ctrandisp1 (dead)
+0x006F2DF0	279	_fdiv_main_routine	named	CRT x87 (adj_fdiv.asm fdiv_main_routine): Pentium FDIV-bug safe division of the two 80-bit operands on the stack: divisor mantissa bits checked against the bad-pattern table 0x798310; safe -> fdivp; risky -> both operands scaled by 15/16 (0x798320; 17/16 0x798324 when the divisor exponent is 1) under a 64-bit-precision CW, then fdivp; zero / Inf / NaN / denormal divisors divided directly. Live through _safe_fdivr 0x6F35E1 (exp path when _adjust_fdiv 0x7CAAD4 = 1); the register entry _adj_fdiv_r 0x6F2F07 and the m16i/m32/m64 entries are unused. CORRECTION: was _fpmath_normalize
 0x006F2F07	41	dead_6F2F07	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006F2F30	1142	sub_6F2F30	named	unregistered function, reached by call / pointer from 0x398382 (gaps.py 2026-11-06)
-0x006F33A6	19	__fdivp_sti_st	named	CRT x87 helper: divide st(i) by st with the extended-precision normalizer
-0x006F33B9	19	__fdivrp_sti_st	named	CRT x87 helper: reverse divide
-0x006F33CC	76	__adj_fdiv_m32	named	
-0x006F3418	76	_fpmath_scale_helper	named	CRT x87 helper: scale/divide fallback when the exponent is not special
+0x006F33A6	19	_fdivp_sti_st	named	CRT x87 (adj_fdiv.asm _fdivp_sti_st): ST1 = ST1 / ST0 popped, through fdiv_main_routine (operands spilled to a 0x2C frame); lib, dead chain: only from _adj_fdiv_m32 / _adj_fdiv_m64 / dead_6F3464 (_adj_fdiv_m16i), all unreferenced
+0x006F33B9	19	_fdivrp_sti_st	named	CRT x87 (adj_fdiv.asm _fdivrp_sti_st): ST1 = ST0 / ST1 popped (operands spilled in the reverse order) through fdiv_main_routine; lib, dead chain: only from dead_6F3464 (_adj_fdiv_m16i); the raw hit from 0x6F2F30 is a jl byte
+0x006F33CC	76	__adj_fdiv_m32	named	CRT x87 (adj_fdiv.asm _adj_fdiv_m32(float)): ST0 /= m32 safely: Inf / NaN divisor -> plain fdiv; else fld the divisor and _fdivp_sti_st (spilling ST1 when the stack is not empty, status TOP 0x3800); ret 4; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F3418	76	_adj_fdiv_m64	named	CRT x87 (adj_fdiv.asm _adj_fdiv_m64(double)): the same for a 64-bit divisor (exponent 0x7FF test), ret 8; lib, unused. CORRECTION: was _fpmath_scale_helper [dead: no caller or pointer]
 0x006F3464	381	dead_6F3464	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F35E1	21	__fprem_helper	named	CRT x87 helper: calls the extended normalizer for the remainder
-0x006F35F6	518	_fpmath_pow_special_a	named	CRT math: pow() special-case classifier (exponent/rounding mode tables)
-0x006F37FC	178	_fpmath_pow_dispatch_a	named	CRT math: dispatches pow() special cases (exponent bits set)
-0x006F38AE	518	_fpmath_pow_special_b	named	CRT math: second instance of the special-case classifier
-0x006F3AB4	181	_fpmath_pow_dispatch_b	named	CRT math: dispatches pow() special cases (second variant)
+0x006F35E1	21	_safe_fdivr	named	CRT x87 (adj_fdiv.asm _safe_fdivr): fdivrp st(1) done safely: spills ST0 / ST1 and calls fdiv_main_routine (ST0 / ST1); called by the exp code at 0x6F135F (1 / 2^|x| for negative x) when _adjust_fdiv 0x7CAAD4 = 1. CORRECTION: was __fprem_helper
+0x006F35F6	518	_fprem_common	named	CRT x87 (adj_fdiv.asm fprem_common): Pentium-safe fprem of the spilled operands: a divisor whose mantissa matches the bad-pattern table 0x79832C (and is not 0 / Inf / denormal) is reduced step by step with scaled divisors (constants 0x79834C / 0x79835C / 0x798364 / 0x798344), else plain fprem; returns the partial remainder with the C0..C3 flags. CORRECTION: was _fpmath_pow_special_a
+0x006F37FC	178	_adj_fprem	named	CRT x87 (adj_fdiv.asm _adj_fprem): safe fprem entry: spills ST0 / ST1; normal divisor -> fprem_common; denormal divisor: both scaled by 2^64 (0x798344) under a 64-bit-precision CW (or only ST1 when the exponent > 0x7FBE), then fprem_common; zero divisor -> plain fprem; from the fmod worker 0x6E95B4 (when _adjust_fdiv) and dead_6F3B69. CORRECTION: was _fpmath_pow_dispatch_a
+0x006F38AE	518	_fprem1_common	named	CRT x87 (adj_fdiv.asm fprem1_common): same as fprem_common for fprem1 (IEEE remainder); lib, dead chain: only from _adj_fprem1 0x6F3AB4. CORRECTION: was _fpmath_pow_special_b
+0x006F3AB4	181	_adj_fprem1	named	CRT x87 (adj_fdiv.asm _adj_fprem1): safe fprem1 entry, as _adj_fprem; lib, dead chain: only from dead_6F3B69 (unreferenced). CORRECTION: was _fpmath_pow_dispatch_b
 0x006F3B69	18	dead_6F3B69	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F3B7B	82	iswctype	named	CRT: wide character class test using the table 0x797DDC or GetStringTypeW
+0x006F3B7B	82	iswctype	named	CRT (iswctype.c iswctype(wc, mask)): WEOF -> 0; wc < 0x100 -> _pwctype 0x797DDC[wc] & mask; else __crtGetStringTypeW(CT_CTYPE1) & mask; lib, dead chain: only from dead_6E9AA0 / dead_6E9A81 / dead_6F3BCD (unreferenced isw* wrappers)
 0x006F3BCD	16	dead_6F3BCD	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F3BE0	104	_aulldiv	named	CRT: unsigned 64-bit divide
-0x006F3C50	117	_aullrem	named	CRT: unsigned 64-bit remainder
-0x006F3CC5	249	__crtGetStringTypeA	named	CRT locale: GetStringTypeA/W wrapper with code page conversion
-0x006F3DBE	4	vt_7477A4::Nop_6F3DBE	named	empty function (returns immediately)
-0x006F3DC2	76	_crtGetStringType_unwind	named	CRT funclet stub for the string type helper
+0x006F3BE0	104	_aulldiv	named	CRT (ulldiv.asm _aulldiv): unsigned 64-bit divide (one or two div when the divisor high dword is 0, else shift-normalised estimate corrected by one); from _output / _ltoa (_ui64toa)
+0x006F3C50	117	_aullrem	named	CRT (ullrem.asm _aullrem): unsigned 64-bit remainder, same method; from _output / _ui64toa
+0x006F3CC5	249	__crtGetStringTypeA	named	CRT (aw_str.c __crtGetStringTypeA(type, src, n, out, codepage, lcid, bError)): first call probes GetStringTypeW (mode 0x7CAC10 = 1 W, 2 A); A mode -> GetStringTypeA(lcid or the LC_CTYPE lcid); W mode: code page (0 -> the locale's ANSI code page), MultiByteToWideChar into an _alloca buffer (zeroed), GetStringTypeW; returns the BOOL result
+0x006F3DBE	4	_crtGetStringTypeA_filter	named	"CRT: SEH filter expression of the _alloca __try in __crtGetStringTypeA (scope table 0x7477A4): returns 1. CORRECTION: was vt_7477A4::Nop ""empty function"""
+0x006F3DC2	76	_crtGetStringTypeA_except	named	CRT: __except body of the _alloca in __crtGetStringTypeA (scope table 0x7477A8): try level -1, restores the SEH chain, returns 0 (FALSE)
 0x006F3E0E	145	sub_6F3E0E	named	unregistered function, reached by call / pointer from 0x3978CC (gaps.py 2026-11-06)
-0x006F3E9F	846	_setlocale_ctype_names	named	CRT locale: derives language/country/codepage from a locale name (846 bytes)
-0x006F41ED	400	___free_lc_time	named	CRT locale: frees the LC_TIME strings table (month/day names, formats)
+0x006F3E9F	846	_get_lc_time	named	"CRT (inittime.c _get_lc_time(__lc_time_data*)): fills the LC_TIME table from the LC_TIME lcid (0x7CAC4E) / ANSI code page through _getlocaleinfo: abbreviated day names 0x31..0x37 (+0..+0x18), day names 0x2A..0x30, abbreviated months 0x44..0x4F, months 0x38..0x43, AM / PM 0x28 / 0x29, then short date 0x1F, long date 0x20, time format 0x1003; returns the OR of the failures (null table -> -1). CORRECTION: was _setlocale_ctype_names ""derives language / country / codepage"""
+0x006F41ED	400	___free_lc_time	named	CRT (inittime.c __free_lc_time(__lc_time_data*)): frees every string of the LC_TIME table (7 + 7 day names, 12 + 12 month names, AM / PM, date / time formats); null -> nothing
 0x006F437D	469	sub_6F437D	named	unregistered function, reached by call / pointer from 0x3978C0 (gaps.py 2026-11-06)
-0x006F4552	55	_strip_case_a	named	CRT locale: normalizes locale name characters (loop A)
+0x006F4552	55	_fix_grouping_num	named	CRT (initnum.c fix_grouping(str)): converts the LOCALE_SGROUPING string in place: digit characters become their values, ';' separators are removed; from __init_numeric. CORRECTION: was _strip_case_a; code identical to 0x6F4776
 0x006F4589	203	sub_6F4589	named	unregistered function, reached by call / pointer from 0x3978B4 (gaps.py 2026-11-06)
-0x006F4654	290	_setlocale_country	named	CRT locale: derives the country from a name
-0x006F4776	55	_strip_case_b	named	CRT locale: normalizes locale name characters (loop B)
-0x006F47AD	78	_free_lconv	named	CRT locale: frees the lconv strings unless they are the defaults
-0x006F47FB	581	_setlocale_ctype_tables	named	CRT locale: loads the ctype tables (GetStringTypeA/W) for the current code page
+0x006F4654	290	_get_lc_lconv	named	"CRT (initmon.c _get_lc_lconv(lconv*)): monetary fields from the LC_MONETARY lcid 0x7CAC44: int_curr_symbol 0x15 (+0xC), currency_symbol 0x14 (+0x10), mon_decimal_point 0x16 (+0x14), mon_thousands_sep 0x17 (+0x18), mon_grouping 0x18 (+0x1C, fix_grouping), positive / negative sign 0x50 / 0x51 (+0x20 / +0x24), int_frac_digits 0x1A, frac_digits 0x19, p/n cs_precedes, sep_by_space, sign_posn (0x54..0x57, 0x52, 0x53; +0x28..+0x2F bytes); returns the OR of the failures (null -> -1). CORRECTION: was _setlocale_country ""derives the country from a name"""
+0x006F4776	55	_fix_grouping_mon	named	CRT (initmon.c fix_grouping(str)): same as 0x6F4552 for mon_grouping; from _get_lc_lconv. CORRECTION: was _strip_case_b
+0x006F47AD	78	__free_lconv_mon	named	CRT (initmon.c __free_lconv_mon(lconv*)): frees the 7 monetary strings (+0xC..+0x24) unless they are the C-locale defaults (int_curr_symbol == 0x7CAE70). CORRECTION: was _free_lconv
+0x006F47FB	581	__init_ctype	named	CRT (initctyp.c __init_ctype, pointer 0x7978A8 in the __lc_category table): C locale (LC_CTYPE handle 0x7CABF0 == 0) -> _pctype / _pwctype = the static table 0x797DE2 and frees the old ones (0x7CAC28 / 0x7CAC2C); else code page (0x7CAC00 or LOCALE_IDEFAULTANSICODEPAGE 0x1004), mallocs 0x202 / 0x202 / 0x101 / 0x202, GetCPInfo (__mb_cur_max 0x797FE4, lead-byte ranges marked _LEADBYTE 0x8000), __crtGetStringTypeA / __crtGetStringTypeW for chars 0..255, installs the new tables; returns 0, 1 on failure. CORRECTION: was _setlocale_ctype_tables (same meaning)
 0x006F4A40	3	sub_6F4A40	named	unregistered function, reached by call / pointer from 0x39789C (gaps.py 2026-11-06)
-0x006F4A50	62	strcspn	named	CRT: strcspn using a 32-byte bit set
-0x006F4A90	58	strpbrk	named	CRT: strpbrk using a 32-byte bit set
-0x006F4ACA	381	_setlocale_core	named	CRT locale: sets up LCID/code page/names for a locale string
-0x006F4C47	88	_lookup_locale_table	named	CRT locale: scans a table of names for a case-insensitive match
-0x006F4C9F	135	_locale_init_names_a	named	CRT locale: initializes language/country name lengths (3-letter forms)
-0x006F4D26	516	_locale_parse_lang	named	CRT locale: parses the language part of a locale name
-0x006F4F2A	86	_locale_init_names_b	named	CRT locale: initializes language name length
-0x006F4F80	189	_locale_parse_country	named	CRT locale: parses the country part of a locale name
-0x006F503D	55	_setlocale_user_default	named	CRT locale: derives the user default language/country from the strings
-0x006F5074	134	_enum_locale_proc_lang	named	CRT locale: EnumSystemLocales callback matching the language name
-0x006F50FA	26	_set_user_default_lcid	named	CRT locale: sets the user default LCID flags (GetUserDefaultLCID)
-0x006F5114	102	_get_lcid_from_name	named	CRT locale: looks up an LCID from a language name (default 0x1004)
-0x006F517A	31	_is_known_langid	named	CRT locale: tests a language id in the known table 0x798914
-0x006F5199	98	_get_country_name	named	CRT locale: country name for an LCID via the locale info callback
-0x006F51FB	54	_is_nt_platform	named	CRT locale: GetVersionEx platform id == VER_PLATFORM_WIN32_NT
-0x006F5231	230	_langid_to_name	named	CRT locale: binary search in the language table 0x798470 and copies the name
-0x006F5317	57	_strlen_skip	named	CRT locale: length of a token (until NUL)
-0x006F5350	33	_alpha_len	named	CRT locale: length of an alphabetic prefix
-0x006F5371	45	_GetLinkerVersion	named	CRT: reads the linker major/minor version from the module's PE header
-0x006F539E	328	__heap_select	named	CRT: selects the heap implementation (reads __MSVCRT_HEAP_SELECT / __GLOBAL_HEAP_SELECTED, OS version check)
-0x006F54E6	93	_heap_init	named	CRT startup: HeapCreate, selects the heap model and builds the small-block heap
+0x006F4A50	62	strcspn	named	CRT (strcspn.asm): length of the prefix of s with no character of the set (32-byte bit map of the set)
+0x006F4A90	58	strpbrk	named	CRT (strpbrk.asm): first character of s found in the set (32-byte bit map), or 0
+0x006F4ACA	381	__get_qualified_locale	named	CRT (getqloc.c __get_qualified_locale(lpInStr, lpOutId, lpOutStr)): picks GetLocaleInfoA (NT) or the table-based crtGetLocaleInfoA 0x6F5231 into 0x7CAC74; language / country names translated through the tables 0x7989E0 (0x40 entries) / 0x798928 (0x16) (TranslateName); then GetLcidFromLangCountry / GetLcidFromLanguage / GetLcidFromCountry / GetLcidFromDefault; code page by ProcessCodePage, IsValidCodePage, IsValidLocale; fills the LC_ID (lang, country, code page) and the full name; returns 1 / 0. CORRECTION: was _setlocale_core
+0x006F4C47	88	_TranslateName	named	CRT (getqloc.c TranslateName(table, high, &name)): binary search (_stricmp) of the {name, replacement} 8-byte table; on a match *name = the replacement string (entry +4)
+0x006F4C9F	135	_GetLcidFromLangCountry	named	CRT (getqloc.c GetLcidFromLangCountry): 3-letter flags for language (0x7CAC60) / country (0x7CAC58), primary length 0x7CAC5C (2 or GetPrimaryLen), EnumSystemLocalesA(LangCountryEnumProc); keeps the result only when language + country + code page flags (0x100, 0x200, 7) are all found
+0x006F4D26	516	_LangCountryEnumProc	named	CRT (getqloc.c LangCountryEnumProc(lcid string)): lcid = LcidFromHexString; country name (LOCALE_SENGCOUNTRY 0x1002 or abbreviated 7) must match, then the language (0x1001 or abbreviated 3), or the primary-language prefix with TestDefaultCountry / TestDefaultLanguage; sets the found flags 0x7CAC6C and the lcids 0x7CAC54 / 0x7CAC70; returns 0 to stop the enumeration
+0x006F4F2A	86	_GetLcidFromLanguage	named	CRT (getqloc.c GetLcidFromLanguage): 3-letter flag, primary length, EnumSystemLocalesA(LanguageEnumProc); keeps the result only when flag 4 (language found) is set
+0x006F4F80	189	_LanguageEnumProc	named	CRT (getqloc.c LanguageEnumProc): lcid from hex; language name (0x1001 / abbreviated 3) equal -> TestDefaultLanguage, or primary prefix (_strnicmp) -> TestDefaultLanguage; match sets flag 4 and the lcids; returns 0 when found
+0x006F503D	55	_GetLcidFromCountry	named	CRT (getqloc.c GetLcidFromCountry): 3-letter flag for the country, EnumSystemLocalesA(CountryEnumProc); keeps it only when flag 4 is set
+0x006F5074	134	_CountryEnumProc	named	CRT (getqloc.c CountryEnumProc): lcid from hex; country name (0x1002 / abbreviated 7) equal and TestDefaultCountry -> flag 4 and the lcids; returns 0 when found
+0x006F50FA	26	_GetLcidFromDefault	named	CRT (getqloc.c GetLcidFromDefault): flags |= 0x104, both lcids = GetUserDefaultLCID()
+0x006F5114	102	_ProcessCodePage	named	"CRT (getqloc.c ProcessCodePage(str)): null / empty / ""ACP"" -> LOCALE_IDEFAULTANSICODEPAGE (0x1004), ""OCP"" -> LOCALE_IDEFAULTCODEPAGE (0xB) read through the 0x7CAC74 getter into a buffer; returns atol of that (or of the given number string). CORRECTION: was _get_lcid_from_name"
+0x006F517A	31	_TestDefaultCountry	named	CRT (getqloc.c TestDefaultCountry(langid)): 0 when the language id is in the 10-entry table 0x798914 (languages whose default country is not the primary one), else 1
+0x006F5199	98	_TestDefaultLanguage	named	CRT (getqloc.c TestDefaultLanguage(lcid, bTestPrimary)): the default sublanguage lcid (lcid & 0x3FF | 0x400) name via the getter; 0 when it differs from lcid and the given language is only a primary prefix; else 1
+0x006F51FB	54	_IsThisWindowsNT	named	CRT (getqloc.c IsThisWindowsNT): GetVersionExA, 1 when dwPlatformId == VER_PLATFORM_WIN32_NT (2). CORRECTION: was _is_nt_platform (same meaning)
+0x006F5231	230	_crtGetLocaleInfoA	named	CRT (getqloc.c crtGetLocaleInfoA(lcid, type, buf, n), the Win9x getter): binary search of the 0x1B-entry 0x2C-byte table 0x798470 by lcid; type 1 (ILANGUAGE), 3 (SABBREVLANGNAME), 7 (SABBREVCTRYNAME), 0xB (IDEFAULTCODEPAGE), 0x1001, 0x1002, 0x1004 pick the field; copies it (strncpy n) or returns the needed size; 0 when not found. CORRECTION: was _langid_to_name
+0x006F5317	57	_LcidFromHexString	named	"CRT (getqloc.c LcidFromHexString(str)): parses a hex number (0-9, a-f, A-F). CORRECTION: was _strlen_skip ""length of a token"""
+0x006F5350	33	_GetPrimaryLen	named	CRT (getqloc.c GetPrimaryLen(str)): number of leading letters A-Z / a-z. CORRECTION: was _alpha_len (same meaning)
+0x006F5371	45	_GetLinkerVersion	named	CRT (heapinit.c _GetLinkerVersion(&ver)): ver = 0, then the MajorLinkerVersion / MinorLinkerVersion bytes of the exe's PE optional header (MZ check, e_lfanew)
+0x006F539E	328	__heap_select	named	"CRT (heapinit.c __heap_select): NT >= 5 -> system heap (1); else __MSVCRT_HEAP_SELECT environment value (upper-cased; ""__GLOBAL_HEAP_SELECTED"" or the exe path from GetModuleFileNameA, then "",n"" read with strtol: 1 / 2 / 3 returned) decides; else linker version >= 6 -> __V6_HEAP (3), else __V5_HEAP (2)"
+0x006F54E6	93	_heap_init	named	CRT (heapinit.c _heap_init(mtflag)): _crtheap 0x7CAF08 = HeapCreate(no serialize when single-threaded, 0x1000, 0); __active_heap 0x7CAF0C = __heap_select; V6 -> __sbh_heap_init(0x3F8), V5 -> __old_sbh_new_region; failure -> HeapDestroy, returns 0; returns 1; from entry
 0x006F5543	199	dead_6F5543	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F560A	179	__sbh_set_threshold	named	CRT: _set_sbh_threshold(size): allocates the small-block heap region table
-0x006F56BD	72	__sbh_heap_init	named	CRT small-block heap: allocates the region table (HeapAlloc 0x140)
-0x006F5705	43	__sbh_find_block	named	CRT small-block heap: finds the region containing an address
-0x006F5730	809	__sbh_free_block	named	CRT small-block heap: free a block (coalesce, update region bitmaps), 809 bytes
-0x006F5A59	777	__sbh_alloc_block	named	CRT small-block heap: allocate a block from a region (777 bytes)
-0x006F5D62	177	__sbh_grow_region_table	named	CRT small-block heap: HeapReAlloc the region table (+0x50 entries)
-0x006F5E13	251	__sbh_decommit_pages	named	CRT small-block heap: decommits/updates pages of a region
-0x006F5F0E	758	__sbh_resize_block	named	CRT small-block heap: resize a block in place (shrink/grow), 758 bytes
+0x006F560A	179	__sbh_set_threshold	named	CRT (sbheap.c _set_sbh_threshold(size)): V6 heap -> threshold 0x7CAF04 when <= 0x3F8; V5 -> rounded to 16, <= 0x780 into 0x79AC14; system heap with size != 0 -> switches to V5 (linker < 6, __old_sbh_new_region) or V6 (__sbh_heap_init); returns 1 / 0; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F56BD	72	__sbh_heap_init	named	CRT (sbheap.c __sbh_heap_init(threshold)): region header array 0x7CAF00 = HeapAlloc(_crtheap, 0, 0x140) (16 x 0x14), __sbh_cntHeaderList 0x7CAEFC = 0, __sbh_sizeHeaderList 0x7CAEE8 = 16, __sbh_pHeaderDefer 0x7CAEF8 = 0, __sbh_pHeaderScan 0x7CAEF0 = the array, threshold 0x7CAF04; returns 1 / 0
+0x006F5705	43	__sbh_find_block	named	CRT (sbheap.c __sbh_find_block(p)): header of the region (0x14-byte entries, 1 MB at +0xC) that contains p, or 0
+0x006F5730	809	__sbh_free_block	named	CRT (sbheap.c __sbh_free_block(header, p)): frees a V6 small block: coalesces with the free neighbours (size words, bit 0 = in use), unlinks / relinks them in the 64 size buckets of the group (group = (p - region base) >> 15, 0x204 bytes each at region +0x144), updates the bucket bitmaps and counts (+0x44 / +4 / header bits), decommits a group that became completely free once another one is deferred (__sbh_pHeaderDefer 0x7CAEF8)
+0x006F5A59	777	__sbh_alloc_block	named	CRT (sbheap.c __sbh_alloc_block(size)): block size (size + 0x17) & ~0xF; searches the region headers from __sbh_pHeaderScan for a group with a big enough bucket bit (then from the start, then a region with an uncommitted group -> __sbh_alloc_new_group, else __sbh_alloc_new_region), takes the block from the smallest fitting bucket, splits the rest back into its bucket, marks it used; returns the user pointer (block + 4) or 0
+0x006F5D62	177	__sbh_alloc_new_region	named	CRT (sbheap.c __sbh_alloc_new_region): grows the header array by 16 entries with HeapReAlloc when full; new header: group data HeapAlloc(HEAP_ZERO_MEMORY, 0x41C4), 1 MB reserved with VirtualAlloc(MEM_RESERVE), bitvCommit = -1 (all groups uncommitted); ++count; returns the header or 0. CORRECTION: was __sbh_grow_region_table
+0x006F5E13	251	__sbh_alloc_new_group	named	CRT (sbheap.c __sbh_alloc_new_group(header)): first uncommitted group (leading bit of bitvCommit), resets its 64 bucket lists, commits its 0x8000 bytes (VirtualAlloc MEM_COMMIT), formats the 8 pages as free 0xFF0 blocks with -1 guards and links them into bucket 63, clears the commit bit; returns the group index or -1. CORRECTION: was __sbh_decommit_pages (it commits)
+0x006F5F0E	758	__sbh_resize_block	named	CRT (sbheap.c __sbh_resize_block(header, p, newsize)): in place: grow by taking the free next block when big enough (bucket unlink / relink of the rest), shrink by splitting off a free tail (coalesced with a free next block); returns 1 / 0
 0x006F6204	209	dead_6F6204	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F62D5	815	__sbh_heap_check	named	CRT small-block heap: validates the region table (IsBadWritePtr etc.)
+0x006F62D5	815	__sbh_heap_check	named	CRT (sbheap.c __sbh_heap_check): validates every region (IsBadWritePtr of the headers and group data, size chains, bucket links and counts against the bitmaps); returns 0 or a negative error code; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
 0x006F6604	34	dead_6F6604	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F6626	324	__old_sbh_new_region	named	CRT old small-block heap: allocates a new 0x2020-byte header + VirtualAlloc region
-0x006F676A	86	__old_sbh_free_region	named	CRT old small-block heap: releases a region (VirtualFree)
-0x006F67C0	194	__old_sbh_release_unused	named	CRT old small-block heap: releases unused regions
-0x006F6882	87	__old_sbh_find_region	named	CRT old small-block heap: finds the region of an address
-0x006F68D9	69	__old_sbh_free_block	named	CRT old small-block heap: returns a block to its group and releases empty regions
-0x006F691E	520	__old_sbh_alloc	named	CRT old small-block heap: allocate (new region as needed)
-0x006F6B26	292	__old_sbh_alloc_block	named	CRT old small-block heap: allocates from a region's free list
-0x006F6C4A	169	__old_sbh_mark_alloc	named	CRT old small-block heap: marks a block allocated and updates group counts
-0x006F6CF3	350	__old_sbh_heap_walk	named	CRT old small-block heap: counts/walks the regions
+0x006F6626	324	__old_sbh_new_region	named	CRT (V5 sbheap.c __old_sbh_new_region): region header = the static 0x798BF0 when free (0x798C00 == -1) else HeapAlloc(0x2020); reserves 4 MB (VirtualAlloc), commits the first 64 KB, links the header into the circular list at 0x798BF0, fills the page descriptors (16 committed pages free 0xF0 paragraphs, the rest -1 / uncommitted), sets the rover; returns the header or 0
+0x006F676A	86	__old_sbh_release_region	named	CRT (V5 __old_sbh_release_region(region)): VirtualFree(MEM_RELEASE) of the 4 MB, moves the rover 0x79AC10 on, unlinks and HeapFree's the header (the static one is only marked free: 0x798C00 = -1). CORRECTION: was __old_sbh_free_region (same meaning)
+0x006F67C0	194	__old_sbh_decommit_pages	named	CRT (V5 __old_sbh_decommit_pages(count)): from the last region backwards decommits up to count completely free pages (0xF0 free paragraphs) with VirtualFree(MEM_DECOMMIT), marks them -1, --free-page counter 0x7CAC78, releases a region whose pages are all decommitted (__old_sbh_release_region). CORRECTION: was __old_sbh_release_unused
+0x006F6882	87	__old_sbh_find_block	named	CRT (V5 __old_sbh_find_block(p, &region, &page)): region of the list whose committed range holds p (16-aligned, past the 0x100-byte page header); stores region / page and returns the address of p's paragraph map byte (page + 8 + ((p - page - 0x100) >> 4)); 0 otherwise. CORRECTION: was __old_sbh_find_region
+0x006F68D9	69	__old_sbh_free_block	named	CRT (V5 __old_sbh_free_block(region, page, mapbyte)): adds the block's paragraph count back to the page's free count, clears the map byte, resets the page's max-free hint to 0xF1; a page now fully free increments 0x7CAC78 and at 0x20 such pages __old_sbh_decommit_pages(0x10)
+0x006F691E	520	__old_sbh_alloc_block	named	CRT (V5 __old_sbh_alloc_block(paragraphs)): from the rover region 0x79AC10 and its last-used page, scans the page descriptors (free count, max-free hint) for room and allocates with __old_sbh_alloc_block_from_page; else commits uncommitted pages of a region (VirtualAlloc 0x1000 commit, page header init), else a new region; updates the rover; returns the block or 0. CORRECTION: was __old_sbh_alloc
+0x006F6B26	292	__old_sbh_alloc_block_from_page	named	CRT (V5 __old_sbh_alloc_block_from_page(page, freecount, paragraphs)): first-fit run of free paragraphs in the page's map (starting at the page's search start, then from the beginning), marks the run length in the first map byte, updates the search start; returns the block address or 0. CORRECTION: was __old_sbh_alloc_block (that is 0x6F691E)
+0x006F6C4A	169	__old_sbh_resize_block	named	CRT (V5 __old_sbh_resize_block(region, page, mapbyte, newparas)): shrink -> new length in the map byte, the freed paragraphs back to the page free count, hint 0xF1; grow -> only when the following map bytes are free and inside the page, then takes them (adjusting the page's search start and free count); returns 1 / 0; from realloc / _expand. CORRECTION: was __old_sbh_mark_alloc
+0x006F6CF3	350	__old_sbh_heap_check	named	CRT (V5 __old_sbh_heap_check): walks the region list checking the page descriptors, map bytes and free counts; returns 0 or -1..-n; lib, unused (no call, no pointer, no raw hit). CORRECTION: was __old_sbh_heap_walk [dead: no caller or pointer]
 0x006F6E60	5	strchr_chunk_6F6E60	named	a piece of strchr placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x006F6E70	188	strchr	named	CRT strchr (word-at-a-time)
-0x006F6F2C	2597	_input	named	CRT: scanf core (format parser: %d %s %c %f %x, scansets, width, whitespace), 2.6 KB
-0x006F7951	55	_isdigit_lk2	named	CRT: ctype class bit 4 test with locale
-0x006F7988	26	getc_core	named	CRT stdio: getc (decrement the count, read or _filbuf)
-0x006F79A2	23	ungetc_wrap	named	CRT scanf: unget the character unless EOF
-0x006F79B9	36	_skip_digits	named	CRT scanf: reads consecutive digit characters counting them
-0x006F79DD	89	_chsize_lk	named	CRT lowio: _chsize under the handle lock
-0x006F7A36	293	_chsize	named	CRT lowio: _chsize(handle, size): extends with zeros or truncates (SetEndOfFile)
-0x006F7B5B	194	_gmtime_core	named	CRT time: converts broken-down time to time_t (year range 1970..2038 check)
-0x006F7C1D	386	signal	named	CRT: signal(sig, handler): installs handlers for SIGINT/SIGBREAK/SIGFPE/etc. (console ctrl handler)
-0x006F7D9F	98	_ctrlevent_capture	named	CRT: console control handler that dispatches SIGINT/SIGBREAK
-0x006F7E01	386	raise	named	CRT: raise(sig): finds the action, runs it or exits
-0x006F7F83	61	_find_matching_xcptact	named	CRT: finds the exception action entry for a code
+0x006F6E70	188	strchr	named	CRT (strchr.asm strchr(s, c)): aligned dword scan with the 0x7EFEFEFF trick for c and for 0; returns the pointer or 0
+0x006F6F2C	2597	_input	named	CRT (input.c _input(stream, format, args)): the scanf engine: white space (_whiteout), literal matching, %[*][width][h l L I64] c s [ ] d i o x X u n e f g p, DBCS lead bytes, hex via _hextodec, floats through _fassign; returns the number of fields assigned or EOF; from sscanf
+0x006F7951	55	_hextodec	named	CRT (input.c _hextodec(c)): c when it is a digit (_pctype & 4, _isctype when MB_CUR_MAX > 1), else (c & ~0x20) - 7 (so 'A'..'F' follow '9'). CORRECTION: was _isdigit_lk2
+0x006F7988	26	getc_core	named	CRT (input.c _inc(stream)): getc: --_cnt >= 0 -> *_ptr++, else _filbuf
+0x006F79A2	23	ungetc_wrap	named	CRT (input.c _un_inc(c, stream)): ungetc unless c is EOF
+0x006F79B9	36	_whiteout	named	CRT (input.c _whiteout(&count, stream)): ++count and _inc while isspace (0x6E93CE); returns the first non-space character. CORRECTION: was _skip_digits
+0x006F79DD	89	_chsize	named	CRT (chsize.c _chsize(fh, size)): fh < _nhandle and FOPEN -> _lock_fh, _chsize_lk, _unlock_fh; else errno EBADF (9), -1; lib, unused (no call, no pointer, no raw hit). CORRECTION: was _chsize_lk (the two names were swapped) [dead: no caller or pointer]
+0x006F7A36	293	_chsize_lk	named	CRT (chsize.c _chsize_lk(fh, size)): current position and end (_lseek); growing -> writes zero blocks of 0x1000 in binary mode; shrinking -> seek and SetEndOfFile (errno EACCES / _doserrno on failure); restores the position; returns 0 / -1; from _sopen. CORRECTION: was _chsize (the two names were swapped)
+0x006F7B5B	194	__loctotime_t	named	CRT (dtoxtime.c __loctotime_t(yr, mo, dy, hr, mn, sc, dstflag)): years 1970..2038 only (else -1); days from the month table 0x79ADA4 + leap day, __tzset, seconds since 1970 + _timezone 0x79ACC0; DST added (_dstbias 0x79ACC8) when dstflag = 1, or -1 and _daylight 0x79ACC4 with _isindst; returns the time_t. CORRECTION: was _gmtime_core
+0x006F7C1D	386	signal	named	CRT (winsig.c signal(sig, action)): SIGINT / SIGBREAK / SIGABRT / SIGTERM handled in globals 0x7CAC84..0x7CAC90 under lock 1 (installs the console handler _ctrlevent_capture once); SIGFPE / SIGILL / SIGSEGV in the per-thread exception-action table (copied from _XcptActTab on first change); returns the old action or SIG_ERR (errno EINVAL); lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006F7D9F	98	_ctrlevent_capture	named	CRT (winsig.c ctrlevent_capture(type)): console control handler: CTRL_C -> SIGINT action 0x7CAC84, else SIGBREAK 0x7CAC88; none -> 0 (not handled); SIG_IGN -> 1; else resets it to SIG_DFL and calls it; lib, dead chain: only installed by signal (unreferenced)
+0x006F7E01	386	raise	named	CRT (winsig.c raise(sig)): SIGINT / SIGBREAK / SIGABRT / SIGTERM -> global actions (under lock 1), SIGFPE / SIGILL / SIGSEGV -> per-thread table (siglookup); else -1; SIG_IGN -> 0; SIG_DFL -> _exit(3); else saves ptd +0x54 pointers (and the FPE code for SIGFPE, resetting the FPE entries), resets the action and calls it (SIGFPE with the code); returns 0; from abort
+0x006F7F83	61	_siglookup	named	CRT (winsig.c siglookup(sig, table)): first 12-byte exception-action entry whose signal (+4) is sig among 0x797BFC entries, else 0. CORRECTION: was _find_matching_xcptact
 0x006F7FC0	9	dead_6F7FC0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F7FC9	9	__pxcptinfoptrs	named	CRT: &per-thread exception pointers
-0x006F7FD2	486	ldexp_like	named	CRT math: ldexp-style scaling with error paths
-0x006F81B8	88	_wincmdln	named	CRT startup: skips the program name in GetCommandLine and returns the argument tail
-0x006F8210	185	_setenvp	named	CRT startup: builds the environment pointer table from the environment strings
-0x006F82C9	153	_setargv	named	CRT startup: GetModuleFileName into the program name and parse the arguments into argv
-0x006F8362	436	parse_cmdline	named	CRT startup: parses the command line into argv/args (quote and backslash rules)
-0x006F8516	306	__crtGetEnvironmentStringsA	named	CRT startup: GetEnvironmentStrings (W converted to A) copy
-0x006F8648	57	_FF_MSGBANNER	named	CRT: writes the runtime error banner before an abort message
-0x006F8681	339	_NMSG_WRITE	named	CRT: writes a runtime error message by number (message table 0x79AC30), console or MessageBox
+0x006F7FC9	9	__pxcptinfoptrs	named	CRT (winsig.c __pxcptinfoptrs): returns &ptd->_tpxcptinfoptrs (ptd +0x54); lib, dead chain: only from dead_6EBBFF (unreferenced)
+0x006F7FD2	486	ldexp	named	CRT (ldexp.c ldexp(x, exp)): Inf -> x, NaN -> _handle_qnan2(OP_LDEXP 0x19), x == 0 -> x; else _decomp + new exponent: overflow -> _except2 with +-INF, underflow -> denormal / 0 with _except2, else _set_exp; lib, dead chain: only from the unreferenced wrapper dead_6EBDC0. CORRECTION: was ldexp_like
+0x006F81B8	88	_wincmdln	named	CRT (wincmdln.c _wincmdln): _acmdln 0x7CC04C past the program name (quoted with DBCS-aware scan, or up to a space) and the following blanks; _setmbcp(-3) when the MBCS info is not set; from entry
+0x006F8210	185	_setenvp	named	CRT (stdenvp.c _setenvp): counts the environment strings of _aenvptr 0x7CAB30 not starting with '=', _environ 0x7CAAFC = malloc((n + 1) * 4) (failure -> _amsg_exit(9)), copies each string (malloc + strcpy), frees the block, ends with 0; from entry
+0x006F82C9	153	_setargv	named	CRT (stdargv.c _setargv): MBCS init when needed, program name = GetModuleFileNameA into 0x7CAC98 (_pgmptr 0x7CAB0C), parses _acmdln (or the name when empty) twice with parse_cmdline (count, then fill one malloc block of pointers + chars; failure -> _amsg_exit(8)); __argv 0x7CAAF4, __argc 0x7CAAF0; from entry
+0x006F8362	436	parse_cmdline	named	"CRT (stdargv.c parse_cmdline(cmd, argv, args, &numargs, &numchars)): program name (quoted or up to white space, DBCS aware), then arguments with the MS rules: 2n backslashes + quote -> n backslashes and a quote toggle, 2n+1 -> a literal quote, """" inside quotes -> a quote; counts / stores the pointers and the strings"
+0x006F8516	306	__crtGetEnvironmentStringsA	named	CRT (a_env.c __crtGetEnvironmentStringsA): mode 0x7CAD9C: W available -> GetEnvironmentStringsW, size via WideCharToMultiByte, malloc + convert, FreeEnvironmentStringsW; else GetEnvironmentStrings copied into a malloc block (FreeEnvironmentStringsA); returns the block or 0; from entry
+0x006F8648	57	_FF_MSGBANNER	named	"CRT (crt0msg.c _FF_MSGBANNER): when the error mode 0x7CAB38 is 1 (or 0 with a console app, 0x7978E4 == 1): _NMSG_WRITE(252) (blank line), the user banner hook 0x7CADA0, _NMSG_WRITE(255) (""runtime error "")"
+0x006F8681	339	_NMSG_WRITE	named	"CRT (crt0msg.c _NMSG_WRITE(n)): message n from the {number, text} table 0x79AC30..0x79ACC0; console mode -> WriteFile to the stderr handle; GUI -> ""Runtime Error!\n\nProgram: <module name, shortened to 60 chars with ...>\n\n<text>"" in __crtMessageBoxA(""Microsoft Visual C++ Runtime Library"", 0x12010 = MB_ICONHAND | MB_TASKMODAL | MB_SETFOREGROUND; unknown name ""<program name unknown>""); 252 skipped in GUI mode"
 0x006F87D4	49	dead_6F87D4	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F8810	48	_strrev	named	CRT _strrev
-0x006F8840	39	strrchr_	named	CRT strrchr
-0x006F8867	39	_getcwd	named	CRT: getcwd under the directory lock
+0x006F8810	48	_strrev	named	CRT (strrev.c _strrev(s)): reverses s in place, returns s
+0x006F8840	39	strrchr_	named	CRT (strrchr.c strrchr(s, c)): last occurrence of c in s (the terminator included), or 0; from the strrchr wrapper
+0x006F8867	39	_getcwd	named	CRT (getcwd.c _getcwd(buf, n)): _getdcwd(0, buf, n) under lock 0xC (_ENV_LOCK); from _fullpath
 0x006F888E	41	dead_6F888E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F88B7	213	_getdcwd	named	CRT: _getdcwd(drive, buf, size) via GetCurrentDirectory
-0x006F898C	55	_validdrive	named	CRT: true when the drive letter n exists (GetDriveType)
-0x006F89D0	62	strspn	named	CRT: strspn using a 32-byte bit set
-0x006F8A0E	147	_commit	named	CRT lowio: _commit(handle) = FlushFileBuffers under the handle lock
-0x006F8AA1	46	__tzset	named	CRT time: tzset once under lock 0xB
+0x006F88B7	213	_getdcwd	named	"CRT (getcwd.c _getdcwd(drive, buf, n)): drive 0 -> GetCurrentDirectoryA, else _validdrive (bad -> _doserrno 0xF, errno EACCES) and GetFullPathNameA(""X:.""); buf 0 -> malloc(max(n, len + 1)) (ENOMEM), too small -> ERANGE; copies, returns buf or 0"
+0x006F898C	55	_validdrive	named	"CRT (getcwd.c _validdrive(drive)): GetDriveTypeA(""X:\"") not DRIVE_UNKNOWN (0) / DRIVE_NO_ROOT_DIR (1) -> 1; drive 0 -> 1"
+0x006F89D0	62	strspn	named	CRT (strspn.asm): length of the prefix of s made only of characters of the set (32-byte bit map)
+0x006F8A0E	147	_commit	named	CRT (commit.c _commit(fh)): valid open handle -> _lock_fh, FlushFileBuffers(_get_osfhandle) (failure -> _doserrno + errno EBADF), _unlock_fh; returns 0 / -1; from fflush
+0x006F8AA1	46	__tzset	named	CRT (tzset.c __tzset): first call only (0x7CAE60): under lock 0xB (_TIME_LOCK) _tzset_lk and sets the flag
 0x006F8ACF	22	dead_6F8ACF	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F8AE5	647	tzset_core	named	CRT time: parses the TZ environment variable or queries GetTimeZoneInformation
-0x006F8D6C	33	_stbuf_lock	named	CRT: locks 0xB and initializes the standard stream buffer state
-0x006F8D8D	428	_stbuf_init	named	CRT stdio: associates the std streams with the CRT default buffers and handle flags
-0x006F8F39	320	_cftoe_parse_fp	named	CRT float formatter: decomposes an extended value into decimal digits using the power-of-ten table
-0x006F9079	73	_fp_bits_zero_below	named	CRT float formatter: tests that the bits below a position are zero (bignum)
-0x006F90C2	86	_round_bignum_up	named	CRT float: rounds a 96-bit digit string up at a bit position
-0x006F9118	140	_fp_round_digits	named	CRT float: round-to-nearest-even digit helper
-0x006F91A4	27	_copy3dwords	named	CRT float formatter: copies a 96-bit value
-0x006F91BF	12	ZeroInit3_6F91BF	named	zeroes 3 field(s) of the object (empty-container constructor / reset)
-0x006F91CB	27	_bignum_is_zero	named	CRT float formatter: tests a 3-dword bignum for zero
-0x006F91E6	141	_bignum_shift_left	named	CRT float formatter: shifts a 96-bit mantissa left by n bits
-0x006F9273	364	_fp_to_digits	named	CRT float: converts an extended value into a decimal digit string with a table (rounding)
-0x006F93DF	22	_fltin_a	named	CRT float: extended to double (rounding table A)
-0x006F93F5	22	_fltin_b	named	CRT float: extended to float (rounding table B)
-0x006F940B	122	_fp_pack_double	named	CRT float: packs a 96-bit mantissa/exponent into an IEEE double
-0x006F9485	45	_atodbl	named	CRT float: string to double (_fltin core)
-0x006F94B2	46	_fltin_double_a	named	CRT float: string to double with flags (variant)
-0x006F94E0	45	_fltin_float	named	CRT float: string to float
-0x006F950D	119	_fptostr	named	CRT float formatter: converts the decimal digits and exponent into a string with rounding
-0x006F9584	92	_fltout	named	CRT float: converts a double into decimal digits (calls _fp_unpack and the digit generator)
-0x006F95E0	182	_fp_unpack	named	CRT float formatter: unpacks a double into a 96-bit mantissa + exponent
-0x006F9696	9	_amsg_exit_2	named	CRT stub: _amsg_exit(2)
-0x006F969F	208	_fpmath_err_two	named	CRT math: error-path handler for the x87 intrinsics with two inputs
-0x006F976F	28	_IsBadReadPtr	named	C++ EH: IsBadReadPtr==0
-0x006F978B	28	_IsBadWritePtr	named	C++ EH: IsBadWritePtr==0
-0x006F97A7	24	_IsBadCodePtr	named	C++ EH: IsBadCodePtr==0
-0x006F97BF	23	abort	named	CRT: abort(): writes the abort message (_NMSG_WRITE 10), raise(SIGABRT), exit(3)
-0x006F97D6	3	Nop_6F97D6	named	empty function (returns immediately)
-0x006F97D9	68	_getbuf	named	CRT stdio: allocates a 4 KB buffer for a stream (malloc 0x1000)
-0x006F981D	41	_isatty_lk	named	CRT lowio: file-handle flag 0x40 test (device)
-0x006F9846	89	wctomb_lk	named	CRT: wctomb under the locale lock
-0x006F989F	105	wctomb	named	CRT: wctomb via WideCharToMultiByte
+0x006F8AE5	647	_tzset_lk	named	"CRT (tzset.c _tzset_lk): under lock 0xC resets the DST cache (0x79AD58 / 0x79AD68 = -1); TZ unset -> GetTimeZoneInformation into 0x7CADB0: _timezone 0x79ACC0 = Bias * 60 (+ StandardBias), _daylight 0x79ACC4 / _dstbias 0x79ACC8 from DaylightDate / DaylightBias, _tzname from the wide names (WideCharToMultiByte, '?' default); TZ set (and changed, copy kept in 0x7CADAC) -> parses ""SSS[+|-]hh[:mm[:ss]][DDD]"": names (3 chars), offset, daylight. CORRECTION: was tzset_core"
+0x006F8D6C	33	_isindst	named	CRT (tzset.c _isindst(tm*)): _isindst_lk under lock 0xB (_TIME_LOCK). CORRECTION: was _stbuf_lock (nothing to do with stdio)
+0x006F8D8D	428	_isindst_lk	named	"CRT (tzset.c _isindst_lk(tm*)): no daylight (0x79ACC4) -> 0; recomputes the DST start / end of tm's year when not cached (0x79AD58 / 0x79AD68) with cvtdate: from the TZ rules (first Sunday of April / last Sunday of October, 2 am) or from the GetTimeZoneInformation dates (day-in-month or absolute); compares yday and ms of the day; returns 1 inside DST. CORRECTION: was _stbuf_init ""std streams"""
+0x006F8F39	320	_cvtdate	named	"CRT (tzset.c cvtdate(trantype, datetype, year, month, week, dayofweek, date, hour, min, sec, msec)): datetype 1 = ""week-th dayofweek of month"" (week 5 = last) computed from the cumulative day tables 0x79AD70 (leap) / 0x79ADA4, else an absolute date; stores yday and ms into the DST start (trantype 1, 0x79AD58..) or end (0, 0x79AD68..) cache, adjusting the end by _dstbias. CORRECTION: was _cftoe_parse_fp ""float formatter"""
+0x006F9079	73	_ZeroTail	named	CRT (intrncvt.c _ZeroTail(man, nbit)): 1 when every bit of the 96-bit mantissa from nbit on is 0. CORRECTION: was _fp_bits_zero_below (same meaning)
+0x006F90C2	86	_IncMan	named	CRT (intrncvt.c _IncMan(man, nbit)): adds 1 at bit nbit of the 96-bit mantissa and propagates the carry up (___add_12 style 32-bit adds); returns the final carry. CORRECTION: was _round_bignum_up
+0x006F9118	140	_RoundMan	named	CRT (intrncvt.c _RoundMan(man, nbit)): round to nearest at precision nbit: bit nbit set and the tail not zero (or odd) -> _IncMan(nbit - 1); clears the bits after nbit; returns the carry. CORRECTION: was _fp_round_digits
+0x006F91A4	27	_CopyMan	named	CRT (intrncvt.c _CopyMan(dst, src)): copies the 3 dwords of a mantissa. CORRECTION: was _copy3dwords (same meaning)
+0x006F91BF	12	_FillZeroMan	named	CRT (intrncvt.c _FillZeroMan(man)): zeroes the 3 dwords of a mantissa. CORRECTION: was ZeroInit3_6F91BF
+0x006F91CB	27	_IsZeroMan	named	CRT (intrncvt.c _IsZeroMan(man)): 1 when all 3 dwords are 0. CORRECTION: was _bignum_is_zero (same meaning)
+0x006F91E6	141	_ShrMan	named	CRT (intrncvt.c _ShrMan(man, n)): shifts the 96-bit mantissa RIGHT by n bits (bit shift with carry between dwords, then whole-dword moves). CORRECTION: was _bignum_shift_left (it shifts right)
+0x006F9273	364	_ld12cvt	named	"CRT (intrncvt.c _ld12cvt(_LDBL12*, out, FpFormatDescriptor*)): converts the 96-bit long double to the format of the descriptor (max / min exponent, precision, bias, size): zero, rounding with _RoundMan (carry -> exponent + 1), denormals by _ShrMan, overflow -> INF (returns 1 = overflow), underflow -> 0 / denormal (2); writes the double or float. CORRECTION: was _fp_to_digits ""decimal digit string"""
+0x006F93DF	22	_ld12tod	named	CRT (intrncvt.c _ld12tod(_LDBL12*, double*)): _ld12cvt with the double descriptor 0x79ADE0. CORRECTION: was _fltin_a
+0x006F93F5	22	_ld12tof	named	CRT (intrncvt.c _ld12tof(_LDBL12*, float*)): _ld12cvt with the float descriptor 0x79ADF8. CORRECTION: was _fltin_b
+0x006F940B	122	_ld12told	named	"CRT (intrncvt.c _ld12told(_LDBL12*, long double*)): rounds the 96-bit mantissa to 64 bits (carry -> mantissa 0x80000000.., exponent + 1) and stores the 80-bit value; returns 1 on exponent overflow (0x7FFF). CORRECTION: was _fp_pack_double ""IEEE double"""
+0x006F9485	45	_atodbl	named	CRT (intrncvt.c _atodbl(double*, str)): __strgtold12 then _ld12tod; returns the conversion flags; from _fassign
+0x006F94B2	46	_atoldbl	named	CRT (intrncvt.c _atoldbl(long double*, str)): __strgtold12 (mode 1) then _ld12told; lib, unused (no call, no pointer, no raw hit). CORRECTION: was _fltin_double_a [dead: no caller or pointer]
+0x006F94E0	45	_atoflt	named	CRT (intrncvt.c _atoflt(float*, str)): __strgtold12 then _ld12tof; from _fassign. CORRECTION: was _fltin_float (same meaning)
+0x006F950D	119	_fptostr	named	CRT (_fptostr.c _fptostr(buf, digits, STRFLT)): copies `digits` mantissa digits (padding with '0') after a leading '0', rounds up on a next digit >= '5' (carrying 9s), a carry into the leading '1' bumps the decimal exponent, else the leading '0' is removed (memmove)
+0x006F9584	92	_fltout	named	CRT (cvt.c _fltout2(double, STRFLT*, buf)): __dtold to a 96-bit long double, $I10_OUTPUT (_ld12tostr) with 17 digits; fills sign, decpt, flag and the mantissa string (strcpy into buf); returns the STRFLT
+0x006F95E0	182	__dtold	named	CRT (cvt.c __dtold(_LDOUBLE*, double*)): unpacks a double into an 80-bit value: exponent + 0x3C00 (denormal 0x3C01 without the hidden bit, 0x7FF -> 0x7FFF), mantissa << 11 with the explicit top bit, normalised by left shifts for denormals, sign kept. CORRECTION: was _fp_unpack (same meaning)
+0x006F9696	9	_fptrap	named	CRT (crt0fp.c _fptrap): _amsg_exit(2) (R6002 floating point not loaded); the default of the 6 _cfltcvt_tab slots 0x797B10..0x797B24. CORRECTION: was _amsg_exit_2 (same meaning)
+0x006F969F	208	_87except	named	CRT (87except.c _87except(opcode, struct _exception*, &cw)): error type -> IEEE flags (_DOMAIN 1 / _TLOSS 5 -> invalid 8, _SING 2 -> 4, _OVERFLOW 3 -> 0x11, _UNDERFLOW 4 -> 0x12, 8 -> inexact 0x10; 7 -> becomes _DOMAIN with no raise); _handle_exc, else _raise_exc (two operands for opcodes 0x10 / 0x16 / 0x1D); restores the CW (_ctrlfp); unless type 8: _matherr flag clear and _matherr() nonzero -> done; else _set_errno. CORRECTION: was _fpmath_err_two
+0x006F976F	28	_ValidateRead	named	CRT C++ EH (validate.cpp _ValidateRead(p, n)): !IsBadReadPtr(p, n). CORRECTION: was _IsBadReadPtr (it returns the negation)
+0x006F978B	28	_ValidateWrite	named	CRT C++ EH (validate.cpp _ValidateWrite(p, n)): !IsBadWritePtr(p, n). CORRECTION: was _IsBadWritePtr
+0x006F97A7	24	_ValidateExecute	named	CRT C++ EH (validate.cpp _ValidateExecute(fn)): !IsBadCodePtr(fn). CORRECTION: was _IsBadCodePtr
+0x006F97BF	23	abort	named	"CRT (abort.c abort): _NMSG_WRITE(10) (""abnormal program termination""), raise(SIGABRT 0x16), _exit(3); from terminate and its __except body"
+0x006F97D6	3	_matherr	named	"CRT (matherr.c _matherr(struct _exception*)): the default user hook, returns 0 (errno is then set by the caller). CORRECTION: was Nop_6F97D6 ""empty function"" (it returns 0)"
+0x006F97D9	68	_getbuf	named	CRT (_getbuf.c _getbuf(FILE*)): ++_cflush 0x7CABE4; malloc(0x1000) -> _base, _IOMYBUF (8), _bufsiz 0x1000; failure -> _IONBF (4), the 2-byte _charbuf (+0x14), _bufsiz 2; _ptr = _base, _cnt = 0
+0x006F981D	41	_isatty	named	CRT (isatty.c _isatty(fh)): fh < _nhandle -> _osfile(fh) & FDEV (0x40), else 0. CORRECTION: was _isatty_lk (no lock involved)
+0x006F9846	89	wctomb	named	CRT (wctomb.c wctomb(mbs, wc)): locale refcount 0x7CC054 (lock 0x13 while setlocale runs) around _wctomb_lk 0x6F989F; from _output (%C / %S). CORRECTION: was wctomb_lk (the two names were swapped)
+0x006F989F	105	_wctomb_lk	named	CRT (wctomb.c _wctomb_lk(mbs, wc)): mbs 0 -> 0; C locale: wc < 0x100 -> one byte, else EILSEQ (0x2A) and -1; else WideCharToMultiByte(LC_CTYPE code page 0x7CAC00, WC_COMPOSITECHECK | WC_SEPCHARS 0x220, MB_CUR_MAX) and -1 + EILSEQ when the default char was used. CORRECTION: was wctomb (swapped)
 0x006F9908	129	dead_6F9908	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006F9989	1185	_strgtold12	named	CRT float: parses a decimal string into a 12-byte extended number (sign, digits, exponent), 1.2 KB
+0x006F9989	1185	_strgtold12	named	CRT (strgtold.c __strgtold12(_LDBL12*, &end, str, mult12, scale, decpt, implicit_E)): state machine over sign, digits, decimal point (locale *_decimal_point), exponent (e / E / d / D), up to 21 significant digits into a buffer, then the 12-byte mantissa (__mtold12, the _atoflt_digits helper) and __multtenpow12 for the exponent; returns SLD flags (1 underflow, 2 overflow, 4 no digits) and the end pointer
 0x006F9E2A	47	sub_6F9E2A	named	unregistered function, reached by call / pointer from 0x2F99EF (gaps.py 2026-11-06)
-0x006F9E5A	60	_fltin_double_b	named	CRT float: string to double returning status flags
-0x006F9E96	236	__crtGetStringTypeW	named	CRT locale: GetStringTypeW wrapper with fallbacks
-0x006F9F82	4	vt_74819C::Nop_6F9F82	named	empty function (returns immediately)
-0x006F9F86	89	_getstringtype_unwind_a	named	CRT funclet stub
-0x006F9FDF	4	vt_7481A8::Nop_6F9FDF	named	empty function (returns immediately)
-0x006F9FE3	120	_getstringtype_unwind_b	named	CRT funclet stub (memmove)
-0x006FA05B	312	_getlocaleinfo	named	CRT locale: gets a locale string for a LCID/LCTYPE into a table slot (62 callers)
+0x006F9E5A	60	__STRINGTOLD	named	CRT (strgtold.c __STRINGTOLD(_LDOUBLE*, &end, str, mult12)): __strgtold12 then _ld12told; overflow adds SLD_OVERFLOW (2); returns the flags; lib, unused (no call, no pointer, no raw hit). CORRECTION: was _fltin_double_b [dead: no caller or pointer]
+0x006F9E96	236	__crtGetStringTypeW	named	CRT (aw_str.c __crtGetStringTypeW(type, src, n, out, codepage, lcid)): first call probes GetStringTypeW (mode 0x7CAE64 = 1 W, 2 A); W -> GetStringTypeW; A -> code page (0 -> the locale's), WideCharToMultiByte into an _alloca buffer, GetStringTypeA(lcid), copies the types back (one per wide char, memmove of n words); returns the BOOL
+0x006F9F82	4	_crtGetStringTypeW_filter1	named	"CRT: SEH filter expression of the first _alloca __try in __crtGetStringTypeW (scope table 0x74819C): returns 1. CORRECTION: was vt_74819C::Nop ""empty function"""
+0x006F9F86	89	_crtGetStringTypeW_except1	named	"CRT: __except body of the first _alloca in __crtGetStringTypeW (scope table 0x7481A0): multibyte buffer [ebp-0x2C] = 0 (returns 0), then the continuation (WideCharToMultiByte 0x220, second _alloca, GetStringTypeA). CORRECTION: was _getstringtype_unwind_a ""funclet stub"""
+0x006F9FDF	4	_crtGetStringTypeW_filter2	named	"CRT: SEH filter expression of the second _alloca __try in __crtGetStringTypeW (scope table 0x7481A8): returns 1. CORRECTION: was vt_7481A8::Nop ""empty function"""
+0x006F9FE3	120	_crtGetStringTypeW_except2	named	CRT: __except body of the second _alloca in __crtGetStringTypeW (scope table 0x7481AC): try level -1, restores the SEH chain, returns 0
+0x006FA05B	312	_getlocaleinfo	named	CRT (initctyp / inithelp.c __getlocaleinfo(lc_type, lcid, fieldtype, address)): type 1 (string) -> __crtGetLocaleInfoA into a 128-byte buffer (or a malloc'ed one of the needed size), *address = malloc copy; type 0 (number) -> __crtGetLocaleInfoW into a 4-WCHAR static buffer 0x7CAE68 and the decimal digits accumulated into the byte *address; returns 0, -1 on failure
 0x006FA193	6	dead_6FA193	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FA1A0	257	_strnicmp_lk	named	CRT: _strnicmp with locale lock
-0x006FA2A1	23	Thunk_FUN_006fa2b8_6FA2A1	named	forwards to FUN_006fa2b8
-0x006FA2B8	517	_atodbl_parse	named	CRT scanf/strtod: parses decimal digits of a number string into the 96-bit mantissa
+0x006FA1A0	257	_strnicmp	named	CRT (strnicmp: _strnicmp(s1, s2, n)): n == 0 -> 0; C locale (0x7CABF0 == 0) -> inline ASCII fold (A-Z + 0x20); else locale refcount 0x7CC054 (lock 0x13 during setlocale) and tolower per character; returns the difference. CORRECTION: was _strnicmp_lk (it is the public locking version)
+0x006FA2A1	23	strtol	named	CRT (strtol.c strtol(nptr, endptr, base)): strtoxl(nptr, endptr, base, 0); from __heap_select. CORRECTION: was Thunk_FUN_006fa2b8
+0x006FA2B8	517	strtoxl	named	"CRT (strtol.c strtoxl(nptr, endptr, ibase, flags)): skips isspace, sign, base 0 / 16 prefixes (""0x""), accumulates digits / letters below the base; overflow -> ERANGE (0x22) and LONG_MAX / LONG_MIN (or ULONG_MAX with flag 1 unsigned), no digits -> 0 and end = nptr; stores the end pointer. CORRECTION: was _atodbl_parse ""96-bit mantissa"""
 0x006FA4BD	23	dead_6FA4BD	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FA4D4	93	mbstowcs	named	CRT: mbstowcs under the locale lock
-0x006FA531	201	mbstowcs_core	named	CRT: multibyte to wide conversion (MultiByteToWideChar) with limit
+0x006FA4D4	93	mbtowc	named	CRT (mbtowc.c mbtowc(pwc, s, n)): locale refcount 0x7CC054 (lock 0x13 during setlocale) around _mbtowc_lk; from _input (%C / %S). CORRECTION: was mbstowcs (it converts one character)
+0x006FA531	201	_mbtowc_lk	named	CRT (mbtowc.c _mbtowc_lk(pwc, s, n)): s 0 or n 0 -> 0; *s == 0 -> 0 (stores L'\0'); C locale -> zero-extends one byte, returns 1; lead byte (_pctype & 0x8000) -> MultiByteToWideChar(code page, MB_PRECOMPOSED | MB_ERR_INVALID_CHARS, s, MB_CUR_MAX) returns MB_CUR_MAX (n too small or failure -> EILSEQ, -1); single byte -> 1. CORRECTION: was mbstowcs_core
 0x006FA5FA	41	dead_6FA5FA	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FA623	110	ungetc	named	CRT: ungetc(ch, stream)
-0x006FA691	89	_setmode_lk	named	CRT lowio: _setmode under the handle lock
-0x006FA6EA	97	_setmode	named	CRT lowio: _setmode(handle, mode) text/binary flags
-0x006FA74B	137	__crtMessageBoxA	named	CRT: dynamically loads user32 MessageBoxA/GetActiveWindow/GetLastActivePopup and shows the runtime error box
+0x006FA623	110	_ungetc_lk	named	CRT (ungetc.c _ungetc_lk(c, stream)): c != EOF and the stream readable (or R/W not writing): no buffer -> _getbuf; at the buffer start with data -> -1, else room by _ptr++; string streams (_IOSTRG) only accept the same character back; *--_ptr = c, ++_cnt, clears _IOEOF, sets _IOREAD; returns c & 0xFF or -1; from _input's _un_inc. CORRECTION: was ungetc (the locking ungetc is the unreferenced dead_6FA5FA)
+0x006FA691	89	_setmode	named	CRT (setmode.c _setmode(fh, mode)): valid open fh -> _lock_fh, _setmode_lk, _unlock_fh; else EBADF, -1; lib, unused (no call, no pointer, no raw hit). CORRECTION: was _setmode_lk (the two names were swapped) [dead: no caller or pointer]
+0x006FA6EA	97	_setmode_lk	named	CRT (setmode.c _setmode_lk(fh, mode)): _O_BINARY 0x8000 clears FTEXT (0x80) in _osfile, _O_TEXT 0x4000 sets it, else EINVAL -1; returns the previous mode; from _chsize_lk (switch to binary and back). CORRECTION: was _setmode (swapped)
+0x006FA74B	137	__crtMessageBoxA	named	CRT (crtmbox.c __crtMessageBoxA(text, caption, type)): first call loads user32.dll and MessageBoxA / GetActiveWindow / GetLastActivePopup (0x7CAE74.. ; none -> 0); owner = the last active popup of the active window; returns MessageBoxA(owner, text, caption, type)
 0x006FA7D4	33	dead_6FA7D4	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FA7F5	125	getenv	named	CRT: getenv(name) over the environment array
-0x006FA872	33	_add96_carry	named	CRT float: adds two dwords with carry flag result
-0x006FA893	94	___add_12	named	CRT float: 96-bit add with carry propagation
-0x006FA8F1	46	_shl96_1	named	CRT float: shifts a 96-bit value left by 1
-0x006FA91F	45	_shr96_1	named	CRT float: shifts a 96-bit value right by 1
-0x006FA94C	199	_atoflt_digits	named	CRT float: converts a decimal digit string to a 96-bit extended number
-0x006FAA13	659	_ld12tostr	named	"CRT float: converts a 12-byte extended value to digits (""1#SNAN"", ""1#IND"", ""1#INF"" special strings)"
-0x006FACA6	544	_mulfp96	named	CRT float: 96-bit multiply (shift-add)
-0x006FAEC6	124	_multtenpow	named	CRT float: multiplies the mantissa by 10^n using the power tables
-0x006FAF42	185	__crtGetLocaleInfoW	named	CRT locale: GetLocaleInfoW with A-fallback
-0x006FAFFB	4	vt_748214::Nop_6FAFFB	named	empty function (returns immediately)
-0x006FAFFF	86	_crtGetLocaleInfoW_unwind	named	CRT funclet stub
-0x006FB055	191	__crtGetLocaleInfoA	named	CRT locale: GetLocaleInfoA with fallback
-0x006FB114	4	vt_748224::Nop_6FB114	named	empty function (returns immediately)
-0x006FB118	91	_crtGetLocaleInfoA_unwind	named	CRT funclet stub
-0x006FB173	63	_mbsnbicoll	named	CRT: multibyte case-insensitive collating compare of n bytes
-0x006FB1B2	110	_findenv	named	CRT: searches the environment array for a variable name
-0x006FB220	439	__crtCompareStringA	named	CRT locale: CompareStringA with code page conversion
-0x006FB3D7	4	vt_748234::Nop_6FB3D7	named	empty function (returns immediately)
-0x006FB3DB	107	__crtCompareStringW_unwind	named	CRT funclet stub
-0x006FB446	4	vt_748240::Nop_6FB446	named	empty function (returns immediately)
-0x006FB44A	83	__crtLCMap_unwind	named	CRT funclet stub
-0x006FB49D	43	_strnlen_b	named	CRT: length of a string limited by n
-0x006FB4C8	391	_putenv_core	named	CRT: putenv core: replaces/adds/removes a variable in the environment array
-0x006FB64F	88	_findenv_idx	named	CRT: environment lookup returning the index (negative if not found)
-0x006FB6A7	103	_copy_environ	named	CRT: duplicates an environment pointer array (strdup each string)
+0x006FA7F5	125	_getenv_lk	named	"CRT (getenv.c _getenv_lk(name)): environment initialised (0x7CC288) and _environ 0x7CAAFC present (built from the wide environment 0x7CAB04 by __wtomb_environ when needed): first ""name="" entry compared case-insensitively (_mbsnbicoll); returns the value pointer or 0; from _tzset_lk (the locking getenv is the unreferenced dead_6FA7D4). CORRECTION: was getenv"
+0x006FA872	33	__addl	named	CRT (mantold.c __addl(x, y, &sum)): sum = x + y, returns the carry. CORRECTION: was _add96_carry
+0x006FA893	94	___add_12	named	CRT (mantold.c ___add_12(x, y)): 96-bit add x += y with carries
+0x006FA8F1	46	___shl_12	named	CRT (mantold.c ___shl_12(x)): 96-bit shift left by 1. CORRECTION: was _shl96_1 (same meaning)
+0x006FA91F	45	___shr_12	named	CRT (mantold.c ___shr_12(x)): 96-bit shift right by 1. CORRECTION: was _shr96_1 (same meaning)
+0x006FA94C	199	__mtold12	named	CRT (mantold.c __mtold12(digits, n, _LDBL12*)): mantissa = mantissa * 10 + digit for each of the n digit values (shl, shl, add, shl, add), then normalises (16-bit then 1-bit left shifts, exponent from 0x404E down) and stores the exponent word. CORRECTION: was _atoflt_digits
+0x006FAA13	659	$I10_OUTPUT	named	"CRT (cvt.c $I10_OUTPUT(ld12 lo, mid, hi, ndigits, flags, FOS*)): sign, special values (""1#SNAN"", ""1#QNAN"", ""1#INF"", ""1#IND""), decimal exponent estimate (log10(2) constant 0x4D10 etc.), scales by __multtenpow12, then produces up to 21 digits by repeated multiply by 10 with rounding; fills the FOS {exp, sign, digit count, digits}; returns 1 / 0 (special). CORRECTION: was _ld12tostr (same meaning)"
+0x006FACA6	544	___ld12mul	named	CRT (tenpow.c ___ld12mul(px, py)): 12-byte long double multiply: exponent sum checks (overflow -> INF, underflow -> 0), 16-bit partial products accumulated with __addl, normalised (___shl_12), rounded (0x8000 bit), result stored in px. CORRECTION: was _mulfp96
+0x006FAEC6	124	__multtenpow12	named	CRT (tenpow.c __multtenpow12(ld12, pow, mult12)): multiplies by 10^pow using the power tables 0x79AE00 (positive) / 0x79AF60 (negative): per octal digit of |pow| a table entry (0x54-byte steps of 7 x 0x0C entries, big ones rounded first), ___ld12mul; mult12 0 clears the low word first. CORRECTION: was _multtenpow (same meaning)
+0x006FAF42	185	__crtGetLocaleInfoW	named	CRT (aw_loc.c __crtGetLocaleInfoW(lcid, type, buf, n, codepage)): first call probes GetLocaleInfoW (mode 0x7CAE80 = 1 W, 2 A); W -> GetLocaleInfoW; A -> GetLocaleInfoA into an _alloca buffer, MultiByteToWideChar (code page 0 -> the locale's); returns the length or 0
+0x006FAFFB	4	_crtGetLocaleInfoW_filter	named	"CRT: SEH filter expression of the _alloca __try in __crtGetLocaleInfoW (scope table 0x748214): returns 1. CORRECTION: was vt_748214::Nop ""empty function"""
+0x006FAFFF	86	_crtGetLocaleInfoW_except	named	CRT: __except body of the _alloca in __crtGetLocaleInfoW (scope table 0x748218): try level -1, restores the SEH chain, returns 0
+0x006FB055	191	__crtGetLocaleInfoA	named	CRT (aw_loc.c __crtGetLocaleInfoA(lcid, type, buf, n, codepage)): mode 0x7CAE84; A -> GetLocaleInfoA; W -> GetLocaleInfoW into an _alloca wide buffer, WideCharToMultiByte to buf; returns the length or 0
+0x006FB114	4	_crtGetLocaleInfoA_filter	named	"CRT: SEH filter expression of the _alloca __try in __crtGetLocaleInfoA (scope table 0x748224): returns 1. CORRECTION: was vt_748224::Nop ""empty function"""
+0x006FB118	91	_crtGetLocaleInfoA_except	named	CRT: __except body of the _alloca in __crtGetLocaleInfoA (scope table 0x748228): try level -1, restores the SEH chain, returns 0
+0x006FB173	63	_mbsnbicoll	named	CRT (mbsnbicl.c _mbsnbicoll(s1, s2, n)): n 0 -> 0; __crtCompareStringA(MBCS lcid 0x7CC284, NORM_IGNORECASE, s1, n, s2, n, MBCS code page 0x7CC058) - 2, failure -> _NLSCMPERROR 0x7FFFFFFF
+0x006FB1B2	110	__wtomb_environ	named	"CRT (wtombenv.c __wtomb_environ): for every string of the wide environment _wenviron 0x7CAB04: WideCharToMultiByte(CP_OEMCP 1) into a malloc block and __crtsetenv(str, 0); returns 0, -1 on a failure. CORRECTION: was _findenv ""searches the environment"""
+0x006FB220	439	__crtCompareStringA	named	CRT (aw_cmp.c __crtCompareStringA(lcid, flags, s1, n1, s2, n2, codepage)): first call probes CompareStringW (mode 0x7CAE88); n1 / n2 limited by strncnt; A mode -> CompareStringA (lcid or the LC_COLLATE one); W mode: when either length is 0 compares with GetCPInfo lead-byte care, else both strings converted with MultiByteToWideChar into _alloca buffers and CompareStringW; returns 1 / 2 / 3 or 0
+0x006FB3D7	4	_crtCompareStringA_filter1	named	"CRT: SEH filter expression of the first _alloca __try in __crtCompareStringA (scope table 0x748234): returns 1. CORRECTION: was vt_748234::Nop ""empty function"""
+0x006FB3DB	107	_crtCompareStringA_except1	named	CRT: __except body of the first _alloca in __crtCompareStringA (scope table 0x748238): wide buffer 1 [ebp-0x24] = 0 (returns 0), then the continuation (MultiByteToWideChar of s1, second _alloca, CompareStringW). CORRECTION: was __crtCompareStringW_unwind
+0x006FB446	4	_crtCompareStringA_filter2	named	"CRT: SEH filter expression of the second _alloca __try in __crtCompareStringA (scope table 0x748240): returns 1. CORRECTION: was vt_748240::Nop ""empty function"""
+0x006FB44A	83	_crtCompareStringA_except2	named	CRT: __except body of the second _alloca in __crtCompareStringA (scope table 0x748244): try level -1, restores the SEH chain, returns 0. CORRECTION: was __crtLCMap_unwind (it belongs to __crtCompareStringA)
+0x006FB49D	43	_strnlen_b	named	CRT (aw_cmp.c strncnt(s, n)): length of s, at most n; code identical to 0x6F2202
+0x006FB4C8	391	__crtsetenv	named	"CRT (setenv.c __crtsetenv(option, primary)): option must contain '=' not at the start; ""name="" with an empty value removes; copies the initial environment (copy_environ) before the first change; creates _environ / _wenviron (malloc(4)) when absent; findenv -> replaces (frees the old string) / removes (shifts the array, realloc) / appends (realloc + 2 slots); for the primary environment also SetEnvironmentVariableA(name, value or 0); returns 0 / -1. CORRECTION: was _putenv_core"
+0x006FB64F	88	_findenv_idx	named	CRT (setenv.c findenv(name, len)): index of the _environ entry whose first len bytes equal name (_mbsnbicoll) followed by '=' or '\0'; else minus the entry count
+0x006FB6A7	103	_copy_environ	named	CRT (setenv.c copy_environ(env)): malloc((n + 1) * 4) (failure -> _amsg_exit(9)) and _strdup of every string; returns the copy (0 for a null array)
 0x006FB70E	666	dead_6FB70E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FB9A8	6	TerminateProcess_thunk	named	import thunk: KERNEL32 (jump through the IAT)
+0x006FB9A8	6	RtlUnwind_thunk	named	import thunk: jmp [IAT] KERNEL32 RtlUnwind; from SEH_ClearUnwindFlag (_UnwindNestedFrames) and __global_unwind2. CORRECTION: was TerminateProcess_thunk
 0x006FB9AE	18	TerminateProcess_thunk_chunk_6FB9AE	named	a piece of TerminateProcess_thunk placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
 0x006FB9C0	1668	dead_6FB9C0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FC044	6	WINSPOOL_GetFileTitleA	named	import thunk: COMDLG32 GetFileTitleA
-0x006FC04A	6	WINSPOOL_ClosePrinter	named	import thunk: ClosePrinter
-0x006FC050	6	WINSPOOL_DocumentPropertiesA	named	import thunk: DocumentPropertiesA
-0x006FC056	6	WINSPOOL_OpenPrinterA	named	import thunk: OpenPrinterA
+0x006FC044	6	COMDLG32_GetFileTitleA	named	import thunk: jmp [IAT] COMDLG32 GetFileTitleA; from AfxGetFileTitle. CORRECTION: was WINSPOOL_GetFileTitleA (it is not a WINSPOOL import)
+0x006FC04A	6	WINSPOOL_ClosePrinter	named	import thunk: jmp [IAT] WINSPOOL ClosePrinter; from CPrintDialog::SelectPrinter (MFC)
+0x006FC050	6	WINSPOOL_DocumentPropertiesA	named	import thunk: jmp [IAT] WINSPOOL DocumentPropertiesA; from CPrintDialog::SelectPrinter
+0x006FC056	6	WINSPOOL_OpenPrinterA	named	import thunk: jmp [IAT] WINSPOOL OpenPrinterA; from CPrintDialog::SelectPrinter
 0x006FC05C	36	WINSPOOL_OpenPrinterA_chunk_6FC05C	named	a piece of WINSPOOL_OpenPrinterA placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
 0x006FC080	48	dead_6FC080	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FC0B0	124	ostream::put	named	ostream::put(char): prefix, store the character (PutChar), flush; 127 callers
-0x006FC12C	34	CMemBuf::PutChar	named	append a byte at +0x1C while below the limit +0x20; returns the byte or -1 (MFC archive/stream buffer)
-0x006FC14E	171	ostream::operator<<_int	named	formats an int with sprintf and writes it with padding (osfx)
-0x006FC1F9	116	istream::ipfx	named	iostream: input prefix (lock, check state, flush tied stream)
-0x006FC26D	176	ostream::flush_osfx	named	iostream: osfx(): after output, flush when unitbuf and handle errors (sets badbit on failure)
-0x006FC31D	41	ostream::operator<<_const_char	named	writes a C string with padding; 211 callers
-0x006FC346	136	istream::ipfx_lock	named	iostream: prefix with the stream lock (EnterCriticalSection when locking enabled)
-0x006FC3CE	54	ostream::ostream_ctor	named	ostream ctor: vtable 0x748284 and ios init
+0x006FC0B0	124	ostream::put	named	MS classic iostream (LIBCI ostream::put(char)): opfx; width (ios +0x30) 0 -> streambuf::sputc (failure -> overflow vt +0x1C, EOF -> state |= failbit | badbit 6); else padded write of the 1-char string; osfx; returns *this
+0x006FC12C	34	streambuf::sputc	named	MS classic iostream (streambuf::sputc(c), inline copy): pptr +0x1C < epptr +0x20 -> *pptr++ = c, returns c & 0xFF; else overflow(c) (vt +0x1C). CORRECTION: was CMemBuf::PutChar
+0x006FC14E	171	ostream::operator<<_unsigned_int	named	"MS classic iostream (ostream::operator<<(unsigned int)): opfx; format ""%u"" (0x79614C) with hex (flags 0x40) -> ""%x"" / ""%X"" (uppercase 0x200) and leader ""0x"" / ""0X"", oct (0x20) -> ""%o""; showbase (0x80) leader ""0""; decimal with showpos (0x400) -> ""+""; sprintf, writepad(leader, digits), osfx. CORRECTION: was operator<<_int (the int and unsigned names were swapped: 0x6FC9C6 is the ""%d"" one)"
+0x006FC1F9	116	ostream::opfx	named	MS classic iostream (ostream::opfx): locks the ios (x_lockc +0x34 < 0 -> critical section +0x38); state +8 != 0 -> sets failbit, unlocks, returns 0; flushes the tied stream (x_tie +0x20); returns 1. CORRECTION: was istream::ipfx (output prefix of ostream)
+0x006FC26D	176	ostream::osfx	named	MS classic iostream (ostream::osfx): width +0x30 = 0; unitbuf (flags 0x2000) -> sync (bp vt +4), failure -> state = 6; stdio (0x4000) -> fflush(stdout 0x798080) and fflush(stderr 0x7980A0) (failure -> failbit); unlocks the ios. CORRECTION: was ostream::flush_osfx (same meaning)
+0x006FC31D	41	ostream::operator<<_const_char	named	"MS classic iostream (ostream::operator<<(const char*)): opfx, writepad("""" prefix 0x79B298, s), osfx"
+0x006FC346	136	ostream::flush	named	MS classic iostream (ostream::flush): locks the ios and the streambuf (lock +0x30 / +0x34), sync (bp vt +4), EOF -> failbit, unlocks both; returns *this; the endl / flush manipulators of the game call it (sub_435000 jumps to it). CORRECTION: was istream::ipfx_lock
+0x006FC3CE	54	ostream::ostream_ctor	named	MS classic iostream (ostream::ostream() protected): most-derived flag -> vbtable 0x748284 and ios::ios() at +8; vtable 0x748280 in the ios part; +4 = 0
 0x006FC404	43	sub_6FC404	named	unregistered function, reached by call / pointer from 0x348280 (gaps.py 2026-11-06)
-0x006FC42F	101	ostream::ostream_ctor_buf	named	ostream ctor with a streambuf (SEH frame)
-0x006FC494	110	istream::istream_ctor_buf	named	istream ctor with a streambuf (SEH frame)
-0x006FC502	15	IosBase_FixVtable	named	iostream virtual-base adjustor: sets the stream sub-object vtable 0x748280
-0x006FC511	134	iostream::iostream_ctor_copy	named	iostream copy-ctor: ios init, owner, copy state
-0x006FC597	91	ostream::ostream_ctor_B	named	ostream ctor variant (vtable 0x748294), SEH frame
+0x006FC42F	101	ostream::ostream_ctor_buf	named	MS classic iostream (ostream::ostream(streambuf*)): most-derived flag -> vbtable 0x748284 + ios::ios() at +8; ios-part vtable 0x748280, ios::init(sb) (named StreamBuf::SetOwner), +4 = 0; from the 8 log-stream static initialisers (g_0x7C55A8 .. g_0x7C5810)
+0x006FC494	110	ostream::ostream_ctor_copy	named	MS classic iostream (ostream::ostream(const ostream&)): like the streambuf ctor but init() with the other stream's rdbuf (its ios +4); lib, unused (no call, no pointer, no raw hit). CORRECTION: was istream::istream_ctor_buf [dead: no caller or pointer]
+0x006FC502	15	ostream::~ostream	named	MS classic iostream (ostream::~ostream body, this = the ostream part + 8): restores the ios-part vtable 0x748280; called by the game's log-stream destructors (0x5DC440 .. 0x5DC600) and ~ostream_withassign. CORRECTION: was IosBase_FixVtable
+0x006FC511	134	ostream::operator=_streambuf	named	MS classic iostream (ostream& ostream::operator=(streambuf*)): deletes the owned streambuf when x_delbuf (+0x1C) (vt slot 0 with 1), bp = 0, copies the state of a fresh ios (temporary ios on the stack, then ~ios), x_delbuf = 0, init(sb); lib, unused (no call, no pointer, no raw hit). CORRECTION: was iostream::iostream_ctor_copy [dead: no caller or pointer]
+0x006FC597	91	ostream_withassign::ostream_withassign	named	MS classic iostream (ostream_withassign()): vbtable 0x748294 + ios::ios() when most derived, ostream::ostream(), ios-part vtable 0x748290; lib, unused (no call, no pointer, no raw hit). CORRECTION: was ostream::ostream_ctor_B [dead: no caller or pointer]
 0x006FC5F2	43	sub_6FC5F2	named	unregistered function, reached by call / pointer from 0x348290 (gaps.py 2026-11-06)
-0x006FC61D	94	ostream::ostream_ctor_buf_B	named	ostream ctor with a streambuf (vtable 0x748294), SEH frame
-0x006FC67B	19	ostream_FixVtable_B	named	iostream virtual-base adjustor: sets the sub-object vtable 0x748290
-0x006FC68E	364	ostream::write_padded	named	iostream: writes two C strings with fill padding to the field width
-0x006FC7FA	290	ostream::operator<<_double	named	"formats a double (""%.*g"" style via sprintf) and writes it; 18 callers"
-0x006FC91C	170	ostream::operator<<_long	named	"formats with ""%ld"" and writes it"
-0x006FC9C6	177	ostream::operator<<_unsigned	named	formats with a stored format (DAT_0078eeec) and writes it; 34 callers
-0x006FCA77	63	ios_base::Init_A	named	iostream init: state fields -1/0 and a critical section
-0x006FCAB6	28	vt_7482AC::DeletingDtor_6FCAB6	named	scalar deleting destructor: runs FUN_006fcb35 then operator delete when flag&1
-0x006FCAD2	99	streambuf::streambuf	named	streambuf ctor (vtable 0x7482AC): buffer pointers, lock
-0x006FCB35	48	streambuf::~streambuf	named	streambuf dtor: deletes the critical section and the owned buffer
-0x006FCB65	52	StreamBuf::Setbuf	named	vt slot 2: set the buffer pointers (+8 = 1 on error)
-0x006FCB99	86	StreamBuf::Sputn	named	vt slot 5: writes n bytes character-wise
-0x006FCBEF	151	StreamBuf::Sgetn	named	vt slot 6: reads n bytes using the get area and underflow
-0x006FCC86	23	StreamBuf::InAvail	named	vt slot 1: available characters in the get/put areas (0 when empty)
+0x006FC61D	94	ostream_withassign::ostream_withassign_buf	named	MS classic iostream (ostream_withassign(streambuf*)): as above with ostream::ostream(sb); lib, unused. CORRECTION: was ostream::ostream_ctor_buf_B [dead: no caller or pointer]
+0x006FC67B	19	ostream_withassign::~ostream_withassign	named	MS classic iostream (~ostream_withassign body): ios-part vtable 0x748290, then ~ostream 0x6FC502; lib, dead chain: only from the deleting dtor 0x6FC5F2 of vtable 0x748290, which only the unreferenced ostream_withassign ctors install. CORRECTION: was ostream_FixVtable_B
+0x006FC68E	364	ostream::writepad	named	MS classic iostream (ostream::writepad(leader, value)): pad = width (+0x30) - both lengths; right-justified (flags & (left 2 | internal 8) == 0) pads with fill (+0x2C) first, then sputn(leader); internal (8) pads between leader and value; sputn(value) (bp vt +0x14); left (2) pads after; a short write or EOF sets state |= 6 (failbit | badbit). CORRECTION: was ostream::write_padded (same meaning)
+0x006FC7FA	290	ostream::operator<<_double	named	"MS classic iostream (ostream::operator<<(double)): opfx; builds ""%[+][#].<precision>g"" (showpos 0x400, showpoint 0x100) with sprintf, changes g to f (fixed 0x1000) or e (scientific 0x800), G / E when uppercase; sprintf of the value into a 0x150-byte buffer, writepad (sign as leader), osfx"
+0x006FC91C	170	ostream::operator<<_long	named	"MS classic iostream (ostream::operator<<(long)): opfx; format ""%ld"" (0x646C25) with hex -> ""%lx"" / ""%lX"" and leader ""0x"", oct -> ""%lo"", showbase leader ""0""; showpos ""+"" only for n > 0; sprintf, writepad, osfx"
+0x006FC9C6	177	ostream::operator<<_int	named	"MS classic iostream (ostream::operator<<(int)): opfx; format ""%d"" (0x78EEEC) with the same hex / oct / showbase / showpos (n > 0) rules, sprintf, writepad, osfx. CORRECTION: was operator<<_unsigned (the ""%u"" one is 0x6FC14E)"
+0x006FCA77	63	streambuf::streambuf_default	named	MS classic iostream (streambuf::streambuf()): vtable 0x7482AC, x_lastc +0xC = -1, lockc +0x30 = -1, all buffer pointers 0, InitializeCriticalSection(+0x34); lib, unused (no call, no pointer, no raw hit). CORRECTION: was ios_base::Init_A [dead: no caller or pointer]
+0x006FCAB6	28	streambuf::scalar_deleting_dtor	named	MS classic iostream: slot 0 of the streambuf vtable 0x7482AC: ~streambuf, operator delete when flag & 1
+0x006FCAD2	99	streambuf::streambuf	named	MS classic iostream (streambuf::streambuf(char* buf, int len)): vtable 0x7482AC, x_lastc -1, base +0x10 = buf, ebuf +0x14 = buf + len, get / put pointers 0, unbuffered +8 = 1 when buf or len is 0, lockc +0x30 = -1, critical section +0x34; from LogStream::Ctor
+0x006FCB35	48	streambuf::~streambuf	named	MS classic iostream (streambuf::~streambuf): vtable 0x7482AC, DeleteCriticalSection(+0x34), sync 0x6FCC.. (named StreamBuf::InAvail), deletes the base buffer when allocated by the class (x_allocbuf +4)
+0x006FCB65	52	streambuf::setbuf	named	MS classic iostream (virtual streambuf::setbuf(buf, len), slot in vtables 0x7482AC and 0x740034): only when no buffer yet: buf or len 0 -> unbuffered (+8 = 1), else base / ebuf set, buffered; returns this, or 0 when a buffer already exists. CORRECTION: was StreamBuf::Setbuf (same meaning)
+0x006FCB99	86	streambuf::xsputn	named	MS classic iostream (virtual streambuf::xsputn(s, n), slot 5 of vtables 0x7482AC / 0x740034): buffered and room -> *pptr++ = c, else overflow(c) (slot 7); stops at EOF; returns the count written. CORRECTION: was StreamBuf::Sputn
+0x006FCBEF	151	streambuf::xsgetn	named	MS classic iostream (virtual streambuf::xsgetn(buf, n), slot 6): buffered: while n and underflow (slot 8) != EOF copies min(n, egptr - gptr) bytes (memmove) and advances gptr; unbuffered: sbumpc one at a time; returns the count read. CORRECTION: was StreamBuf::Sgetn
+0x006FCC86	23	streambuf::sync	named	MS classic iostream (virtual streambuf::sync, slot 1): 0 when the get area (gptr +0x28 >= egptr +0x2C) and the put area (pptr +0x1C <= pbase +0x18) are empty, else EOF; also called by ~streambuf. CORRECTION: was StreamBuf::InAvail
 0x006FCC9D	30	dead_6FCC9D	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FCCBB	45	streambuf::doallocate	named	vt slot 10: allocates a 0x200-byte buffer (operator new) and installs it
-0x006FCCE8	48	streambuf::SetBuf	named	replaces the buffer (+0x10) with ownership flag (+4)
-0x006FCD18	6	vt_740034::Nop_6FCD18	named	empty function (returns immediately)
-0x006FCD1E	18	StreamBuf::Seekoff_Default	named	vt slot 4: calls virtual seekoff(pos, 0, mode)
-0x006FCD30	92	streambuf::pbackfail	named	vt slot 9: put back a character into the get area (uses memmove)
-0x006FCD8C	37	StreamBuf::Sputbackc	named	put a character back into the get area if possible
-0x006FCDB1	94	ios::ios_ctor	named	ios base ctor: zero state, format flags, lock init
-0x006FCE0F	28	DeletingDtor_6FCE0F	named	scalar deleting destructor: runs FUN_006fcedc then operator delete when flag&1
+0x006FCCBB	45	streambuf::doallocate	named	MS classic iostream (virtual streambuf::doallocate, slot 10): operator new(0x200), setb(buf, buf + 0x200, owned 1); returns 1, EOF when new fails
+0x006FCCE8	48	streambuf::setb	named	MS classic iostream (streambuf::setb(b, eb, a)): deletes the old base when owned (x_allocbuf +4), base +0x10 = b, ebuf +0x14 = eb, x_allocbuf = a. CORRECTION: was streambuf::SetBuf (same meaning)
+0x006FCD18	6	streambuf::seekoff	named	"MS classic iostream (virtual streambuf::seekoff(off, dir, mode), slot 3 of 0x7482AC / 0x740034): default returns EOF (-1); ret 0xC. CORRECTION: was vt_740034::Nop ""empty function"" (returns -1, not a game vtable method)"
+0x006FCD1E	18	streambuf::seekpos	named	MS classic iostream (virtual streambuf::seekpos(pos, mode), slot 4): seekoff(pos, ios::beg 0, mode). CORRECTION: was StreamBuf::Seekoff_Default (same meaning)
+0x006FCD30	92	streambuf::pbackfail	named	MS classic iostream (virtual streambuf::pbackfail(c), slot 9): room before gptr -> sputbackc(c); else seekoff(-1, cur, in) EOF -> EOF; buffered with a get area -> memmove the get area up by 1 and store c at gptr
+0x006FCD8C	37	streambuf::sputbackc	named	MS classic iostream (streambuf::sputbackc(c), inline copy): eback +0x24 < gptr +0x28 -> *--gptr = c, returns c; else pbackfail(c) (slot 9). CORRECTION: was StreamBuf::Sputbackc (same meaning)
+0x006FCDB1	94	ios::ios_ctor	named	MS classic iostream (ios::ios()): vtable 0x7482E8, bp 0, state badbit (4), precision 6, fill ' ', lockc -1, flags / tie / width / delbuf 0, InitializeCriticalSection of its lock; the first of the static stream count 0x7CAEC8 also initialises the global lock 0x7CAE90
+0x006FCE0F	28	ios::scalar_deleting_dtor	named	MS classic iostream: slot 0 of the ios vtable 0x7482E8: ~ios, operator delete when flag & 1. CORRECTION: was DeletingDtor_6FCE0F
 0x006FCE2B	105	dead_6FCE2B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FCE94	72	ios::ios_copy_ctor	named	ios copy ctor (vtable 0x7482E8): CopyState, lock init
-0x006FCEDC	74	ios::~ios	named	ios dtor: refcount of the global lock; deletes it at zero
-0x006FCF26	47	StreamBuf::SetOwner	named	replaces the owned stream buffer pointer (+4), deleting the old one when owned
-0x006FCF55	59	StreamBuf::CopyState	named	copies the format state fields (+0x20..+0x30) from another stream
+0x006FCE94	72	ios::ios_copy_ctor	named	MS classic iostream (ios::ios(const ios&)): vtable 0x7482E8, bp 0, delbuf 0, ios::operator= (state copy), lockc -1, critical sections as in ios(); lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006FCEDC	74	ios::~ios	named	MS classic iostream (ios::~ios): vtable 0x7482E8, lockc -1, --stream count 0x7CAEC8 (0 -> DeleteCriticalSection of the global lock 0x7CAE90), deletes its own lock, deletes the streambuf when x_delbuf (+0x1C) (slot 0 with 1), bp = 0, state = badbit
+0x006FCF26	47	ios::init	named	MS classic iostream (ios::init(streambuf*)): deletes the old streambuf when x_delbuf, bp +4 = sb, state +8 badbit (4) set when sb is 0 else cleared; from the ostream ctors. CORRECTION: was StreamBuf::SetOwner (it is an ios method)
+0x006FCF55	59	ios::operator=	named	MS classic iostream (ios& ios::operator=(const ios&)): copies x_tie +0x20, x_flags +0x24, x_precision +0x28, x_fill +0x2C (byte), x_width +0x30 and state +8 (badbit kept when there is no streambuf). CORRECTION: was StreamBuf::CopyState
 0x006FCF90	87	dead_6FCF90	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FCFE7	11	InitializeCriticalSection_wrap	named	STLport lock: InitializeCriticalSection
-0x006FCFF2	11	DeleteCriticalSection_wrap	named	STLport lock: DeleteCriticalSection
-0x006FCFFD	11	EnterCriticalSection_wrap	named	STLport lock: EnterCriticalSection
-0x006FD008	11	LeaveCriticalSection_wrap	named	STLport lock: LeaveCriticalSection
+0x006FCFE7	11	InitializeCriticalSection_wrap	named	"MS classic iostream (mtlock.c _mtlockinit(cs)): InitializeCriticalSection; from the ios / streambuf ctors. CORRECTION: purpose was ""STLport lock"" (the iostream here is the classic MS one)"
+0x006FCFF2	11	DeleteCriticalSection_wrap	named	"MS classic iostream (_mtlockterm(cs)): DeleteCriticalSection; from ~ios / ~streambuf. CORRECTION: purpose was ""STLport lock"""
+0x006FCFFD	11	EnterCriticalSection_wrap	named	"MS classic iostream (_mtlock(cs)): EnterCriticalSection; from ostream::opfx / ostream::flush. CORRECTION: purpose was ""STLport lock"""
+0x006FD008	11	LeaveCriticalSection_wrap	named	"MS classic iostream (_mtunlock(cs)): LeaveCriticalSection; from ostream::osfx / opfx / flush. CORRECTION: purpose was ""STLport lock"""
 0x006FD014	18	dead_6FD014	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FD026	29	_hypot	named	CRT: _hypot(x, y) = sqrt(x^2 + y^2) entry: calls the core 0x6FD060 with the CRT operation code 0x18 = OP_HYPOT (trans.h; OP_POW is 0x1D); was named pow. Callers include I3DFigureImpl::DrawTexturedPolyline 0x501D90 / Line2D_EmitQuad 0x502AC0 (screen segment length)
+0x006FD026	29	_hypot	named	CRT (hypot.c _hypot(x, y)): _hypothlp(x, y, OP_HYPOT 0x18); used by the game for 2D lengths (DrawTexturedPolyline, Line2D_EmitQuad, CCamera methods, Scene3ds_WeldVertices, UVs_FindOrAdd)
 0x006FD043	29	dead_6FD043	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FD060	645	_hypothlp	named	"CRT: the _hypot core (special cases, frexp / ldexp scaling, sqrt); was ""pow(x, y) core"""
-0x006FD2F0	241	_stricmp_n_lk	named	CRT: case-insensitive compare of n chars under the locale lock
-0x006FD3F0	20	sqrt_entry	named	CRT math: sqrt entry (exponent bits then checker)
-0x006FD404	9	sqrt_wrap	named	CRT math: sqrt entry using __fload_withFB
-0x006FD40D	157	sqrt_checked	named	"CRT math: sqrt NaN/negative handling (""sqrt"")"
-0x006FD4AA	52	CString::CString_char_int	named	CString(ch, n): allocate and memset
-0x006FD4DE	50	CString::CString_const_char_int	named	CString(buf, len): allocate and copy
+0x006FD060	645	_hypothlp	named	CRT (hypot.c _hypothlp(x, y, opcode)): saves the CW; an Inf operand -> +INF (0x797D98), a quiet NaN -> _handle_qnan2, a signalling NaN -> invalid (8) through _except2; else m = max(|x|, |y|) (0 -> 0), sqrt((x/m)^2 + (y/m)^2) through sqrt 0x6FD404, the result times m recombined with _decomp (exponent sum >= 0x401 -> overflow through _except2, else _set_exp); restores the CW
+0x006FD2F0	241	_memicmp	named	CRT (memicmp: _memicmp(p1, p2, n)): compares n bytes case-insensitively WITHOUT stopping at a NUL: C locale -> inline A-Z fold, else locale refcount (lock 0x13 during setlocale) and tolower; returns -1 / 0 / 1; from CFileRegistry::FindData. CORRECTION: was _stricmp_n_lk (that would be _strnicmp, 0x6FA1A0)
+0x006FD3F0	20	_CIsqrt	named	CRT x87 (_CIsqrt, intrinsic form: operand in ST0): fst to the stack, _checkTOS_exponent 0x6EF6D8, then the common sqrt body 0x6FD40D; lib, unused (no call, no pointer, no raw hit). CORRECTION: was sqrt_entry [dead: no caller or pointer]
+0x006FD404	9	sqrt	named	CRT (sqrt(double), C-call form): __fload_withFB of the stack argument, then falls into the common body 0x6FD40D; from _hypothlp. CORRECTION: was sqrt_wrap
+0x006FD40D	157	_sqrt_common	named	"CRT x87: common sqrt body: saves the CW (_load_CW when not 0x27F); positive finite -> fsqrt, exit through _fast_exit (fast flag 0x7CAAD0) or __math_exit (name ""sqrt"" 0x79B1A0, opcode 5); -0 / +0 / +INF returned as is; negative or -INF -> indefinite 0x797B30, domain error 1; NaN -> _convertTOStoQNaN; errors through __startOneArgErrorHandling. Reached by fall-through from sqrt 0x6FD404 (and from _CIsqrt). CORRECTION: was sqrt_checked"
+0x006FD4AA	52	CString::CString_char_int	named	MFC (CString::CString(TCHAR ch, int nRepeat)): empty string data 0x796E48; nRepeat >= 1 -> AllocBuffer(n) and memset(ch); from 0x469400
+0x006FD4DE	50	CString::CString_const_char_int	named	MFC (CString::CString(LPCTSTR lpch, int nLength)): empty, then nLength != 0 -> AllocBuffer + memcpy; from Compiler_Tokenize and the CFileRegistry getters
 0x006FD510	73	dead_6FD510	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FD559	21	CString::operator_char	named	assigns a single character (AssignCopy); 14 callers
-0x006FD56E	98	operator_CString_char	named	CString concatenation with a character
-0x006FD5D0	98	operator_char_CString	named	character + CString concatenation
-0x006FD632	88	CString::Delete	named	CString::Delete(index, count): erase characters (unshare, memmove)
-0x006FD68A	132	CString::Insert_char	named	CString::Insert(index, ch)
-0x006FD70E	181	CString::Insert_LPCSTR	named	CString::Insert(index, string)
+0x006FD559	21	CString::operator_char	named	MFC (const CString& CString::operator=(TCHAR ch)): AssignCopy(1, &ch); returns *this
+0x006FD56E	98	operator_CString_char	named	MFC (CString operator+(const CString&, TCHAR)): temporary string, ConcatCopy(len, data, 1, &ch), copy-constructs the result, destroys the temporary
+0x006FD5D0	98	operator_char_CString	named	MFC (CString operator+(TCHAR, const CString&)): ConcatCopy(1, &ch, len, data) into the result
+0x006FD632	88	CString::Delete	named	MFC (int CString::Delete(nIndex, nCount = 1)): index < 0 -> 0; count > 0 and index inside -> CopyBeforeWrite, memmove the tail (with the NUL) down, length -= count; returns the old length; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006FD68A	132	CString::Insert_char	named	MFC (int CString::Insert(nIndex, TCHAR ch)): CopyBeforeWrite, index clamped to [0, length], grows the buffer (AllocBuffer + copy, FreeData) when full, memmove the tail up by 1, stores ch; returns the new length; lib, unused [dead: no caller or pointer]
+0x006FD70E	181	CString::Insert_LPCSTR	named	MFC (int CString::Insert(nIndex, LPCTSTR psz)): lstrlenA; non-empty -> CopyBeforeWrite, index clamped, grows when needed, memmove the tail, memcpy the text; returns the new length; lib, unused [dead: no caller or pointer]
 0x006FD7C3	61	dead_6FD7C3	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FD800	355	CString::Replace_LPCSTR_LPCSTR	named	CString::Replace(old, new): counts matches with _mbsstr, rebuilds the buffer
-0x006FD963	81	CString::Remove	named	CString::Remove(char): deletes all occurrences (multibyte aware)
-0x006FD9B4	35	CString::Mid	named	"MFC CString::Mid(nFirst) = Mid(dest, nFirst, length - nFirst) (0x6FD9D7), the tail from index nFirst; was named CString::Left. DialogScreen::SelectAnswer uses Mid(7) to read the merchant id of ""constr_<n>"""
-0x006FD9D7	150	CString::Mid_first_count	named	substring (EH frame); 22 callers
-0x006FDA6D	124	CString::Right	named	CString::Right(count); 15 callers
-0x006FDAE9	120	CString::Left	named	"MFC CString::Left(nCount): nCount < 0 -> 0, >= length -> copy of the string, else AllocCopy(dest, nCount, 0, 0) (ConcatCopy_One); 58 callers. Was CString::Mid_first (""from an index to the end"" was wrong)"
-0x006FDB61	43	CString::Collate_Mid	named	compares then Mid (stricmp-based helper)
-0x006FDB8C	43	CString::CollateNoCase_Mid	named	collate-based compare then Mid
-0x006FDBB7	34	CString::ReverseFind	named	CString::ReverseFind(char) (uses strrchr), -1 when not found
-0x006FDBD9	14	Thunk_FUN_006fdbe7_6FDBD9	named	forwards to FUN_006fdbe7
-0x006FDBE7	43	CString::Find	named	CString::Find(LPCSTR, start) via _mbsstr
-0x006FDC12	845	CString::FormatV	named	"CString::FormatV: parses the format (""%*.*f"" ...), sizes the buffer, then vsprintf; 845 bytes"
-0x006FDF5F	19	CString::Format	named	CString::Format(fmt, ...): FormatV with the stack arguments; 413 callers
+0x006FD800	355	CString::Replace_LPCSTR_LPCSTR	named	MFC (int CString::Replace(lpszOld, lpszNew)): counts the matches with _mbsstr (stepping over embedded NULs), reallocates when the result is longer (or shared), then replaces each in place with memmove / memcpy; returns the count; lib, unused (the game uses its own CString_ReplaceAll) [dead: no caller or pointer]
+0x006FD963	81	CString::Remove	named	MFC (int CString::Remove(TCHAR ch)): CopyBeforeWrite, compacts the string skipping every ch (_mbsinc steps), NUL, length -= removed; from CString_RemoveCR
+0x006FD9B4	35	CString::Mid	named	MFC (CString CString::Mid(nFirst) const): Mid(nFirst, length - nFirst) through 0x6FD9D7
+0x006FD9D7	150	CString::Mid_first_count	named	MFC (CString CString::Mid(nFirst, nCount) const): clamps nFirst >= 0, nCount >= 0, nFirst + nCount <= length, nFirst <= length; whole string -> copy of *this; else AllocCopy (ConcatCopy_One) into a temporary returned by copy
+0x006FDA6D	124	CString::Right	named	MFC (CString CString::Right(nCount) const): nCount < 0 -> 0; >= length -> copy of *this; else AllocCopy(nCount, start length - nCount)
+0x006FDAE9	120	CString::Left	named	MFC (CString CString::Left(nCount) const): nCount < 0 -> 0; >= length -> copy of *this; else AllocCopy(nCount, 0)
+0x006FDB61	43	CString::SpanIncluding	named	"MFC (CString CString::SpanIncluding(lpszCharSet) const): Left(_mbsspn(data, set)) (0x6ECB29, 0x6FDAE9); lib, unused (no call, no pointer, no raw hit). CORRECTION: was CString::Collate_Mid ""compares then Mid"" [dead: no caller or pointer]"
+0x006FDB8C	43	CString::SpanExcluding	named	MFC (CString CString::SpanExcluding(lpszCharSet) const): Left(_mbscspn(data, set)) (0x6ECBB8); lib, unused. CORRECTION: was CString::CollateNoCase_Mid [dead: no caller or pointer]
+0x006FDBB7	34	CString::ReverseFind	named	MFC (int CString::ReverseFind(TCHAR ch) const): strrchr (MBCS _mbsrchr) of ch, index or -1
+0x006FDBD9	14	CString::Find_LPCSTR	named	MFC (int CString::Find(LPCTSTR lpszSub) const): Find(lpszSub, 0). CORRECTION: was Thunk_FUN_006fdbe7
+0x006FDBE7	43	CString::Find	named	MFC (int CString::Find(lpszSub, nStart) const): nStart > length -> -1; _mbsstr(data + nStart, sub) -> index or -1
+0x006FDC12	845	CString::FormatV	named	MFC (void CString::FormatV(lpszFormat, va_list)): estimates the maximum length by parsing every % item (flags, width / precision incl. '*', size prefixes h l I64 F N, types c C s S d i u x X o e f g G p n; strings by their length, numbers 32, floats 128 + precision, at least 0x200 for %e / %f ...), GetBuffer(max), vsprintf (sprintf_va), ReleaseBuffer
+0x006FDF5F	19	CString::Format	named	MFC (void CString::Format(lpszFormat, ...)): FormatV with the stack argument list; 413 callers
 0x006FDF72	73	dead_6FDF72	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FDFBB	76	CString::FormatMessage	named	FormatMessageA into a CString (throws on failure)
-0x006FE007	131	CString::LoadString_Format	named	loads a string resource then formats it with FormatV args (EH frame)
-0x006FE08A	83	CString::TrimRight_LPCSTR	named	CString::TrimRight(set): trims trailing characters found in the set; 18 callers
-0x006FE0DD	66	CString::TrimRight_char	named	CString::TrimRight(ch)
-0x006FE11F	76	CString::TrimRight	named	CString::TrimRight(): trims trailing whitespace; 15 callers
+0x006FDFBB	76	CString::FormatMessage	named	MFC (void CString::FormatMessage(lpszFormat, ...)): FormatMessageA(FORMAT_MESSAGE_FROM_STRING | ALLOCATE_BUFFER 0x500, ...), failure -> AfxThrowMemoryException, assigns, LocalFree; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006FE007	131	CString::FormatMessage_UINT	named	MFC (void CString::FormatMessage(UINT nFormatID, ...)): LoadString(nFormatID) into a temporary, FormatMessageA(0x500) with the arguments, failure -> AfxThrowMemoryException, assigns, LocalFree; lib, unused. CORRECTION: was CString::LoadString_Format [dead: no caller or pointer]
+0x006FE08A	83	CString::TrimRight_LPCSTR	named	MFC (void CString::TrimRight(LPCTSTR lpszTargetList)): CopyBeforeWrite; finds the start of the trailing run whose characters are all in the list (_mbschr, _mbsinc steps), cuts there (NUL, new length)
+0x006FE0DD	66	CString::TrimRight_char	named	MFC (void CString::TrimRight(TCHAR chTarget)): CopyBeforeWrite; cuts the trailing run of chTarget
+0x006FE11F	76	CString::TrimRight	named	MFC (void CString::TrimRight()): CopyBeforeWrite; cuts the trailing run of white space (_ismbcspace 0x6ECEA9, _mbsinc steps)
 0x006FE16B	104	dead_6FE16B	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FE1D3	67	CString::TrimLeft_char	named	CString::TrimLeft(ch)
-0x006FE216	82	CString::TrimLeft	named	CString::TrimLeft(): trims leading whitespace; 13 callers
-0x006FE268	46	CString_InitN	named	initializes n CStrings to the empty string (memmove 4 bytes each)
-0x006FE296	36	CStringArray_DestroyElements	named	~CString for n elements (39 callers)
-0x006FE2BA	44	CStringArray_CopyElements	named	CString::operator= for n elements
+0x006FE1D3	67	CString::TrimLeft_char	named	MFC (void CString::TrimLeft(TCHAR chTarget)): CopyBeforeWrite; skips the leading run of chTarget (_mbsinc) and memmoves the rest (with the NUL) down, new length
+0x006FE216	82	CString::TrimLeft	named	MFC (void CString::TrimLeft()): CopyBeforeWrite; skips leading white space (_ismbcspace), memmoves the rest down, new length
+0x006FE268	46	CString_InitN	named	MFC (ConstructElements(CString*, n), afxtempl): every element = the empty string data (memcpy of the 4-byte pointer to 0x796E48)
+0x006FE296	36	CStringArray_DestroyElements	named	MFC (DestructElements(CString*, n)): ~CString for n elements
+0x006FE2BA	44	CStringArray_CopyElements	named	MFC (CopyElements(CString* dst, const CString* src, n)): CString::operator= for n elements; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
 0x006FE2E6	55	dead_6FE2E6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FE31D	41	CSimpleException::InitString	named	loads the error message text for the exception (resource id at +0x94)
-0x006FE346	67	CSimpleException::GetErrorMessage	named	vt slot 3: copies the message into the buffer, true when found
-0x006FE389	25	ThrowMemoryException	named	throws the global CMemoryException object (0x7C8DE8)
-0x006FE3A2	25	ThrowNotSupportedException	named	throws the global exception object (0x7C8D50)
-0x006FE3BB	76	CTime::CTime_y_m_d_h_mi_s_dst	named	builds a CTime via mktime from broken-down values
-0x006FE407	105	CTime::CTime_dosDate_dosTime	named	builds a CTime from DOS date/time words
-0x006FE470	76	CTime::CTime_SYSTEMTIME	named	builds a CTime from SYSTEMTIME fields (year >= 1900)
-0x006FE4BC	76	CTime::CTime_FILETIME	named	CTime from a FILETIME via local time and SYSTEMTIME
-0x006FE508	19	CTime::GetCurrentTime	named	time() into the object
-0x006FE51B	44	ostream_ctor_lk	named	iostream helper: ctor under lock
-0x006FE547	47	ostream_flush_lk	named	iostream helper: flush under lock
+0x006FE31D	41	CSimpleException::InitString	named	MFC (CSimpleException::InitString): m_bInitialized +0xC = 1, m_bLoaded +0x10 = AfxLoadString(m_nResourceID +0x94, m_szMessage +0x14, 0x80) != 0
+0x006FE346	67	CSimpleException::GetErrorMessage	named	MFC (virtual BOOL CSimpleException::GetErrorMessage(lpszError, nMaxError, pnHelpContext), in the CSimpleException-family vtables 0x746478 / 0x746490 / 0x746604 / 0x74661C): help context = 0; InitString once; loaded -> lstrcpynA of the message, else empty; returns m_bLoaded
+0x006FE389	25	ThrowMemoryException	named	MFC (AfxThrowMemoryException body): throws the static CMemoryException object 0x7C8DE8 (_CxxThrowException with ThrowInfo 0x77EE38)
+0x006FE3A2	25	ThrowNotSupportedException	named	MFC (AfxThrowNotSupportedException): throws the static CNotSupportedException object 0x7C8D50 (ThrowInfo 0x77EE80); from the unsupported CFile / CMemFile / CArchive paths
+0x006FE3BB	76	CTime::CTime_y_m_d_h_mi_s_dst	named	MFC (CTime::CTime(nYear, nMonth, nDay, nHour, nMin, nSec, nDST)): struct tm {sec, min, hour, mday, mon - 1, year - 1900, isdst} -> m_time = mktime (callee named _fcloseall_wrap)
+0x006FE407	105	CTime::CTime_dosDate_dosTime	named	MFC (CTime::CTime(WORD wDosDate, WORD wDosTime, nDST)): tm from the DOS bit fields (sec * 2, min, hour, day, month - 1, year + 80) -> mktime; lib, unused (no call, no pointer, no raw hit) [dead: no caller or pointer]
+0x006FE470	76	CTime::CTime_SYSTEMTIME	named	MFC (CTime::CTime(const SYSTEMTIME&, nDST)): wYear < 1900 -> 0; else CTime(wYear, wMonth, wDay, wHour, wMinute, wSecond, nDST)
+0x006FE4BC	76	CTime::CTime_FILETIME	named	MFC (CTime::CTime(const FILETIME&, nDST)): FileTimeToLocalFileTime + FileTimeToSystemTime -> the SYSTEMTIME ctor; failure -> 0; from CFileFind / CFile::GetStatus
+0x006FE508	19	CTime::GetCurrentTime	named	MFC (static CTime CTime::GetCurrentTime()): time(NULL) (callee named _tzset_check) into the result; from CSaveLoadWin::DoSave / QuickSave
+0x006FE51B	44	CTime::GetGmtTm	named	"MFC (struct tm* CTime::GetGmtTm(struct tm* ptm) const): gmtime(&m_time) (callee named _getbuf_alloc); ptm given -> copies the 9 dwords and returns ptm, else the static tm; lib, unused (no call, no pointer, no raw hit). CORRECTION: was ostream_ctor_lk ""iostream helper"" [dead: no caller or pointer]"
+0x006FE547	47	CTime::GetLocalTm	named	"MFC (struct tm* CTime::GetLocalTm(struct tm* ptm) const): localtime(&m_time) (callee named _stbuf); ptm given -> copies the 9 dwords (0 when localtime failed) and returns ptm; from CFile::TimeToFileTime. CORRECTION: was ostream_flush_lk ""iostream helper"""
 0x006FE576	151	dead_6FE576	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006FE60D	300	CTime::FormatImpl	named	"formats a time via the strftime-like loop (""%02d"" ... into a CString)"
-0x006FE739	92	CTime::Format	named	CTime::Format(fmt) (EH frame)
-0x006FE795	81	CTime::Format_Stbuf	named	formats text with _stbuf/_output into a CString
-0x006FE7E6	81	CTime::Format_GetBuf	named	formats text with _getbuf_alloc/_output into a CString
-0x006FE837	92	CTime::FormatGmtime	named	CTime::FormatGmtime(fmt) (EH frame)
-0x006FE893	92	CTime::FormatLocal	named	CTime::Format(UINT) variant (EH frame)
-0x006FE8EF	32	CPlex_Create	named	allocates a new block (n*size+4) and links it into the plex chain; 148 callers
+0x006FE60D	300	CTimeSpan::Format	named	"MFC (CString CTimeSpan::Format(LPCTSTR pFormat) const): copies the format into a 128-byte buffer expanding %D (days m_timeSpan / 86400, ""%ld""), %H (hours % 24), %M, %S (""%02d"") and %%; lib, dead chain: only from CTimeSpan::Format(UINT) 0x6FE739 (unreferenced). CORRECTION: was CTime::FormatImpl"
+0x006FE739	92	CTimeSpan::Format_UINT	named	MFC (CString CTimeSpan::Format(UINT nFormatID) const): LoadString then CTimeSpan::Format(LPCTSTR); lib, unused (no call, no pointer, no raw hit). CORRECTION: was CTime::Format [dead: no caller or pointer]
+0x006FE795	81	CTime::Format	named	MFC (CString CTime::Format(LPCTSTR pFormat) const): localtime(&m_time) (named _stbuf), strftime into a 128-byte buffer (named _output_wrapper), empty on failure, CString result; from CSaveLoadWin::RefreshSaveList (save list dates). CORRECTION: was CTime::Format_Stbuf
+0x006FE7E6	81	CTime::FormatGmt	named	MFC (CString CTime::FormatGmt(LPCTSTR pFormat) const): the same with gmtime (named _getbuf_alloc); lib, dead chain: only from FormatGmt(UINT) 0x6FE893 (unreferenced). CORRECTION: was CTime::Format_GetBuf
+0x006FE837	92	CTime::Format_UINT	named	MFC (CString CTime::Format(UINT nFormatID) const): LoadString then CTime::Format(LPCTSTR) 0x6FE795; lib, unused (no call, no pointer, no raw hit). CORRECTION: was CTime::FormatGmtime [dead: no caller or pointer]
+0x006FE893	92	CTime::FormatGmt_UINT	named	MFC (CString CTime::FormatGmt(UINT nFormatID) const): LoadString then FormatGmt(LPCTSTR) 0x6FE7E6; lib, unused. CORRECTION: was CTime::FormatLocal [dead: no caller or pointer]
+0x006FE8EF	32	CPlex_Create	named	MFC (static CPlex* CPlex::Create(CPlex*& pHead, nMax, cbElement)): operator new(nMax * cbElement + 4), links the block at the head of the chain (pNext = old head), returns it; used by every MFC CList / CMap node pool (148 callers)
 0x006FE90F	22	List_FreeChain	named	frees a singly linked chain of blocks (355 callers)
 0x006FE925	23	InitVtable_745F5C_6FE925	named	stores vtable 0x00745F5C and initializes 5 field(s) (constructor/reset step)
 0x006FE93C	28	vt_745F5C::DeletingDtor_6FE93C	named	scalar deleting destructor: runs FUN_006fe958 then operator delete when flag&1
