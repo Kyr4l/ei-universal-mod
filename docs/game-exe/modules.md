@@ -42,11 +42,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00402B20 | 416 | CBaseManager::CBaseManager | CBaseManager constructor body (the managers' ctors call it before storing their vtable) |
 | 0x00403020 | 390 | CBaseManager::Init | slot 2: idMin +0x98 = 0, idMax +0x9c = 2000000000; idMap +0x1c cleared and resized to 0x400 buckets; nodeMap +0x50 nodes freed, 0x400 buckets; poolsByKind +0x68 nodes freed (PoolFree_N12_407DA0, the pooled lists themselves are not... |
 | 0x00403BD0 | 349 | CBaseManager::RegisterWithNewId | (obj): id = idMap maxId +0x30 + 1 when in [idMin, idMax), else up to 100000 random tries for an unused id (FatalError 'CBaseManager::RegisterInstant..' on failure); new id -> list entry appended +0x38 and nodeMap +0x50 entry (+0x6... |
-| 0x00403E10 | 296 | dead_403E10 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00403E10 | 296 | CBaseManager::ChangeId_403E10 | (oldId, newId) ret 8: obj = idMap +0x1c[oldId] (or 0); erases idMap[oldId] (HashU32_EraseNode_405620) and inserts idMap[newId] = obj (max id +0x30 kept), obj id +0xc = newId; moves the nodeMap +0x50 entry oldId -> newId the same w... |
 
 ## 0x405000 - 0x40C000: STLport containers / node allocator (no strings)
 
-194 functions, group `leaf`.
+199 functions, group `leaf`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -67,7 +67,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x40C000 - 0x411000: CCamera (+ camera .cam files)
 
-99 functions, group `client`.
+100 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -82,13 +82,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0040D710 | 555 | CCamera::LevelRoll | derives the roll of the view quaternion +0x34 (angle between the right axis and the horizontal of -up); when >= 1 deg rotates 10% of it back about the cross axis, then AvoidObstacles. Was ClampPitch (it does not clamp the pitch: U... |
 | 0x0040C060 | 515 | DwordVector_ctorN8 | STL: vector<node*>(n) bucket vector ctor with the pool chunk refill inlined (g_0x79B224 lists, chunk_alloc); HashTable_Resize_40BC30 = rehash of the archive's written-object id set (Archive_Open / HashSetU32_Insert) |
 | 0x0040EFB0 | 506 | CCamera::PlayCamFile | (time): flag 0x20 playback of the keyframes +0x2F0: finds the segment (current index +0x304, time offset +0x300), lerps the position +0x1C and slerps the quaternion +0x34; past the last key copies it and clears flag 0x20; main cal... |
-| 0x00410E70 | 484 | dead_410E70 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0040D9B0 | 404 | Terrain_SampleHeightBox | (centre xy*, unused, unused, step, halfW, halfH, out avg, out min, out max): CWorldClient::GetHeight on a grid of points centre +- half extents at the given step (inside the terrain g_0x7AF738 +0x10C/+0x110), returns the average /... |
 | 0x0040CC30 | 387 | CObject3D::UpdateWorldTransform | CObject3D slot 15: calls slot 14 (world rot) then world pos (+0x28) = parent pos + local pos (+0x1c) rotated by the parent quat (arg = parent's 7 floats: pos? no: arg[0..3] quat, used as rotation); helpers 0x401DE0 vec3 set, 0x40C... |
+| 0x0040C2A0 | 374 | StlString_AppendRange | (first, last): STLport string append, not assign: n = last-first; n == -1 or size + n past max -> throws length_error (logic_error ctor 0x40C440, vt 0x73B984, ThrowInfo 0x749CE8); if it fits in capacity copies the range after fini... |
 
 ## 0x411000 - 0x414000: CCamera helpers (LookFromTo, SetDirection, AddShake), STLport deque<0x24>, Net_TickAll, ServerInfo / JoinMessage / ChatMessage / NamedEventMessage, LobbyServer::ctor
 
-89 functions, group `net`.
+93 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -130,7 +130,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x41A000 - 0x42D000: net lobby: LobbyServer / LobbyClient (players, chat, maps, variables, file transfers, pairing/party records), ChunkFile fields, STLport/MFC helpers
 
-612 functions, group `net`.
+636 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -184,7 +184,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004315B0 | 1068 | BigNum_DivMod | (a (2n ushorts), b (n), n bytes, q out): multi-precision division of a by b (Knuth D on 16-bit limbs): remainder left in a, quotient in q |
 | 0x0042F4C0 | 976 | OBB_IntersectsSegment | fastcall (box, quat*, boxPos xyz, segCentre xyz, segVec xyz): box axes from the quaternion, segment direction = segVec / /segVec/, half length /segVec/ * 0.5, centre offset and direction expressed in the box frame (Mat3_Solve), 6 ... |
 | 0x00432DA0 | 666 | NetPeer::ctor | (this 0x1168, linkId): refcounted base -> vtable 0x73BF38; +8 next send seq = GetTickCount() & 0xffff, +0xc last received seq = 0, +0x10 wrap base = 0x10000, receive window vector +0x14, +0x20 linkId, +0x24 rtt mean = NetConnectio... |
-| 0x00431370 | 562 | BigNum_ModExp | (base, exponent bits, modulus, nBytes, out): square-and-multiply modular exponentiation on 16-bit limbs (BigNum_DivMod); NO CALLERS: a leftover key-exchange routine, never used by the game |
+| 0x00431370 | 562 | BigNum_ModExp | (base, exponent bits, modulus, nBytes, out): square-and-multiply modular exponentiation on 16-bit limbs (BigNum_DivMod); dead chain: only the dead key-exchange functions KeyExchange::MakeKeyPair 0x431090 / DeriveSessionKeys 0x4311... |
 | 0x0042E4D0 | 465 | Vertex32_Lerp | fastcall (a, b, t, out): D3D TL vertex lerp: sx, sy, sz, rhw (+0..+0xC) and tu, tv (+0x18 / +0x1C) as floats; the colour +0x10 and specular +0x14 per byte channel, each rounded (fistp) and repacked; callers the six ClipPoly_* pass... |
 | 0x0042FAE0 | 444 | LzCodec_InitTables | static initializer of the LZ match-length code tables g_0x79B848 (code) / g_0x79B7C0 (bits): lengths 1..6 fixed codes (1,3,5,3,5,5 bits), 7..10 = 6-bit code, 11..18 = 8-bit, 19..34 = 10-bit; offset tables g_0x79B738 / g_0x79B6B0 f... |
 | 0x0042E020 | 397 | ClipPoly_YMin | as ClipPoly_YMax but keeps y > plane (y > 0 in ClipTriangle): inside vertices kept, crossing edges interpolated (Vertex32_Lerp) into new vertices at verts[*nextVertex++], results written back into idx[] and *count through the scra... |
@@ -193,7 +193,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x433000 - 0x444000: net transport: NetConnection / NetServer / NetClient (A)
 
-472 functions, group `net`.
+480 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -241,17 +241,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00446C10 | 4909 | CFakeUnit::LoadModelFromScene | loads a "scenes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
 | 0x00446910 | 466 | CFakeUnit::~CFakeUnit_body | vt = vt_CFakeUnit; animSystemOld +0x4e0 Detach + SetOwner 0; CUnit::Done; CFigures_CArraySetSize(+0x530, 0); refcount +4 of each figure -= 1; destroys the arrays materials +0x570 (0x9c each, vt[0](0)), vectors +0x55c (0x14, vt[1](... |
-| 0x00446520 | 420 | dead_446520 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00446330 | 321 | dead_446330 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446520 | 420 | WordsBlocks_Read_446520 | (CFile*) ret 4: the read side of 0x446480: count + CArray_SetSize_A + words; count2 + resize of the 32-byte array (same growth as 0x446330: grow = clamp(size / 8, 4, 1024)) + blocks; +0x24, +0x28, +0x2c [dead: no caller or pointer... |
+| 0x00446330 | 321 | WordsBlocks_Assign_446330 | (const src&) ret 4: CWordArray::Copy(src) on +0; resizes the 32-byte-element array +0x14 (data, size +0x18, cap +0x1c, grow +0x20; 32-byte aligned operator_new with the raw pointer at data - 4) to src's size and copies its element... |
 | 0x004466D0 | 213 | CFakeUnit::CFakeUnit | ctor (0x580 bytes, kind 0x39 in CMapObjectManager::CreateByKind): CUnit::CUnit, CAnimationSystemOld::ctor at +0x4e0, four empty MFC arrays at +0x530 (vt 0x73C108) / +0x544 (0x73C0FC) / +0x558 (0x73C0F0) / +0x56c (0x73C0E4), then v... |
-| 0x004460D0 | 159 | dead_4460D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00446480 | 150 | dead_446480 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004460D0 | 159 | CString_FindBetween_4460D0 | (out range {begin, end, CString*, emptyData}, startMarker, endMarker, startPos) ret 0x10: when startMarker is given: p = Find(startMarker, startPos), not found -> out = {startPos, startPos, this, g_0x796E48}; else begin = p + strl... |
+| 0x00446480 | 150 | WordsBlocks_Write_446480 | (CFile*) ret 4: writes the word count +8 and count * 2 bytes from +4, the block count +0x18 and count * 32 bytes from +0x14, then the dwords +0x24, +0x28, +0x2c [dead: no caller or pointer] |
 | 0x00446B20 | 116 | CFakeUnit::Done | slot 3: animSystemOld +0x4e0 Detach + SetOwner 0, CUnit::Done, destroys the figures +0x534 (count +0x538, 0x220 each, vt[0](0)), frees the array, figures = 0, count +0x538 = cap +0x53c = 0 |
 | 0x00446050 | 114 | CString_FromInt | (out CString, int): CString::Format("%i" at 0x7842D8, value), copy into out; returns out; no caller or pointer; CORRECTION: was 'CString_InitDefaultConst' [dead: no caller or pointer] |
 | 0x00446BA0 | 112 | CFakeUnit::Load | CFakeUnit slot 62 (name, arg): 0x446C10(name, arg, this); for each of the +0x534[] entries (0x220 bytes, count +0x538): 0x59F390(entry, vt[18]()->vt[23](0x45 kind, -1)) (RegisterInstant of a CFigureClientSpecific per entry); retur... |
-| 0x004462C0 | 98 | dead_4462C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00446260 | 94 | dead_446260 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00446170 | 64 | dead_446170 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004462C0 | 98 | StringWords_Read_4462C0 | (CFile*) ret 4: the read side of 0x446260: length, GetBuffer(length) + Read, count, CArray_SetSize_B(+4, count), Read(+8 data, count * 2) [dead: no caller or pointer] |
+| 0x00446260 | 94 | StringWords_Write_446260 | (this {CString +0, CWordArray +4: data +8, size +0xc}, CFile*) ret 4: writes length + 1, the characters with the terminating 0, the word count and count * 2 bytes of words (vt +0x38 Write) [dead: no caller or pointer] |
+| 0x00446170 | 64 | CString_ReadFromStream_446170 | (CFile*) ret 4: file vt +0x28 Seek(0, 0), len = vt +0x30 GetLength, GetBufferSetLength(len), vt +0x34 Read(buffer, len), ReleaseBuffer(-1) (the read twin of CString_WriteToStream 0x4461B0) [dead: no caller or pointer] |
 | 0x004461B0 | 45 | CString_WriteToStream | (this CString, stream): stream vt[14] (+0x38)(GetBuffer(0), length -8), then ReleaseBuffer(-1); no caller or pointer [dead: no caller or pointer] |
 
 ## 0x447000 - 0x453000: 3ds model import / figure export (editor leftover): Scene3ds_ResolveNodesAMF, WeldVertices, ComputeNormals, BuildIndexedComponents, CorrectMappings (.reg atlas), Material_ParseName, AnimNode_Write .ani / .ast / .bon, old CAnimationNode tree building; container serializers
@@ -270,8 +270,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00448A40 | 1507 | Scene3ds_ResolveNodesAMF | fastcall (CFakeFigure CArray CFakeUnit +0x544 (0x18c each), 3ds nodes CArray of 0x120, short frameCount = scene frames - 1, CAnimationSystemOld CFakeUnit +0x4e0) -> 1 / FatalError result: per node the first position key (+0xac, it... |
 | 0x0044A2A0 | 1285 | Material_ParseName | fastcall (name, out textureKind*, out materialKind*) -> 1: the name is cut at every '.', only the parts BEFORE a dot are kept (CStringArray); exactly 3 parts: part 2 lower-cased (CString::MakeUpper 0x700EFE is really MakeLower) an... |
 | 0x0044E3B0 | 1250 | Scene3ds_BuildSoAVertices | fastcall (scene): per mesh (+0x548, 0x18c, count +0x54c): the SoA vector +0xa8 (count +0xac) is sized to ceil(vertices +0xdc / 4) 0x40-byte blocks (AlignedAlloc32_452E70, growth grow or count/8 clamped 4..0x400), every lane first ... |
-| 0x0044B370 | 1008 | dead_44B370 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00448000 | 931 | sub_448000 | unregistered function, reached by call / pointer from 0x33FD89 (gaps.py 2026-11-06). Dead: its only 4-byte match (file +0x33FD89) is unaligned float data, no call or jump; start of the 3ds transform chain (Nodes3ds_AccumulateTrans... |
+| 0x0044B370 | 1008 | AnimNodeOld_Read_44B370 | fastcall (this AnimNodeOld, CFile*): reads 16 bytes -> +0xe4, 12 -> +0xf4, a count + 12-byte vectors -> +0x100 (AlignedAlloc32_Vec3_A growth), dword +0x40, a count + 0x28 keys (AnimKey28_Read each), a count + 0x20 keys (AnimKey20_... |
+| 0x00448000 | 931 | Scene3ds_BuildNodeKeys_448000 | fastcall (scene {objects +4 (0x1c0 each, vt +0x1c name), count +8}, nodes CArray {data +4 (0x120 records), count +8}, u16 frames): per node record: default position +0x70 from the position track +0xac when it has no keys, default ... |
 | 0x004483B0 | 880 | Nodes3ds_AccumulateTransforms | (parent 3ds node record 0x120, nodes CArray, index*): from *index on, while the record's depth short +0xc is greater than the parent's: the record pointer is appended to the parent's child CArray +0x10c (data +0x110, count +0x114)... |
 | 0x0044B060 | 779 | AnimNode_WriteAniAstFiles | fastcall (AnimNodeOld, dir, suffix, splitFrame): builds "<dir><node name +4><suffix>.ani" and the same with ".ast" (both lower-cased; CORRECTION: was "<pathAni>..ani / <pathAst>..ast": the third argument is a name suffix used for ... |
 
@@ -309,17 +309,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00455BA0 | 220 | Protection_Penalty | resets the application settings to defaults (AppSettings::SetDefaults on g_0x79BC70) and randomises the flags of every object of the world manager (CMapObject::SetSpecificRaw / CObject3D::SetSpecific46Raw with random 12-bit values... |
 | 0x00455E50 | 176 | GlobalList79BC2C_Init | static initializer: allocates the 0x10-byte sentinel node of the STLport list g_0x79BC2C from the 16-byte node free list g_0x79B228 (refilled by stlport_node_alloc_chunk_alloc(0x10) and chained when empty) and links it to itself (... |
 | 0x00455A90 | 166 | Disk_GetFreeBytes | (root path): GetDiskFreeSpaceExA (via GetProcAddress on kernel32) or the sector-based GetDiskFreeSpaceA fallback; 0 on failure |
-| 0x00455FF0 | 110 | dead_455FF0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00455F80 | 108 | dead_455F80 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00455A30 | 93 | sub_455A30 | unregistered function, reached by call / pointer from 0x56937 (gaps.py 2026-11-06) |
+| 0x00455FF0 | 110 | App_CreateMainWindow_455FF0 | fastcall (hInstance, nCmdShow): g_0x79BC24 = hInstance; g_0x79BC28 = CreateWindowExA(0, class atom g_0x79BA20, title g_0x79BB24, WS_POPUP / WS_CLIPSIBLINGS 0x84000000, 0, 0, width g_0x79BCA0, height g_0x79BCA4, 0, 0, hInstance, 0)... |
+| 0x00455F80 | 108 | App_RegisterWindowClass_455F80 | fastcall (hInstance): RegisterClassExA({cbSize 0x30, style 8 CS_DBLCLKS, App_WndProc, 0, 0, hInstance, LoadIconA(hInstance, 0x69), cursor 0, brush 0, menu 0, class name g_0x79BA24, small icon LoadIconA(hInstance, 0x69)}) [dead: no... |
+| 0x00455A30 | 93 | App_OutOfMemoryHandler | installed by main through _set_new_handler(0x455A30) at 0x456936: cursor = GetCursor; FlipToGDISurface (device g_0x7AF080 +0xc vt +0x28, result +8, FatalErrorHr on failure) when the device is exclusive (+0x20 bit 0); MessageBoxA(g... |
 | 0x00455830 | 83 | HashSet_Begin4 | (this = STLport hashtable {?, buckets begin +4, end +8}, out iterator {node, table}): begin(): first non-null bucket head into out[0] (0 when all empty), out[1] = this |
 | 0x00455B50 | 79 | Protection_RandomCheck | rolls rand (~1 in 100 per call); when it hits finds an entry flagged in the global list g_0x79BC2C (byte +8 == 0) and calls Protection_Penalty |
 | 0x004553F0 | 74 | Pair8_ConstructN | (records, n): zero-fills n 8-byte records, then each record's CString +4 = empty (g_0x796E48) |
-| 0x00455F40 | 59 | dead_455F40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00455F40 | 59 | App_IsQueryCancelAutoPlay_455F40 | fastcall (message id): once (bit 0 of g_0x79BA04) g_0x79BA00 = RegisterWindowMessageA("QueryCancelAutoPlay"); returns 1 when the id is non-zero and equals it [dead: no caller or pointer] |
 
 ## 0x456000 - 0x461000: application: main window, settings sections, DX7 check, sysmsg.txt
 
-108 functions, group `app`.
+109 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -340,7 +340,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x461000 - 0x463000: CHoover + CInventory + keyboard.ini
 
-68 functions, group `client`.
+69 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -361,7 +361,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x463000 - 0x466000: database.res loader (databases)
 
-56 functions, group `data`.
+60 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -394,7 +394,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00467E10 | 689 | CLightning::InitRandom | (this, from, to): main segment +0x5c; type 0: 6 branches between random jittered copies of from/to (±5% of the length); else 6 branches from lerp(from, to, +0x4f4[i]) to `to`; type < 0: Update; ComputeBounds |
 | 0x004672E0 | 676 | CLightning::Update | (this): UpdatePoints of the main segment +0x5c (scale 1.5 / 1 / 2 by type +0x50c), for type != 0 moves the 6 branch segments (+0x104, 0xa8 each) to a sine-animated offset along the main bolt at fraction +0x4f4[i] (frequencies g_0x... |
 | 0x00468A00 | 530 | Lightning_LoadNoiseTables | reads 'gfx.res\lightning.dat' (CMappedResource) into g_0x79CE78: 32 tables x 400 floats (0x640 bytes each, 0xC800 bytes up to 0x7A9678) = the precomputed harmonic noise bands CLightning::EvalNoise blends; FatalError 'Unable to ope... |
-| 0x00466AF0 | 483 | dead_466AF0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00466AF0 | 483 | LightningSegment_InitRandom_466AF0 | (from, to, c, scale) ret 0x10: LightningSegment_Init(from, to); +0x90 = c; then for 3 records (stride 0x10, from +0x30 and +0x60): an ISAAC random index & 0xf and a random 2D vector (components rand * 2^-31 - 1) normalised and mul... |
 | 0x00468DA0 | 423 | CArray8::Serialize | slot 2 of vt 0x73C584 (this = MFC CArray of 8-byte elements, CArchive*): loading: ReadCount and SetSize inlined (new elements zero-filled, growth count/8 clamped 4..0x400); storing: WriteCount; then count*8 raw bytes through CArch... |
 | 0x00467150 | 391 | CLightning::ComputeBounds | (this): min/max +0x38/+0x44 over the main segment +0x5c and 6 sub segments at +0x104 (0xa8 each); centre +0x28, half extents, radius +0x34, +0x24 = 3 |
 | 0x00466FD0 | 381 | CLightning::ExtendBounds | (this, segment): for each 16-byte point of the segment (+0x94, count +0x98) widens the box min +0x38..+0x40 / max +0x44..+0x4c (branchless min / max); CLightning::ComputeBounds |
@@ -403,19 +403,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x469000 - 0x470000: .mob object descriptors (CObjectDesc / CUnitDesc / CLightDesc / CSoundDesc / CParticleDesc / torch / lever / trap) + 3DS figure builder
 
-154 functions, group `app`.
+145 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, 3DS scene*, out): editor leftover: converts a parsed .3ds scene into CFigure arrays (0x1c0 each); not reached by the game DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
-| 0x00469F70 | 1303 | dead_469F70 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x00469090 | 831 | dead_469090 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00469F70 | 1303 | CDescBase::GetFootprint_469F70 | (int out[8]) ret 4: for the spawned object +0x1c: rotates four corner offsets of its box (object +0x128 / +0x144 / +0x1c) by rotation +0x2c (explicit quaternion sandwich 2(u.v)u + (w^2 - u.u)v + 2w(u x v), the last through Quat_Ro... |
+| 0x00469090 | 831 | MapObjectKind_FromName_469090 | (CString name by value) ret 4 -> kind: MakeLower, then "trap" 0x3b, "lever" 0x3c, "torch" 0x3a, "human" 0x32, "monster" 0x33, "animal" 0x34, "flora" / "tree" 0x35, "structure" / "building" 0x36, "stone" 0x37, "unit" 0x39, "object"... |
 | 0x0046AB20 | 824 | CObjectDesc::OnChunk | slot 0 (ChunkFile reader, OBJECT 0xB001 children): 0xB002 NID -> +0x18, B003 OBJTYPE -> +0x50, B004 OBJNAME -> +0x3C, B006 OBJMODEL -> +0x54, B007 -> +0x70, B008 -> +0x74, B009 OBJPOSITION -> +0x20, B00A OBJROTATION quaternion -> ... |
 | 0x0046CBC0 | 792 | MobLogicSlot_OnChunk | (children of UNIT_LOGIC 0xBBBC0000 into the 0x4c MobLogicSlot): 0xBBBD0000 appends a 0x20 point {pos, CArray of 0x14 look-at records} and reads it (MobLogicPoint_OnChunk); 0001 byte (legacy aggressive: AggrMode -> 0), 0002 byte +0... |
 | 0x0046B7D0 | 774 | CMagicTrapDesc::OnChunk | slot 0 (MAGIC_TRAP 0xBBAB0000 children, as the explicit compares in MobFile_ParseChunks 0x481F00 and this switch read them): 0xBBAB0001 diplomacy dword -> +0x8C, 0002 spell string -> +0x90, 0003 count + N x 12 bytes area circles {... |
 | 0x0046C900 | 677 | MobLogicSlot_Write | (ChunkFile, slot +0x18): UNIT_LOGIC chunk: 0xBBBC000B alarm condition, 000C help radius, 0002 cyclic, 000E aggression mode, 000D always active, 0003 model, 0004 guard radius, 000A wait, 0005 guard point, 0007 use, 0006 num alarm; ... |
 | 0x0046E680 | 623 | MobLogicPoints_Copy | (this = CArray of 0x20 point records, src): destroys the current points, SetSize to the source count, copy-constructs each (pos + look-at CArray). Was UnitLogicRecords_Copy |
-| 0x0046BAD8 | 615 | sub_46BAD8 | unregistered function, reached by call / pointer from 0x6B813 (gaps.py 2026-11-06) |
+| 0x0046BAF0 | 589 | CMagicTrapDesc::CopyFrom_46BAF0 | (const src&) ret 4: CObjectDesc::CopyFrom, +0x8c, CString +0x90, vec3 +0x94, the 12-byte array +0xa0 (resize 0x46EAD0 + copy of src +0xa4 x +0xa8), the 8-byte array +0xb8 (size +0xbc, cap +0xc0, grow +0xc4; 0x46F110 constructs new... |
 | 0x0046A710 | 519 | CObjectDesc::CopyFrom | (src DescRecordB-like record): copies model / prototype / complection / name strings (+4..+0x48 of the source, CStrings +0x3c / +0x40) into the matching descriptor fields (editor path) |
 | 0x0046D080 | 513 | CUnitDesc::OnChunk | slot 0 (UNIT 0xBBBB0000 children): 0xBBBC0000 UNIT_LOGIC -> the next 0x4c slot (+0x90 + (+0x8c)++ * 0x4c; +0x28 = 0, +0x48 = 4 before MobLogicSlot_OnChunk, 4 -> 0 after); 0xBBBB0002 UNIT_PROTONAME -> +0x20c; 0004 UNIT_STATS -> 0xa... |
 | 0x0046A940 | 465 | CObjectDesc::WriteFields | slot 11 (shared by object / torch / lever / trap / unit): writes 0xB00D parts +0x78, B011 byte +0x6c, B002 id, B003 type +0x50, B004 name +0x3c, B006 model +0x54, B00E prototype +0x58, B007 +0x70, B008 +0x74, B00F comment +0x40, B... |
@@ -441,18 +441,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0047B1F0 | 1064 | PtrArray_Diff | (ecx old, edx new, outAdded, outRemoved, outKept): PtrArray_SortUnique(new); sizes the three outputs to max(count old, count new) (aligned SetSize inlined); merges the two sorted arrays: equal -> outKept, only in new -> outAdded w... |
-| 0x00477710 | 994 | dead_477710 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00477710 | 994 | MobUnitStats_CaptureFrom_477710 | (unit) ret 4: the inverse of MobUnitStats_ApplyTo: this +0..+0xc = _ftol of the unit stat block +0x170 fields +0x28 / +0x2c / +0x34 / +0x38 (hp / mana values), +0x10..+0x53 from the +0x240 block (+0x208..+0x268, bytes +0x248 / +0x... |
 | 0x00477B00 | 829 | MobUnitStats_ApplyTo | (this = unit prototype record, unit): empty prototype -> only adds the named spells (+0xc4 list, 0x531180) and perks (+0xb0, 0x531220); otherwise resets the unit stats (0x5315B0) and copies hp / mana / stats (+0..+0x50) into the u... |
 | 0x0047ADF0 | 809 | PtrArray_SortUnique | (ecx = 32-byte aligned pointer array {data, count, cap, grow}): when count > 1: sizes the static scratch array g_0x7A9738 (lazy init + atexit 0x47B1D0, aligned grow), LSD radix sort of the dword keys by bytes 0, 1, 2 (counting sor... |
 | 0x0047DCA0 | 785 | DeltaWriter::WriteBytes | (this = DeltaCodec, data, n): writes n bytes against both base snapshots: base A (+0 stream, bits to +0x50) and base B (+0x28, bits to +0x78): no snapshot at the base position -> a 0 bit then per dword 0 bit + 4 raw bytes, rest ra... |
-| 0x0047BC10 | 620 | dead_47BC10 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0047BC10 | 620 | ReliableStream_OnDatagram_47BC10 | (data, len) ret 8 (0x2014-byte stack frame): g_0x7A976C = timeGetTime; len >= 4; u32 seq = data[0]; len == 4 is an ack: removes the matching entries (+0x10 == seq) of the unacked list +0x50 (head +0x54) and updates the RTT estimat... |
 | 0x0047C680 | 607 | TcpConnectThread_dead | thread body of ConnectAsync (socket, split host:port, connect); NO CALLERS (dead) |
 | 0x00476430 | 513 | CMapArray_Serialize | slot 2 of vt 0x73C80C (this = MFC CArray of 0x1c-byte CMaps, CArchive*): loading: ReadCount and SetSize inlined (CMapArray_ConstructN for new elements, vt[1](0) for removed ones); storing: WriteCount; then count*0x1c raw bytes (th... |
 | 0x004761C0 | 501 | CMap_Serialize | slot 2 of vt 0x73C818 (this = MFC CMap<DWORD, DWORD>, CArchive*): loading: ReadCount, then per entry key and value (4 bytes each through CArchive Read 0x708832) inserted with the operator[] code inlined; storing: WriteCount(count ... |
 | 0x00479E30 | 499 | CTcpNetDriver::SyncPeers | (this = RefListPair CWorld +0x60, LobbyServer g_0x79B5DC): for every NetPeer of the server's peer list +0x28 without a PeerMsgStream in +8: when the peer's IN stream +0x1148 holds bytes (GameBuffer::CommitCursor first) AND LobbySe... |
 | 0x00475310 | 488 | CArray1C_Serialize | slot 2 of vt 0x73C848 (this = MFC CArray of 0x1c-byte POD elements, CArchive*): ReadCount + SetSize inlined (zero-filled new elements) / WriteCount, then count*0x1c raw bytes |
 | 0x0047CFA0 | 453 | CTcpNetDriver::AcceptNewClient_dead | accept() on a listening socket + TcpMsgStream; NO CALLERS (no listening socket is ever created): dead TCP server path |
-| 0x0047D190 | 445 | dead_47D190 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0047D190 | 445 | CTcpNetDriver::PollSockets_47D190 | () (large stack frame): drops the streams of the list +0x10 that answer 0 to vt +0x10 / vt +0x14 (ObjRefList10_EraseNode2); builds the fd_set g_0x7A9778 from the listening socket and every stream socket and select()s; a readable l... |
 | 0x00475130 | 435 | CArray0C_Serialize2 | slot 2 of vt 0x73C854: same code as CArray0C_Serialize (0xc-byte POD elements zero-filled on grow, raw count*0xc bytes) |
 
 ## 0x47E000 - 0x481000: net delta codec: DeltaWriter/DeltaReader (16-bit quantized fields vs two base snapshots), DeltaCodecSet, GameException, FatalError, DDraw error text, AnimKeyToString
@@ -484,7 +484,6 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00481660 | 2029 | MobFile_Load | (ChunkFile, noScript) from LoadMapObjects: MobFile_ParseChunks; parse result 1 -> PlayerRelations::Set(g_0x7C2BC4, i, j, m[i][j], 1) 32x32; AppSettings AutomaticQuantization (g_0x79BCF4) -> morphs of kind-1 objects (types not 0x32... |
 | 0x00481F00 | 1327 | MobFile_ParseChunks | (ChunkFile, out descriptor hash keyed by NID, out 32x32 matrix + names, out script CString) -> 1 unless a 0xD000 marker came last: 0xACCEECCA plain script / 0xACCEECCB scrambled (LCG, 0x42C650); 0xABD0 wind {vec3 dir, strength -> ... |
-| 0x004810F0 | 1064 | sub_4810F0 | unregistered function, reached by call / pointer from 0x80C7A (gaps.py 2026-11-06) |
 | 0x00482EF0 | 703 | RbMap_Insert_482EF0 | STL: std::map<string-range,list> insert with hint: handles begin/end cases, InsertUnique fallback, rebalance |
 | 0x00483950 | 580 | DwordVector_Reserve_483950 | STL: vector<uint>::reserve(n) |
 | 0x004827D0 | 432 | List24_Ctor_4827D0 | STL: construct std::list<0x18-byte>: allocate sentinel node from pool g_0x79B22C |
@@ -496,10 +495,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00483DF0 | 235 | RbNode_New_483DF0 | STL: allocate a 0x20-byte tree node (pool g_0x79B230) and copy-construct key (String_CtorRange) and value list (0x483F00) |
 | 0x00482640 | 212 | NodeAlloc32_482640 | STL: allocate 0x20-byte node from pool g_0x79B230 (refill 20 via chunk allocator) |
 | 0x004833B0 | 202 | HashMap_Ctor_4833B0 | STL: construct hash map object: sentinel list, bucket vector of NextPrime(100) |
+| 0x004824B0 | 191 | ListHolder_Destroy_4824B0 | STL: destroy a std::list (+0xC) of 0x18-byte nodes via PoolFree and the owning containers |
 
 ## 0x484000 - 0x499000: particle effects (CParticle, 'Particle effect ...')
 
-200 functions, group `effects`.
+195 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -520,7 +520,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
-593 functions, group `script`.
+599 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -536,17 +536,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0049F150 | 863 | Isaac_Init | (ctx {+0 initialised, +4 counter, +8 results[256], +0x408 mm[256], +0x808 aa, +0x80c bb, +0x810 cc}) fastcall: only when +0 is 0: Isaac_SeedFromFiles fills results[] with 1 KB of a random file on C: (see 0x49F7B1); aa = bb = cc = ... |
 | 0x004B5B00 | 856 | SSCCmd::EvalGroup | (this, vm, vars, out ObjRefCArray**): parameters bound and nested bindings evaluated; the result = a new group node appended to the temp pool +0x1b0 (GroupCList_AddTail); 0x59 GroupAdd = ObjRefCArray_Union, 0x5a GroupSub = Differe... |
 | 0x0049A220 | 842 | OctaveNoise_FillBand | slot 1 of 0x7420D4 (this, out 256 x 256 bytes, step): steps 1..4 regenerate octave table 0..3 (+0x18 + 0 / 0x400 / 0x800 / 0xC00, vt[0]); steps 7..14 fill rows (step - 7) x 32 .. +32: each pixel = (64 o1 + 32 o2 + 16 o3 + 8 o4 - 7... |
-| 0x0049A7A0 | 838 | dead_49A7A0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x0049A7A0 | 838 | OctaveNoise_FillBand2_49A7A0 | (out, step) ret 8: a second copy of OctaveNoise_FillBand 0x49A220 (slot 1 of 0x7420D4) with other weights: steps 1..4 regenerate octave tables 0..3 through vt[0], steps 6..15 fill rows from the weighted octaves (>> 3 / >> 2 / >> 1... |
 | 0x004B5FE0 | 837 | SSCCmd::Read | (this, stream): function id +0, float slots (count then values), string slots (Stream_ReadCStringTo), object slot count (slots zeroed: refs are re-bound at run time), group slot count (zeroed), local bindings +0x58 and global bind... |
 
 ## 0x4B7000 - 0x4BB000: script API (cont.)
 
-89 functions, group `script`.
+87 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004BAAB0 | 825 | QuestObjectives_GenerateScript | (vm GSWorld*): script QFinish(): builds the source "DeclareScript Su%i()\n" per objective, then per objective i "Script Su%i(if(\n<cond>\n)then(\nKillScript()\nSu%i+1()\nGSSetVar(0,\"q.%s.%s.%i\",2)\nGSSetVar(0,\"q.%s.%s.%i+1\",1)... |
-| 0x004B9C08 | 337 | sub_4B9C08 | unregistered function, reached by call / pointer from 0xB6870 (gaps.py 2026-11-06) |
 | 0x004BAEC0 | 307 | ScriptParty_Resolve | fastcall (player, name CString*) -> CParty*: 0 for no player; a name "Store::Rest" is split at "::" (g_0x78BB18): name = Rest, store = Store (else store = ""); store equal to the PartyList current name g_0x7AA5D4 (+0x10) -> the pl... |
 | 0x004BAE10 | 159 | QuestObjectives_Add | (kind = the QObj* command id 0xd7..0xdd, text CString*, value): appends {kind, text, value} to g_0x7AA608 (Run cases 0xd7 QObjArea(f), 0xd8 QObjSeeObject(s), 0xd9 QObjSeeUnit(s), 0xda QObjKillUnit(s), 0xdb QObjKillGroup(s), 0xdc Q... |
 | 0x004BA730 | 130 | AiLogicAggression::Clone | slot 3 of vt 0x73D260 (AiLogicAggression, 0x18): new 0x18-byte object (refcount 0, vt 0x73D22C then 0x73D260): target ObjRef +8 shared (refcount ++), revenge byte +0xc, spell +0x10, chosen +0x14 copied. Was ObjHolder73D260::Clone |
@@ -559,10 +558,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004BA250 | 84 | AiLogicGuard::Clone | slot 3 of vt 0x73D128 (AiLogicGuard, 0x20): new 0x20-byte object (refcount +4 = 0, vt 0x73D15C then 0x73D128) with +8..+0x1c copied (point, radius, stayTime, failedSpots). Called through the vtable (Brain logic copies). Was Class7... |
 | 0x004BA5B0 | 84 | AiLogicFollow::dtor | fastcall: vt = 0x73D1C4, the target +8 released (vt[4]) and nulled, vt = 0x73BB68 (base). Caller AiLogicFollow::DeletingDtor. Was ObjHolder73D1C4::dtor_base |
 | 0x004BA8C0 | 84 | AiLogicAggression::dtor_base | vt 0x73D260 dtor body: releases the kept target ref +8 (vt[4] Release) and clears it, vt -> 0x73BB68; AiLogicAggression::DeletingDtor. Was ObjHolder73D260::dtor_base |
+| 0x004BA450 | 78 | AiLogicFollow::Ctor | (this, target): vt 0x73D15C then 0x73D1C4; +8 = target with refcount ++; kind 10. Script UMFollow. Was ObjHolder73D1C4::ctor |
 
 ## 0x4BB000 - 0x4D6000: WorldScript compiler (lexer, #define, Duplicate script) + spell name table
 
-455 functions, group `script`.
+448 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -583,7 +583,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4D6000 - 0x4D7000: CServerSpecificManager + CTorchObjectSpecific
 
-36 functions, group `core`.
+35 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -604,7 +604,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4D7000 - 0x4DA000: CSkyObject
 
-56 functions, group `client`.
+55 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -667,7 +667,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4E1000 - 0x4E3000: CVisibilityFog / VisionFog
 
-48 functions, group `client`.
+47 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -688,7 +688,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4E3000 - 0x501000: renderer: D3D7 device, state blocks, vertex buffers, MMX
 
-513 functions, group `renderer`.
+510 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|

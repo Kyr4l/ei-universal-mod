@@ -250,7 +250,7 @@ Per direction: `outStream` GameBuffer `+0x112c` (bytes queued by `PeerMsgStream:
 | pending accept lifetime | 60 s | `NetServer::Receive` 0x443590 |
 | peer silence timeout | 60 s (`NetConnection +0xc`) | `NetPeer::Tick` |
 | resend timeout | `rttMean + 3 sigma`, clamped 0.1..5 s; lost records kept 5 s | `NetPeer::Tick`, `+0x10` |
-| id recycle period | 75 s (`+0x14`) | `NetPeer::Tick` |
+| id recycle period | 75 s (`+0x14` = peer timeout `+0xc` 60 + max resend `+0x10` 5 + 10, recomputed by the unreferenced setter 0x437870; getter 0x4378B0) [T7 n01] | `NetPeer::Tick` |
 | receive window / ack bits | 32 behind the last; 32 ack bits | `AcceptSeq`, `WriteAcks` |
 | packet budget / chunk / receive size | 220 / 204 (hard cap 255) / 2048 | `NetPeer +0x50`, `TakeStreamChunk`, `ReceiveFrom` |
 | out stream cap | 32000 bytes -> drop | `NetPeer::Tick` |
@@ -539,12 +539,23 @@ by `CPlayerServer` (`world-client-players.md`). Users: `CMapObject::WriteNetStat
 
 ### 5.7 Dead code: Huffman, BigNum / RIPEMD [V]
 
-- `HuffmanCoder` (0xc08: codes `+0`, lengths `+0x400`, frequencies `+0x800`, root `+0xc04`; `BuildTree` 0x47A8B0, `BuildCodes` 0x47AA10,
-  `RebuildCodes` 0x47A800, `AssignCodes` 0x47AA80, node pool `g_0x7A972C`): no constructor exists and no function outside the coder calls
-  it; the LZ stream uses fixed prefix tables. Linker leftover.
+- `HuffmanCoder` (0xc08: codes `+0`, lengths `+0x400`, frequencies `+0x800`, total byte count `+0xc00`, root `+0xc04`; ctor
+  0x47A6F0, ResetCounts 0x47A790, CountBytes 0x47A7B0, `BuildTree` 0x47A8B0 (comparator 0x47A880), `BuildCodes` 0x47AA10,
+  `RebuildCodes` 0x47A800, `AssignCodes` 0x47AA80, Encode 0x47AB80, Decode 0x47AC10; node pool `g_0x7A972C` (free 0x47ACF0, user count
+  `g_0x7A9730` 0x47AD00 / 0x47AD10)): a constructor exists (0x47A6F0, T7 n01) but nothing calls it or any other coder entry; the LZ
+  stream uses fixed prefix tables. Linker leftover.
 - `KeyHash_Derive` 0x431300 (xor-folds 64 bytes at `this +0x40` into 16, one `Ripemd128_Compress` 0x4319E0 round from the standard IV),
   `BigNum_ModExp` 0x431370 (square-and-multiply on 16-bit limbs over `BigNum_DivMod` 0x4315B0): no callers. There is no key exchange, no
   session key and no CD / integrity check in the protocol; the login magic is the only "secret".
+- The rest of the unused key exchange is there too, all unreached (T7 n01): `KeyExchange::MakeKeyPair` 0x431090 (32 ISAAC bytes as the
+  private key, public = `BigNum_ModExp(g_0x783DF0, key, g_0x783E10, 32)`), `GetPublicKey` 0x4310F0, `DeriveSessionKeys` 0x431110
+  (shared secret = ModExp(peer key), two RIPEMD-128 counter keystreams), `KeyStream_Xor` 0x431220 (CTR xor); `BigNum_ModExp`'s only
+  callers are 0x431090 / 0x431110 (dead chain).
+- Unreached pieces of the dead TCP / reliable driver (T7 n01): `ReliableStream_OnDatagram` 0x47BC10 (ack / in-order delivery, 7/8 RTT
+  filter at `+0x90`), `ReliableStream_Send` 0x47BE80, `TcpDriver_ResendAll` 0x47C070 (30 s drop), `TcpDriver_ReapStreams` 0x47C0F0,
+  `TcpMsgStream::PollRecv` 0x47C4B0 (60000-byte recv), `TcpListener_Open` 0x47C550 (bind + listen on port 8000),
+  `CTcpNetDriver::PollSockets` 0x47D190 (select loop), `ReleaseListener` 0x47D350, `TakeStreams` 0x47D380. Live: the WinSock atexit
+  0x47C330 (Sleep(1000) while `g_0x7A9774` sockets are open, then WSACleanup) and the linger-close 0x47C3E0 pushed by TcpSocketRef::dtor.
 
 ### 5.8 GameException and FatalError [V]
 
@@ -552,7 +563,10 @@ by `CPlayerServer` (`world-client-players.md`). Users: `CMapObject::WriteNetStat
 `FatalErrorHr` 0x4800E0 appends `(0x%.8X) <DDrawErrorString>`. The net code never throws: parse errors end in `NetFatalError` 0x664B70
 ("Wrong packet ID", "Packet has no handler", "Error during parsing update prevID %x curID %x", "Pkt read error", `Serv_` variants) or
 in a peer drop. `GameException` (0xc: `vt` 0x73CAB4, `+4` message, `+8` hr; ctors 0x480250 / 0x480300) is thrown only by the DirectDraw /
-texture layer (0x4E6000-0x4F1000, 43 sites) and caught there.
+texture layer (0x4E6000-0x4F1000, 43 sites) and caught there. The fatal callback `g_0x7A9BA0` has a setter 0x480050 and a sibling setter
+0x480060 (`g_0x7A9BA4`), both unreferenced, so the callback stays 0 in the shipped game; `DDrawFatalError` 0x480170 (HRESULT-only
+message box + exit) and `GameException::ctorFormat` 0x4801D0 (vtable 0x73CAB0) are dead twins of FatalErrorHr / GameException::ctor
+[V, T7 n01].
 
 ## 6. What is not known
 
@@ -606,6 +620,7 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | this page 5 / `functions.tsv` (t7 g04) | `IMsgStream` slot 2 "dtor" (`FileMsgStream::dtor` 0x478610, `DualFileMsgStream::dtor` 0x478B10, `PeerMsgStream::dtor` 0x479C10, `TcpMsgStream::dtor` 0x47CD40) | slot 2 is a Reset: each destroys its members, then re-runs the constructor body in place (`this != 0` guard, empty `CFileStream`, open = 0); the real destructors are the slot-0 deleting dtors (`*::dtor_base`) [V] |
 | `functions.tsv` (t7 g04) | `PartyPair::dtor` 0x4578D0 | `DInputMouse::dtor` (vt 0x73C350, the mouse object made in `main`) [V] |
 | this page 4.2 / `structs.tsv` (t7 g02) | kind 6 / 7 / 8 / 9 strings "no NUL on the wire"; kind 14 payload starts with `ref player` | every string is written with its NUL (`ChatMessage::Write` 0x413B10 etc.: `strlen + 1`); `RefDwordsStringMessage::Write` 0x416C00 writes only `u32 kind, u32 value, text\0`, the player ref is server-side routing [V] |
+| this page 5.7 (T7 n01) | `HuffmanCoder`: "no constructor exists" | the ctor is 0x47A6F0; nothing calls it or any coder entry |
 
 ## 8. Function index
 

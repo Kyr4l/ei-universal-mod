@@ -3949,10 +3949,10 @@ MsgStreamBase			0x50	pointer	link	PeerMsgStream: NetPeer ref; TcpMsgStream: TcpS
 TcpSocketRef		0xc	0x0	pointer	vtable	0x73CA00; dtor starts a thread that closes the socket gracefully (g_0x7A9774 counts them); dead code
 TcpSocketRef			0x4	int	refCount	
 TcpSocketRef			0x8	int	socket	
-HuffmanCoder		0xc08	0x0	uint[256]	codes	prefix code per symbol; DEAD CODE: no constructor and no live caller (see HuffmanCoder::dtor)
+HuffmanCoder		0xc08	0x0	uint[256]	codes	prefix code per symbol; DEAD CODE: the constructor 0x47A6F0 exists but nothing calls it or any other coder entry. CORRECTION: was "no constructor and no live caller"
 HuffmanCoder			0x400	uint[256]	lengths	code length per symbol
 HuffmanCoder			0x800	uint[256]	frequencies	
-HuffmanCoder			0xc00	int	unknownC00	cleared by the dtor
+HuffmanCoder			0xc00	int	totalCount	number of bytes counted: CountBytes 0x47A7B0 adds n, ResetCounts 0x47A790 / the ctor 0x47A6F0 clear it (all dead code). CORRECTION: was unknownC00
 HuffmanCoder			0xc04	pointer	root	HuffmanNode tree
 HuffmanNode		0x18	0x0	pointer	left	
 HuffmanNode			0x4	pointer	right	
@@ -4014,8 +4014,8 @@ CBaseManager			0x68	IdHash	poolsByKind	kind -> MFC-style CList (0x1c bytes, vt 0
 CBaseManager			0x80	IdHash	poolCountByKind	kind -> number of objects pooled for that kind (PoolObject: find-or-insert then +1); 0x100 buckets after Init; +0x94 = the highest kind seen; FreeTypeGroups / Init clear it
 CBaseManager			0x98	int	idMin	lower bound of the ids RegisterWithNewId allocates: 0 after Init (the ctor leaves it 0); RegisterInstant uses the same range for id == -1
 CBaseManager			0x9c	int	idMax	upper bound (exclusive) of the allocated ids: 2000000000 after the ctor and Init; when maxId +0x30 is outside [idMin, idMax) a random id in the range is tried up to 100000 times, then FatalError "CBaseManager::RegisterInstant"
-CBaseManager			0xa0	int	unk_0xa0	-1 in the ctor, 0 after Init; no reader in the typed decompiles (derived managers may use it)
-CBaseManager			0xa4	int	unk_0xa4	-1 in the ctor, 300 after Init; no reader in the typed decompiles
+CBaseManager			0xa0	int	sweepCounter	counts calls of the unreferenced sweep 0x404320 (dead code); reset when it reaches +0xa4. CORRECTION: was unk_0xa0 (no reader)
+CBaseManager			0xa4	int	sweepPeriod	300 after Init: every 300th call of 0x404320 (dead) frees the pools and pools every object with refcount 0. CORRECTION: was unk_0xa4
 CBaseManager			0xa8	int	lastRegisteredId	the id handed out by the last RegisterInstant / RegisterWithNewId (-1 after the ctor; not reset by Init)
 CBaseManager			0xac	pointer	world	the CWorld set by slot 13 SetWorld (0 when the argument is 0; Done clears it); the managers reach the specific managers and the map through it
 CMagicTrapObject	CMapObject	0x290	0x238	uint	diplomacyMask	MT_DIPLOMACY of the descriptor (CMagicTrapDesc +0x8c): the faction mask handed to MagicTrap_CollectUnitsInAreas (which units in the areas count as targets); -1 (everyone) after the ctor / Init; saved as the last dword of Read / Write; spells.md traps

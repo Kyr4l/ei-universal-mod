@@ -69,7 +69,10 @@ Fields: +0x1c id->object map, +0x30 max id, +0x38/+0x3c list head/tail (+0x40 co
 +0x50 id->node hash, +0x68 kind->pooled objects, +0x80 kind->pool count, +0x98/+0x9c id range (0, 2000000000), +0xa8 last id,
 +0xac the world (set by slot 13 SetWorld). Slots: 2 Init, 3 Done, 9 Read, 10 Write, 13 SetWorld(world), 14 CreateByKind(kind)
 (pure virtual in the base), 15 DoneObjects, 23 RegisterInstant(kind, id or -1 = random), 24 DestroyObject(obj) (from
-CObject::Release). 16-22: defaults returning 0 / empty (per-manager hooks).
+CObject::Release). 16-22: defaults returning 0 / empty (per-manager hooks). `+0xa0` / `+0xa4` are the counter / period (300 after Init) of an
+unreferenced sweep 0x404320 (every 300th call: FreeTypeGroups, then PoolObject on every registered object with refcount 0). Other dead
+methods: RegisterWithId 0x403D30, ChangeId 0x403E10, PopPooled 0x404260 (the pool pop RegisterInstant inlines), SetIdRange 0x404600
+(recomputes maxId +0x30 within [min, max]) [V, T7 n01].
 
 ## CUnitServer (kind 0x48 server; vtable 0x73EF38, 54 slots; 0xb20 bytes) — +0x1c = the owning CUnit
 +0x3c move state (slot 16 returns it; +0 mode, 2 = moving), +0x1e0 stats block (0x523xxx / 0x524xxx / 0x525xxx helpers,

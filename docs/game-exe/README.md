@@ -404,6 +404,12 @@ The compiler's C++ exception code is listed separately in `eh-funclets.tsv` (gen
 states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 237 KB in all. Every row names its owner function
 (the function whose prologue registers the stub), the unwind state and the code. These blocks are not in `functions.tsv`.
 
+## Bytes in .text that are not functions (not-functions.tsv)
+
+`not-functions.tsv` (addr, size, old name, what it is, batch) lists the blocks that earlier passes registered as functions but that the
+T7 reading round (2026-11-07) showed are not function starts: switch jump / index tables, alignment padding, addresses inside another
+instruction, and unreachable bytes after a no-return call. They were moved out of `functions.tsv` so every byte stays accounted for.
+
 ## Coverage
 
-Coverage (15748 functions): named 15748.
+Coverage (15773 functions): named 15773.
