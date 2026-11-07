@@ -10543,7 +10543,7 @@ addr	size	name	status	purpose
 0x00624F10	1299	CCampSkillsWin::Build	named	vt 0x7417A8 slot 18: the tab-1 skills / perks pane: blit surface origin (200,100); buttons 0..3 list scroll arrows, 4 / 5 Melee / Archery rows, 6 empty rect (Backstab never clickable), 7..9 Elemental / Sense / Astral, 10 Science, 11..33 the 23 available-perk rows (0x19F..0x249), 34..43 the 10 learned-perk rows (0xD7..0x181 x 0x14A..); texts skills / perks / perks_av (+0x1A4); one 0x3C edit record per party hero (+0x190 vector, SaveStatsBytes)
 0x00625430	209	CCampSkillsWin::ResetEdit	named	re-creates the per-hero edit records from the party (Array60_InsertRealloc, SaveStatsBytes)
 0x00625510	23	CCampSkillsWin::GetPerkFlag	named	the dirty flag (+0x38) of the selected hero's edit record (+0x190 + sel * 0x3C)
-0x00625530	37	FloatToInt_Wrap	named	float to long via _ftol
+0x00625530	37	CCampSkillsWin::GetCurrentExp	named	"thiscall (CCampSkillsWin): rec = +0x190 + (+0x150) * 0x3C (the selected hero's 0x3C-byte record); x87 rec[+0x34] + rec[+0x2C] - rec[+0x30] converted by _ftol (0x6E853C, tail jump) and returned as int; callers CCampScreen::EnterMode (ecx = skillsWin +0x1F4, tab 1) and CCampScreen2::Draw (ecx = +0x1C4, ""camp_current_exp"" text). CORRECTION: was a generic float-to-long wrapper"
 0x00625560	52	CCampSkillsWin::GetPointsLeft	named	free points = (int)(unit exp total - spent) of the selected hero (unit +0xCC accessor)
 0x006255A0	235	CCampSkillsWin::SelectNextAvailable	named	(apply, discard): apply = commit the edited records (SaveStatsBytes / RecalcDerived) and select the next dirty hero; discard = restore the stats from the record; RefreshPerks
 0x00625690	457	CUnitInfoWin::TooltipAtPoint	named	"(x, y, out {kind, index, .., top y = parent vt[51]() + 0x20, CString text}): ButtonAtPoint: 4..9 -> kind 1 attribute (name from the table at 0x793BD4 ""Melee""..), 10 -> kind 2 (table 0x793BC4), 11..0x21 -> kind 3 skill list row (+0x15C rows of 0x18, scroll +0x154; text = row +4 trimmed), 0x22.. -> kind 3 perk list row (+0x168, scroll +0x158, index = row +0x10); otherwise kind -1. Only when +0xE8 is set"
@@ -10575,28 +10575,28 @@ addr	size	name	status	purpose
 0x00629A40	136	CCampFaceBar::Setup	named	"(party, large, flag): +0x194 = mode, figure ""InventoryM01"", CCampBar2::Build, tooltips 0x9DD0 / 0x9DD1; the hero appearance bar of the party screen (vt 0x741BF4, derived from CCampBar2). Was CCampInventoryWin::Setup"
 0x00629AD0	25	CCampFaceBar::RebuildItemList	named	vt 0x741BF4 slot 26: +0x188 = number of entries of the vector +0x194. Was UIWin741BF4::UpdateCount
 0x00629AF0	684	CCampFaceBar::Draw	named	vt 0x741BF4 slot 20: tab fade, the hero's face figure (UIUnitPreview::PickFaceFigure), CUIWidget::Draw. Was CCampBar2::DrawFace
-0x00629DA0	5	thunk_FUN_00700970	named	
+0x00629DA0	5	thunk_CString_dtor_00629DA0	named	5-byte thunk: jmp CString::~CString 0x700970; reached only from the unwind funclet 0x72CD33 of CCampFaceBar::Draw (state 0->-1)
 0x00629DB0	164	CCampFaceBar::OnLButtonDown	named	vt 0x741C60 slot 2: CCampBar2::OnLButtonDown; button 8 = the slider (height / face index, UnscalePoint -> +0x100), buttons\battle\on_off.wav. Was OnLButtonDownSlider
 0x00629E60	459	Record24Vector_InsertRealloc	named	STL: vector<PerkRow 0x18>::_M_insert_overflow (grow path of insert); 4 calls in CCampSkillsWin::RefreshPerks (the available / learned perk rows)
-0x0062A0B0	403	Array60_InsertRealloc	named	vector of 0x3C-byte records insert grow path (Array60_CopyRange / Array60_FillN)
-0x0062A290	114	Record24Range_Assign	named	assign [first,last) of 0x18-byte records of three CStrings and three values
-0x0062A310	116	Record24_CopyCtor	named	copy-construct a 0x18-byte record {CString x3, int, int, byte}
+0x0062A0B0	403	Array60_InsertRealloc	named	thiscall (vector of 0x3C-byte records, pos, value, n): STLport _M_insert_overflow: new cap = size + max(size, n) records from the size pool g_0x79B224 (<= 0x80 bytes, PoolAlloc_Refill when empty) or operator_new; Array60_CopyRange [begin, pos), then one copy of *value (n == 1) or Array60_FillN n copies, Array60_CopyRange [pos, end); old buffer back to the pool / operator_delete; sets begin/end/cap (+0/+4/+8); callers CCampSkillsWin::Build and ::ResetEdit
+0x0062A290	114	Record24Range_Assign	named	fastcall (first, last, dest): copy-assigns (last - first) / 0x18 records {CString +0, +4, +8; dword +0xC, +0x10; byte +0x14} with CString::operator= and plain copies; returns the dest end; caller CCampSkillsWin::RefreshPerks (3)
+0x0062A310	116	Record24_CopyCtor	named	thiscall (dest, src): copy-constructs the 0x18-byte record: CString copy ctor for +0, +4, +8, dwords +0xC, +0x10, byte +0x14; returns dest; callers CCampSkillsWin::RefreshPerks (3), Record24Vector_InsertRealloc
 0x0062A390	307	DwordArray_SetSize_62A390	named	MFC: CArray<DWORD> SetSize (plain buffer +4, size +0xC, cap +8, grow +0x10)
 0x0062A4D0	129	Record24Range_AssignFwd	named	STL: copy 0x18 perk row records forward onto dest (erase shift); used by CCampSkillsWin::RefreshPerks
 0x0062A560	32	StaticInit_Guarded_62A560	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0062A580	163	Record24Range_UninitCopy	named	STL: uninitialized_copy of 0x18 perk row records; used by Record24Vector_InsertRealloc
 0x0062A670	164	Record24Range_UninitFill	named	STL: uninitialized_fill_n of a 0x18 perk row record; used by Record24Vector_InsertRealloc
-0x0062A760	44	Array60_CopyRange	named	copy [first,last) of 0x3C-byte (15-dword) records to dest skipping null
-0x0062A790	40	Array60_FillN	named	fill N 0x3C-byte records with *value skipping null
+0x0062A760	44	Array60_CopyRange	named	fastcall (first, last, dest): for each 0x3C-byte record copies 15 dwords to dest when dest != 0 (uninitialized_copy); returns nothing useful (dest end in eax); caller Array60_InsertRealloc (2)
+0x0062A790	40	Array60_FillN	named	fastcall (dest, n, value): n times copies the 15 dwords of *value into dest when dest != 0 (uninitialized_fill_n), dest += 0x3C; caller Array60_InsertRealloc
 0x0062A7C0	30	DeletingDtor_62A7C0	named	MFC: scalar deleting dtor of a small record of two CStrings (CStringPair_Destroy_00613CF0 + operator delete when flag&1); 4 direct callers in the camp / options code
 0x0062A7E0	31	StaticInit_Consts3_62A7E0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0062A800	41	Quat_StaticInit_Identity_0062A800	named	sets a global quaternion to (1,0,0,0)
+0x0062A800	41	Quat_StaticInit_Identity_0062A800	named	static initializer (pointer 0x783858 in the init table): g_0x7C7F90..0x7C7F9C = {1.0, 0, 0, 0}
 0x0062A830	523	CFreeCameraScreen::Build	named	vt 0x740840 slot 25 (screen id 7): a 0xC-byte link child (vt 0x741154), a UIControl740278 (world click handler) and a UIControl740208 (camera control) child; g_0x79B2B0 &= ~0x40; camera target (30,30,0), yaw rotated by 225 degrees (the quaternion g_0x79B2DC..); no HUD: the observer / editor mode screen. Was CUIScreen740840::OnOpen
 0x0062AA40	13	CFreeCameraScreen::OnClose	named	vt 0x740840 slot 26: g_0x79B2B0 |= 0x40. Was SetFlag40
 0x0062AA50	18	CFreeCameraScreen::Draw	named	vt 0x740840 slot 20: WorldClient_Call569E40
 0x0062AA70	32	StaticInit_Guarded_62AA70	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0062AA90	31	StaticInit_Consts3_62AA90	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0062AAB0	41	Quat_StaticInit_Identity_0062AAB0	named	sets a global quaternion to (1,0,0,0)
+0x0062AAB0	41	Quat_StaticInit_Identity_0062AAB0	named	static initializer (pointer 0x783868 in the init table): g_0x7C7FB8..0x7C7FC4 = {1.0, 0, 0, 0}
 0x0062AAE0	19	SetGlobal_007C7FB0_62AAE0	named	CRT: per-TU static initializer of the math-header float constant pi/2 (1.5708f) at 0x007C7FB0
 0x0062AB00	19	SetGlobal_007C7FB4_62AB00	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7FB4
 0x0062AB20	361	CEscMenu::Build	named	"vt 0x7412A4 slot 25: full-screen window; figure holder ""escMenu00"" / ""escMenu00labels"" at (400,700) depth 4.8 rotated by g_0x7C7FB0 around X; 5 buttons from the rect table g_0x7C80A8.. (continue, save, load, options, quit); animation 1 (opening), buttons\menu\shift.wav"
@@ -10617,24 +10617,24 @@ addr	size	name	status	purpose
 0x0062B540	1	dead_62B540	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0062B550	24	InitFields4_62B550	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
 0x0062B570	24	InitFields4_62B570	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x0062B590	77	PoolFreeVector_0062B590	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x0062B590	77	PoolFreeVector_0062B590	named	fastcall (vector of 0x18-byte records): buffer +0 != 0: bytes = (cap +8 - begin) / 0x18 * 0x18, operator_delete above 0x80 else pushed on the size pool g_0x79B224[(bytes - 1) >> 3]; reached only from the unwind funclets of COptionsScreen::DtorBody (0x72CF4C) and Record24Vector_Destroy_62B350 (0x72CF80)
 0x0062B5E0	24	InitFields4_62B5E0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x0062B600	77	PoolFreeVector_0062B600	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x0062B600	77	PoolFreeVector_0062B600	named	fastcall (vector of 0x14-byte records): buffer +0 != 0: bytes = (cap +8 - begin) / 0x14 * 0x14, operator_delete above 0x80 else size pool g_0x79B224[(bytes - 1) >> 3]; reached only from the unwind funclets of COptionsScreen::DtorBody (0x72CF44) and Record20Vector_Destroy (0x72CFC0)
 0x0062B650	32	StaticInit_Guarded_62B650	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
-0x0062B670	64	PoolFreeVector_0062B670	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x0062B6B0	57	PoolFreeVector_0062B6B0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
+0x0062B670	64	PoolFreeVector_0062B670	named	fastcall (vector of dwords): buffer +0 != 0: bytes = (cap +8 - begin) & ~3, operator_delete above 0x80 else size pool g_0x79B224[(bytes - 1) >> 3]; keeps the buffer in a stack slot (push ecx) unlike its twin 0x62B6B0; reached only from unwind funclets (COptionsScreen::DtorBody, ::BuildKeyList, Record24Vector_Destroy_62B350, Record_Destroy_6518A0, Record24c_InsertRealloc, Record_CopyCtor_652FF0, RecordRange_UninitCopy_6531E0, RecordRange_UninitFill_653390)
+0x0062B6B0	57	PoolFreeVector_0062B6B0	named	fastcall (vector of dwords): same as 0x62B670 without the stack slot: bytes = (cap +8 - begin) & ~3, operator_delete above 0x80 else size pool g_0x79B224; called by COptionsScreen::DtorBody and Record24c_InsertRealloc, and from unwind funclets of COptionsScreen::DtorBody, Record24Vector_Destroy_62B350, Record_CopyCtor_652FF0, RecordRange_UninitCopy_6531E0
 0x0062B6F0	1	Nop_62B6F0	named	STL: no-op allocator / destroy hook of a trivially destructible element (Record24Vector_Destroy, Record24c_InsertRealloc)
-0x0062B700	59	PoolFree_N4_0062B700	named	free an array of N 0x4-byte elements to the size-class pool (<=0x80) or operator delete
+0x0062B700	59	PoolFree_N4_0062B700	named	cdecl (buffer, n): buffer != 0: n * 4 > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(n * 4 - 1) >> 3]; callers Record24Vector_Destroy_62B350, Record24c_InsertRealloc, RecordRange_UninitCopy_6531E0, RecordRange_UninitFill_653390
 0x0062B740	1	Nop_62B740	named	empty destructor of a COptionsScreen member (trivially destructible record), called once from COptionsScreen::DtorBody
 0x0062B750	3	Nop_62B750	named	STL: no-op allocator / destroy hook of a trivially destructible element (Record24Vector_Destroy, Record24c_InsertRealloc)
 0x0062B760	3	Nop_62B760	named	STL: no-op allocator / destroy hook of a trivially destructible element (Record24Vector_Destroy, Record24c_InsertRealloc)
 0x0062B770	11	COptionsScreen::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x741F78 slot 0: this -= 0x94 then COptionsScreen::DeletingDtor 0x62B160
 0x0062B780	31	StaticInit_Consts3_62B780	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0062B7A0	41	Quat_StaticInit_Identity_0062B7A0	named	sets a global quaternion to (1,0,0,0)
+0x0062B7A0	41	Quat_StaticInit_Identity_0062B7A0	named	static initializer (pointer 0x783878 in the init table): g_0x7C7FD8..0x7C7FE4 = {1.0, 0, 0, 0}
 0x0062B7D0	1205	CCreditsScreen::Build	named	"vt 0x740C3C slot 25: name +0x1D4 ""Crdt"" (screen id 8, end of campaign, +0x1F4 = 0: StopAll + music stop) or ""Titles"" (main menu, +0x1F4 = 1: Game_SetServerPaused(0)); Movies_PlayIniList(""<name>fin""); saves font smoothing (SPI_GETFONTSMOOTHING 0x4A) in +0x16C and switches it off (0x4B); parses the entry ""credits.scr"" of <root>outro.res (CMappedResource +0x170): lines ""[#scroll] <seconds|speed> <rtf entry> [title]"" into the 0x18-byte list +0x1C8 (+8 scroll flag, +0xC float, +0x10 title, +0x14 rtf), current +0x1D0; CRichEditSurface +0x164 (10,0x96)-(0x316,0x1C2), title surface +0x168 (10,0x6E)-(0x316,0x8C); render globals +0x14 saved in +0x1F8 and zeroed; CBinkVideo +0x1D8 opens Movies\<name>.bik without sound"
-0x0062BC90	5	thunk_FUN_00700970	named	
-0x0062BCA0	8	StringAtOffset0C_Free_B	named	free the std::string at this+0xC
-0x0062BCB0	77	CStringPair_Destroy_0062BCB0	named	destroy two CString members of a small record (SEH frame)
+0x0062BC90	5	thunk_CString_dtor_0062BC90	named	5-byte thunk: jmp CString::~CString 0x700970; reached only from the unwind funclet 0x72CFF0 of CCreditsScreen::Build (state 2->-1)
+0x0062BCA0	8	StringAtOffset0C_Free_B	named	fastcall: CString::~CString(this + 0xC); reached only from the unwind funclets 0x72D000 / 0x72D018 of CCreditsScreen::Build
+0x0062BCB0	77	CStringPair_Destroy_0062BCB0	named	fastcall (record): CString::~CString(+0xC) then (+8), SEH frame so +8 is still freed when +0xC throws; caller CCreditsScreen::OnClose, unwind funclet 0x72D020 of CCreditsScreen::Build
 0x0062BD00	127	CCreditsScreen::OnClose	named	vt 0x740C3C slot 26: clears the list +0x1C8, restores font smoothing (SPI_SETFONTSMOOTHING 0x4B with +0x16C), render globals +0x14 = +0x1F8, g_0x784750 = 1, software cursor mode 1
 0x0062BD80	583	CCreditsScreen::Draw	named	"vt 0x740C3C slot 20: plays the Bink frames (CBinkVideo::Frame; next file of the ini list at the end), the RichEdit scroller (""fout"" fade), closes the screen when the list is done (close request 0, LobbySession_ReleaseActive2)"
 0x0062BFD0	14	CCreditsScreen::OnCommand	named	vt 0x740C3C slot 27: any command closes the video (CBinkVideo::Close2). Was OnClose
@@ -10642,11 +10642,11 @@ addr	size	name	status	purpose
 0x0062C010	58	CCreditsScreen::OnKeyDown	named	vt 0x740C08 slot 9: Esc / Space skip the credits (same as the click)
 0x0062C050	37	dead_62C050	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0062C080	11	CopyField_0_62C080	named	STL: iterator copy / begin() returned through the out pointer: *out = the pointer at +0
-0x0062C090	41	ListInsertBefore_0062C090	named	allocate a list node and link it before param_2, return the iterator
+0x0062C090	41	ListInsertBefore_0062C090	named	cdecl (out iterator, pos, value): new = NodeAlloc18_CopyCtor_62C0C0(value); links it before pos (new.next = pos, new.prev = pos.prev, pos.prev.next = new, pos.prev = new); *out = new, returns out; caller CCreditsScreen::Build
 0x0062C0C0	220	NodeAlloc18_CopyCtor_62C0C0	named	STL: allocate a 0x18-byte node from pool g_0x79B22C and copy-construct a CString
 0x0062C1C0	32	StaticInit_Guarded_62C1C0	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0062C1E0	31	StaticInit_Consts3_62C1E0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0062C200	41	Quat_StaticInit_Identity_0062C200	named	sets a global quaternion to (1,0,0,0)
+0x0062C200	41	Quat_StaticInit_Identity_0062C200	named	static initializer (pointer 0x783884 in the init table): g_0x7C8000..0x7C800C = {1.0, 0, 0, 0}
 0x0062C230	19	SetGlobal_007C7FF8_62C230	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C7FF8
 0x0062C250	1694	CExchangeScreen::Build	named	"vt 0x740D18 slot 25 (screen id 9, lobby item exchange): figure ""campinfo""; buttons 0 accept (0xC,0x1C2)-(0x34,0x1EA) tip 0xA028, 1 retract (0x94..0xBC) 0xA029, 2 leave (0x2E4,0x1CC)-(0x30C,0x1EA) 0xA02B; +0x190 scratch CParty, +0x198 own offer = LobbyClient +0x2620 (cleared), +0x194 remote offer = LobbyClient +0x2690; UIItemInfoWin +0x164 at (600,100), CCampBar2 +0x19C (client party, mode 0, kind 1), CCampFaceBar +0x1A0, CCampTradeWin +0x1A4 (top grid = remote offer, bottom = own offer, kind 5), money CEditWin +0x1A8 (0,0x15E)-(200,0x16E) digits only (mask 1), 9 chars; 4 text surfaces"
 0x0062C8F0	34	CExchangeScreen::OnClose	named	vt 0x740D18 slot 26: UIInventoryWin::SetItem(0), release +0x190. Was UIInventoryWin::OnClose
@@ -10660,13 +10660,13 @@ addr	size	name	status	purpose
 0x0062D210	114	CExchangeScreen::Exchange	named	vt 0x740D18 slot 37 (a, b, c), via CInterface::OnLobbyRef 0x5F8310 from the confirmed-pair update code 0x41F270: CParty::ReleaseItems on the client party, Party_MoveAllItems(party, c) then (party, a), party money = a.money - b.money + c.money, Game_SendEnterWorld
 0x0062D290	32	StaticInit_Guarded_62D290	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x0062D2B0	31	StaticInit_Consts3_62D2B0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x0062D2D0	41	Quat_StaticInit_Identity_0062D2D0	named	sets a global quaternion to (1,0,0,0)
+0x0062D2D0	41	Quat_StaticInit_Identity_0062D2D0	named	static initializer (pointer 0x783898 in the init table): g_0x7C8028..0x7C8034 = {1.0, 0, 0, 0}
 0x0062D300	15	SetGlobal_007C8020_62D300	named	CRT: per-TU static initializer of the math-header float constant 2*pi (6.2832f) at 0x007C8020
 0x0062D310	19	SetGlobal_007C8024_62D310	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C8024
 0x0062D330	32	CWorldMapScreen::GetUIStreamDword	named	slot 40: reads 4 bytes from the UI save stream g_0x7AFDF8
 0x0062D350	6721	CWorldMapScreen::Build	named	"vt 0x740B3C slot 25 (screen id 4): current zone -> allod record; textures Map<allod> / Sys<allod> / MapG<allod> / saveload + 256x256 target; zone entries +0x190 (every kind-0 zone of the allod with a non-empty record +0x10: +0 trunc(z.<zone>), +4 linked row or -1, +8 name, +0xC title), quest markers +0x1B8 (q.<zone>.<id> == 1, map.txt #quest), zone rows +0x1A4 (exits to kind-2 zones with z == 2, one button each from index 3); cloud layers, picking surface +0x210, time panel (allod title + save_day from trunc(gtime * 60)), i.nocamp, per-allod highlight ambient, FlameNoise, wind.wav loop; autosave ""saveb"" when built live, client mode != 5 and option g_0x79BE7C on"
 0x0062EDA0	30	OctaveNoise::DeletingDtor	named	vt 0x7420D4 slot 2 (the 3-slot noise interface {pure, pure, virtual dtor}, cf FlameNoise 0x73D030): runs the base dtor body 0x499E90 (FlameNoise::dtor_base) then operator delete when flag&1
-0x0062EDC0	5	ArrayVtable73D030::DtorBody	named	sets vt 0x73D030 and frees six buffers (+0x10..+0x24)
+0x0062EDC0	5	thunk_FlameNoise_dtor_base_0062EDC0	named	5-byte thunk: jmp FlameNoise::dtor_base 0x499E90 (vt 0x73D030, frees the buffers +0x10..+0x24; Ghidra inlined the target); caller OctaveNoise::DeletingDtor (0x62EDA3). CORRECTION: was named as if the body were here
 0x0062EDD0	88	CWorldMapScreen::OnClose	named	vt 0x740B3C slot 26: stops the wind sound channel (+0x290), deletes the picking surface +0x210
 0x0062EE30	58	CWorldMapScreen::OnCommand	named	vt 0x740B3C slot 27 (id): resets the rotation (+0x174), +0x264 = 0, +0x20C = 1 and moves the cursor back to the saved position. Was OnActivate
 0x0062EE70	22	CWorldMapScreen::GetTutorialKey	named	"vt 0x740B3C slot 41: ""global_map_nocamp"" (+0x27C) or ""global_map"" (the tutorial page key, CInterface::ShowTutorialForTopScreen). Was v41_GetMapName"
@@ -10693,30 +10693,30 @@ addr	size	name	status	purpose
 0x006316A0	5	CWorldMapScreen::IsZoneAllowed_Ret1	named	stub predicate on the selected zone name (CWorldMapScreen::OnLButtonDown calls it with the CString after LoadZonePoints and only then enters the zone / plays globalmap ok.wav); always returns 1 in this build (a removed demo / lock check)
 0x006316B0	1	dead_6316B0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x006316C0	24	InitFields4_6316C0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x006316E0	41	RbMap_InsertWrapper_006316E0	named	std::map insert wrapper: builds the hint iterator and forwards to the hint/unique insert
-0x00631710	87	RbMap_Destroy_00631710	named	destroy a std::map: erase all nodes (payloads freed), reset header, free header node
+0x006316E0	41	RbMap_InsertWrapper_006316E0	named	thiscall (map, out iterator, hint, value): copies the hint iterator (InitFields1_631770) and calls RbMap_InsertUniqueHint 0x631980; returns out; callers CWorldMapScreen::LoadZonePoints (3), ::OnLButtonDown (2)
+0x00631710	87	RbMap_Clear_00631710	named	"fastcall (map {header +0, count +4}): when count != 0 walks from the root (header +4): RbTree_EraseSubtree_005FB7D0(right +0xC), then the node goes to the 0x18-byte pool g_0x79B22C and the walk continues left (+8); then header left/right (+8/+0xC) = header, root = 0, count = 0; the header itself is kept (map::clear, not the destructor); caller CWorldMapScreen::OnLButtonDown (2). CORRECTION: was ""destroy ... free header node"""
 0x00631770	13	InitFields1_631770	named	STL: one-pointer copy constructor (iterator / allocator proxy): *this = *src
 0x00631780	22	InitFields2_631780	named	STL: two-field constructor from two sources (pair / hashtable iterator {node, table} or {pointer, allocator byte}): (*param_1, *param_2)
-0x006317A0	62	PoolFree_N18_006317A0	named	free an array of N 0x18-byte elements to the size-class pool (<=0x80) or operator delete
-0x006317E0	337	Pair8Vector_InsertRealloc	named	vector of 8-byte pairs insert grow path (Pair8Range_Copy / Pair8Range_FillN)
-0x00631980	666	RbMap_InsertUnique_00631980	named	std::map insert_unique: descend comparing keys, insert unless present
+0x006317A0	62	PoolFree_N18_006317A0	named	cdecl (buffer, n): buffer != 0: n * 0x18 > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(n * 0x18 - 1) >> 3]; caller CWorldMapScreen::RefreshZonePoints
+0x006317E0	337	Pair8Vector_InsertRealloc	named	thiscall (vector of 8-byte pairs, pos, value, n): STLport _M_insert_overflow: new cap = size + max(size, n) from the size pool g_0x79B224 (PoolAlloc_Refill when empty) or operator_new; Pair8Range_Copy [begin, pos), one copy (n == 1) or Pair8Range_FillN, Pair8Range_Copy [pos, end); old buffer freed to the pool / operator_delete; sets begin/end/cap; caller CWorldMapScreen::LoadZonePoints
+0x00631980	666	RbMap_InsertUniqueHint_00631980	named	"thiscall (map, out iterator, hint, value): STLport insert_unique(hint, v) on a map with int key at node +0x10 (0x18-byte nodes): hint == leftmost or end or the neighbour test passes -> RbMap_InsertAt_00632170 directly (leftmost / rightmost fast paths link a NodeAlloc18_00632530 node and RbTree_Rebalance inline, count +4 += 1); else falls back to RbMap_InsertUnique_00632330; *out = resulting node; caller RbMap_InsertWrapper_006316E0. CORRECTION: was ""insert_unique: descend"" (it is the hinted overload)"
 0x00631C20	96	RbMapInt_LowerBoundCheck_631C20	named	STL: lower_bound by int key (node+0x10) returning end() unless key <= found
 0x00631C80	52	RbMapInt_LowerBound_631C80	named	STL: lower_bound by int key (node+0x10)
 0x00631CC0	429	StringArray_SetAtGrow_631CC0	named	MFC: CArray<CString> SetAtGrow(index, value) with CStringArray_Construct_5FBF50 / CStringPair_Destroy_005FBD30
 0x00631E70	384	CStrPairArray_SetSize_631E70	named	MFC: CArray of 0x18-byte string-pair records SetSize (CStringPair_Destroy_005FBD80, CStringRecordArray_Construct_5FBFB0)
 0x00631FF0	384	CStrPairArray_SetSize_631FF0	named	MFC: same for the other instantiation (005FBDD0 / 5FC010)
-0x00632170	438	RbMap_InsertAt_00632170	named	std::map _M_insert at a parent: create node, link, rebalance (rotate left/right)
-0x00632330	312	RbMap_InsertUnique_00632330	named	std::map insert_unique: descend comparing keys, insert unless present
+0x00632170	438	RbMap_InsertAt_00632170	named	thiscall (map, out, x, parent, value): STLport _M_insert: new = NodeAlloc18_00632530(value); goes left of parent when parent == header, x != 0 or key < parent key +0x10 (updating header root / leftmost), else right (updating rightmost); parent link +4, children +8/+0xC = 0, colour red; inline red-black rebalance (recolour / rotate left / right up to the root, root coloured black); count +4 += 1; *out = new
+0x00632330	312	RbMap_InsertUnique_00632330	named	thiscall (map, out pair, value): STLport insert_unique(v): descends from the root comparing the int key +0x10 (go left while v < key), steps back with RbTree_Decrement when it went left; inserts (NodeAlloc18_00632530, link, rebalance) only when the predecessor key < v, else returns the existing node; out = {iterator, inserted bool}; caller RbMap_InsertUniqueHint_00631980 (2)
 0x00632470	32	StaticInit_Guarded_632470	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
-0x00632490	65	Record24b_Assign	named	assign a 0x18-byte record {4 dwords, CString, CString}
-0x006324E0	65	Record24b_Assign2	named	same as 0x632490 (second instantiation)
-0x00632530	127	NodeAlloc18_00632530	named	allocate a 0x18-byte node from the pool (refill 20 via the chunk allocator)
-0x006325B0	14	Iter_DerefNode8_O	named	iterator deref, instance O
+0x00632490	65	Record24b_Assign	named	thiscall (dest, src): dest[0..3] = src[0..3] (dwords), CString::operator= for +0x10 and +0x14; returns dest; caller CWorldMapScreen::Build
+0x006324E0	65	Record24b_Assign2	named	thiscall (dest, src): byte-identical twin of Record24b_Assign 0x632490: four dwords copied, CString::operator= for +0x10 and +0x14; returns dest; caller CWorldMapScreen::Build
+0x00632530	127	NodeAlloc18_00632530	named	cdecl (value) -> 0x18-byte rb-tree node: pops the 0x18 pool g_0x79B22C, or when empty stlport_node_alloc_chunk_alloc(0x18, 20) and links the extra blocks onto the pool; copies the 8-byte value (int key, dword) to +0x10/+0x14; callers RbMap_InsertUniqueHint_00631980 (4), RbMap_InsertUnique_00632330 (4), RbMap_InsertAt_00632170 (2)
+0x006325B0	14	Iter_DerefNode8_O	named	thiscall (map, out): *out = header +8 (the leftmost node = begin()); caller RbMap_InsertUniqueHint_00631980
 0x006325C0	22	InitFields2_6325C0	named	STL: two-field constructor from two sources (pair / hashtable iterator {node, table} or {pointer, allocator byte}): (*param_1, *param_2)
-0x006325E0	37	Pair8Range_Copy	named	copy [first,last) of 8-byte pairs to dest skipping null
-0x00632610	35	Pair8Range_FillN	named	fill N 8-byte pairs skipping null
+0x006325E0	37	Pair8Range_Copy	named	fastcall (first, last, dest): uninitialized_copy of 8-byte pairs, skipping a null dest; returns the dest end; caller Pair8Vector_InsertRealloc (2)
+0x00632610	35	Pair8Range_FillN	named	fastcall (dest, n, value): uninitialized_fill_n of n 8-byte pairs = *value, skipping a null dest; returns the dest end; caller Pair8Vector_InsertRealloc
 0x00632640	31	StaticInit_Consts3_632640	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00632660	41	Quat_StaticInit_Identity_00632660	named	sets a global quaternion to (1,0,0,0)
+0x00632660	41	Quat_StaticInit_Identity_00632660	named	static initializer (pointer 0x7838A8 in the init table): g_0x7C8100..0x7C810C = {1.0, 0, 0, 0}
 0x00632690	19	SetGlobal_007C80F8_632690	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C80F8
 0x006326B0	594	CMainMenu::OnOpen	named	"vt 0x740688 slot 25 (Build, screen id 2): Databases_Reload, adds the version text (DrawVersion) and 5 buttons (rects g_0x7C80A8..: new game, load, quit, options, credits + multiplayer), Music_PlayTrack, camera ""MainMenu.cam"" (Camera_SetTarget), random flash timer (+0x16C/+0x170), Game_SetFlag94_8"
 0x00632910	39	CMainMenu::OnClose	named	vt 0x740688 slot 26: SetGlobal_0079BD34 (camera distance), Game_StopAllSounds(1), Terrain_Call6CBCD0
@@ -10738,24 +10738,24 @@ addr	size	name	status	purpose
 0x00633DD0	209	CDifficultyBox::OnLButtonDown	named	vt 0x742228 slot 2: 0 OK = g_0x79BEC0 = choice +0x180 (1 easy, 0 hard), messbox ok.wav, close base|1 (0x20001); 1 cancel.wav, close base|2; 2 = easy (+0x180 = 1, quad 0 marked), 3 = hard (+0x180 = 0, quad 1 marked)
 0x00633EA4	16	sub_633EA4	named	unregistered function, reached by call / pointer from 0x233DF4 (gaps.py 2026-11-06)
 0x00633EC0	138	CDifficultyBox::OnKeyDown	named	vt 0x742228 slot 9: Enter = OK, Esc = cancel. Was CMessageBox::OnKeyDown
-0x00633F50	148	RbMap_Destroy_00633F50	named	destroy a std::map: erase all nodes (payloads freed), reset header, free header node
-0x00633FF0	148	RbMap_Destroy_00633FF0	named	destroy a std::map: erase all nodes (payloads freed), reset header, free header node
+0x00633F50	148	CCampScreen2::PortraitMapA_Ctor	named	"fastcall (map) -> map: constructor of the 16-byte portrait map CCampScreen2 +0x170: header node from the 0x24-byte pool g_0x79B234 (PoolAlloc_Refill(0x24) when empty), colour 0, root 0, leftmost / rightmost = header, count +4 = 0, compare byte +8, +0xC = 0x32 (50); SEH frame; caller the CCampScreen2 constructor inlined in CMainMenu::OnLButtonDown (button 5). CORRECTION: was ""destroy a std::map"" (it is the constructor)"
+0x00633FF0	148	CCampScreen2::PortraitMapB_Ctor	named	"fastcall (map) -> map: byte-identical twin of 0x633F50 (own unwind table) for the second portrait map CCampScreen2 +0x180; caller CMainMenu::OnLButtonDown. CORRECTION: was ""destroy a std::map"""
 0x00634090	183	StringPairVector_Destroy_634090	named	STL: destroy N 8-byte CString pairs and free
 0x00634150	1	dead_634150	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00634160	160	RbMap_Destroy_00634160	named	destroy a std::map: erase all nodes (payloads freed), reset header, free header node
-0x00634200	160	RbMap_Destroy_00634200	named	destroy a std::map: erase all nodes (payloads freed), reset header, free header node
+0x00634160	160	RbMap_Destroy_00634160	named	fastcall (map, 0x24-byte entries): when count +4 != 0 erases every node from the root: RbTree_EraseSubtree_005FAFF0(right), key buffer +0x10 freed (PoolBuf_Delete_A flag 0), PoolFree_N24_005FA920(node, 1), continue left; header reset, count 0; then the header node goes back to the pool g_0x79B234; caller CCampScreen2::DtorBody for portraitMapA +0x170 (after PortraitMap_ReleaseAll)
+0x00634200	160	RbMap_Destroy_00634200	named	fastcall: twin of 0x634160 using RbTree_EraseSubtree_005FB040, PoolBuf_Delete_B and PoolFree_N24_005FA960; caller CCampScreen2::DtorBody for portraitMapB +0x180
 0x006342A0	24	InitFields4_6342A0	named	STL: vector<T>::vector(const allocator&): zeroes start / finish / end-of-storage and copies the empty allocator byte at +8 (empty vector member ctor)
-0x006342C0	57	PoolFreeVector_006342C0	named	free a vector buffer (begin +0, capacity end +8) to the size-class pool or operator delete
-0x00634300	432	List18_CtorInline_00634300	named	std::list constructor: sentinel node from the 0x18-byte pool, chunk refill inlined
+0x006342C0	57	PoolFreeVector_006342C0	named	fastcall (vector of 8-byte elements): buffer +0 != 0: bytes = (cap +8 - begin) & ~7, operator_delete above 0x80 else size pool g_0x79B224[(bytes - 1) >> 3]; reached only from the unwind funclets of CCampScreen2::DtorBody (0x72D6C0, 0x72D6D3; the voice-set StringPair vectors) and StringPairVector_Destroy_634090 (0x72D830)
+0x00634300	432	List18_CtorInline_00634300	named	thiscall (list, allocator byte) -> list: STLport list constructor: sentinel node popped from the 0x18-byte pool g_0x79B22C; when empty the refill is inlined (_S_chunk_alloc: carves 20 nodes from the chunk g_0x79B268..0x79B26C, else operator_new of 0x3C0 + heap_size/16 rounded (g_0x79B264) after giving the chunk rest to its size list, stealing from larger free lists when operator_new fails) and the extra nodes are linked on the pool; sentinel next = prev = itself; SEH frame; caller CMainMenu::OnLButtonDown (the inlined CCampScreen2 constructor)
 0x006344B0	1	dead_6344B0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x006344C0	51	PoolFree_N8_006344C0	named	free an array of N 0x8-byte elements to the size-class pool (<=0x80) or operator delete
+0x006344C0	51	PoolFree_N8_006344C0	named	fastcall (buffer, n): buffer != 0: n * 8 > 0x80 -> operator_delete, else pushed on the size pool g_0x79B224[(n * 8 - 1) >> 3]; caller CCampScreen2::DtorBody (2)
 0x00634500	86	CCampScreen2::PortraitMap_ReleaseAll	named	walks the std::map (RB-tree, value at node +0x1C) of cached portrait figures and releases each (CObject slot 4 via SmartPtr_CallSlot4_S); called by CCampScreen2::DtorBody for the first portrait cache
 0x00634560	86	CCampScreen2::PortraitMap_ReleaseAll2	named	same for the second portrait std::map of CCampScreen2 (DtorBody)
 0x006345C0	32	StaticInit_Guarded_6345C0	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x006345E0	11	CDifficultyBox::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x742228 slot 0: this -= 0x94 then CDifficultyBox::DeletingDtor 0x633730
 0x006345F0	11	CCampScreen2::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x742118 slot 0: this -= 0x94 then CCampScreen2::DeletingDtor 0x633240
 0x00634600	31	StaticInit_Consts3_634600	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00634620	41	Quat_StaticInit_Identity_00634620	named	sets a global quaternion to (1,0,0,0)
+0x00634620	41	Quat_StaticInit_Identity_00634620	named	static initializer (pointer 0x7838B8 in the init table): g_0x7C8120..0x7C812C = {1.0, 0, 0, 0}
 0x00634650	276	CMessageBox::CMessageBox	named	(ui, titleKey, textKey, resultBase +0x16C, flags +0x170 (1 OK, 2 Cancel, 4 text input into the caller's char buffer +0x17C (strcpy on OK, edit 50 chars), 0x10 align), align +0x174): vt 0x742348 / sub 0x742314; +0x164 title / +0x168 text (CTextManager::GetString); the result reaches the parent's slot 27 as resultBase | 1 (OK) or | 2 (Cancel)
 0x00634770	30	CMessageBox::DeletingDtor	named	vt 0x742348 slot 0 (CMessageBox 0x634650): body CStringPair_Destroy_0061E3E0 (title / text CStrings) then operator delete when flag&1
 0x00634790	1377	CMessageBox::Build	named	"vt 0x742348 / 0x741DD8 slot 25: ""saveload"" art, surface (200,0x32)-(600,500); text font 2 (1 when resultBase == -0x10000); title 0x31B3FF / text 0xA7D7E4 (align +0x174 | 0x10) centred vertically in 0x226 px; flag 4: CEditWin +0x178 (0xD7,y)-(0x249,..) mask 0xF, 50 chars, seeded from the caller buffer +0x17C; panel 200..600 + border; buttons: flags 1|2 = OK (0x107,y+0x1A)-(0x151,y+0x4A) tip 0xC3B4 + Cancel (0x1CF..0x219) tip 0xC3B5; 1 = OK (0x16B..0x1B5); 2 = empty button 0 + Cancel (0x16B..0x1B5)"
@@ -10765,7 +10765,7 @@ addr	size	name	status	purpose
 0x00634FB0	32	StaticInit_Guarded_634FB0	named	CRT: once-guarded (bit 0 of g_0x7CAEE4) static initializer that only registers the destructor 0x4013D0 with atexit - the per-TU STLport static instance
 0x00634FD0	11	CMessageBox::SubThunk_DeletingDtor	named	IUIEvents sub-vtable 0x742314 slot 0: this -= 0x94 then CMessageBox::DeletingDtor 0x634770
 0x00634FE0	31	StaticInit_Consts3_634FE0	named	CRT: per-TU static initializer of the math-header zero Vector3 constant (3 dwords = 0)
-0x00635000	41	Quat_StaticInit_Identity_00635000	named	sets a global quaternion to (1,0,0,0)
+0x00635000	41	Quat_StaticInit_Identity_00635000	named	static initializer (pointer 0x7838CC in the init table): g_0x7C8150..0x7C815C = {1.0, 0, 0, 0}
 0x00635030	15	SetGlobal_007C8140_635030	named	CRT: per-TU static initializer of the math-header float constant 2*pi (6.2832f) at 0x007C8140
 0x00635040	19	SetGlobal_007C8144_635040	named	CRT: per-TU static initializer of the math-header float constant pi/2 (1.5708f) at 0x007C8144
 0x00635060	19	SetGlobal_007C8148_635060	named	CRT: per-TU static initializer of the math-header float constant 1.0f at 0x007C8148

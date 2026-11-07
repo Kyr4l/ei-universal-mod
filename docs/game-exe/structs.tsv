@@ -4071,6 +4071,8 @@ CCampScreen2			0x210	pointer	currentVoices	&+0x1f8 or &+0x204 by the hero's gend
 CCampScreen2			0x214	int	voiceScroll	first visible voice row (11-row window)
 CCampScreen2			0x218	int	voiceSelected	selected voice row (OnLButtonDown rows 9..0x13 of mode 10; Up / Down keys); StartGame copies that set's '%s*.mp3' files
 CCampScreen2			0x21c	int	voiceChannel	UI_PlaySound handle of the voice sample LoadSlotSounds plays (a random sample of the hero's voice set from the sound registry g_0x7AF364); stopped and set to -1 before the next
+CCampScreen2			0x17C	int	portraitMapA_0x32	dword after the portraitMapA tree (+0x170 header, +0x174 count, +0x178 compare byte) set to 0x32 (50) by its ctor 0x633F50 [V]
+CCampScreen2			0x18C	int	portraitMapB_0x32	same for portraitMapB (ctor 0x633FF0) [V]
 EffectRecord		0x1c	0x0	pointer	vtable	vt 0x73D880 (base EffectRecord_Base 0x73D888); refcounted render effect built by CStateBlockSet::RegisterEffect (generic sweep A 2026-11-01)
 EffectRecord			0x4	int	refcount	
 EffectRecord			0x8	pointer[3]	passHandles	CORRECTION: was "std::vector<EffectPassRecord 0x28>": a vector of D3D state-block handles (dwords), one per pass: [0] = the stage-state block of the first pass, [k] = the SRCBLEND / DESTBLEND block of extra pass k (CStateBlockSet::RegisterEffect 0x4FD2A0; DrawIndexedWithMaterial applies them)
@@ -4178,3 +4180,5 @@ CBinkVideo			0x18	pointer	bink	HBINK from _BinkOpen; Frame returns LastFrameNum 
 LogStream	streambuf	0x454	0x4c	uint	mask	log category mask (LogStream::Ctor)
 LogStream	streambuf	0x454	0x50	CString	text	collected text, sent to CInterface::ConsoleAddText and emptied by sync (slot 1)
 LogStream	streambuf	0x454	0x54	char[0x400]	buffer	the streambuf put area (streambuf::streambuf(this, +0x54, 0x400))
+CCampSkillsWin			0x150	int	selectedHero	index of the hero record in +0x190 used by GetCurrentExp 0x625530 [V]
+CCampSkillsWin			0x190	pointer[3]	heroRecords	std::vector of 0x3C-byte hero records (Array60_InsertRealloc from Build / ResetEdit); record +0x2C / +0x30 / +0x34 floats: current exp = +0x34 + +0x2C - +0x30 (GetCurrentExp 0x625530) [V]
