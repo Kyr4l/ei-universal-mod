@@ -4331,6 +4331,7 @@ CWinApp			0x70	LPTSTR	m_lpCmdLine	AfxWinInit 0x70CF52 (dead)
 CWinApp			0x74	int	m_nCmdShow	AfxWinInit 0x70CF52 (dead)
 CWinApp			0xa8	CRecentFileList*	m_pRecentFileList	CWinApp::LoadStdProfileSettings 0x70D79E (dead)
 CWinApp			0xb4	int	m_nNumPreviewPages	CWinApp::LoadStdProfileSettings 0x70D79E (dead): GetProfileInt("Settings", "PreviewPages")
+CWinApp			0x80	CDocManager*	m_pDocManager	CWinApp::CloseAllDocuments 0x70B3B5 (vt +0x24), OpenDocumentFile, OnDDECommand
 AcksLine		0x28	0x0	int	weight	acks voice-line record (vector element of every Answers / Cryes / Others list): archive tag 2 (4 bytes) in AcksLine28_Serialize / Archive_SerializeRec28Vector 0x6E42F0
 AcksLine			0x4	byte[12]	wavPath	std::string, archive tag 1
 AcksLine			0x10	byte[12]	subtitle	std::string, archive tag 3
@@ -4483,6 +4484,7 @@ _AFX_THREAD_STATE			0xb8	HWND	m_hLockoutNotifyWindow	CWnd::OnCommand / OnNotify 
 _AFX_THREAD_STATE			0xbc	BOOL	m_bInMsgFilter	ProcessMessageFilter
 _AFX_THREAD_STATE			0xcc	CToolTipCtrl*	m_pToolTip	AfxTermThread, CancelToolTips, OnNcDestroy
 _AFX_THREAD_STATE			0x108	CControlBar*	m_pLastStatus	CancelToolTips
+_AFX_THREAD_STATE			0xc0	CView*	m_pRoutingView	returned by _AfxGetRoutingView 0x70ADC1 (CCmdTarget::GetRoutingView, dead)
 AFX_MODULE_STATE			0x4	CWinApp*	m_pCurrentWinApp	AfxGetApp; NULL in this game (no CWinApp)
 AFX_MODULE_STATE			0x8	HINSTANCE	m_hCurrentInstanceHandle	CWnd::CreateEx
 AFX_MODULE_STATE			0xc	HINSTANCE	m_hCurrentResourceHandle	AfxLoadString
@@ -4519,3 +4521,9 @@ _AFX_CTL3D_STATE			0x20	FARPROC	m_pfnSubclassDlgEx	ordinal 21
 _AFX_CTL3D_STATE			0x24	FARPROC	m_pfnWinIniChange	ordinal 22
 _AFX_CTL3D_STATE			0x28	FARPROC	m_pfnSubclassCtl	ordinal 3
 _AFX_CTL3D_STATE			0x2c	FARPROC	m_pfnSubclassCtlEx	ordinal 25
+CFileStatus		0x112	0x0	CTime	m_ctime	CMemFile::GetStatus 0x7030D0 (+0 / +4 / +8 the three times zeroed)
+CFileStatus		0x112	0xc	LONG	m_size	CMemFile::GetStatus: = CMemFile m_nFileSize +0x1C
+CFileStatus		0x112	0x10	BYTE	m_attribute	CMemFile::GetStatus: 0
+CFileStatus		0x112	0x12	char[260]	m_szFullName	CMemFile::GetStatus: empty
+COleControlSite			0x4c	LPUNKNOWN	m_pObject	CWnd::GetControlUnknown 0x7037F8 returns it
+TerrainSecFile			0x0	ushort[0x441][4]	groundVertices	.sec payload after the 5-byte header: 33 x 33 packed 8-byte vertices, row stride 0x108; CTerrain::WeldSecSeams_6CCC40 copies the edge columns / rows (+0x100 column 32, +0x2100 row 32, +0x2200 corner)

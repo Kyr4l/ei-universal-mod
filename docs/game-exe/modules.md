@@ -1423,7 +1423,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x683000 - 0x68C000: CSpell / CSpellContainer / CSpellConstructor / CSpellManager
 
-190 functions, group `spells`.
+192 functions, group `spells`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1444,7 +1444,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
-87 functions, group `renderer`.
+88 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1465,7 +1465,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68F000 - 0x69F000: CTexture / CTextureManager (.mmp), CFileRegistry (binary key/value registry), CIniFile, CWinRegistry, CItemConstructor, STL leaves
 
-348 functions, group `renderer`.
+349 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1486,7 +1486,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x69F000 - 0x6AE000: CItem* + CItemManager + items.idb
 
-279 functions, group `items`.
+284 functions, group `items`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1507,7 +1507,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6AE000 - 0x6B4000: quests database (quests.qdb)
 
-88 functions, group `data`.
+91 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1528,7 +1528,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6B4000 - 0x6C3000: CMusicSystem / CSoundManager / mp3 (Miles)
 
-232 functions, group `sound`.
+235 functions, group `sound`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1570,15 +1570,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6CC000 - 0x6E0000: terrain prints (foot/blood/fire decals), terrain tile helpers, CBitmapDib (BMP/mip loading), database.res loaders (CDatabase/CDatabase2/CDatabaseTables)
 
-365 functions, group `renderer`.
+370 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006D7620 | 3520 | CAcksDb::Load | (dataDir) -> bool: <dir>database.res / acks.db ('Can't open acks database'); tags 1 / 2 / 3 Answers (0x1C4) / Cryes (0x5C) / Others (0x38) into +0 / +0x20 / +0x40 with name maps; then per record an ack id -> list map at +0xC: Answ... |
 | 0x006DE370 | 2156 | AcksAnswer::CopyCtor | copy-constructs an acks.db Answers record 0x1C4: the name std::string, the id -> list hash map +0xC and the 0x16 voice-line vectors +0x20 (0x28 lines each, PtrVector_CtorN_6DEF90 + copies); used by AcksAnswersVector_Resize / _Inse... |
 | 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | (clipBuf, corners SoA float[16]): the terrain cell box under the shadow prism (the rectangle slid up the light ray to the highest vertex of the box, 1-cell margin, clamped to the map), ClipBuf::ReserveForTriangles(((nx+1)*(ny+1) +... |
-| 0x006D61D4 | 1557 | sub_6D61D4 | unregistered function, reached by call / pointer from 0x2D617D (gaps.py 2026-11-06) |
 | 0x006D5BF0 | 1475 | CBitmapDib::LoadMmpMipLevel | (stream, level) -> bool: MMP header 0x4C ('read error 1'; 'wrong level for mipmap' when width < 2^level, AfxMessageBox), seek to the level (hdr +0x48 extra + level sizes), DIB of w >> level x h >> level: DXT1..5 decoded to RGB565 ... |
+| 0x006D6200 | 1464 | CBitmapDib::LoadMmpMipLevelMem_6D6200 | (void* mmp data, level) ret 8 -> bool: the in-memory twin of CBitmapDib::LoadMmpMipLevel 0x6D5BF0: CBitmapDib::Free, the 0x4C MMP header copied from the pointer (pixel data at +0x4C) instead of read from a stream; 'wrong level for... |
 | 0x006DC390 | 1423 | AcksAnswer::~AcksAnswer | destroys a 0x1C4-byte Answers record (hash tables, line vectors, strings) |
 | 0x006CEDE0 | 1324 | CPrintDecal::Render | (this) -> bool: inactive (+5 == 0) -> 1; mesh not built (+4 == 0): z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, world vt[27] terrain height), the 4 rectangle corners (half extents +0x10 / +0x14 rotated by +0x44) at z0 -> C... |
 | 0x006D0630 | 1106 | CPrintsDb::Load | (dataDir) -> bool: opens '<dir>database.res' (CMappedResource; FatalError 'Can't open database file' naming databases.res) and its 'prints.db' ('Can't open terrain prints database'); the Archive tags 1 / 2 / 3 (database-format.md ... |
@@ -1587,21 +1587,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006DD6C0 | 875 | AcksCryesVector_AssignN | STL: vector<Cryes record 0x5C>::_M_fill_insert / assign n copies of one record (each record = std::string name, a vector of 0x28 voice-line records and a hash set; in-place copies or AcksCryesVector_InsertRealloc); used by AcksCry... |
 | 0x006D8430 | 796 | CUnit::PlayAck | (this = client CUnit, code): plays the unit's acknowledgement for a unit event code (0xFF: respawn vt+0xD0): heroes below a counter remap codes 0..10 -> 0x27 / 0xB..0x13,0x1D -> 0x28; 0x25/0x26 weapons\timecrash.wav only, 0x23/0x2... |
 | 0x006DDA30 | 755 | AcksOthersVector_AssignN | STL: vector<Others record 0x38>::_M_fill_insert / assign n copies of one record (std::string name, a 0x28 voice-line vector and a hash set; in-place copies or AcksOthersVector_InsertRealloc); used by AcksOthersVector_Resize (CAcks... |
-| 0x006CCC40 | 736 | dead_6CCC40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x006CCC40 | 736 | CTerrain::WeldSecSeams_6CCC40 | editor tool, (): for sx 0..sectorsX-2, sy 0..sectorsY-2 maps the .sec data (reader +0x15C vt[5], + 5) of A (sx, sy), B (sx+1, sy), C (sx, sy+1), D (sx+1, sy+1); copies B's column 0 (32 packed 8-byte vertices, row stride 0x108) int... |
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-1893 functions, group `crt`.
+2414 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006F6F2C | 2597 | _input | CRT (input.c _input(stream, format, args)): the scanf engine: white space (_whiteout), literal matching, %[*][width][h l L I64] c s [ ] d i o x X u n e f g p, DBCS lead bytes, hex via _hextodec, floats through _fassign; returns th... |
 | 0x006F17D4 | 1825 | _output | CRT (output.c _output(stream, format, args)): the printf engine: state table 0x7476B0 / 0x7476D0, flags - + space # 0, width / precision (* from args), h l I64 L size, %c %C %s %S %Z %d %i %u %o %x %X %p %n %e %f %g %E %G (through... |
-| 0x006FB9C0 | 1668 | dead_6FB9C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x006E3780 | 1585 | AcksAnswer::Serialize | (this = AcksAnswer 0x1C4, archive): tag 1 name string +0; tags 10..0x26 the voice-line vectors through Archive_SerializeRec28Vector (+0x20, +0x2C, .. in a fixed tag -> offset order, e.g. 0x14 -> +0xA4, 0x21 -> +0xB0, 0x24 -> +0x98... |
 | 0x0070592E | 1198 | CWnd::OnWndMsg | MFC 6: CWnd::OnWndMsg(msg, wParam, lParam, LRESULT*) (slot 39): WM_COMMAND -> OnCommand (vt +0x78); WM_NOTIFY -> OnNotify (vt +0x7C); WM_ACTIVATE -> _AfxHandleActivate; WM_SETCURSOR -> _AfxHandleSetCursor; then the message map (Ge... |
 | 0x006F9989 | 1185 | _strgtold12 | CRT (strgtold.c __strgtold12(_LDBL12*, &end, str, mult12, scale, decpt, implicit_E)): state machine over sign, digits, decimal point (locale *_decimal_point), exponent (e / E / d / D), up to 21 significant digits into a buffer, th... |
-| 0x006F2F30 | 1142 | sub_6F2F30 | unregistered function, reached by call / pointer from 0x398382 (gaps.py 2026-11-06) |
 | 0x006EE4B3 | 1007 | _expandtime | MSVC6 CRT: static _expandtime(spec, tm, &out, &left, lc_time): one strftime letter: a / A / b / B names from lc_time (+0 / +0x1C / +0x38 / +0x68), c / x / X through _store_winword with the ww_ formats, d H I j m M S U W w y Y numb... |
 | 0x006E0540 | 1006 | AcksAnswerRange_Copy_A | STLport: std::copy(first, last, dest) for AcksAnswer 0x1C4 records, FORWARD: per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector_Assign for the 32 line vectors +0x2C..+0x... |
 | 0x006E1570 | 1002 | AcksAnswerRange_CopyBackward | STLport: std::copy_backward(first, last, dest_end) for AcksAnswer 0x1C4 records (the real backward one): from the end, per record String_Assign +0, HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= +0x20, Rec28Vector... |
@@ -1609,3 +1607,5 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006F3E9F | 846 | _get_lc_time | CRT (inittime.c _get_lc_time(__lc_time_data*)): fills the LC_TIME table from the LC_TIME lcid (0x7CAC4E) / ANSI code page through _getlocaleinfo: abbreviated day names 0x31..0x37 (+0..+0x18), day names 0x2A..0x30, abbreviated mont... |
 | 0x006FDC12 | 845 | CString::FormatV | MFC (void CString::FormatV(lpszFormat, va_list)): estimates the maximum length by parsing every % item (flags, width / precision incl. '*', size prefixes h l I64 F N, types c C s S d i u x X o e f g G p n; strings by their length,... |
 | 0x006F62D5 | 815 | __sbh_heap_check | CRT (sbheap.c __sbh_heap_check): validates every region (IsBadWritePtr of the headers and group data, size chains, bucket links and counts against the bitmaps); returns 0 or a negative error code; lib, unused (no call, no pointer,... |
+| 0x006F5730 | 809 | __sbh_free_block | CRT (sbheap.c __sbh_free_block(header, p)): frees a V6 small block: coalesces with the free neighbours (size words, bit 0 = in use), unlinks / relinks them in the 64 size buckets of the group (group = (p - region base) >> 15, 0x20... |
+| 0x006E3FD0 | 799 | AcksCry::Serialize | (this = AcksCry 0x5C, archive): tag 1 name +0; tags 10..14 the five line vectors +0x20/+0x2C/+0x38/+0x44/+0x50 (read: Rec28Vector_Clear + resize to the count, then the per-line tags 1..4); caller AcksCryesVector_Serialize |
