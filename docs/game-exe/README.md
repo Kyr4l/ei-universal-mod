@@ -409,7 +409,13 @@ states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 18
 `not-functions.tsv` (addr, size, old name, what it is, batch) lists the blocks that earlier passes registered as functions but that the
 T7 reading round (2026-11-07) showed are not function starts: switch jump / index tables, alignment padding, addresses inside another
 instruction, and unreachable bytes after a no-return call. They were moved out of `functions.tsv` so every byte stays accounted for.
+The last pass (`gap-final` rows) added the tables and data that sat between functions.
 
 ## Coverage
 
-Coverage (16156 functions): named 16156.
+**Complete (2026-11-07, T7 round).** Every function of `functions.tsv` was read from its own code (depth `read` on all rows; 1,696
+of them are dead code, tagged in the purpose). Every byte of `.text` belongs to one of: a function row, an exception-handling block
+in `eh-funclets.tsv`, a block in `not-functions.tsv`, or alignment padding (int3 / nop / filler instructions). The check is
+`_cpr/claude-re/full/tools/gaps.py` followed by `gapleft.py` (0 bytes left). Still open: the UI y-flip writer (see the open items).
+
+Coverage (16163 functions): named 16163.

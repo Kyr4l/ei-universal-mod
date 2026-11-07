@@ -403,7 +403,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x469000 - 0x470000: .mob object descriptors (CObjectDesc / CUnitDesc / CLightDesc / CSoundDesc / CParticleDesc / torch / lever / trap) + 3DS figure builder
 
-145 functions, group `app`.
+146 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -520,14 +520,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
-599 functions, group `script`.
+600 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004B6760 | 13477 | SSCScript::Run | (this = SSCScript {+0 program, +4 pc, +8 run counter, +0xc sleep start, +0x10 kill flag*, +0x14 SSCVars}, vm GSWorld*) -> 0 only when pc was already past the last command at entry, else 1 (also after running the last command, 0x4B... |
 | 0x004B41E0 | 4822 | SSCCmd::EvalFloat | (this, vm GSWorld*, vars SSCVars* (local), out float*): SetParameters (local +0x54, global +0x68 from vm +0xa0), CalcParameters for every nested binding, then by id (0x45..0xe6, else FatalError "Function does not return float at S... |
 | 0x004A7630 | 2147 | GSPlayers_CreateDefaults | (this = vector of CGSPlayer refs, fourPlayers): the vector is emptied; CGSPlayer objects (0x28c, CGSPlayer::ctor) are created with the index +8 = 1..5 (indices 1, 3, 4, 5 when fourPlayers), flags +0xc / +0xd, the float table +0x10... |
-| 0x004A3CA0 | 1715 | Deque16_InsertMiddle | (this = deque, position, range first / last by value, n): STLport _M_insert_range_aux: elems_before = position - start; when it is below half the size the front grows (Deque16_ReserveFront, new start = start - n) and either the fi... |
+| 0x004A3CA0 | 1760 | Deque16_InsertMiddle | (this = deque, position, range first / last by value, n): STLport _M_insert_range_aux: elems_before = position - start; when it is below half the size the front grows (Deque16_ReserveFront, new start = start - n) and either the fi... |
 | 0x004A0BA0 | 1589 | Chunk3ds_ReadMaterial | (this = {IStream*}, chunk, out materials CArray): a temporary CMaterial (0x9c); sub-chunks: 0xA000 MAT_NAME, 0xA010 / 0xA020 / 0xA030 ambient / diffuse / specular (colour sub-chunk 0x10 floats or 0x11 bytes, else printf "WARNING :... |
 | 0x0049BEA0 | 1563 | PointSet_ClusterCentroids | (points {Vec3 begin, end}, out Vec3 vector, levels) fastcall: levels 0: one cluster with every point (weight 1); else each point is quantised (_ftol of the components x 127) into a 10 / 10 / 10-bit packed key counted in a hash set... |
 | 0x0049F890 | 1396 | Node3ds_StepFrame | (this = 3DS keyframe node {+0x10 pos key index, +0x14 rot key index, +0x18 .. +0x2c velocity, +0x30 local quat, +0x40 world quat, +0x50 angle per frame, +0xac pos keys (0x14), +0xc0 rot keys (0x18), +0xfc per-frame records 0x28}, ... |
@@ -1439,8 +1439,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006875D0 | 571 | SpellProto::operator_assign | copy-assigns a SpellProto 0x84 (the std::string code / name fields and the numeric spell fields); 3 calls in SpellProtoVector_InsertN |
 | 0x00689B70 | 560 | HashMapUint_InitBuckets | thiscall (hash, n): STLport hashtable::_M_initialize_buckets: lower_bound of n in the prime table 0x73B914 (0xFFFFFFFB past the end), bucket vector +4..+0xC reserved to that size and null-filled, count +0x10 = 0; caller SpellRegis... |
 | 0x00686910 | 543 | SpellProtoVector_InsertRealloc | STL: vector<SpellProto 0x84>::_M_insert_overflow (grow path of insert); used by SpellProtoVector_InsertN |
-| 0x00685F30 | 528 | SpellSetRecordVector_InsertRealloc | STL: vector<SpellSetRecord 0x34>::_M_insert_overflow (grow path of insert: new size-pool buffer, placement copies, old records destroyed); used by SpellSetRecordVector_InsertN |
-| 0x0068A500 | 515 | DwordVector_ctorN5 | STL: vector<node*>(n) zeroed bucket table with the STLport node allocator inlined; the rehash of the spell id -> CSpell map (HashMapUint_Rehash <- CSpellManager::CreateSpellById, SpellRegistry_ctor) |
+| 0x00687E50 | 531 | SpellProto_UninitCopyRange | STL: uninitialized_copy of SpellProto 0x84 (copy ctor per proto); used by SpellProtoVector_InsertN and _InsertRealloc |
+| 0x00688070 | 529 | SpellProto_UninitFillN | STL: uninitialized_fill_n of a SpellProto 0x84; used by SpellProtoVector_InsertN and _InsertRealloc |
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
@@ -1519,12 +1519,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006B3E60 | 662 | Briefing::operator_assign | copy-assigns a Briefing 0x6C (its std::strings and vectors); 2 calls in BriefingVector_InsertN |
 | 0x006B02B0 | 609 | CStringVector_Reserve | STL: vector<CString>::reserve(n) (size pool buffer, CString copies, old destroyed); 8 calls in QuestsDb::ParseQuestReg (the quest .reg string lists) |
 | 0x006B2BA0 | 569 | Briefing_CopyRange2 | fastcall (first, last, dest): copy-assigns (last - first) / 0x6C Briefing records forward: name string +0 (String_AssignRange2), exp +0xC, money +0x10, giveItems vector<CString> +0x14 (inline assign: realloc via Strings_AllocCopy ... |
+| 0x006B35A0 | 565 | Briefing_UninitFillN | STL: uninitialized_fill_n of a Briefing 0x6C; used by BriefingVector_InsertRealloc and BriefingVector_InsertN |
+| 0x006B3360 | 564 | Briefing_UninitCopyRange | STL: uninitialized_copy of Briefing 0x6C (Briefing::CopyCtor per record); used by BriefingVector_InsertRealloc and BriefingVector_InsertN |
 | 0x006AFCF0 | 560 | QuestMap_Rehash | (this = quest name map g_0x7C87B4, minBuckets): grow buckets to the next prime and re-link the nodes |
 | 0x006AFFC0 | 560 | BriefingMap_Rehash | (this = briefing name map g_0x7C87D4, minBuckets): grow buckets to the next prime and re-link the nodes |
 | 0x006B1CB0 | 553 | Briefing::CopyCtor | copy-constructs a Briefing 0x6C (its std::strings and vectors); used by BriefingVector_InsertRealloc |
 | 0x006B1480 | 524 | BriefingVector_InsertRealloc | STL: vector<Briefing 0x6C>::_M_insert_overflow (grow path of insert); used by BriefingTable_AddUnique, BriefingVector_PushBack and BriefingVector_InsertN |
-| 0x006B0EF0 | 523 | QuestVector_InsertRealloc | STL: vector<Quest 0x38>::_M_insert_overflow (grow path of insert); used by QuestVector_PushBack and QuestVector_InsertN |
-| 0x006B2240 | 519 | BriefingVector_Resize | STL: vector<Briefing 0x6C>::resize(n) (QuestsDb briefings): InsertN of default records or erase of the tail; used by BriefingVector_Serialize |
 
 ## 0x6B4000 - 0x6C3000: CMusicSystem / CSoundManager / mp3 (Miles)
 
@@ -1591,7 +1591,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-2414 functions, group `crt`.
+2419 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1606,6 +1606,6 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006E0930 | 860 | AcksCryRange_Copy | STLport: std::copy forward for AcksCry 0x5C records: string assign +0 (String_AssignRange2), HashSet_Assign_6E14E0 +0xC, inline vector<line 0x28>::operator= for +0x20 and +0x2C, Rec28Vector_Assign +0x38/+0x44/+0x50; caller AcksCry... |
 | 0x006F3E9F | 846 | _get_lc_time | CRT (inittime.c _get_lc_time(__lc_time_data*)): fills the LC_TIME table from the LC_TIME lcid (0x7CAC4E) / ANSI code page through _getlocaleinfo: abbreviated day names 0x31..0x37 (+0..+0x18), day names 0x2A..0x30, abbreviated mont... |
 | 0x006FDC12 | 845 | CString::FormatV | MFC (void CString::FormatV(lpszFormat, va_list)): estimates the maximum length by parsing every % item (flags, width / precision incl. '*', size prefixes h l I64 F N, types c C s S d i u x X o e f g G p n; strings by their length,... |
-| 0x006F62D5 | 815 | __sbh_heap_check | CRT (sbheap.c __sbh_heap_check): validates every region (IsBadWritePtr of the headers and group data, size chains, bucket links and counts against the bitmaps); returns 0 or a negative error code; lib, unused (no call, no pointer,... |
-| 0x006F5730 | 809 | __sbh_free_block | CRT (sbheap.c __sbh_free_block(header, p)): frees a V6 small block: coalesces with the free neighbours (size words, bit 0 = in use), unlinks / relinks them in the 64 size buckets of the group (group = (p - region base) >> 15, 0x20... |
-| 0x006E3FD0 | 799 | AcksCry::Serialize | (this = AcksCry 0x5C, archive): tag 1 name +0; tags 10..14 the five line vectors +0x20/+0x2C/+0x38/+0x44/+0x50 (read: Rec28Vector_Clear + resize to the count, then the per-line tags 1..4); caller AcksCryesVector_Serialize |
+| 0x006E1D20 | 836 | AcksAnswerRange_UninitCopy | STLport: uninitialized_copy(first, last, dest) for AcksAnswer 0x1C4: DbTableRecord_CopyCtor (= AcksAnswer::CopyCtor) per record; the catch(...) block after it destroys the partial record (StlValueType_Null_6E0510 / AcksLine28_Dest... |
+| 0x006E20A0 | 834 | AcksAnswerRange_UninitFillN | STLport: uninitialized_fill_n(dest, n, x) for AcksAnswer 0x1C4 (DbTableRecord_CopyCtor per slot, catch block destroys and rethrows); returns dest end; callers AcksAnswersVector_Resize, AcksAnswersVector_InsertRealloc |
+| 0x006EC3A0 | 821 | memcpy | MSVC6 CRT: memcpy(dst, src, n): the second linked copy of the memcpy.asm code (identical to memmove 0x6E79A0, overlap-safe); used by the CRT / MFC objects (CString::FreeExtra / Insert / Replace / ConcatCopy, realloc, setlocale ..)... |
