@@ -199,7 +199,7 @@ CUnitServer			0x918	pointer	footstepStimulus	the StimulusMap::EmitFootstep recor
 CUnitServer			0x920	pointer	passiveSpellList	CORRECTION: was {next, ?, item, countdown} (TickPassiveSpells): head of the list of nodes {next, prev, item ref, countdown, keep byte} of the equipped items whose spell has flag 0x20000 (ic); rebuilt by 0x5528F0
 CUnitServer			0x938	int	idleVoiceCounter	player units: > 500 then 1/1001 per tick -> message 0x29 (idle voice) unless the player mode is set
 CUnitServer			0x93c	int	lastOrderTick	world tick when the last order was dispatched
-CUnitServer			0x978	pointer	animDoneCallback	called when a state-3 animation ends
+CUnitServer			0x978	pointer	animDoneCallback	EXTENDS the existing row: fastcall (CUnitServer*) called when a state-3 animation ends; the dialog code sets 0x6023F0 (DialogScreen_OnSpeakerAnimDone: the speaker goes back to StartSpeakerAnimation(unit, 0, 0)) in ParseDialogScript, AddSpeaker, StartSpeakerAnimation and the dead 0x607A10
 CUnitServer			0x97c	uint	propagatedAlarmMask	enemy bits already exchanged with the neighbours
 CUnitServer			0xb10	AiAcknowledge	acknowledge	voice reaction object
 CUnitServer			0x924	pointer	passiveSpellTail	
@@ -3014,9 +3014,9 @@ CRichEditSurface	CUIBlitSurface	0x58	0x48	float	scrollSpeed
 CRichEditSurface	CUIBlitSurface	0x58	0x4C	int	streamResult	EM_STREAMIN return
 CRichEditSurface	CUIBlitSurface	0x58	0x50	int	state	
 CRichEditSurface	CUIBlitSurface	0x58	0x54	pointer	hRiched20	LoadLibrary("Riched20.dll")
-CBattleHud	CUIWindow	0x230	0x16C	pointer	units	CUnit*[] of the controlled units (hero first); flag CUnit +8 & 0x10 = selected
+CBattleHud	CUIWindow	0x230	0x16c	pointer	selectedUnits	CUnit*[] of the selected units, count +0x170 (CBattleHud::OnUnitRemoved removes from it; the dead helpers IsUnitSelected 0x6365B0, CameraFollowSelected 0x6379B0, CountFlaggedSelected 0x637D60 walk it)
 CBattleHud	CUIWindow	0x230	0x170	int	unitCount	
-CBattleHud	CUIWindow	0x230	0x17C	int	commandMode	0 none 1 spell on unit 2 spell at point 3 belt item on unit 4 belt at point 5 science / use object 6 loot 7 follow (SetLeader) 8 interact -1 (IssueCommandAt 0x638EF0)
+CBattleHud	CUIWindow	0x230	0x17c	int	commandMode	pending command mode 1..8 stored with commandSlot +0x180 and interaction +0x184 by the dead SetCommandMode 0x637FC0 (1-2 bar +0x19c, 3-6 quick bar +0x198, 7-8 bar +0x1a0) and read by the dead GetCommandMode 0x638160
 CBattleHud	CUIWindow	0x230	0x180	int	commandSlot	spell / belt slot of the pending command, -1
 CBattleHud	CUIWindow	0x230	0x184	int	interaction	interaction id for modes 5 / 6 / 8, -1
 CBattleHud	CUIWindow	0x230	0x188	int	pendingExit	zone exit index of the leave-zone prompt

@@ -252,7 +252,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004462C0 | 98 | StringWords_Read_4462C0 | (CFile*) ret 4: the read side of 0x446260: length, GetBuffer(length) + Read, count, CArray_SetSize_B(+4, count), Read(+8 data, count * 2) [dead: no caller or pointer] |
 | 0x00446260 | 94 | StringWords_Write_446260 | (this {CString +0, CWordArray +4: data +8, size +0xc}, CFile*) ret 4: writes length + 1, the characters with the terminating 0, the word count and count * 2 bytes of words (vt +0x38 Write) [dead: no caller or pointer] |
 | 0x00446170 | 64 | CString_ReadFromStream_446170 | (CFile*) ret 4: file vt +0x28 Seek(0, 0), len = vt +0x30 GetLength, GetBufferSetLength(len), vt +0x34 Read(buffer, len), ReleaseBuffer(-1) (the read twin of CString_WriteToStream 0x4461B0) [dead: no caller or pointer] |
-| 0x004461B0 | 45 | CString_WriteToStream | (this CString, stream): stream vt[14] (+0x38)(GetBuffer(0), length -8), then ReleaseBuffer(-1); no caller or pointer [dead: no caller or pointer] |
+| 0x004461B0 | 45 | CString_WriteCharsToStream | (this CString, stream): stream vt[14] (+0x38)(GetBuffer(0), length -8), then ReleaseBuffer(-1); no caller or pointer [dead: no caller or pointer]. Renamed from CString_WriteToStream (duplicate name). |
 
 ## 0x447000 - 0x453000: 3ds model import / figure export (editor leftover): Scene3ds_ResolveNodesAMF, WeldVertices, ComputeNormals, BuildIndexedComponents, CorrectMappings (.reg atlas), Material_ParseName, AnimNode_Write .ani / .ast / .bon, old CAnimationNode tree building; container serializers
 
@@ -386,7 +386,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004680D0 | 1454 | CLightning::Init | (from, to, type, demon): +0x50C type; +0x510 amplitude 0.3 (type <= 0) / 0.05 (> 0, or //dz/ - 30/ < 0.01); main segment +0x5C (LightningSegment_Init, seeds scale 1.5 / 2 / 1 for type > 0 / 0 / < 0, seed time (g_0x7AF61C + g_0x7AF... |
+| 0x004680D0 | 1454 | CLightning::Setup | (from, to, type, demon): +0x50C type; +0x510 amplitude 0.3 (type <= 0) / 0.05 (> 0, or //dz/ - 30/ < 0.01); main segment +0x5C (LightningSegment_Init, seeds scale 1.5 / 2 / 1 for type > 0 / 0 / < 0, seed time (g_0x7AF61C + g_0x7AF... |
 | 0x004662C0 | 1314 | LightningSegment::EvalNoise | (this = LightningSegment (main +0x5C or a branch), time, out dx[count], out dy[count], scale): per axis a ring of 3 seeds (+0x30.. / +0x60..: 2 table indices ISAAC & 15 + 2 weights U[-1,1) normalised x scale), shifted once per who... |
 | 0x00467590 | 1045 | CLightning::RenderGlow | (ctx, pos, unused, size): 8 particle quads stacked from pos towards the camera g_0x79B2C4 (quad i at pos + dir * size * i/8, size * sqrt(1 - (i/8)^2)), colour 0xA0FFFFFF, frame (world +0x64 + round(15 pos.x) + 2i) % 15 of a 4x4 at... |
 | 0x00467AD0 | 821 | CLightning::Render | (this, renderer): binds texture +0x1c (vt slot 0x2c), GetWorld, Update when type >= 0; type >= 0: DrawTexturedPolyline (vt slot 0x40) of the main points +0xf0 (width = /dir/ * count * 0.6, random frame 0..3 * 0.25) and the 6 branc... |
@@ -682,7 +682,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004E24E0 | 310 | CVisibilityFog::dtorBody | vt_CVisibilityFog: frees the cell nodes (0x20 bytes, pool g_0x79B230) and buckets +0x58, then the CObject dtor 0x455930 |
 | 0x004E15C0 | 244 | TextArchiveEntry_Create | cdecl (value*) -> 0x18 entry from the STLport free list g_0x79B22C (stlport_node_alloc_chunk_alloc(0x18, 20) refill chained when empty): name string copy-constructed at +8 (String_CtorRange2), resource +0x14 = value +0xc. Caller T... |
 | 0x004E2760 | 229 | CVisFogManager::Tick | slot 6: calls vt[6] Tick on every fog of the list +0xB8; a fog returning 0 is unlinked and vt[4] released |
-| 0x004E2620 | 210 | HashTable20_Destroy | hash table of 0x20-byte nodes (the fog cells): frees every chain and the bucket vector |
+| 0x004E2620 | 210 | HashTable32_Destroy_VisFog | hash table of 0x20-byte nodes (the fog cells): frees every chain and the bucket vector. Renamed from HashTable20_Destroy (duplicate name). |
 | 0x004E28D0 | 190 | CVisFogManager::CreateAndRegister | creates a CVisibilityFog (vt[23](0, -1)), refcount++, appends it to the CList +0xB8 (0xC-byte nodes); returns it |
 | 0x004E2F00 | 146 | HashMapUint_EraseKey | (this = hash_map<uint, ..>, key*) -> removed count: every node of the key's bucket with node +4 == key unlinked and pushed on the 0x20 free list g_0x79B230 (the head checked last), count +0x10 decremented per node. Caller CVisibil... |
 
@@ -1003,7 +1003,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x57A000 - 0x58A000: game session: saves, MainMenu, autoexec, scenario/mission.sav, MpState
 
-317 functions, group `app`.
+330 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1045,7 +1045,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x595000 - 0x59F000: CWorldServer::LoadZone / NewZone / LoadMapObjects / LoadSave / WriteSave / UnloadZone, world script loading, progress videos; the server object hash / list / array container instantiations (IdHash_*, RefList / RefArray / LootRecordList serializers)
 
-225 functions, group `world`.
+227 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1087,7 +1087,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5AD000 - 0x5C6000: CAIMap: terrain / passability grids, collision map, path finders, nav grid, stamps; Alertness
 
-435 functions, group `ai`.
+439 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1122,14 +1122,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005C7860 | 327 | MoveCurve::Read | (stream): reads the segments / points / cell speeds and +0x3C..+0x4C (save game) |
 | 0x005C7B00 | 244 | MoveRequest::SetStand | (pos[2], facing dir[2], tick): request kind 0 = stand at pos*2 with heading atan2(dir), start tick, clears the cell list; returns true when something changed (16 callers) |
 | 0x005C6290 | 219 | MoveCurve::LimitSegmentSpeeds | (maxTurnRate): caps each segment's speed so traversing it takes at least (heading change to the next segment) / maxTurnRate |
-| 0x005C6110 | 214 | dead_5C6110 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
-| 0x005C6E50 | 202 | dead_5C6E50 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005C6110 | 214 | MoveSegCache::BuildCubic_5C6110 | (): on the cached move segment (MoveCurve +0x50 layout: start x +0 / y +4, start dir +8 / +0xc, end +0x10 / +0x14, end dir +0x18 / +0x1c, length L +0x20) computes the cubic Hermite coefficients per axis: x: c0 +0x28 = x0, c1 +0x2c... |
+| 0x005C6E50 | 202 | MoveCurve::BeginTurn_5C6E50 | (dx, dy, rate) ret 0xc: dx == dy == 0 -> turnDelta +0x4c = 0; else curTurnRate +0x44 = rate (or turnRate +0x40 when rate == 0) and turnDelta = atan2(dy, dx) - startHeading +0x48, wrapped into [-pi, pi] (pi at 0x73FE44). No call, j... |
 | 0x005C6000 | 191 | PathCells_RemoveDuplicates | (list {vt, head, tail, count, free, pool}): unlinks consecutive nodes with equal (x, y) shorts into the free list; frees the pool (0x6FE90F) when the list becomes empty |
 | 0x005C6F20 | 150 | MoveCurve::EvalTurn | (t, out dir[2]): heading at time t of a turn in place (+0x48 start + clamp(+0x4C delta, +0x44 rate * t)); returns 1 while still turning |
 
 ## 0x5C8000 - 0x5D3000: unit AI: perception (aiinfo.res, hearing, vision, smell)
 
-175 functions, group `ai`.
+176 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1146,11 +1146,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005C98C0 | 631 | StimulusMap::HearSound | (source CUnitServer, loudness, delayTicks, pos or 0 = source pos): for every unit within 50 m (CollisionMap::FindUnitsNear on world+0x124) for which source.side is an enemy (CUnit::IsPlayerInMask(listener, source)), whose AiMemory... |
 | 0x005CEED0 | 607 | AiSpellInfos_Build | (this = brain +0xa4, CUnit): rebuilds the two tables: non-heroes with a natural weapon (+0x28c != 0x10) get {kind 0 weapon, slot -1, range GetAttackRange, damage GetDamage7} in the attack table; then every spell slot 0..7 (CUnit::... |
 | 0x005C8D40 | 584 | ByteGrid_EnsureCovers | thiscall (map, cx, cy, r): the square [cx - r, cx + r] x [cy - r, cy + r] must lie inside the map: first use (originX == 0x7FFFFFFF): (re)allocates a (2r + 1)^2 map, zeroed, origin = (cx - r, cy - r); else, when the square leaves ... |
-| 0x005D1450 | 568 | dead_5D1450 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005D1450 | 568 | AiLogicPatrol::AppendReversedRoute_5D1450 | (): with n = the point count +0x10 of the PatrolPoint CArray +8 (0x20 each, data +0xc): reserves 2n (inlined SetSize: CArray73D460_Delete on shrink, Records32Str_ConstructN on growth), sets the size back to n (Records32StrCArray_S... |
 
 ## 0x5D3000 - 0x5E2000: unit AI: behaviours (Guard / Patrol / Sentry / CorpseWatcher / Tamed) + #say
 
-259 functions, group `ai`.
+260 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1171,7 +1171,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5E2000 - 0x5E3000: IUIEvents defaults + CUIMessageLog (timed chat/message lines)
 
-27 functions, group `ui`.
+28 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1183,7 +1183,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005E2990 | 79 | CUIMessageLog::Tick | slot 24 (called every frame by CInterface::ProcessPendingScreens on +0x1C): erases the lines older than 20000 ms (node +0x10 vs timeGetTime) |
 | 0x005E29E0 | 69 | CUIMessageLog::BlitSurfaces | slot 22: places each line surface at (10, 10 + 16 * i), blits it (surface vt[0]) and then the base CUIWidget::BlitSurfaces (the input line). Was Layout |
 | 0x005E2480 | 67 | List24_Clear_5E2480 | STL: std::list clear into 0x18-byte pool; 1 unwind funclet(s) (0x728da6) |
-| 0x005E24D0 | 65 | dead_5E24D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005E24D0 | 65 | RetStub_5E24D0 | empty function (ret): no-op destructor of a stack object jumped to by the unwind funclet 0x728D83 of List18_Ctor (state 0 -> -1). The gap block (65 bytes) holds this stub, the registered List24_InsertBefore_5E24E0 and the new ret ... |
 | 0x005E24E0 | 41 | List24_InsertBefore_5E24E0 | STL: allocate and link a 0x18-byte node; callers Timer_Schedule |
 | 0x005E2620 | 41 | Quat_StaticInit_Identity4 | static initializer (pointer 0x783740): g_0x7C7B98 = {1.0, 0, 0, 0}; the only reference to it in the exe (xq refs) |
 | 0x005E25B0 | 40 | List24_EraseNode_5E25B0 | STL: unlink node to 0x18-byte pool; callers CFlyingHitPoints::Draw |
@@ -1234,7 +1234,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5EE000 - 0x5FD000: UI: CInterface screen manager, item/spell/perk info panels, CUIBlitSurface, string-pair arrays, STL leaves
 
-340 functions, group `ui`.
+352 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1272,7 +1272,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005FF830 | 391 | CUIWidget::AddButton | allocates a 0x34-byte UIButton (+0 CInterface, polygon +4.., rect +0x14, flags +0x24/+0x25, origin +0x28/+0x2C, tooltip +0x30) and appends it to +0x128 (count +0x12C); 158 callers. Was CUIWindow::AddButton |
 | 0x005FDA80 | 384 | CUIBlitSurface::Blt | vt slot 0: when visible (flag 4) blits the surface to the back buffer at its rect clipped to the screen (DDBLT_WAIT, or DDBLT_KEYSRCOVERRIDE 0x1010200 with the colour key +0x34 when flag 1); called from CUIWidget::BlitSurfaces. Wa... |
 | 0x00601ED0 | 384 | CDemoScreen::OnOpen | vt 0x73F7F8 slot 25 of the attract-mode demo screen (0x184 bytes, CUIWindow_73F7F8::Create): once (+0x16C): enumerates 'demo%d.apl' recorded sessions into the CStringArray +0x170; adds a CamCtlFree handler, clears the camera free ... |
-| 0x005FF240 | 379 | dead_5FF240 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005FF240 | 379 | CUIWidget::AddQuadMeshUnique_5FF240 | (mesh) ret 4 -> 1 when the mesh is already in quads +0x108 (count +0x10c), else 0 after appending it (inlined aligned CArray growth: AlignedAlloc32_600AA0, raw pointer at -4, grow +0x114 or size / 8 clamped 4..0x400), mesh refcoun... |
 
 ## 0x602000 - 0x60E000: UI: dialog screen (speakers, topics, briefing), status-lamp screen, STL leaves
 
@@ -1297,7 +1297,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x60E000 - 0x645000: UI: camp/inventory/trade/spell+item constructor, hero stats, main menu, save/load, lobby, battle HUD, credits
 
-638 functions, group `ui`.
+641 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1318,7 +1318,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x645000 - 0x65F000: UI: battle HUD strips, scroll bars, edit/list controls, save/load, options, tutorial, key config; DirectInput mouse; RichEdit
 
-375 functions, group `ui`.
+377 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1360,7 +1360,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x664000 - 0x674000: CPlayer / CPlayerClient / CPlayerServer: in-game protocol opcodes (client SendMsgXX / OnMsg_*, server SendMsgXX / OnMsg_*), party sync (MpFile), tracked units and objects, CPlayerManager, CMappedResource (resource file cache), hero record array
 
-378 functions, group `net`.
+379 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1393,7 +1393,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00674910 | 378 | CResourceBase::CreateAccelTable | (pairs {name, index}*, count): +0x1c = max index + 1 slots (-1 filled) with the entry index of every name (fixed numbering of often-used entries); "CResourceBase::CreateAccelTable(). Index out of range / No entry" |
 | 0x00674DF0 | 332 | CObjectManager::dtor | vt 0x743338: every prototype record of +0xb0: object vt[3] Done then vt[0](1) delete; the strings destroyed; CBaseManager::Done; the vector buffer returned to the size pool; CBaseManager::DestroyBody |
 | 0x00675200 | 313 | CObjectManager::CloseProtoResource | slot 17 (name): the record with that name: resource vt[3] Release + delete, the record erased (vector shift); 1 when found. Was FindProtoByName2 |
-| 0x00674310 | 288 | dead_674310 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00674310 | 288 | CMMIOResource::OpenResource_674310 | (path, accel pairs, count) ret 0xc -> bool: archive +0x24 = mmioOpenA(path, 0, 0x20) (FatalError "CMMIOResource::OpenResource() Unable to open resource file"); mmioRead of the 16-byte header +4 (else "Unable to read header of reso... |
 | 0x00674F40 | 245 | CFigureManager::Done | slot 3: deletes every cached figure entry (stride 0x10) then CBaseManager::Done |
 | 0x006744C0 | 244 | CResourceBase::OpenFile | (name, out size): CloseFile; a loose file of that name on disk (_access) is mmioOpen'd into +0x30 (size from _findfirst) -> loose files override archive entries; else FindEntry and mmioSeek(+0x24, entry offset) with +0x28 = offset... |
 | 0x00675340 | 243 | CObjectManager::ClearProtos | slot 18: every record: resource vt[3] + delete; the vector emptied |
@@ -1402,7 +1402,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x676000 - 0x683000: CEffect* (sounds, lights, particles, arrows, tornado)
 
-235 functions, group `effects`.
+237 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1423,7 +1423,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x683000 - 0x68C000: CSpell / CSpellContainer / CSpellConstructor / CSpellManager
 
-189 functions, group `spells`.
+190 functions, group `spells`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
