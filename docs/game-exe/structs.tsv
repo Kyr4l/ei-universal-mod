@@ -725,7 +725,7 @@ AiLogic		0x8	0x4	short	refCount
 AiLogicGuard	AiLogic	0x20	0x8	float[3]	point	
 AiLogicGuard	AiLogic	0x20	0x14	float	radius	GuardRadius default
 AiLogicGuard	AiLogic	0x20	0x18	float	stayTime	GuardStayTime default; x 15 ticks per idle turn
-AiLogicGuard	AiLogic	0x20	0x1c	int	failedSpots	100 failures -> search around the unit
+AiLogicGuard	AiLogic	0x20	0x1c	int	failedSpots	reset to 0 by AiLogicGuard::Reset (slot 2, 0x4BA2D0)
 AiLogicPatrol	AiLogic	0x20	0x8	CArray	points	PatrolPoint x count +0x10 (data +0xc)
 AiLogicPatrol	AiLogic	0x20	0x1c	int	index	current point
 PatrolPoint		0x20	0x0	float[3]	pos	tile centre
@@ -740,7 +740,7 @@ AiLogicSuspection	AiLogic	0x18	0x8	float[3]	point	= AiMemory noticedPos when ado
 AiLogicSuspection	AiLogic	0x18	0x14	int	stay	priority; -5 per tick near the point, -50 per tick while an enemy is seen
 AiLogicAggression	AiLogic	0x18	0x8	pointer	target	kept target (ref)
 AiLogicAggression	AiLogic	0x18	0xc	byte	revenge	1 = attacks only its attacker (mob AggrMode 1 / UMRevenge)
-AiLogicAggression	AiLogic	0x18	0x10	int	spell	chosen spell slot, -1 weapon
+AiLogicAggression	AiLogic	0x18	0x10	int	spell	-1 after AiLogicAggression::Reset (slot 2, 0x4BA7C0); target +8 = 0, revenge +0xc = 0, chosen +0x14 = 0
 AiLogicAggression	AiLogic	0x18	0x14	pointer	chosen	target chosen this tick (raw)
 AiLogicPlayer	AiLogic	0x24	0x8	pointer	keptTarget	attack target (ref)
 AiLogicPlayer	AiLogic	0x24	0xc	pointer	leader	followed unit (ref)
@@ -1171,7 +1171,7 @@ PartyStore			0x10	CParty	party	the selected / working party (0x70)
 PartyStore			0x80	CString	fileName	
 PartySlot		0x74	0x0	CParty	party	one 1-hero party per *.mp file
 PartySlot			0x70	CString	fileName	
-ShopStock		0xb8	0x0	pointer	world	the CWorld the stock builds items in (vt[16] constructor, vt[18] item manager, vt[22] spell manager); CGSPlayer +0x11c (item shop) and +0x1d4 (spell shop)
+ShopStock		0xb8	0x0	pointer	shopParty	the shop CParty the stock builds into (CGSPlayer +0x3c for the item stock +0x11c, +0xac for the spell stock +0x1d4; set by ShopStock::ctor 0x4A66C0 / the inlined copy in CGSPlayer::ctor); vt[16] item constructor, vt[18] item manager, vt[22] spell manager are CParty slots. CORRECTION: was "world: the CWorld the stock builds items in"
 ShopStock			0x4	int	playerBit	bit index tested against the S_* tables' mask +0x30
 ShopStock			0x8	pointer	armorProtos	vector<ArmorProto*> begin/end/cap (+8/+0xc/+0x10) [?: names swapped vs the old AddUnique_Weapon]
 ShopStock			0x14	pointer	weaponProtos	vector<WeaponProto*> (+0x14/+0x18/+0x1c)
@@ -1215,6 +1215,11 @@ CGSPlayer			0x3c	CParty	itemShop	the item trade stock (GenerateItemShop)
 CGSPlayer			0xac	CParty	spellShop	the spell trade stock (GenerateSpellShop)
 CGSPlayer			0x11c	ShopStock	itemStock	allowed protos / materials for the item shop
 CGSPlayer			0x1d4	ShopStock	spellStock	allowed spells / perks for the spell shop
+CGSPlayer		0x28c	0x8	int	id	merchant id (1..5; -1 after ctor): CGSPlayer::Serialize tag 1, PtrVector_FindByIdAt8 key
+CGSPlayer			0xc	byte	flagC	CGSPlayer::Serialize tag 2 (0 after ctor); GenerateItemShop runs when set (items.md 7)
+CGSPlayer			0xd	byte	flagD	CGSPlayer::Serialize tag 3 (0 after ctor)
+CGSPlayer			0x10	float[10]	priceFactors	0x28 bytes saved as tag 4: the merchant price factors (items.md 7 / ui-screens.md: nine used, +0x10..+0x30), filled by GSPlayers_CreateDefaults
+CGSPlayer			0x38	byte	flag38	CGSPlayer::Serialize tag 6 (1 after ctor)
 HeroKit		0x60	0x0	CString	name	units.udb NPC record (tag 4, g_0x7AF384 map): the hero kit
 HeroKit			0x24	pointer	ints	vector<int> (+0x24/+0x28/+0x2c)
 HeroKit			0x30	pointer	weaponNames	vector<CString> item names -> HeroRecord +0x730 (ApplyHeroKit)
@@ -4125,10 +4130,14 @@ FlameNoise			0x28	float	phase	fraction of the current step (0..1)
 FlameNoise			0x2c	int	frame	0..15: the FillBand step for texture C
 FlameNoise			0x30	int	size	texture side (256)
 ObjPartyRecord		0x44	0x0	StlHashTable	partyHash	id -> CParty (functor bytes +0..+2, buckets +4..+0xc, size +0x10; 0x78-byte nodes {next, key, CParty +8}); 100 buckets at construction; PartyHash_Destroy (EH) / ObjPartyRecord_dtor
-ObjPartyRecord			0x14	pointer	records	vector of 0x14-byte records (begin +0x14, end +0x18, cap +0x1c; Records20_Destroy each) [?]
+ObjPartyRecord			0x14	pointer	records	vector of 0x14-byte records {CString +0, CString +4, dword vector +8/+0xc/+0x10} (begin +0x14, end +0x18, cap +0x1c); saved as tag 2 by ObjPartyRecord_Write (Archive_SerializeRecords20Vector). CORRECTION: was [?]
 ObjPartyRecord			0x24	PartyList	partyList	the script party list (vector of NamedParty* +0x24..+0x2c, CString +0x30, CString +0x34): PartyStore::FindByName / AddParty / RemoveByName / ResetToDefault (0x4A5xxx), ObjPartyRecord::GetPartyStoreAddr
-ObjPartyRecord			0x38	pointer	refs	vector of object refs (begin +0x38, end +0x3c, cap +0x40; ObjRef_ReleaseAt0b each in the dtor) [?]
+ObjPartyRecord			0x38	pointer	merchants	vector of CGSPlayer* (16-bit refcounted; begin +0x38, end +0x3c, cap +0x40): filled by GSPlayers_CreateDefaults, found by id +8 (PtrVector_FindByIdAt8 on g_0x7AA5D8 with trunc(constr.current)), saved as tag 4 (each object's vt[1] = CGSPlayer::Serialize). CORRECTION: was "vector of object refs [?]"
+ObjPartyRecord			0x20	int	unk_0x20	saved / loaded as tag 3 (4 bytes) by ObjPartyRecord_Write / Read
 NamedParty		0x7c	0x0	pointer	vtable	0x73C360 (slot 1 NamedParty::Serialize)
 NamedParty			0x4	short	refCount	16-bit refcount (RcPtrShort_Assign / RcPtrShort_Release; vt[0](1) at 0)
 NamedParty			0x8	CParty	party	0x70: FindByName returns &entry->party
 NamedParty			0x78	CString	name	the script party name ("" = the default party made by ResetToDefault)
+PartyList		0x14	0x0	pointer	begin	vector<NamedParty*> begin (16-bit refcounted pointers); end +4, cap +8; ObjPartyRecord +0x24 (g_0x7AA5C4)
+PartyList			0xc	CString	nextName	the party to load at the next PartyList::GetParty (script SetCurrentParty writes it); "" = the default party
+PartyList			0x10	CString	currentName	the party currently in use: PartyList::StoreParty writes into it, GetParty sets it = nextName; ScriptParty_Resolve maps this name to the player's own party (g_0x7AA5D4)

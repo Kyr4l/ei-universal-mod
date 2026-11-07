@@ -4,49 +4,49 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x401000 - 0x402000: math: vec3/quat helpers (CObject3D transform)
 
-22 functions, group `leaf`.
+25 functions, group `leaf`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00401F00 | 766 | CObject3D::AlignToDirectionInv | AlignToDirection variant using the inverse-rotated axes, optional flag param_2; 3 callers |
-| 0x00401B50 | 643 | CObject3D::AlignToDirection | computes rotation that turns the local axis onto a target vector (cross products, normalise, acos), applies it to quat +0x34 |
+| 0x00401F00 | 766 | CObject3D::AlignToDirectionSmooth | (dir, slow): same axes and projection as AlignToDirection (own -Y toward dir about own Z); angle > pi branch (2pi - angle, axis negated) cannot trigger after acos; slow != 0 scales the angle by 0.4 (gradual turn); then RotateAxisA... |
+| 0x00401B50 | 643 | CObject3D::AlignToDirection | (dir float[3]): from localRot +0x34 builds the object's -Y axis (column 1) and Z axis (column 2), projects dir onto the plane normal to Z (Z x dir x Z, normalised), axis = (-Y) x proj; if /axis/ >= 1e-5 angle = acos(clamp(dot(-Y, ... |
 | 0x00401680 | 535 | CObject3D::LookAtPlanar | rotation delta between local axis and target vector (xy), via Quat_FromAngleAxis, applied with Quat_MulAssign |
 | 0x00401940 | 527 | CObject3D::RotateTowardDirection_B | rotation of the object's quaternion (+0x34) that turns the other local axis onto a target direction (sibling of 0x401680) |
 | 0x00401170 | 414 | NetPlayerInfo::Read | GameBuffer counterpart of 0x401000, reads the same fields in the same order |
 | 0x00401000 | 367 | NetPlayerInfo::Write | serialize into GameBuffer: dwords +0x1c,+0x20, two CStrings (+0,+0xc), bytes +0x18,+0x19,+0x1b,+0x1a |
-| 0x00401570 | 258 | CObject3D::BuildRotationMatrix | 4x4 matrix (16 floats) from the quaternion at +0x44..0x50, identity elsewhere |
-| 0x00401E50 | 176 | CObject3D::RotateAxisAngle | post-multiply quaternion +0x34..0x40 by Quat_FromAngleAxis(axis, angle) |
-| 0x004018A0 | 148 | Quat_PreMulAssign | this = q * this (the doc comment 'this*param' is the other order) |
+| 0x00401570 | 258 | CObject3D::BuildWorldMatrix | (float[16] out): identity, then rotation part from worldRot +0x44 (w,x,y,z) in the D3D row-vector layout, translation row out[12..14] = worldPos +0x28; CORRECTION: was 'rotation matrix only' (it also writes the translation) |
+| 0x00401E50 | 176 | CObject3D::RotateAxisAngle | (axis, angle): q = Quat_FromAngleAxis(angle, axis); localRot +0x34 = q * localRot (q on the left); CORRECTION: was 'post-multiply' |
+| 0x004018A0 | 148 | Quat_PreMulAssign | (this quat, q): this = q * this (Hamilton, w first); checked term z = q1*a2 - q2*a1 + .. |
 | 0x00401490 | 115 | CObject3D::CopyTransform | CObject3D slot 13: copies +0x1c..+0x50 (local pos 3f @0x1c, world pos 3f @0x28, local rot quat 4f @0x34, world rot quat 4f @0x44) from the other object |
-| 0x00401340 | 97 | GameBuffer::ReadBytes | bounds-checked read of N bytes; slow path via GameBuffer::Read or vt[3] refill |
-| 0x00401310 | 46 | GameBuffer::ReadInline | copy N bytes from the cursor (+8) without bounds check, advance cursor |
-| 0x00401460 | 41 | Quat_StaticInit_Identity | sets global quaternion g_0x79B1C0 to (1,0,0,0) |
+| 0x00401340 | 97 | GameBuffer::ReadBytes | (dst, n): if cursor +8 + n > +0x10 -> GameBuffer::Read(dst, n); else if it fits under +0xc copies inline and advances +8; else vt[3](dst, n) refill path |
+| 0x00401310 | 46 | GameBuffer::ReadInline | (dst, n): copies n bytes from the cursor +8 (dwords then tail bytes), +8 += n; no bounds check |
+| 0x00401460 | 41 | Quat_StaticInit_Identity | static init: global quaternion 0x79B1C0 = (1,0,0,0) (w first) |
 | 0x00401510 | 39 | CObject3D::WriteTransform | CObject3D slot 16: stream->vt[14](ptr,size) writes local pos (+0x1c, 12 bytes) and local rot (+0x34, 16 bytes) |
 
 ## 0x402000 - 0x405000: CObject root + CBaseManager (id map, pools, RegisterInstant)
 
-63 functions, group `core`.
+73 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00402780 | 887 | ScratchBufU32_Reserve | grow global uint scratch array g_0x79B1E0 (same growth policy) |
-| 0x004031E0 | 761 | CBaseManager::Done | slot 3: for every object in the id map +0x1c: refcount++ then vt[3]() (Done), collects them in a list and vt[4]() (Release) each; frees the list +0x38 (count +0x40, free list +0x44, pool +0x48 via 0x6FE90F), destroys every object ... |
-| 0x00403730 | 636 | CBaseManager::RegisterInstant | slot 23 (type, id): if the type's pool (+0x80 count map, +0x68 pool map) has a free object (0x404FE0) reuse it else vt[14](type) creates one; obj+8 = 0, obj+0x10 = type; id == -1: random id in [+0x98, +0x9c) not yet in the id map ... |
-| 0x00402500 | 599 | ScratchBufU16_Reserve | grow global ushort scratch array g_0x79B1F8 (same growth policy) |
-| 0x004034E0 | 568 | CBaseManager::DoneObjects | slot 15: for every object in the id map: refcount++, vt[3]() Done, vt[4]() Release; +0x30 = 0; clears the id map (0x4067B0), the list +0x38.. and the hash +0x50 (0x406E80) |
-| 0x00402DF0 | 539 | CBaseManager::DestroyBody | vtable 0x73B870; frees the two hash tables (+0x6c,+0x84) and ref lists, calls Done; used by derived dtors |
-| 0x00404040 | 529 | CBaseManager::PoolObject | (obj): returns the object to the per-type pool +0x68 / +0x80 or deletes it (DestroyObject) |
+| 0x00402780 | 887 | RadixSortU32 | fastcall (uint *data, n): 4-pass LSD radix sort (bytes 0..3, ping-pong data <-> scratch g_0x79B1E0, result back in data); scratch grown like 0x402310 (AlignedAlloc32_406B50, guard 0x79B1F0, atexit 0x402B00); no caller or pointer; ... |
+| 0x004031E0 | 761 | CBaseManager::Done | slot 3: walks idMap +0x1c three times: (1) refcount +4 += 1 on every object, (2) records each id +0xc in a temp std::list and calls obj vt[3] (Done), (3) for each recorded id still in idMap calls vt[4] (Release); frees the temp li... |
+| 0x00403730 | 636 | CBaseManager::RegisterInstant | slot 23 (kind, id): poolCountByKind +0x80[kind] > 0 and a pooled list in poolsByKind +0x68 -> PopPooled reuses an object, else vt[14](kind) creates one (0 -> returns 0); obj flags +8 = 0, kind +0x10 = kind; id != -1: appends a lis... |
+| 0x00402500 | 599 | RadixSortU16 | fastcall (ushort *data, n): 2-pass LSD radix sort (low byte into scratch g_0x79B1F8, high byte back into data); scratch grown like 0x402310 (AlignedAlloc32_406B30, guard 0x79B208, atexit 0x402760); no caller or pointer; CORRECTION... |
+| 0x004034E0 | 568 | CBaseManager::DoneObjects | slot 15: three passes over idMap +0x1c: refcount +4 += 1 on every object, then vt[3] (Done) on each, then vt[4] (Release) on each; idMap maxId +0x30 = 0 and its entries freed; object list +0x38 emptied (CPlex chain freed); nodeMap... |
+| 0x00402DF0 | 539 | CBaseManager::DestroyBody | resets vt 0x73B870, calls Done (0x4031E0), frees the nodes and bucket vectors of poolCountByKind +0x80, poolsByKind +0x68, nodeMap +0x50, empties the object list +0x34 (vt reset to 0x73B8D4, head/tail/free/count 0, CPlex chain +0x... |
+| 0x00404040 | 529 | CBaseManager::PoolObject | (obj): if idMap +0x1c[obj id +0xc] is obj, removes it from idMap, nodeMap +0x50 and the object list (CList12_RemoveNode); then appends obj to the kind's CList in poolsByKind +0x68 (creates the list when missing: operator new 0x1c,... |
 | 0x00404410 | 490 | CBaseManager::FreeTypeGroups | iterates the std::map at +0x68, for each group deletes all objects of its list (vt[0](1)), clears it and frees; then empties hash table +0x6c |
-| 0x00402310 | 452 | ScratchBuf32_Reserve | grow global 32-byte-aligned scratch buffer g_0x79B210 (growth 1/8 clamped 4..0x400), static-init guard |
-| 0x00404A70 | 426 | List16_NodeAllocInline | pool allocation of a 0x10-byte node with the chunk-refill logic inlined (stlport_node_alloc_chunk_alloc 0x10), then constructs node |
+| 0x00402310 | 452 | RadixSortU8 | fastcall (byte *data, n): in-place counting sort of n bytes: grows the 32-byte-aligned scratch g_0x79B210 (cap +0x79B218, growth = last n/8 clamped 4..0x400; once-guard 0x79B220 + atexit 0x4024E0), counts 256 buckets, scatters int... |
+| 0x00404A70 | 426 | List16_Ctor | (this list, alloc byte): allocates the sentinel from the 0x10-byte pool g_0x79B228 (refill of 20 entries inlined: chunk g_0x79B268..g_0x79B26C, heap total g_0x79B264, then stlport_node_alloc_chunk_alloc), sentinel next = prev = it... |
 | 0x00402B20 | 416 | CBaseManager::CBaseManager | CBaseManager constructor body (the managers' ctors call it before storing their vtable) |
-| 0x00403020 | 390 | CBaseManager::Init | slot 2: resets the containers: +0x98 id min = 0, +0x9c id max = 2000000000, id map +0x1c (0x4067B0 clear, 0x406640 reserve 0x400), +0x30 max id = 0, hash +0x50 (0x400 buckets; nodes freed by 0x407580), hash +0x68 (0x100; nodes 0x4... |
-| 0x00403BD0 | 349 | CBaseManager::RegisterWithNewId | pick a free id in [+0x98,+0x9c) (sequential from +0x30, else up to 100000 random tries; error string CBaseManager::RegisterInstant), add to id map, append to object list, track max id +0x64 |
-| 0x004039B0 | 289 | CBaseManager::RemoveById | unregister object id: erase from id map (+0x1c) and from node map (+0x50), unlink its list node (+0x38 head, +0x3c tail, +0x40 count) and recycle it |
+| 0x00403020 | 390 | CBaseManager::Init | slot 2: idMin +0x98 = 0, idMax +0x9c = 2000000000; idMap +0x1c cleared and resized to 0x400 buckets; nodeMap +0x50 nodes freed, 0x400 buckets; poolsByKind +0x68 nodes freed (PoolFree_N12_407DA0, the pooled lists themselves are not... |
+| 0x00403BD0 | 349 | CBaseManager::RegisterWithNewId | (obj): id = idMap maxId +0x30 + 1 when in [idMin, idMax), else up to 100000 random tries for an unused id (FatalError 'CBaseManager::RegisterInstant..' on failure); new id -> list entry appended +0x38 and nodeMap +0x50 entry (+0x6... |
+| 0x00403E10 | 296 | dead_403E10 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x405000 - 0x40C000: STLport containers / node allocator (no strings)
 
-179 functions, group `leaf`.
+194 functions, group `leaf`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -67,7 +67,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x40C000 - 0x411000: CCamera (+ camera .cam files)
 
-84 functions, group `client`.
+99 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -82,34 +82,34 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0040D710 | 555 | CCamera::LevelRoll | derives the roll of the view quaternion +0x34 (angle between the right axis and the horizontal of -up); when >= 1 deg rotates 10% of it back about the cross axis, then AvoidObstacles. Was ClampPitch (it does not clamp the pitch: U... |
 | 0x0040C060 | 515 | DwordVector_ctorN8 | STL: vector<node*>(n) bucket vector ctor with the pool chunk refill inlined (g_0x79B224 lists, chunk_alloc); HashTable_Resize_40BC30 = rehash of the archive's written-object id set (Archive_Open / HashSetU32_Insert) |
 | 0x0040EFB0 | 506 | CCamera::PlayCamFile | (time): flag 0x20 playback of the keyframes +0x2F0: finds the segment (current index +0x304, time offset +0x300), lerps the position +0x1C and slerps the quaternion +0x34; past the last key copies it and clears flag 0x20; main cal... |
+| 0x00410E70 | 484 | dead_410E70 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0040D9B0 | 404 | Terrain_SampleHeightBox | (centre xy*, unused, unused, step, halfW, halfH, out avg, out min, out max): CWorldClient::GetHeight on a grid of points centre +- half extents at the given step (inside the terrain g_0x7AF738 +0x10C/+0x110), returns the average /... |
 | 0x0040CC30 | 387 | CObject3D::UpdateWorldTransform | CObject3D slot 15: calls slot 14 (world rot) then world pos (+0x28) = parent pos + local pos (+0x1c) rotated by the parent quat (arg = parent's 7 floats: pos? no: arg[0..3] quat, used as rotation); helpers 0x401DE0 vec3 set, 0x40C... |
-| 0x0040C2A0 | 374 | StlString_AssignRange | std::string::assign(first, last) with length_error "basic_string" on overflow (20 callers) |
 
 ## 0x411000 - 0x414000: CCamera helpers (LookFromTo, SetDirection, AddShake), STLport deque<0x24>, Net_TickAll, ServerInfo / JoinMessage / ChatMessage / NamedEventMessage, LobbyServer::ctor
 
-81 functions, group `net`.
+89 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00412D80 | 1225 | LobbyServer::ctor | (this 0x2600, gameKind): NetConnection::ctor, pending-accept list +0x2568 (0x28 nodes {addr 16, linkId, rate, age}), vt 0x73BBB4 then 0x73BB70, NetSocket::Open(8888 = g_0x783E30), lists +0x2590..+0x25c4, strings +0x25c8 name / +0x... |
 | 0x004110D0 | 645 | CCamera::SetDirection | (dx, dy, dz): yaw quaternion +0xF4 from atan2 of the horizontal direction (identity when straight down), pitch = asin(dz / len), view quaternion +0x34 = yaw rotated by -(90 deg + pitch) about x; false for a zero vector |
 | 0x00412370 | 521 | ServerInfo::ctor | 0x48-byte ServerInfo (vtable 0x73BB40 base NetPeerInfo -> 0x73BB28): NetPeerInfo::Ctor, name +0x28 and map +0x38 = default string g_0x783D6C, +0x34 = 4, bytes +0x44..+0x46 = 0 |
-| 0x00411660 | 432 | List18_CtorE | list constructor with 0x18-byte nodes (STLport chunk allocator) |
-| 0x00411850 | 426 | List10_CtorB | list constructor with 0x10-byte nodes (STLport chunk allocator) |
-| 0x00411F70 | 424 | Deque24_ReserveMapAtBack | (n, atFront): STLport _M_reallocate_map: recenters or reallocates the buffer pointer map |
-| 0x00412590 | 359 | ServerInfo::Clone | slot 3 of 0x73BB28: allocates a 0x48-byte copy (NetPeerInfo part +8..+0x24, name +0x28, id +0x34, map +0x38, bytes +0x44..+0x46) |
-| 0x00412750 | 344 | ServerInfo::Reset | slot 2 of 0x73BB28: destroys the strings and re-constructs the object (NetPeerInfo::Ctor, empty name / map, +0x34 = 4, flag bytes +0x44..+0x46 = 0) |
-| 0x00413570 | 306 | JoinMessage::Reset | slot 2 of 0x73BBF8: releases the ref +0x30, destroys the strings and re-constructs the message |
-| 0x00413440 | 299 | JoinMessage::Clone | slot 3 of 0x73BBF8: allocates a 0x34-byte copy (strings, byte +0x24, +0x28, +0x2c, ref +0x30) |
-| 0x00413D20 | 285 | NamedEventMessage::Clone | slot 3 of 0x73BC40: allocates a 0x1c-byte copy (dword +0xc, name) |
-| 0x00413930 | 279 | ChatMessage::Clone | slot 3 of 0x73BC28: allocates a 0x18-byte copy with the text |
-| 0x00411C00 | 278 | Deque24_InitializeMap | (n): allocates the map (max(8, n / 14 + 3) pointers) and the n / 14 + 1 buffers (0x411EE0), sets start / finish iterators |
+| 0x00411660 | 432 | List18_CtorE | (this, alloc&): STLport list ctor: header node = 0x18 bytes from the free list g_0x79B22C (empty -> inlined _S_refill: 20 nodes from the chunk g_0x79B268..0x79B26C, heap size g_0x79B264), header next = prev = itself; caller CCamer... |
+| 0x00411850 | 426 | List10_CtorB | (this, alloc&): same STLport list ctor as 0x411660 with 0x10-byte nodes (free list g_0x79B228); callers CWorldClient::ctor, CCamera::AvoidObstacles, CBattleHud::Update / OnLButtonUp |
+| 0x00411F70 | 424 | Deque24_ReserveMapAtBack | (this, nodesToAdd, atFront): STLport _M_reallocate_map: if the map +0x20 (size +0x24) has room for 2 * needed, recentres the used node pointers inside it (memmove forwards or backwards), else allocates max(size, add) + size + 2 po... |
+| 0x00412590 | 359 | ServerInfo::Clone | slot 3 of 0x73BB28: new 0x48 bytes, refCount +4 = 0, copies the NetPeerInfo part (address +8..+0x14, timeout +0x18, ping +0x1C, versionMismatch +0x20, source +0x24), name string +0x28, gameKind +0x34, map string +0x38, players / m... |
+| 0x00412750 | 344 | ServerInfo::Reset | slot 2 of 0x73BB28: frees the map +0x38 and name +0x28 strings, re-runs NetPeerInfo::Ctor, re-creates both strings (8-byte buffers) and assigns "?" (0x783D6C) to name and map, gameKind +0x34 = 4, players / maxPlayers / hasPassword... |
+| 0x00413570 | 306 | JoinMessage::Reset | slot 2 of 0x73BBF8: releases peerRecord +0x30 (refCount +4 --, 0 -> vt[0](1)), frees unitName and name, re-constructs: version 1, two empty strings (8-byte buffers), peerRecord 0, hostFlag 0, state +0x28 = 4, heroId +0x2C = -1 |
+| 0x00413440 | 299 | JoinMessage::Clone | slot 3 of 0x73BBF8: new 0x34, refCount 0, version +8 copied, name +0xC and unitName +0x18 strings copied, hostFlag +0x24, state +0x28, heroId +0x2C, peerRecord +0x30 shared (its short refCount +4 ++); vt 0x73BBF8 |
+| 0x00413D20 | 285 | NamedEventMessage::Clone | slot 3 of 0x73BC40: new 0x1C, refCount 0, version and kind +0xC copied, name +0x10 copied (length_error on overflow), vt 0x73BC40 |
+| 0x00413930 | 279 | ChatMessage::Clone | slot 3 of 0x73BC28: new 0x18, refCount 0, version copied, text +0xC copied (length + 1 from PoolAlloc, length_error on overflow), vt 0x73BC28 |
+| 0x00411C00 | 278 | Deque24_InitializeMap | (this, n): STLport _M_initialize_map: nodes = n/14 + 1, map size +0x24 = max(8, n/14 + 3) pointers (pool or operator new), buffers 0x1F8 bytes (14 elements) allocated for the centred node range (Deque24_CreateNodes), start = {firs... |
 | 0x00412B70 | 259 | ObjListMessage::Read | slot 5 of 0x73BDD0 (cursor*): count, RefVector_Resize +0xc, every ref via NetPeer::ReadObjectRef(g_0x79B924), +0x18, u8 +0x1c, +0x20, +0x24, refs +0x28 / +0x2c |
 
 ## 0x414000 - 0x41A000: net message classes (NetMessage subclasses: strings / refs / blobs), LobbyServer map list, variables, file transfers, player events
 
-143 functions, group `net`.
+153 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -123,14 +123,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00419D90 | 435 | LobbyServer::PostPlayerEvent | (player, kind, value, strBegin, strEnd): creates a RefDwordsStringMessage {player ref, kind, value, string} and appends it to the timed list +0x25b4 with a 60 s timeout |
 | 0x00418530 | 428 | LobbyServer::RefreshMapList | 0x580F10(); enumerates the maps (0x57F850 with +0x25e4 and the current name +0x25d4) and appends a StringMessage "<map><suffix 0x783D70>" per map to the list +0x25ac (0x5809D0 per map name) |
 | 0x004193F0 | 379 | LobbyServer::OnQuestMapFinished | (name string*): when the current map message +0x25A8 carries that name: releases it, clears the map list +0x25AC and appends a StringMessage "<name>_3" (map progression); true when it matched. Was LobbyServer::OnMapUnloaded |
-| 0x00416220 | 355 | ListStringMessage::Clone | slot 3 of 0x73BD18: 0x2c-byte copy (short, dword, string, ref vector) |
-| 0x00415120 | 345 | StringPairMessage::Read | slot 5 of 0x73BCA0 (cursor*): assigns the two C strings at the cursor to +0xc and +0x18 |
-| 0x00414500 | 330 | TwoStringMessage::Clone | slot 3 of 0x73BC70: 0x3c-byte copy (two strings, +0x24.. +0x38) |
+| 0x00416220 | 355 | ListStringMessage::Clone | slot 3 of 0x73BD18: new 0x2C, refCount 0, version, chunkCount +0xC, size +0x10, name +0x14 copied, chunk ObjRef vector +0x20 copied into a PoolAlloc block (ObjRefs_UninitCopy), vt 0x73BD18 |
+| 0x00415120 | 345 | StringPairMessage::Read | slot 5 of 0x73BCA0 (cursor*): hostAddress +0xC = first C string, zoneName +0x18 = second (each overwrite / append 0x40C2A0 / erase tail); cursor advanced past both NULs |
+| 0x00414500 | 330 | TwoStringMessage::Clone | slot 3 of 0x73BC70: new 0x3C, refCount 0, version, name and unitName strings copied, state, isHost, heroId, playerId, slotIndex, chatWatermark (+0x24..+0x38) copied, vt 0x73BC70 |
 | 0x004195D0 | 324 | LobbyServer::GetOrAddVariable | (out node, name string*): finds the StringDwordsMessage variable of the list +0x25b0 with that name (0x427FA0 compare) or appends a new one with the name |
 
 ## 0x41A000 - 0x42D000: net lobby: LobbyServer / LobbyClient (players, chat, maps, variables, file transfers, pairing/party records), ChunkFile fields, STLport/MFC helpers
 
-553 functions, group `net`.
+612 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -143,26 +143,26 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0041B2A0 | 645 | LobbyServer::OnNamedEvent | created-handler for NamedEventMessage (kind 7, {u32 kind +0xc, name +0x10}): all require the sender to be the host player (+0x28) except 3..5 which need IsPeerLoaded; 0 -> Session_SetMapName(g_0x7AFE20, name); 1 -> the name must b... |
 | 0x0041BC40 | 611 | LobbyClient::ctor | (this 0x2700): NetConnection::ctor, NetClient part (+0x2568 server addr, login GameBuffer +0x2578, server info list +0x25a8, NetServerRecord vector +0x25ac, pending list +0x25bc, state +0x2598 = 0), NetSocket::Open(-1 = any port),... |
 | 0x0041ECC0 | 590 | LobbyClient::OnChunkReceived | created-handler for RefBlobMessage (kind 12 {ref +0xc transfer, u16 index +0x10, 64 bytes +0x12}): appends to +0x25e4 (ignored when the transfer name is empty); when all +0xc chunks of the transfer are present: sorts by index, con... |
-| 0x00426CB0 | 587 | ObjRefVector_InsertN | (pos, n, ref*): vector<ObjRef>::_M_fill_insert (external ref protocol copies; reallocating path 0x429B70) |
+| 0x00426CB0 | 587 | ObjRefVector_InsertN | (this = vector<ObjRef>, pos, n, value*): _M_fill_insert: capacity short -> ObjRefVector_InsertNRealloc; else takes a temp ObjRef copy of *value (shared objects are cloned), moves the tail up (ObjRefs_UninitCopy2 + ObjRef_Set backw... |
 | 0x0041A7E0 | 559 | LobbyServer::FillServerInfo | slot 15 of 0x73BB70 (out ref): new ServerInfo {name +0x25c8, +0x34 = +0x25e4, map = Game_GetQuestName of the current map +0x25a8 (empty when none), +0x44 = peer count, +0x45 = +0x25e0, +0x46 = password set}; serialized by NetServe... |
 | 0x0041AA10 | 533 | LobbyServer::SendMasterHeartbeat | builds a NetPlayerInfo-style record {name +0x25c8, map (current quest or empty), u8 players, u8 max +0x25e0, u8 kind +0x25e4, u8 hasPassword, u32 request id +0x25fc, u32 public address +0x2578, u32 magic 0xDEC0AD07} with NetPlayer... |
-| 0x00421F60 | 515 | ObjRefVector_CtorN | (n): allocates a vector of n ObjRef slots (STLport chunk allocator) |
-| 0x0042AC70 | 515 | PtrVector_CtorN2 | (n): allocates a vector of n dword slots (STLport chunk allocator) |
+| 0x00421F60 | 515 | ObjRefVector_CtorN | (this, n, alloc&): STLport _Vector_base(n): n dwords (0 -> null; <= 0x80 bytes from the free list g_0x79B224 or inlined refill from the chunk g_0x79B268; else operator new); start = finish = buffer, end_of_storage = buffer + n; ca... |
+| 0x0042AC70 | 515 | PtrVector_CtorN2 | (this, n, alloc&): STLport _Vector_base(n) of dwords: same allocation code as ObjRefVector_CtorN 0x421F60 (free list g_0x79B224 / inlined refill / operator new), start = finish = buffer, end_of_storage = buffer + n; caller IdHash_... |
 
 ## 0x42D000 - 0x42E000: CClientSpecificManager; ChunkFile (tag+length chunk reader-writer over CFile), vector<byte>, polygon clipping (ClipTriangle / ClipPoly_*)
 
-30 functions, group `core`.
+33 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0042DE90 | 397 | ClipPoly_YMax | (unused, verts (0x20 each), &nextVertex, idx[] ushort in/out, &count, yMax): Sutherland-Hodgman pass against y <= yMax: inside vertices kept, crossing edges get a Vertex32_Lerp'd vertex at verts[*nextVertex++]; scratch list g_0x79... |
-| 0x0042DB70 | 389 | ClipPoly_XMax | (outcode, verts (0x20 each), &vertCount, idx[], &count, x): Sutherland-Hodgman clip of the polygon index list against x <= plane: keeps inside vertices, interpolates new ones (Vertex32_Lerp) appended at vertCount; scratch g_0x79B6... |
+| 0x0042DB70 | 389 | ClipPoly_XMax | fastcall (outcode ignored, verts, &vertCount, idx[], &n, xMax): Sutherland-Hodgman pass for x <= xMax: keeps inside indices, for an edge crossing t = (xMax - x0) / (x1 - x0): t outside [0, 1] -> keeps the next index, else Vertex32... |
 | 0x0042DD00 | 389 | ClipPoly_XMin | as ClipPoly_YMax but keeps x > plane (x > 0 in ClipTriangle; vertex x at +0): kept vertices and Vertex32_Lerp'd crossings at verts[*nextVertex++] through the scratch list g_0x79B66C, idx[] and *count rewritten; ClipTriangle / Clip... |
 | 0x0042D700 | 386 | CClientSpecificManager::CreateByKind | slot 14 factory (kind): 0x45 CFigureClientSpecific (0x3c bytes, ctor 0x5A7010), 0x46 CObject3DClientSpecific (0xfc, 0x51AB00), 0x47 CMapObjectClientSpecific (0x58, 0x510450), 0x48 CUnitClientSpecific (0xdc, 0x533AD0), 0x49 CPlayer... |
-| 0x0042D910 | 363 | ClipTriangle | (verts, outcodes, idx[3], &vertCount, &count, xMax, yMax): outcode test (all three share a bit -> fully out, -1; none -> trivially in), else clips the triangle against the six planes x <= xMax, x > 0, y > 0, y <= yMax, z <= 1, z >... |
+| 0x0042D910 | 363 | ClipTriangle | fastcall (verts 0x20-byte TL vertices, outcodes[], idx u16[3] in/out, &vertCount, &idxCount, xMax, yMax): scratch CArray g_0x79B668 SetSize(0x20); all three outcodes share a bit (& 0x3F) -> idxCount 0, returns -1; none set -> idxC... |
 | 0x0042D370 | 357 | Bytes_InsertN | STL: vector<byte>::insert(pos, n, value) in-place path (memmove of the tail, fill), grow path Bytes_InsertNRealloc; ChunkFile::ReadBytesToString (chunk payload into a byte vector) and CString_Scramble |
 | 0x0042D4E0 | 287 | Bytes_InsertNRealloc | STL: vector<byte>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n) from the pool / new, both halves copied, fill, old buffer freed); Bytes_InsertN and ByteVector_Resize (CString_Scramble / Unscramble, LoadWor... |
-| 0x0042DA80 | 229 | ClipPolygon | (verts, idx[], &vertCount, &count, xMax, yMax): clips a polygon against the six view planes (no outcodes) and re-triangulates it as a fan |
+| 0x0042DA80 | 229 | ClipPolygon | fastcall (verts, idx[3], &vertCount, &idxCount, xMax, yMax): same as ClipTriangle without the outcode tests (always runs the six clip passes, then the fan); no caller, no pointer, no raw E8/E9 hit [dead: no caller or pointer] |
 | 0x0042D1C0 | 146 | ChunkFile::ctor | (name CString): vtable 0x73BE94 -> 0x73BE9C, tag / consumed / length / start = 0, parent +0x14 = 0, CFile at +0x18, opens the file; NO CALLERS (the chunk reader is only used through sub-chunk objects created by the owning serializ... |
 | 0x0042D060 | 120 | ChunkFile::ReadVec4B | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and copies the four dwords read to the output (machine code 0x42D0BB..0x42D0CF; the decompile's {0x10, .., x, y} was a stack misread); second function named ReadVec4... |
 | 0x0042D0E0 | 115 | ChunkFile::WriteDwordPair | (value): CFile::Write (vt[14]) of the dword twice plus 16 more bytes; consumed bytes accounted on the parent |
@@ -172,20 +172,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x42E000 - 0x433000: GameBuffer; Vertex32_Lerp, OBB tests, Mat3_Solve, LZ compressor (LzCompress / LzDecompress), BigNum_ModExp + RIPEMD-128 key hash, NetPeer::ctor
 
-30 functions, group `leaf`.
+41 functions, group `leaf`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004319E0 | 4787 | Ripemd128_Compress | (state[4], block[64]): RIPEMD-128 compression function (two parallel lines, constants 0x5a827999 / 0x6ed9eba1 / 0x8f1bbcdc and 0x50a28be6 / 0x5c4dd124 / 0x6d703ef3) |
-| 0x0042E700 | 3436 | OBB_Intersects | (boxA, boxB, posA xyz, posB xyz, quatA, quatB): separating-axis test of two oriented boxes (half extents at +0x20 / +0x24 / +0x28, axes from the quaternions, Mat3_Solve for the relative axes): 15 axis tests, 1 when they overlap DE... |
+| 0x0042E700 | 3436 | OBB_Intersects | fastcall (boxA, boxB, posA xyz, posB xyz, quatA*, quatB*): builds the 3 axes of each box from its quaternion (w,x,y,z), half extents at box +0x20/+0x24/+0x28, expresses the centre offset and B's axes in A's frame with Mat3_Solve, ... |
 | 0x00430960 | 1523 | LzDecompress | (this = LzCompressor, in GameBuffer view, out GameBuffer): u32 raw length then tokens until it is produced: bit 0 = literal byte (next stream byte); bit 1 = match: length prefix tree (0 0 -> 2, 0 1 -> 4, 1 0 0 0 -> 3, 1 0 0 1 + 3 ... |
 | 0x00430450 | 1243 | LzCompress | (this = LzCompressor, input view (LzInputAdapter over the source bytes), output GameBuffer): u32 raw length then LZ77 tokens over the persistent 1 KB ring window (+0 window, +0x400 copy, +0x800 chain distances, +0x1800 1024 hash h... |
 | 0x0042FD10 | 1222 | LzCompressor::EmitMatch | (this, matchPos): writes the match length +0x2820 (< 35 table code; 35..98 prefix 0x17 in 5 bits + 6 bits of len-35; 99..226 prefix 0x3f in 6 bits + 7 bits of len-99) then the distance d = (pos - len - matchPos - 1) & 0x3ff (d < 3... |
 | 0x004315B0 | 1068 | BigNum_DivMod | (a (2n ushorts), b (n), n bytes, q out): multi-precision division of a by b (Knuth D on 16-bit limbs): remainder left in a, quotient in q |
-| 0x0042F4C0 | 976 | OBB_IntersectsSegment | (box, quat, boxPos xyz, segStart xyz, segDir xyz): separating-axis test of an oriented box against a line segment (direction normalized, half length); 1 when they intersect |
+| 0x0042F4C0 | 976 | OBB_IntersectsSegment | fastcall (box, quat*, boxPos xyz, segCentre xyz, segVec xyz): box axes from the quaternion, segment direction = segVec / /segVec/, half length /segVec/ * 0.5, centre offset and direction expressed in the box frame (Mat3_Solve), 6 ... |
 | 0x00432DA0 | 666 | NetPeer::ctor | (this 0x1168, linkId): refcounted base -> vtable 0x73BF38; +8 next send seq = GetTickCount() & 0xffff, +0xc last received seq = 0, +0x10 wrap base = 0x10000, receive window vector +0x14, +0x20 linkId, +0x24 rtt mean = NetConnectio... |
 | 0x00431370 | 562 | BigNum_ModExp | (base, exponent bits, modulus, nBytes, out): square-and-multiply modular exponentiation on 16-bit limbs (BigNum_DivMod); NO CALLERS: a leftover key-exchange routine, never used by the game |
-| 0x0042E4D0 | 465 | Vertex32_Lerp | (a, b, t, out): interpolates a 0x20-byte vertex: position +0..+0xc, two packed ARGB colours +0x10 / +0x14 (per channel), uv +0x18 / +0x1c |
+| 0x0042E4D0 | 465 | Vertex32_Lerp | fastcall (a, b, t, out): D3D TL vertex lerp: sx, sy, sz, rhw (+0..+0xC) and tu, tv (+0x18 / +0x1C) as floats; the colour +0x10 and specular +0x14 per byte channel, each rounded (fistp) and repacked; callers the six ClipPoly_* pass... |
 | 0x0042FAE0 | 444 | LzCodec_InitTables | static initializer of the LZ match-length code tables g_0x79B848 (code) / g_0x79B7C0 (bits): lengths 1..6 fixed codes (1,3,5,3,5,5 bits), 7..10 = 6-bit code, 11..18 = 8-bit, 19..34 = 10-bit; offset tables g_0x79B738 / g_0x79B6B0 f... |
 | 0x0042E020 | 397 | ClipPoly_YMin | as ClipPoly_YMax but keeps y > plane (y > 0 in ClipTriangle): inside vertices kept, crossing edges interpolated (Vertex32_Lerp) into new vertices at verts[*nextVertex++], results written back into idx[] and *count through the scra... |
 | 0x0042E1B0 | 397 | ClipPoly_ZMax | as ClipPoly_YMax but against z <= plane (z <= 1 in ClipTriangle; vertex z at +8): kept / interpolated vertices through the scratch list g_0x79B66C, idx[] and *count rewritten; ClipTriangle / ClipPolygon |
@@ -193,70 +193,70 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x433000 - 0x444000: net transport: NetConnection / NetServer / NetClient (A)
 
-426 functions, group `net`.
+472 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00435A00 | 1295 | NetPeer::SendUpdate | (this = NetPeer, budget = NetPeer +0x50 = 220 bytes; from Tick): SyncObjectSet; builds in g_0x79B900 (reserve budget + 0x400): u8 0, u16 seq (+8 ++), WriteAcks, TakeStreamChunk(budget - 16 = 204 max) + the chunk {u16 offset, u8 le... |
 | 0x00435F30 | 1268 | NetPeer::ReadMessage | (this = NetPeer, cursor*, packet seq): flag bit (LSB-first from the byte read before each group of 8), u8 kind, u16 id, key = kind << 16 / id in the received-object tree +0x1100 (node +0x14 ObjRef, +0x18 version = seq of the last ... |
 | 0x00443080 | 1131 | NetServer::OnLogin | slot 5 (addr*, cursor*): u32 magic (must equal +8 else ignored), u32 linkId, u32 rate (clamped to GetRateFor(addr)); a known peer at that address -> "ERROR: Ignoring login request for active session"; a pending accept record (+0x2... |
-| 0x0043D830 | 933 | RbTree_RebalanceForErase | (node, &root, &leftmost, &rightmost): STLport _Rb_tree_rebalance_for_erase (8 callers) |
+| 0x0043D830 | 933 | RbTree_RebalanceForErase | fastcall (z, &root, &leftmost, &rightmost): STLport _Rb_tree_rebalance_for_erase: unlinks z (swapping in its successor when it has two children), fixes leftmost / rightmost, recolours / rotates (colour byte 0 red, 1 black; left +8... |
 | 0x00441D40 | 918 | NetClient::OnInfo | slot 7 (addr*, cursor*): f32 echo, u32 magic (must match +8 ignoring the low byte = protocol version); vt[16] NewServerInfo makes a ServerInfo, vt[5] Read fills it, addr -> +8, +0x20 = version mismatch flag (low byte differs), +0x... |
 | 0x00433BD0 | 826 | NetPeer::Tick | (this = NetPeer link, dt double): +0x44 += dt (silence timer), +0x48 += dt (clock); resend timeout = clamp(rttMean + 3 * sqrt(/mean^2 - var/), 0.1, NetConnection +0x10); sent packets +0x10f8 older than it -> PacketLost and moved t... |
 | 0x00437370 | 823 | NetConnection::Receive | (dt double): g_0x79B920 = this, clock +0x20 += dt; for every datagram (NetSocket::ReceiveFrom into g_0x79B8E0, 2048 max; "ZERO length packet received from" when empty): u8 type -> slot 3 OnUpdate (0), 6 OnDisconnect (1), 4 OnGetIn... |
 | 0x00433060 | 698 | NetPeer::Clone | slot 3: new 0x1168-byte NetPeer copy-constructed from this (all trees / lists / buffers) |
 | 0x00434110 | 685 | NetPeer::RegisterObject | (this = NetPeer, {object, group}): kind = registry +0x2c lookup of the object's vtable; new 0x14-byte NetPendingEntry (vtable 0x73BF4C: +8 version sent, +0xc u16 id, +0xe u8 kind, +0xf bit 0 ack-mode (from the connection byte tabl... |
 | 0x004346D0 | 673 | NetPeer::SyncObjectSet | (this = NetPeer): calls NetConnection vt[13] GatherReplicated of g_0x79B920 into the global vector g_0x79B8D0 of {object, group}, sorts it by object pointer, merges with the object tree +0x1068: new objects -> RegisterObject, gone... |
-| 0x0043BBC0 | 666 | ObjRefTree_InsertWithHint | (out node, hint, pair*): STLport insert_unique(hint, value) for the int-keyed {key, obj ref} tree |
-| 0x0043C100 | 666 | ObjRefTree_InsertWithHint2 | (out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree |
-| 0x0043C650 | 666 | ObjRefTree_InsertWithHint3 | (out node, hint, pair*): insert_unique(hint, value) for an unsigned-keyed {key, obj ref} tree |
-| 0x0043CBC0 | 666 | ScriptRefTree_InsertWithHint | (out node, hint, rec*): insert_unique(hint, value) for the script object tree |
+| 0x0043BBC0 | 666 | ObjRefTree_InsertWithHint | (out it, hint, value*): STLport insert_unique(hint, value) for the signed-int-keyed {key, ObjRef} tree (entries ObjRefNode18_New2): O(1) paths when hint is begin / end or value lies between hint-1 and hint (ObjRefTree_InsertAt or ... |
+| 0x0043C100 | 666 | ObjRefTree_InsertWithHint2 | (out it, hint, value*): the same STLport insert_unique(hint) for an unsigned-keyed {key, ObjRef} tree (entries ObjRefNode18_New3, fallback ObjRefTree_InsertUnique2 / InsertAt2); one caller ObjRefTree_InsertWithHintIter2 |
+| 0x0043C650 | 666 | ObjRefTree_InsertWithHint3 | (out it, hint, value*): the same STLport insert_unique(hint) for the third unsigned-keyed {key, ObjRef} tree (entries ObjRefNode18_New4, fallback InsertUnique3 / InsertAt3); one caller ObjRefTree_InsertWithHintIter3 |
+| 0x0043CBC0 | 666 | ScriptRefTree_InsertWithHint | (out it, hint, value*): the same STLport insert_unique(hint) for the signed-int-keyed {key, ScriptObjRef, version} tree (entries ScriptRefNode20_New, fallback ScriptRefTree_InsertUnique / InsertAt); one caller ScriptRefTree_Insert... |
 
 ## 0x444000 - 0x446000: debug text (Courier New) + misc
 
-58 functions, group `client`.
+62 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00445360 | 703 | StringMap_InsertValue | (this, out iterator, hint, value*): hinted red-black insertion of a {key, text} pair (703 bytes) |
-| 0x00444D00 | 584 | DebugText::Render | (this): draws the key/value table of the debug text map +4 into the overlay window +0x14 (UI DC 0x5FDC00; background 0x70BB04 / 0x7090C2): one line per entry with a shadow offset (1,1) in two columns (key left half, value right ha... |
+| 0x00445360 | 703 | StringMap_InsertValue | (out it, hint, pair*): STLport insert_unique(hint, value) for map<string, string> (keys compared with StringRange_Less): O(1) paths at begin / end / between hint-1 and hint (StringMapNode_Create + RbTree_Rebalance, or StringMap_In... |
+| 0x00444D00 | 584 | DebugText::Render | fastcall: when the window +0x14 exists: GetDC (0x5FDC00), clears it to colour 0 (0x70BB04), transparent background (0x7090C2), selects the font; walks the map +4 from begin: per entry draws key (left half) and value (right half) f... |
 | 0x00444090 | 475 | NetServerRecordVector_Resize | STL: vector<NetServerRecord 0x2c>::resize(n): a default record (zero NetAddress + GameBuffer::ctor) inserted n - size times (NetServerRecords_InsertN) or the tail destroyed (GameBuffer::dtor); AddrBook_Serialize when loading the l... |
-| 0x004447E0 | 441 | StringMap_SetValue | slot 0 (this, key, text): finds or creates the entry for the key and overwrites its text with the given string (copy / grow) |
-| 0x00445A00 | 420 | StringMap_InsertUnique | (this, out {iterator, bool}, value*): descends the tree comparing keys, handles the duplicate case, inserts via StringMap_InsertNode |
-| 0x00445870 | 389 | StringMap_InsertNode | (this, out iterator, force-left, parent, value*): red-black tree insertion with rotations (RbTree_RotateLeft / Right) |
-| 0x00445E50 | 311 | CString_ReplaceAll | (this = text, needle, replacement): replaces every occurrence of the needle (via 0x445F90 range helper, 0x6FDBE7 Find) by the replacement text |
-| 0x00445BD0 | 273 | StringMapNode_Create | (pair*): allocates a 0x28-byte node from pool g_0x79B234 and copy-constructs the {std::string key, std::string text} pair (10 callers) |
-| 0x00445D30 | 270 | CStringFinder_Next | (iterator {pos, string*, needle, match}): finds the next occurrence of the needle in the string, fills the match / remainder CStrings (0x6FDBE7 Find) and advances; returns 0 at the end |
-| 0x00445170 | 259 | StringMapValue_CopyCtor | (this = {std::string key, value}, key range*, value*): copies the key (length_error on overflow) and the text |
-| 0x004449A0 | 208 | StringMap_RemoveByName | slot 1 (this, name): wraps the name in a std::string, finds it (StringMap_LowerBound) and erases the node when found |
-| 0x00444C10 | 191 | DebugText::SetRect | (rect*): stores the overlay rect +0x2c..+0x38, clamps to the window (UI window 0x5F7CA0 / 0x5F7DA0 query), width at least 100, height at least 15, +0x1c = left |
-| 0x00445620 | 191 | StringMap_LowerBound | (this, out iterator, key*): lower bound of the key in the tree using StringRange_Compare |
-| 0x00444F50 | 185 | DebugText::Show | (this, on): +0x3c = on; creates the overlay window object (0x38 bytes, 0x5FCDD0, order 5) when needed, stamps timeGetTime +0x40 and renders; hiding destroys the window |
+| 0x004447E0 | 441 | StringMap_SetValue | vt 0x73BFA4 slot 0 (key, text): builds a std::string key, StringMap_FindInsertPos (lower_bound); when it is end or key < its key (StringRange_Less) inserts {key, empty string} (StringMapValue_CopyCtor + StringMap_InsertAt); then o... |
+| 0x00445A00 | 420 | StringMap_InsertUnique | (out {it, bool}, pair*): descends with StringRange_Compare; duplicate key -> {existing, false}; else links a new entry (StringMapNode_Create) and rebalances, {entry, true}; one caller StringMap_InsertValue |
+| 0x00445870 | 389 | StringMap_InsertNode | (out it, x, parent, pair*): STLport _M_insert for map<string, string>: new StringMapNode_Create entry as the left child of parent (parent = header, x != 0, or key < parent key) updating root / leftmost, else the right child (right... |
+| 0x00445E50 | 311 | CString_ReplaceAll | (this CString, find, repl): loop: pos = Find(find, pos), -1 -> return; string = Left(pos) + repl + Mid(pos + strlen(find)) (StringRangeRef_ctor helper, operator+); pos += strlen(repl); no caller or pointer [dead: no caller or poin... |
+| 0x00445BD0 | 273 | StringMapNode_Create | (pair*): 0x28 entry from g_0x79B234 (refill 20 via stlport_node_alloc_chunk_alloc 0x28); copy-constructs the key string at +0x10 and the value string at +0x1c (String_CtorRange); returns the entry; 10 sites |
+| 0x00445D30 | 270 | CStringFinder_Next | fastcall (finder): pos == src length -> pos = -1; pos -1 -> returns 0; CString::Find(sep, pos): not found -> piece = Mid(pos) (the tail), pos = length; found -> piece = Mid(pos, found - pos), pos = found + strlen(sep); returns the... |
+| 0x00445170 | 259 | StringMapValue_CopyCtor | (this pair, key string*, value string*): pair<string, string> ctor: allocates len+1 for the key (PoolAlloc; String_ThrowLengthError on overflow), copies it with a terminating 0 (+0 begin, +4 end, +8 cap), then the same for the val... |
+| 0x004449A0 | 208 | StringMap_RemoveByName | vt 0x73BFA4 slot 1 (key): builds a std::string key, StringMap_LowerBound (really map::find), frees the temp; when found erases the entry (Thunk_StringMap_Erase_445010) |
+| 0x00444C10 | 191 | DebugText::SetRect | (rect*): stores the rect at +0x2c..+0x38, UiScale::ScaleRect with the owner +0x10, clamps width to [100, screen width] and height to [15, screen height], copies to +0x1c..+0x28 and UiScale::UnscaleRect it; when shown (+0x3c) re-cr... |
+| 0x00445620 | 191 | StringMap_Find | (tree, out it, key string*): lower bound with StringRange_Compare, then end unless the found key equals the key (memcmp of the shorter length, then the lengths); callers StringMap_RemoveByName; CORRECTION: was 'StringMap_LowerBoun... |
+| 0x00444F50 | 185 | DebugText::Show | (show): +0x3c = show; show: creates the 0x38-byte CUIBlitSurface window (owner +0x10, rect +0x1c, 5) when missing, +0x40 = timeGetTime, Render; hide: deletes the window, +0x14 = 0; callers DebugText::SetRect (2) |
 
 ## 0x446000 - 0x447000: CFakeUnit
 
-28 functions, group `units`.
+35 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00446C10 | 4909 | CFakeUnit::LoadModelFromScene | loads a "scenes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x00446910 | 466 | CFakeUnit::~CFakeUnit_body | vtable vt_CFakeUnit; tears down animation system +0x4E0, CUnit body, decrements 0x220-byte entries in array +0x534, three member arrays (0x27-dword, 5-dword elements) |
+| 0x00446910 | 466 | CFakeUnit::~CFakeUnit_body | vt = vt_CFakeUnit; animSystemOld +0x4e0 Detach + SetOwner 0; CUnit::Done; CFigures_CArraySetSize(+0x530, 0); refcount +4 of each figure -= 1; destroys the arrays materials +0x570 (0x9c each, vt[0](0)), vectors +0x55c (0x14, vt[1](... |
+| 0x00446520 | 420 | dead_446520 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446330 | 321 | dead_446330 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004466D0 | 213 | CFakeUnit::CFakeUnit | ctor (0x580 bytes, kind 0x39 in CMapObjectManager::CreateByKind): CUnit::CUnit, CAnimationSystemOld::ctor at +0x4e0, four empty MFC arrays at +0x530 (vt 0x73C108) / +0x544 (0x73C0FC) / +0x558 (0x73C0F0) / +0x56c (0x73C0E4), then v... |
-| 0x00446B20 | 116 | CFakeUnit::Done | slot 3: 0x5088E0(+0x4e0); 0x508930(+0x4e0, 0); CUnit::Done; destroys the +0x534[] objects (count +0x538, 0x220 bytes each, vt[0](0)) and frees the array |
-| 0x00446050 | 114 | CString_InitDefaultConst | static-init helper: builds a CString from constant g_0x7842D8 and assigns it to this (SEH frame) |
+| 0x004460D0 | 159 | dead_4460D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446480 | 150 | dead_446480 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446B20 | 116 | CFakeUnit::Done | slot 3: animSystemOld +0x4e0 Detach + SetOwner 0, CUnit::Done, destroys the figures +0x534 (count +0x538, 0x220 each, vt[0](0)), frees the array, figures = 0, count +0x538 = cap +0x53c = 0 |
+| 0x00446050 | 114 | CString_FromInt | (out CString, int): CString::Format("%i" at 0x7842D8, value), copy into out; returns out; no caller or pointer; CORRECTION: was 'CString_InitDefaultConst' [dead: no caller or pointer] |
 | 0x00446BA0 | 112 | CFakeUnit::Load | CFakeUnit slot 62 (name, arg): 0x446C10(name, arg, this); for each of the +0x534[] entries (0x220 bytes, count +0x538): 0x59F390(entry, vt[18]()->vt[23](0x45 kind, -1)) (RegisterInstant of a CFigureClientSpecific per entry); retur... |
-| 0x004461B0 | 45 | CString_WriteToStream | calls stream->vt[14](CString data, length) then releases the buffer |
-| 0x00446210 | 41 | Quat_StaticInit_Identity2 | sets global quaternion g_0x79B9A0 to (1,0,0,0) |
-| 0x00446AF0 | 35 | CFakeUnit::Init | slot 2: 0x508870(+0x4e0); 0x508930(+0x4e0, this); CUnit::Init |
-| 0x004461F0 | 31 | StaticInit_Vec3Zero_g79B9B0 | CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x79B9B0 |
-| 0x004468F0 | 30 | CFakeUnit::~CFakeUnit | slot 0: deleting destructor (root layout) |
-| 0x004467F0 | 29 | CFakeUnit::ForwardSlot20_v31 | slot 31: forwards (a,b,c) to the specific (+0x240) virtual slot 20 |
-| 0x004468B0 | 26 | CUnit::GetSpeedA | CUnit slot 59: 0x52F920(this, &a, &b) and returns a (float) |
-| 0x00446850 | 22 | CUnit::SpecificVt42 | CUnit slot 56: unit specific (+0x240: CUnitServer / CUnitClientSpecific)->vt[42](arg) |
+| 0x004462C0 | 98 | dead_4462C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446260 | 94 | dead_446260 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00446170 | 64 | dead_446170 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004461B0 | 45 | CString_WriteToStream | (this CString, stream): stream vt[14] (+0x38)(GetBuffer(0), length -8), then ReleaseBuffer(-1); no caller or pointer [dead: no caller or pointer] |
 
 ## 0x447000 - 0x453000: 3ds model import / figure export (editor leftover): Scene3ds_ResolveNodesAMF, WeldVertices, ComputeNormals, BuildIndexedComponents, CorrectMappings (.reg atlas), Material_ParseName, AnimNode_Write .ani / .ast / .bon, old CAnimationNode tree building; container serializers
 
-113 functions, group `figures`.
+124 functions, group `figures`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -270,10 +270,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00448A40 | 1507 | Scene3ds_ResolveNodesAMF | (meshes CArray, nodes CArray, frameCount, scene) -> bool: every node takes its position +0x70 from the first keyframe (+0xac) and its rotation (axis +0x60, angle +0x6c -> quat +0x7c via 0x49E800) from +0xc0 (FatalError "ResolveNod... |
 | 0x0044A2A0 | 1285 | Material_ParseName | (name, out textureKind, out materialKind) -> 1: the name is split at '.' keeping only the parts before a dot (so "<name>.<TEX>.<MAT>.<rest>", three dots); with 3 parts: part 2 lower-cased -> texture kind 1..0x10 or 0 (16 strings 0... |
 | 0x0044E3B0 | 1250 | Scene3ds_BuildSoAVertices | (scene): for every mesh record (+0x548, 0x18c each): the vertices +0xd8 (count +0xdc) are packed 4-wide (0x40 per 4 vertices: x x x x / y y y y / z z z z / 1 1 1 1, padded with the first vertex) into the aligned buffer +0xa8 (coun... |
+| 0x0044B370 | 1008 | dead_44B370 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00448000 | 931 | sub_448000 | unregistered function, reached by call / pointer from 0x33FD89 (gaps.py 2026-11-06) |
 | 0x004483B0 | 880 | Nodes3ds_AccumulateTransforms | (node, nodes CArray, index*): recursive: the following nodes of deeper level (+0xc short) become children (+0x10c); their rotation +0x7c is multiplied by the parent's and their position +0x70 rotated by the parent's rotation and t... |
 | 0x0044B060 | 779 | AnimNode_WriteAniAstFiles | (node, pathAni, pathAst, splitFrame): opens "<pathAni><node name>.ani" and "<pathAst><node name>.ast" for writing (FatalError "Can't opent file for write"), AnimNode_WriteAniAst, closes; recursion over the children +0x20 |
-| 0x0044E8A0 | 704 | Mesh3ds_ComputeBounds | (mesh): min / max of the vertices +0xd8 (count +0xdc) -> centre +0x15c, min +0x168 and max +0x174 (relative to the centre), radius +0x180 |
-| 0x00448720 | 673 | AnimNodes_ComposeWorldTransforms | (node, frame): for every child of +0x110: 0x49F890(child, node, frame); the child's world key (+0xfc record +0x34..) = node rotation applied to the child's local key position plus the node position (+0xfc +0x24..), its quaternion ... |
 
 ## 0x453000 - 0x455000: CFigure base in-place constructors (CFigures_ConstructN 0x220, CFakeFigures_ConstructN 0x18c = the 3ds mesh record), CFakeFigure dtor, hash / CList / aligned vector helpers
 
@@ -281,45 +281,45 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00454A70 | 472 | StrRecs18Array::Serialize | slot 2 of 0x73C2BC: CArchive of the array of 0x18-byte {CString, CArray} records (raw bytes) |
-| 0x004545C0 | 470 | CFakeFigures_ConstructN | (objs, n): constructs n 0x18c-byte CFakeFigure objects in place (CObject base, quaternions, name +0x94, the 12 aligned vectors +0x98..+0x14c, StrRecs18 CArray +0x148; vt_CFakeFigure) |
-| 0x00454F80 | 458 | Nodes3ds_ConstructN | (records, n): n 0x120-byte node records: CStrings +4 / +8, quaternions +0x30 / +0x40 / +0x7c / +0x98 identity, CArrays +0xa8 (vt 0x73C1AC), +0xbc (0x73C1B8), +0xd0 (0x73C114), +0xe4 (0x73C120), +0xf8 (0x73C12C), +0x10c (dwords) |
-| 0x00453550 | 421 | Materials9C_CArraySetSize | (this = CArray of 0x9c-byte materials, n, grow): SetSize (Materials9C_ConstructN / vt[0](0)) |
-| 0x00453240 | 412 | CFigures_ConstructN | (objs, n): constructs n 0x220-byte CFigure objects in place (CObject3DBase_InitFields, names +0x120 / +0x124, vectors, CFigure::Init, raw mesh vectors +0x1c0.. zeroed) |
-| 0x00454830 | 409 | CFakeFigure::dtor | StrRecs18 CArray +0x148 destroyed, the aligned vectors +0x138..+0x98 freed, name +0x94; CObject base; CObject::dtor_body |
-| 0x00453E00 | 381 | Recs10_CArraySetAtGrow | (this = CArray of 0x10-byte records, index, record*): grows so that index fits and copies the 4 dwords |
-| 0x00453A30 | 341 | Pairs8_CArraySetSize | (this = CArray of 8-byte records, n, grow): SetSize with zero-filled new elements |
-| 0x00453CA0 | 341 | Recs10_CArraySetSize | (this = CArray of 0x10-byte records, n, grow): SetSize with zero-filled new elements |
-| 0x004538D0 | 311 | AlignedDwords_SetAtGrow6 | (this, index, value): grows the aligned dword vector so that index fits and stores value |
-| 0x00453790 | 307 | Dwords_CArraySetSize | (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10}, n, grow): SetSize with zero-filled new elements |
-| 0x004543E0 | 293 | Node3ds_Destroy | (node record 0x120): frees the CArrays +0x10c, +0xf8, +0xe4, +0xd0 (aligned vectors inside), +0xbc, +0xa8 and the CStrings +8 / +4 |
-| 0x00453100 | 263 | Aligned8_SetSize2 | (this, n, grow): CArray SetSize for a 32-byte aligned vector of 8-byte elements (uv pairs) |
-| 0x00454CE0 | 163 | StrRecs18Array::dtor | vt 0x73C2BC: StrRec18_Destroy on every 0x18-byte record and frees the array |
+| 0x00454A70 | 472 | StrRecs18Array::Serialize | slot 2 of vt 0x73C2BC (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of 0x18-byte {CString, CArray} records, CArchive*): loading (archive flags +0x14 bit 0): ReadCount then SetSize inlined (StrRecs18_ConstructN for n... |
+| 0x004545C0 | 470 | CFakeFigures_ConstructN | (objs, n): zero-fills n*0x18c bytes, then per object: CObject base (vt 0x73B8E0), identity quaternions +0x34 / +0x44, vt 0x73BA38 (CObject3D), name +0x94 = empty CString, the eleven 4-dword vectors +0x98..+0x147 = 0, the StrRecs18... |
+| 0x00454F80 | 458 | Nodes3ds_ConstructN | (records, n): zero-fills n*0x120 bytes, then per 3ds node record: CStrings +4 / +8 = empty, identity quaternions (1.0 first) at +0x30, +0x40, +0x7c, +0x98, MFC CArrays +0xa8 (vt 0x73C1AC), +0xbc (0x73C1B8), +0xd0 (0x73C114), +0xe4... |
+| 0x00453550 | 421 | Materials9C_CArraySetSize | (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of 0x9c-byte CMaterial records, n, grow): MFC SetSize: n 0 -> vt[0](0) on every element then free; empty -> new(n*0x9c) + Materials9C_ConstructN; n <= cap -> construct t... |
+| 0x00453240 | 412 | CFigures_ConstructN | (objs, n): zero-fills n*0x220 bytes, then for each 0x220-byte object: CObject3DBase_InitFields, +0x11c owner 0, names +0x120 / +0x124 = empty CString, +0x128..+0x134 = 0, AlignedArray_Init_A on the diffuse / specular colour arrays... |
+| 0x00454830 | 409 | CFakeFigure::dtor | (this): StrRecs18 CArray +0x148 (vt 0x73C2BC): StrRec18_DeletingDtor(0) on each 0x18-byte element, data freed; the eleven 32-byte aligned vectors +0x138, +0x128, ... +0x98 freed (raw block at ptr[-4]); CString +0x94 destroyed; vt ... |
+| 0x00453E00 | 381 | Recs10_CArraySetAtGrow | (this = CArray of 0x10-byte records, index, record*): MFC SetAtGrow: index >= count -> SetSize(index+1) inlined (new elements zero-filled, growth count/8 clamped 4..0x400), then copies the 4 dwords of the record into data[index] |
+| 0x00453A30 | 341 | Pairs8_CArraySetSize | (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of 8-byte records, n, grow): MFC CArray SetSize; new elements zero-filled; growth = grow or count/8 clamped 4..0x400 |
+| 0x00453CA0 | 341 | Recs10_CArraySetSize | (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of 0x10-byte records, n, grow): MFC CArray SetSize; new elements zero-filled; growth = grow or count/8 clamped 4..0x400 |
+| 0x004538D0 | 311 | AlignedDwords_SetAtGrow6 | (this = 32-byte aligned dword vector {data +0, count +4, cap +8, grow +0xc}, index, value): if index >= count grows to index+1 (same SetSize logic as Aligned8_SetSize2, new slots uninitialised), then data[index] = value |
+| 0x00453790 | 307 | Dwords_CArraySetSize | (this = CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of dwords, n, grow): MFC CArray SetSize; new elements zero-filled; growth = grow or count/8 clamped 4..0x400; plain operator_new / delete (not aligned) |
+| 0x004543E0 | 293 | Node3ds_Destroy | (3ds node record 0x120): destroys the six MFC CArrays in reverse order: +0x10c (vt 0x73C138), +0xf8 (0x73C12C), +0xe4 (0x73C120), +0xd0 (0x73C114: AlignedVector_Free on +4 of each 0x14-byte element first), +0xbc (0x73C1B8), +0xa8 ... |
+| 0x00453100 | 263 | Aligned8_SetSize2 | (this = {data +0, count +4, cap +8, grow +0xc}, n, grow): SetSize of a 32-byte aligned vector of 8-byte elements: grow != -1 stored at +0xc; n 0 frees the block (raw pointer at data[-4]) and zeroes count / cap; empty -> new(n*8+0x... |
+| 0x00454CE0 | 163 | StrRecs18Array::dtor | (this = CArray vt 0x73C2BC): vt reset, StrRec18_Destroy inlined on every 0x18-byte record (SetSize 0, Empty, CArray dtor, CString dtor), data freed |
 
 ## 0x455000 - 0x456000: CObject helpers (GetWorld, SetManager) + disk / capture
 
-46 functions, group `core`.
+60 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00455680 | 317 | PlayerRelations::DeclareHostile | (this = CWorldServer +0x12c64 PlayerRelations, attacker CUnit, victim CUnit): unless attacker.side is a FRIEND of victim.side (row bit): victim.SetAlarmMask(+0x244 / bit attacker.side) (sets flag 0x80000 = alarm to propagate) and ... |
-| 0x00455170 | 311 | Records14_SetSize | (this, n, grow): MFC CArray SetSize for 0x14-byte records (0x454ED0 ctor) |
-| 0x004552B0 | 311 | Records18_SetSize | (this, n, grow): MFC CArray SetSize for 0x18-byte records (0x454F00 ctor) |
+| 0x00455170 | 311 | Records14_SetSize | (this = MFC CArray {vt, data +4, count +8, cap +0xc, grow +0x10} of 0x14-byte records, n, grow): MFC SetSize; new elements zero-filled by ZeroFill_Elem20_A, removed ones not destructed; growth = grow or count/8 clamped 4..0x400 |
+| 0x004552B0 | 311 | Records18_SetSize | (this = MFC CArray of 0x18-byte records, n, grow): MFC SetSize; new elements zero-filled by ZeroFill_Elem24_A; growth = grow or count/8 clamped 4..0x400 |
 | 0x004554E0 | 292 | PlayerRelations::Set | (side a, side b, mode, applyToUnits): mode 0 FRIEND (row[a] /= bit b, forced bit cleared), 1 NEUTRAL (both cleared), 2 ENEMY (forced bit set, friend bit cleared); applyToUnits: every unit of side a gets bit b set (enemy) / cleared... |
 | 0x00455BA0 | 220 | Protection_Penalty | resets the application settings to defaults (AppSettings::SetDefaults on g_0x79BC70) and randomises the flags of every object of the world manager (CMapObject::SetSpecificRaw / CObject3D::SetSpecific46Raw with random 12-bit values... |
-| 0x00455E50 | 176 | GlobalList79BC2C_Init | allocates the sentinel node of the global list g_0x79BC2C from pool g_0x79B228 (self-linked) |
+| 0x00455E50 | 176 | GlobalList79BC2C_Init | static initializer: allocates the 0x10-byte sentinel node of the STLport list g_0x79BC2C from the 16-byte node free list g_0x79B228 (refilled by stlport_node_alloc_chunk_alloc(0x10) and chained when empty) and links it to itself (... |
 | 0x00455A90 | 166 | Disk_GetFreeBytes | (root path): GetDiskFreeSpaceExA (via GetProcAddress on kernel32) or the sector-based GetDiskFreeSpaceA fallback; 0 on failure |
-| 0x00455830 | 83 | HashSet_Begin4 | (this, out iterator {node, table}): first non-empty bucket (20 callers) |
+| 0x00455FF0 | 110 | dead_455FF0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00455F80 | 108 | dead_455F80 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00455A30 | 93 | sub_455A30 | unregistered function, reached by call / pointer from 0x56937 (gaps.py 2026-11-06) |
+| 0x00455830 | 83 | HashSet_Begin4 | (this = STLport hashtable {?, buckets begin +4, end +8}, out iterator {node, table}): begin(): first non-null bucket head into out[0] (0 when all empty), out[1] = this |
 | 0x00455B50 | 79 | Protection_RandomCheck | rolls rand (~1 in 100 per call); when it hits finds an entry flagged in the global list g_0x79BC2C (byte +8 == 0) and calls Protection_Penalty |
-| 0x004553F0 | 74 | Pair8_ConstructN | (first, n): zero n 8-byte records and init their CString at +4 |
-| 0x004558B0 | 54 | HashIterator_Next4 | (iterator): next node of the same bucket or the next non-empty bucket (13 callers) |
-| 0x00455630 | 46 | PlayerRelations::GetRelation | (a, b): 0 friend when row[a] has bit b, 2 enemy when the forced row has it, else 1 neutral |
-| 0x004557C0 | 45 | PlayerRelations::Read | (stream): reads both 0x80-byte mask arrays |
-| 0x004557F0 | 45 | PlayerRelations::Write | (stream): writes both 0x80-byte mask arrays |
+| 0x004553F0 | 74 | Pair8_ConstructN | (records, n): zero-fills n 8-byte records, then each record's CString +4 = empty (g_0x796E48) |
+| 0x00455F40 | 59 | dead_455F40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x456000 - 0x461000: application: main window, settings sections, DX7 check, sysmsg.txt
 
-101 functions, group `app`.
+108 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -340,28 +340,28 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x461000 - 0x463000: CHoover + CInventory + keyboard.ini
 
-62 functions, group `client`.
+68 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00461CB0 | 1256 | CHoover::CollectUnitLoot | (world, unit, out items CList, out proto-drop CList, unused, out money): 0 when flag 0x100000 (looted); creates the unit proto's drop names (+0xe8 vector, CItemManager::CreateItemByName) into both lists; money = rand(proto +0xd0..... |
-| 0x004626E0 | 560 | HashSetBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
+| 0x004626E0 | 560 | HashSetBuckets_Reserve | (this = STLport hashtable {buckets begin +4, end +8, eos +0xc, count +0x10}, hint): _M_initialize_buckets: n = first prime >= hint from the table 0x73B914 (binary search over 28 entries; 0xFFFFFFFB past the end), buckets.reserve(n... |
 | 0x00461980 | 515 | StringIntMapBuckets_ctorN | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); StringIntMap_Rehash = the NamedFloatMap / string -> int maps (NamedFloatMap_Set / Read, StringIntMap_GetOrInsert) |
 | 0x00462C10 | 465 | KeyBindings_Load | fills the 88 key records g_0x7857B0 (0x48 each: +0 scancode, +4 static name '1'..'KP_STAR'..'DEL', +8 GetKeyNameText text for the options screen), zeroes the scancode -> action table g_0x79BF70[0x200] and reads <saves root>\config... |
-| 0x00461750 | 382 | StringIntMap_Rehash | (this, minBuckets): next prime from 0x73B914, re-links the nodes with hash*5 on the key |
+| 0x00461750 | 382 | StringIntMap_Rehash | (this = STLport hashtable keyed by C strings, hint): STLport resize: when hint > bucket count, new count = first prime >= hint from the table 0x73B914..0x73B984 (0xFFFFFFFB past the end); if larger, allocates a zeroed bucket vecto... |
 | 0x00462DF0 | 373 | KeyBindings_Save | writes <saves root>\config\keyboard.ini: one '%s %s\n' line (key name, action name) for every scancode of g_0x79BF70 with a non-zero action that has a key record |
 | 0x00462960 | 334 | DwordVector_InsertRealloc7 | STL: vector<node*>::insert(pos, n, value) reallocating path of HashSetBuckets_Reserve = the bucket vector of the CInventory object hash set +0x50 (CInventory::ctor, 100 buckets) |
 | 0x00461260 | 255 | NamedIntMap_Write | (map, stream): writes count + {name, int} pairs (CParty::Write). Was StringIntMap_Write |
-| 0x00462420 | 241 | CInventory::dtorBody | vt_CInventory: frees the bucket map +0x50 nodes (0xc each) and the bucket vector, then CItem::dtor body (0x69FD70) |
-| 0x004613C0 | 233 | StringIntMap_GetOrInsert | (this, CString key*): rehash, find the key (hash*5, strcmp) or insert a new node; returns &value (node +8) |
-| 0x004615B0 | 202 | StringIntMapNode_Create | (pair {CString, int}*): allocates a 0x10 node from pool g_0x79B228, copy-constructs the key and stores the value at +8 |
+| 0x00462420 | 241 | CInventory::dtorBody | (this): vt = vt_CInventory; STLport hashtable at +0x4c (buckets +0x50..+0x58, count +0x5c): every 0xc-byte node PoolFree(node, 0xc), buckets nulled, count = 0, bucket vector returned to the size-class pool g_0x79B224 (or Free_Wrap... |
+| 0x004613C0 | 233 | StringIntMap_GetOrInsert | (this = STLport hash map CString -> dword, CString key*) -> &value: copies the key, StringIntMap_Rehash(count +0x10 + 1), hash = String_Hash5 % bucket count, strcmp along the chain; when absent a node from StringIntMapNode_Create(... |
+| 0x004615B0 | 202 | StringIntMapNode_Create | (pair {CString key, dword value}*) -> node: takes a 0x10-byte node from the STLport free list g_0x79B228 (refilled by stlport_node_alloc_chunk_alloc(0x10) when empty), next = 0, CString copy of the key at +4, value at +8 |
 | 0x00462AF0 | 201 | DwordBuffer_AllocCopy14 | STL: allocate n dwords (size pool / new) and copy a range in; HashSetBuckets_Reserve = the bucket vector of the CInventory object hash set +0x50 (CInventory::ctor) |
 | 0x00461190 | 193 | Stream_ReadCString | reads a NUL-terminated string from a stream (stream->vt[1](ptr,1) per char) into a new std::string (STLport); returns it |
 | 0x00462540 | 186 | CInventory::Done | slot 3: releases (vt[4]) every object of the hash set +0x4c.. then CItem::Done |
 
 ## 0x463000 - 0x466000: database.res loader (databases)
 
-51 functions, group `data`.
+56 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -371,18 +371,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00464210 | 580 | DwordVector_Reserve2 | STL: vector<node*>::reserve(n) of the bucket vector of LeversDb +0xc leverMap (LeversDb::ctor, 101 buckets); DwordBuffer_AllocCopy9 |
 | 0x00465310 | 515 | DwordVector_ctorN2 | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); HashMapStrDword_Rehash3 = LeversDb leverMap +0xc (NameMap_FindOrInsert) and StringHash_FindOrInsert3 |
 | 0x00465800 | 480 | LeverRecordVector_InsertRealloc | vector<LeverRecord>::insert with reallocation (grow by max(n, size)) |
-| 0x004637C0 | 432 | StlList18_ctor | STLport list ctor: allocates the sentinel node (0x18 nodes from the pool) and links it to itself |
-| 0x00463AA0 | 426 | StlList10_ctor | STLport list ctor: allocates the sentinel node (0x10 nodes from the pool) and links it to itself |
-| 0x00465EE0 | 385 | LightningNoise_AddBand | (table of 400 floats, i0, i1, amp0, amp1): for harmonics i0..i1 adds random-phase sin/cos terms with amplitude interpolated from amp0 to amp1 (ISAAC rng g_0x7A9D40) |
+| 0x004637C0 | 432 | StlList18_ctor | (this, allocator byte*): STLport list ctor for 0x18-byte nodes: takes the sentinel from the free list g_0x79B22C; when empty the node-allocator chunk refill is inlined (20 nodes from the start / end free pointers g_0x79B268 / g_0x... |
+| 0x00463AA0 | 426 | StlList10_ctor | (this, allocator byte*): STLport list ctor for 0x10-byte nodes: sentinel from the free list g_0x79B228 (inlined chunk refill of 20 nodes, 0x140 bytes, as in StlList18_ctor), linked to itself; returns this |
+| 0x00465EE0 | 385 | LightningNoise_AddBand | (this = table of 400 floats, i0, i1, amp0, amp1) ret 0x10: n = i1 - i0 + 1; for each harmonic i in [i0, i1) (i1 excluded): a = amp0/n + (i - i0)/n * (amp1/n - amp0/n), two ISAAC words from g_0x7A9D40 (Isaac_Generate refill inline)... |
 | 0x00463120 | 376 | LeversDb::dtor | frees the name map nodes (0x14: next, std::string key, LeverRecord*) + buckets and the vector<LeverRecord 0x2c> |
-| 0x00464F30 | 348 | HashMapStrDword_Rehash3 | (this, minBuckets): grow buckets to the next prime and re-link the nodes by String_Hash (variant) |
+| 0x00464F30 | 348 | HashMapStrDword_Rehash3 | (this = STLport hashtable {buckets +4..+0xc}, hint): resize: new count = first prime >= hint (table 0x73B914, 0xFFFFFFFB past the end); when larger, a zeroed bucket vector, every node re-linked by String_Hash(key +4) % new count, ... |
 | 0x00464910 | 334 | DwordVector_InsertRealloc | STL: vector<node*>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n), DwordRange_Copy both halves); DwordVector_InsertN (StringHashMap_ctor100 bucket fill) and ArchiveTagHash_Rehash (archive tag-name hash +0x5... |
 | 0x00464B70 | 334 | DwordVector_InsertRealloc2 | STL: vector<node*>::insert(pos, n, value) reallocating path behind DwordVector_InsertN2 = the 101-bucket fill of LeversDb leverMap +0xc in LeversDb::ctor |
 | 0x004645A0 | 331 | Archive_dtor | tagged archive dtor (45 callers): clears list +0x70 (0xc nodes), hash +0x60, list +0x50 (0x18 nodes), frees the two CMemStream buffers (+0x40, +0x18; vt 0x73BD90 -> base 0x73BDB0) |
 
 ## 0x466000 - 0x469000: CLight + CLightning (lightning.dat)
 
-39 functions, group `effects`.
+47 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -394,33 +394,33 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00467E10 | 689 | CLightning::InitRandom | (this, from, to): main segment +0x5c; type 0: 6 branches between random jittered copies of from/to (±5% of the length); else 6 branches from lerp(from, to, +0x4f4[i]) to `to`; type < 0: Update; ComputeBounds |
 | 0x004672E0 | 676 | CLightning::Update | (this): UpdatePoints of the main segment +0x5c (scale 1.5 / 1 / 2 by type +0x50c), for type != 0 moves the 6 branch segments (+0x104, 0xa8 each) to a sine-animated offset along the main bolt at fraction +0x4f4[i] (frequencies g_0x... |
 | 0x00468A00 | 530 | Lightning_LoadNoiseTables | reads 'gfx.res\lightning.dat' (CMappedResource) into g_0x79CE78: 32 tables x 400 floats (0x640 bytes each, 0xC800 bytes up to 0x7A9678) = the precomputed harmonic noise bands CLightning::EvalNoise blends; FatalError 'Unable to ope... |
-| 0x00468DA0 | 423 | CArray8::Serialize | (this = CArray of 8-byte elements, CArchive): loading: ReadCount, (re)allocate (grow step 4..0x400), zero new slots; then Read/Write count * 8 bytes |
+| 0x00466AF0 | 483 | dead_466AF0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00468DA0 | 423 | CArray8::Serialize | slot 2 of vt 0x73C584 (this = MFC CArray of 8-byte elements, CArchive*): loading: ReadCount and SetSize inlined (new elements zero-filled, growth count/8 clamped 4..0x400); storing: WriteCount; then count*8 raw bytes through CArch... |
 | 0x00467150 | 391 | CLightning::ComputeBounds | (this): min/max +0x38/+0x44 over the main segment +0x5c and 6 sub segments at +0x104 (0xa8 each); centre +0x28, half extents, radius +0x34, +0x24 = 3 |
-| 0x00466FD0 | 381 | CLightning::ExtendBounds | (this, segment): widens min +0x38..+0x40 / max +0x44..+0x4c by the segment's points (+0x94, count +0x98) |
+| 0x00466FD0 | 381 | CLightning::ExtendBounds | (this, segment): for each 16-byte point of the segment (+0x94, count +0x98) widens the box min +0x38..+0x40 / max +0x44..+0x4c (branchless min / max); CLightning::ComputeBounds |
 | 0x00466CE0 | 377 | CLightning::UpdatePoints | (this, time, scale): EvalNoise into g_0x79C1F8 / g_0x79C838, then point i (+0x94, 16 bytes) = origin +0 + i * dir +0x24 + dx * side +0xc + dy * up +0x18 (drift-corrected) |
 | 0x00468680 | 266 | CLightningManager::CreateByKind | slot 14 factory: operator new(0x514) + inline CLightning ctor: CObject base (vt 0x73B8E0, id -1), bounds / segments zeroed, the 6 LightningSegment branches +0x104 constructed (__ehvec), vt_CLightning, type +0x50c = 1.0, amplitude ... |
-| 0x00468C50 | 263 | CArray16_SetSize | (this = CArray of 16-byte elements, n, growStep or -1): allocates 32-byte aligned storage (raw pointer kept at -4), grow step clamped 4..0x400 |
 
 ## 0x469000 - 0x470000: .mob object descriptors (CObjectDesc / CUnitDesc / CLightDesc / CSoundDesc / CParticleDesc / torch / lever / trap) + 3DS figure builder
 
-126 functions, group `app`.
+154 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, 3DS scene*, out): editor leftover: converts a parsed .3ds scene into CFigure arrays (0x1c0 each); not reached by the game DEAD CODE: no call and no pointer anywhere in the file (byte search 2026-11-03). |
+| 0x00469F70 | 1303 | dead_469F70 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00469090 | 831 | dead_469090 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0046AB20 | 824 | CObjectDesc::OnChunk | slot 0 (ChunkFile reader, OBJECT 0xB001 children): 0xB002 NID -> +0x18, B003 OBJTYPE -> +0x50, B004 OBJNAME -> +0x3C, B006 OBJMODEL -> +0x54, B007 -> +0x70, B008 -> +0x74, B009 OBJPOSITION -> +0x20, B00A OBJROTATION quaternion -> ... |
 | 0x0046CBC0 | 792 | MobLogicSlot_OnChunk | (children of UNIT_LOGIC 0xBBBC0000 into the 0x4c MobLogicSlot): 0xBBBD0000 appends a 0x20 point {pos, CArray of 0x14 look-at records} and reads it (MobLogicPoint_OnChunk); 0001 byte (legacy aggressive: AggrMode -> 0), 0002 byte +0... |
 | 0x0046B7D0 | 774 | CMagicTrapDesc::OnChunk | slot 0 (MAGIC_TRAP 0xBBAB0000 children, as the explicit compares in MobFile_ParseChunks 0x481F00 and this switch read them): 0xBBAB0001 diplomacy dword -> +0x8C, 0002 spell string -> +0x90, 0003 count + N x 12 bytes area circles {... |
 | 0x0046C900 | 677 | MobLogicSlot_Write | (ChunkFile, slot +0x18): UNIT_LOGIC chunk: 0xBBBC000B alarm condition, 000C help radius, 0002 cyclic, 000E aggression mode, 000D always active, 0003 model, 0004 guard radius, 000A wait, 0005 guard point, 0007 use, 0006 num alarm; ... |
 | 0x0046E680 | 623 | MobLogicPoints_Copy | (this = CArray of 0x20 point records, src): destroys the current points, SetSize to the source count, copy-constructs each (pos + look-at CArray). Was UnitLogicRecords_Copy |
+| 0x0046BAD8 | 615 | sub_46BAD8 | unregistered function, reached by call / pointer from 0x6B813 (gaps.py 2026-11-06) |
 | 0x0046A710 | 519 | CObjectDesc::CopyFrom | (src DescRecordB-like record): copies model / prototype / complection / name strings (+4..+0x48 of the source, CStrings +0x3c / +0x40) into the matching descriptor fields (editor path) |
 | 0x0046D080 | 513 | CUnitDesc::OnChunk | slot 0 (UNIT 0xBBBB0000 children): 0xBBBC0000 UNIT_LOGIC -> the next 0x4c slot (+0x90 + (+0x8c)++ * 0x4c; +0x28 = 0, +0x48 = 4 before MobLogicSlot_OnChunk, 4 -> 0 after); 0xBBBB0002 UNIT_PROTONAME -> +0x20c; 0004 UNIT_STATS -> 0xa... |
 | 0x0046A940 | 465 | CObjectDesc::WriteFields | slot 11 (shared by object / torch / lever / trap / unit): writes 0xB00D parts +0x78, B011 byte +0x6c, B002 id, B003 type +0x50, B004 name +0x3c, B006 model +0x54, B00E prototype +0x58, B007 +0x70, B008 +0x74, B00F comment +0x40, B... |
-| 0x004696D0 | 454 | DescRecordA::operator_assign | copy-assign the 0x74 record: 4 CStrings, ints +0x10..+0x20, string arrays +0x24 / +0x38 / +0x60 (sized by the source counts) |
+| 0x004696D0 | 454 | DescRecordA::operator_assign | (this, src 0x74 record): copies the CStrings +0..+0xc and the dwords +0x10..+0x20, then CStringArray::SetSize of +0x24 to src count +0x2c, of +0x38 to src count +0x40 and of +0x60 ALSO to src count +0x40, and copies the elements o... |
 | 0x0046E190 | 441 | CSoundDesc::OnChunk | slot 0 (children of SOUND 0xCC01): 0xCC02 id -> +0x18, CC03 pos -> +0x20, CC04 range -> +0x68, CC05 name -> +0x3c, CC06 min -> +0x74, CC07 max -> +0x78, CC08 comment -> +0x40, CC0A wave file list -> CStringArray +0x54 (cleared fir... |
-| 0x0046EC10 | 393 | Vec3CArray_Serialize | vt 0x73C68C / 0x73C698 slot 2 (CArchive): count + 12-byte elements (magic trap areas) |
-| 0x0046EDA0 | 383 | Pairs8CArray_Serialize | vt 0x73C680 / 0x73C6A4 slot 2 (CArchive): count + 8-byte elements (magic trap targets) |
-| 0x0046DBF0 | 352 | CLightDesc::OnChunk | slot 0 (children of LIGHT 0xAA01): 0xAA02 range -> +0x64, AA03 name -> +0x3c, AA04 pos -> +0x20, AA05 id -> +0x18, AA06 shadow byte -> +0x60, AA07 colour rgb floats -> +0x54, AA08 comment -> +0x40 |
 
 ## 0x470000 - 0x474000: AI state names + DirectX error text
 
@@ -436,33 +436,33 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x474000 - 0x47E000: MFC CArray/CMap instantiations, IStream/CMemStream/CFileStream, MsgStream family (file / peer / TCP), CTcpNetDriver, Huffman coder, unit prototype apply
 
-262 functions, group `net`.
+289 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0047B1F0 | 1064 | PtrArray_Diff | (old, new, outAdded, outRemoved, outKept): PtrArray_SortUnique(new), then merges the two sorted pointer arrays: only in new -> outAdded (refcount +4 ++), only in old -> outRemoved (vt[4] Release), both -> outKept; finally old := n... |
+| 0x0047B1F0 | 1064 | PtrArray_Diff | (ecx old, edx new, outAdded, outRemoved, outKept): PtrArray_SortUnique(new); sizes the three outputs to max(count old, count new) (aligned SetSize inlined); merges the two sorted arrays: equal -> outKept, only in new -> outAdded w... |
+| 0x00477710 | 994 | dead_477710 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00477B00 | 829 | MobUnitStats_ApplyTo | (this = unit prototype record, unit): empty prototype -> only adds the named spells (+0xc4 list, 0x531180) and perks (+0xb0, 0x531220); otherwise resets the unit stats (0x5315B0) and copies hp / mana / stats (+0..+0x50) into the u... |
-| 0x0047ADF0 | 809 | PtrArray_SortUnique | (array): radix-sorts the pointer array by all four key bytes (scratch array g_0x7A9738) and removes consecutive duplicates |
+| 0x0047ADF0 | 809 | PtrArray_SortUnique | (ecx = 32-byte aligned pointer array {data, count, cap, grow}): when count > 1: sizes the static scratch array g_0x7A9738 (lazy init + atexit 0x47B1D0, aligned grow), LSD radix sort of the dword keys by bytes 0, 1, 2 (counting sor... |
 | 0x0047DCA0 | 785 | DeltaWriter::WriteBytes | (this = DeltaCodec, data, n): writes n bytes against both base snapshots: base A (+0 stream, bits to +0x50) and base B (+0x28, bits to +0x78): no snapshot at the base position -> a 0 bit then per dword 0 bit + 4 raw bytes, rest ra... |
+| 0x0047BC10 | 620 | dead_47BC10 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0047C680 | 607 | TcpConnectThread_dead | thread body of ConnectAsync (socket, split host:port, connect); NO CALLERS (dead) |
-| 0x00476430 | 513 | CMapArray_Serialize | slot 2 of 0x73C80C: MFC CArray<CMap>::Serialize (constructs / destroys 0x1c-byte CMap elements on resize) |
-| 0x004761C0 | 501 | CMap_Serialize | slot 2 of 0x73C818: MFC CMap<DWORD, DWORD>::Serialize (count, then key / value pairs; loading inserts through the hash table) |
+| 0x00476430 | 513 | CMapArray_Serialize | slot 2 of vt 0x73C80C (this = MFC CArray of 0x1c-byte CMaps, CArchive*): loading: ReadCount and SetSize inlined (CMapArray_ConstructN for new elements, vt[1](0) for removed ones); storing: WriteCount; then count*0x1c raw bytes (th... |
+| 0x004761C0 | 501 | CMap_Serialize | slot 2 of vt 0x73C818 (this = MFC CMap<DWORD, DWORD>, CArchive*): loading: ReadCount, then per entry key and value (4 bytes each through CArchive Read 0x708832) inserted with the operator[] code inlined; storing: WriteCount(count ... |
 | 0x00479E30 | 499 | CTcpNetDriver::SyncPeers | (this = RefListPair CWorld +0x60, LobbyServer g_0x79B5DC): for every NetPeer of the server's peer list +0x28 without a PeerMsgStream in +8: when the peer's IN stream +0x1148 holds bytes (GameBuffer::CommitCursor first) AND LobbySe... |
-| 0x00475310 | 488 | CArray1C_Serialize | slot 2 of 0x73C848: MFC CArray::Serialize, 0x1c-byte elements |
+| 0x00475310 | 488 | CArray1C_Serialize | slot 2 of vt 0x73C848 (this = MFC CArray of 0x1c-byte POD elements, CArchive*): ReadCount + SetSize inlined (zero-filled new elements) / WriteCount, then count*0x1c raw bytes |
 | 0x0047CFA0 | 453 | CTcpNetDriver::AcceptNewClient_dead | accept() on a listening socket + TcpMsgStream; NO CALLERS (no listening socket is ever created): dead TCP server path |
-| 0x00475130 | 435 | CArray0C_Serialize2 | slot 2 of 0x73C854: MFC CArray::Serialize, 0xc-byte elements |
-| 0x004756A0 | 435 | CArray14_Serialize | slot 2 of 0x73C83C: MFC CArray::Serialize, 0x14-byte elements |
-| 0x00475A00 | 435 | CArray18_Serialize | slot 2 of 0x73C830: MFC CArray::Serialize, 0x18-byte elements |
-| 0x00476AD0 | 435 | CArray14_Serialize2 | slot 2 of 0x73C86C: MFC CArray::Serialize, 0x14-byte elements |
+| 0x0047D190 | 445 | dead_47D190 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00475130 | 435 | CArray0C_Serialize2 | slot 2 of vt 0x73C854: same code as CArray0C_Serialize (0xc-byte POD elements zero-filled on grow, raw count*0xc bytes) |
 
 ## 0x47E000 - 0x481000: net delta codec: DeltaWriter/DeltaReader (16-bit quantized fields vs two base snapshots), DeltaCodecSet, GameException, FatalError, DDraw error text, AnimKeyToString
 
-38 functions, group `net`.
+45 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004803E0 | 1939 | AnimKeyToString | (key): describes an animation key into g_0x7A979C: bits 15-17 state (Neutral, Attack, Warry, Lie), bits 18-21 action (Special, Attack, Cast, Run, Walk, Idle, Death, Suffer, Cross), bits 22-29 modifier (Stay / LookAround for Idle, ... |
-| 0x00480B80 | 1390 | DDrawErrorString | (hr): DirectDraw / Direct3D HRESULT -> description text ("No error.", "Generic failure.", D3DERR_* ...) |
+| 0x004803E0 | 1939 | AnimKeyToString | (ecx key) -> char*: debug text of an animation key built in an STLport string then copied (no length check) into the static buffer g_0x7A979C: "(0x%8X) " prefix, state bits 15-17 (0x38000: Neutral / Attack / Warry / Lie), action b... |
+| 0x00480B80 | 1390 | DDrawErrorString | (ecx hr) -> const char*: binary-search switch over 149 DirectDraw / Direct3D HRESULTs (DDERR_*, D3DERR_*, E_* values) returning the English description; 0 -> "No error.", anything else -> "Unrecognized error value."; FatalErrorHr,... |
 | 0x0047F4D0 | 785 | DeltaWriter_WriteVec3F16 | (this = DeltaCodec, float[3]): packs three floats into 16-bit halves and delta-writes them (10 callers) |
 | 0x0047F7F0 | 586 | DeltaReader_ReadVec3F16 | (out float[3]): reads three delta-coded 16-bit halves (DeltaReader_ReadBytes for the 2nd and 3rd) and expands them to floats |
 | 0x0047E3A0 | 571 | DeltaWriter_WritePos3D | (this = DeltaCodec, float[3]): quantizes x, y as (v + 16) * 120.46875 and z as (v + 32) * 341.32812 to 16 bits and delta-writes them against both base streams (13 callers) |
@@ -478,12 +478,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x481000 - 0x484000: mission/zone file loader (MobFile) + std::map<string,list> instantiations
 
-62 functions, group `renderer`.
+71 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00481660 | 2029 | MobFile_Load | (ChunkFile, noScript) from LoadMapObjects: MobFile_ParseChunks; parse result 1 -> PlayerRelations::Set(g_0x7C2BC4, i, j, m[i][j], 1) 32x32; AppSettings AutomaticQuantization (g_0x79BCF4) -> morphs of kind-1 objects (types not 0x32... |
 | 0x00481F00 | 1327 | MobFile_ParseChunks | (ChunkFile, out descriptor hash keyed by NID, out 32x32 matrix + names, out script CString) -> 1 unless a 0xD000 marker came last: 0xACCEECCA plain script / 0xACCEECCB scrambled (LCG, 0x42C650); 0xABD0 wind {vec3 dir, strength -> ... |
+| 0x004810F0 | 1064 | sub_4810F0 | unregistered function, reached by call / pointer from 0x80C7A (gaps.py 2026-11-06) |
 | 0x00482EF0 | 703 | RbMap_Insert_482EF0 | STL: std::map<string-range,list> insert with hint: handles begin/end cases, InsertUnique fallback, rebalance |
 | 0x00483950 | 580 | DwordVector_Reserve_483950 | STL: vector<uint>::reserve(n) |
 | 0x004827D0 | 432 | List24_Ctor_4827D0 | STL: construct std::list<0x18-byte>: allocate sentinel node from pool g_0x79B22C |
@@ -491,15 +492,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004835D0 | 389 | RbMap_InsertAt_4835D0 | STL: std::map<string-range,...> _M_insert at a given parent: creates node (RbNode_New), links left/right, rebalances (rotate left/right) |
 | 0x004831B0 | 387 | Vec3Vector_InsertRealloc_4831B0 | STL: vector<12-byte> insert grow path using Vec3Range_Copy / Vec3Range_FillN |
 | 0x00483BA0 | 314 | DwordVector_InsertN_483BA0 | STL: vector<uint>::insert(pos,n,value), grow path 0x484180 |
-| 0x00482AA0 | 286 | String_CtorFromRange | construct std::string from [first,last) (PoolAlloc, copy, throw on length overflow) |
+| 0x00482AA0 | 286 | String_CtorFromRange | (this = pair {STLport string +0..+8, list +0xc}, src string*, src list*): pair copy ctor of MobFile_Load's map value: string = copy of [src.start, src.finish) (PoolAlloc(len+1), Bytes_Copy, NUL; length overflow -> String_ThrowLeng... |
 | 0x00483DF0 | 235 | RbNode_New_483DF0 | STL: allocate a 0x20-byte tree node (pool g_0x79B230) and copy-construct key (String_CtorRange) and value list (0x483F00) |
 | 0x00482640 | 212 | NodeAlloc32_482640 | STL: allocate 0x20-byte node from pool g_0x79B230 (refill 20 via chunk allocator) |
 | 0x004833B0 | 202 | HashMap_Ctor_4833B0 | STL: construct hash map object: sentinel list, bucket vector of NextPrime(100) |
-| 0x004824B0 | 191 | ListHolder_Destroy_4824B0 | STL: destroy a std::list (+0xC) of 0x18-byte nodes via PoolFree and the owning containers |
 
 ## 0x484000 - 0x499000: particle effects (CParticle, 'Particle effect ...')
 
-160 functions, group `effects`.
+200 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -508,61 +508,61 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00496EB0 | 2045 | CParticle::Update | slot 6 -> bool (alive): copies g_0x7AF5DC..+0xc (world wind / time block) into +0x140, resets the bounds, Attach(0) when the carrier has flag 1 (dying); +0xa4 = world pos delta since the last tick, +0x98 = world pos, +0xc8 = /delt... |
 | 0x004923B0 | 1986 | ParticleEmit_Weather | (this = CParticle, record) invoke-lightning impact 0x2030: 10 records = impact points on a disk of radius 0.3 x size around +0x98 (first at the centre) at client terrain height + 0.3 with an outward-up direction; first 20 emission... |
 | 0x0048E070 | 1871 | ParticleEmit_Shield | (this = CParticle, record, index) emitter of the protection / antimagic auras 0x2015..0x2017 and 0x201A (not the link 0x2014): needs a carrier ('Particle effect Link without carrier' trace, copy-pasted string); index 0: shell radi... |
-| 0x004918E0 | 1864 | ParticleEmit_2027Casting | particle types 0x2027..0x202A casting 4 / 7 / fire / 8: emit callback |
-| 0x00489320 | 1827 | ParticleEmit_200B | particle type 0x200B (FireSmoke): emit callback |
+| 0x004918E0 | 1864 | ParticleEmit_2027Casting | (this = CParticle, ParticleRecord) -> 1 / 0, types 0x2027..0x202A (converging casting glow). First call (no record): needs a carrier (else Trace_Stub_A, return 0); R = unit body radius (vt[60] for type id 0x50) or 0.8 x GetCarrier... |
+| 0x00489320 | 1827 | ParticleEmit_200B | emit callback of type 0x200B (FireSmoke texture; ecx system, record): first call: no carrier -> Trace_Stub_A, returns 0; else 3 emitter records, GetCarrierExtent (centre, r): each record = ring point k (angle k * 120 deg in +0x10,... |
 | 0x00484C00 | 1600 | CParticle::GetCarrierOffset | (out xyz, carrier): without flag 0x10: the carrier position; units (type 0x50) by attach mode +0x13C: 0 CUnit::GetAttachPoint2 (the default attach point); 1..7 = FindPartByNameStart with one of six short part-name prefixes (1..6: ... |
 | 0x004976B0 | 1575 | CParticle::Render | (this, I3DFigureImpl): nothing when the live count +0x1c0 is 0 or the bounds box +0x17c is frustum-culled (CViewFrustum::CullBox == 2); static buffers g_0x7A9BD0 (aligned {x,y,z,size} x 0x1000) / g_0x7A9BE0 ({colour, uv rect*} pai... |
-| 0x00490C10 | 1540 | ParticleEmit_202BCasting | particle types 0x202B..0x202E casting 1 / 2 / 3 / 6: emit callback |
+| 0x00490C10 | 1540 | ParticleEmit_202BCasting | (this = CParticle, ParticleRecord) -> 1 / 0, types 0x202B..0x202E (textures Casting2 / Casting3 / Casting6 / Casting1; +0xec = ring point count 2 / 1 / 2 / 1). While fewer records than +0xec: needs a carrier (else Trace_Stub_A, re... |
 | 0x0048B630 | 1456 | ParticleEmit_Healing | (this, particle): "Particle effect Healing without carrier" (FatalError 0x44C470 without +0x94); record array +0x154 sized round(+0x10c * 6 + 2) (0x497EB0), ring of particles around the carrier (GetCarrierExtent) rising upward |
-| 0x0048D8D0 | 1368 | ParticleEmit_2014Link | particle type 0x2014 link: emit callback |
-| 0x0048C090 | 1278 | ParticleEmit_2002Blast | particle type 0x2002 blast (Explosion): emit callback |
+| 0x0048D8D0 | 1368 | ParticleEmit_2014Link | emit callback of type 0x2014 link (ecx system, record): first call: 4 emitter records from the link vector D = +0x130: rec0 +0x18 = /D/, +0x1c = 1 / /D/, rec1 +0x18 = D / /D/, rec2 +0x18 = u = normalised (Dy, -Dx, 0) (fallback (Dy... |
+| 0x0048C090 | 1278 | ParticleEmit_2002Blast | emit callback of type 0x2002 blast (ecx system, record): white; variant v = rand % 29 - 14; no live particles and record 0 +0x30 == 1 -> the centre flash (variant -1, at the world pos, frame 15, size 0); v >= 0 -> a streak particl... |
 | 0x0048B080 | 1262 | ParticleEmit_GridFill | (this = CParticle) acid fog / poison cloud 0x2007 / 0x2008: only while the live list +0x1b8 is empty: one particle per cell of the grid -n..n (n = trunc(size +0x10c), spacing 1, jitter +-0.25) inside radius +0x10c: size 0.75..1.25... |
 
 ## 0x499000 - 0x4B7000: script API (GS* functions: GetObject*, KillScript) + colour/percentage parsers
 
-502 functions, group `script`.
+593 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004B6760 | 13477 | SSCScript::Run | (this = SSCScript {+0 program, +4 pc, +8 run counter, +0xc sleep start, +0x10 kill flag*, +0x14 SSCVars}, vm GSWorld*) -> 0 only when pc was already past the last command at entry, else 1 (also after running the last command, 0x4B... |
 | 0x004B41E0 | 4822 | SSCCmd::EvalFloat | (this, vm GSWorld*, vars SSCVars* (local), out float*): SetParameters (local +0x54, global +0x68 from vm +0xa0), CalcParameters for every nested binding, then by id (0x45..0xe6, else FatalError "Function does not return float at S... |
 | 0x004A7630 | 2147 | GSPlayers_CreateDefaults | (this = vector of CGSPlayer refs, fourPlayers): the vector is emptied; CGSPlayer objects (0x28c, CGSPlayer::ctor) are created with the index +8 = 1..5 (indices 1, 3, 4, 5 when fourPlayers), flags +0xc / +0xd, the float table +0x10... |
-| 0x004A3CA0 | 1715 | Deque16_InsertMiddle | (this = deque of 16-byte elements, position iterator, range iterators by value, n): STLport deque _M_insert_range_aux: the shorter side (front or back) is shifted by n (Deque16_ReserveFront / Back, copies) and the range copied in.... |
-| 0x004A0BA0 | 1589 | Chunk3ds_ReadMaterial | (this = {stream}, chunk, out materials CArray): a temporary 0x9c material (0x68DBC0 / 0x68DE30): 0xA000 MAT_NAME, 0xA010 ambient / 0xA020 diffuse / 0xA030 specular (colour sub-chunk 0x10 floats or 0x11 bytes, DebugPrint "WARNING :... |
-| 0x0049BEA0 | 1563 | PointSet_ClusterCentroids | (points {Vec3 begin, end}, out Vec3 vector, levels): level 0: all points in one cluster; else every point quantised as round(v * 127) to signed 10-bit components packed 10 / 10 / 10 (hash set with counts), the cells dequantised (x... |
+| 0x004A3CA0 | 1715 | Deque16_InsertMiddle | (this = deque, position, range first / last by value, n): STLport _M_insert_range_aux: elems_before = position - start; when it is below half the size the front grows (Deque16_ReserveFront, new start = start - n) and either the fi... |
+| 0x004A0BA0 | 1589 | Chunk3ds_ReadMaterial | (this = {IStream*}, chunk, out materials CArray): a temporary CMaterial (0x9c); sub-chunks: 0xA000 MAT_NAME, 0xA010 / 0xA020 / 0xA030 ambient / diffuse / specular (colour sub-chunk 0x10 floats or 0x11 bytes, else printf "WARNING :... |
+| 0x0049BEA0 | 1563 | PointSet_ClusterCentroids | (points {Vec3 begin, end}, out Vec3 vector, levels) fastcall: levels 0: one cluster with every point (weight 1); else each point is quantised (_ftol of the components x 127) into a 10 / 10 / 10-bit packed key counted in a hash set... |
 | 0x0049F890 | 1396 | Node3ds_StepFrame | (this = 3DS keyframe node {+0x10 pos key index, +0x14 rot key index, +0x18 .. +0x2c velocity, +0x30 local quat, +0x40 world quat, +0x50 angle per frame, +0xac pos keys (0x14), +0xc0 rot keys (0x18), +0xfc per-frame records 0x28}, ... |
 | 0x004A7080 | 1009 | CGSPlayer::InitAllowedLists | (this): shop stock +0x11c: every weapon / armor / quick proto whose shop mask +0x64 (items.idb "Shop 1..5" bits) has bit (player index +8 - 1), materials (mask +0x4c) with range 20..50; spells (mask +0x80) and perks (mask +0x20) i... |
-| 0x004A1220 | 996 | Chunk3ds_ReadKeyframer | (this = {stream, +4 short}, chunk, out nodes CArray): sub-chunks until the chunk end: 0xB002 OBJECT_NODE_TAG: a temporary 3DS node (CStrings, identity quat, CArrays) filled from its sub-chunks 0xB010 NODE_HDR (Chunk3ds_ReadNodeHdr... |
-| 0x0049F150 | 863 | Isaac_Init | (ctx {+0 initialised flag, +4 counter, +8 results[256], +0x408 mm[256], +0x808 a, +0x80c b, +0x810 c}): when not initialised: the seed buffer prepared (0x49F660), the golden ratio 0x9e3779b9 mixing (4 rounds), the mm table built i... |
+| 0x004A1220 | 996 | Chunk3ds_ReadKeyframer | (this = {IStream*, +4 short}, chunk, out nodes CArray): +4 = 0; sub-chunks until the chunk end: 0xB002 OBJECT_NODE_TAG: a temporary 3DS node filled from 0xB010 NODE_HDR (Chunk3ds_ReadNodeHdr), 0xB013 PIVOT (Stream_ReadThreeDwords_... |
+| 0x0049F150 | 863 | Isaac_Init | (ctx {+0 initialised, +4 counter, +8 results[256], +0x408 mm[256], +0x808 aa, +0x80c bb, +0x810 cc}) fastcall: only when +0 is 0: Isaac_SeedFromFiles fills results[] with 1 KB of a random file on C: (see 0x49F7B1); aa = bb = cc = ... |
 | 0x004B5B00 | 856 | SSCCmd::EvalGroup | (this, vm, vars, out ObjRefCArray**): parameters bound and nested bindings evaluated; the result = a new group node appended to the temp pool +0x1b0 (GroupCList_AddTail); 0x59 GroupAdd = ObjRefCArray_Union, 0x5a GroupSub = Differe... |
-| 0x0049A220 | 842 | OctaveNoise_FillBand | slot 1 of 0x7420D4 (this, out bytes, mode): modes 1..4 call vt[0] on the octave tables +0x18 + 0 / 0x400 / 0x800 / 0xc00 (regenerate); modes 7..14 fill rows (mode - 7) * 32 .. +32 of a 256 x 256 byte noise texture by bilinearly sa... |
+| 0x0049A220 | 842 | OctaveNoise_FillBand | slot 1 of 0x7420D4 (this, out 256 x 256 bytes, step): steps 1..4 regenerate octave table 0..3 (+0x18 + 0 / 0x400 / 0x800 / 0xC00, vt[0]); steps 7..14 fill rows (step - 7) x 32 .. +32: each pixel = (64 o1 + 32 o2 + 16 o3 + 8 o4 - 7... |
+| 0x0049A7A0 | 838 | dead_49A7A0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004B5FE0 | 837 | SSCCmd::Read | (this, stream): function id +0, float slots (count then values), string slots (Stream_ReadCStringTo), object slot count (slots zeroed: refs are re-bound at run time), group slot count (zeroed), local bindings +0x58 and global bind... |
-| 0x004A2C80 | 825 | Deque16_EraseRange | (this = deque of 16-byte elements, out iterator, first (by value), last (by value)): STL deque erase(first, last): everything when the whole range (blocks freed), else the shorter side is shifted over the gap (Deque16_CopyBackward... |
 
 ## 0x4B7000 - 0x4BB000: script API (cont.)
 
-86 functions, group `script`.
+89 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004BAAB0 | 825 | QuestObjectives_GenerateScript | (vm GSWorld*): script QFinish(): builds the source "DeclareScript Su%i()\n" per objective, then per objective i "Script Su%i(if(\n<cond>\n)then(\nKillScript()\nSu%i+1()\nGSSetVar(0,\"q.%s.%s.%i\",2)\nGSSetVar(0,\"q.%s.%s.%i+1\",1)... |
-| 0x004BAEC0 | 307 | ScriptParty_Resolve | (obj, name CString*) -> party record: the name is split at the separator g_0x78BB18 (0x6FDBD9 Find / 0x6FD9D7 Left-Mid) into the store name and the rest (written back to name); when the store name equals the current one g_0x7AA5D4... |
+| 0x004B9C08 | 337 | sub_4B9C08 | unregistered function, reached by call / pointer from 0xB6870 (gaps.py 2026-11-06) |
+| 0x004BAEC0 | 307 | ScriptParty_Resolve | fastcall (player, name CString*) -> CParty*: 0 for no player; a name "Store::Rest" is split at "::" (g_0x78BB18): name = Rest, store = Store (else store = ""); store equal to the PartyList current name g_0x7AA5D4 (+0x10) -> the pl... |
 | 0x004BAE10 | 159 | QuestObjectives_Add | (kind = the QObj* command id 0xd7..0xdd, text CString*, value): appends {kind, text, value} to g_0x7AA608 (Run cases 0xd7 QObjArea(f), 0xd8 QObjSeeObject(s), 0xd9 QObjSeeUnit(s), 0xda QObjKillUnit(s), 0xdb QObjKillGroup(s), 0xdc Q... |
-| 0x004BA730 | 130 | ObjHolder73D260::Clone | slot 3 of 0x73D260 -> new 0x18-byte copy: the object +8 (refcount ++), the byte +0xc, +0x10, +0x14 |
-| 0x004BA4A0 | 112 | ObjHolder73D1C4::Clone | slot 3 of 0x73D1C4 -> new 0xc-byte copy holding the object +8 (refcount +4 ++) |
-| 0x004BA7C0 | 106 | ObjHolder73D260::dtor | slot 2 of 0x73D260: the object +8 released; vt -> 0x73BB68; then the fields are re-initialised (+8 = 0, +0xc byte = 0, +0x10 = -1, +0x14 = 0) with vt 0x73D260 (odd Ghidra merge of dtor + ctor) |
-| 0x004BA510 | 101 | ObjHolder73D1C4::dtor | slot 2 of 0x73D1C4: the object +8 released (vt[4]); vt -> 0x73BB68 base |
+| 0x004BA730 | 130 | AiLogicAggression::Clone | slot 3 of vt 0x73D260 (AiLogicAggression, 0x18): new 0x18-byte object (refcount 0, vt 0x73D22C then 0x73D260): target ObjRef +8 shared (refcount ++), revenge byte +0xc, spell +0x10, chosen +0x14 copied. Was ObjHolder73D260::Clone |
+| 0x004BA4A0 | 112 | AiLogicFollow::Clone | slot 3 of vt 0x73D1C4 (AiLogicFollow, 0xc): new 0xc-byte object (refcount 0, vt 0x73D15C then 0x73D1C4) holding the same target ObjRef +8 (32-bit refcount +4 ++). Was ObjHolder73D1C4::Clone |
+| 0x004BA7C0 | 106 | AiLogicAggression::Reset | slot 2 of vt 0x73D260, fastcall: target +8 released and nulled, vt = 0x73BB68, then re-constructed: +8 = 0, +0xc = 0, +0x10 = -1, +0x14 = 0, vt = 0x73D260. CORRECTION: was ObjHolder73D260::dtor |
+| 0x004BA510 | 101 | AiLogicFollow::Reset | slot 2 of vt 0x73D1C4, fastcall: the target +8 released (vt[4]) and nulled, vt = 0x73BB68, then re-constructed: +8 = 0, vt = 0x73D1C4. CORRECTION: was ObjHolder73D1C4::dtor |
 | 0x004BAA40 | 99 | QuestObjectives_Reset | (quest name): script QStart(name): the global objective table g_0x7AA608 (CArray vt 0x73D46C of 0xc {kind, CString text, float value}, data g_0x7AA60C, count g_0x7AA610) emptied and the name stored for QFinish. Was TriggerTable_Re... |
 | 0x004BA120 | 96 | ColorObj_SetRGB | (this, r, g, b): +0x14 = 0xff000000 / (r, g, b rounded * 255); vt[0](colour) |
 | 0x004BA1C0 | 85 | AiLogicGuard::Ctor | (this, pos[3], radius, stayTime): vt 0x73D128 then GuardPoint_Init; kind 0. Script UMGuard / UMGuardEx. Was Class73D128::ctor |
-| 0x004BA250 | 84 | Class73D128::Clone | slot 3 of 0x73D128 -> new 0x20-byte copy with +8 .. +0x1c (guard point pos, radius, stay time, +0x1c) copied |
-| 0x004BA5B0 | 84 | ObjHolder73D1C4::dtor_base | (this): the object +8 released (vt[4]); vt -> 0x73BB68 (scalar dtor body) |
+| 0x004BA250 | 84 | AiLogicGuard::Clone | slot 3 of vt 0x73D128 (AiLogicGuard, 0x20): new 0x20-byte object (refcount +4 = 0, vt 0x73D15C then 0x73D128) with +8..+0x1c copied (point, radius, stayTime, failedSpots). Called through the vtable (Brain logic copies). Was Class7... |
+| 0x004BA5B0 | 84 | AiLogicFollow::dtor | fastcall: vt = 0x73D1C4, the target +8 released (vt[4]) and nulled, vt = 0x73BB68 (base). Caller AiLogicFollow::DeletingDtor. Was ObjHolder73D1C4::dtor_base |
 | 0x004BA8C0 | 84 | AiLogicAggression::dtor_base | vt 0x73D260 dtor body: releases the kept target ref +8 (vt[4] Release) and clears it, vt -> 0x73BB68; AiLogicAggression::DeletingDtor. Was ObjHolder73D260::dtor_base |
-| 0x004BA450 | 78 | AiLogicFollow::Ctor | (this, target): vt 0x73D15C then 0x73D1C4; +8 = target with refcount ++; kind 10. Script UMFollow. Was ObjHolder73D1C4::ctor |
 
 ## 0x4BB000 - 0x4D6000: WorldScript compiler (lexer, #define, Duplicate script) + spell name table
 
-433 functions, group `script`.
+455 functions, group `script`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -578,12 +578,12 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004D1FE0 | 956 | Compiler_ParseVarDecls | (this = GSWorld, decl SSCScriptDecl*, cursor, tokens, qualify) -> 1 / 0: "name : type" pairs separated by "," until ")" (error 4 "Expected ',' or ')' after variable"); ':' = token 0x73 (error 2 "Wrong lexeme %s"); type word (case-... |
 | 0x004C01A0 | 891 | Compiler_DeclareScript | (this = compiler / GSWorld, text "name(params)") -> 1 / 0 / error: the module-qualified name must not exist yet (GSWorld::FindDeclIndexByName; error 0xf "Duplicate script %s"); the text is tokenized (Compiler_Tokenize 0x4CF7A0 int... |
 | 0x004BFCC0 | 860 | Compiler_CompileGlobalVars | (this = compiler / GSWorld, text (stack CString)) -> 1 / 0 / error: the text tokenized (Compiler_Tokenize), the declarations parsed (Compiler_ParseVarDecls into a temporary SSCScriptDecl) and appended to the global SSCVars +0xa0 (... |
-| 0x004C3DC0 | 782 | SSCVars::AppendGroups | (this = {CArray of 0x14 groups, names +0x14}, src block): the source groups (each ref copied, refcount ++) and names appended after the existing ones |
+| 0x004C3DC0 | 782 | SSCGroupBlock_Append | (this = group block {CArray of groups +0, names +0x14}, src block): groups SetSize(old + src count) inlined (Group_ConstructN / Group_DestructN), names SetSize(old + src names count); for i < src names count: the name copied, a te... |
 | 0x004C09F0 | 776 | Compiler_CompileCommands | (this = compiler / GSWorld, script name or 0, program) -> 1 / 0 / error: the named declaration (module-qualified) looked up in +0x90 (0 = global); the text (stack CString) tokenized (Compiler_Tokenize into a CString CList) and the... |
 
 ## 0x4D6000 - 0x4D7000: CServerSpecificManager + CTorchObjectSpecific
 
-35 functions, group `core`.
+36 functions, group `core`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -604,12 +604,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4D7000 - 0x4DA000: CSkyObject
 
-41 functions, group `client`.
+56 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004D8000 | 1130 | ShadowProjector::Build | (A, B, C array descriptors, corners SoA float[16] (only 0, 2, 3 read), L light dir, pos caster centre, a radius): L normalised (+0x48, +0x24); AU = Eu' / /Eu'/^2 with Eu' = (corner2 - corner3) minus its L component (+0xC), AV like... |
 | 0x004D74B0 | 911 | ShadowProjector::ClipStage2 | planes v >= 0, 1 - u >= 0, 1 - v >= 0 then emit (the second half of a u-split triangle) |
+| 0x004D7860 | 856 | dead_4D7860 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004D9360 | 791 | CSkyObject::Recolour | (this, r1 g1 b1, a2 r2 g2 b2 (ints after ftol of the colour floats)): rebuilds the horizon table +0x220 (one float per vertex: sqrt(-normal z) for vertices with z lane >= 1.0 in the SoA positions +0x1C0, else 0) when the vertex co... |
 | 0x004D71D0 | 708 | ShadowProjector::ClipStage3 | planes 1 - u >= 0 then 1 - v >= 0; each result emitted with 3 x ClipBuf::AddVertex + indices |
 | 0x004D7BD0 | 702 | ShadowProjector::ClipStage1 | (tri float[15]): planes cap (L . P + +0x68 >= 0), u >= 0, v >= 0 then Stage3 / Stage2: the prism clip of one triangle |
@@ -621,11 +622,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004D96E0 | 403 | CSky::Render | (this = sky holder, ctx, cameraPos): the sky figure (+0) is placed at (camera x, y, z - 16), spun about Z by Game_GetTimeSum() / 3000 rad when +0xC, its matrix +0x54 rebuilt (Quat_ToMatrix4) and pushed on the context's world stack... |
 | 0x004D85F0 | 381 | ShadowProjector::ClipTriangleB | same for object triangles (scratch g_0x7AA690; the dead object-receiver branch) |
 | 0x004D9110 | 344 | CSkyObject::ctor | CFigure-style construction (CObject3D base, vt_CFigure then vt_CSkyObject): the figure's aligned SoA arrays (+0x128.., positions +0x1C0, normals +0x1D0, +0x1E0, index arrays +0x1F0 / +0x200 / +0x210, horizon table +0x220) zeroed, ... |
-| 0x004D8490 | 330 | ShadowProjector::ClipTriangleA | (v0, v1, v2 float[3]: terrain triangle): 5-float vertices (x, y, z, u = P.AU + off_u, v = P.AV + off_v) in the static scratch g_0x7AA6D0 -> ClipStage1 |
 
 ## 0x4DA000 - 0x4DB000: GameBuffer (stream)
 
-33 functions, group `leaf`.
+38 functions, group `leaf`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -633,20 +633,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004DA200 | 381 | GameBuffer::ReadLength | (this, out string range, max): reads the 1/4-byte variable-length prefix and then the string bytes (assigns a std::string) |
 | 0x004DA380 | 196 | GameBuffer::WriteLength | (this, range{begin,end}*): writes the range length as a 1-byte (n*2) or 4-byte (n*2+1) variable-length prefix, then flags dirty bit 1 |
 | 0x004DABC0 | 188 | GameBuffer::InitWithSize | (this, valid size, capacity): allocates `capacity` bytes, cursor +8 = start, +0x10 = start + size, +0x14 = 0 |
+| 0x004DA040 | 182 | dead_4DA040 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x004DAD80 | 162 | dead_4DAD80 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004DA740 | 161 | GameBuffer::WriteGrow | slot 4 (data, n): reallocates to (length + n) * 2 + 0x40, rebases +8 / +0x10 / +0xc, copies n bytes at the cursor +8 and advances it (the overflow path of the inline write). Was GameBuffer::Write |
 | 0x004DA9E0 | 156 | GameBuffer::CopyCtor | (this, src): allocates and copies the source buffer, copies cursor and limits (7 callers) |
 | 0x004DACE0 | 149 | BufferedFile_SeekAbs | (this, offset): flushes the dirty window, reads a new window at the absolute file offset (vt slot 7) and fixes the cursor |
 | 0x004DA860 | 139 | GameBuffer::Seek | slot 6 (pos): valid end +0x10 = max(valid end, cursor); cursor +8 = data + pos, growing the buffer (x2 + 0x40) when pos is past the capacity |
 | 0x004DA170 | 138 | GameBuffer::Read | (this, dest, n): zero-fills dest, copies n bytes from the buffer (via refill through vt slot 3 on underrun); sets error flag 8 on short reads (14 callers) |
+| 0x004DAB40 | 125 | dead_4DAB40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x004DAFC0 | 125 | BufferedFile_GrowWindow | vt 0x73F8A4/0x73F8C8 slot 1 (this, n): grows the window buffer to n + 0x400 bytes and rebases the cursors |
 | 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): reallocates the buffer for pending data + n * 2 + 0x40 |
-| 0x004DA6B0 | 124 | GameBuffer::GrowForWrite | vt 0x73D624 slot 1 (n bytes needed): new buffer of (used = bias +0x14 + cursor - data + n) * 2 + 0x40 bytes, [data, capacityEnd) copied, old freed, data +4 / cursor +8 / validEnd +0x10 rebased, capacityEnd +0xc = new end; the writ... |
-| 0x004DAA80 | 110 | GameBuffer::Assign | (this, src): frees the buffer, copies src's buffer, valid end, cursor and flags (7 callers) |
-| 0x004DA5C0 | 109 | GameBuffer::Grow | (this, n): reallocates the buffer to size * 2 + 0x40 + n and rebases the cursors (10 callers) |
 
 ## 0x4DB000 - 0x4E1000: CSysInfo + CTextManager
 
-96 functions, group `app`.
+110 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -667,7 +667,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4E1000 - 0x4E3000: CVisibilityFog / VisionFog
 
-41 functions, group `client`.
+48 functions, group `client`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -688,7 +688,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x4E3000 - 0x501000: renderer: D3D7 device, state blocks, vertex buffers, MMX
 
-445 functions, group `renderer`.
+513 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -709,7 +709,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x501000 - 0x50A000: renderer: I3DFigure / C3DFigureImpl (scene, figure drawing)
 
-99 functions, group `renderer`.
+142 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -719,18 +719,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the OLD (.ani, double-precision) animation node of the 3ds tool chain: frame fraction +0x38 += dt, frame +0x34 ++ at 1, key indices step past their end frames; CFigureManager::MakeAnimationNode / LoadAnimationF... |
 | 0x00505CB0 | 1078 | AnimNodeOld_ReadFromData | (node, cursor*): one node of the old .ani tool-chain animation: rest rotation quaternion (16 B raw) +0xE4, pivot Vec3 +0xF4, u32 n + n Vec3 base morph vertices +0x100 (and the working copy +0xD4), u32 frame count +0x40, u32 + rota... |
 | 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 (RECT, fov or 0): the 16 stack depths of the library +8 reset; P = Mat4_Perspective(fov (camera g_0x79B2A8 default), rect aspect, near, far) on stack 6, V = Mat4_Viewport(rect) on stack 8, identity on 7, stacks 1 and 0 = V... |
+| 0x00505901 | 935 | dead_505901 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00504A60 | 923 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
 | 0x00507E80 | 826 | AnimNodeOld_ResetToFirstKey | (node): without a parent +0x1c: the rotation +0xb8 = the first rotation key quat, the position +0xc8 = that rotation applied to the pivot +0x110 (quaternion rotation formula); with a parent: rotation = key0 * parent rotation +0xb8... |
+| 0x005061E0 | 727 | dead_5061E0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00506D00 | 709 | dead_506D00 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00507990 | 699 | AnimNodeOld_StepTimeRecursive | (node, double dt) -> 1: the current morph frame (+0x88 [+0x98]) scaled by dt is accumulated into +0xd4; AnimNodeOld_AdvanceTime(dt); the world position / rotation composed with the parent (as in AnimNodeOld_RefreshRecursive); recu... |
+| 0x00509000 | 628 | dead_509000 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0050434F | 619 | I3DFigureImpl::DrawRect2D_part2 | tail of I3DRenderer::DrawRect2D split off by Ghidra (the outline line strip drawing) |
-| 0x00508240 | 596 | AnimNodeOld_EnsureDefaultKeys | (node): without position keys +0x58 one key (frames 0..1, pos / delta = g_0x7AF0F0 zero) is created; without rotation keys +0x44 one identity key (quat g_0x7AF0E0, axis (1, 0, 0), angle 0) |
-| 0x005064C0 | 592 | AnimNodeOld_SetMorphPivot | (node, bounds (6 Vec3), u, v, w): +0x11c..+0x124 = u, v, w; the pivot +0x110 = lerp(lerp(p0, p1, u) + (p2 - .) * v, lerp(p3, p4, u) + (p5 - .) * v, w) (the FIG bounds interpolation with the 3 morph params) |
-| 0x00508D30 | 563 | CAnimationSystemOld::ReadNodes | (stream): the OLD .ani skeleton (node count, per node name + parent name) of the 3ds tool chain (CFigureManager::LoadSkeletonOld); not the game's runtime path |
-| 0x00506A50 | 537 | AnimNodeOld_RefreshRecursive | (node) -> 1: AnimNodeOld_AdvanceTime(0); the world position +0xc8 / rotation +0xb8 composed with the parent +0x1c (rotated pivot +0x110 + parent position, local * parent rotation) or copied from the local +0xac / +0x9c; recursion ... |
 
 ## 0x50A000 - 0x50E000: CAnimationTrack (.anm keys: positions, rotations, morph frames; Evaluate) / CAnimationNode (hierarchy, bound figure part, morph interpolation, UpdateTransform) / CAnimationSystem2 (nodes, animation queue, SetTime / SetAnimation / SetMorphParams / BindPart)
 
-80 functions, group `figures`.
+97 functions, group `figures`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -745,13 +745,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0050D600 | 444 | CAnimationSystem2::SetTime | (t, frames since the clip start, = world ticks: 1 frame per tick): +0x60 = t (dirty when changed); no current clip (+0x40) but a queue (+0x44, count +0x50): the first queued .adb entry becomes current at time 0; while the current ... |
 | 0x0050B1D0 | 416 | CAnimationNode::dtor | releases the bound part +0x48 and the tracks +0x4c..+0x58, CStrings reset, child CList reset, bone matrix vector +0x90 freed, CObject::dtor_body |
 | 0x0050B370 | 406 | CAnimationNode::Init | slot 2 -> 1: names +0x1C / +0x20 / +0x24 = "", parent +0x28 = 0, child list +0x2C reset, bound part +0x48 and tracks +0x4C..+0x58 = 0, world position +0x74 = 0, rotation +0x80 = identity, bone matrix vector +0x90 emptied, morph pa... |
+| 0x0050B6E0 | 391 | dead_50B6E0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0050D7C0 | 351 | CAnimationSystem2::SetMorphParams | (s, d, h): the model record (CFigureManager::GetModel of the owner's model name); every node gets +0x68..+0x70 = (s, d, h) and its rest offset rebuilt (SetNodeRestOffset); +0x68.. of the system = the params; dirty |
-| 0x0050C730 | 294 | CAnimationSystem2::dtor | releases the nodes, resets the node and queue CLists (CPlex chains freed), CObject::dtor_body |
-| 0x0050DC20 | 281 | CList_73DA40::Serialize | slot 2 of 0x73DA40: CArchive of a CList of pointers (4 bytes each) |
+| 0x0050D180 | 342 | dead_50D180 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x50E000 - 0x51A000: CMapObject (net state pack / unpack, buffs, specifics) + CMapObjectClientSpecific (buff visual effects + sounds, light) + CMapObjectServer + CObject3D (parts, figure / .adb animation database, LoadModel / LoadFigures / CreatePart, scale, bounds, effects list) + units prototype lookup (Units_FindProtoByName, Unit_InitStatsFromProto, Unit_ApplyPrototype, Unit_GiveProtoEquipment)
 
-266 functions, group `objects`.
+288 functions, group `objects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -772,7 +772,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x51A000 - 0x520000: CObject3DClientSpecific (texture sets +0x20/+0x24, materials +0x38, skins SetTextureNames, wounds texture + TextureBlend, shadows, invisibility / stun material tweaks, material colour push/pop) + CObject3DServer + perks.pdb database (PerksDb_FindByName / Save) + aligned dword vectors / CString vector helpers
 
-130 functions, group `objects`.
+153 functions, group `objects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -782,18 +782,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0051FF40 | 721 | PerksDb_Save | (this = perks database, path) -> bool: "Saving database." log; writes perks.pdb through the database writer (0x409AE0 / 0x40A000 framework: group records 0x5207D0 tag 1 and perk records 0x5208C0 tag 2) into the file opened by the ... |
 | 0x0051E5D0 | 476 | TexNameRefs_InsertRealloc | (this = vector of 0x14 TexNameRef, pos, value, n): reallocating fill-insert (size pool), old records destroyed |
 | 0x0051F5B0 | 471 | CStrings_Resize | (this = vector<CString>, n): shrinks (destroying) or grows with empty CStrings (CStrings_InsertRealloc when the capacity is exceeded) |
+| 0x0051A440 | 389 | dead_51A440 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0051C250 | 383 | CObject3DClientSpecific::SetTextureNames | (primary name, secondary name) -> 1: +0xE0 / +0xE4 = the names; for each non-empty name an existing texture of the set's kind with that name (texture manager world vt[34]() 0x692D30) replaces the set's texture (the skin "<prefix>s... |
 | 0x0051F790 | 382 | CStrings_InsertRealloc | (this = vector<CString>, pos, value, n): reallocating fill-insert (size pool), old strings destroyed |
 | 0x0051FB50 | 382 | PerksDb_DestroyTables | (this = perks database): destroys the 0x44-byte perk records (+0xc: CStrings +0, +4, +0xc, +0x14) and the 0x18-byte group records (+0: CStrings +0, +4, CString vector +0xc), frees both vectors |
 | 0x0051B2F0 | 358 | CObject3DClientSpecific::GetOrCreateTextureSet | (textureNumber) -> set (0x14: +0 CTexture* (CWorldClient::FindTexture(kind)), +4 material slots vector, +8 count, +0xC cap, +0x10 grow): an existing texture of that kind in +0x28 (count +0x2C) returns its set; kinds 1, 3, 4, 6..9,... |
+| 0x0051A5D0 | 352 | dead_51A5D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x0051A010 | 311 | AlignedDwords_SetAtGrow3 | (this, index, value): grows the 32-byte aligned dword vector so that index fits and stores value |
-| 0x0051EE50 | 311 | AlignedDwords_SetAtGrow4 | (this, index, value): grows the 32-byte aligned dword vector so that index fits and stores value |
-| 0x0051C9F0 | 310 | CObject3DClientSpecific::SaveRestoreMaterialColors | (push): push: every material of +0x38 pushes its diffuse +0x50..+0x5C on its colour deque (+0x64.., ColorDeque_PushBack) and resets it to 1.0; pop: restores it (the death fade / colour push-pop of CUnitClientSpecific) |
-| 0x0051AB00 | 299 | CObject3DClientSpecific::CObject3DClientSpecific | (kind 0x46, 0xFC, vt 0x73DEFC base): +0x1C owner CObject3D, +0x20 primary texture set, +0x24 secondary set, +0x28 textures vector (count +0x2C), +0x38 materials vector (count +0x3C), +0x48 = -1 registered material count, +0x4C / +... |
+| 0x0051A900 | 311 | dead_51A900 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x520000 - 0x529000: unit stats & damage model (perks.pdb, damage types, hit locations)
 
-143 functions, group `units`.
+172 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -803,18 +803,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00526C70 | 895 | UnitStats_WeaponSkill | (stats, damageKind, unit): the attack skill: melee kinds 0..4: perk group = kind bonus + melee byte +0x6cb (+ heroes: weapon proto +0x7b + governing attribute - 25 from the skills table letter d/i/s); 5/6: archery byte +0x6cc + pr... |
 | 0x00525070 | 848 | UnitStats_ApplyDamage | (stats, unit, placement, hit, weapon): part = +0x110 + hit[11]*0xf4, state < 2 -> 0; per type i with dmg = hit[i]*hit[9] > 0: armor tiers (heroes 2..0, others 0) with state (+0x44+0x48t) > 1 absorb hit[10] * tierValue_i (wearing t... |
 | 0x00522CE0 | 822 | UnitStats_PackToRecord | (stats, unit, record 0x108 = CUnit +0x330): +4 exp, +8 exp + accum - spent, +0xc/+0xd/+0xe str/dex/int, +0x10..+0x13 stance speed mults * 127.5, +0x14 base speed * 25.5, +0x15 action speed, +0x16 carry max short, +0xf move type, +... |
+| 0x00527520 | 806 | dead_527520 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x00527220 | 763 | dead_527220 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00528AB0 | 738 | UnitStats_RaiseSkill | (stats, skill, delta, unit): server units: byte +0x6cb[skill] += delta; the cost is added to the experience accumulator and flushed into total +4 and spent +8; max HP/mana and parts refreshed; Recompute2 |
 | 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | (stats, kind, delta, unit): server units only (unit specific +0x170 vt[12] type 0x39): attributeSkills byte +0x6c8[kind] += delta, the experience cost (pow of the old / new level) goes into expAccumulator +0x700 and a positive acc... |
 | 0x00524CD0 | 712 | UnitStats_Recompute | (stats, carriedWeight): older/simpler recompute (camp / client side): attributes + perk bytes +0x6ea..+0x6ec, +0x44 = -2, part max HP rescale with the health perk, +0x50 = arg, +0x54 carry max, +0x58/+0x5c limb factors, +0x28, +0x... |
 | 0x00520FA0 | 631 | vector18_InsertN | STLport vector<Record18>::insert(pos, n, value) |
 | 0x005254B0 | 618 | UnitStats_ApplyHit | (stats, unit, placement, hit[15], weapon): location > 6 -> 0; sets statFlags +0x6F8 bit 1 (head hit, location 0) / bit 2 (hit[5] > 0: damage type 5 present; the damage-type order is the items.idb one); per damage type i: eff_i = m... |
 | 0x005239B0 | 614 | UnitStats_GainExperience | (stats, unit, xp): server units only (specific GetTypeId 0x39): accumulator +0x700 += xp * pow(1.04 (0x73E128), int +0x20 - 25.0 (0x73E124)); when > 0 it is added to experience +4 and reset (the accumulator only keeps negative bal... |
-| 0x00521220 | 607 | vector44_InsertN | STLport vector<Record44>::insert(pos, n, value) (grows through 0x5218E0) |
-| 0x00528050 | 544 | Perk_ComputeCost | (stats, record): base = trunc(50*(1.61^(c/5) - 1.61^(c'/5))) * 1.95^N (N = owned ability levels), rounded to 1 significant digit (2 when the leading digit < 4) (see docs/game-memory.md) |
 
 ## 0x529000 - 0x52E000: CTree / CBuilding / CStone / CStuffObject / CTrapObject / CMagicTrapObject (areas, cast points, targets, CastAtTargets) / CLeverObject (SwitchState: AI map blocking, animation phase) / CTorchObject + specifics (light, effect, looping sound) + units.udb / prototype / hero record field serializers + UnitStats_BoostMax*
 
-152 functions, group `objects`.
+154 functions, group `objects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -835,7 +835,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x52E000 - 0x533000: CUnit (+ CFakeUnit overrides)
 
-109 functions, group `units`.
+120 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -856,7 +856,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x533000 - 0x53A000: CUnitClientSpecific
 
-144 functions, group `units`.
+155 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -877,7 +877,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x53A000 - 0x545000: units database (units.udb prototypes)
 
-145 functions, group `data`.
+161 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -898,7 +898,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x545000 - 0x557000: CUnitServer (update, combat, skills, orders)
 
-231 functions, group `units`.
+277 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -919,7 +919,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x557000 - 0x55E000: CUnitServer helpers (no strings)
 
-138 functions, group `units`.
+148 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -940,7 +940,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x55E000 - 0x565000: CWorld base (managers, time of day, RefListPair +0x60) + CWorldClient (object lists / grids, CBridgeManager walkable quads, sky, day-light tables, CWeather at +0x6f4), CTerrain / CTextManager / CParticleManager / CVisFogManager dtors
 
-199 functions, group `world`.
+212 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -961,7 +961,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x565000 - 0x579000: CWorldClient: LoadZone (terrain / sky / day-light tables / skins), Render / RenderObjects / ClassifyCellObjects / shadows, object picking (screen rects), terrain prints (prints.db), zone exits, hero unit creation, net attach (file / TCP streams), session helpers; STL sort / container instantiations
 
-439 functions, group `world`.
+504 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -982,7 +982,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x579000 - 0x57A000: game session helpers: stat scramble (anti-tamper), save writer/reader, MainMenu entry, CUIWindow 73F7F8
 
-35 functions, group `ui`.
+39 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -996,14 +996,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00579730 | 155 | CDemoScreen::Create2 | identical second copy of CDemoScreen::Create (CUIWindow 0x184 bytes, vt 0x73F7F8, +0x94 = the 0x73F7C4 interface, the CStringArray at +0x188, the byte +0x184 = 1): CInterface::SetPendingScreen(g_0x7C7D50, window). No callers (link... |
 | 0x00579420 | 126 | Session_LeaveGameToMenu | (this, a, CParty): same as request kind 5: CPlayer::SetPartyBlock(client connection owner, party), UnloadZone, CWorldClient::ConnectToLobbyHost; without a lobby server Game_EnterZone("MainMenu", 2) else Lobby_ResetMpGameState; con... |
 | 0x005796B0 | 95 | CDemoScreen::~body | destroys the CString +0x164 and the demo list, then CUIWindow::~body. Was CUIWindow_73F7F8::~body |
+| 0x005797D0 | 63 | dead_5797D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005793A0 | 62 | dead_5793A0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x005793E0 | 62 | Session_PlayRecordedStream | (file): UnloadZone, CWorldClient::AttachDualFileStream (recorded packet playback), connection +0x84 = 1, +0x85 = 0. Caller CUIScreen73F7F8::PlayIntroMovie. Was Game_AttachClientStream |
-| 0x00579690 | 30 | CDemoScreen::DeletingDtor | scalar deleting destructor (vt 0x73F7F8). Was CUIWindowBase::DeletingDtor_579690 |
-| 0x00579810 | 27 | Game_IsNotBusy | true when vt[6] of the client connection's player object returns 0 |
-| 0x00579350 | 20 | RefPtr_DetachDec | decrement refcount (+4) of *ptr and clear the pointer (15 callers) |
+| 0x00579370 | 34 | dead_579370 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x57A000 - 0x58A000: game session: saves, MainMenu, autoexec, scenario/mission.sav, MpState
 
-292 functions, group `app`.
+320 functions, group `app`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1024,7 +1024,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x58A000 - 0x595000: CWorldServer: object creation from descriptions, object hashes (+0x12d70 all, +0x104 active, +0x12de8 effects, +0x12dd0 named), per-player replication (ReplicateToPlayer), weather / time / day-night, spell casting, hero spawning from CParty records, mercenaries, loot, experience, script VM dtor, CAIMap dtor
 
-100 functions, group `world`.
+118 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1045,7 +1045,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x595000 - 0x59F000: CWorldServer::LoadZone / NewZone / LoadMapObjects / LoadSave / WriteSave / UnloadZone, world script loading, progress videos; the server object hash / list / array container instantiations (IdHash_*, RefList / RefArray / LootRecordList serializers)
 
-217 functions, group `world`.
+225 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1066,7 +1066,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x59F000 - 0x5AD000: CFigure (.fig mesh: raw SoA buffers +0x1c0.., morph deltas +0x128, bounds FIG8 / FIG6 interpolation, SetMorphDeltas) + CFigureClientSpecific (Render / RenderLit, texture frame animation, screen rect) + CFigureManager (figures.res models: FigureModel records, LoadSkeleton (.lnk), BuildAnimationNode (.bon), LoadNodeTrack, SetupAnimation, LoadPartBounds, CreatePart; old .ani / .bon loaders)
 
-100 functions, group `figures`.
+109 functions, group `figures`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1087,7 +1087,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5AD000 - 0x5C6000: CAIMap: terrain / passability grids, collision map, path finders, nav grid, stamps; Alertness
 
-373 functions, group `ai`.
+443 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1108,7 +1108,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5C6000 - 0x5C8000: Mover (unit movement state)
 
-27 functions, group `units`.
+33 functions, group `units`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1122,14 +1122,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005C7860 | 327 | MoveCurve::Read | (stream): reads the segments / points / cell speeds and +0x3C..+0x4C (save game) |
 | 0x005C7B00 | 244 | MoveRequest::SetStand | (pos[2], facing dir[2], tick): request kind 0 = stand at pos*2 with heading atan2(dir), start tick, clears the cell list; returns true when something changed (16 callers) |
 | 0x005C6290 | 219 | MoveCurve::LimitSegmentSpeeds | (maxTurnRate): caps each segment's speed so traversing it takes at least (heading change to the next segment) / maxTurnRate |
+| 0x005C6110 | 214 | dead_5C6110 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
+| 0x005C6E50 | 202 | dead_5C6E50 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x005C6000 | 191 | PathCells_RemoveDuplicates | (list {vt, head, tail, count, free, pool}): unlinks consecutive nodes with equal (x, y) shorts into the free list; frees the pool (0x6FE90F) when the list becomes empty |
 | 0x005C6F20 | 150 | MoveCurve::EvalTurn | (t, out dir[2]): heading at time t of a turn in place (+0x48 start + clamp(+0x4C delta, +0x44 rate * t)); returns 1 while still turning |
-| 0x005C66C0 | 131 | MoveCurve::BuildSegments | for every pair of consecutive run points calls AddSegmentsBetween (offset -0.5 at the path start, +0.5 at its end) |
-| 0x005C6750 | 118 | MoveCurve::CopySegmentCells | copies the request cells' x / y into segment fields +0x14 / +0x18 (the last segment gets the last cell when the request has exactly one chunk) |
 
 ## 0x5C8000 - 0x5D3000: unit AI: perception (aiinfo.res, hearing, vision, smell)
 
-151 functions, group `ai`.
+181 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1146,11 +1146,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005C98C0 | 631 | StimulusMap::HearSound | (source CUnitServer, loudness, delayTicks, pos or 0 = source pos): for every unit within 50 m (CollisionMap::FindUnitsNear on world+0x124) for which source.side is an enemy (CUnit::IsPlayerInMask(listener, source)), whose AiMemory... |
 | 0x005CEED0 | 607 | AiSpellInfos_Build | (this = brain +0xa4, CUnit): rebuilds the two tables: non-heroes with a natural weapon (+0x28c != 0x10) get {kind 0 weapon, slot -1, range GetAttackRange, damage GetDamage7} in the attack table; then every spell slot 0..7 (CUnit::... |
 | 0x005C8D40 | 584 | ByteGrid_EnsureCovers | (cx, cy, r): square byte map {originX, originY, buffer, rows, rowBytes, rowCount}: first use (origin 0x7fffffff) allocates (2r + 1)^2 zeroed; otherwise, when the circle leaves the map, grows the map (copy of the old one through By... |
-| 0x005CA1D0 | 565 | StimulusMap::RefreshNearbyUnits | (unit CUnit, AiMemory): every 8..11 ticks (AiMemory +0x20 countdown = (rand & 3) + 8; sets flag 0x80000 'alarm pending' on the unit +8): rebuilds the AiMemory neighbour list +0x24 (head +0x28) with every unit (except itself) of th... |
+| 0x005D1450 | 568 | dead_5D1450 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x5D3000 - 0x5E2000: unit AI: behaviours (Guard / Patrol / Sentry / CorpseWatcher / Tamed) + #say
 
-219 functions, group `ai`.
+265 functions, group `ai`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1171,7 +1171,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5E2000 - 0x5E3000: IUIEvents defaults + CUIMessageLog (timed chat/message lines)
 
-25 functions, group `ui`.
+27 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1183,16 +1183,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005E2990 | 79 | CUIMessageLog::Tick | slot 24 (called every frame by CInterface::ProcessPendingScreens on +0x1C): erases the lines older than 20000 ms (node +0x10 vs timeGetTime) |
 | 0x005E29E0 | 69 | CUIMessageLog::BlitSurfaces | slot 22: places each line surface at (10, 10 + 16 * i), blits it (surface vt[0]) and then the base CUIWidget::BlitSurfaces (the input line). Was Layout |
 | 0x005E2480 | 67 | List24_Clear_5E2480 | STL: std::list clear into 0x18-byte pool; 1 unwind funclet(s) (0x728da6) |
+| 0x005E24D0 | 65 | dead_5E24D0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x005E24E0 | 41 | List24_InsertBefore_5E24E0 | STL: allocate and link a 0x18-byte node; callers Timer_Schedule |
 | 0x005E2620 | 41 | Quat_StaticInit_Identity4 | sets global quaternion g_0x7C7B98 to (1,0,0,0) |
 | 0x005E25B0 | 40 | List24_EraseNode_5E25B0 | STL: unlink node to 0x18-byte pool; callers CFlyingHitPoints::Draw |
 | 0x005E25E0 | 32 | StaticInit_NoopGuarded_f5E25E0 | compiler: per-TU initialiser of a header static object with an empty ctor and an empty dtor (0x4013D0 is a bare ret): sets bit 0 of the shared guard g_0x7CAEE4 and registers the dtor with atexit; no effect (163 copies in the exe) |
 | 0x005E2600 | 31 | StaticInit_Vec3Zero_g7C7BA8 | per-TU static const zero vector g_0x7C7BA8 = (0, 0, 0) (3 floats, a math header constant copied into every TU next to its 1.0f / identity-quaternion copies); unreferenced (every use was folded by the compiler) |
-| 0x005E28C0 | 30 | CUIMessageLog::DeletingDtor | scalar deleting destructor of vt 0x7400DC |
 
 ## 0x5E3000 - 0x5E7000: chat/console panels (CUIMessageLog edit, CUIConsole), software cursor (CSoftCursor), ScreenFade, CI3DFigure
 
-71 functions, group `renderer`.
+83 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1213,7 +1213,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5E7000 - 0x5EE000: UI: camera input handlers, UIQuadMesh, unit preview/portraits, camp screen widgets
 
-77 functions, group `ui`.
+90 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1234,7 +1234,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5EE000 - 0x5FD000: UI: CInterface screen manager, item/spell/perk info panels, CUIBlitSurface, string-pair arrays, STL leaves
 
-321 functions, group `ui`.
+344 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1255,7 +1255,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x5FD000 - 0x602000: UI: CUIWindow (element/quad/button/blit-surface arrays, event dispatch), CUIBlitSurface (DirectDraw backing surface)
 
-105 functions, group `ui`.
+106 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1272,11 +1272,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005FF830 | 391 | CUIWidget::AddButton | allocates a 0x34-byte UIButton (+0 CInterface, polygon +4.., rect +0x14, flags +0x24/+0x25, origin +0x28/+0x2C, tooltip +0x30) and appends it to +0x128 (count +0x12C); 158 callers. Was CUIWindow::AddButton |
 | 0x005FDA80 | 384 | CUIBlitSurface::Blt | vt slot 0: when visible (flag 4) blits the surface to the back buffer at its rect clipped to the screen (DDBLT_WAIT, or DDBLT_KEYSRCOVERRIDE 0x1010200 with the colour key +0x34 when flag 1); called from CUIWidget::BlitSurfaces. Wa... |
 | 0x00601ED0 | 384 | CDemoScreen::OnOpen | vt 0x73F7F8 slot 25 of the attract-mode demo screen (0x184 bytes, CUIWindow_73F7F8::Create): once (+0x16C): enumerates 'demo%d.apl' recorded sessions into the CStringArray +0x170; adds a CamCtlFree handler, clears the camera free ... |
-| 0x005FDE20 | 378 | CUIBlitSurface::DrawText | (text, rect in 800x600 (empty = whole surface; +2 px inset), DT format flags, colour BGR, shadow, font id): ::DrawText with the CInterface font, transparent background, a black shadow offset (1, 1) first when shadow; returns the f... |
+| 0x005FF240 | 379 | dead_5FF240 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x602000 - 0x60E000: UI: dialog screen (speakers, topics, briefing), status-lamp screen, STL leaves
 
-138 functions, group `ui`.
+148 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1297,7 +1297,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x60E000 - 0x645000: UI: camp/inventory/trade/spell+item constructor, hero stats, main menu, save/load, lobby, battle HUD, credits
 
-600 functions, group `ui`.
+684 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1318,7 +1318,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x645000 - 0x65F000: UI: battle HUD strips, scroll bars, edit/list controls, save/load, options, tutorial, key config; DirectInput mouse; RichEdit
 
-355 functions, group `ui`.
+389 functions, group `ui`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1339,7 +1339,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x65F000 - 0x664000: CParty (hero records 0x784 bytes with four item arrays: equipped / B / inventory / spells, party items, named variables, map name), HeroRecord save reader, PartyStore (*.mp folder), PartySlot::SaveToFile, RichEdit credits scroller
 
-92 functions, group `world`.
+95 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1360,7 +1360,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x664000 - 0x674000: CPlayer / CPlayerClient / CPlayerServer: in-game protocol opcodes (client SendMsgXX / OnMsg_*, server SendMsgXX / OnMsg_*), party sync (MpFile), tracked units and objects, CPlayerManager, CMappedResource (resource file cache), hero record array
 
-359 functions, group `net`.
+382 functions, group `net`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1381,7 +1381,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x674000 - 0x676000: resources: CMappedResource / CResourceBase / CMappedFile + CObjectManager
 
-57 functions, group `data`.
+60 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1393,16 +1393,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00674910 | 378 | CResourceBase::CreateAccelTable | (pairs {name, index}*, count): +0x1c = max index + 1 slots (-1 filled) with the entry index of every name (fixed numbering of often-used entries); "CResourceBase::CreateAccelTable(). Index out of range / No entry" |
 | 0x00674DF0 | 332 | CObjectManager::dtor | vt 0x743338: every prototype record of +0xb0: object vt[3] Done then vt[0](1) delete; the strings destroyed; CBaseManager::Done; the vector buffer returned to the size pool; CBaseManager::DestroyBody |
 | 0x00675200 | 313 | CObjectManager::CloseProtoResource | slot 17 (name): the record with that name: resource vt[3] Release + delete, the record erased (vector shift); 1 when found. Was FindProtoByName2 |
+| 0x00674310 | 288 | dead_674310 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x00674F40 | 245 | CFigureManager::Done | slot 3: deletes every cached figure entry (stride 0x10) then CBaseManager::Done |
 | 0x006744C0 | 244 | CResourceBase::OpenFile | (name, out size): CloseFile; a loose file of that name on disk (_access) is mmioOpen'd into +0x30 (size from _findfirst) -> loose files override archive entries; else FindEntry and mmioSeek(+0x24, entry offset) with +0x28 = offset... |
 | 0x00675340 | 243 | CObjectManager::ClearProtos | slot 18: every record: resource vt[3] + delete; the vector emptied |
 | 0x00675BE0 | 185 | CEffect::ResetState | zeroes position +0x1c, velocity +0x94..+0xa4, SetSize(0) of the four delta CMemStreams +0xa8/+0xd0/+0xf8/+0x120, last tick +0x148 = -1 |
 | 0x00675560 | 183 | Record10Vector_Destroy | vector<0x10 record {std::string, int}>: destruct strings and free storage |
-| 0x006746F0 | 159 | CResourceBase::Seek | (offset, origin 0 begin / 1 current / 2 end): on the archive relative to the entry start +0x28 (size +0x2c), returns the entry-relative position; on the loose file mmioSeek |
 
 ## 0x676000 - 0x683000: CEffect* (sounds, lights, particles, arrows, tornado)
 
-216 functions, group `effects`.
+245 functions, group `effects`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1423,7 +1423,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x683000 - 0x68C000: CSpell / CSpellContainer / CSpellConstructor / CSpellManager
 
-176 functions, group `spells`.
+193 functions, group `spells`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1444,7 +1444,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
-76 functions, group `renderer`.
+88 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1465,7 +1465,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x68F000 - 0x69F000: CTexture / CTextureManager (.mmp), CFileRegistry (binary key/value registry), CIniFile, CWinRegistry, CItemConstructor, STL leaves
 
-265 functions, group `renderer`.
+351 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1486,7 +1486,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x69F000 - 0x6AE000: CItem* + CItemManager + items.idb
 
-272 functions, group `items`.
+303 functions, group `items`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1507,7 +1507,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6AE000 - 0x6B4000: quests database (quests.qdb)
 
-85 functions, group `data`.
+88 functions, group `data`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1528,12 +1528,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6B4000 - 0x6C3000: CMusicSystem / CSoundManager / mp3 (Miles)
 
-188 functions, group `sound`.
+233 functions, group `sound`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer, 0x882 with water) from the packed vertices +0x18: normal +0x2B/+0x2F/+0x33 from the packed dword d (nx = ((d >> 11 & 0x7FF) - 1000) / 1000, ny = ((d & 0x7FF) - 1000)... |
 | 0x006BFF40 | 5050 | TerrainSector_Draw | (sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertice... |
+| 0x006BE470 | 3676 | dead_6BE470 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTextureSq, mapStem, terrain) -> bool: reads '<stem>%3.3i%3.3i.sec' (reader vt[5]); header dword magic 0xCF4BF774 + byte flags (bit 0 water layer -> +0x10, bits 0-1 -> +0x14); payload ... |
 | 0x006B89F0 | 1737 | CSoundManager::LoadSample | (channel, index, name, decompressMp3) -> bool: the sample cache: map +0x870 (name -> cache node) hit: the node moves to the list head +0x858 (LRU list +0x854, tail +0x85c), tick = GetTickCount, refcount ++, AIL_set_named_sample_fi... |
 | 0x006B4710 | 1584 | CMusicSystem::Init | slot 2: reads "<g_0x7AF45C>music.reg" (CFileRegistry; FatalError "CMusicSystem::Create(): Unable to..."): [Common] Credits -> +0x30, MainMenu -> +0x34; every other section = a zone: two 0x38 MusicZoneRecords appended to the CArray... |
@@ -1545,11 +1546,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006B6D80 | 722 | CSoundManager::Done | slot 3: stops the music / sequence threads (+0x248 flag, WaitForSingleObject), releases the AIL samples, frees the sample cache, clears the pending map and the sound archive list, AIL_waveOutClose, +0x898 = 0 |
 | 0x006BFC80 | 695 | TerrainSector_TransformVertices | (sector, ctx) -> +0x60: for every quarter with +0x144[q] != 2: its 17 x 17 vertices (step 1 / 2 / 4 at LOD 0 / 1 / 2 (+0x170); the water layer (+0x441) too when +0x10) are copied from +0x180 into g_0x7C88F8 (16 bytes each) and pro... |
 | 0x006B7D10 | 682 | CSoundManager::FindChannelSlot | (priority) -> channel index or -1: picks the channel with the lowest priority +0x1c (free ones have priority 0 / none); -1 when the new priority <= that; a stolen looping channel (+0x24) is saved as a 0x48 pending record {name, +0... |
-| 0x006BF5F0 | 674 | TerrainSector_ctor | (sector 0x394 bytes): bounds +0x28 (flags, centre +0x2C, min +0x38, max +0x44) and the 4 quarter bounds +0x64 (0x38 each) zeroed, water material list +0x15C (CByteArray), vertex positions +0x180, vertex records +0x194 (CArray vt 0... |
 
 ## 0x6C3000 - 0x6CC000: CTerrain: Load (.mp header, materials, tile types, textures + lightmap pages, UV tables), sector LRU cache (GetSector), per-vertex sun / dynamic lighting with shadow ray tracing, water waves + animated tiles, rendering passes, lights link lists, height / material queries, ray to ground, ambient sounds, modified-sector writer
 
-99 functions, group `world`.
+114 functions, group `world`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
@@ -1570,13 +1570,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6CC000 - 0x6E0000: terrain prints (foot/blood/fire decals), terrain tile helpers, CBitmapDib (BMP/mip loading), database.res loaders (CDatabase/CDatabase2/CDatabaseTables)
 
-314 functions, group `renderer`.
+365 functions, group `renderer`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006D7620 | 3520 | CAcksDb::Load | (dataDir) -> bool: <dir>database.res / acks.db ('Can't open acks database'); tags 1 / 2 / 3 Answers (0x1C4) / Cryes (0x5C) / Others (0x38) into +0 / +0x20 / +0x40 with name maps; then per record an ack id -> list map at +0xC: Answ... |
 | 0x006DE370 | 2156 | AcksAnswer::CopyCtor | copy-constructs an acks.db Answers record 0x1C4: the name std::string, the id -> list hash map +0xC and the 0x16 voice-line vectors +0x20 (0x28 lines each, PtrVector_CtorN_6DEF90 + copies); used by AcksAnswersVector_Resize / _Inse... |
 | 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | (clipBuf, corners SoA float[16]): the terrain cell box under the shadow prism (the rectangle slid up the light ray to the highest vertex of the box, 1-cell margin, clamped to the map), ClipBuf::ReserveForTriangles(((nx+1)*(ny+1) +... |
+| 0x006D61D4 | 1557 | sub_6D61D4 | unregistered function, reached by call / pointer from 0x2D617D (gaps.py 2026-11-06) |
 | 0x006D5BF0 | 1475 | CBitmapDib::LoadMmpMipLevel | (stream, level) -> bool: MMP header 0x4C ('read error 1'; 'wrong level for mipmap' when width < 2^level, AfxMessageBox), seek to the level (hdr +0x48 extra + level sizes), DIB of w >> level x h >> level: DXT1..5 decoded to RGB565 ... |
 | 0x006DC390 | 1423 | AcksAnswer::~AcksAnswer | destroys a 0x1C4-byte Answers record (hash tables, line vectors, strings) |
 | 0x006CEDE0 | 1324 | CPrintDecal::Render | (this) -> bool: inactive (+5 == 0) -> 1; mesh not built (+4 == 0): z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, world vt[27] terrain height), the 4 rectangle corners (half extents +0x10 / +0x14 rotated by +0x44) at z0 -> C... |
@@ -1586,20 +1587,21 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006DD6C0 | 875 | AcksCryesVector_AssignN | STL: vector<Cryes record 0x5C>::_M_fill_insert / assign n copies of one record (each record = std::string name, a vector of 0x28 voice-line records and a hash set; in-place copies or AcksCryesVector_InsertRealloc); used by AcksCry... |
 | 0x006D8430 | 796 | CUnit::PlayAck | (this = client CUnit, code): plays the unit's acknowledgement for a unit event code (0xFF: respawn vt+0xD0): heroes below a counter remap codes 0..10 -> 0x27 / 0xB..0x13,0x1D -> 0x28; 0x25/0x26 weapons\timecrash.wav only, 0x23/0x2... |
 | 0x006DDA30 | 755 | AcksOthersVector_AssignN | STL: vector<Others record 0x38>::_M_fill_insert / assign n copies of one record (std::string name, a 0x28 voice-line vector and a hash set; in-place copies or AcksOthersVector_InsertRealloc); used by AcksOthersVector_Resize (CAcks... |
-| 0x006D2E40 | 723 | DbRecord40Vector_AssignN | assign n copies of a 0x28-byte record (string copies), grow path 0x6D3430; 723 bytes |
-| 0x006D3120 | 711 | Record52Vector_Assign | vector of 0x34-byte records assign(n, value)/insert helper with std::string copies; 711 bytes |
+| 0x006CCC40 | 736 | dead_6CCC40 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-1657 functions, group `crt`.
+1942 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006F6F2C | 2597 | _input | CRT: scanf core (format parser: %d %s %c %f %x, scansets, width, whitespace), 2.6 KB |
 | 0x006F17D4 | 1825 | _output | CRT: printf core (format parser: flags, width, precision, %d %s %c %f %e %g %x...), 184 blocks |
+| 0x006FB9C0 | 1668 | dead_6FB9C0 | unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06) |
 | 0x006E3780 | 1585 | TaggedRecordSet_SerializeC | archive: string tag 1 and seven Rec28 vector tags 10..14+, 1.5 KB |
 | 0x0070592E | 1198 | CWnd::OnWndMsg | vt slot 39: the central message dispatcher (commands, notifications, sys colors, ctl colors) via message maps, 1.2 KB |
 | 0x006F9989 | 1185 | _strgtold12 | CRT float: parses a decimal string into a 12-byte extended number (sign, digits, exponent), 1.2 KB |
+| 0x006F2F30 | 1142 | sub_6F2F30 | unregistered function, reached by call / pointer from 0x398382 (gaps.py 2026-11-06) |
 | 0x006EE4B3 | 1007 | _strftime_core | CRT time: strftime format letter dispatch |
 | 0x006E0540 | 1006 | DbTableRecord_CopyBackward_A | copy-assign 0x1C4-byte DbTableRecord range backward |
 | 0x006E1570 | 1002 | DbTableRecord_CopyBackward_B | copy-assign 0x1C4-byte DbTableRecord range backward (second instance) |
@@ -1607,5 +1609,3 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006F3E9F | 846 | _setlocale_ctype_names | CRT locale: derives language/country/codepage from a locale name (846 bytes) |
 | 0x006FDC12 | 845 | CString::FormatV | CString::FormatV: parses the format ("%*.*f" ...), sizes the buffer, then vsprintf; 845 bytes |
 | 0x006F62D5 | 815 | __sbh_heap_check | CRT small-block heap: validates the region table (IsBadWritePtr etc.) |
-| 0x006F5730 | 809 | __sbh_free_block | CRT small-block heap: free a block (coalesce, update region bitmaps), 809 bytes |
-| 0x006E3FD0 | 799 | TaggedRecordSet_Serialize | archive: tag 1 string, tag 10 counted vector of 0x28 records (read: clear + fill, write: count) |

@@ -612,11 +612,13 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 - ~~The MFC `Serialize` slots of all script containers (vt slot 2)~~ settled 2026-11-06 [V]: dead code in the whole exe. No `CArchive`
   is ever made: the MFC constructor `CArchive::CArchive(CFile*, mode, bufSize, buf)` 0x7086C0 (minimum buffer 128, grow size 0x40 /
   0x10, hash size 0x89; Ghidra had named it `ReadObject`) and the destructor `CArchive::~CArchive` 0x70879C have no call, jump or
-  pointer anywhere. So none of the ~150 `*::Serialize` methods (and the archive helpers they call) can run; the save uses the explicit
-  `Write` / `Read` pairs.
+  pointer anywhere. So none of the MFC `*::Serialize` slots (CArchive mode at `+0x14`, `ReadCount` / `WriteCount`) can run; the save uses
+  the explicit `Write` / `Read` pairs. Not to be confused with the game's own tagged archive (`Archive_Open` 0x409AE0, `+0x50` tag
+  stack, `+0x54` version, `+0x58` loading): its `Serialize(archive)` methods are live, e.g. `PartyList::Serialize` 0x4A64B0 and
+  `CGSPlayer::Serialize` 0x4A6C40 in the party record `scenario.sav` (`ObjPartyRecord_Read` / `Write` 0x4A8310 / 0x4A8560) [V, T7 2026-11-07].
 - `GSWorld::Decompile` and the five `Compiler_*` one-list entry points have no callers: editor leftovers [untestable].
 - ~~The sound-source respawn inversion: whether randomized sources ever play~~ settled (gs-functions.md section 5, machine code 0x4BF156..0x4BF2D8) [V]: they never do in the shipped game (the `Tick` test is inverted and nothing else starts them); um-engine's byte patch `GSWorld::RandomizedSoundSources` fixes it; no shipped map calls `CreateRandomizedFXSource`.
-- `GSPlayerLayer::dtor` (0x4A6840, was `CompiledScript_Destroy`, then `Destroy?`): the member destructor called from the `CGSPlayer` ctor / dtor EH funclets (guess sweep 2026-11-01); `CGSPlayer` / `GSPlayers_*`
+- `GSPlayerLayer::dtor` (0x4A6840, was `CompiledScript_Destroy`, then `Destroy?`) is the `ShopStock` destructor (its ctor 0x4A66C0 builds the 0xb8-byte shop stock at `CGSPlayer +0x1d4`, items.md 7) [V, T7]: called from the `CGSPlayer` ctor / dtor EH funclets; `CGSPlayer` / `GSPlayers_*`
   (0x4A6580..0x4A7630) are the session's player / shop records and have nothing to do with the script VM despite the "GS" prefix.
 
 ## 10. Corrections to earlier notes
@@ -648,6 +650,10 @@ see the ordinary object / effect replication (gs-functions.md section 1.2) [V].
 | script-vm.md 6 (2), functions.tsv `GSWorld::RunProgram` / `SSCScript::Run` | "if it returns 1 (stopped in a wait before the end) a copy ... is pushed"; "a body that finishes in one run leaves nothing behind" | `Run` returns 1 also after its last command (0x4B9BF2), so a kill-flag-0 copy is queued after every non-empty firing and dropped next tick when finished |
 | script-vm.md 6 Waits / 7 table, functions.tsv `SSCScript::Run` | `SleepUntilIdle` "stops while ... its brain's current logic `+0x984` is non-zero" | `+0x984` = `Brain +4` orderKind (0 none, 1 move ...): it waits until the unit has no order (gs-functions.md had it right) |
 | (new) script-vm.md 3 / 4 | - | `For` / `ForIf` bodies are parsed without the script's parameters (0x4D160D `push 0`): a parameter in a loop body is error 7 |
+| script-vm.md 9 (2026-11-06) | "none of the ~150 `*::Serialize` methods ... can run" | only the MFC `CArchive` slots are dead; the `Serialize(archive)` methods on the game's tagged `Archive_*` object run (PartyList / CGSPlayer / party hash in `scenario.sav`) [V, T7 g06] |
+| script-vm.md 9, functions.tsv | `GSPlayerLayer::ctor` / `dtor` 0x4A66C0 / 0x4A6840 | `ShopStock` ctor / dtor (CGSPlayer +0x11c / +0x1d4) [V, T7 g06] |
+| functions.tsv | `SSCVars::AssignValues` 0x4B3900 "the four value CArrays copied"; `SSCVars::AppendNumbers` .. `WriteGroups` 0x4C2B70..0x4C4330 take an SSCVars | `SSCVars::Append`: the parsed `GlobalVars` (cleared) are *appended* to `GSWorld +0xA0`; the Append / Read / Write / Clear helpers act on one `SSCVarBlock` (renamed `SSCNumberBlock_*`, `SSCStringBlock_*`, `SSCObjectBlock_*`, `SSCGroupBlock_*`) [V, T7 g06] |
+| functions.tsv | `SSCCmdArray_DestroyAll` 0x4B2D60 | `qsort(data, count, 4, 0x4B2D80)`: sorts a group by pointer (used after `SSCGroupBlock_Read`) [V, T7 g06] |
 | gs-functions.md 3.4 / 5 / 6, scripting.md, README.md | `InflictDamage` = KillUnit's `Hit_Init` record with [8] / [9] / [11] changed, "up to 7 x n HP" | own record: electrical weight [5] = 1.0 only, [8] 100, [9] n, [10] 1, [11] 1, `TakeHit` (CUnitServer vt[20]) direct; at most n HP; a spell-type hit (gs-functions.md 7) |
 
 ## 11. Function index (address, name, one line)
