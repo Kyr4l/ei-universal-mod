@@ -201,13 +201,21 @@ All the pixel loops are MMX (2 or 4 pixels per step); the decompiles show them a
 | 3 | +0x2C | empty | the object matrix when the lighting is recomputed; `RenderLit` inverts its top to move the lights into figure space |
 | 5 | +0x3C | W * P | (unused by this module) |
 | 6 | +0x44 | P | |
-| 7 | +0x4C | W = identity | |
+| 7 | +0x4C | W = diag(1, -1, 1) (the y flip; with EIStarter's WideScreen patch diag((4/3) / aspect, -1, 1)) | |
 | 8 | +0x54 | V (viewport) | |
 | 9 | +0x5C | empty | the camera view (`CWorldClient::Render` 0x569E40) |
 | 10 | +0x64 | empty | the shadow light projection (`RenderShadow`) |
 
 `MatrixStack_Push(ctx, M, n)` 0x4D9B80 stores `top * M` (depth 0: `M`), `MatrixStack_Pop` 0x51C110 decrements the depth. With column vectors
 the top of stack 1 for a part is `V * W * P * Mobject * Mpart`: the part matrix is applied first.
+
+**W (stack 7) and the widescreen x scale [V, 2026-11-07].** W comes from `Mat4_FlipY` 0x4F1330 (it was called Mat4_Identity, but it
+builds diag(1, -1, 1, 1): the y flip). `InitRenderer` builds P with the fixed aspect 4/3 (`push 0x3FAAAAAB`), and `SetupCamera` with
+the rectangle's w / h. The 0.75 seen live in W at 1920 x 1080 (rig, 2026-11-06, while UI figures draw) does not come from game.exe:
+EIStarter's loader `addon.dll` (v0.12.4.1, in the EIStarter OBT-1 folder; it also loads um.dll) applies a "WideScreen" patch set at
+start, and its patch #91 rewrites the last 19 bytes of `Mat4_FlipY` (0x4F135A) so that W[0] = (4/3) / (window w / h). With the 4:3 P
+this keeps square pixels and widens the horizontal view: 0.75 x 960 = 720 = 1.333 x 540. `addon.log` lists every patch it installs
+(about 360 sites: WideScreen, camera, draw radius, fixes, Lua hooks); without EIStarter, W is the plain y flip.
 
 ### 2.4 Render states and effects [V]
 

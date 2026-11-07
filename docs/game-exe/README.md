@@ -418,6 +418,6 @@ bytes outside functions (its note says "trimmed").
 **Complete (2026-11-07, T7 round).** Every function of `functions.tsv` was read from its own code (depth `read` on all rows; 1,696
 of them are dead code, tagged in the purpose). Every byte of `.text` belongs to one of: a function row, an exception-handling block
 in `eh-funclets.tsv`, a block in `not-functions.tsv`, or alignment padding (int3 / nop / filler instructions). The check is
-`_cpr/claude-re/full/tools/gaps.py` followed by `gapleft.py` (0 bytes left). Still open: the UI y-flip writer (see the open items).
+`_cpr/claude-re/full/tools/gaps.py` followed by `gapleft.py` (0 bytes left). The last open item, the UI y flip in matrix stack 7, is found: the game's own `Mat4_FlipY` plus the EIStarter WideScreen patch (renderer.md 2.3).
 
 Coverage (16163 functions): named 16163.
