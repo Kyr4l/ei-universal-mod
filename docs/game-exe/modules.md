@@ -976,9 +976,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0056BF30 | 1053 | CWorldClient::PickTerrainPointRaw | (out pos, screen x, y): PickTerrainPoint sampling the terrain directly (0x6C8680) instead of vt[29]. Was PickTerrainPoint2 |
 | 0x0056C350 | 1023 | CWorldClient::PickTerrainPoint | (out pos, screen x, y): the screen ray from the inverted view-projection, z = terrain height (vt[29], bridges included) found by iteration from half the terrain extent and bisection (100 steps, 0.01) |
 | 0x0056DAF0 | 911 | CWorldClient::CollectObjectsNear | (pos, radius, out list): the grid A cells of the square pos +- radius; every object whose bounding sphere (+0x1c + +0x128, radius hypot(+0x144, +0x148)) is within radius |
-| 0x005769C0 | 892 | UnitRecord_PartialSort | (first, middle, last, _, plane, manager): STL partial_sort of 0x18-byte unit records by depth (heap of [first, middle), then sort_heap) |
-| 0x00573740 | 787 | UnitRecord_IntroSortLoop | (first, last, _, depth limit, plane, manager): STL __introsort_loop of 0x18-byte unit records by depth (median-of-3 pivot, UnitRecord_LessByDepth; heap sort when the depth limit is exhausted) |
-| 0x00577920 | 750 | UnitRecord_MakeHeap | (first, last, plane, manager): STL make_heap of 0x18-byte unit records by depth |
+| 0x005769C0 | 892 | UnitRecord_PartialSort | fastcall (first, middle, last, _, plane, manager): STL partial_sort of 0x18-byte pick records: make_heap of [first, middle) (UnitRecord_AdjustHeap2 from the last parent down), every later record less than the top is swapped in (po... |
+| 0x00573740 | 787 | UnitRecord_IntroSortLoop | fastcall (first, last, _, depth limit, plane, manager): STLport __introsort_loop over 0x18-byte records: stops at <= 16 records (the final insertion sort is the caller's); depth 0: UnitRecord_MakeHeap + AdjustHeap pop loop (heap s... |
+| 0x00577920 | 750 | UnitRecord_MakeHeap | fastcall (first, last, plane, manager): STL make_heap of 0x18-byte pick records: from the last parent down, __adjust_heap (hole to the larger child) + __push_heap with the inlined UnitRecord_LessByDepth; caller UnitRecord_IntroSor... |
 
 ## 0x579000 - 0x57A000: game session helpers: stat scramble (anti-tamper), save writer/reader, MainMenu entry, CUIWindow 73F7F8
 

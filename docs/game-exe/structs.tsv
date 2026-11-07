@@ -1114,7 +1114,7 @@ CItemConstructor			0x24	pointer	proto	items.idb record (any of the five tables)
 CItemConstructor			0x28	pointer	item	the CItem being built (refcount held until FinishItem)
 CItemConstructor			0x2c	pointer	spell	CSpell* to embed (count / price added by SetSpell)
 CItemConstructor			0x30	int	count	stack count written to item +0x48 (1 by default; the "[n]" of material.x[n])
-PartyItemLink		0xc	0x0	pointer	vtable	0x73FA88 (slot 3 Clone)
+PartyItemLink		0xc	0x0	pointer	vtable	0x73FA88: slot 0 DeletingDtor 0x58FBC0, slot 1 RefCountedBase::v1_Nop, slot 2 0x58FB90 (re-stamps the vtable, frees nothing), slot 3 Clone 0x58FB60
 PartyItemLink			0x4	short	refcount	16-bit (RefCounted16_Release)
 PartyItemLink			0x8	int	partyItemId	id (+0xc) of the matching item in the party's item manager (ConsumeItemCharge mirrors mana / count into it)
 CParty	CObject	0x70	0x1c	pointer	itemManager	CItemManager (0xbc) created by Init; slot 18
@@ -1379,6 +1379,7 @@ CWorldClient			0xf8	pointer	pickRecordsEnd	end of the used pick records of +0xf4
 CWorldClient			0xfc	pointer	pickRecordsCapEnd	end of the reserved storage (400 x 0x18 bytes allocated by Init)
 CWorldClient			0x194	int	unk_0x194	0 in the ctor, returned by slot 37 (Get194); never written elsewhere in the typed decompiles (a null manager slot between lightManager +0x190 and particleManager +0x19c)
 CWorldClient			0x198	int	unk_0x198	0 in the ctor, returned by slot 38 (Get198); never written elsewhere
+CWorldClient			0x8	uint	flags8	g_0x7AF5C0 for the client world g_0x7AF5B8: bit 0x10 set while a .cam flight is recorded (Game_StartCamRecording 0x5787F0 sets it with CCamera::StartRecording, Game_StopCamRecording 0x5787D0 clears it)
 CBridgeManager	CObject	0x38	0x1c	pointer	quadListVt	MFC CList (vt 0x73F548) of walkable quads: 0x54-byte nodes {next, prev, BridgeQuad}
 CBridgeManager			0x20	pointer	quadHead	first quad node (CWorldClient +0x1f4)
 CBridgeManager			0x24	pointer	quadTail	

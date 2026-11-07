@@ -230,7 +230,7 @@ name `intro_1..4`; the briefing keys `<intro>q` / `<intro>k` (`Briefing_MakeKey`
 `+0x25F8` goes through `Briefing_SetNamedFloat`, and every lobby variable of `+0x25FC` named `q.<x>.<y>` triggers `QuestFiles_Scan(x)`.
 The variables `+0x25FC` are records {name +0xC, value +0x18, serial +0x1C}. In a playable world (`CWorldClient` kind 1) they are replayed
 in serial order: the journal counters `g_0x7AFED0` (highest serial seen) and `g_0x7AFED4` (next to show) pick the new ones, which are
-sorted (`Sort_IntroLoop`) and shown through `CampScreen_ShowNamedState`, then every variable up to the shown serial is written into
+sorted by serial (std::sort: `Sort_IntroLoopRecursive` 0x589160 + `Sort_FinalInsertionSort` 0x589240, key `+0x1C`) [V] and shown through `CampScreen_ShowNamedState`, then every variable up to the shown serial is written into
 the named floats. Elsewhere they are all written at once and the counter resets to 0. `Lobby_SetMpGameFlags` (`z.MPGame1`) ends it.
 
 ### 2.7 Databases and the balance index [V]
@@ -239,7 +239,7 @@ the named floats. Elsewhere they are all written at once and the counter resets 
 `Session_ProcessRequest` reloads them when the file name changes between `database.res` (single player) and `databaseLMP.res`
 (lobby alive), and swaps `g_0x79BEC0` (the balance index into the stat tables `g_0x7C54A0`, forced 0 in lobby games) with its
 saved copy `g_0x79BEC4`. `Databases_Reload` 0x57DEE0 is the explicit variant.
-Both paths destroy the unit tables first (`UnitsDb_Dtor` / the table dtors), so `UnitsDb::Load` 0x53A200 always starts from empty
+Both paths destroy the unit tables first (`UnitsDb_Reset` 0x57CBE0 = in-place dtor + empty ctor, `PerksDb_Reset` 0x57CD60, `SpellsDb_Reset` 0x57CE80, `ItemsDb_Reset` 0x57D340 / the table dtors) [V], so `UnitsDb::Load` 0x53A200 always starts from empty
 name maps (data-sound.md 3) [V deep read 2026-11-06].
 
 `QuestsDb::ParseQuestReg` 0x6AE8E0 (each map's `quest.reg`, from `QuestFiles_Scan`) [V deep read 2026-11-06, disassembly
@@ -753,6 +753,11 @@ Settled in the T3 pass (2026-11-02; log in `_cpr/claude-re/full/t3-settled.tsv`)
 | structs.tsv UnitProto +0x108 / +0x114 | bloodKind / hitEffectFlag | the end-of-storage words of the spells (`+0x100`) and wears (`+0x10c`) vectors; blood / cast type are `UdbRaceModel +0x108 / +0x114` |
 | world-client-players.md day light | a third section "(sky / fog)" | the section is named "sky"; keys `hourNN` must be ascending, each interpolated from the previous key, hours after the last key keep old values |
 | world-client-players.md Update | "print colours re-lit from the lights" | only the blood prints are relit (grey of the max luminance: the sun at the camera ground point, then every non-sun light whose radius covers the print) |
+| functions.tsv 0x57CD60 / 0x57CE80 / 0x57D340 | `Session_DtorMembers`, `DbGroup2_Dtor`, `DbGroup3_Dtor` (session / "database group" dtors) | `PerksDb_Reset` (g_0x7AF268), `SpellsDb_Reset` (g_0x7C8510), `ItemsDb_Reset` (g_0x7C86D8): in-place dtor + empty ctor before each Load (T7 g11) |
+| functions.tsv 0x589240 / world-server.md 2.6 | `Sort_IntroLoop` | `Sort_FinalInsertionSort` (std::sort's final pass; the partition loop is `Sort_IntroLoopRecursive` 0x589160) |
+| functions.tsv RefPairList clear / remove / dtor (0x571F10, 0x598EF0, 0x598F40, 0x599C70, 0x599CC0, 0x599D60, 0x59A050, 0x59C810) | "releases both refs of every node" | one ref per cell (MFC DestructElements with count 1; the classes serialize one 4-byte pointer per cell) |
+| functions.tsv 0x59AAA0 UnitHash44c_Clear | "0x30-byte nodes back to the pool g_0x79B238" | cells go to g_0x79B230 (the 0x19..0x20-byte class) |
+| functions.tsv 0x578C40 | `World_ApplyVariableTable` "applies a table" | `World_CollectVariablesByPrefix`: reads the named variables starting with a prefix into an out map (StringFloatMap_CollectPrefix) |
 | functions.tsv 0x4048F0 | `CBaseManager::ReleaseAllObjects` "release every object" | `ReleaseUnreferenced`: only the objects whose refcount +4 is 0 get refcount 1 + vt[4] Release (4.8; t7 2026-11-06) |
 
 ## 8. Function index (addresses)

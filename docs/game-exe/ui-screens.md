@@ -550,7 +550,7 @@ Three entry tables:
   and whose record `+0x10` string is not empty; `+0` = trunc(`z.<zone>`) (0 = unknown: not hoverable / clickable), `+4` linked row or
   -1, `+8` name, `+0xC` title (first line of "zone <id>"), one quad each (the old note "visited zones `z.` == 1" was wrong: the value
   is stored, not filtered).
-- **quest markers** (0x18 bytes `+0x1B8`, count `+0x168`): per zone entry every variable of `q.<zone>` (`Game_GetNamedFloat2`) equal
+- **quest markers** (0x18 bytes `+0x1B8`, count `+0x168`): per zone entry every variable of `q.<zone>` (`Game_CollectNamedFloats` 0x578B70 = `StringFloatMap_CollectPrefix`) equal
   to 1.0 with 3 dot parts: `+0` zone entry index, `+4` `#quest <id>` position, `+0x10` quest id, `+0x14` quest title; a 0.3-scale quad.
 - **zone rows** (0x18 bytes `+0x1A4`, count `+0x16C`): per zone entry, every exit (record `+0x4C` data, `+0x50` count, 0x3C each)
   whose target zone is of kind 2 ("brief"), has a non-empty `+0x10` and `z.<target>` == 2.0: `+0` entry index, `+4` `#zone`
@@ -561,7 +561,7 @@ globals `+0x14` = 0xFF3C005A, the picking surface `+0x210` (built 400x300, rect 
 the time panel (20,20)-(170,70): line 1 the allod title, line 2 "save_day" "%s  %d,  %d:%02d" from "gtime" (game hours: m = trunc(gtime * 60)
 (fmul 60.0 at 0x62E750), day m / 1440, hour (m mod 1440) / 60, minute m mod 60) (font 2, 0xA7D7E4); the camp button art (hidden when `i.nocamp` == 1, `+0x27C`), the two rotate arrows; ambient of the
 selected entry `+0x280` (ingos (0.371, 0.508, 0.625), suslanger (0.391, 0.195, 0.086), else (0, 1, 0)), `+0x278` = 1 on gipat;
-`Game_ForwardToWorldServer(0, 0)`, music stopped, `FlameNoise` 256 `+0x214`, the 18 colour stages (`ApplyFadeColor`), wind.wav loop
+`Game_SetRain(0, 0)` (rain off), music stopped, `FlameNoise` 256 `+0x214`, the 18 colour stages (`ApplyFadeColor`), wind.wav loop
 `+0x290`; **autosave "saveb"** (`QuickSave`) only when the screen is built live (not restored from the UI stream g_0x7AFDF8 on a
 load), the client mode (connection `+0x1C +0x104`) is not 5 (= not coming back from the camp [V: written only by `OnMsg07_GameMode`, which echoes the mode of the last `0x04` leave; `Game_SendLeave(5)` is only the camp]) and the option autosave g_0x79BE7C
 is on; tutorial.
@@ -728,7 +728,7 @@ CHudMinimap (built by 0x641F20, which was named `CHudMainPanel::Build` but runs 
 CHudClockStrip, `+0x1B4` CHudStanceStrip, `+0x1B8` CTextListWin combat log (0xBE,0x19)-(0x262,0x59), `+0x1BC` CHudMessagePanel
 (`FlushCombatMessages`), a `CamCtlFree` camera handler; personality labels from every text "pers *" (first line, keyed by a hash of
 5 characters, std::map `+0x1F0`); command mode `+0x17C` = 0, slot `+0x180` = -1, selection `+0x168` emptied, called-shot flags
-cleared; `Game_ForwardToWorldServer(0, 0)`, `Game_SetFlag94_8`, bit 0x40 of g_0x79B2B0 cleared; in a lobby slot 36 is called. `Update` 0x638280 [V, deep read 2026-11-06]: (1) when exactly one unit is selected and its vt+0xDC answers non-zero [? a unit
+cleared; `Game_SetRain(0, 0)` (rain off), `Game_SetFlag94_8`, bit 0x40 of g_0x79B2B0 cleared; in a lobby slot 36 is called. `Update` 0x638280 [V, deep read 2026-11-06]: (1) when exactly one unit is selected and its vt+0xDC answers non-zero [? a unit
 the player does not command], the weapon / quick / spell / ability bars are emptied and the unit info panel shows that unit (`+0x14C`
 unit, proto `+0x20` / `+0x24`, `UnitLabel`); (2) **only in a lobby game** the unit list is rebuilt from the lobby player records
 (`LobbyClient +0x25D8`): records with `+0x24` == 0 whose unit `+0x2C` exists give list A, the others their `+0x30` in list B (both
@@ -1023,3 +1023,5 @@ hero and `RefreshPanels`; tutorial_script = `ShowQueuedTutorial(1)`.
 | 0x65E320..0x65EA80 | CTooltipControl | |
 | 0x65EAD0..0x65ECB0 | DInputMouse | |
 | 0x65ED30..0x65EF80 | CRichEditSurface | |
+| functions.tsv 0x578B70 | `Game_GetNamedFloat2` (a lookup) | `Game_CollectNamedFloats`: `StringFloatMap_CollectPrefix` 0x460EE0 of the connection's named floats (every variable starting with the prefix, e.g. `q.<zone>`) (T7 g11) |
+| functions.tsv 0x5786A0 | `Game_ForwardToWorldServer` | `Game_SetRain` (`CWorldServer::SetRain(kind, strength)`; the screens call it with (0, 0) = rain off) |
