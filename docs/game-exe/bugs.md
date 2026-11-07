@@ -516,3 +516,13 @@ Not covered by SpellAddon. Fix: skip the record when the lookup returns 0, as th
 Latent, no effect found: the hand-written item proto copy helpers skip some fields (weapon 0x6A8FB0 / 0x6AB9C0: +0x84 / +0x88;
 armour 0x6A9370 / 0x6ABE20: +0xB4..+0xC7; quick 0x6ABF60: +0x6C / +0x74 / +0x78 and the spell name; quest 0x6AAE40 / 0x6AC240: the
 zones vector). The loaders copy only default-constructed protos and then fill each record in place, so nothing shows in the game.
+
+## 35. Editor leftovers (3ds import, old .ani system): defects in code the game never runs (T7 ed01 / ed02, 2026-11-07)
+
+From the code; relevant only to a re-implementation, because none of this runs in the shipped game (the old .ani loading, playing
+and exporting is dead, the 3ds import is reached only through CFakeUnit, which is never created). `Nodes3ds_LinkHierarchy` 0x449030
+writes the root transforms into record -1 when no root exists; `Scene3ds_FillAnimNode` 0x4492F0 never writes the last position
+key's delta; `Scene3ds_WeldVertices` 0x44C4A0 assumes mesh i belongs to node i while `ResolveNodesAMF` pairs them by name;
+`AnimNodeOld_AdvanceFrame` 0x506FD0 tests the frame after the wrap, so its queued-clip branch can never run;
+`AnimNodeOld_StepFrameRecursive` 0x507160 adds two morph frames per step; `RemoveChild` / `DetachChildByName` 0x508610 / 0x508670
+drop the result of the recursive call, so a hit deeper than one level returns 0.

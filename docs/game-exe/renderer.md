@@ -635,6 +635,14 @@ entry the per-file fallback `LoadNodeTrack` 0x5ACA60 (`<model><node><clip>` + ex
 `AnimNodeOld_*` 0x505410-0x508D30, `CAnimationSystemOld::ReadNodes` 0x508D30, `CFigureManager::MakeAnimationNode / LoadAnimationFile /
 LoadSkeletonOld` 0x5AC400-0x5AC770 read the `.ani` double-precision keys of the 3ds tool chain (`CFakeFigure`, `Scene3ds_BuildFigures`).
 Nothing in the unit / object draw calls them.
+Reachability (T7 ed02 read 2026-11-07) [V]: the only code of this chain that a call can reach is what `CFakeUnit` (never created)
+uses: `CAnimationSystemOld::ctor / dtor / Reset / Detach / SetOwner`, `ApplyRoot` -> `AnimNodeOld_ResetToFirstKey / ApplyRecursive`
+(pose from rotation key 0 of the tree that `Scene3ds_BuildAnimTree` built from the 3ds scene), `BindFigures` -> `AnimNodeOld_BindFigures`,
+and `AnimNodeOld_Destroy`. Playing and loading are dead: `CAnimationSystemOld::Advance` 0x508AE0 has no caller (so
+`AnimNodeOld_StepTimeRecursive` / `AdvanceTime` never run), `AnimNodeOld_StepFrameRecursive` 0x507160 is unreferenced, and every caller
+of `CFigureManager::LoadAnimationFile` 0x5AC590 / `MakeAnimationNode` 0x5AC400 is itself dead (`AdvanceFrame`, `AdvanceTime`,
+`ReloadAnimation`, `QueueAnimation`, `MakeRecursive`, dead_508510 / dead_508C20), so no `.ani` file is ever read. The exporters
+`AnimNode_WriteAniAstFiles` 0x44B060, `AnimNode_WriteBon` 0x44B820 and `AnimNodeOld_WriteHierarchy` 0x44B760 have no caller either.
 Deep read 2026-11-06 [V]: `AnimNodeOld_ReadFromData` 0x505CB0 reads one node record of that chain: the rest rotation quaternion
 (16 B raw into `+0xE4`; the decompile shows it as "two doubles rounded to int64", which is only the FPU 8-byte copy idiom), the
 pivot Vec3 `+0xF4`, u32 n + n Vec3 base morph vertices (`+0x100`, also copied to the working array `+0xD4`), u32 frame count

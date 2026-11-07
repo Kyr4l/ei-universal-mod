@@ -4129,6 +4129,21 @@ CFakeFigure	CObject3D	0x18c	0x0	pointer	vtable	vt_CFakeFigure 0x73C274 (slots 0 
 CFakeFigure			0x94	CString	name	returned by slot 7 GetName 0x4547C0
 CFakeFigure			0x98	byte[176]	meshVectors	eleven 32-byte-aligned vectors {data, count, cap, grow} at +0x98, +0xa8 .. +0x138 (raw block at data[-4]); freed by CFakeFigure::dtor 0x454830
 CFakeFigure			0x148	CArray	strRecs	MFC CArray vt 0x73C2BC of 0x18-byte StrRec18 {CString, CDWordArray} (data +0x14c, count +0x150)
+CFakeFigure			0xa8	vector	soaVertices	aligned vector of 0x40 blocks (x4 / y4 / z4 / 1.0 x4), count = ceil(vertices / 4) (Scene3ds_BuildSoAVertices)
+CFakeFigure			0xb8	vector	soaNormals	same layout for the normals (Scene3ds_ComputeNormals)
+CFakeFigure			0xd8	vector	vertices	aligned Vec3 vector (count +0xdc); welded (Scene3ds_WeldVertices), made node-local (ResolveNodesAMF)
+CFakeFigure			0xe8	vector	uvs	aligned 8-byte uv vector (count +0xec); remapped into the .reg atlas (Scene3ds_CorrectMappings)
+CFakeFigure			0xf8	vector	normals	aligned Vec3 vector, one per vertex (Scene3ds_ComputeNormals)
+CFakeFigure			0x108	vector	components	ushort triplets {vertex, normal, uv} (count +0x10c) (Scene3ds_BuildIndexedComponents)
+CFakeFigure			0x118	vector	vertexNormalPairs	dwords {ushort vertex, ushort normal}, sorted, padded to a multiple of 4
+CFakeFigure			0x128	vector	cornerComponents	ushort component index per face corner (count +0x12c)
+CFakeFigure			0x138	vector	faces	0x34 records (count +0x13c): vertex indices +0..+8, uv indices +0xc..+0x14, normal indices +0x18..+0x20, plane normal +0x24, d +0x30
+CFakeFigure			0x15c	float[3]	centre	bounding box centre (Mesh3ds_ComputeBounds)
+CFakeFigure			0x168	float[3]	boxMin	relative to the centre
+CFakeFigure			0x174	float[3]	boxMax	relative to the centre
+CFakeFigure			0x180	float	radius	length of the half extent
+CFakeFigure			0x184	int	materialKind	0x11..0x19 from Material_ParseName (Scene3ds_CorrectMappings)
+CFakeFigure			0x188	int	textureKind	0..0x10 from Material_ParseName
 StrRec18		0x18	0x0	CString	name	StrRecs18_ConstructN 0x454DB0 / StrRec18_Destroy 0x454C50 / StringPair_Assign 0x474C50
 StrRec18			0x4	CArray	values	MFC dword array (vt 0x7464B8, data +8, count +0xc, cap +0x10, grow +0x14)
 FlameNoise		0x34	0x0	pointer	vtable	0x73D030 (pure base; slot 2 dtor 0x499E30); the world map uses OctaveNoise 0x7420D4 (slot 0 OctaveNoise_GenerateTable, slot 1 OctaveNoise_FillBand)
@@ -4204,3 +4219,51 @@ PrintRecord28	CObject	0x28	0x0	pointer	vtable	0x744264, slot 0 PrintRecord28::Se
 PrintRecord28			0x4	byte[12]	name	std::string, archive tag 1
 PrintRecord28			0x10	int[3]	block2	archive tag 2, sub-tags 1..3
 PrintRecord28			0x1c	int[3]	block3	archive tag 3, sub-tags 1..3
+Node3ds		0x120	0x4	CString	name	3ds keyframer node name (NODE_HDR); matched to the CFakeFigure name by Scene3ds_ResolveNodesAMF
+Node3ds			0x8	CString	parentName	empty for the root (Nodes3ds_LinkHierarchy takes the last such node)
+Node3ds			0xc	short	depth	hierarchy depth; Nodes3ds_AccumulateTransforms (dead) nests by it
+Node3ds			0x10	int	posKeyIndex	reset to 0 by Scene3ds_ResolveNodesAMF; Node3ds_StepFrame
+Node3ds			0x14	int	rotKeyIndex	reset to 0 by Scene3ds_ResolveNodesAMF
+Node3ds			0x54	float[3]	pivot	must be zero (Scene3ds_FillAnimNode: FatalError "node %s have NONULL pivot")
+Node3ds			0x60	float[3]	axis	first rotation key axis (Scene3ds_ResolveNodesAMF)
+Node3ds			0x6c	float	angle	first rotation key angle
+Node3ds			0x70	float[3]	position	first position key; mesh vertices are made relative to it
+Node3ds			0x7c	float[4]	rotation	quaternion {w, x, y, z} from axis / angle, conjugated after the mesh is made local
+Node3ds			0x8c	float[3]	basePosition	copy of +0x70 (Nodes3ds_LinkHierarchy / Node3ds_ResetTransformsRecursive); AnimNodeOld pivot +0xf4 source
+Node3ds			0x98	float[4]	baseRotation	copy of +0x7c; AnimNodeOld rest rotation +0xe4 source
+Node3ds			0xa8	CArray	posKeys	vt 0x73C1AC, 0x14 records {short frame, flags, x, y, z} (data +0xac, count +0xb0)
+Node3ds			0xbc	CArray	rotKeys	vt 0x73C1B8, 0x18 records {short frame, flags, angle +8, axis +0xc} (data +0xc0, count +0xc4)
+Node3ds			0xd0	CArray	morphKeys	vt 0x73C114, 0x14 records {short frame, aligned Vec3 buffer +4, count +8, cap, grow} (data +0xd4, count +0xd8)
+Node3ds			0xe4	CArray	vec3s	vt 0x73C120 Vec3 CArray (data +0xe8, count +0xec); FillAnimNode sizes the AnimNodeOld +0x6c array to its count
+Node3ds			0xf8	CArray	frames	vt 0x73C12C, 0x28 per-frame records {.., position +0xc, quaternion +0x18} (data +0xfc), sized to the frame count by ResolveNodesAMF
+Node3ds			0x10c	CArray	children	vt 0x73C138 dword CArray of child record pointers (data +0x110, count +0x114)
+CAnimationSystemOld		0x50	0x4	pointer	nodeList	aligned dword vector of every AnimNodeOld (count +8), filled by Scene3ds_FillAnimNode
+CAnimationSystemOld			0x14	pointer	root	root AnimNodeOld (0x128), rebuilt by Scene3ds_BuildAnimTree
+CAnimationSystemOld			0x0	pointer	owner	CFakeUnit (SetOwner)
+CAnimationSystemOld			0x18	double	time	-1.0 after the ctor, 0 after ApplyRoot, += dt in Advance (dead)
+CAnimationSystemOld			0x20	CString	name	emptied by the ctor
+CAnimationSystemOld			0x24	CStringArray	names	CORRECTION: was a CString (the ctor builds it with 0x6FE925, the dtor calls CStringArray::~CStringArray)
+CAnimationSystemOld			0x3c	vector	queue	aligned dword vector of queued clip entries (count +0x40, cap +0x44, grow +0x48)
+AnimNodeOld		0x128	0x0	pointer	system	owning CAnimationSystemOld (its +0 owner gives the world -> figure manager vt[15]); zeroed by AnimNodeOld_Destroy
+AnimNodeOld			0x4	CString	name	matched to the CFigure part name (vt[7]) by AnimNodeOld_BindFigures; .ani / .ast / .bon file name
+AnimNodeOld			0x10	pointer	currentClip	set from +0x14 by AnimNodeOld_ReloadAnimation / AdvanceFrame (dead code)
+AnimNodeOld			0x14	pointer	pendingClip	set by CAnimationSystemOld::NextQueued
+AnimNodeOld			0x1c	pointer	parent	0 for the root; set by Scene3ds_FillAnimNode
+AnimNodeOld			0x20	vector	children	aligned dword vector of AnimNodeOld* (count +0x24)
+AnimNodeOld			0x30	pointer	boundFigure	CFigure part (refcount +4 ++ on bind, -- in AnimNodeOld_Destroy); gets position +0x1c, rotation +0x34, morph deltas
+AnimNodeOld			0x34	int	frame	current frame (AnimNodeOld_AdvanceFrame / AdvanceTime)
+AnimNodeOld			0x38	double	frameFraction	zeroed by AnimNodeOld_ApplyRecursive / CAnimationSystemOld::ApplyRoot
+AnimNodeOld			0x40	int	frameCount	from the 3ds scene (Scene3ds_FillAnimNode) or the .ani data
+AnimNodeOld			0x44	vector	rotKeys	aligned vector of 0x28 keys {start, end, quaternion +8, axis +0x18, angle +0x24} (count +0x48); index +0x54
+AnimNodeOld			0x58	vector	posKeys	aligned vector of 0x20 keys {start, end, position +8, delta +0x14} (count +0x5c); index +0x68
+AnimNodeOld			0x84	CArray	morphFrames	vt 0x73D9BC, 0x18 records {start, end, aligned Vec3 vector +8, count +0xc} (data +0x88, count +0x8c); index +0x98
+AnimNodeOld			0x9c	float[4]	localRotation	current key quaternion
+AnimNodeOld			0xac	float[3]	localPosition	
+AnimNodeOld			0xb8	float[4]	worldRotation	local * parent world rotation
+AnimNodeOld			0xc8	float[3]	worldPosition	parent world position + pivot rotated by the parent world rotation
+AnimNodeOld			0xd4	vector	morphVertices	working vertex copy (count +0xd8), base +0x100 plus the accumulated morph frames; passed to CFigure::SetMorphDeltas
+AnimNodeOld			0xe4	float[4]	restRotation	parent-relative after AnimNode_MakeRelativeToParent
+AnimNodeOld			0xf4	float[3]	restPosition	parent-relative after AnimNode_MakeRelativeToParent
+AnimNodeOld			0x100	vector	baseVertices	aligned Vec3 vector (count +0x104)
+AnimNodeOld			0x110	float[3]	pivot	offset from the parent (AnimNode_MakeRelativeToParent, AnimNodeOld_SetMorphPivot); written to <node>.bon
+AnimNodeOld			0x11c	float[3]	morphParams	u, v, w of AnimNodeOld_SetMorphPivot
