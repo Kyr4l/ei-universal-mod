@@ -3374,13 +3374,13 @@ LeverRecord			0x24	CString	switchSound	FLD6 Switch Sound (tag 6): CLeverObject::
 LeverRecord			0x28	CString	leverText	FLD7 Lever Text (tag 7): no reader
 LeversDb		0x20	0x0	pointer[3]	levers	vector<LeverRecord 0x2c> (Levers.ldb tag 1); g_0x79C1A0
 LeversDb			0xc	StrHash	leverMap	std::string -> LeverRecord*; g_0x79C1AC (CLeverObject::SwitchState)
-DbArchive		0x98	0x0	CMemStream	readStream	stream object (vt 0x73BD90) bound by Archive_Open; +0x40 = the buffer base used by Archive_ReadTagged
-DbArchive			0x28	CMemStream	writeStream	grown by Archive_WriteTagged (SetSize)
-DbArchive			0x50	pointer	tagStack	CList of 0x24 nodes {+8 tag byte, +0xc offset, +0x10 size, +0x14 occurrence index}: the open tagged sections (Archive_BeginTag / EndTag)
+DbArchive		0x98	0x0	CMemStream	objectStream	the object table: (class id, object id) dword pairs; loading = the file's tag-0 chunk (Archive_Open), storing = filled by Archive_Close and written as chunk tag 0. CORRECTION: was "readStream ... +0x40 = the buffer base" (the tagged data lives in the +0x28 stream; +0x40 is its buffer +0x18)
+DbArchive			0x28	CMemStream	dataStream	the tagged data for reading AND writing: loading holds the tag-2 chunk while the objects are read, then the main tag-1 chunk; storing grown by Archive_WriteTagged; +0x40 (= this stream +0x18) is the buffer base of every Archive_ReadTagged / WriteTagged. CORRECTION: was "writeStream" only
+DbArchive			0x50	pointer	sectionList	STLport list sentinel (0x18-byte nodes from free list 0x79B22C: {next, prev, +8 tag byte, +0xc offset, +0x10 size, +0x14 occurrence}); the back node (sentinel +4) is the current section; BeginTag = push_back, EndTag = pop_back. CORRECTION: was "CList of 0x24 nodes"
 DbArchive			0x54	int	version	written at Archive_Close under tag 2 (the 10-byte trailer: tag 0 empty + tag 2 {tag 2 int 1})
 DbArchive			0x58	byte	loading	1 = reading (Archive_SerializeBytes zero-fills missing tags), 0 = writing
-DbArchive			0x5c	StrHash	tagNameHash	hash table +0x5c (object refs, unused by the databases)
-DbArchive			0x70	pointer	objectList	list +0x70 of deferred objects (Archive_Close writes them)
+DbArchive			0x5c	IdHash	objectById	STLport hash_map<uint, object*> {buckets +0x60..+0x68, count +0x6c}: storing = the objects already queued (key = address, value = archive marker; Archive_WriteObjectRef); loading = object id -> object created by Archive_Open (Archive_ReadObjectRef). CORRECTION: was "tagNameHash, StrHash, unused by the databases"
+DbArchive			0x70	pointer	objectQueue	STLport list<object*> (0x10-byte nodes): storing = objects referenced by Archive_WriteObjectRef, serialized by Archive_Close; loading = objects created by Archive_Open
 CDescBase		0x4c	0x0	pointer	vtable	ChunkFile base (0x42BEC0); 0x73C5C4; slots: 0 OnChunk, 3 GetTypeName, 4 GetDisplayName, 5 MoveBy, 6 GetObject, 7 Spawn, 8 Remove, 9 Write, 10 WriteChunk, 11 WriteFields
 CDescBase			0x4	uint	chunkTag	ChunkFile: the current child chunk tag during OnChunk
 CDescBase			0x18	int	id	NID (0xB002 / 0xAA05 / 0xCC02 / 0xDD02); -1 = allocate
@@ -4267,3 +4267,39 @@ AnimNodeOld			0xf4	float[3]	restPosition	parent-relative after AnimNode_MakeRela
 AnimNodeOld			0x100	vector	baseVertices	aligned Vec3 vector (count +0x104)
 AnimNodeOld			0x110	float[3]	pivot	offset from the parent (AnimNode_MakeRelativeToParent, AnimNodeOld_SetMorphPivot); written to <node>.bon
 AnimNodeOld			0x11c	float[3]	morphParams	u, v, w of AnimNodeOld_SetMorphPivot
+FactoryMap		0x28	0x0	IdHash	classIdByVtable	g_0x79B270 +0: hash_map<vtable, class id> (0xC-byte nodes; 100 buckets in FactoryMap_Ctor_408EA0); Archive_Close writes the class id of each queued object
+FactoryMap			0x14	IdHash	factoryByClassId	g_0x79B284: hash_map<class id, factory fn> (FactoryMap_Register); Archive_Open creates each object of the table with it
+CArchive			0x4	int	m_bForceFlat	TRUE in the ctor 0x7086C0 (MFC 6 layout; the ctor itself is unused)
+CArchive			0xc	uint	m_nObjectSchema	-1 in the ctor; swapped around each object Serialize by ReadObject
+CArchive			0x10	CString	m_strFileName	file GetFilePath (vt+0x18); used in AfxThrowArchiveException
+CArchive			0x14	uint	m_nMode	bit 0 = load (IsLoading tests of every Serialize), bit 1 = bNoFlushOnDelete
+CArchive			0x18	int	m_bUserBuf	buffer supplied by the caller (not freed by Abort)
+CArchive			0x1c	int	m_nBufSize	>= 0x80
+CArchive			0x20	CFile*	m_pFile	vt+0x28 Seek, +0x34 Read, +0x38 Write, +0x50 GetBufferPtr
+CArchive			0x24	BYTE*	m_lpBufCur	CArchive::Read / Write position
+CArchive			0x28	BYTE*	m_lpBufMax	end of valid data (load) / buffer end (store)
+CArchive			0x2c	BYTE*	m_lpBufStart	buffer start
+CArchive			0x30	uint	m_nMapCount	object / class count (CheckCount limit 0x3FFFFFFD)
+CArchive			0x34	pointer	m_pLoadArray_or_m_pStoreMap	CPtrArray when loading, CMapPtrToPtr when storing (MapObject)
+CArchive			0x38	CMapPtrToPtr*	m_pSchemaMap	versionable class schemas (ReadClass)
+CArchive			0x3c	int	m_nGrowSize	0x40 load / 0x10 store
+CArchive			0x40	int	m_nHashSize	0x89
+CMemFile	CFile	0x28	0x10	uint	m_nGrowBytes	0 = fixed buffer (GrowFile throws)
+CMemFile			0x14	uint	m_nPosition	GetPosition, Seek
+CMemFile			0x18	uint	m_nBufferSize	capacity
+CMemFile			0x1c	uint	m_nFileSize	GetLength / SetLength
+CMemFile			0x20	BYTE*	m_lpBuffer	Alloc / Realloc / Free through vt+0x54 / +0x58 / +0x60
+CMemFile			0x24	int	m_bAutoDelete	TRUE for the grow ctor; the buffer is freed by Close only then
+CDC	CObject	0x10	0x4	HDC	m_hDC	output DC
+CDC			0x8	HDC	m_hAttribDC	attribute DC (queries, map mode)
+CDC			0xc	int	m_bPrinting	
+AFX_MODULE_THREAD_STATE	CNoTrackObject		0x14	CHandleMap*	m_pmapHWND	
+AFX_MODULE_THREAD_STATE			0x18	CHandleMap*	m_pmapHMENU	created by 0x707BFA (CTempMenu); that function is named AfxGetHandleMap_Gdi in functions.tsv but is afxMapHMENU
+AFX_MODULE_THREAD_STATE			0x1c	CHandleMap*	m_pmapHDC	created by 0x708D07 (CTempDC, 2 handles)
+AFX_MODULE_THREAD_STATE			0x20	CHandleMap*	m_pmapHGDIOBJ	created by 0x709FEE (CTempGdiObject). CORRECTION: 0x709FEE was named AfxGetHandleMap_Menu
+AFX_MODULE_THREAD_STATE			0x28	pointer	m_pfnNewHandler	AfxThrowMemoryException
+AUX_DATA		0x6c	0x18	int	cxPixelsPerInch	afxData 0x7C90C8 +0x18 = 0x7C90E0 (default LOGPIXELSX of DPtoHIMETRIC without a DC)
+AUX_DATA			0x3c	HCURSOR	hcurWait	0x7C9104, CWinApp::DoWaitCursor
+AUX_DATA			0x50	HBITMAP	hbmMenuDot	0x7C9118 (AfxLoadDotBitmap; deleted by AUX_DATA::~AUX_DATA 0x70E181)
+AUX_DATA			0x5c	int	bWin4	0x7C9124
+CWinApp	CWinThread	0xc0	0x78	char*	m_pszAppName	the game never constructs a CWinApp (CWinApp::CWinApp 0x70D654 unreferenced); only CWinApp::DoMessageBox runs with this = NULL

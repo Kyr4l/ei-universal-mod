@@ -97,200 +97,200 @@ addr	size	name	status	purpose
 0x00404F20	82	HashMapU32_Remove	named	(key*): finds key in its bucket, erases it (HashU32_EraseNode_405620), returns its value +8; 0 if absent
 0x00404F80	83	HashMapU32_Lookup	named	STL-style hash map find (this = {+4 buckets begin, +8 end}, key uint*, out value*) -> 1 / 0: bucket = key % bucket count, chain of nodes {next, key +4, value +8} compared on the key, *out = value on a hit; CBaseManager::RegisterInstant / PoolObject look the per-type pool record up by type id
 0x00404FE0	89	CBaseManager::PopPooled	named	(this = a per-type pool record's MFC CList {+4 head, +8 tail, +0xc count, +0x10 free nodes, +0x14 CPlex}) -> the pooled object: RemoveHead (data +8 returned, node to the free list); at count 0 the CPlex chain is freed (List_FreeChain) and the list reset; CBaseManager::RegisterInstant
-0x00405040	128	CList12_NewNode	named	MFC-style CList node alloc (0xC-byte nodes, free list +0x10, blocks +0x14 via 0x6FE8EF), stores value at +8
-0x004050C0	108	CList12_RemoveNode	named	unlink node (head +4, tail +8) and put it on the free list, release block when empty
-0x00405130	95	CList12_Destroy	named	vtable 0x73B8D4 dtor: clears list, frees blocks (19 callers)
-0x00405190	281	CList12_Serialize	named	vtable 0x73B8D4 slot 2: CArchive load/store of a list of dwords (nodes of 0xC bytes)
-0x004052B0	148	HashTable12_Destroy_4052B0	named	return every 0xC-byte node to size pool (PoolFree) and free the bucket vector
-0x00405350	82	HashU32_Remove_405350	named	erase key from uint hashtable (via HashU32_EraseNode_405720) and return its value
-0x004053B0	148	HashTable12_Destroy_4053B0	named	same as 0x4052B0
-0x00405450	148	HashTable12_Destroy_405450	named	same as 0x4052B0
-0x004054F0	8	ClearField_8_4054F0	named	stores a constant into this+8
-0x00405500	48	List16_Clear_405500	named	std::list clear: nodes back to the 0x10-byte pool g_0x79B228, reset sentinel
-0x00405530	8	ClearField_8_405530	named	stores a constant into this+8
-0x00405540	30	vt_73B8D4::DeletingDtor_405540	named	scalar deleting destructor: runs CList12_Destroy then operator delete when flag&1
-0x00405560	60	HashU32_Find_405560	named	STLport hashtable (uint key at node+4) find: iterator {node, table}
-0x004055A0	123	HashU32_FindOrInsert16_4055A0	named	map operator[]: rehash check (0x406640), find key else NodeAlloc16 insert, returns pointer to value
-0x00405620	119	HashU32_EraseNode_405620	named	unlink node from its bucket chain, return it to pool g_0x79B228, count(+0x10)--
-0x004056A0	123	HashU32_FindOrInsert16_4056A0	named	map operator[] variant (rehash 0x406D10)
-0x00405720	119	HashU32_EraseNode_405720	named	same as 0x405620 (another instantiation)
-0x004057A0	60	HashU32_Find_4057A0	named	hashtable find by uint key
+0x00405040	128	CList12::AddTail	named	MFC CList<DWORD>::AddTail (inlined NewNode): free list +0x10 empty -> CPlex_Create(+0x14, block size +0x18, 0xC) and chain the new nodes; node {next, prev=tail +8, data=arg}, count +0xC ++, link after tail (or head +4 when empty); called by CBaseManager::RegisterInstant
+0x004050C0	108	CList12::RemoveAt	named	MFC CList<DWORD>::RemoveAt: unlink node (head +4 / tail +8 fix-up), FreeNode onto free list +0x10, count +0xC --; when count hits 0 does RemoveAll (clear head/tail/count/free list, List_FreeChain blocks +0x14)
+0x00405130	95	CList12::~CList	named	MFC CList<DWORD> dtor: vtable 0x73B8D4, RemoveAll (zero +4/+8/+0xC/+0x10), CPlex chain +0x14 freed by List_FreeChain
+0x00405190	281	CList12::Serialize	named	MFC CList<DWORD>::Serialize (vtable 0x73B8D4 slot 2): storing -> WriteCount(+0xC) then 4 bytes per node data +8; loading -> ReadCount then reads 4 bytes and AddTail per element (CArchive Read/Write named CMemFile::Write/Read at 0x708832/0x708941)
+0x004052B0	148	HashTable12_Destroy_4052B0	named	STLport hashtable dtor body (clear + free buckets): every chain node -> PoolFree(n, 0xC), bucket slots zeroed, count +0x10 = 0, bucket vector +4..+0xC freed (node_alloc free list 0x79B224[(n-1)>>3] when <= 0x80 bytes, else operator delete); reached only from unwind funclets 0x70E224/0x70E28E/0x721B9E/0x721E2E
+0x00405350	82	HashU32_Remove_405350	named	game helper on a STLport hash_map<uint,ptr>: finds key (key % bucket count), erases the node through HashU32_EraseNode_405720 and returns its value +8, 0 when absent; CBaseManager::PoolObject, CWorldClient::Update
+0x004053B0	148	HashTable12_Destroy_4053B0	named	same code as 0x4052B0 (STLport hashtable clear + free buckets, 0xC nodes); only from unwind funclets 0x70E237/0x70E299
+0x00405450	148	HashTable12_Destroy_405450	named	same code as 0x4052B0 (STLport hashtable clear + free buckets, 0xC nodes); only from unwind funclet 0x70E2A4
+0x004054F0	8	ClearField_8_4054F0	named	sets +8 = 0; jump target of 8 unwind funclets (0x70E320, 0x70E350, ...)
+0x00405500	48	List16_Clear_405500	named	STLport list<T>::clear for 0x10-byte nodes: walks from sentinel *this, pushes every node on the node_alloc free list 0x79B228, resets sentinel next/prev to itself; CBaseManager::Done
+0x00405530	8	ClearField_8_405530	named	sets +8 = 0 (same code as 0x4054F0); unwind funclet 0x70E3B0
+0x00405540	30	vt_73B8D4::DeletingDtor_405540	named	scalar deleting dtor of CList<DWORD> (vtable 0x73B8D4 slot 1): CList12::~CList, operator delete when flag & 1
+0x00405560	60	HashU32_Find_405560	named	STLport hashtable<uint>::find: bucket key % nbuckets (buckets +4..+8), walks chain comparing node+4; writes iterator {node or 0, table}
+0x004055A0	123	HashU32_FindOrInsert16_4055A0	named	STLport hash_map<uint,T>::operator[] (find_or_insert): resize(count+1) 0x406640, search bucket, else NodeAlloc16_407420({key,0}) pushed at bucket head, count +0x10 ++; returns &node->value (+8)
+0x00405620	119	HashU32_EraseNode_405620	named	STLport hashtable::erase(iterator) for 0x10-byte nodes: finds node in its bucket chain, unlinks it, puts it on node_alloc free list 0x79B228, count +0x10 --
+0x004056A0	123	HashU32_FindOrInsert16_4056A0	named	STLport hash_map<uint,T>::operator[] (hashtable::find_or_insert), same code as 0x4055A0 with resize 0x406D10 and NodeAlloc16_4074F0; returns &node->value (+8); CBaseManager::RegisterWithNewId
+0x00405720	119	HashU32_EraseNode_405720	named	STLport hashtable::erase(iterator), byte-identical to 0x405620 (0x10-byte nodes to free list 0x79B228, count +0x10 --)
+0x004057A0	60	HashU32_Find_4057A0	named	STLport hashtable<uint>::find, byte-identical to 0x405560 (iterator {node or 0, table})
 0x004057E0	49	dead_4057E0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00405820	303	HashTable_Ctor_405820	named	STLport hashtable constructor with initial bucket count (NextPrime, bucket vector from pool)
-0x00405950	398	PoolAlloc	named	size-class allocator: <=0x80 bytes from free lists g_0x79B224 (refill via chunk allocator), else operator new (137 callers)
-0x00405AE0	60	HashU32_Find_405AE0	named	hashtable find by uint key
-0x00405B20	60	HashU32_Find_405B20	named	hashtable find by uint key (5 callers, used by CBaseManager id map)
-0x00405B60	57	PoolFreeVector_405B60	named	free a vector's buffer to the size pool (begin +0, capacity end +8)
+0x00405820	303	HashTable_Ctor_405820	named	STLport hashtable ctor (n, hash, equal, alloc): copies the empty functor bytes +0..+2, zeroes bucket vector +4/+8/+0xC and count +0x10, n -> next prime from __stl_prime_list 0x73B914 (28 entries; 0xFFFFFFFB past the end), bucket.reserve (PoolAlloc / DwordVector_AllocFill_4081F0 + PoolFreeDwords), bucket.insert(end, n, 0) via 0x406810; CBaseManager::CBaseManager
+0x00405950	398	PoolAlloc	named	STLport __node_alloc::allocate(n) (fastcall): n > 0x80 -> operator new; else pop free list 0x79B224[(n-1)>>3]; empty -> _S_refill inlined (chunk 0x79B268..0x79B26C, heap size 0x79B264, 20 objects, grow by 2*20*n + heap/16, falls back to bigger free lists) and stlport_node_alloc_chunk_alloc; returns the block in eax
+0x00405AE0	60	HashU32_Find_405AE0	named	STLport hashtable<uint>::find, byte-identical to 0x405560
+0x00405B20	60	HashU32_Find_405B20	named	STLport hashtable<uint>::find, byte-identical to 0x405560; CBaseManager id map users
+0x00405B60	57	PoolFreeVector_405B60	named	STLport vector<4-byte> buffer deallocate: begin +0, end_of_storage +8; <= 0x80 bytes back to node_alloc free list 0x79B224[(n-1)>>3], else operator delete; only from unwind funclets
 0x00405BA0	1	dead_405BA0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00405BB0	60	HashU32_Find_405BB0	named	hashtable find by uint key
-0x00405BF0	57	PoolFreeVector_405BF0	named	free a vector's buffer to the size pool (7 callers)
+0x00405BB0	60	HashU32_Find_405BB0	named	STLport hashtable<uint>::find, byte-identical to 0x405560
+0x00405BF0	57	PoolFreeVector_405BF0	named	STLport vector buffer deallocate, same code as 0x405B60; CBaseManager::DestroyBody, CWorldClient::dtor and unwind funclets
 0x00405C30	1	dead_405C30	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00405C40	303	HashTable_Ctor_405C40	named	STLport hashtable constructor with initial bucket count
-0x00405D70	60	HashU32_Find_405D70	named	hashtable find by uint key
-0x00405DB0	57	PoolFreeVector_405DB0	named	free vector buffer to size pool
+0x00405C40	303	HashTable_Ctor_405C40	named	STLport hashtable ctor with n buckets, same code as 0x405820 (callees DwordVector_AllocFill_4088B0 / DwordVector_InsertN_407280); CBaseManager::CBaseManager
+0x00405D70	60	HashU32_Find_405D70	named	STLport hashtable<uint>::find, byte-identical to 0x405560
+0x00405DB0	57	PoolFreeVector_405DB0	named	STLport vector buffer deallocate, same code as 0x405B60; CBaseManager::DestroyBody and unwind funclets
 0x00405DF0	1	dead_405DF0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00405E00	57	PoolFreeVector_405E00	named	free vector buffer to size pool
+0x00405E00	57	PoolFreeVector_405E00	named	STLport vector buffer deallocate, same code as 0x405B60; CBaseManager::DestroyBody and unwind funclets
 0x00405E40	1	dead_405E40	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00405E50	57	PoolFreeVector_405E50	named	free vector buffer to size pool
-0x00405E90	18	SetFields2_4_405E90	named	stores two arguments into this+0 and this+4
-0x00405EB0	560	HashTable_Rehash2_405EB0	named	hashtable resize path using prime table 0x73B914: realloc bucket vector, move chains, pool free of the old vector
-0x004060E0	343	PoolAlloc_Refill	named	size-class allocator slow path (186 callers): carve 20 nodes of the aligned size from the chunk g_0x79B268/26C or operator new
-0x00406240	24	InitFields4_406240	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
-0x00406260	21	PairCtor_406260	named	constructs a small pair/struct from two byte/dword sources (second store overwrites the first: STLport empty-base pair)
-0x00406280	83	HashTable_Begin_406280	named	iterator to the first non-empty bucket
-0x004062E0	18	SetFields2_4_4062E0	named	stores two arguments into this+0 and this+4
-0x00406300	560	HashTable_Rehash2_406300	named	same pattern as 0x405EB0
-0x00406530	24	InitFields4_406530	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
-0x00406550	21	PairCtor_406550	named	constructs a small pair/struct from two byte/dword sources (second store overwrites the first: STLport empty-base pair)
-0x00406570	18	SetFields2_4_406570	named	stores two arguments into this+0 and this+4
-0x00406590	51	PoolFreeDwords	named	free N-dword array (N*4 <= 0x80 to size pool else delete), 36 callers
-0x004065D0	98	HashSetU32_Insert_4065D0	named	rehash check then insert uint key if absent (node via NodeAlloc16_407420)
-0x00406640	362	HashTable_Resize_406640	named	if n > bucket count: NextPrime(n), build new bucket vector, rehash all chains (node 0x10), free old
-0x004067B0	90	HashTable_ClearNodes16_4067B0	named	return every node of every bucket to the 0x10-byte pool, count=0
-0x00406810	314	DwordVector_InsertN_406810	named	vector<uint>::insert(pos, n, value) with grow path 0x408060
-0x00406950	72	HashU32_GetValuePtr	named	find key, return pointer to node value (node+8) or 0
-0x004069A0	97	CList12_AllocNode_4069A0	named	MFC CList 0xC-byte node allocation with insertion (blocks via 0x6FE8EF)
-0x00406A10	133	HashMapU32_FindOrInsertMax_406A10	named	map operator[]: tracks max key in +0x14, rehash, returns pointer to value
-0x00406AA0	133	HashMapU32_FindOrInsertMax_406AA0	named	same with other node type
-0x00406B30	24	AlignedAlloc32_406B30	named	allocates size param_1 * 2 + 0x24 with operator new and returns it aligned to 32 bytes (original pointer stored just before)
-0x00406B50	27	AlignedAlloc32_406B50	named	allocates size param_1 * 4 + 0x24 with operator new and returns it aligned to 32 bytes (original pointer stored just before)
-0x00406B70	295	stlport_node_alloc_chunk_alloc	named	STLport __node_alloc::_S_chunk_alloc(size=ecx, &nobjs=edx): carves a block from the free-list pool (g_0x79b224 free lists for 8..128 bytes, g_0x79b268/0x79b26c start/end of the current chunk, g_0x79b264 heap size); calls malloc 0x7005AF. Was wrongly seeded as ConsolePrint.
-0x00406CA0	98	HashSetU32_Insert_406CA0	named	rehash check (0x406D10) then insert uint key
-0x00406D10	362	HashTable_Resize_406D10	named	same, other node type
-0x00406E80	90	HashTable_ClearNodes16_406E80	named	return every node to the 0x10-byte pool, count=0
-0x00406EE0	362	HashTable_Resize_406EE0	named	same, other node type
-0x00407050	90	HashTable_ClearNodes16_407050	named	return every node to the 0x10-byte pool, count=0
-0x004070B0	362	HashTable_Resize_4070B0	named	same, other node type
-0x00407220	90	HashTable_ClearNodes16_407220	named	return every node to the 0x10-byte pool, count=0
-0x00407280	314	DwordVector_InsertN_407280	named	vector<uint>::insert(pos, n, value) with grow path 0x408450
-0x004073C0	54	HashIter_NextBucketNode_4073C0	named	first node of the next non-empty bucket after the current node's bucket
-0x00407400	32	StaticInit_Guarded_407400	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x00407420	133	NodeAlloc16_407420	named	allocate 0x10-byte node from pool g_0x79B228 (refill 20 via chunk allocator), store value at +8
-0x004074B0	24	NodeFree16_4074B0	named	push 0x10-byte node onto pool g_0x79B228
-0x004074D0	22	GetFieldOut_8_4074D0	named	copies the field at this+8 to *param_1
-0x004074F0	133	NodeAlloc16_4074F0	named	allocate 0x10-byte node from pool, store value at +8
-0x00407580	24	NodeFree16_407580	named	push 0x10-byte node onto pool g_0x79B228
-0x004075A0	22	GetFieldOut_8_4075A0	named	copies the field at this+8 to *param_1
-0x004075C0	123	HashMapU32_FindOrInsert_4075C0	named	map operator[] returning pointer to value (node+8)
-0x00407640	24	NodeFree16_407640	named	push 0x10-byte node onto pool g_0x79B228
-0x00407660	22	GetFieldOut_8_407660	named	copies the field at this+8 to *param_1
-0x00407680	123	HashMapU32_FindOrInsert_407680	named	map operator[] returning pointer to value
-0x00407700	24	NodeFree16_407700	named	push 0x10-byte node onto pool g_0x79B228
-0x00407720	22	GetFieldOut_8_407720	named	copies the field at this+8 to *param_1
-0x00407740	515	HashTable_ConstructBuckets_407740	named	construct bucket vector of N dwords (pool allocated, zero-filled)
+0x00405E50	57	PoolFreeVector_405E50	named	STLport vector buffer deallocate, same code as 0x405B60; CBaseManager::DestroyBody
+0x00405E90	18	SetFields2_4_405E90	named	STLport hashtable iterator ctor: +0 = node, +4 = table (thiscall, 2 args); same bytes as 0x4062E0/0x406570/0x40AD20/0x40B5E0
+0x00405EB0	560	HashTable_InitBuckets_405EB0	named	"STLport hashtable::_M_initialize_buckets(n): n -> first prime >= n of __stl_prime_list 0x73B914 (inline lower_bound, 0xFFFFFFFB past the end), bucket vector +4..+0xC reserve (node_alloc / PoolAlloc_Refill / operator new, old buffer copied by DwordVector_AllocFill_4087E0 and PoolFree), then insert(end, n, 0) inlined (FillDwords / DwordRange_Copy / CopyDwords / CopyBackwardDwords / InsertRealloc 0x4082C0), count +0x10 = 0; CBaseManager::CBaseManager. Same shape as HashTable_InitBuckets 0x4A9FC0. CORRECTION: was ""rehash/resize path"""
+0x004060E0	343	PoolAlloc_Refill	named	STLport __node_alloc::_S_refill(n) (fastcall): rounds n up to 8, gets 20 objects (fewer when the chunk is short) through the inlined _S_chunk_alloc / stlport_node_alloc_chunk_alloc, returns the first and threads the rest onto free list 0x79B224[(n-1)>>3]
+0x00406240	24	InitFields4_406240	named	STLport _Vector_base ctor (alloc): begin +0 = finish +4 = 0, end_of_storage +8 = 0 (the allocator byte store at +8 is overwritten); same bytes as 0x406530/0x40ADE0/0x40AE50
+0x00406260	21	PairCtor_406260	named	STLport _STLP_alloc_proxy / compressed pair ctor: stores the empty allocator byte then the dword value at +0 (second store wins); same bytes as 0x406550
+0x00406280	83	HashTable_Begin_406280	named	STLport hashtable::begin(): iterator {first node of the first non-empty bucket (buckets +4..+8) or 0, table}; CBaseManager::FreeTypeGroups
+0x004062E0	18	SetFields2_4_4062E0	named	STLport hashtable iterator ctor {node, table}; same bytes as 0x405E90
+0x00406300	560	HashTable_InitBuckets_406300	named	"STLport hashtable::_M_initialize_buckets(n), same code as 0x405EB0 (other callee copies); CBaseManager::CBaseManager. CORRECTION: was ""rehash"""
+0x00406530	24	InitFields4_406530	named	STLport _Vector_base ctor (all three pointers 0); same bytes as 0x406240
+0x00406550	21	PairCtor_406550	named	STLport compressed pair ctor (allocator byte + dword at +0); same bytes as 0x406260
+0x00406570	18	SetFields2_4_406570	named	STLport hashtable iterator ctor {node, table}; same bytes as 0x405E90
+0x00406590	51	PoolFreeDwords	named	STLport allocator<4-byte>::deallocate(p, n) (fastcall): n*4 <= 0x80 -> push on node_alloc free list 0x79B224[(n*4-1)>>3], else operator delete; null p ignored
+0x004065D0	98	HashSetU32_Insert_4065D0	named	STLport hashtable<uint>::find_or_insert(key) for a hash_set: resize(count+1) 0x406640, search bucket, else NodeAlloc16_407420(key) at the bucket head and count +0x10 ++; returns &node->value (+4)
+0x00406640	362	HashTable_Resize_406640	named	STLport hashtable::resize(hint): when hint > bucket count, n = next prime (SortedU32_LowerBound on 0x73B914..0x73B984, 0xFFFFFFFB past the end); if larger, builds a new bucket vector (HashTable_ConstructBuckets_407740, zero-filled here), moves every node of every old chain to new[key % n] (key at node+4), swaps vectors and frees the old one (node_alloc list or operator delete)
+0x004067B0	90	HashTable_ClearNodes16_4067B0	named	STLport hashtable::clear() for 0x10-byte nodes: every chain node pushed on free list 0x79B228, bucket slots zeroed, count +0x10 = 0 (bucket vector kept); same bytes as 0x406E80/0x407050/0x407220/0x40B330
+0x00406810	314	DwordVector_InsertN_406810	named	STLport vector<4-byte>::_M_fill_insert(pos, n, &x) (this = vector begin +0, finish +4, end_of_storage +8): capacity short -> _M_insert_overflow 0x408060; else moves the tail up (two cases: n < elems after pos, or not) and fills n copies of x
+0x00406950	72	HashU32_GetValuePtr	named	game helper on a STLport hash_map<uint,T>: finds key (key % bucket count), returns &node->value (+8) or 0; CBaseManager::Done
+0x004069A0	97	CList12_AllocNode_4069A0	named	MFC CList<DWORD>::NewNode(pPrev, pNext): free list +0x10 empty -> CPlex_Create(+0x14, +0x18, 0xC) and thread the block; pops a node, node.prev = arg1, node.next = arg2, count +0xC ++, data +8 = 0; returns the node
+0x00406A10	133	HashMapU32_FindOrInsertMax_406A10	named	game wrapper of hash_map<uint,T>::operator[]: first keeps the largest key seen in +0x14 (signed compare), then the inlined find_or_insert (resize 0x406D10, NodeAlloc16_4074F0) returning &value (+8); CBaseManager::RegisterInstant, CWorldClient::AddObject
+0x00406AA0	133	HashMapU32_FindOrInsertMax_406AA0	named	same code as 0x406A10 (resize 0x4070B0, other node alloc): max key in +0x14, then operator[] -> &value; CBaseManager::RegisterInstant / PoolObject
+0x00406B30	24	AlignedAlloc32_406B30	named	fastcall (n): operator new(n*2 + 0x24) (0x7005AF), returns the pointer rounded up to 32 bytes ((p+0x23) & ~0x1F) with the raw pointer stored at result-4; buffers of n 16-bit indices (renderer)
+0x00406B50	27	AlignedAlloc32_406B50	named	fastcall (n): operator new(n*4 + 0x24), returns it aligned to 32 bytes with the raw pointer at result-4; buffers of n dwords (scene / figure loaders, RadixSortU32)
+0x00406B70	295	stlport_node_alloc_chunk_alloc	named	STLport __node_alloc::_S_chunk_alloc(size ecx, &nobjs edx): serves size*nobjs from the chunk 0x79B268..0x79B26C (or as many objects as fit, nobjs updated); else puts the chunk rest on its free list, operator new(2*size*nobjs + heap/16 rounded to 8) (heap total 0x79B264), on failure borrows from a larger free list, and loops
+0x00406CA0	98	HashSetU32_Insert_406CA0	named	STLport hashtable<uint>::find_or_insert(key) for a hash_set, same code as 0x4065D0 (resize 0x406D10, NodeAlloc16_4074F0); returns &node->value (+4); only from dead_403D30 / dead_403E10
+0x00406D10	362	HashTable_Resize_406D10	named	"STLport hashtable::resize(hint), same code as 0x406640 (bucket ctor 0x407960). CORRECTION: was ""other node type""; the code is node-type independent (key at node+4)"
+0x00406E80	90	HashTable_ClearNodes16_406E80	named	STLport hashtable::clear() for 0x10-byte nodes, byte-identical to 0x4067B0; CBaseManager::Done / DoneObjects, CWorldClient::dtor / ClearAll
+0x00406EE0	362	HashTable_Resize_406EE0	named	STLport hashtable::resize(hint), same code as 0x406640 (bucket ctor 0x407B80)
+0x00407050	90	HashTable_ClearNodes16_407050	named	STLport hashtable::clear(), byte-identical to 0x4067B0; CBaseManager::Done
+0x004070B0	362	HashTable_Resize_4070B0	named	STLport hashtable::resize(hint), same code as 0x406640 (bucket ctor 0x407E00)
+0x00407220	90	HashTable_ClearNodes16_407220	named	STLport hashtable::clear(), byte-identical to 0x4067B0; CBaseManager::Done
+0x00407280	314	DwordVector_InsertN_407280	named	STLport vector<4-byte>::_M_fill_insert(pos, n, &x), same code as 0x406810 (overflow 0x408650); HashTable_Ctor_405C40
+0x004073C0	54	HashIter_NextBucketNode_4073C0	named	STLport hashtable iterator _M_skip_to_next (fastcall it {node, table}): returns the first node of the next non-empty bucket after node's bucket (node key +4 % n), 0 at the end; CBaseManager::FreeTypeGroups
+0x00407400	32	StaticInit_Guarded_407400	named	CRT initializer (table entry 0x783054): sets guard bit 0 of 0x7CAEE4 once and atexit(0x4013D0), a 1-byte ret, i.e. a static object with trivial ctor and empty dtor (template static shared with 0x40BDF0)
+0x00407420	133	NodeAlloc16_407420	named	STLport hashtable::_M_new_node(pair): pops a 0x10-byte node from free list 0x79B228 (empty -> stlport_node_alloc_chunk_alloc(0x10, 20) and threads the rest), next = 0, copies the 8-byte value {key, value} to +4/+8; returns the node
+0x004074B0	24	NodeFree16_4074B0	named	STLport allocator deallocate of one 0x10-byte node: pushes it on free list 0x79B228 (null ignored); same bytes as 0x407580/0x407640/0x407700
+0x004074D0	22	GetFieldOut_8_4074D0	named	STLport vector::get_allocator(): copies the allocator byte +8 to *out; same bytes as 0x4075A0/0x407660/0x407720/0x40BE10/0x40BE30
+0x004074F0	133	NodeAlloc16_4074F0	named	STLport hashtable::_M_new_node, same code as 0x407420
+0x00407580	24	NodeFree16_407580	named	push one 0x10-byte node on free list 0x79B228, same bytes as 0x4074B0; CBaseManager::DestroyBody / Init
+0x004075A0	22	GetFieldOut_8_4075A0	named	STLport vector::get_allocator() (byte +8 -> *out), same bytes as 0x4074D0; HashTable_Resize_406D10
+0x004075C0	123	HashMapU32_FindOrInsert_4075C0	named	STLport hash_map<uint,T>::operator[], same code as 0x4055A0 (resize 0x406EE0, NodeAlloc16_408A90); returns &value (+8); CBaseManager::PoolObject
+0x00407640	24	NodeFree16_407640	named	push one 0x10-byte node on free list 0x79B228, same bytes as 0x4074B0; CBaseManager::DestroyBody
+0x00407660	22	GetFieldOut_8_407660	named	STLport vector::get_allocator(), same bytes as 0x4074D0; HashTable_Resize_406EE0
+0x00407680	123	HashMapU32_FindOrInsert_407680	named	STLport hash_map<uint,T>::operator[], same code as 0x4055A0 (resize 0x4070B0, NodeAlloc16_408B20); CBaseManager::PoolObject
+0x00407700	24	NodeFree16_407700	named	push one 0x10-byte node on free list 0x79B228, same bytes as 0x4074B0; CBaseManager::DestroyBody
+0x00407720	22	GetFieldOut_8_407720	named	STLport vector::get_allocator(), same bytes as 0x4074D0; HashTable_Resize_4070B0
+0x00407740	515	HashTable_ConstructBuckets_407740	named	"STLport vector<void*>(n, alloc) storage ctor: n dwords from node_alloc (free list 0x79B224, inlined _S_refill / chunk_alloc) or operator new when > 0x80 bytes; begin = finish = buffer, end_of_storage = buffer + n; the caller (Resize 0x406640) zero-fills. CORRECTION: was ""zero-filled"" (this function does not fill)"
 0x00407950	1	dead_407950	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00407960	515	HashTable_ConstructBuckets_407960	named	construct bucket vector of N dwords
+0x00407960	515	HashTable_ConstructBuckets_407960	named	same code as 0x407740 (vector<void*> storage of n, no fill); HashTable_Resize_406D10
 0x00407B70	1	dead_407B70	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00407B80	515	HashTable_ConstructBuckets_407B80	named	construct bucket vector of N dwords
+0x00407B80	515	HashTable_ConstructBuckets_407B80	named	same code as 0x407740; HashTable_Resize_406EE0
 0x00407D90	1	dead_407D90	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00407DA0	62	PoolFree_N12_407DA0	named	free array of N 0xC-byte elements to size pool
-0x00407DE0	22	InitFields2_407DE0	named	initializes 2 field(s) from constants/arguments (*param_1, *param_2)
-0x00407E00	515	HashTable_ConstructBuckets_407E00	named	construct bucket vector of N dwords
+0x00407DA0	62	PoolFree_N12_407DA0	named	STLport allocator<12-byte>::deallocate(p, n) (cdecl): n*0xC <= 0x80 -> free list 0x79B224[(n*0xC-1)>>3], else operator delete; CBaseManager::Init / FreeTypeGroups
+0x00407DE0	22	InitFields2_407DE0	named	STLport pair<dword,dword> copy ctor (+0 = *a, +4 = *b); same bytes as 0x40A9D0; CBaseManager::PoolObject
+0x00407E00	515	HashTable_ConstructBuckets_407E00	named	same code as 0x407740; HashTable_Resize_4070B0
 0x00408010	1	dead_408010	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00408020	62	PoolFree_N12_408020	named	free array of N 0xC-byte elements to size pool
-0x00408060	334	DwordVector_InsertRealloc_408060	named	vector<uint> insert grow path: new capacity max(2*size, size+n), copy halves around the gap
-0x004081F0	201	DwordVector_AllocFill_4081F0	named	allocate N dwords from the pool and copy/fill range
-0x004082C0	334	DwordVector_InsertRealloc_4082C0	named	vector<uint> insert grow path
-0x00408450	334	DwordVector_InsertRealloc_408450	named	vector<uint> insert grow path
-0x004085E0	98	HashSetU32_Insert_4085E0	named	rehash check (0x4070B0) then insert uint key
-0x00408650	334	DwordVector_InsertRealloc_408650	named	vector<uint> insert grow path
-0x004087E0	201	DwordVector_AllocFill_4087E0	named	allocate N dwords from the pool and copy/fill range
-0x004088B0	201	DwordVector_AllocFill_4088B0	named	allocate N dwords from the pool and copy/fill range
-0x00408980	201	DwordVector_AllocFill_408980	named	allocate N dwords from the pool and copy/fill range
-0x00408A50	54	SortedU32_LowerBound	named	binary search lower_bound over uint array [first,last) for *key (95 callers)
-0x00408A90	133	NodeAlloc16_408A90	named	allocate 0x10-byte node from pool, store value
-0x00408B20	133	NodeAlloc16_408B20	named	allocate 0x10-byte node from pool, store value
-0x00408BB0	43	CopyBackwardDwords	named	copy_backward of 4-byte elements [first,last) ending at dest (15 callers)
-0x00408BE0	31	CopyDwords	named	forward copy of 4-byte elements [first,last) to dest (18 callers)
-0x00408C00	27	FillDwords	named	fill N dwords at dest with *value (15 callers)
-0x00408C20	38	DwordRange_Copy	named	copy [first,last) dwords to dest, returns dest end (76 callers)
-0x00408C50	32	StlException_DeletingDtorLike	named	calls the virtual cleanup (slot at +4) of the object, releases its AtomicRefPtr and frees it
-0x00408C70	51	AtomicRefPtr_Release	named	interlocked decrement of 32-bit refcount (+4) of *ptr, calls vt[0](1) at zero
-0x00408CB0	123	StlAllocHeader8	named	allocates an 8-byte header and links a node (list sentinel construction)
-0x00408D30	22	StaticInit_HashMapU32_Ctor_408EA0_408D30	named	static initializer: HashMapU32_Ctor_408EA0 on a global, then registers its destructor with atexit (FUN_006e727b)
+0x00408020	62	PoolFree_N12_408020	named	allocator<12-byte>::deallocate, same code as 0x407DA0; CBaseManager::FreeTypeGroups
+0x00408060	334	DwordVector_InsertRealloc_408060	named	STLport vector<4-byte>::_M_insert_overflow(pos, &x, n): new capacity size + max(size, n) (node_alloc / PoolAlloc_Refill / operator new), copies [begin,pos) (DwordRange_Copy), n copies of x, then [pos,finish), frees the old buffer, sets begin/finish/end_of_storage; DwordVector_InsertN_406810
+0x004081F0	201	DwordVector_AllocFill_4081F0	named	STLport vector<4-byte>::_M_allocate_and_copy(n, first, last) (cdecl): n dwords from node_alloc (free list 0x79B224, refill 20 by stlport_node_alloc_chunk_alloc) or operator new when > 0x80 bytes, copies [first,last); returns the buffer; HashTable_Ctor_405820 (reserve)
+0x004082C0	334	DwordVector_InsertRealloc_4082C0	named	STLport vector<4-byte>::_M_insert_overflow, same code as 0x408060; HashTable_InitBuckets_405EB0
+0x00408450	334	DwordVector_InsertRealloc_408450	named	STLport vector<4-byte>::_M_insert_overflow, same code as 0x408060; DwordVector_InsertN_407280
+0x004085E0	98	HashSetU32_Insert_4085E0	named	STLport hashtable<uint>::find_or_insert(key) (hash_set), same code as 0x4065D0 (resize 0x4070B0, NodeAlloc16_408B20); returns &value (+4); CBaseManager::PoolObject (also a pointer at 0x742A8D inside code bytes)
+0x00408650	334	DwordVector_InsertRealloc_408650	named	STLport vector<4-byte>::_M_insert_overflow, same code as 0x408060; HashTable_InitBuckets_406300
+0x004087E0	201	DwordVector_AllocFill_4087E0	named	STLport vector::_M_allocate_and_copy(n, first, last), same code as 0x4081F0; HashTable_InitBuckets_405EB0
+0x004088B0	201	DwordVector_AllocFill_4088B0	named	STLport vector::_M_allocate_and_copy, same code as 0x4081F0; HashTable_Ctor_405C40
+0x00408980	201	DwordVector_AllocFill_408980	named	STLport vector::_M_allocate_and_copy, same code as 0x4081F0; HashTable_InitBuckets_406300
+0x00408A50	54	SortedU32_LowerBound	named	STLport lower_bound(first, last, &key) over uint (fastcall first/last, key on stack): binary search, returns the first element >= key in eax; the prime-list lookup of every hashtable resize (95 callers)
+0x00408A90	133	NodeAlloc16_408A90	named	STLport hashtable::_M_new_node (0x10-byte node, copies the 8-byte value), same code as 0x407420; HashMapU32_FindOrInsert_4075C0
+0x00408B20	133	NodeAlloc16_408B20	named	STLport hashtable::_M_new_node, same code as 0x407420; FindOrInsertMax_406AA0 / FindOrInsert_407680 / HashSetU32_Insert_4085E0
+0x00408BB0	43	CopyBackwardDwords	named	STLport copy_backward for 4-byte elements (fastcall first, last; dest end on stack): copies [first,last) downwards, returns the new dest begin
+0x00408BE0	31	CopyDwords	named	STLport copy / uninitialized_copy for 4-byte elements (fastcall first, last; dest on stack): forward copy of [first,last)
+0x00408C00	27	FillDwords	named	STLport uninitialized_fill_n for 4-byte elements (fastcall dest, n; &value on stack): n copies of *value
+0x00408C20	38	DwordRange_Copy	named	STLport uninitialized_copy for 4-byte elements (fastcall first, last; dest on stack): forward copy, returns dest end (76 callers)
+0x00408C50	32	ThreadProc_CallMethod	named	"game _beginthread procedure: arg block {obj, method}: ecx = obj, call method (thiscall), then AtomicRefPtr_Release(block) and operator delete(block); its only reference is Thread_StartMethod 0x408CB0 (dead chain: only from CTcpNetDriver::ConnectAsync_dead). CORRECTION: was ""StlException_DeletingDtorLike"" (no exception object)"
+0x00408C70	51	AtomicRefPtr_Release	named	game ref pointer release (fastcall &ptr): if ptr, interlocked --(ptr+4), at 0 calls vt[0](1) (deleting dtor); only from ThreadProc_CallMethod 0x408C50 (dead chain: only from CTcpNetDriver::ConnectAsync_dead)
+0x00408CB0	123	Thread_StartMethod	named	"(this = ref-counted object, method, stack size): new 8-byte block {ref to this (interlocked ++this+4, old ref released), method}, _beginthread(ThreadProc_CallMethod 0x408C50, stack size, block); only caller CTcpNetDriver::ConnectAsync_dead (dead chain). CORRECTION: was ""StlAllocHeader8, list sentinel construction"""
+0x00408D30	22	StaticInit_FactoryMap_408D30	named	CRT initializer (table entry 0x783058): HashMapU32_Ctor_408EA0(g_0x79B270 archive factory map (FactoryMap_Register)) and atexit(0x408D50 = its dtor 0x408D60)
 0x00408D50	10	sub_408D50	named	unregistered function, reached by call / pointer from 0x8D3B (gaps.py 2026-11-06)
-0x00408D60	318	HashContainer_Destroy_408D60	named	destroy a container with two hash tables and a bucket vector: free 0xC-byte nodes, pool free
-0x00408EA0	239	HashMapU32_Ctor_408EA0	named	constructor of a hash map object (NextPrime initial buckets, vectors, list)
-0x00408F90	210	HashTable12_Destroy_408F90	named	SEH variant: free 0xC-byte nodes and bucket vector
-0x00409070	156	Archive_ReadTagged	named	tagged-chunk archive: read tag byte and varint length (even byte = len*2, odd = 4-byte len*2|1) from the mapped buffer and return pointer/size
-0x00409110	174	Archive_WriteTagged	named	grow buffer (CMemStream::SetSize) and write tag byte, varint length, then len bytes of data
-0x004091C0	97	Archive_FindNthTag	named	iterate Archive_ReadTagged entries until the Nth chunk with tag byte param_2 is found
-0x00409230	120	Archive_CountTag	named	iterate chunks and count/locate those with a given tag byte
-0x004092B0	227	Archive_SerializeBytes	named	(archive, tag, data, size): under the tag: the bytes written (storing, +0x58 == 0) or read
-0x004093A0	207	Archive_SerializeCString	named	(archive, tag, CString*): under the tag: the CString written or read
-0x00409470	452	Archive_SerializeStrTag	named	tag-based string field: write mode stores CString as tagged chunk, read mode finds the tag and assigns (34 callers)
-0x00409640	651	Archive_SerializeStream	named	(archive, tag, CMemStream*): under the tag: the stream contents written, or read into the stream (its size from the archive +0x54)
-0x004098D0	176	Archive_BeginTag	named	(archive, tag) -> bool: opens a tagged section (nested in the tag stack +0x50); false when loading and the tag is absent
-0x00409980	181	Archive_EndTag	named	(archive): closes the current tagged section
-0x00409A40	29	Archive_ResizeStreamToEntry	named	resize the memory stream at +0xA0 to the size/offset of the current entry (+0x50 -> +4 -> +0xC/+0x10)
-0x00409A60	125	Archive_CountTag	named	(archive, tag) -> count: the number of sections with that tag inside the current one (loading)
-0x00409AE0	928	Archive_Open	named	(archive, CMemStream*, loading, version): binds the archive to the stream (+0x58 = loading flag)
-0x00409E80	19	InitFields4_409E80	named	initializes 4 field(s) from constants/arguments (0xff, 1, 0, 0)
-0x00409EA0	142	Archive_ReadChunkToStream	named	read varint length (stream vt[1]) up to 10,000,000 and read that many bytes into a CMemStream
-0x00409F30	202	Archive_SkipToTag	named	loop: read tag/len pairs from the stream until the Nth matching tag is reached; returns 1 on success
-0x0040A000	919	Archive_Close	named	(archive, CMemStream*): flushes / finishes the archive on the stream
-0x0040A3A0	24	RefCount16_Release	named	decrement 16-bit refcount at +4 and call vt[0](1) at zero (71 callers)
-0x0040A3C0	116	Archive_WriteTagStream	named	write tag byte, varint length of a CMemStream (vt[4]) and its buffer (+0x18)
-0x0040A440	344	Archive_WriteObjectRef	named	(archive, tag, obj): writes a reference to a 16-bit-refcounted object under the tag
-0x0040A5A0	236	Archive_ReadObjectRef	named	(archive, tag) -> obj: reads a reference to a 16-bit-refcounted object under the tag (refcount ++)
-0x0040A690	25	Thunk_FUN_0040aa70_40A690	named	forwards to FUN_0040aa70
-0x0040A6B0	20	List24_PushBackDefault_Wrap	named	push a default-constructed 24-byte element on a list
-0x0040A6D0	45	List24_PopFront	named	erase first node (begin via 0x40A960 then List24_EraseNode)
-0x0040A700	85	HashIter_PostIncrement	named	iterator++ returning old iterator; advances through chain then next non-empty bucket
-0x0040A760	9	List_FrontPayloadAddr	named	address of the first node payload (node+8) of a list
-0x0040A770	19	RefPtr16_Attach	named	store pointer and increment its 16-bit refcount
+0x00408D60	318	FactoryMap_Dtor_408D60	named	dtor of the archive factory map (FactoryMap_Register) g_0x79B270 (two STLport hash_maps of 0xC-byte nodes): map +0x14 (buckets +0x18..+0x20, count +0x24) and map +0 (buckets +4..+0xC, count +0x10): every node to PoolFree_N12, buckets zeroed, bucket vectors PoolFree; reached by jmp from 0x408D50 (atexit)
+0x00408EA0	239	FactoryMap_Ctor_408EA0	named	ctor (fastcall) of the archive factory map (FactoryMap_Register) g_0x79B270: hash_map +0 (vtable -> class id, used by Archive_Close) with HashTable_InitBuckets_40AA80(100) and hash_map +0x14 (class id -> factory, g_0x79B284, used by Archive_Open): next prime of 100, DwordVector_Reserve_40AF00, insert n null buckets, count +0x24 = 0
+0x00408F90	210	HashTable12_Destroy_408F90	named	STLport hashtable dtor body for 0xC-byte nodes (with an EH frame): every chain node PoolFree(n, 0xC), buckets zeroed, count +0x10 = 0, bucket vector freed (node_alloc list or operator delete); reached only from unwind funclets (0x70E590, 0x70E60E, 0x70E640, 0x70E64B)
+0x00409070	156	Archive_ReadTagged	named	(archive, section {+4 offset, +8 size}, &pos, out entry {+0 tag, +4 offset, +8 size}) -> bool: fails when pos + 2 > size; reads the tag byte and the length byte L at archive buffer +0x40 + section offset + pos; odd L -> 4-byte LE length (L plus 3 more bytes); length >>= 1; fails when pos + length > size; stores the entry offset (section offset + pos) and length, pos += length
+0x00409110	174	Archive_WriteTagged	named	(archive, section, tag, data, size) -> 1: grows the write stream +0x28 (CMemStream::SetSize to section offset + size + 5 + current size), writes the tag byte, then the length size*2 as 1 byte (< 0x100) or 4 bytes size*2 | 1, then copies the data (skipped when it already sits there, the EndTag case); section size +8 grows
+0x004091C0	97	Archive_FindNthTag	named	(archive, section, tag, out entry, n) -> bool: walks the section's entries (Archive_ReadTagged from pos 0) and stops on the n-th entry with that tag; false when there are fewer; Archive_Open / Archive_Close
+0x00409230	120	Archive_CountTagIn	named	(archive, section, tag) -> count of entries with that tag in the given section (Archive_ReadTagged loop); Archive_Open (tag-1 object sections of the root). Renamed from the duplicate name Archive_CountTag (0x409A60 is the current-section version)
+0x004092B0	227	Archive_SerializeBytes	named	(archive, tag, data, size): current section = back of the section list +0x50; storing (+0x58 == 0) -> Archive_WriteTagged; loading -> the n-th entry with that tag (n = section occurrence +0x14) copied to data (size bytes), zero-filled when absent
+0x004093A0	207	Archive_SerializeCString	named	"(archive, tag, CString*): storing writes the CString bytes with the terminator (length -8 + 1); loading assigns the n-th tagged entry as a C string, """" (0x79B298) when absent"
+0x00409470	452	Archive_SerializeStdString	named	"(archive, tag, std::string* {begin +0, end +4}): as Archive_SerializeCString for an STLport string: storing writes strlen + 1 bytes; loading assigns the entry's C string (or """" 0x79B298 when absent) by overwrite + StlString_EraseRange or StlString_AssignRange (34 callers: records, tagged record sets). Renamed from Archive_SerializeStrTag"
+0x00409640	651	Archive_SerializeStream	named	"(archive, tag, CMemStream*): opens a section with that tag (storing: pushed after the parent's data, offset = parent offset + size + 5; loading: the n-th tag entry, nothing done when absent); inside it tag 1 = the stream length (4 bytes, stream vt+0x10; on load the stream is cleared vt+0x18 and CMemStream::Reset(length)), tag 2 = the stream bytes (buffer +0x18; zero-filled on load when absent); stream vt+0xC(0) seeks to 0; then closes the section (storing: written into the parent as a tagged entry, write stream resized). CORRECTION: was ""its size from the archive +0x54"" (the size is the tag-1 child)"
+0x004098D0	176	Archive_BeginTag	named	(archive, tag) -> bool: push_back of a section {tag, offset, size 0, occurrence 1} on the section list +0x50; storing: offset = parent offset + parent size + 5 (room for the header), true; loading: scans the parent (back section) for its occurrence-th (+0x14) entry with that tag and fills the new section from it, false when absent (the section stays pushed; callers then skip the body and still call EndTag)
+0x00409980	181	Archive_EndTag	named	(archive): loading: pop_back of the section list +0x50; storing: Archive_WriteTagged(parent, tag, section data at buffer +0x40 + offset, size) which moves the body down behind its real header, pop_back, then the write stream +0x28 is cut to parent offset + size
+0x00409A40	29	Archive_ResizeStreamToEntry	named	(archive) fastcall: CMemStream::SetSize(+0x28 write stream, back section offset +0xC + size +0x10)
+0x00409A60	125	Archive_CountTag	named	(archive, tag) -> number of entries with that tag inside the current (back) section (Archive_ReadTagged loop from pos 0); list sizes of the record serializers
+0x00409AE0	928	Archive_Open	named	(archive, file stream, loading, version): frees the old section nodes (PoolFree_N24), clears the object stream +0 and the data stream +0x28 (vt+0x18), pushes a root section, +0x58 = loading; storing: +0x54 = version, done. Loading: seeks the file to 0 and loads its first tag-0 chunk (object table) into +0 and its first tag-2 chunk (object data + version) into +0x28 (Archive_ReadChunkToStream; cleared when absent), root size = data length; for every (class id, object id) dword pair of the table: creates the object with the factory of factory map g_0x79B284[class id] (0 when unknown), queues it in list +0x70 and maps hash +0x5C[object id] = object; version: arg 1 -> read tag 2 of the root into +0x54, else +0x54 = arg; then for each tag-1 root entry: tag 0 = object id -> hash +0x5C, BeginTag(1) -> object vt+4 (Serialize) -> EndTag; finally the root is reset {tag 0xFF, offset 0, size 0, occurrence 1}, Archive_SkipToTag(file, 1, data stream, 1) loads the main tag-1 chunk and root size = its length (structure read from the code; decompile stack-confused in the table loop)
+0x00409E80	19	InitFields4_409E80	named	section/entry record ctor: tag +0 = 0xFF, offset +4 = 0, size +8 = 0, occurrence +0xC = 1 (fastcall); Archive_Open / Archive_Close
+0x00409EA0	142	Archive_ReadChunkToStream	named	(file stream ecx, &tag edx, CMemStream* dest) -> bool: file vt+4 Read: 1 tag byte, 1 length byte, 3 more when odd; length >>= 1; false when the file ok flag +5 is clear or length > 10,000,000; CMemStream::Reset(dest, length) and reads length bytes into dest buffer +0x18; true when all were read
+0x00409F30	202	Archive_SkipToTag	named	(file stream ecx, tag dl, CMemStream* dest, n) -> bool: file flags +5 / +4 = 1, seek 0 (vt+0xC), then reads chunks one after another (same tag/length decoding, length <= 10,000,000) into dest until the n-th one with that tag: true; on a read failure dest is cleared (vt+0x18) and false; Archive_Open (main tag-1 chunk)
+0x0040A000	919	Archive_Close	named	(archive, file stream): storing: cuts the data stream +0x28 to the root, writes it to the file as chunk tag 1 (tag byte, length*2 in 1 or 4 bytes |1, bytes), clears it, resets the root; then for every object queued in list +0x70 (Archive_WriteObjectRef): class id = factory map g_0x79B270[object vtable] (-1 unknown) and the object id (its address) written to the object stream +0 (vt+8), and a root tag-1 section {tag 0: id, tag 1: object vt+4 Serialize}; then SerializeBytes(2, version +0x54), Archive_WriteTagStream(file, 0, object stream) and (file, 2, data stream). Loading: releases the extra reference of every object in hash +0x5C (RefPtr16_Attach + RefCount16_Release). Both: clears the streams, hash +0x5C, list +0x70 and the section list +0x50
+0x0040A3A0	24	RefCount16_Release	named	game ref-counted object release (fastcall obj): 16-bit count +4 --, at 0 obj vt[0](1) (deleting dtor) (71 callers)
+0x0040A3C0	116	Archive_WriteTagStream	named	(file stream ecx, tag dl, CMemStream*): file vt+8 Write: tag byte, length*2 as 1 byte (< 0x100) or 4 bytes length*2 | 1, then the stream buffer +0x18 (length = vt+0x10); returns 1; Archive_Close
+0x0040A440	344	Archive_WriteObjectRef	named	(archive, tag, object*): when the object is not yet in hash +0x5C (key = its address) it is queued in list +0x70 (written later by Archive_Close) and hash +0x5C[address] = archive (marker, resize 0x40BC30); then storing writes the address as a 4-byte entry with that tag (the loading branch only scans, reads nothing)
+0x0040A5A0	236	Archive_ReadObjectRef	named	"(archive, tag) -> object*: loading reads the 4-byte object id of the n-th tagged entry (0 when absent), storing writes a 0 id; returns hash +0x5C[id] (the object created by Archive_Open) or 0. CORRECTION: was ""refcount ++"" (no reference taken here)"
+0x0040A690	25	Thunk_FUN_0040aa70_40A690	named	STLport list::end()/begin-style iterator copy: out = *this (via SetField_0_40AA70), returns out; Archive_Close
+0x0040A6B0	20	List24_PushBackDefault_Wrap	named	pushes a default section {0xFF, 0, 0, 1} on the list ecx (List24_PushBackDefault with a dummy out iterator); Archive_Open / Close / SerializeStream
+0x0040A6D0	45	List24_PopBack	named	"STLport list<section 0x10>::pop_back (fastcall list): --end() (DerefFieldOut_4_40A960 = sentinel->prev) then List24_EraseNode; Archive_Close. CORRECTION: was ""PopFront, erase first node"""
+0x0040A700	85	HashIter_PostIncrement	named	STLport hashtable iterator operator++(int): returns the old {node, table}, advances to node->next or the first node of the next non-empty bucket (0 at the end); Archive_Close
+0x0040A760	9	List_BackPayloadAddr	named	"(fastcall &list sentinel) -> sentinel->prev + 8 = address of the back element payload (the current archive section); Archive_Close / SerializeStream. CORRECTION: was ""first node payload"" (it is the last)"
+0x0040A770	19	RefPtr16_Attach	named	game ref pointer assign: *this = obj, obj 16-bit count +4 ++ when not null; Archive_Close
 0x0040A790	17	dead_40A790	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0040A7B0	57	PoolFreeVector_40A7B0	named	free vector buffer to size pool
+0x0040A7B0	57	PoolFreeVector_40A7B0	named	STLport vector buffer deallocate (begin +0, end_of_storage +8 to node_alloc or operator delete), same code as 0x405B60; only from unwind funclets
 0x0040A7F0	1	dead_40A7F0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0040A800	123	HashMapU32_FindOrInsert_40A800	named	map operator[] returning pointer to value
-0x0040A880	57	PoolFreeVector_40A880	named	free vector buffer to size pool
+0x0040A800	123	HashMapU32_FindOrInsert_40A800	named	STLport hash_map<uint,T>::operator[], same code as 0x4055A0 (resize 0x40BAC0, NodeAlloc16_40B440); returns &value; Archive_Open (factory map g_0x79B284)
+0x0040A880	57	PoolFreeVector_40A880	named	STLport vector buffer deallocate, same code as 0x405B60; only from unwind funclets
 0x0040A8C0	1	dead_40A8C0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0040A8D0	70	List24_PushBackDefault	named	append a default-constructed 0x18-byte element via List24_InsertBefore
-0x0040A920	40	List24_EraseNode	named	unlink std::list node and push it to the 0x18-byte pool g_0x79B22C, return successor
-0x0040A950	13	InitFields1_40A950	named	initializes 1 field(s) from constants/arguments (*param_1)
-0x0040A960	10	DerefFieldOut_4_40A960	named	copies the field at (*this)+4 to *param_1
-0x0040A970	83	HashTable_Begin_40A970	named	iterator to first non-empty bucket
-0x0040A9D0	22	InitFields2_40A9D0	named	initializes 2 field(s) from constants/arguments (*param_1, *param_2)
-0x0040A9F0	13	DerefOut_40A9F0	named	copies **this to *param_1 (iterator dereference)
-0x0040AA00	11	CopyField_0_40AA00	named	copies this+0 to *param_1
-0x0040AA10	41	List16_InsertBefore_40AA10	named	allocate 0x10-byte node (NodeAlloc16_40AD40), link before param_2
-0x0040AA40	40	List16_EraseNode	named	unlink std::list node, push to 0x10-byte pool g_0x79B228, return successor
-0x0040AA70	11	SetField_0_40AA70	named	stores the argument into this+0
-0x0040AA80	560	HashTable_Rehash2_40AA80	named	same pattern as 0x405EB0
-0x0040ACB0	41	List24_InsertBefore	named	allocate 0x18-byte node (NodeAlloc24_40AE70), link before param_2
-0x0040ACE0	62	PoolFree_N24	named	free array of N 0x18-byte elements to size pool
-0x0040AD20	18	SetFields2_4_40AD20	named	stores two arguments into this+0 and this+4
-0x0040AD40	121	NodeAlloc16_40AD40	named	allocate 0x10-byte node from pool
+0x0040A8D0	70	List24_PushBackDefault	named	(out iterator, list sentinel): inserts a default section payload {tag 0xFF, offset 0, size 0, occurrence 1} before the sentinel (push_back, List24_InsertBefore); returns out = the new node
+0x0040A920	40	List24_EraseNode	named	STLport list::erase(node) for 0x18-byte nodes: unlinks it, pushes it on free list 0x79B22C, out = successor
+0x0040A950	13	InitFields1_40A950	named	STLport list iterator ctor (*this = *arg); List24_PushBackDefault
+0x0040A960	10	DerefFieldOut_4_40A960	named	STLport list iterator operator-- (fastcall &it): it = it->prev (+4)
+0x0040A970	83	HashTable_Begin_40A970	named	STLport hashtable::begin(), byte-identical to 0x406280; Archive_Close (hash +0x5C)
+0x0040A9D0	22	InitFields2_40A9D0	named	STLport pair<dword,dword> ctor (+0 = *a, +4 = *b), byte-identical to 0x407DE0; Archive_Open
+0x0040A9F0	13	DerefOut_40A9F0	named	STLport list iterator begin(): *out = **this (sentinel->next); Archive_Close
+0x0040AA00	11	CopyField_0_40AA00	named	STLport list::end(): *out = *this (the sentinel); Archive_Open / WriteObjectRef
+0x0040AA10	41	List16_InsertBefore_40AA10	named	STLport list<dword>::insert(pos, &x): node 0x10 from NodeAlloc16_40AD40 (value at +8), linked before pos; out = node; Archive_Open / WriteObjectRef (queue +0x70)
+0x0040AA40	40	List16_EraseNode	named	STLport list::erase(node) for 0x10-byte nodes: unlink, push on free list 0x79B228, out = successor; Archive_Close
+0x0040AA70	11	SetField_0_40AA70	named	STLport list iterator ctor from a node (*this = arg); Archive_SerializeStream / EndTag
+0x0040AA80	560	HashTable_InitBuckets_40AA80	named	"STLport hashtable::_M_initialize_buckets(n), same code as 0x405EB0; FactoryMap_Ctor_408EA0 (n = 100). CORRECTION: was ""Rehash2"""
+0x0040ACB0	41	List24_InsertBefore	named	STLport list<section 0x10>::insert(pos, &x): 0x18-byte node from NodeAlloc24_40AE70 (copies 16 bytes), linked before pos, out = node
+0x0040ACE0	62	PoolFree_N24	named	STLport allocator<0x18>::deallocate(p, n): n*0x18 <= 0x80 -> free list 0x79B224[(n*0x18-1)>>3], else operator delete; DbArchive dtor, Archive_Open, PerksDb_Save / Load, AddrBook_Save
+0x0040AD20	18	SetFields2_4_40AD20	named	STLport hashtable iterator ctor {node, table}, byte-identical to 0x405E90; Archive_Close
+0x0040AD40	121	NodeAlloc16_40AD40	named	STLport list<dword>::_M_create_node: 0x10-byte node from free list 0x79B228 (refill 20 by stlport_node_alloc_chunk_alloc), data +8 = *arg; List16_InsertBefore_40AA10
 0x0040ADC0	17	dead_40ADC0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0040ADE0	24	InitFields4_40ADE0	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
-0x0040AE00	68	NextPrime	named	lower_bound in prime table 0x73B914 (28 entries), returns next prime >= n (0xFFFFFFFB if beyond)
-0x0040AE50	24	InitFields4_40AE50	named	initializes 4 field(s) from constants/arguments (0, 0, *param_1, 0)
-0x0040AE70	139	NodeAlloc24_40AE70	named	allocate 0x18-byte node from pool g_0x79B22C (refill 20 via chunk allocator)
-0x0040AF00	580	DwordVector_Reserve_40AF00	named	vector<uint>::reserve(n): allocate from pool or heap, copy, free old
-0x0040B150	314	DwordVector_InsertN_40B150	named	vector<uint>::insert(pos, n, value) with grow path 0x40B860
-0x0040B290	48	List24_Clear	named	std::list clear into 0x18-byte pool g_0x79B22C
-0x0040B2C0	98	HashSetU32_Insert_40B2C0	named	rehash check (0x40BC30) then insert uint key
-0x0040B330	90	HashTable_ClearNodes16_40B330	named	return all hashtable nodes to 0x10-byte pool
-0x0040B390	48	List16_Clear_40B390	named	std::list clear into 0x10-byte pool
-0x0040B3C0	54	StlString_EraseRange	named	erase [first,last) from an std::string-like buffer (memmove of tail incl. NUL, end ptr at +4), 41 callers
-0x0040B400	60	HashU32_Find_40B400	named	hashtable find by uint key
-0x0040B440	133	NodeAlloc16_40B440	named	allocate 0x10-byte node from pool
-0x0040B4D0	133	NodeAlloc16_40B4D0	named	allocate 0x10-byte node from pool
-0x0040B560	62	PoolFree_N12_40B560	named	free array of N 0xC-byte elements to size pool
-0x0040B5A0	62	PoolFree_N12_40B5A0	named	free array of N 0xC-byte elements to size pool
-0x0040B5E0	18	SetFields2_4_40B5E0	named	stores two arguments into this+0 and this+4
-0x0040B600	334	DwordVector_InsertRealloc_40B600	named	vector<uint> insert grow path
-0x0040B790	201	DwordVector_AllocFill_40B790	named	allocate N dwords from the pool and copy/fill range
-0x0040B860	334	DwordVector_InsertRealloc_40B860	named	vector<uint> insert grow path
-0x0040B9F0	201	DwordVector_AllocFill_40B9F0	named	allocate N dwords from the pool and copy/fill range
-0x0040BAC0	362	HashTable_Resize_40BAC0	named	same, other node type
-0x0040BC30	362	HashTable_Resize_40BC30	named	same, other node type
-0x0040BDA0	57	PoolFreeVector_40BDA0	named	free vector buffer to size pool (15 callers)
+0x0040ADE0	24	InitFields4_40ADE0	named	STLport _Vector_base ctor (3 pointers 0), byte-identical to 0x406240; FactoryMap_Ctor_408EA0
+0x0040AE00	68	NextPrime	named	STLport hashtable _M_next_size(n): lower_bound in __stl_prime_list 0x73B914 (28 primes), returns the first prime >= n, 0xFFFFFFFB past the end; FactoryMap_Ctor_408EA0
+0x0040AE50	24	InitFields4_40AE50	named	STLport _Vector_base ctor (3 pointers 0), byte-identical to 0x406240; FactoryMap_Ctor_408EA0
+0x0040AE70	139	NodeAlloc24_40AE70	named	STLport list<section>::_M_create_node: 0x18-byte node from free list 0x79B22C (refill 20 by stlport_node_alloc_chunk_alloc), copies the 16-byte payload to +8..+0x14
+0x0040AF00	580	DwordVector_Reserve_40AF00	named	STLport vector<4-byte>::reserve(n): nothing when capacity >= n; else n dwords from node_alloc (inlined refill / chunk_alloc) or operator new, old contents copied (DwordVector_AllocFill_40B9F0 path when non-empty), old buffer freed, begin/finish/end_of_storage set; FactoryMap_Ctor_408EA0
+0x0040B150	314	DwordVector_InsertN_40B150	named	STLport vector<4-byte>::_M_fill_insert(pos, n, &x), same code as 0x406810 (overflow 0x40B860); FactoryMap_Ctor_408EA0
+0x0040B290	48	List24_Clear	named	STLport list<section>::clear (fastcall &sentinel): every node pushed on free list 0x79B22C, sentinel next/prev reset to itself; Archive_Close, PerksDb_Save / Load, AddrBook_Save
+0x0040B2C0	98	HashSetU32_Insert_40B2C0	named	STLport hashtable<uint>::find_or_insert, same code as 0x4065D0 (resize 0x40BC30, NodeAlloc16_40B4D0); here on hash_map<id, obj> +0x5C with a {key, 0} pair: returns &node+4, the caller sets [1] = object; Archive_Open
+0x0040B330	90	HashTable_ClearNodes16_40B330	named	STLport hashtable::clear(), byte-identical to 0x4067B0; Archive_Close (hash +0x5C), PerksDb_Save / Load, AddrBook_Save
+0x0040B390	48	List16_Clear_40B390	named	STLport list<dword>::clear, byte-identical to 0x405500; Archive_Close (queue +0x70), PerksDb_Save, AddrBook_Save
+0x0040B3C0	54	StlString_EraseRange	named	STLport string::erase(first, last): memmove of the tail including the terminator, finish +4 -= (last - first); returns first (41 callers)
+0x0040B400	60	HashU32_Find_40B400	named	STLport hashtable<uint>::find, byte-identical to 0x405560; Archive_Close (factory map: vtable -> class id)
+0x0040B440	133	NodeAlloc16_40B440	named	STLport hashtable::_M_new_node (0x10 node, 8-byte value), same code as 0x407420; FindOrInsert_40A800, FactoryMap_Register
+0x0040B4D0	133	NodeAlloc16_40B4D0	named	STLport hashtable::_M_new_node, same code as 0x407420; Archive_WriteObjectRef, HashSetU32_Insert_40B2C0
+0x0040B560	62	PoolFree_N12_40B560	named	allocator<12-byte>::deallocate, same code as 0x407DA0; FactoryMap_Dtor_408D60, NetRegistry::Destroy
+0x0040B5A0	62	PoolFree_N12_40B5A0	named	allocator<12-byte>::deallocate, same code as 0x407DA0; FactoryMap_Dtor_408D60
+0x0040B5E0	18	SetFields2_4_40B5E0	named	STLport hashtable iterator ctor {node, table}, byte-identical to 0x405E90; Archive_Close, NetPeer::RegisterObject
+0x0040B600	334	DwordVector_InsertRealloc_40B600	named	STLport vector<4-byte>::_M_insert_overflow, same code as 0x408060; HashTable_InitBuckets_40AA80, Vector4_InsertN4
+0x0040B790	201	DwordVector_AllocFill_40B790	named	STLport vector::_M_allocate_and_copy, same code as 0x4081F0; HashTable_InitBuckets_40AA80, HashTable_CtorN
+0x0040B860	334	DwordVector_InsertRealloc_40B860	named	STLport vector<4-byte>::_M_insert_overflow, same code as 0x408060; DwordVector_InsertN_40B150
+0x0040B9F0	201	DwordVector_AllocFill_40B9F0	named	STLport vector::_M_allocate_and_copy, same code as 0x4081F0; DwordVector_Reserve_40AF00
+0x0040BAC0	362	HashTable_Resize_40BAC0	named	STLport hashtable::resize(hint), same code as 0x406640 (bucket ctor 0x40BE50); FindOrInsert_40A800, FactoryMap_Register (factory map g_0x79B284)
+0x0040BC30	362	HashTable_Resize_40BC30	named	STLport hashtable::resize(hint), same code as 0x406640 (bucket ctor DwordVector_ctorN8 0x40C060); Archive_WriteObjectRef, HashSetU32_Insert_40B2C0 (archive hash +0x5C)
+0x0040BDA0	57	PoolFreeVector_40BDA0	named	STLport vector buffer deallocate, same code as 0x405B60; DbArchive dtor, PerksDb_Save / Load, AddrBook_Save and unwind funclets
 0x0040BDE0	1	dead_40BDE0	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0040BDF0	32	StaticInit_Guarded_40BDF0	named	static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code
-0x0040BE10	22	GetFieldOut_8_40BE10	named	copies the field at this+8 to *param_1
-0x0040BE30	22	GetFieldOut_8_40BE30	named	copies the field at this+8 to *param_1
-0x0040BE50	515	HashTable_ConstructBuckets_40BE50	named	construct bucket vector of N dwords
+0x0040BDF0	32	StaticInit_Guarded_40BDF0	named	CRT initializer (table entry 0x78305C): same code as 0x407400 (guard bit 0 of 0x7CAEE4, atexit(0x4013D0) = empty dtor)
+0x0040BE10	22	GetFieldOut_8_40BE10	named	STLport vector::get_allocator() (byte +8 -> *out), byte-identical to 0x4074D0; HashTable_Resize_40BAC0
+0x0040BE30	22	GetFieldOut_8_40BE30	named	STLport vector::get_allocator(), byte-identical to 0x4074D0; HashTable_Resize_40BC30
+0x0040BE50	515	HashTable_ConstructBuckets_40BE50	named	STLport vector<void*> storage of n (no fill), same code as 0x407740; HashTable_Resize_40BAC0
 0x0040C060	515	DwordVector_ctorN8	named	STL: vector<node*>(n) bucket vector ctor with the pool chunk refill inlined (g_0x79B224 lists, chunk_alloc); HashTable_Resize_40BC30 = rehash of the archive's written-object id set (Archive_Open / HashSetU32_Insert)
 0x0040C270	1	dead_40C270	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0040C280	23	Thunk_StlString_AssignRange_40C280	named	STL: basic_string::assign(first, last) forwarding thunk (25 callers: lobby, ServerInfo::ctor, StringMap_SetValue ...)
@@ -15285,428 +15285,428 @@ addr	size	name	status	purpose
 0x00707C6C	21	AfxInitHandleMaps_Gdi	named	creates the GDI handle map and temp CWnd
 0x00707C81	30	AfxLookupGdiHandle	named	looks up a GDI object in the permanent handle map
 0x00707C9F	45	dead_707C9F	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00707CCC	42	CMenu::Detach	named	removes the HMENU from the permanent map and clears it
-0x00707CF6	22	CMenu::DestroyMenu	named	Detach then DestroyMenu
-0x00707D0C	3	vt_7471FC::Nop_707D0C	named	empty function (returns immediately)
-0x00707D0F	3	vt_7471FC::Nop_707D0F	named	empty function (returns immediately)
-0x00707D12	209	AfxAbbreviateName	named	"shortens a path with ""..."" to fit a number of characters (MRU list helper)"
-0x00707DE3	184	CObject_Ctor_CStrings	named	constructs an object with CString members and a CString array (EH frame)
-0x00707E9B	28	vt_747240::DeletingDtor_707E9B	named	scalar deleting destructor: runs FUN_00707f02 then operator delete when flag&1
-0x00707EB7	75	CStringArray_DeletingDtor	named	deleting destructor: runs the element destructors / ~CString / operator delete by flag
-0x00707F02	93	CStringList_Dtor_EH	named	SEH destructor body for a CString holder (vtable 0x747240)
-0x00707F5F	113	CRecentFileList::Add	named	vt slot 1: AfxFullPath, removes duplicates (AfxCmpMenuString) and inserts at the front
-0x00707FD0	59	CRecentFileList::Remove	named	vt slot 0: removes an entry and shifts the following ones
-0x0070800B	262	CRecentFileList::GetDisplayName	named	builds the display name of an MRU entry (abbreviated path/title)
-0x00708111	538	CRecentFileList::UpdateMenu	named	updates the MRU popup menu: GetMenuString, builds display strings
-0x0070832B	126	CRecentFileList::WriteList	named	vt slot 4: writes the MRU entries to INI/registry
-0x007083A9	158	CRecentFileList::ReadList	named	vt slot 3: reads the MRU entries from INI/registry
-0x00708447	121	CArchive::WriteString	named	writes a CString: length as BYTE/WORD/DWORD with markers then bytes
-0x007084C0	87	CArchive::ReadClassTag	named	reads a class tag (0xFF marks wide tag, 0xFFFE new class) from the archive
-0x00708517	152	CArchive::ReadWideString	named	reads a (wide) string tag, converts with CString::operator=(LPCWSTR)
-0x007085AF	78	CArchive::SerializeStringRange	named	for n entries: ReadWideString (read) or WriteString (write)
-0x007085FD	139	CArchive::ReadClassName	named	reads a schema and a class name (up to 0x40 chars) and resolves it under the global lock
-0x00708688	56	CArchive::WriteClassInfo	named	writes the class schema WORD + name length + name
-0x007086C0	220	CArchive::CArchive	named	MFC CArchive ctor (CFile*, nMode, nBufSize, lpBuf): m_nMode, buffer at least 128 bytes (allocated when lpBuf is 0), m_nGrowSize 0x40 (load) / 0x10, m_nHashSize 0x89; NO caller and no pointer in the exe: no CArchive is ever made, every MFC Serialize path is dead. CORRECTION: was CArchive::ReadObject
-0x0070879C	70	CArchive::~CArchive	named	archive destructor: flush when writing, destroy buffers, EH frame
-0x007087E2	66	CMemFile::Reset	named	frees the buffer (+0x2C) and resets positions
-0x00708824	14	CArchive::Flush	named	FillBuffer then reset the position (+0x20)
-0x00708832	271	CMemFile::Write	named	CMemFile::Write(buf, n) with growth (210 callers)
-0x00708941	144	CMemFile::Read	named	CMemFile::Read(buf, n) (211 callers)
-0x007089D1	124	CArchive::FillBuffer	named	refills/flushes the archive buffer (read or write mode)
-0x00708A4D	194	CArchive::ReadFillBuffer	named	refills the read buffer, moving the remaining bytes (throws on EOF)
-0x00708B0F	46	CArchive::WriteCount	named	writes a count as WORD (or 0xFFFF + DWORD) (153 callers)
-0x00708B3D	48	CArchive::ReadCount	named	reads a count: WORD, or 0xFFFF + DWORD (153 callers)
-0x00708B6D	29	CArchive::WriteStringZ	named	writes a C string (lstrlen bytes)
-0x00708B8A	104	CArchive::ReadString	named	reads a length-prefixed string into the CString (EH frame)
+0x00707CCC	42	CMenu::Detach	named	MFC: CMenu::Detach (fastcall this): hMenu = m_hMenu +4; when set, removes it from the permanent map of afxMapHMENU (0x707BFA, thread state +0x18; that callee is named AfxGetHandleMap_Gdi but creates the CTempMenu map) by CMapPtrToPtr::RemoveKey; m_hMenu = 0; returns hMenu
+0x00707CF6	22	CMenu::DestroyMenu	named	MFC: CMenu::DestroyMenu: m_hMenu +4 == 0 -> FALSE; else ::DestroyMenu(Detach())
+0x00707D0C	3	CMenu::DrawItem	named	MFC: CMenu::DrawItem(LPDRAWITEMSTRUCT) empty virtual (ret 4); CMenu vtable 0x7471FC slot 3 (+0xC) and the second vtable at 0x747220. Renamed from vt_7471FC::Nop_707D0C
+0x00707D0F	3	CMenu::MeasureItem	named	MFC: CMenu::MeasureItem(LPMEASUREITEMSTRUCT) empty virtual (ret 4); vtable 0x7471FC slot 4 (+0x10) and 0x747224. Renamed from vt_7471FC::Nop_707D0F
+0x00707D12	209	AfxAbbreviateName	named	"MFC: AfxAbbreviateName(path, cchMax, bAtLeastName): shortens a path to ""\\server\..\name"" style with ""\..."" so it fits cchMax (AfxGetFileName, _mbsinc), or keeps just the name / """" ; only from CRecentFileList::GetDisplayName (dead chain: CRecentFileList is only built by dead_70D79E = CWinApp::LoadStdProfileSettings, unreferenced)"
+0x00707DE3	184	CRecentFileList::CRecentFileList	named	"MFC: CRecentFileList ctor (nStart, section, entry format, nSize, nMaxDispLen): vtable 0x747240, m_arrNames +8 = new CString[nSize] (count word before, __ehvec ctor helper), m_nSize +4, m_nStart +0x14, m_strSectionName +0xC, m_strEntryFormat +0x10, m_nMaxDisplayLength +0x18, m_strOriginal +0x1C; only caller dead_70D79E (CWinApp::LoadStdProfileSettings: ""Recent File List"", ""File%d"", 30), unreferenced -> dead chain. CORRECTION: was ""CObject_Ctor_CStrings"""
+0x00707E9B	28	vt_747240::DeletingDtor_707E9B	named	MFC: CRecentFileList scalar deleting dtor (vtable 0x747240 slot 5): ~CRecentFileList 0x707F02, operator delete when flag & 1; vtable only installed by the dead ctor 0x707DE3 (dead chain)
+0x00707EB7	75	CString_VectorDeletingDtor	named	"MFC/compiler: CString `vector deleting destructor' (flag 2: __ehvec dtor iterator 0x6E859F over count at p-4 with ~CString, delete p-4 when flag & 1; else one ~CString); only from ~CRecentFileList (dead chain). CORRECTION: was ""CStringArray_DeletingDtor"""
+0x00707F02	93	CRecentFileList::~CRecentFileList	named	"MFC: CRecentFileList dtor: vtable 0x747240, delete[] m_arrNames +8 (vector deleting dtor 0x707EB7 flag 3), ~CString +0x1C / +0x10 / +0xC; dead chain (only from 0x707E9B). CORRECTION: was ""CStringList_Dtor_EH"""
+0x00707F5F	113	CRecentFileList::Add	named	MFC: CRecentFileList::Add(path) (vtable slot 1): AfxFullPath, finds an equal entry (callee named AfxCmpMenuString, which is AfxComparePath) among the first nSize-1, shifts the entries before it down one, stores the full path at [0]; dead chain (vtable 0x747240 only from the dead ctor)
+0x00707FD0	59	CRecentFileList::Remove	named	MFC: CRecentFileList::Remove(nIndex) (vtable slot 0): empties [nIndex], shifts the following entries up, empties the last; dead chain
+0x0070800B	262	CRecentFileList::GetDisplayName	named	MFC: CRecentFileList::GetDisplayName(CString& out, nIndex, curDir, nCurDir, bAtLeastName) -> FALSE for an empty entry; copies the path, a file in curDir -> just its title (AfxGetFileTitle), else title + AfxAbbreviateName(m_nMaxDisplayLength +0x18 unless -1); dead chain
+0x00708111	538	CRecentFileList::UpdateMenu	named	"MFC: CRecentFileList::UpdateMenu(CCmdUI*) (vtable slot 2): first call saves the original menu text (m_strOriginal +0x1C); empty list -> restores the text and disables; else deletes the old items, inserts ""&n <display name>"" (ampersands doubled, DBCS lead bytes kept) for each entry with InsertMenu(MF_BYPOSITION), updates the CCmdUI index / count; dead chain"
+0x0070832B	126	CRecentFileList::WriteList	named	"MFC: CRecentFileList::WriteList (vtable slot 4): AfxGetApp (module state +4), WriteProfileString(section, NULL) to clear, then ""File%d"" = each non-empty entry; dead chain"
+0x007083A9	158	CRecentFileList::ReadList	named	"MFC: CRecentFileList::ReadList (vtable slot 3): for each index GetProfileString(section, ""File%d"", """") into m_arrNames; dead chain"
+0x00708447	121	CArchive::WriteString	named	MFC: operator<<(CArchive&, const CString&): length prefix (< 0xFF byte; else 0xFF + word when < 0xFFFE; else 0xFF, 0xFFFF, dword; AfxWriteStringLength) then CArchive::Write of the characters (callee 0x708941 named CMemFile::Read = CArchive::Write); CStringArray::Serialize, SerializeElements
+0x007084C0	87	AfxReadStringLength	named	"MFC: AfxReadStringLength(CArchive&): byte; 0xFF -> word; word 0xFFFE -> -1 (Unicode marker), 0xFFFF -> dword; returns the length. CORRECTION: was ""CArchive::ReadClassTag"""
+0x00708517	152	CArchive::ReadString_CString	named	MFC: operator>>(CArchive&, CString&): length (AfxReadStringLength; -1 -> wide string, read the length again), GetBufferSetLength, CArchive::Read (callee 0x708832 named CMemFile::Write), short read -> AfxThrowArchiveException (callee 0x70A835 named AfxAllocNode10); a wide string is converted with CString = LPCWSTR and the temp freed. Renamed from CArchive::ReadWideString
+0x007085AF	78	SerializeElements_CString	named	MFC: SerializeElements<CString>(CArchive&, CString*, n): loading (+0x14 & 1) -> operator>> per element, else operator<<; SSCNameCArray::Serialize. Renamed from CArchive::SerializeStringRange
+0x007085FD	139	CRuntimeClass::Load	named	"MFC: CRuntimeClass::Load(CArchive&, UINT* schema): schema word, name length word (< 0x40), name; under AfxLockGlobals(0) searches the module state class list (+0x1C, next +0x14) by lstrcmp; returns the CRuntimeClass or 0; only from CArchive::ReadClass 0x70A5A3 (dead chain: ReadClass is reached only from dead code). CORRECTION: was ""CArchive::ReadClassName"""
+0x00708688	56	CRuntimeClass::Store	named	"MFC: CRuntimeClass::Store(CArchive&) (this = CRuntimeClass: name +0, schema +8): writes schema word, name length word, the name bytes; only from CArchive::WriteClass 0x70A512 (dead chain). CORRECTION: was ""CArchive::WriteClassInfo"""
+0x007086C0	220	CArchive::CArchive	named	MFC: CArchive::CArchive(CFile*, nMode, nBufSize, lpBuf): m_strFileName +0x10 = file GetFilePath (vt+0x18), m_nMode +0x14, m_pFile +0x20, m_nObjectSchema +0xC = -1, m_bForceFlat +4 = 1, m_nGrowSize +0x3C 0x40 / 0x10, m_nHashSize +0x40 = 0x89, buffer size >= 0x80, direct buffer via vt+0x50 GetBufferPtr or new buffer (m_bUserBuf +0x18), m_lpBufCur / m_lpBufMax; lib, unused (no call, pointer or funclet) [dead: no caller or pointer]
+0x0070879C	70	CArchive::~CArchive	named	MFC: CArchive::~CArchive: m_pFile +0x20 set and not bNoFlushOnDelete (mode & 2) -> Close 0x708824; Abort 0x7087E2; ~CString m_strFileName; lib, unused (no reference) [dead: no caller or pointer]
+0x007087E2	66	CArchive::Abort	named	"MFC: CArchive::Abort: m_pFile +0x20 = 0, deletes the buffer +0x2C unless m_bUserBuf +0x18, deletes m_pLoadArray and m_pStoreMap (two pointers after the buffer fields, vt+4 deleting dtor); only from the unused ~CArchive (dead chain). CORRECTION: was ""CMemFile::Reset"""
+0x00708824	14	CArchive::Close	named	"MFC: CArchive::Close: Flush (0x7089D1), m_pFile +0x20 = 0; only from the unused ~CArchive (dead chain). CORRECTION: was ""CArchive::Flush"""
+0x00708832	271	CArchive::Read	named	"MFC: CArchive::Read(buf, n) -> bytes read: from the buffer [cur +0x24, max +0x28), then whole buffer-size blocks straight from the file (vt+0x34 Read), then refills the buffer (file Read, or GetBufferPtr vt+0x50 for direct-buffer files) and copies the rest (210 callers: every MFC Serialize when loading). CORRECTION: was ""CMemFile::Write"""
+0x00708941	144	CArchive::Write	named	"MFC: CArchive::Write(buf, n): fills the buffer, when full Flush (0x7089D1), whole blocks straight to the file (vt+0x38 Write), direct-buffer files get a new buffer by GetBufferPtr (vt+0x50), the rest buffered (211 callers). CORRECTION: was ""CMemFile::Read"""
+0x007089D1	124	CArchive::Flush	named	"MFC: CArchive::Flush: storing: writes [buffer +0x2C, cur +0x24) to the file (vt+0x38 Write) or commits a direct buffer (vt+0x50 GetBufferPtr(bufferCommit) then a new one), cur = start; loading: seeks the file back over the unread bytes (vt+0x28 Seek(-(max - cur), current)), cur = max; CBitmapDib::Serialize, the operator<< helpers, Close. CORRECTION: was ""CArchive::FillBuffer"" (the brief's note confirmed)"
+0x00708A4D	194	CArchive::FillBuffer	named	"MFC: CArchive::FillBuffer(nBytesNeeded): moves the unread rest to the buffer start and reads more from the file (vt+0x34) until enough, or for a direct buffer seeks back and takes a new buffer (vt+0x50); fewer than needed -> AfxThrowArchiveException(endOfFile) (callee 0x70A835 named AfxAllocNode10); the operator>> helpers (MemReader_Get*). CORRECTION: was ""ReadFillBuffer"""
+0x00708B0F	46	CArchive::WriteCount	named	MFC: CArchive::WriteCount(n): n < 0xFFFF -> word; else word 0xFFFF + dword (153 callers: MFC collection Serialize)
+0x00708B3D	48	CArchive::ReadCount	named	MFC: CArchive::ReadCount -> word, or the dword after a 0xFFFF word
+0x00708B6D	29	CArchive::WriteString	named	MFC: CArchive::WriteString(LPCTSTR): CArchive::Write(lpsz, lstrlen) (no terminator); lib, unused (no reference). Renamed from CArchive::WriteStringZ (0x708447 keeps its old name for the operator<<) [dead: no caller or pointer]
+0x00708B8A	104	CArchive::ReadString	named	"MFC: CArchive::ReadString(lpsz, nMax) -> lpsz or 0: reads bytes until ""\n"" or ""\r\n"" (the newline is kept when nMax < 0) or |nMax|, zero-terminates; only from the unused 0x708C3C (dead chain)"
 0x00708C0C	25	sub_708C0C	named	unregistered function, reached by call / pointer from 0x308C07 (gaps.py 2026-11-06)
-0x00708C25	23	EH_StoreFrame_Stub	named	EH epilogue: stores a zero byte and restores the frame
-0x00708C3C	155	CArchive::ReadLine	named	reads a text line into a CString (ReadString loop, 0x80 chunks)
-0x00708CD7	20	InitVtable_7461B0_708CD7	named	stores vtable 0x007461B0 and initializes 4 field(s) (constructor/reset step)
-0x00708CEB	28	vt_7461B0::DeletingDtor_708CEB	named	scalar deleting destructor: runs FUN_00708e0c then operator delete when flag&1
-0x00708D07	114	AfxGetHandleMap_Dc	named	returns the thread's DC handle map (state +0x1C), creating it
-0x00708D79	21	AfxInitHandleMaps_Dc	named	creates the DC handle map and temp CWnd
-0x00708D8E	55	CDC::Attach	named	attaches an HDC and registers it in the permanent map
-0x00708DC5	49	CDC::Detach	named	removes the HDC from the permanent map and clears it
+0x00708C25	23	EH_StoreFrame_Stub	named	tail block of CArchive::ReadString 0x708B8A (zero terminator, restore the EH frame, return); jumped to only from it (dead chain)
+0x00708C3C	155	CArchive::ReadString_CString	named	"MFC: CArchive::ReadString(CString&) -> BOOL: reads 0x80-byte chunks with ReadString(buf, -0x80) until the line is complete, strips the trailing ""\n""; lib, unused (no reference). Renamed from CArchive::ReadLine [dead: no caller or pointer]"
+0x00708CD7	20	CDC::CDC	named	MFC: CDC::CDC (fastcall): vtable 0x7461B0, m_hDC +4 = m_hAttribDC +8 = 0, m_bPrinting +0xC = 0; CWnd::OnWndMsg, CClientDC / CWindowDC / CPaintDC ctors. Renamed from InitVtable_7461B0_708CD7
+0x00708CEB	28	vt_7461B0::DeletingDtor_708CEB	named	MFC: CDC scalar deleting dtor (vtable 0x7461B0 slot 1): ~CDC 0x708E0C, operator delete when flag & 1
+0x00708D07	114	AfxGetHandleMap_Dc	named	MFC: afxMapHDC(bCreate): module thread state +0x1C; created on first use (AfxSetAllocHook, new CHandleMap 0x48 for CTempDC 0x745FB0 with 2 handles: m_hDC / m_hAttribDC); CDC::FromHandle / Attach / Detach. (Its neighbours: afxMapHMENU = 0x707BFA state +0x18, named AfxGetHandleMap_Gdi; afxMapHGDIOBJ = 0x709FEE +0x20)
+0x00708D79	21	CDC::FromHandle	named	"MFC: CDC::FromHandle(HDC): afxMapHDC(TRUE) (0x708D07, CTempDC map) -> CHandleMap::FromHandle; (the decompile drops the ecx map); UI blitters, CWnd::OnWndMsg. CORRECTION: was ""AfxInitHandleMaps_Dc, creates the DC handle map and temp CWnd"""
+0x00708D8E	55	CDC::Attach	named	MFC: CDC::Attach(HDC) -> BOOL: 0 -> FALSE; m_hDC +4 = h, afxMapHDC(TRUE) permanent map SetAt(h, this), SetAttribDC(m_hDC) (vt+0xC)
+0x00708DC5	49	CDC::Detach	named	MFC: CDC::Detach -> HDC: removes m_hDC from the afxMapHDC permanent map, ReleaseAttribDC (vt+0x14), m_hDC = 0
 0x00708DF6	22	dead_708DF6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00708E0C	54	CDC::~CDC	named	CDC destructor body: vtable 0x7461B0, delete/detach DC
-0x00708E42	10	vt_7461B0::SetField_8_708E42	named	stores the argument into this+8 (undefined4)
-0x00708E4C	10	vt_7461B0::SetField_4_708E4C	named	stores the argument into this+4 (undefined4)
-0x00708E56	5	vt_7461B0::ClearField_8_708E56	named	stores a constant into this+8
-0x00708E5B	5	vt_7461B0::ClearField_4_708E5B	named	stores a constant into this+4
-0x00708E60	56	CDC::StartDoc	named	StartDocA with a DOCINFO (cbSize 0x14, name) on the output DC
-0x00708E98	49	CDC::SaveDC_708E98	named	MFC CDC wrapper: SaveDC on the output/attribute DC (+4/+8)
-0x00708EC9	62	CDC::RestoreDC_708EC9	named	MFC CDC wrapper: RestoreDC on the output/attribute DC (+4/+8)
+0x00708E0C	54	CDC::~CDC	named	MFC: CDC::~CDC: vtable 0x7461B0; m_hDC +4 set -> ::DeleteDC(Detach())
+0x00708E42	10	CDC::SetAttribDC	named	MFC: CDC::SetAttribDC(HDC) virtual (vtable 0x7461B0 slot 3 and the CClientDC / CWindowDC / CPaintDC / CMetaFileDC-like vtables): m_hAttribDC +8 = h. Renamed from vt_7461B0::SetField_8_708E42
+0x00708E4C	10	CDC::SetOutputDC	named	MFC: CDC::SetOutputDC(HDC) virtual (slot 4): m_hDC +4 = h. Renamed from vt_7461B0::SetField_4_708E4C
+0x00708E56	5	CDC::ReleaseAttribDC	named	MFC: CDC::ReleaseAttribDC virtual (slot 5): m_hAttribDC +8 = 0. Renamed from vt_7461B0::ClearField_8_708E56
+0x00708E5B	5	CDC::ReleaseOutputDC	named	MFC: CDC::ReleaseOutputDC virtual (slot 6): m_hDC +4 = 0. Renamed from vt_7461B0::ClearField_4_708E5B
+0x00708E60	56	CDC::StartDoc	named	MFC: CDC::StartDoc(LPCTSTR name): DOCINFO {cbSize 0x14, name}, ::StartDoc(m_hDC); lib, unused (no reference) [dead: no caller or pointer]
+0x00708E98	49	CDC::SaveDC_708E98	named	MFC: CDC::SaveDC virtual (slot 7): SaveDC on m_hAttribDC, and on m_hDC when different (then the result is -1); returns the id
+0x00708EC9	62	CDC::RestoreDC_708EC9	named	MFC: CDC::RestoreDC(n) virtual (slot 8): RestoreDC on m_hDC when different, then on m_hAttribDC; TRUE when all succeed
 0x00708F07	23	dead_708F07	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00708F1E	60	CDC::SelectObject_708F1E	named	MFC CDC wrapper: SelectObject on the output/attribute DC (+4/+8)
-0x00708F5A	70	CDC::SelectObject_708F5A	named	MFC CDC wrapper: SelectObject on the output/attribute DC (+4/+8)
-0x00708FA0	70	CDC::SelectObject_708FA0	named	MFC CDC wrapper: SelectObject on the output/attribute DC (+4/+8)
-0x00708FE6	70	CDC::SelectObject_708FE6	named	MFC CDC wrapper: SelectObject on the output/attribute DC (+4/+8)
-0x0070902C	69	CDC::SelectObject_70902C	named	MFC CDC wrapper: SelectObject on the output/attribute DC (+4/+8)
+0x00708F1E	60	CDC::SelectStockObject	named	MFC: CDC::SelectStockObject(index) virtual (slot 9): GetStockObject, SelectObject on m_hDC (when different) and m_hAttribDC, returns CGdiObject::FromHandle(old) (0x70A060). Renamed from CDC::SelectObject_708F1E
+0x00708F5A	70	CDC::SelectObject_708F5A	named	MFC: CDC::SelectObject(CPen* / CBrush* / CBitmap*) (one of the identical non-virtual overloads): ::SelectObject of the object handle +4 (0 for null) on m_hDC (when different) and m_hAttribDC, returns CGdiObject::FromHandle(old); UI redraws (CLobbyScreen::LayoutLobby, CUIConsole / CUIMessageLog::RedrawInput, CSaveLoadWin, CEditWin)
+0x00708FA0	70	CDC::SelectObject_Brush	named	MFC: CDC::SelectObject(CBrush*) (same code as 0x708F5A): only from CDC::DrawDragRect 0x70B7D6 (4 calls, brushes), which is unreferenced -> dead chain
+0x00708FE6	70	CDC::SelectObject_708FE6	named	MFC: CDC::SelectObject(CFont*) virtual (slot 10), same code as 0x708F5A
+0x0070902C	69	CDC::SelectObject_70902C	named	MFC: int CDC::SelectObject(CRgn*): ::SelectObject of the region on m_hDC (when different) and m_hAttribDC; lib, unused (no reference) [dead: no caller or pointer]
 0x00709071	34	dead_709071	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00709093	47	CDC::SetBkColor_709093	named	MFC CDC wrapper: SetBkColor on the output/attribute DC (+4/+8)
-0x007090C2	46	CDC::SetBkMode_7090C2	named	MFC CDC wrapper: SetBkMode on the output/attribute DC (+4/+8)
-0x007090F0	46	CDC::SetPolyFillMode_7090F0	named	MFC CDC wrapper: SetPolyFillMode on the output/attribute DC (+4/+8)
-0x0070911E	46	CDC::SetROP2_70911E	named	MFC CDC wrapper: SetROP2 on the output/attribute DC (+4/+8)
-0x0070914C	46	CDC::SetStretchBltMode_70914C	named	MFC CDC wrapper: SetStretchBltMode on the output/attribute DC (+4/+8)
-0x0070917A	47	CDC::SetTextColor_70917A	named	MFC CDC wrapper: SetTextColor on the output/attribute DC (+4/+8)
-0x007091A9	46	CDC::SetMapMode_7091A9	named	MFC CDC wrapper: SetMapMode on the output/attribute DC (+4/+8)
-0x007091D7	76	CDC::SetViewportOrgEx_7091D7	named	MFC CDC wrapper: SetViewportOrgEx on the output/attribute DC (+4/+8)
-0x00709223	76	CDC::OffsetViewportOrgEx_709223	named	MFC CDC wrapper: OffsetViewportOrgEx on the output/attribute DC (+4/+8)
-0x0070926F	76	CDC::SetViewportExtEx_70926F	named	MFC CDC wrapper: SetViewportExtEx on the output/attribute DC (+4/+8)
-0x007092BB	88	CDC::ScaleViewportExtEx_7092BB	named	MFC CDC wrapper: ScaleViewportExtEx on the output/attribute DC (+4/+8)
-0x00709313	76	CDC::SetWindowOrgEx_709313	named	MFC CDC wrapper: SetWindowOrgEx on the output/attribute DC (+4/+8)
-0x0070935F	76	CDC::OffsetWindowOrgEx_70935F	named	MFC CDC wrapper: OffsetWindowOrgEx on the output/attribute DC (+4/+8)
-0x007093AB	76	CDC::SetWindowExtEx_7093AB	named	MFC CDC wrapper: SetWindowExtEx on the output/attribute DC (+4/+8)
-0x007093F7	88	CDC::ScaleWindowExtEx_7093F7	named	MFC CDC wrapper: ScaleWindowExtEx on the output/attribute DC (+4/+8)
-0x0070944F	16	vt_7461B0::Thunk_GetClipBox_70944F	named	forwards to GetClipBox
-0x0070945F	64	CDC::SelectClipRgn_70945F	named	MFC CDC wrapper: SelectClipRgn on the output/attribute DC (+4/+8)
-0x0070949F	66	CDC::ExcludeClipRect_70949F	named	MFC CDC wrapper: ExcludeClipRect on the output/attribute DC (+4/+8)
+0x00709093	47	CDC::SetBkColor_709093	named	MFC: CDC::SetBkColor(COLORREF) virtual (slot 11): on m_hDC when different, result from m_hAttribDC (CLR_INVALID = -1 default)
+0x007090C2	46	CDC::SetBkMode_7090C2	named	MFC: CDC::SetBkMode(mode): on m_hDC when different, result from m_hAttribDC; DebugText::Render, CUIConsole, CUIBlitSurface::DrawText
+0x007090F0	46	CDC::SetPolyFillMode_7090F0	named	MFC: CDC::SetPolyFillMode (both DCs); lib, unused [dead: no caller or pointer]
+0x0070911E	46	CDC::SetROP2_70911E	named	MFC: CDC::SetROP2 (both DCs); lib, unused [dead: no caller or pointer]
+0x0070914C	46	CDC::SetStretchBltMode_70914C	named	MFC: CDC::SetStretchBltMode (both DCs); lib, unused [dead: no caller or pointer]
+0x0070917A	47	CDC::SetTextColor_70917A	named	MFC: CDC::SetTextColor(COLORREF) virtual (slot 12): both DCs, result from m_hAttribDC
+0x007091A9	46	CDC::SetMapMode_7091A9	named	MFC: CDC::SetMapMode virtual (slot 13): both DCs
+0x007091D7	76	CDC::SetViewportOrgEx_7091D7	named	MFC: CDC::SetViewportOrg(x, y) -> CPoint virtual (slot 14): SetViewportOrgEx on m_hDC (when different) and m_hAttribDC, old origin out
+0x00709223	76	CDC::OffsetViewportOrgEx_709223	named	MFC: CDC::OffsetViewportOrg(dx, dy) -> CPoint virtual (slot 15), both DCs
+0x0070926F	76	CDC::SetViewportExtEx_70926F	named	MFC: CDC::SetViewportExt(cx, cy) -> CSize virtual (slot 16), both DCs
+0x007092BB	88	CDC::ScaleViewportExtEx_7092BB	named	MFC: CDC::ScaleViewportExt(xNum, xDenom, yNum, yDenom) -> CSize virtual (slot 17), both DCs
+0x00709313	76	CDC::SetWindowOrgEx_709313	named	MFC: CDC::SetWindowOrg(x, y) -> CPoint (both DCs); only from CDC::PlayMetaFileProc (dead chain)
+0x0070935F	76	CDC::OffsetWindowOrgEx_70935F	named	MFC: CDC::OffsetWindowOrg (both DCs); lib, unused [dead: no caller or pointer]
+0x007093AB	76	CDC::SetWindowExtEx_7093AB	named	MFC: CDC::SetWindowExt(cx, cy) -> CSize virtual (slot 18), both DCs
+0x007093F7	88	CDC::ScaleWindowExtEx_7093F7	named	MFC: CDC::ScaleWindowExt -> CSize virtual (slot 19), both DCs
+0x0070944F	16	CDC::GetClipBox	named	MFC: CDC::GetClipBox(LPRECT) const virtual (slot 20): ::GetClipBox(m_hDC). Renamed from vt_7461B0::Thunk_GetClipBox_70944F
+0x0070945F	64	CDC::SelectClipRgn_70945F	named	MFC: CDC::SelectClipRgn(CRgn*): ::SelectClipRgn with the region handle (or 0) on m_hDC (when different) and m_hAttribDC; only from CDC::DrawDragRect 0x70B7D6 (unreferenced) -> dead chain
+0x0070949F	66	CDC::ExcludeClipRect_70949F	named	MFC: CDC::ExcludeClipRect(x1, y1, x2, y2) (both DCs); lib, unused [dead: no caller or pointer]
 0x007094E1	66	CDC__ExcludeClipRect_70949F_chunk_7094E1	named	a piece of CDC::ExcludeClipRect_70949F placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x00709523	66	CDC::IntersectClipRect_709523	named	MFC CDC wrapper: IntersectClipRect on the output/attribute DC (+4/+8)
+0x00709523	66	CDC::IntersectClipRect_709523	named	MFC: CDC::IntersectClipRect(x1, y1, x2, y2) (both DCs); lib, unused [dead: no caller or pointer]
 0x00709565	66	CDC__IntersectClipRect_709523_chunk_709565	named	a piece of CDC::IntersectClipRect_709523 placed outside its registered range, reached by its jumps (gaps.py 2026-11-06)
-0x007095A7	54	CDC::OffsetClipRgn_7095A7	named	MFC CDC wrapper: OffsetClipRgn on the output/attribute DC (+4/+8)
-0x007095DD	54	CDC::OffsetClipRgn_7095DD	named	MFC CDC wrapper: OffsetClipRgn on the output/attribute DC (+4/+8)
-0x00709613	76	CDC::MoveToEx_709613	named	MFC CDC wrapper: MoveToEx on the output/attribute DC (+4/+8)
-0x0070965F	53	CDC::LineTo	named	LineTo(x, y) on the output DC (attribute DC handling)
-0x00709694	53	CDC::SetTextAlign_709694	named	MFC CDC wrapper: SetTextAlign on the output/attribute DC (+4/+8)
-0x007096C9	54	CDC::SetTextJustification_7096C9	named	MFC CDC wrapper: SetTextJustification on the output/attribute DC (+4/+8)
-0x007096FF	49	CDC::SetTextCharacterExtra_7096FF	named	MFC CDC wrapper: SetTextCharacterExtra on the output/attribute DC (+4/+8)
-0x00709730	47	CDC::SetMapperFlags_709730	named	MFC CDC wrapper: SetMapperFlags on the output/attribute DC (+4/+8)
-0x0070975F	54	CDC::GetLayout	named	GetLayout from GDI32 (dynamic), -1 with ERROR_CALL_NOT_IMPLEMENTED when missing
-0x00709795	70	CDC::SetLayout	named	SetLayout from GDI32 (dynamic)
-0x007097DB	60	CWnd::ScreenToClientRect	named	ScreenToClient on both corners of a rect, mirrored when WS_EX_LAYOUTRTL
+0x007095A7	54	CDC::OffsetClipRgn_7095A7	named	MFC: CDC::OffsetClipRgn(x, y) (both DCs); byte-identical to 0x7095DD (the SIZE overload); lib, unused [dead: no caller or pointer]
+0x007095DD	54	CDC::OffsetClipRgn_7095DD	named	MFC: CDC::OffsetClipRgn(SIZE) (same bytes as 0x7095A7); lib, unused [dead: no caller or pointer]
+0x00709613	76	CDC::MoveToEx_709613	named	MFC: CDC::MoveTo(x, y) -> CPoint: MoveToEx on m_hDC (when different) and m_hAttribDC, old position out; UI redraws
+0x0070965F	53	CDC::LineTo	named	MFC: CDC::LineTo(x, y): when m_hAttribDC differs, MoveToEx(m_hAttribDC, x, y) first; ::LineTo(m_hDC); UI redraws
+0x00709694	53	CDC::SetTextAlign_709694	named	MFC: CDC::SetTextAlign (both DCs); lib, unused [dead: no caller or pointer]
+0x007096C9	54	CDC::SetTextJustification_7096C9	named	MFC: CDC::SetTextJustification (both DCs); lib, unused [dead: no caller or pointer]
+0x007096FF	49	CDC::SetTextCharacterExtra_7096FF	named	MFC: CDC::SetTextCharacterExtra (both DCs); lib, unused [dead: no caller or pointer]
+0x00709730	47	CDC::SetMapperFlags_709730	named	MFC: CDC::SetMapperFlags (both DCs); lib, unused [dead: no caller or pointer]
+0x0070975F	54	CDC::GetLayout	named	"MFC: CDC::GetLayout: GDI32 ""GetLayout"" through GetProcAddress, else -1 and SetLastError(ERROR_CALL_NOT_IMPLEMENTED 0x78); lib, unused [dead: no caller or pointer]"
+0x00709795	70	CDC::SetLayout	named	"MFC: CDC::SetLayout(dw): GDI32 ""SetLayout"" on both DCs through GetProcAddress, else -1 / ERROR_CALL_NOT_IMPLEMENTED; lib, unused [dead: no caller or pointer]"
+0x007097DB	60	CWnd::ScreenToClientRect	named	MFC: CWnd::ScreenToClient(LPRECT): ::ScreenToClient on both corners (m_hWnd +0x1C), swaps left/right when WS_EX_LAYOUTRTL (0x400000); CWnd::GetUpdateRegionClient
 0x00709817	60	dead_709817	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00709853	88	ArcTo	named	
-0x007098AB	46	CDC::SetArcDirection_7098AB	named	MFC CDC wrapper: SetArcDirection on the output/attribute DC (+4/+8)
-0x007098D9	73	PolyDraw	named	
-0x00709922	70	FID_conflict:PolyBezierTo	named	
-0x00709968	46	CDC::SetColorAdjustment_709968	named	MFC CDC wrapper: SetColorAdjustment on the output/attribute DC (+4/+8)
-0x00709996	70	FID_conflict:PolyBezierTo	named	
-0x007099DC	94	CDC::SelectClipPath_7099DC	named	MFC CDC wrapper: SelectClipPath on the output/attribute DC (+4/+8)
-0x00709A3A	72	CDC::ExtSelectClipRgn_709A3A	named	MFC CDC wrapper: ExtSelectClipRgn on the output/attribute DC (+4/+8)
-0x00709A82	576	CDC::PlayMetaFileProc	named	enumerates metafile records (SetWindowOrgEx etc.), 576 bytes
-0x00709CC2	57	PlayMetaFile	named	
-0x00709CFB	105	CDC::DPtoLP_x	named	logical conversion using window/viewport extents (MulDiv with abs)
-0x00709D64	105	CDC::DPtoLP_y	named	logical conversion using window/viewport extents
-0x00709DCD	86	CGdiObject_Attach_A	named	attaches a GDI handle (ctor, throws CResourceException on failure)
-0x00709E23	28	vt_74624C::DeletingDtor_709E23	named	scalar deleting destructor: runs FID_conflict__CClientDC then operator delete when flag&1
-0x00709E3F	66	CClientDC::~CClientDC	named	releases the DC (ReleaseDC) then ~CDC
-0x00709E81	86	CGdiObject_Attach_B	named	same for another GDI class
-0x00709ED7	28	vt_7462C4::DeletingDtor_709ED7	named	scalar deleting destructor: runs FID_conflict__CClientDC then operator delete when flag&1
-0x00709EF3	66	CWindowDC::~CWindowDC	named	releases the DC then ~CDC
-0x00709F35	86	CClientDC::CClientDC	named	GetDC for the window and Attach (throws CResourceException on failure)
-0x00709F8B	28	vt_74633C::DeletingDtor_709F8B	named	scalar deleting destructor: runs CPaintDC::~CPaintDC then operator delete when flag&1
-0x00709FA7	71	CPaintDC::~CPaintDC	named	EndPaint then ~CDC
-0x00709FEE	114	AfxGetHandleMap_Menu	named	returns the thread's menu handle map (state +0x20), creating it
-0x0070A060	21	AfxInitHandleMaps_Menu	named	creates the menu handle map and temp CWnd
-0x0070A075	45	CMenu::Attach	named	attaches an HMENU and registers it in the permanent map
-0x0070A0A2	42	CMenu::Detach_Impl	named	removes the HMENU from the permanent map and clears it
-0x0070A0CC	22	CGdiObject::DeleteObject	named	Detach then DeleteObject; 17 callers
-0x0070A0E2	80	CBrush::CBrush_COLORREF	named	CreateSolidBrush(color), throws on failure
-0x0070A132	86	CPen::CPen_style_width_color	named	CreatePen / ExtCreatePen, throws on failure
-0x0070A188	74	CBrush::CreateSolidBrush	named	CreateSolidBrush(color)
-0x0070A1D2	77	CBrush::CreateHatchBrush	named	CreateHatchBrush(style, color)
-0x0070A21F	77	CBrush::CreateDIBPatternBrush	named	creates a pattern brush from a DIB/bitmap
-0x0070A26C	50	CreateDIBPatternBrush	named	
-0x0070A29E	25	AfxThrowResourceException	named	throws the global resource exception object (0x7C8C58)
+0x00709853	88	ArcTo	named	MFC: CDC::ArcTo(8 ints): ::ArcTo(m_hDC), then copies the current position to m_hAttribDC (GetCurrentPositionEx + MoveToEx) when different; lib, unused [dead: no caller or pointer]
+0x007098AB	46	CDC::SetArcDirection_7098AB	named	MFC: CDC::SetArcDirection (both DCs); lib, unused [dead: no caller or pointer]
+0x007098D9	73	PolyDraw	named	MFC: CDC::PolyDraw(points, types, n): ::PolyDraw(m_hDC) + current position sync to m_hAttribDC; lib, unused [dead: no caller or pointer]
+0x00709922	70	CDC::PolylineTo	named	MFC: CDC::PolylineTo(points, n): ::PolylineTo(m_hDC) + position sync; lib, unused. Renamed from FID_conflict:PolyBezierTo (this one calls PolylineTo) [dead: no caller or pointer]
+0x00709968	46	CDC::SetColorAdjustment_709968	named	MFC: CDC::SetColorAdjustment (both DCs); lib, unused [dead: no caller or pointer]
+0x00709996	70	CDC::PolyBezierTo	named	MFC: CDC::PolyBezierTo(points, n): ::PolyBezierTo(m_hDC) + position sync; lib, unused. Renamed from FID_conflict:PolyBezierTo [dead: no caller or pointer]
+0x007099DC	94	CDC::SelectClipPath_7099DC	named	MFC: CDC::SelectClipPath(mode): SelectClipPath on m_hDC, when m_hAttribDC differs copies the resulting clip region to it (CreateRectRgn, GetClipRgn, SelectClipRgn, DeleteObject); lib, unused [dead: no caller or pointer]
+0x00709A3A	72	CDC::ExtSelectClipRgn_709A3A	named	MFC: CDC::SelectClipRgn(CRgn*, mode) = ExtSelectClipRgn on both DCs; lib, unused [dead: no caller or pointer]
+0x00709A82	576	CDC::PlayMetaFileProc	named	MFC: CDC::PlayMetaFileProc (EnumMetaFile callback): routes META_ records through the CDC virtuals (SelectObject with GetObjectType / stock objects, SetWindowOrg 0x709313, save / restore, colours, extents), else PlayMetaFileRecord; only referenced by CDC::PlayMetaFile (dead chain)
+0x00709CC2	57	PlayMetaFile	named	MFC: CDC::PlayMetaFile(HMETAFILE): GetDeviceCaps(TECHNOLOGY) == DT_METAFILE (5) -> ::PlayMetaFile, else EnumMetaFile with PlayMetaFileProc; lib, unused [dead: no caller or pointer]
+0x00709CFB	105	CDC::LPtoDP_Size	named	"MFC: CDC::LPtoDP(LPSIZE): size * |viewport ext| / |window ext| (MulDiv, m_hAttribDC); callers HIMETRICtoDP 0x70B69F and LPtoHIMETRIC 0x70B72D, both reached only from unreferenced code (dead chain). CORRECTION: was ""CDC::DPtoLP_x"" (it scales logical -> device)"
+0x00709D64	105	CDC::DPtoLP_Size	named	MFC: CDC::DPtoLP(LPSIZE): size * |window ext| / |viewport ext| (MulDiv on m_hAttribDC extents).; callers DPtoHIMETRIC 0x70B611 and HIMETRICtoLP 0x70B748 (dead chain). Renamed from CDC::DPtoLP_y
+0x00709DCD	86	CClientDC::CClientDC	named	"MFC: CClientDC::CClientDC(CWnd*): CDC::CDC, vtable 0x74624C, m_hWnd +0x10 = pWnd->m_hWnd (+0x1C) or 0, Attach(::GetDC(hWnd)) else AfxThrowResourceException; lib, unused (no reference). CORRECTION: was ""CGdiObject_Attach_A"" [dead: no caller or pointer]"
+0x00709E23	28	vt_74624C::DeletingDtor_709E23	named	MFC: CClientDC scalar deleting dtor (vtable 0x74624C slot 1); the vtable is installed only by the unused ctor 0x709DCD and the dtor (dead chain)
+0x00709E3F	66	CClientDC::~CClientDC	named	MFC: CClientDC::~CClientDC: vtable 0x74624C, ::ReleaseDC(m_hWnd +0x10, Detach()), ~CDC; only from its deleting dtor (dead chain)
+0x00709E81	86	CWindowDC::CWindowDC	named	"MFC: CWindowDC::CWindowDC(CWnd*): CDC::CDC, vtable 0x7462C4, m_hWnd +0x10, Attach(::GetWindowDC(hWnd)) else AfxThrowResourceException; lib, unused. CORRECTION: was ""CGdiObject_Attach_B"" [dead: no caller or pointer]"
+0x00709ED7	28	vt_7462C4::DeletingDtor_709ED7	named	MFC: CWindowDC scalar deleting dtor (vtable 0x7462C4 slot 1); vtable only from the unused ctor (dead chain)
+0x00709EF3	66	CWindowDC::~CWindowDC	named	MFC: CWindowDC::~CWindowDC: ::ReleaseDC(m_hWnd +0x10, Detach()), ~CDC; dead chain
+0x00709F35	86	CPaintDC::CPaintDC	named	"MFC: CPaintDC::CPaintDC(CWnd*): CDC::CDC, vtable 0x74633C, m_hWnd +0x10, Attach(::BeginPaint(hWnd, &m_ps +0x14)) else AfxThrowResourceException; lib, unused. CORRECTION: was ""CClientDC::CClientDC"" [dead: no caller or pointer]"
+0x00709F8B	28	vt_74633C::DeletingDtor_709F8B	named	MFC: CPaintDC scalar deleting dtor (vtable 0x74633C slot 1); vtable only from the unused ctor (dead chain)
+0x00709FA7	71	CPaintDC::~CPaintDC	named	MFC: CPaintDC::~CPaintDC: ::EndPaint(m_hWnd, &m_ps), Detach, ~CDC; dead chain
+0x00709FEE	114	AfxMapHGDIOBJ	named	"MFC: afxMapHGDIOBJ(bCreate): module thread state +0x20; created on first use (AfxSetAllocHook, new CHandleMap 0x48 for CTempGdiObject, 1 handle). CORRECTION: was ""AfxGetHandleMap_Menu"" (the menu map is 0x707BFA, state +0x18; DC +0x1C)"
+0x0070A060	21	CGdiObject::FromHandle	named	"MFC: CGdiObject::FromHandle(HGDIOBJ): afxMapHGDIOBJ(TRUE)->FromHandle(h) (decompile drops the ecx map); the CDC SelectObject wrappers, PlayMetaFileProc. CORRECTION: was ""AfxInitHandleMaps_Menu, creates the menu handle map and temp CWnd"""
+0x0070A075	45	CGdiObject::Attach	named	"MFC: CGdiObject::Attach(HGDIOBJ) -> BOOL: 0 -> FALSE; m_hObject +4 = h, afxMapHGDIOBJ(TRUE) permanent map SetAt(h, this); AfxDrawGrayBitmap, CUIBlitSurface::DrawFrameRect, CPen / CBrush ctors. CORRECTION: was ""CMenu::Attach"""
+0x0070A0A2	42	CGdiObject::Detach	named	"MFC: CGdiObject::Detach -> HGDIOBJ: removes m_hObject +4 from the afxMapHGDIOBJ permanent map, m_hObject = 0; CGdiObject::DeleteObject. CORRECTION: was ""CMenu::Detach_Impl"""
+0x0070A0CC	22	CGdiObject::DeleteObject	named	MFC: CGdiObject::DeleteObject: m_hObject 0 -> FALSE, else ::DeleteObject(Detach()) (17 callers: CFont / CGdiObject dtors, UI redraws)
+0x0070A0E2	80	CPen::CPen	named	"MFC: CPen::CPen(nPenStyle, nWidth, COLORREF): vtable 0x7463B4, Attach(::CreatePen) else AfxThrowResourceException; UI redraws (CLobbyScreen::LayoutLobby, RedrawInput, CSaveLoadWin, CEditWin). CORRECTION: was ""CBrush::CBrush_COLORREF"""
+0x0070A132	86	CPen::CPen_Ext	named	MFC: CPen::CPen(nPenStyle, nWidth, const LOGBRUSH*, nStyleCount, lpStyle): vtable 0x7463B4, Attach(::ExtCreatePen) else throw; lib, unused. Renamed from CPen::CPen_style_width_color [dead: no caller or pointer]
+0x0070A188	74	CBrush::CBrush_Color	named	MFC: CBrush::CBrush(COLORREF): vtable 0x7463C4, Attach(::CreateSolidBrush) else AfxThrowResourceException; lib, unused. Renamed from CBrush::CreateSolidBrush (it is the ctor) [dead: no caller or pointer]
+0x0070A1D2	77	CBrush::CBrush_Hatch	named	MFC: CBrush::CBrush(nIndex, COLORREF): vtable 0x7463C4, Attach(::CreateHatchBrush) else throw; lib, unused. Renamed from CBrush::CreateHatchBrush [dead: no caller or pointer]
+0x0070A21F	77	CBrush::CBrush_Bitmap	named	"MFC: CBrush::CBrush(CBitmap*): vtable 0x7463C4, Attach(::CreatePatternBrush(bitmap +4)) else throw; lib, unused. CORRECTION: was ""CBrush::CreateDIBPatternBrush"" (it calls CreatePatternBrush) [dead: no caller or pointer]"
+0x0070A26C	50	CreateDIBPatternBrush	named	MFC: CBrush::CreateDIBPatternBrush(HGLOBAL, nUsage): GlobalLock, Attach(::CreateDIBPatternBrushPt), GlobalUnlock; lib, unused [dead: no caller or pointer]
+0x0070A29E	25	AfxThrowResourceException	named	MFC: AfxThrowResourceException: throws the static CResourceException 0x7C8C58 (_CxxThrowException, type info 0x77EC28)
 0x0070A2B7	25	dead_70A2B7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070A2D0	20	AfxCheckHandleLimit	named	throws when the size field exceeds 0x3FFFFFFD
-0x0070A2E4	127	CArchive::WriteObjectEntry	named	writes an object reference entry (null tag or object via WriteObject)
-0x0070A363	175	CArchive::ReadObjectRef	named	reads an object reference (index or new object) with kind checks
+0x0070A2D0	20	CArchive::CheckCount	named	"MFC: CArchive::CheckCount: m_nMapCount +0x30 > 0x3FFFFFFD -> AfxThrowArchiveException (0x70A835); called only by MapObject / WriteObject / ReadObject / WriteClass / ReadClass, which are all unreferenced or dead chain -> dead chain. CORRECTION: was ""AfxCheckHandleLimit"""
+0x0070A2E4	127	CArchive::WriteObject	named	"MFC: CArchive::WriteObject(const CObject*): MapObject(NULL); null -> wNullTag 0; stored before -> index word (0x7FFF + dword when >= 0x7FFF); else WriteClass(GetRuntimeClass vt+0), CheckCount, store map +0x34 [obj] = m_nMapCount++ (+0x30), obj vt+8 Serialize(*this); lib, unused (no reference). CORRECTION: was ""CArchive::WriteObjectEntry"" [dead: no caller or pointer]"
+0x0070A363	175	CArchive::ReadObject	named	"MFC: CArchive::ReadObject(const CRuntimeClass* requested): ReadClass; an index -> m_pLoadArray +0x34 element (out of range -> AfxThrowArchiveException; IsKindOf check), a new class -> CreateObject (callee named CWnd_ForEachChild = CRuntimeClass::CreateObject; null -> memory exception), CheckCount, load array InsertAt(m_nMapCount++), schema +0xC swapped while obj vt+8 Serialize runs; callers dead_6D4A80 / dead_70BE91 / dead_70BED9 / dead_70C140 / dead_70C18E (operator>> helpers, all unreferenced) -> dead chain. CORRECTION: was ""CArchive::ReadObjectRef"""
 0x0070A412	8	dead_70A412	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070A41A	248	CObject_Serialize_Plex	named	reads/writes a map with CArray and CPlex storage (EH frame)
-0x0070A512	145	CArchive::WriteObject	named	writes an object pointer: handles map, class info, serialization (throws on bad type)
-0x0070A5A3	462	CArchive::ReadObjectPtr	named	reads an object pointer entry: tags, class lookup, creates and serializes
+0x0070A41A	248	CArchive::MapObject	named	"MFC: CArchive::MapObject(const CObject*): loading: creates m_pLoadArray +0x34 (CPtrArray, SetSize(1, m_nGrowSize +0x3C), [0] = 0, count +0x30 = 1) and appends the object; storing: creates m_pStoreMap (CMapPtrToPtr, InitHashTable(m_nHashSize +0x40), [NULL] = 0, count 1) and maps object -> m_nMapCount++; only from the dead WriteObject / WriteClass / ReadClass (dead chain). CORRECTION: was ""CObject_Serialize_Plex"""
+0x0070A512	145	CArchive::WriteClass	named	"MFC: CArchive::WriteClass(const CRuntimeClass*): schema 0xFFFF -> AfxThrowNotSupportedException; MapObject(NULL); new class -> wNewClassTag 0xFFFF + CRuntimeClass::Store, mapped to m_nMapCount++; else class tag word 0x8000 | index (or 0x7FFF + dword | 0x80000000); callers WriteObject 0x70A2E4 (unused) and dead_70A771 (dead chain). CORRECTION: was ""CArchive::WriteObject"""
+0x0070A5A3	462	CArchive::ReadClass	named	"MFC: CArchive::ReadClass(requested, UINT* pSchema, DWORD* pObTag) -> CRuntimeClass*: MapObject(NULL), tag word (0x7FFF -> dword); object index -> *pObTag, 0; new class 0xFFFF -> CRuntimeClass::Load (schema mismatch: versionable class schema kept in map +0x38, else AfxThrowArchiveException), CheckCount, load array InsertAt; class index -> load array (range checked), schema via map +0x38; IsDerivedFrom check against requested; callers ReadObject 0x70A363 and dead_70A771 (dead chain). CORRECTION: was ""CArchive::ReadObjectPtr"""
 0x0070A771	36	dead_70A771	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070A795	160	CArchiveException::GetErrorMessage	named	vt slot 3: formats the archive error message
-0x0070A835	100	AfxAllocNode10	named	allocates a 0x10-byte object (throws on failure), sets CString, EH frame
+0x0070A795	160	CArchiveException::GetErrorMessage	named	MFC: CArchiveException::GetErrorMessage(buf, max, pnHelpContext) (vtable 0x746808 slot 3): help id 0xF1B0 + m_cause +8; file name m_strFileName +0xC (or string 0xF006 when empty); AfxFormatString1(0xF1B0 + cause, name) into buf (lstrcpyn); returns TRUE
+0x0070A835	100	AfxThrowArchiveException	named	"MFC: AfxThrowArchiveException(cause, lpszArchiveName): new CArchiveException (0x10: vtable 0x746808, m_cause +8, m_strFileName +0xC), _CxxThrowException (type 0x77F2B0); operator>> CString, CArchive::FillBuffer, ReadObject / ReadClass, CheckCount. CORRECTION: was ""AfxAllocNode10"""
 0x0070A899	121	dead_70A899	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070A912	74	IsComboBoxWindow	named	"GetWindowLong style test plus class name ""combobox"""
-0x0070A95C	43	IsWindowClass	named	GetClassName equals (case-insensitive) the given class name
-0x0070A987	117	ChildWindowFromPointDeep	named	ClientToScreen then GetWindow loop to find the child at a point
-0x0070A9FC	88	SetWindowTextIfChanged	named	SetWindowText only when the text differs (<=256 chars)
-0x0070AA54	25	DeleteGDIObject	named	DeleteObject and clear the handle slot
-0x0070AA6D	119	AfxHideFocusCombo	named	handles focus on a combo box control
-0x0070AAE4	54	GlobalFreeUnlocked	named	GlobalUnlock until the lock count is zero, then GlobalFree
+0x0070A912	74	IsComboBoxWindow	named	"MFC: _AfxIsComboBoxControl(hWnd, nStyle): style & 0xF == nStyle and class name ""combobox"" (lstrcmpi); callers _AfxCancelModes 0x70AA6D (dead) and 0x706E34 (named AfxDrawGrayBitmap; its name looks doubtful, not in this batch)"
+0x0070A95C	43	IsWindowClass	named	MFC: _AfxCompareClassName(hWnd, lpszClassName): GetClassName (0x20) lstrcmpi == 0; lib, unused [dead: no caller or pointer]
+0x0070A987	117	ChildWindowFromPointDeep	named	MFC: _AfxChildWindowFromPoint(hWnd, pt): ClientToScreen, walks the children (GW_CHILD then GW_HWNDNEXT) and returns the first visible (WS_VISIBLE) one with a control id != -1 whose window rect holds pt, else 0; CWnd::HitTest
+0x0070A9FC	88	SetWindowTextIfChanged	named	MFC: AfxSetWindowText(hWnd, lpsz): SetWindowText only when the text is longer than 256 or differs from GetWindowText; CCmdUI::SetText
+0x0070AA54	25	DeleteGDIObject	named	MFC: AfxDeleteObject(HGDIOBJ*): ::DeleteObject(*p) and *p = 0 when set
+0x0070AA6D	119	AfxCancelModes	named	MFC: _AfxCancelModes(hWndRcvr): the focus window (or its parent) is a dropdown combo box (_AfxIsComboBoxControl CBS_DROPDOWNLIST 3 / CBS_DROPDOWN 2) and not the receiver -> SendMessage CB_SHOWDROPDOWN (0x14F) FALSE, unless the receiver is a child of the desktop; lib, unused. Renamed from AfxHideFocusCombo [dead: no caller or pointer]
+0x0070AAE4	54	GlobalFreeUnlocked	named	MFC: AfxGlobalFree(HGLOBAL): GlobalUnlock lock-count times (GlobalFlags & 0xFF), then GlobalFree; CPrintDialog::SelectPrinter, CWinApp::~CWinApp
 0x0070AB1A	101	sub_70AB1A	named	unregistered function, reached by call / pointer from 0x3036D8,0x3048D7,0x307C1A (gaps.py 2026-11-06)
-0x0070AB7F	46	AfxHandleStatusMessage	named	forwards to the thread's main window virtual slot 25/ status handler
-0x0070ABAD	231	CWinApp::DoMessageBox	named	vt slot 35: MessageBox with a safe owner, the app name as caption, and status handling
-0x0070AC94	56	AfxMessageBox	named	MessageBox via DoMessageBox when there is a thread app, else the global handler; 14 callers
-0x0070ACCC	89	AfxMessageBox_Res	named	loads the resource string and shows AfxMessageBox
-0x0070AD25	156	AfxGetSafeOwner	named	returns a safe owner window for dialogs (parent, active window or main window)
+0x0070AB7F	46	CWinApp::DoEnableModeless	named	"MFC: CWinApp::DoEnableModeless(bEnable): AfxGetMainWnd (0x6E6AD6, named AfxGetThreadCall); a frame window (vt+0xB0 IsFrameWnd) with m_pNotifyHook +0x68 -> hook vt+0x64 OnEnableModeless(bEnable); CWinApp::DoMessageBox. CORRECTION: was ""AfxHandleStatusMessage"""
+0x0070ABAD	231	CWinApp::DoMessageBox	named	MFC: CWinApp::DoMessageBox(prompt, nType, nIDPrompt) (vtable 0x7470C4 slot 35): DoEnableModeless(FALSE), CWnd::GetSafeOwner_, help context from WM_HELPPROMPTADDR (0x376) or m_dwPromptContext +0x9C (set to nIDPrompt + 0x30000 while shown), default icon MB_ICONEXCLAMATION (0x30) when none, caption m_pszAppName +0x78 (or the module file name), ::MessageBox, restores the context, re-enables the top window, DoEnableModeless(TRUE)
+0x0070AC94	56	AfxMessageBox	named	MFC: AfxMessageBox(LPCTSTR, nType, nIDHelp): the app (module state +4) vt+0x8C DoMessageBox, or CWinApp::DoMessageBox(NULL, ..) when there is no app; game error boxes (CBitmapDib::LoadFile, CWorldServer::CreateObjectFromDesc, scene loaders)
+0x0070ACCC	89	AfxMessageBox_Res	named	MFC: AfxMessageBox(nIDPrompt, nType, nIDHelp): CString::LoadString(nIDPrompt), help id -1 -> nIDPrompt, AfxMessageBox; CException::ReportError, CWnd::RunModalLoop
+0x0070AD25	156	AfxGetSafeOwner	named	MFC: CWnd::GetSafeOwner_(hParent, HWND* pWndTop): start window = hParent, else the routing frame (0x70ADCD) or the main window; climbs to the first non-child, finds the top-level parent, GetLastActivePopup when no parent given; *pWndTop = the top window disabled with EnableWindow(FALSE) when it was enabled and differs, else 0; returns the owner
 0x0070ADC1	12	dead_70ADC1	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070ADCD	12	AfxGetCurrentWaitCursor	named	returns the wait cursor handle (+0xC4) from the thread state
-0x0070ADD9	48	CMemFile::CMemFile_grow	named	CMemFile ctor (vtable 0x746650) with grow bytes
-0x0070AE09	28	vt_746650::DeletingDtor_70AE09	named	scalar deleting destructor: runs CMemFile::~CMemFile then operator delete when flag&1
-0x0070AE25	60	CMemFile::CMemFile_buf	named	CMemFile ctor attaching a buffer (size, grow)
-0x0070AE61	43	CMemFile::Attach	named	Attach(buffer, size, grow): sets position/size/capacity
-0x0070AE8C	18	CMemFile::Detach	named	Detach(): returns the buffer pointer and clears the state
-0x0070AE9E	76	CMemFile::~CMemFile	named	CMemFile destructor: Close then ~CFile
-0x0070AEEA	13	CMemFile::Alloc	named	vt slot 21: malloc(n)
-0x0070AEF7	18	CMemFile::Realloc	named	vt slot 22: realloc
-0x0070AF09	37	CMemFile::Memcpy	named	vt slot 23: memcpy (dword loop + tail)
-0x0070AF2E	13	CMemFile::Free	named	vt slot 24: free
-0x0070AF3B	4	vt_746650::GetField_14_70AF3B	named	returns the field at this+0x14
-0x0070AF3F	89	CMemFile::GrowFile	named	vt slot 25: grows the buffer to hold n bytes (rounded to the grow step), throws when fixed
-0x0070AF98	35	CMemFile::SetLength	named	vt slot 11: SetLength(n): grows and truncates the position
-0x0070AFBB	65	CMemFile::LockRange	named	vt slot 13: no-op range lock
-0x0070AFFC	66	CMemFile::Write	named	vt slot 14: Write(buf, n), grows as needed
-0x0070B03E	70	CMemFile::SeekImpl	named	seek helper (begin/current/end) returning the new position, -1 for bad origin
-0x0070B084	1	vt_746650::Nop_70B084	named	empty function (returns immediately)
-0x0070B085	42	CMemFile::Close	named	vt slot 19: resets pointers and frees the buffer when owned
-0x0070B0AF	5	CMemFile::Abort	named	vt slot 17: Close via virtual slot 19
-0x0070B0B4	8	CMemFile::Unsupported_A	named	vt slot 15: throws CNotSupportedException
-0x0070B0BC	8	CMemFile::Unsupported_B	named	vt slot 16: throws CNotSupportedException
-0x0070B0C4	8	CMemFile::Unsupported_C	named	vt slot 9: throws CNotSupportedException
-0x0070B0CC	167	CMemFile::Seek	named	vt slot 20: Seek(offset, begin/current/end) on the memory position
-0x0070B173	58	AfxFormatString1	named	loads a resource string and formats it with %1 replacements
-0x0070B1AD	255	AfxFormatStrings	named	CString::FormatMessage-like: replaces %1..%9 placeholders
-0x0070B2AC	23	AfxFormatString_Res1	named	loads a resource string and formats with 1 argument
-0x0070B2C3	38	AfxFormatString_Res2	named	loads a resource string and formats with 2 arguments
-0x0070B2E9	50	CFrameWnd::HideForExit	named	ShowWindow(0), ShowOwnedPopups(0), SetWindowPos(bottom)
-0x0070B31B	95	CWinApp::DoWaitCursor	named	adjusts the wait-cursor counter under the global lock and sets the cursor
-0x0070B37A	19	CFrameWnd::ForwardSlot8	named	vt slot 34: forwards to the child view virtual slot 8 (+0x80)
-0x0070B38D	22	CFrameWnd::NotifyView	named	vt slot 32: calls virtual slot 1 of the document at +0xA8
-0x0070B3A3	18	CFrameWnd::ForwardSlot7	named	vt slot 31: forwards to the view's virtual slot 7
+0x0070ADCD	12	CCmdTarget::GetRoutingFrame_	named	"MFC: CCmdTarget::GetRoutingFrame_: AfxGetThreadState()->m_pRoutingFrame (+0xC4); GetSafeOwner_ and dead_7041CA. CORRECTION: was ""AfxGetCurrentWaitCursor"""
+0x0070ADD9	48	CMemFile::CMemFile_grow	named	MFC: CMemFile::CMemFile(nGrowBytes): CFile::CFile (0x701036), vtable 0x746650, m_nGrowBytes +0x10, m_nPosition +0x14 = m_nBufferSize +0x18 = m_nFileSize +0x1C = 0, m_lpBuffer +0x20 = 0, m_bAutoDelete +0x24 = TRUE; CFigureManager::LoadSkeletonOld
+0x0070AE09	28	vt_746650::DeletingDtor_70AE09	named	MFC: CMemFile scalar deleting dtor (vtable 0x746650 slot 1): ~CMemFile, operator delete when flag & 1
+0x0070AE25	60	CMemFile::CMemFile_buf	named	MFC: CMemFile::CMemFile(lpBuffer, nBufferSize, nGrowBytes): CFile::CFile, vtable 0x746650, buffer +0x20, size +0x18, file size +0x1C = nGrowBytes ? 0 : nBufferSize, position 0, m_bAutoDelete 0; CRichEditSurface::StreamInBuffer
+0x0070AE61	43	CMemFile::Attach	named	MFC: CMemFile::Attach(lpBuffer, nBufferSize, nGrowBytes): same fields as the buffer ctor; CFigureManager::LoadSkeletonOld
+0x0070AE8C	18	CMemFile::Detach	named	MFC: CMemFile::Detach -> the buffer +0x20; buffer, file size, buffer size, position cleared
+0x0070AE9E	76	CMemFile::~CMemFile	named	MFC: CMemFile::~CMemFile: vtable 0x746650, Close (0x70B085) when a buffer is set, fields +0x10..+0x1C = 0, CFile::~CFile
+0x0070AEEA	13	CMemFile::Alloc	named	MFC: CMemFile::Alloc(n) virtual (slot 21): malloc(n)
+0x0070AEF7	18	CMemFile::Realloc	named	MFC: CMemFile::Realloc(p, n) virtual (slot 22): realloc (CRT 0x.. named _expand_or_realloc)
+0x0070AF09	37	CMemFile::Memcpy	named	MFC: CMemFile::Memcpy(dst, src, n) virtual (slot 23): memcpy (dword loop + byte tail), returns dst
+0x0070AF2E	13	CMemFile::Free	named	MFC: CMemFile::Free(p) virtual (slot 24): free
+0x0070AF3B	4	CMemFile::GetPosition	named	MFC: CMemFile::GetPosition virtual (slot 3): returns m_nPosition +0x14. Renamed from vt_746650::GetField_14_70AF3B
+0x0070AF3F	89	CMemFile::GrowFile	named	MFC: CMemFile::GrowFile(dwNewLen) virtual (slot 25): when larger than m_nBufferSize +0x18: no grow step (+0x10 = 0) -> AfxThrowMemoryException; size rounded up by grow steps, Alloc (vt+0x54) or Realloc (vt+0x58), null -> AfxThrowMemoryException; buffer +0x20 / size +0x18 updated
+0x0070AF98	35	CMemFile::SetLength	named	MFC: CMemFile::SetLength(n) virtual (slot 11): GrowFile (vt+0x64) when n > buffer size, position clipped to n, m_nFileSize +0x1C = n
+0x0070AFBB	65	CMemFile::Read	named	"MFC: CMemFile::Read(buf, n) -> bytes read virtual (slot 13): 0 when n == 0 or position > file size; clipped to file size - position, Memcpy (vt+0x5C) from buffer + position, position += n. CORRECTION: was ""CMemFile::LockRange, no-op range lock"""
+0x0070AFFC	66	CMemFile::Write	named	MFC: CMemFile::Write(buf, n) virtual (slot 14): GrowFile (vt+0x64) to position + n when needed, Memcpy into buffer + position, position += n, file size raised to the position
+0x0070B03E	70	CMemFile::Seek	named	MFC: CMemFile::Seek(lOff, nFrom) -> new position virtual (slot 10): begin / current (+0x14) / end (+0x1C); other nFrom -> -1; negative -> throws (callee named AfxAllocNode14, the CFileException::badSeek thrower); position = result. Renamed from CMemFile::SeekImpl
+0x0070B084	1	CMemFile::Flush	named	MFC: CMemFile::Flush virtual (slot 18): empty. Renamed from vt_746650::Nop_70B084
+0x0070B085	42	CMemFile::Close	named	MFC: CMemFile::Close virtual (slot 19): grow / position / size / file size = 0; buffer +0x20 freed (vt+0x60 Free) when m_bAutoDelete +0x24; buffer = 0
+0x0070B0AF	5	CMemFile::Abort	named	MFC: CMemFile::Abort virtual (slot 17): jumps to Close (vt+0x4C)
+0x0070B0B4	8	CMemFile::LockRange	named	MFC: CMemFile::LockRange(pos, count) virtual (slot 15): AfxThrowNotSupportedException. Renamed from CMemFile::Unsupported_A
+0x0070B0BC	8	CMemFile::UnlockRange	named	MFC: CMemFile::UnlockRange(pos, count) virtual (slot 16): AfxThrowNotSupportedException. Renamed from CMemFile::Unsupported_B
+0x0070B0C4	8	CMemFile::Duplicate	named	MFC: CMemFile::Duplicate virtual (slot 9): AfxThrowNotSupportedException, returns 0. Renamed from CMemFile::Unsupported_C
+0x0070B0CC	167	CMemFile::GetBufferPtr	named	"MFC: CMemFile::GetBufferPtr(nCommand, nCount, ppBufStart, ppBufMax) virtual (slot 20): bufferCheck (3) -> bufferDirect 1; bufferCommit (2) -> position += n, file size raised; bufferRead (0) / bufferWrite (1, grows first): *ppBufStart = buffer + position, *ppBufMax = clipped end (read: nCount -1 = all), read advances the position; returns max - start. CORRECTION: was ""CMemFile::Seek"""
+0x0070B173	58	AfxFormatStrings_Id	named	MFC: AfxFormatStrings(CString&, nIDS, LPCTSTR* rglpsz, nString): AfxLoadString(nIDS) into 256 bytes, then AfxFormatStrings(text) 0x70B1AD; AfxFormatString1 / 2. Renamed from AfxFormatString1 (that name belongs to 0x70B2AC)
+0x0070B1AD	255	AfxFormatStrings	named	"MFC: AfxFormatStrings(CString&, lpszFormat, LPCTSTR* rglpsz, nString): two passes (length, then copy) replacing %1..%9 and %A..%Z by rglpsz[i] (missing index -> ""?""), DBCS lead bytes copied in pairs (_mbctype 0x7CC181 bit 4)"
+0x0070B2AC	23	AfxFormatString_Res1	named	MFC: AfxFormatString1(CString&, nIDS, lpsz1): AfxFormatStrings(nIDS, &lpsz1, 1); CFileException / CArchiveException::GetErrorMessage
+0x0070B2C3	38	AfxFormatString_Res2	named	MFC: AfxFormatString2(CString&, nIDS, lpsz1, lpsz2): AfxFormatStrings(nIDS, {lpsz1, lpsz2}, 2); lib, unused [dead: no caller or pointer]
+0x0070B2E9	50	CWinApp::HideApplication	named	"MFC: CWinApp::HideApplication (this = app, m_pMainWnd +0x1C): ShowWindow(SW_HIDE), ShowOwnedPopups(FALSE), SetWindowPos(&wndBottom 0x7CA9E8, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE 0x13); lib, unused (the one raw hit is the FF 75 byte pair of a push inside 0x70B2C3). CORRECTION: was ""CFrameWnd::HideForExit"" [dead: no caller or pointer]"
+0x0070B31B	95	CWinApp::DoWaitCursor	named	MFC: CWinApp::DoWaitCursor(nCode) (vtable 0x7470C4 slot 36): AfxLockGlobals(2); m_nWaitCursorCount +0xA0 += nCode; <= 0 -> 0 and SetCursor(m_hcurWaitCursorRestore +0xA4); else SetCursor(afxData wait cursor 0x7C9104), the first begin saves the previous cursor; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)
+0x0070B37A	19	CWinApp::SaveAllModified	named	"MFC: CWinApp::SaveAllModified (vtable 0x7470C4 slot 34): m_pDocManager +0x80 ? its vt+0x20 SaveAllModified : TRUE. CORRECTION: was ""CFrameWnd::ForwardSlot8""; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)"
+0x0070B38D	22	CWinApp::AddToRecentFileList	named	"MFC: CWinApp::AddToRecentFileList(path) (slot 32): m_pRecentFileList +0xA8 -> its Add (vt+4). CORRECTION: was ""CFrameWnd::NotifyView""; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)"
+0x0070B3A3	18	CWinApp::OpenDocumentFile	named	"MFC: CWinApp::OpenDocumentFile(path) (slot 31): m_pDocManager +0x80 vt+0x1C OpenDocumentFile. CORRECTION: was ""CFrameWnd::ForwardSlot7""; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)"
 0x0070B3B5	56	dead_70B3B5	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070B3ED	26	CFrameWnd::ForwardSlot12	named	vt slot 37: forwards to the view's virtual slot 12 (0 without view)
+0x0070B3ED	26	CWinApp::OnDDECommand	named	"MFC: CWinApp::OnDDECommand(cmd) (slot 37): m_pDocManager +0x80 ? its vt+0x30 OnDDECommand : FALSE. CORRECTION: was ""CFrameWnd::ForwardSlot12""; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)"
 0x0070B407	51	sub_70B407	named	unregistered function, reached by call / pointer from 0x347064 (gaps.py 2026-11-06)
-0x0070B43A	117	CWinApp::WriteProfileInt	named	WritePrivateProfileString (INI) or the registry value
-0x0070B4AF	160	CWinApp::WriteProfileString	named	INI or registry write of a string value
-0x0070B54F	161	CWinApp::WriteProfileBinary	named	writes binary data as hex text (INI) or registry binary
+0x0070B43A	117	CWinApp::WriteProfileInt	named	"MFC: CWinApp::WriteProfileInt(section, entry, value): no m_pszRegistryKey (+0x7C) -> wsprintf ""%d"" + WritePrivateProfileString(m_pszProfileName +0x90); else GetSectionKey + RegSetValueEx REG_DWORD; CWinApp::SaveSettings; dead chain: no CWinApp is ever constructed (CWinApp::CWinApp 0x70D654 has no caller; vtable 0x7470C4 only installed by it and ~CWinApp)"
+0x0070B4AF	160	CWinApp::WriteProfileString	named	MFC: CWinApp::WriteProfileString(section, entry, value): INI -> WritePrivateProfileString; registry: entry NULL -> RegDeleteKey(section) under the app key, value NULL -> RegDeleteValue, else RegSetValueEx REG_SZ; only from CRecentFileList::WriteList and WriteProfileBinary, both dead -> dead chain
+0x0070B54F	161	CWinApp::WriteProfileBinary	named	MFC: CWinApp::WriteProfileBinary(section, entry, data, n): INI -> each byte as two letters 'A' + nibble (low first) through WriteProfileString; registry -> REG_BINARY; lib, unused [dead: no caller or pointer]
 0x0070B5F0	11	sub_70B5F0	named	unregistered function, reached by call / pointer from 0x30B601 (gaps.py 2026-11-06)
-0x0070B5FB	5	StaticInit_Thunk_B5F0	named	static init thunk: atexit(0x70B5F0) result into g_0x7C8D44
-0x0070B600	17	StaticInit_B5F0	named	static init stub
-0x0070B611	142	CDC::HIMETRICtoDP_y	named	converts HIMETRIC to device units using the map mode (y)
-0x0070B69F	142	CDC::HIMETRICtoDP_x	named	converts HIMETRIC to device units using the map mode (x)
-0x0070B72D	27	CDC::HIMETRICtoLP	named	HIMETRIC to logical (x then y)
-0x0070B748	27	CDC::LPtoHIMETRIC	named	logical to HIMETRIC (x then y)
-0x0070B763	115	AfxInitGrayBrush	named	creates the global 8x8 gray pattern brush under the lock (0x7C8D40)
-0x0070B7D6	772	CDC::DrawGrayBitmap_Impl	named	draws a bitmap/icon with the dithered gray brush (772 bytes)
-0x0070BADA	42	CDC::FillSolidRect	named	SetBkColor + ExtTextOut(ETO_OPAQUE) to fill a rect
-0x0070BB04	76	CDC::SetBkColor_70BB04	named	MFC CDC wrapper: SetBkColor on the output/attribute DC (+4/+8)
+0x0070B5FB	5	StaticInit_Thunk_B5F0	named	CRT initializer (table 0x783B84) = jmp 0x70B600 (MFC wingdix: _afxWingdixTerm = atexit(AfxWingdixTerm))
+0x0070B600	17	StaticInit_B5F0	named	MFC: static char _afxWingdixTerm = (char)atexit(AfxWingdixTerm 0x70B5F0) (the term deletes the halftone brush 0x7C8D40 with AfxDeleteObject), result byte at 0x7C8D44
+0x0070B611	142	CDC::DPtoHIMETRIC	named	"MFC: CDC::DPtoHIMETRIC(LPSIZE): constrained map mode (< MM_ISOTROPIC, not MM_TEXT) -> SetMapMode(MM_HIMETRIC) (vt+0x34), DPtoLP(size) 0x709D64, restore; else size * 2540 / LOGPIXELSX/Y (afxData defaults 0x7C90E0/E4 without a DC); only from LPtoHIMETRIC 0x70B72D (dead chain). CORRECTION: was ""CDC::HIMETRICtoDP_y"""
+0x0070B69F	142	CDC::HIMETRICtoDP	named	MFC: CDC::HIMETRICtoDP(LPSIZE): constrained map mode -> SetMapMode(MM_HIMETRIC), LPtoDP(size) 0x709CFB, restore; else size * LOGPIXELS / 2540; only from HIMETRICtoLP 0x70B748 (dead chain). Renamed from CDC::HIMETRICtoDP_x
+0x0070B72D	27	CDC::LPtoHIMETRIC	named	"MFC: CDC::LPtoHIMETRIC(LPSIZE): LPtoDP 0x709CFB then DPtoHIMETRIC 0x70B611; lib, unused. CORRECTION: was ""CDC::HIMETRICtoLP"" (the two names were swapped) [dead: no caller or pointer]"
+0x0070B748	27	CDC::HIMETRICtoLP	named	"MFC: CDC::HIMETRICtoLP(LPSIZE): HIMETRICtoDP 0x70B69F then DPtoLP 0x709D64; lib, unused. CORRECTION: was ""CDC::LPtoHIMETRIC"" (swapped with 0x70B72D) [dead: no caller or pointer]"
+0x0070B763	115	AfxGetHalftoneBrush	named	MFC: AfxGetHalftoneBrush: AfxLockGlobals(8); first call builds the 8x8 0x5555 / 0xAAAA pattern (CreateBitmap, CreatePatternBrush, DeleteObject) into 0x7C8D40; returns CBrush::FromHandle (0x70A060); only from CDC::DrawDragRect 0x70B7D6 (dead chain). Renamed from AfxInitGrayBrush
+0x0070B7D6	772	CDC::DrawDragRect	named	"MFC: CDC::DrawDragRect(rect, size, rectLast, sizeLast, brush, brushLast): frame regions (CreateRectRgnIndirect, InflateRect, CombineRgn RGN_XOR) of the new and old rect, halftone brush by default, SelectClipRgn + GetClipBox (vt+0x50) + PatBlt PATINVERT 0x5A0049 for the old and new frames, temporary CRgn objects deleted; lib, unused. CORRECTION: was ""CDC::DrawGrayBitmap_Impl"" [dead: no caller or pointer]"
+0x0070BADA	42	CDC::FillSolidRect	named	MFC: CDC::FillSolidRect(LPCRECT, COLORREF): ::SetBkColor(m_hDC) then ExtTextOut(ETO_OPAQUE 2, rect, no text); CUIBlitSurface::FillBackground / FillColor
+0x0070BB04	76	CDC::FillSolidRect_xywh	named	"MFC: CDC::FillSolidRect(x, y, cx, cy, COLORREF): SetBkColor + ExtTextOut(ETO_OPAQUE) on {x, y, x+cx, y+cy}; CDC::Draw3dRect, CUIConsole::RedrawInput / RenderHistory, DebugText::Render. CORRECTION: was ""CDC::SetBkColor_70BB04"""
 0x0070BB50	43	dead_70BB50	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BB7B	106	CDC::Draw3dRect	named	draws a 3D rectangle with two colors (four FillSolidRect lines)
-0x0070BBE5	69	CFont::CreatePointFont_Helper	named	fills a LOGFONT (height, face name up to 0x20, charset) and creates the font
-0x0070BC2A	158	CFont::HeightFromPointSize	named	converts a point size to logical pixels using the screen/printer DC
-0x0070BCC8	31	CRect::NormalizeRect	named	swaps coordinates so left<=right and top<=bottom
+0x0070BB7B	106	CDC::Draw3dRect	named	MFC: CDC::Draw3dRect(x, y, cx, cy, clrTopLeft, clrBottomRight): four FillSolidRect lines (top, left in the first colour; right, bottom in the second); only from dead_70BB50 (= the LPCRECT overload, unreferenced) -> dead chain
+0x0070BBE5	69	CFont::CreatePointFont	named	MFC: CFont::CreatePointFont(nPointSize, lpszFaceName, CDC*): LOGFONT zeroed, lfHeight = nPointSize, lfCharSet = DEFAULT_CHARSET (1), face (lstrcpyn 0x20), CreatePointFontIndirect; CInterface::Init, DebugText::Init, CUIConsole::CUIConsole. Renamed from CFont::CreatePointFont_Helper
+0x0070BC2A	158	CFont::CreatePointFontIndirect	named	"MFC: CFont::CreatePointFontIndirect(const LOGFONT*, CDC*): DC = the CDC's m_hAttribDC or GetDC(NULL); height = LOGPIXELSY * lfHeight / 720 converted with DPtoLP (minus the origin), negated; ReleaseDC; Attach(CreateFontIndirect). CORRECTION: was ""CFont::HeightFromPointSize"""
+0x0070BCC8	31	CRect::NormalizeRect	named	MFC: CRect::NormalizeRect: swaps left/right and top/bottom when inverted; Bitmap_DrawStretch (and dead_51B750 / dead_6D5230)
 0x0070BCE7	118	dead_70BCE7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BD5D	95	CRect::MulDiv	named	scales the rectangle coordinates with MulDiv
+0x0070BD5D	95	CRect::MulDiv	named	MFC: CRect::MulDiv(nMultiplier, nDivisor) -> CRect: each coordinate MulDiv'd into the out rect; lib, unused [dead: no caller or pointer]
 0x0070BDBC	75	dead_70BDBC	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BE07	16	AfxIsModuleStateDefault	named	true when module state +0x2C is zero
+0x0070BE07	16	AfxOleCanExitApp	named	"MFC: AfxOleCanExitApp: module state m_nObjectCount (+0x2C) == 0; CWnd::PostNcDestroy_Impl. CORRECTION: was ""AfxIsModuleStateDefault"""
 0x0070BE17	41	dead_70BE17	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BE40	15	AfxSetModuleStateField30	named	module state +0x30 = value
-0x0070BE4F	9	AfxGetModuleStateField30	named	returns module state +0x30
-0x0070BE58	6	CFile::GetRuntimeClass	named	returns the CRuntimeClass of CFile (0x745DB0)
-0x0070BE5E	6	CFileFind::GetRuntimeClass	named	returns the CRuntimeClass of CFileFind (0x745EC0)
+0x0070BE40	15	AfxOleSetUserCtrl	named	MFC: AfxOleSetUserCtrl(bUserCtrl): module state m_bUserCtrl +0x30 = arg; callers CCommandLineInfo::ParseParamFlag (dead chain: CCommandLineInfo only built in dead_70D79E) and dead_70BDBC -> dead chain. Renamed from AfxSetModuleStateField30
+0x0070BE4F	9	AfxOleGetUserCtrl	named	MFC: AfxOleGetUserCtrl: returns module state m_bUserCtrl +0x30; callers CWinApp::OnIdleExit 0x707A13 (= CWinApp::Run, only in the never-installed CWinApp vtable 0x747118) and dead_70BDBC -> dead chain. Renamed from AfxGetModuleStateField30
+0x0070BE58	6	CFile::GetRuntimeClass	named	"MFC: CFile::GetRuntimeClass: &classCFile 0x745DB0 (""CFile"", size 0x10); CFile vtable 0x745DF4 slot 0"
+0x0070BE5E	6	CFileFind::GetRuntimeClass	named	"MFC: CFileFind::GetRuntimeClass: &classCFileFind 0x745EC0 (""CFileFind"", 0x1C); vtable 0x745EE8"
 0x0070BE64	23	sub_70BE64	named	unregistered function, reached by call / pointer from 0x396EF4 (gaps.py 2026-11-06)
-0x0070BE7B	6	CStringArray::GetRuntimeClass	named	returns the CRuntimeClass of CStringArray (0x796EE8)
-0x0070BE81	5	StaticInit_CStringArray_Class	named	static init: registers the CStringArray runtime class
-0x0070BE86	11	StaticExit_CStringArray_Class	named	atexit: frees the CStringArray runtime class registration
+0x0070BE7B	6	CStringArray::GetRuntimeClass	named	"MFC: CStringArray::GetRuntimeClass: &classCStringArray 0x796EE8 (""CStringArray"", 0x14, IMPLEMENT_SERIAL schema 0, CreateObject 0x70BE64); vtable 0x745F5C"
+0x0070BE81	5	StaticInit_CStringArray_Class	named	CRT initializer (table 0x783B74): jmp 0x70BE86
+0x0070BE86	11	CStringArray_ClassInit	named	"MFC: AFX_CLASSINIT _init_CStringArray: AfxClassInit(&classCStringArray 0x796EE8) (callee 0x700674 named AfxFreeLocalObject). CORRECTION: was ""StaticExit_CStringArray_Class"" (it is the initializer body, not an exit)"
 0x0070BE91	50	dead_70BE91	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BEC3	6	CWordArray::GetRuntimeClass	named	returns the CRuntimeClass of CWordArray (0x796F20)
-0x0070BEC9	5	StaticInit_CWordArray_Class	named	static init: registers the CWordArray runtime class
-0x0070BECE	11	StaticExit_CWordArray_Class	named	atexit: frees the CWordArray runtime class registration
+0x0070BEC3	6	CWordArray::GetRuntimeClass	named	"MFC: CWordArray::GetRuntimeClass: &classCWordArray 0x796F20 (""CWordArray"", serial schema 0); vtable 0x745F78"
+0x0070BEC9	5	StaticInit_CWordArray_Class	named	CRT initializer (table 0x783B78): jmp 0x70BECE
+0x0070BECE	11	CWordArray_ClassInit	named	"MFC: AFX_CLASSINIT _init_CWordArray: AfxClassInit(&classCWordArray 0x796F20). CORRECTION: was ""StaticExit_CWordArray_Class"""
 0x0070BED9	27	dead_70BED9	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BEF4	6	CResourceException::GetRuntimeClass	named	returns the CRuntimeClass (0x746180)
-0x0070BEFA	10	StaticInit_ResourceException_Group	named	static init group for the global CResourceException
-0x0070BF04	18	StaticInit_ResourceException	named	static init: constructs the global CResourceException (0x7C8C58, id 0xF022)
-0x0070BF16	12	StaticInit_ResourceException_Atexit	named	atexit registration for the resource exception
+0x0070BEF4	6	CResourceException::GetRuntimeClass	named	"MFC: CResourceException::GetRuntimeClass: 0x746180 (""CResourceException""); vtable 0x74646C"
+0x0070BEFA	10	StaticInit_ResourceException_Group	named	CRT initializer (table 0x783B7C): construct _simpleResourceException (0x70BF04) then register its dtor (0x70BF16)
+0x0070BF04	18	StaticInit_ResourceException	named	MFC: static CResourceException _simpleResourceException(FALSE, AFX_IDS_RESOURCE_EXCEPTION 0xF022) at 0x7C8C58 (ctor 0x6E68C9)
+0x0070BF16	12	StaticInit_ResourceException_Atexit	named	atexit(0x70BF22 = destroy 0x7C8C58 via 0x6E690F)
 0x0070BF22	10	sub_70BF22	named	unregistered function, reached by call / pointer from 0x30BF17 (gaps.py 2026-11-06)
-0x0070BF2C	6	CUserException::GetRuntimeClass	named	returns the CRuntimeClass of CUserException (0x746158)
-0x0070BF32	10	StaticInit_UserException_Group	named	static init group for the global CUserException
-0x0070BF3C	18	StaticInit_UserException	named	static init: constructs the global CUserException (0x7C8BC0, id 0xF024)
-0x0070BF4E	12	StaticInit_UserException_Atexit	named	atexit registration for the user exception
+0x0070BF2C	6	CUserException::GetRuntimeClass	named	"MFC: CUserException::GetRuntimeClass: 0x746158 (""CUserException""); vtable 0x746484"
+0x0070BF32	10	StaticInit_UserException_Group	named	CRT initializer (table 0x783B80): construct _simpleUserException then register its dtor
+0x0070BF3C	18	StaticInit_UserException	named	MFC: static CUserException _simpleUserException(FALSE, AFX_IDS_USER_EXCEPTION 0xF024) at 0x7C8BC0 (ctor 0x6E6916)
+0x0070BF4E	12	StaticInit_UserException_Atexit	named	atexit(0x70BF5A = destroy 0x7C8BC0)
 0x0070BF5A	33	sub_70BF5A	named	unregistered function, reached by call / pointer from 0x30BF4F (gaps.py 2026-11-06)
-0x0070BF7B	6	CDC::GetRuntimeClass	named	returns the CRuntimeClass of CDC (0x746138)
-0x0070BF81	6	CClientDC::GetRuntimeClass	named	returns the CRuntimeClass of CClientDC (0x746110)
-0x0070BF87	6	CWindowDC::GetRuntimeClass	named	returns the CRuntimeClass of CWindowDC (0x7460E8)
-0x0070BF8D	6	CPaintDC::GetRuntimeClass	named	returns the CRuntimeClass of CPaintDC (0x7460C0)
+0x0070BF7B	6	CDC::GetRuntimeClass	named	"MFC: CDC::GetRuntimeClass: 0x746138 (""CDC"", 0x10, CreateObject 0x70BF64); vtable 0x7461B0"
+0x0070BF81	6	CClientDC::GetRuntimeClass	named	"MFC: CClientDC::GetRuntimeClass: 0x746110 (""CClientDC""); vtable 0x74624C (only installed by the unused ctor: dead chain)"
+0x0070BF87	6	CWindowDC::GetRuntimeClass	named	"MFC: CWindowDC::GetRuntimeClass: 0x7460E8 (""CWindowDC""); vtable 0x7462C4 (dead chain)"
+0x0070BF8D	6	CPaintDC::GetRuntimeClass	named	"MFC: CPaintDC::GetRuntimeClass: 0x7460C0 (""CPaintDC"", 0x54); vtable 0x74633C (dead chain)"
 0x0070BF93	26	sub_70BF93	named	unregistered function, reached by call / pointer from 0x3460A4 (gaps.py 2026-11-06)
-0x0070BFAD	6	CGdiObject::GetRuntimeClass	named	returns the CRuntimeClass of CGdiObject (0x746098)
-0x0070BFB3	6	CBitmap::GetRuntimeClass	named	returns the CRuntimeClass of CBitmap (0x746078)
-0x0070BFB9	6	CBrush::GetRuntimeClass	named	returns the CRuntimeClass of CBrush (0x746058)
-0x0070BFBF	6	CFont::GetRuntimeClass	named	returns the CRuntimeClass of CFont (0x746038)
+0x0070BFAD	6	CGdiObject::GetRuntimeClass	named	"MFC: CGdiObject::GetRuntimeClass: 0x746098 (""CGdiObject"", 8, CreateObject 0x70BF93); vtable 0x7463D4"
+0x0070BFB3	6	CPen::GetRuntimeClass	named	"MFC: CPen::GetRuntimeClass: 0x746078 (""CPen""); vtable 0x7463B4 (CPen ctors). CORRECTION: was ""CBitmap::GetRuntimeClass"""
+0x0070BFB9	6	CBrush::GetRuntimeClass	named	"MFC: CBrush::GetRuntimeClass: 0x746058 (""CBrush""); vtable 0x7463C4"
+0x0070BFBF	6	CFont::GetRuntimeClass	named	"MFC: CFont::GetRuntimeClass: 0x746038 (""CFont""); in the game's CFont-derived vtable 0x73BFB4"
 0x0070BFC5	12	dead_70BFC5	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070BFD1	6	CObject_GetRuntimeClass_745FD0	named	returns the CRuntimeClass at 0x745FD0
+0x0070BFD1	6	CRgn::GetRuntimeClass	named	"MFC: CRgn::GetRuntimeClass: 0x745FD0 (""CRgn""); vtable 0x74649C (the temporary CRgn objects of DrawDragRect). Renamed from CObject_GetRuntimeClass_745FD0"
 0x0070BFD7	38	sub_70BFD7	named	unregistered function, reached by call / pointer from 0x345FBC (gaps.py 2026-11-06)
-0x0070BFFD	32	CTempDC::DeletingDtor	named	scalar deleting dtor: destroys the DC, returns the object to the CPlex pool 0x7C8D18
-0x0070C01D	5	CDC::~CDC_thunk	named	thunk to the CDC destructor body (vtable 0x7461B0, release the DC)
-0x0070C022	6	CTempDC::GetRuntimeClass	named	returns the CRuntimeClass of CTempDC (0x745FB0)
+0x0070BFFD	32	CTempDC::DeletingDtor	named	MFC: CTempDC scalar deleting dtor (vtable 0x7463E4 slot 1): ~CDC (0x70C01D), memory back to CTempDC::s_alloc 0x7C8D18 (CFixedAlloc::Free, callee named CPlex_Free) when flag & 1
+0x0070C01D	5	CDC::~CDC_thunk	named	jmp 0x708E0C (~CDC), CTempDC::~CTempDC; CTempDC::DeletingDtor
+0x0070C022	6	CTempDC::GetRuntimeClass	named	"MFC: CTempDC::GetRuntimeClass: 0x745FB0 (""CTempDC"", 0x10, CreateObject 0x70BFD7); vtable 0x7463E4"
 0x0070C028	28	sub_70C028	named	unregistered function, reached by call / pointer from 0x345F94 (gaps.py 2026-11-06)
-0x0070C044	32	CTempGdiObject::DeletingDtor	named	deleting dtor: returns the object to the CPlex pool 0x7C8CF0
-0x0070C064	41	CTempGdiObject_Dtor_EH	named	SEH destructor body (vtable 0x7463D4): DeleteObject
-0x0070C08D	6	CTempGdiObject::GetRuntimeClass	named	returns the CRuntimeClass of CTempGdiObject (0x745F88)
-0x0070C093	10	StaticInit_CPlex_10_Group	named	static init group for the 0x10 block allocator
-0x0070C09D	15	StaticInit_CPlex_10	named	static init: CPlex_Ctor(&g_0x7C8D18, 0x10, 0x40)
-0x0070C0AC	12	StaticInit_CPlex_10_Atexit	named	atexit registration
+0x0070C044	32	CTempGdiObject::DeletingDtor	named	MFC: CTempGdiObject scalar deleting dtor (vtable 0x74645C slot 1): ~CGdiObject (0x70C064), memory back to CTempGdiObject::s_alloc 0x7C8CF0 when flag & 1
+0x0070C064	41	CTempGdiObject_Dtor_EH	named	MFC: CGdiObject::~CGdiObject inlined for CTempGdiObject: vtable 0x7463D4, DeleteObject
+0x0070C08D	6	CTempGdiObject::GetRuntimeClass	named	"MFC: CTempGdiObject::GetRuntimeClass: 0x745F88 (""CTempGdiObject"", 8, CreateObject 0x70C028); vtable 0x74645C"
+0x0070C093	10	StaticInit_CPlex_10_Group	named	CRT initializer (table 0x783014): construct CTempDC::s_alloc (0x70C09D) then register its dtor (0x70C0AC)
+0x0070C09D	15	StaticInit_CPlex_10	named	MFC: CFixedAlloc CTempDC::s_alloc(0x10, 64) at 0x7C8D18 (ctor named CPlex_Ctor); the pool of CTempDC::DeletingDtor
+0x0070C0AC	12	StaticInit_CPlex_10_Atexit	named	atexit(0x70C0B8 = ~CFixedAlloc of 0x7C8D18)
 0x0070C0B8	27	sub_70C0B8	named	unregistered function, reached by call / pointer from 0x30C0AD (gaps.py 2026-11-06)
-0x0070C0D3	10	StaticInit_CPlex_8_Group	named	static init group for the 8-byte block allocator
-0x0070C0DD	15	StaticInit_CPlex_8	named	static init: CPlex_Ctor(&g_0x7C8CF0, 8, 0x40)
-0x0070C0EC	12	StaticInit_CPlex_8_Atexit	named	atexit registration
+0x0070C0D3	10	StaticInit_CPlex_8_Group	named	CRT initializer (table 0x783018): construct CTempGdiObject::s_alloc then register its dtor
+0x0070C0DD	15	StaticInit_CPlex_8	named	MFC: CFixedAlloc CTempGdiObject::s_alloc(8, 64) at 0x7C8CF0; the pool of CTempGdiObject::DeletingDtor
+0x0070C0EC	12	StaticInit_CPlex_8_Atexit	named	atexit(0x70C0F8 = ~CFixedAlloc of 0x7C8CF0)
 0x0070C0F8	50	sub_70C0F8	named	unregistered function, reached by call / pointer from 0x30C0ED (gaps.py 2026-11-06)
-0x0070C12A	6	CDWordArray::GetRuntimeClass	named	returns the CRuntimeClass of CDWordArray (0x797140)
-0x0070C130	5	StaticInit_CDWordArray_Class	named	static init: registers the CDWordArray runtime class
-0x0070C135	11	StaticExit_CDWordArray_Class	named	atexit: frees the CDWordArray runtime class registration
+0x0070C12A	6	CDWordArray::GetRuntimeClass	named	"MFC: CDWordArray::GetRuntimeClass: 0x797140 (""CDWordArray"", serial schema 0); vtable 0x7464B8"
+0x0070C130	5	StaticInit_CDWordArray_Class	named	CRT initializer (table 0x783B88): jmp 0x70C135
+0x0070C135	11	CDWordArray_ClassInit	named	"MFC: AFX_CLASSINIT _init_CDWordArray: AfxClassInit(&classCDWordArray 0x797140). CORRECTION: was ""StaticExit_CDWordArray_Class"""
 0x0070C140	27	dead_70C140	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070C15B	6	CStdioFile::GetRuntimeClass	named	returns the CRuntimeClass of CStdioFile (0x7464C8)
+0x0070C15B	6	CStdioFile::GetRuntimeClass	named	"MFC: CStdioFile::GetRuntimeClass: 0x7464C8 (""CStdioFile"", base CFile); vtable 0x7464F0"
 0x0070C161	23	sub_70C161	named	unregistered function, reached by call / pointer from 0x3971A4 (gaps.py 2026-11-06)
-0x0070C178	6	CByteArray::GetRuntimeClass	named	returns the CRuntimeClass of CByteArray (0x797198)
-0x0070C17E	5	StaticInit_CByteArray_Class	named	static init: registers the CByteArray runtime class
-0x0070C183	11	StaticExit_CByteArray_Class	named	atexit: frees the CByteArray runtime class registration
+0x0070C178	6	CByteArray::GetRuntimeClass	named	"MFC: CByteArray::GetRuntimeClass: 0x797198 (""CByteArray"", serial schema 0); vtable 0x746560"
+0x0070C17E	5	StaticInit_CByteArray_Class	named	CRT initializer (table 0x783B8C): jmp 0x70C183
+0x0070C183	11	CByteArray_ClassInit	named	"MFC: AFX_CLASSINIT _init_CByteArray: AfxClassInit(&classCByteArray 0x797198). CORRECTION: was ""StaticExit_CByteArray_Class"""
 0x0070C18E	33	dead_70C18E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070C1AF	6	CMemoryException::GetRuntimeClass	named	returns the CRuntimeClass of CMemoryException (0x7465A0)
-0x0070C1B5	10	StaticInit_MemoryException_Group	named	static init group for the global CMemoryException
-0x0070C1BF	18	StaticInit_MemoryException	named	static init: constructs the global CMemoryException (0x7C8DE8, id 0xF023)
-0x0070C1D1	12	StaticInit_MemoryException_Atexit	named	atexit registration
+0x0070C1AF	6	CMemoryException::GetRuntimeClass	named	"MFC: CMemoryException::GetRuntimeClass: 0x7465A0 (""CMemoryException""); vtable 0x7465F8"
+0x0070C1B5	10	StaticInit_MemoryException_Group	named	CRT initializer (table 0x783B90): construct the static CMemoryException (0x70C1BF) then register its dtor (0x70C1D1)
+0x0070C1BF	18	StaticInit_MemoryException	named	MFC: static CMemoryException _simpleMemoryException(FALSE, AFX_IDS_MEMORY_EXCEPTION)
+0x0070C1D1	12	StaticInit_MemoryException_Atexit	named	atexit(0x70C1DD = destroy the static CMemoryException)
 0x0070C1DD	10	sub_70C1DD	named	unregistered function, reached by call / pointer from 0x30C1D2 (gaps.py 2026-11-06)
-0x0070C1E7	6	CNotSupportedException::GetRuntimeClass	named	returns the CRuntimeClass of CNotSupportedException (0x746570)
-0x0070C1ED	10	StaticInit_NotSupportedException_Group	named	static init group for the global CNotSupportedException
-0x0070C1F7	18	StaticInit_NotSupportedException	named	static init: constructs the global CNotSupportedException (0x7C8D50, id 0xF021)
-0x0070C209	12	StaticInit_NotSupportedException_Atexit	named	atexit registration
+0x0070C1E7	6	CNotSupportedException::GetRuntimeClass	named	"MFC: CNotSupportedException::GetRuntimeClass: 0x746570 (""CNotSupportedException""); vtable 0x746610"
+0x0070C1ED	10	StaticInit_NotSupportedException_Group	named	CRT initializer (table 0x783B94): construct the static CNotSupportedException then register its dtor
+0x0070C1F7	18	StaticInit_NotSupportedException	named	MFC: static CNotSupportedException _simpleNotSupportedException(FALSE, AFX_IDS_NOT_SUPPORTED_EXCEPTION)
+0x0070C209	12	StaticInit_NotSupportedException_Atexit	named	atexit(0x70C215 = destroy the static CNotSupportedException)
 0x0070C215	62	sub_70C215	named	unregistered function, reached by call / pointer from 0x30C20A (gaps.py 2026-11-06)
-0x0070C253	6	CMemFile::GetRuntimeClass	named	returns the CRuntimeClass of CMemFile (0x746628)
-0x0070C259	68	CWinThread::CWinThread_proc_param	named	CWinThread ctor with thread procedure and parameter
-0x0070C29D	28	vt_7466E0::DeletingDtor_70C29D	named	scalar deleting destructor: runs CWinThread::~CWinThread then operator delete when flag&1
-0x0070C2B9	61	CWinThread::CWinThread	named	CWinThread default ctor
-0x0070C2F6	50	CWinThread::ClearMembers	named	zeroes the thread state fields (+0x1C..+0x34)
-0x0070C328	6	CWinThread::GetRuntimeClass	named	returns the CRuntimeClass of CWinThread (0x7466B8)
+0x0070C253	6	CMemFile::GetRuntimeClass	named	"MFC: CMemFile::GetRuntimeClass: 0x746628 (""CMemFile"", 0x28, base CFile); vtable 0x746650"
+0x0070C259	68	CWinThread::CWinThread_proc_param	named	MFC: CWinThread::CWinThread(AFX_THREADPROC, LPVOID): CCmdTarget::CCmdTarget (0x703EAE), vtable 0x7466E0, m_pfnThreadProc +0x50, m_pThreadParams +0x4C, CommonConstruct; AfxBeginThread
+0x0070C29D	28	vt_7466E0::DeletingDtor_70C29D	named	MFC: CWinThread scalar deleting dtor (vtable 0x7466E0 slot 1): ~CWinThread 0x70E132, operator delete when flag & 1
+0x0070C2B9	61	CWinThread::CWinThread	named	MFC: CWinThread::CWinThread(): CCmdTarget ctor, vtable 0x7466E0, m_pThreadParams = m_pfnThreadProc = 0, CommonConstruct; CWinApp::CWinApp
+0x0070C2F6	50	CWinThread::CommonConstruct	named	MFC: CWinThread::CommonConstruct: m_pMainWnd +0x1C = m_pActiveWnd +0x20 = 0, m_hThread +0x28 / m_nThreadID +0x2C = 0, +0x34 = 0, +0x64 = 0, GetCursorPos(m_ptCursorLast +0x5C), m_nMsgLast +0x58 = 0, m_nDisablePumpCount +0x54 = 0, m_bAutoDelete +0x24 = TRUE. Renamed from CWinThread::ClearMembers
+0x0070C328	6	CWinThread::GetRuntimeClass	named	"MFC: CWinThread::GetRuntimeClass: 0x7466B8 (""CWinThread"", 0x68, base CCmdTarget 0x7468A8); vtable 0x7466E0"
 0x0070C32E	91	sub_70C32E	named	unregistered function, reached by call / pointer from 0x30219D,0x3026DC,0x302766 (gaps.py 2026-11-06)
-0x0070C389	27	CHook_DeletingDtor	named	deleting dtor: destroy, then AfxLocalFree when flag&1
-0x0070C3A4	27	CHook_DeletingDtor2	named	deleting dtor (second instance)
-0x0070C3BF	6	CUIntArray::GetRuntimeClass	named	returns the CRuntimeClass of CUIntArray (0x746778)
-0x0070C3C5	69	AfxInitLocks	named	lazy init: GetVersion, detects Win32s flag (DAT_007C9078) for critical-section use
+0x0070C389	27	CHook_DeletingDtor	named	MFC: scalar deleting dtor of a CNoTrackObject-derived thread/module state (vtable 0x746760): dtor 0x70D43F, memory freed by CNoTrackObject::operator delete (AfxLocalFree, LocalFree) when flag & 1
+0x0070C3A4	27	CHook_DeletingDtor2	named	MFC: scalar deleting dtor of a second CNoTrackObject-derived state (vtable 0x746768): dtor 0x70D480, LocalFree when flag & 1
+0x0070C3BF	6	CUIntArray::GetRuntimeClass	named	"MFC: CUIntArray::GetRuntimeClass: 0x746778 (""CUIntArray""); vtable 0x7467A0"
+0x0070C3C5	69	AfxCriticalInit	named	MFC: AfxCriticalInit: once (0x7C907C): Win32s (GetVersion < 4 with the high bit) -> 0x7C9078 = TRUE (no locking), else InitializeCriticalSection(_afxLockInitLock 0x7C8EC8); returns the init flag. Renamed from AfxInitLocks
 0x0070C40A	78	dead_70C40A	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070C458	112	AfxLockGlobals_Enter	named	enter global lock n (initializing locks first)
-0x0070C4C8	33	AfxLockGlobals_Leave	named	LeaveCriticalSection on global lock n (unless Win32s)
-0x0070C4E9	19	CPlex_PushFree	named	pushes a node onto the free list at +4
-0x0070C4FC	70	CPlex_Contains	named	walks a chain of blocks looking for a pointer
-0x0070C542	30	AfxLocalAlloc	named	LocalAlloc(LPTR); throws CMemoryException when it fails
-0x0070C560	20	AfxLocalFree	named	LocalFree if non-null
-0x0070C574	66	CThreadSlotData_Init	named	initializes the thread-local slot manager fields (EH throw on failure)
-0x0070C5B6	87	CThreadSlotData::~CThreadSlotData	named	TlsFree and delete the per-thread value tables
-0x0070C60D	274	CThreadSlotData::AllocSlot	named	allocates a TLS slot index under the critical section (grows the table)
-0x0070C71F	93	CThreadSlotData::FreeSlot	named	frees a TLS slot and releases per-thread data for all threads
-0x0070C77C	234	CThreadSlotData::SetValue	named	TlsGetValue/LocalAlloc of the per-thread table, grows and stores the slot value
-0x0070C866	27	CNoTrack_DeletingDtor	named	deleting dtor
-0x0070C881	1	Nop_70C881	named	empty function (returns immediately)
-0x0070C882	65	CThreadSlotData::DeleteValues	named	deletes per-thread values under the lock
-0x0070C8C3	153	CThreadSlotData::DeleteValuesRange	named	deletes per-thread values for slots matching a target
-0x0070C95C	89	CThreadSlotData::DeleteValues2	named	deletes values of a slot (current thread or all)
-0x0070C9B5	119	CThreadLocalObject::AllocateAndSet	named	allocates the slot on first use and stores the value (23 callers)
-0x0070CA2C	45	CThreadLocalObject::GetData	named	TlsGetValue-based per-thread data lookup by slot
-0x0070CA59	30	CThreadLocalObject::Free	named	frees its slot via the global slot data and clears the index
-0x0070CA77	75	CThreadLocalObject::GetThreadObject	named	creates the per-thread object on first use under the global lock (EH frame)
-0x0070CAD2	37	~CProcessLocalObject	named	
+0x0070C458	112	AfxLockGlobals	named	MFC: AfxLockGlobals(nLockType): AfxCriticalInit; not Win32s -> lazily InitializeCriticalSection(_afxResourceLock 0x7C8EE0 + n*0x18) under the init lock (flag array 0x7C8E80), EnterCriticalSection
+0x0070C4C8	33	AfxUnlockGlobals	named	MFC: AfxUnlockGlobals(nLockType): LeaveCriticalSection(0x7C8EE0 + n*0x18) unless Win32s
+0x0070C4E9	19	CSimpleList::AddHead	named	"MFC: CSimpleList::AddHead(p) (this = {m_pHead, m_nNextOffset}): *(p + nextOffset) = head, head = p; AfxClassInit (module class list), CThreadSlotData::SetValue. CORRECTION: was ""CPlex_PushFree"""
+0x0070C4FC	70	CSimpleList::Remove	named	"MFC: CSimpleList::Remove(p) -> BOOL: unlinks p from the singly linked list (head or the predecessor's next at +nextOffset), FALSE when absent; CThreadSlotData::DeleteValues. CORRECTION: was ""CPlex_Contains"""
+0x0070C542	30	CNoTrackObject::operator_new	named	MFC: CNoTrackObject::operator new(n): LocalAlloc(LPTR 0x40, n), null -> AfxThrowMemoryException; the thread / module state factories, CThreadSlotData::SetValue
+0x0070C560	20	CNoTrackObject::operator_delete	named	MFC: CNoTrackObject::operator delete(p): LocalFree when not null; every CNoTrackObject deleting dtor
+0x0070C574	66	CThreadSlotData::CThreadSlotData	named	MFC: CThreadSlotData::CThreadSlotData: m_list {head +0x14, next offset +0x18 = 4}, m_nAlloc +4 = 0, m_nRover +8 = 1, m_nMax +0xC = 0, m_pSlotData +0x10 = 0, m_tlsIndex +0 = TlsAlloc (failure -> AfxThrowMemoryException), InitializeCriticalSection(m_sect +0x1C); built in place at 0x7C9088 (_afxThreadData 0x7C9084)
+0x0070C5B6	87	CThreadSlotData::~CThreadSlotData	named	MFC: CThreadSlotData::~CThreadSlotData: TlsFree, DeleteValues(pData, NULL) for every CThreadData of m_list, slot table GlobalUnlock / GlobalFree, DeleteCriticalSection; only from dead_70CAF7 (unreferenced AfxInitLocalData / AfxTermLocalData / AfxTlsRelease code) -> dead chain
+0x0070C60D	274	CThreadSlotData::AllocSlot	named	MFC: CThreadSlotData::AllocSlot -> slot: under m_sect, takes m_nRover when free, else the first free slot (flag bit 0 of the 8-byte slot entries), else grows the table by 32 (GlobalAlloc / GlobalReAlloc GMEM_MOVEABLE | GMEM_ZEROINIT, failure -> AfxThrowMemoryException), marks it used, m_nMax raised, m_nRover = slot + 1
+0x0070C71F	93	CThreadSlotData::FreeSlot	named	MFC: CThreadSlotData::FreeSlot(slot): under m_sect deletes the slot value of every thread (vt[0](1)) and clears it, then clears the used flag; CThreadLocalObject dtor
+0x0070C77C	234	CThreadSlotData::SetValue	named	MFC: CThreadSlotData::SetValue(slot, value): this thread's CThreadData (TlsGetValue; first time new CThreadData 0x10, vtable 0x7467B0, added to m_list under m_sect); grows its value array to m_nMax (LocalAlloc / LocalReAlloc, failure -> AfxThrowMemoryException, zero-filled), TlsSetValue; stores the value
+0x0070C866	27	CThreadData::DeletingDtor	named	MFC: CThreadData scalar deleting dtor (vtable 0x7467B0): empty dtor 0x70C881, LocalFree when flag & 1
+0x0070C881	1	CThreadData::dtor	named	MFC: CThreadData::~CThreadData (empty CNoTrackObject dtor body)
+0x0070C882	65	CThreadSlotData::AssignInstance	named	"MFC: CThreadSlotData::AssignInstance(hInst): under m_sect every used slot with no owner instance (+4 of the slot entry) gets hInst; only from dead_70CAF7 (AfxInitLocalData, unreferenced) -> dead chain. CORRECTION: was ""CThreadSlotData::DeleteValues"""
+0x0070C8C3	153	CThreadSlotData::DeleteValues_Data	named	MFC: CThreadSlotData::DeleteValues(CThreadData* pData, hInst): deletes (vt[0](1)) and clears the values of the slots owned by hInst (all when 0); when nothing is left removes pData from m_list (CSimpleList::Remove), LocalFree of the value array, deletes pData, TlsSetValue(0)
+0x0070C95C	89	CThreadSlotData::DeleteValues	named	MFC: CThreadSlotData::DeleteValues(hInst, bAll): under m_sect, this thread's data (TlsGetValue) or every thread's (bAll) through DeleteValues(pData, hInst); CWinThread::ProcessWndProcException_Idle (AfxTermThread path) and dead_70CAF7
+0x0070C9B5	119	CThreadLocalObject::GetData	named	MFC: CThreadLocalObject::GetData(pfnCreateObject): creates _afxThreadData (0x7C9084, in place at 0x7C9088) and the slot (+0 = AllocSlot) on first use; value of this thread (TlsGetValue table) or a new one from pfnCreateObject stored with SetValue (23 callers). Renamed from CThreadLocalObject::AllocateAndSet
+0x0070CA2C	45	CThreadLocalObject::GetDataNA	named	MFC: CThreadLocalObject::GetDataNA: this thread's value of slot +0 or 0 (never creates). Renamed from CThreadLocalObject::GetData
+0x0070CA59	30	CThreadLocalObject::~CThreadLocalObject	named	MFC: CThreadLocalObject::~CThreadLocalObject: FreeSlot(slot +0) when allocated, slot = 0; the atexit dtors of the thread-local statics (0x70CC23, 0x70D5EF) and the AFX_MODULE_STATE dtor
+0x0070CA77	75	CProcessLocalObject::GetData	named	"MFC: CProcessLocalObject::GetData(pfnCreateObject): first use -> AfxLockGlobals(CRIT_PROCESSLOCAL 0x10), create once, unlock; returns +0 (CWnd colour / sys-colour handlers, AfxGetModuleState). CORRECTION: was ""CThreadLocalObject::GetThreadObject"" (it is the process-local version)"
+0x0070CAD2	37	CProcessLocalObject::~CProcessLocalObject	named	MFC: CProcessLocalObject::~CProcessLocalObject: deletes the object +0 (vt[0](1)); the atexit dtors 0x70CE6D / 0x70D615 / 0x70DC3E
 0x0070CAF7	95	dead_70CAF7	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070CB56	23	InitVtable_7467B8_70CB56	named	stores vtable 0x007467B8 and initializes 3 field(s) (constructor/reset step)
-0x0070CB6D	27	CWinApp_DeletingDtor	named	deleting dtor: destroy then AfxLocalFree
-0x0070CB88	116	CWinApp_Dtor_EH	named	SEH destructor: vtable 0x7467B8, frees the buffer at +0xCC
-0x0070CBFC	16	AfxGetThreadStatePtr	named	returns the AFX per-thread state object (9 callers)
-0x0070CC0C	10	StaticInit_ThreadSlot_Group	named	static init group for the thread slot data
-0x0070CC16	1	Nop_70CC16	named	empty function (returns immediately)
-0x0070CC17	12	StaticInit_Atexit_ThreadSlot	named	atexit registration for the thread-slot data
+0x0070CB56	23	_AFX_THREAD_STATE::ctor	named	MFC: _AFX_THREAD_STATE::_AFX_THREAD_STATE (fastcall): vtable 0x7467B8, m_nLastHit +0xD4 = -1, m_nLastStatus +0x104 = -1 (members zeroed by LPTR alloc); created by the factory 0x70C215
+0x0070CB6D	27	_AFX_THREAD_STATE::DeletingDtor	named	"MFC: _AFX_THREAD_STATE scalar deleting dtor (vtable 0x7467B8): dtor 0x70CB88, LocalFree when flag & 1. CORRECTION: was ""CWinApp_DeletingDtor"" (not CWinApp)"
+0x0070CB88	116	_AFX_THREAD_STATE::dtor	named	"MFC: _AFX_THREAD_STATE::~_AFX_THREAD_STATE: m_pToolTip +0xCC destroyed (vt+0x58 DestroyToolTipCtrl) and deleted, UnhookWindowsHookEx of m_hHookOldMsgFilter +0x30 and m_hHookOldCbtFilter +0x2C, free(m_pSafetyPoolBuffer +0xC). CORRECTION: was ""CWinApp_Dtor_EH"""
+0x0070CBFC	16	AfxGetThreadState	named	MFC: AfxGetThreadState: _afxThreadState (0x7C90C0) GetData(create 0x70C21F). Renamed from AfxGetThreadStatePtr
+0x0070CC0C	10	StaticInit_ThreadSlot_Group	named	CRT initializer (table 0x78301C): empty ctor (0x70CC16) of the thread-local static _afxThreadState, then register its dtor (0x70CC17)
+0x0070CC16	1	Nop_70CC16	named	MFC: CThreadLocal<_AFX_THREAD_STATE> ctor body (nothing to do)
+0x0070CC17	12	StaticInit_Atexit_ThreadSlot	named	atexit(0x70CC23 = CThreadLocalObject::~CThreadLocalObject of 0x7C90C0)
 0x0070CC23	15	sub_70CC23	named	unregistered function, reached by call / pointer from 0x30CC18 (gaps.py 2026-11-06)
-0x0070CC32	99	CThreadSlotData::Init	named	zeroes the slot table fields
-0x0070CC95	27	CNoTrackObject_DeletingDtor3	named	deleting dtor
-0x0070CCB0	117	CNoTrackObject_DtorBody	named	frees the slot list (vtable 0x7467C0), EH frame
-0x0070CD25	5	thunk_FUN_0070ca59	named	
-0x0070CD2A	68	CMap_FreeAllExcept	named	iterates a CMap deleting all values except one
-0x0070CD6E	31	CNoTrackObject_Ctor	named	ctor (vtable 0x7467C8): block size 0x54, handler = ThrowMemoryException
-0x0070CD8D	27	CNoTrackObject_DeletingDtor	named	deleting dtor
-0x0070CDA8	174	CNoTrackObject_Dtor	named	dtor: frees the list of nodes (RemoveHead + delete)
-0x0070CE56	10	StaticInit_NoTrack_Group	named	static init group
-0x0070CE60	1	Nop_70CE60	named	empty function (returns immediately)
-0x0070CE61	12	StaticInit_Atexit_NoTrack	named	atexit registration
+0x0070CC32	99	AFX_MODULE_STATE::AFX_MODULE_STATE	named	"MFC: AFX_MODULE_STATE::AFX_MODULE_STATE(bDLL): vtable 0x7467C0, m_bDLL +0x14, m_classList {+0x1C head, +0x20 offset 0x14}, m_factoryList {+0x24, +0x28 offset 0x1C}, m_nObjectCount +0x2C = 0, m_bUserCtrl +0x30 = TRUE, type-lib cache fields (+0x1050 = 0x18, +0x1054.. = 0, -1), m_thread +0x1070; called by the _afxBaseModuleState factory 0x70CEFE. CORRECTION: was ""CThreadSlotData::Init"""
+0x0070CC95	27	AFX_MODULE_STATE::DeletingDtor	named	MFC: AFX_MODULE_STATE scalar deleting dtor (vtable 0x7467C0): dtor 0x70CCB0, LocalFree when flag & 1
+0x0070CCB0	117	AFX_MODULE_STATE::dtor	named	MFC: AFX_MODULE_STATE::~AFX_MODULE_STATE: deletes m_pDllIsolation-style object +0x1044, releases the type-lib cache +0x106C (vt+0xC Unlock(&+0x1048), vt+4 delete), ~CThreadLocalObject of m_thread +0x1070
+0x0070CD25	5	CThreadLocalObject_dtor_thunk_70CD25	named	jmp CThreadLocalObject::~CThreadLocalObject 0x70CA59; only from code after dead_73A092 (an atexit dtor that the reference index does not cover; reached by the raw scan)
+0x0070CD2A	68	CMap_FreeAllExcept	named	MFC-style helper: walks a CMapPtrToPtr (count +0xC, CMap_GetNextAssoc) and operator-deletes every value except the given one; lib, unused (no reference) [dead: no caller or pointer]
+0x0070CD6E	31	AFX_MODULE_THREAD_STATE::ctor	named	"MFC: AFX_MODULE_THREAD_STATE::AFX_MODULE_THREAD_STATE: vtable 0x7467C8, m_frameList {+8, next offset +0xC = 0x54}, m_pfnNewHandler +0x28 = AfxThrowMemoryException; created by the factory 0x70C32E. CORRECTION: was ""CNoTrackObject_Ctor"""
+0x0070CD8D	27	AFX_MODULE_THREAD_STATE::DeletingDtor	named	MFC: AFX_MODULE_THREAD_STATE scalar deleting dtor (vtable 0x7467C8): dtor 0x70CDA8, LocalFree when flag & 1
+0x0070CDA8	174	AFX_MODULE_THREAD_STATE::dtor	named	MFC: AFX_MODULE_THREAD_STATE::~AFX_MODULE_THREAD_STATE: deletes the handle maps m_pmapHWND +0x14, HMENU +0x18, HDC +0x1C, HGDIOBJ +0x20, HIMAGELIST +0x24, empties and deletes the socket notification list +0x38 (CPtrList::RemoveHead + delete), deletes the socket maps +0x30 / +0x34
+0x0070CE56	10	StaticInit_NoTrack_Group	named	CRT initializer (table 0x783020): empty ctor of the process-local static _afxBaseModuleState holder, then register its dtor
+0x0070CE60	1	Nop_70CE60	named	MFC: CProcessLocal<_AFX_BASE_MODULE_STATE> ctor body (nothing to do)
+0x0070CE61	12	StaticInit_Atexit_NoTrack	named	atexit(0x70CE6D = ~CProcessLocalObject)
 0x0070CE6D	31	sub_70CE6D	named	unregistered function, reached by call / pointer from 0x30CE62 (gaps.py 2026-11-06)
-0x0070CE8C	38	AfxGetModuleState	named	returns the AFX module state of the current thread (52 callers)
-0x0070CEB2	23	AfxGetModuleThreadState	named	returns the AFX_MODULE_THREAD_STATE of the current thread
-0x0070CEC9	53	CTypeLibCache::Unlock	named	InterlockedDecrement of the lock count
+0x0070CE8C	38	AfxGetModuleState	named	MFC: AfxGetModuleState: thread state m_pModuleState (+4), else _afxBaseModuleState.GetData(0x70CEFE) (52 callers)
+0x0070CEB2	23	AfxGetModuleThreadState	named	MFC: AfxGetModuleThreadState: AfxGetModuleState()->m_thread (+0x1070) GetData(create 0x70C32E)
+0x0070CEC9	53	CTypeLibCache::Unlock	named	MFC: CTypeLibCache::Unlock: InterlockedDecrement(m_cRef +0x20); at 0 releases m_ptinfo +0x1C and m_ptlib +8 (COM Release vt+8); CWinThread::ReleaseTypeLib
 0x0070CEFE	40	sub_70CEFE	named	unregistered function, reached by call / pointer from 0x30CE7D,0x30CEA3 (gaps.py 2026-11-06)
-0x0070CF26	27	CNoTrackObject_DeletingDtor2	named	deleting dtor (second instance)
-0x0070CF41	5	CNoTrackObject_Dtor_thunk	named	SEH destructor thunk (vtable 0x7467C0)
-0x0070CF46	6	CArchiveException::GetRuntimeClass	named	returns the CRuntimeClass of CArchiveException (0x7467D8)
-0x0070CF4C	6	CFileException::GetRuntimeClass	named	returns the CRuntimeClass of CFileException (0x746820)
+0x0070CF26	27	_AFX_BASE_MODULE_STATE::DeletingDtor	named	MFC: _AFX_BASE_MODULE_STATE scalar deleting dtor (vtable 0x7467D0): ~AFX_MODULE_STATE (thunk 0x70CF41), LocalFree when flag & 1
+0x0070CF41	5	_AFX_BASE_MODULE_STATE::dtor_thunk	named	jmp AFX_MODULE_STATE::~AFX_MODULE_STATE 0x70CCB0 (_AFX_BASE_MODULE_STATE dtor)
+0x0070CF46	6	CArchiveException::GetRuntimeClass	named	"MFC: CArchiveException::GetRuntimeClass: 0x7467D8 (""CArchiveException"", 0x10); vtable 0x746808"
+0x0070CF4C	6	CFileException::GetRuntimeClass	named	"MFC: CFileException::GetRuntimeClass: 0x746820 (""CFileException"", 0x14); vtable 0x745E4C"
 0x0070CF52	99	dead_70CF52	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070CFB5	285	CWinApp::SetCurrentHandles	named	"sets instance handles, module path, help file name ("".HLP"") and profile name ("".INI"")"
-0x0070D0D2	86	AfxGetFileName	named	returns the file name after the last path separator (multibyte aware)
-0x0070D128	6	CMapPtrToPtr::GetRuntimeClass	named	returns the CRuntimeClass of CMapPtrToPtr (0x746870)
-0x0070D12E	10	StaticInit_SysInfo_Group	named	static init group: AfxInitSysInfo and atexit
-0x0070D138	10	AfxInitSysInfo_Thunk	named	calls AfxInitSysInfo(0x7C90C8)
-0x0070D142	12	StaticInit_Atexit_MapPtr	named	atexit registration
+0x0070CFB5	285	CWinApp::SetCurrentHandles	named	"MFC: CWinApp::SetCurrentHandles: module state instance / resource handles = m_hInstance +0x68; module path without extension; m_pszExeName +0x88 (strdup of the file name), m_pszAppName +0x78 (string 0xE000 or the exe name), module state app name +0x10, m_pszHelpFilePath +0x8C ("".HLP""), m_pszProfileName +0x90 ("".INI""); only from dead_70CF52 (= AfxWinInit, unreferenced: the game has its own WinMain) -> dead chain"
+0x0070D0D2	86	AfxGetFileName	named	MFC: AfxGetFileName(path, buf, max): name after the last '\\', '/' or ':' (_mbsinc); buf null -> its length + 1, else lstrcpyn and 0; AfxGetFileTitle, CFileFind, CWinApp::SetCurrentHandles
+0x0070D128	6	CMapPtrToPtr::GetRuntimeClass	named	"MFC: CMapPtrToPtr::GetRuntimeClass: 0x746870 (""CMapPtrToPtr"", 0x1C); vtable 0x74689C (the one raw hit is a byte pair inside AfxGetFileName)"
+0x0070D12E	10	StaticInit_SysInfo_Group	named	CRT initializer (table 0x783B98): construct afxData (AUX_DATA at 0x7C90C8, 0x70D138) then register its dtor (0x70D142)
+0x0070D138	10	AfxInitSysInfo_Thunk	named	ecx = afxData 0x7C90C8, jmp AUX_DATA::AUX_DATA 0x70D1AA
+0x0070D142	12	StaticInit_Atexit_MapPtr	named	atexit(0x70D14E = AUX_DATA::~AUX_DATA of afxData). Name kept (it registers the afxData dtor, not a map)
 0x0070D14E	10	sub_70D14E	named	unregistered function, reached by call / pointer from 0x30D143 (gaps.py 2026-11-06)
-0x0070D158	48	AfxUpdateSysMetrics_B	named	reads SM_CXBORDER/SM_CYBORDER (+1) into globals when themed
-0x0070D188	34	AfxUpdateSysMetrics_A	named	reads SM_CXBORDER/SM_CYBORDER into globals
-0x0070D1AA	155	AfxInitSysInfo	named	GetVersion, fills OS version flags, system colors and metrics
-0x0070D245	224	AfxInitMenuCheckBitmap	named	builds the menu check/radio bitmaps from GetMenuCheckMarkDimensions
+0x0070D158	48	AfxUpdateSysMetrics_B	named	"MFC AUX_DATA helper: when afxData.bWin4 (0x7C9124): cxVScroll 0x7C90C8 = GetSystemMetrics(SM_CXVSCROLL 2) + 1, cyHScroll 0x7C90CC = SM_CYHSCROLL (3) + 1, flag 0x7C9130 = 1; AfxUpdateSysMetrics. CORRECTION: was ""SM_CXBORDER/SM_CYBORDER"" (indices 2 / 3 are the scroll bar sizes)"
+0x0070D188	34	AfxUpdateSysMetrics_A	named	"MFC AUX_DATA helper: cxVScroll = GetSystemMetrics(SM_CXVSCROLL), cyHScroll = SM_CYHSCROLL (no +1), flag 0x7C9130 = 0; AfxUpdateSysMetrics. CORRECTION: was ""SM_CXBORDER/SM_CYBORDER"""
+0x0070D1AA	155	AUX_DATA::AUX_DATA	named	MFC: AUX_DATA::AUX_DATA (fastcall, afxData 0x7C90C8): GetVersion -> winVer +0x54, bWin32s +0x58, bWin4 +0x5C, bNotWin4 +0x60, bSmCaption +0x64, bMarked4 +0x68 (GetProcessVersion >= 4.0); UpdateSysMetrics, UpdateSysColors (callee named CWnd::LoadSysColors), hcurWait +0x3C (IDC_WAIT), hcurArrow +0x40, hcurHelp +0x44 = 0, +0x50 = 0, cxBorder2 / cyBorder2 +0x10/+0x14 = bWin4 + 1. Renamed from AfxInitSysInfo
+0x0070D245	224	AfxLoadDotBitmap	named	MFC: _AfxLoadDotBitmap: menu check-mark size (GetMenuCheckMarkDimensions, max 32), 5-row dot pattern 0x7468CC shifted to the centre of a 0xFF-filled 1-bpp bitmap, CreateBitmap into afxData.hbmMenuDot 0x7C9118 (OBM_CHECK 0x7FE3 fallback); CCmdUI::SetCheck (radio path). Renamed from AfxInitMenuCheckBitmap
 0x0070D325	56	dead_70D325	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070D35D	6	CWnd::GetRuntimeClass	named	returns the CRuntimeClass of CWnd (0x7469D8)
+0x0070D35D	6	CWnd::GetRuntimeClass	named	"MFC: CWnd::GetRuntimeClass: 0x7469D8 (""CWnd"", 0x3C, CreateObject 0x70D32B, base CCmdTarget 0x7468A8); vtable 0x746DA8"
 0x0070D363	64	sub_70D363	named	unregistered function, reached by call / pointer from 0x3469BC (gaps.py 2026-11-06)
-0x0070D3A3	32	CTempWnd::DeletingDtor	named	deleting dtor: ~CWnd then returns the object to the CPlex pool 0x7CA940
-0x0070D3C3	5	CWnd::~CWnd	named	CWnd destructor body: destroys the window unless it is a global/permanent window
-0x0070D3C8	6	CTempWnd::GetRuntimeClass	named	returns the CRuntimeClass of CTempWnd (0x7469B0)
-0x0070D3CE	10	StaticInit_CPlex_3C_Group	named	static init group for the 0x3C block allocator
-0x0070D3D8	15	StaticInit_CPlex_3C	named	static init: CPlex_Ctor(&g_0x7CA940, 0x3C, 0x40)
-0x0070D3E7	12	StaticInit_CPlex_3C_Atexit	named	atexit registration
+0x0070D3A3	32	CTempWnd::DeletingDtor	named	MFC: CTempWnd scalar deleting dtor (vtable 0x746EC4 slot 1): ~CWnd (0x70D3C3), memory back to CTempWnd::s_alloc 0x7CA940 when flag & 1
+0x0070D3C3	5	CWnd::~CWnd	named	jmp 0x704FE3 (CWnd::~CWnd body); CTempWnd::DeletingDtor
+0x0070D3C8	6	CTempWnd::GetRuntimeClass	named	"MFC: CTempWnd::GetRuntimeClass: 0x7469B0 (""CTempWnd"", CreateObject 0x70D363); vtable 0x746EC4"
+0x0070D3CE	10	StaticInit_CPlex_3C_Group	named	CRT initializer (table 0x783024): construct CTempWnd::s_alloc then register its dtor
+0x0070D3D8	15	StaticInit_CPlex_3C	named	MFC: CFixedAlloc CTempWnd::s_alloc(0x3C, 64) at 0x7CA940
+0x0070D3E7	12	StaticInit_CPlex_3C_Atexit	named	atexit(0x70D3F3 = ~CFixedAlloc of 0x7CA940)
 0x0070D3F3	76	sub_70D3F3	named	unregistered function, reached by call / pointer from 0x30D3E8 (gaps.py 2026-11-06)
-0x0070D43F	65	CHook_Dtor_EH	named	destructor with an EH frame (vtable 0x746760): unhooks via the stored callback
-0x0070D480	54	CHook_Dtor_EH2	named	destructor (vtable 0x746768): releases the global hook slot 0x7CAA88
+0x0070D43F	65	CHook_Dtor_EH	named	MFC: _AFX_CTL3D_STATE::~_AFX_CTL3D_STATE (vtable 0x746760): m_pfnUnregister +0x10 called with NULL, FreeLibrary(m_hCtl3dLib +8); object created by the factory at 0x70C32E.. (CProcessLocal create functions)
+0x0070D480	54	CHook_Dtor_EH2	named	MFC: _AFX_CTL3D_THREAD::~_AFX_CTL3D_THREAD (vtable 0x746768): the process CTL3D state (0x7CAA88) m_pfnUnAutoSubclass +0x18 called when set
 0x0070D4B6	290	dead_70D4B6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070D5D8	10	StaticInit_Group_A	named	static init group
-0x0070D5E2	1	Nop_70D5E2	named	empty function (returns immediately)
-0x0070D5E3	12	StaticInit_Atexit_A	named	atexit registration
+0x0070D5D8	10	StaticInit_Group_A	named	CRT initializer (table 0x78302C): empty ctor of a thread/process-local static (0x70D5E2), then register its dtor (0x70D5E3)
+0x0070D5E2	1	Nop_70D5E2	named	MFC: empty ctor body of a CThreadLocal / CProcessLocal static
+0x0070D5E3	12	StaticInit_Atexit_A	named	atexit(0x70D5EF = CThreadLocalObject::~CThreadLocalObject of that static)
 0x0070D5EF	15	sub_70D5EF	named	unregistered function, reached by call / pointer from 0x30D5E4 (gaps.py 2026-11-06)
-0x0070D5FE	10	StaticInit_Group_B	named	static init group
-0x0070D608	1	Nop_70D608	named	empty function (returns immediately)
-0x0070D609	12	StaticInit_Atexit_B	named	atexit registration
+0x0070D5FE	10	StaticInit_Group_B	named	CRT initializer (table 0x783030): empty ctor (0x70D608) then register the dtor (0x70D609)
+0x0070D608	1	Nop_70D608	named	MFC: empty ctor body of a CProcessLocal static
+0x0070D609	12	StaticInit_Atexit_B	named	atexit(0x70D615 = ~CProcessLocalObject of that static)
 0x0070D615	15	sub_70D615	named	unregistered function, reached by call / pointer from 0x30D60A (gaps.py 2026-11-06)
-0x0070D624	6	CPtrArray::GetRuntimeClass	named	returns the CRuntimeClass of CPtrArray (0x746F88)
-0x0070D62A	6	CPtrList::GetRuntimeClass	named	returns the CRuntimeClass of CPtrList (0x746FC0)
-0x0070D630	9	SetVtable_7470BC_70D630	named	stores the vtable 0x007470BC into the object (base-class constructor/destructor step)
-0x0070D639	27	CGdiHolder_DeletingDtor	named	deleting dtor
-0x0070D654	234	CWinApp::CWinApp	named	CWinApp constructor (vtable 0x7470C4): CWinThread ctor, strdup app name, thread state
-0x0070D73E	28	vt_7470C4::DeletingDtor_70D73E	named	scalar deleting destructor: runs FUN_0070da85 then operator delete when flag&1
-0x0070D75A	64	CWinApp::AssignMainWnd	named	vt slot 33: assigns the pending main window from the global slot
-0x0070D79A	4	vt_7470C4::Nop_70D79A	named	empty function (returns immediately)
+0x0070D624	6	CPtrArray::GetRuntimeClass	named	"MFC: CPtrArray::GetRuntimeClass: 0x746F88 (""CPtrArray""); vtable 0x746FB0"
+0x0070D62A	6	CPtrList::GetRuntimeClass	named	"MFC: CPtrList::GetRuntimeClass: 0x746FC0 (""CPtrList""); vtable 0x746FE8"
+0x0070D630	9	SetVtable_7470BC_70D630	named	MFC: ctor (fastcall) of a CNoTrackObject process state with vtable 0x7470BC (one GDI handle at +4, deleted by its dtor 0x70E18B), returns this; created by the factory 0x70D3F3..
+0x0070D639	27	CGdiHolder_DeletingDtor	named	MFC: scalar deleting dtor of that process state (vtable 0x7470BC): dtor 0x70E18B, LocalFree when flag & 1
+0x0070D654	234	CWinApp::CWinApp	named	MFC: CWinApp::CWinApp(lpszAppName): CWinThread::CWinThread, vtable 0x7470C4, m_pszAppName +0x78 = strdup, module thread state m_pCurrentWinThread and module state m_pCurrentWinApp = this, m_hThread +0x28 / m_nThreadID +0x2C = current, the other members 0, m_nSafetyPoolSize +0xB8 = 512; lib, unused (no reference: the game never creates a CWinApp) [dead: no caller or pointer]
+0x0070D73E	28	vt_7470C4::DeletingDtor_70D73E	named	MFC: CWinApp scalar deleting dtor (vtable 0x7470C4 slot 1); dead chain (no CWinApp is constructed)
+0x0070D75A	64	CWinApp::InitApplication	named	"MFC: CWinApp::InitApplication (vtable slot 33): CDocManager::pStaticDocManager (0x7CAA90) moved into m_pDocManager +0x80 when unset; m_pDocManager -> AddDocTemplate(NULL) (vt+0xC), else CDocManager::bStaticInit 0x7974E8 = FALSE; returns TRUE; dead chain (no CWinApp). CORRECTION: was ""CWinApp::AssignMainWnd"""
+0x0070D79A	4	CWinApp::InitInstance	named	MFC: CWinApp::InitInstance (vtable 0x7470C4 slot 20): returns TRUE (push 1, pop eax); dead chain (no CWinApp). Renamed from vt_7470C4::Nop_70D79A
 0x0070D79E	270	dead_70D79E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0070D8AC	28	vt_747164::DeletingDtor_70D8AC	named	scalar deleting destructor: runs FUN_0070d8c8 then operator delete when flag&1
-0x0070D8C8	87	CCommandLineInfo_Dtor_EH	named	SEH destructor (vtable 0x747164) freeing the CString members
-0x0070D91F	41	CCommandLineInfo::ParseParamImpl	named	vt slot 3: dispatches to ParseParamFlag, ParseParam and ParseLast
-0x0070D948	190	CCommandLineInfo::ParseParamFlag	named	"recognizes flags (""Unregister"", ""Unregserver"", ""Embedding"") and sets the run mode"
-0x0070DA06	80	CCommandLineInfo::ParseParam	named	parses one command-line argument string into the file-name members
-0x0070DA56	47	CCommandLineInfo::ParseLast	named	handles the last-argument state transition
-0x0070DA85	310	CWinApp::~CWinApp	named	CWinApp destructor: frees settings, DEVMODE/DEVNAMES, profile strings
-0x0070DBBB	48	CWinApp::SaveSettings	named	"virtual slot 4 then WriteProfileInt(""Settings"",""PreviewPages"")"
-0x0070DBEB	54	CWinApp::ExitInstance	named	vt slot 26: saves settings unless in an OLE embedding state
-0x0070DC21	6	CWinApp::GetRuntimeClass	named	returns the CRuntimeClass of CWinApp (0x746FF8)
-0x0070DC27	10	StaticInit_Group_C	named	static init group
-0x0070DC31	1	Nop_70DC31	named	empty function (returns immediately)
-0x0070DC32	12	StaticInit_Atexit_C	named	atexit registration
+0x0070D8AC	28	vt_747164::DeletingDtor_70D8AC	named	MFC: CCommandLineInfo scalar deleting dtor (vtable 0x747164); the vtable is installed only inside dead_70D79E (unreferenced) -> dead chain
+0x0070D8C8	87	CCommandLineInfo::~CCommandLineInfo	named	MFC: CCommandLineInfo dtor: vtable 0x747164, ~CString of m_strPortName +0x20, m_strDriverName +0x1C, m_strPrinterName +0x18, m_strFileName +0x14; dead chain. Renamed from CCommandLineInfo_Dtor_EH
+0x0070D91F	41	CCommandLineInfo::ParseParam	named	MFC: CCommandLineInfo::ParseParam(lpszParam, bFlag, bLast) (vtable 0x747164 slot 3): bFlag -> ParseParamFlag, else ParseParamNotFlag, then ParseLast; dead chain. Renamed from ParseParamImpl
+0x0070D948	190	CCommandLineInfo::ParseParamFlag	named	"MFC: CCommandLineInfo::ParseParamFlag: ""pt"" -> m_nShellCommand +0x10 = FilePrintTo 3, ""p"" -> FilePrint 2, ""Unregister"" / ""Unregserver"" -> AppUnregister 5, ""dde"" -> FileDDE 4 (AfxOleSetUserCtrl(FALSE)), ""Embedding"" -> m_bRunEmbedded +8, ""Automation"" -> m_bRunAutomated +0xC (both AfxOleSetUserCtrl(FALSE), m_bShowSplash +4 = FALSE); dead chain"
+0x0070DA06	80	CCommandLineInfo::ParseParamNotFlag	named	MFC: CCommandLineInfo::ParseParamNotFlag: first plain argument -> m_strFileName +0x14; for FilePrintTo the next ones fill m_strPrinterName +0x18, m_strDriverName +0x1C, m_strPortName +0x20; dead chain. Renamed from ParseParam
+0x0070DA56	47	CCommandLineInfo::ParseLast	named	MFC: CCommandLineInfo::ParseLast(bLast): FileNew with a file name -> FileOpen (1); m_bShowSplash = !m_bRunEmbedded && !m_bRunAutomated; dead chain
+0x0070DA85	310	CWinApp::~CWinApp	named	MFC: CWinApp::~CWinApp: deletes m_pDocManager +0x80 and m_pRecentFileList +0xA8 (vt+0x14), the pending doc-manager statics 0x7CAA94 / 0x7CAA90 (not a DLL), AfxGlobalFree of m_hDevMode +0x94 / m_hDevNames +0x98, GlobalDeleteAtom m_atomApp +0xB0 / m_atomSystemTopic +0xB2, deletes +0xAC, clears the module state app name / app, frees the five profile strings, ~CWinThread; dead chain (only from the CWinApp deleting dtor)
+0x0070DBBB	48	CWinApp::SaveSettings	named	"MFC: CWinApp::SaveStdProfileSettings: m_pRecentFileList +0xA8 vt+0x10 (WriteList), m_nNumPreviewPages +0xB4 -> WriteProfileInt(""Settings"", ""PreviewPages""); only from CWinApp::ExitInstance (dead chain)"
+0x0070DBEB	54	CWinApp::ExitInstance	named	MFC: CWinApp::ExitInstance (vtable slot 26): unless an OLE app in the 'unregister' state (+0xAC +0x10 == 5) and not a DLL -> SaveStdProfileSettings; an optional term callback of the CWinApp tail called when set; returns m_msgCur.wParam (+0x38); dead chain (no CWinApp)
+0x0070DC21	6	CWinApp::GetRuntimeClass	named	"MFC: CWinApp::GetRuntimeClass: 0x746FF8 (""CWinApp"", 0xC0, base CWinThread); vtable 0x7470C4 (dead chain: never installed by live code)"
+0x0070DC27	10	StaticInit_Group_C	named	CRT initializer (table 0x783034): empty ctor (0x70DC31) then register the dtor (0x70DC32)
+0x0070DC31	1	Nop_70DC31	named	MFC: empty ctor body of a CProcessLocal static
+0x0070DC32	12	StaticInit_Atexit_C	named	atexit(0x70DC3E = ~CProcessLocalObject of that static)
 0x0070DC3E	15	sub_70DC3E	named	unregistered function, reached by call / pointer from 0x30DC33 (gaps.py 2026-11-06)
-0x0070DC4D	35	AfxIsDBCS	named	true when the OEM code page has a max char size > 1
-0x0070DC70	5	StaticInit_DBCS_Thunk	named	static init: g_0x7CAA98 = AfxIsDBCS()
-0x0070DC75	11	StaticInit_DBCS	named	static init: g_0x7CAA98 = AfxIsDBCS()
+0x0070DC4D	35	AfxIsDBCS	named	MFC: _AfxIsDBCSEnabled-style test: GetCPInfo(GetOEMCP()).MaxCharSize > 1; StaticInit_DBCS
+0x0070DC70	5	StaticInit_DBCS_Thunk	named	CRT initializer (table 0x783BB0): jmp 0x70DC75
+0x0070DC75	11	StaticInit_DBCS	named	MFC: static init _afxDBCS (0x7CAA98) = AfxIsDBCS()
 0x0070DC80	26	sub_70DC80	named	unregistered function, reached by call / pointer from 0x3471E4 (gaps.py 2026-11-06)
-0x0070DC9A	6	CMenu::GetRuntimeClass	named	returns the CRuntimeClass of CMenu (0x7471D8)
+0x0070DC9A	6	CMenu::GetRuntimeClass	named	"MFC: CMenu::GetRuntimeClass: 0x7471D8 (""CMenu"", 8, CreateObject 0x70DC80); vtable 0x7471FC"
 0x0070DCA0	28	sub_70DCA0	named	unregistered function, reached by call / pointer from 0x3471BC (gaps.py 2026-11-06)
-0x0070DCBC	32	CTempMenu::DeletingDtor	named	deleting dtor: returns the object to the CPlex pool 0x7CAAA8
-0x0070DCDC	41	CMenu::~CMenu_EH	named	SEH destructor body: DestroyMenu
-0x0070DD05	6	CTempMenu::GetRuntimeClass	named	returns the CRuntimeClass of CTempMenu (0x7471B0)
-0x0070DD0B	10	StaticInit_CPlex_8b_Group	named	static init group for the 8-byte block allocator
-0x0070DD15	15	StaticInit_CPlex_8b	named	static init: CPlex_Ctor(&g_0x7CAAA8, 8, 0x40)
-0x0070DD24	12	StaticInit_CPlex_8b_Atexit	named	atexit registration
+0x0070DCBC	32	CTempMenu::DeletingDtor	named	MFC: CTempMenu scalar deleting dtor (vtable 0x747214 slot 1): ~CMenu (0x70DCDC), memory back to CTempMenu::s_alloc 0x7CAAA8 when flag & 1
+0x0070DCDC	41	CMenu::~CMenu_EH	named	MFC: CMenu::~CMenu: vtable 0x7471FC, DestroyMenu
+0x0070DD05	6	CTempMenu::GetRuntimeClass	named	"MFC: CTempMenu::GetRuntimeClass: 0x7471B0 (""CTempMenu"", CreateObject 0x70DCA0); vtable 0x747214"
+0x0070DD0B	10	StaticInit_CPlex_8b_Group	named	CRT initializer (table 0x783028): construct CTempMenu::s_alloc then register its dtor
+0x0070DD15	15	StaticInit_CPlex_8b	named	MFC: CFixedAlloc CTempMenu::s_alloc(8, 64) at 0x7CAAA8
+0x0070DD24	12	StaticInit_CPlex_8b_Atexit	named	atexit(0x70DD30 = ~CFixedAlloc of 0x7CAAA8)
 0x0070DD30	27	sub_70DD30	named	unregistered function, reached by call / pointer from 0x30DD25 (gaps.py 2026-11-06)
-0x0070DD4B	59	CWinApp::SetAppName	named	frees the old strings and strdup's the app name / registry key names
-0x0070DD86	51	CWinApp::SetAppNameFromResource	named	loads a resource string and calls SetAppName
-0x0070DDB9	148	CWinApp::GetAppRegistryKey	named	opens HKCU\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\software (RegOpenKeyEx) and the company/app subkeys
-0x0070DE4D	70	CWinApp::GetSectionKey	named	opens the registry section key under the application key; 7 callers
-0x0070DE93	108	CWinApp::GetProfileInt	named	GetPrivateProfileInt (INI) or registry DWORD with a default
-0x0070DEFF	273	CWinApp::GetProfileString	named	INI or registry string with a default (EH frame)
-0x0070E010	290	CWinApp::GetProfileBinary	named	reads binary data from INI hex text or registry
-0x0070E132	79	CWinThread::~CWinThread	named	CWinThread destructor (EH frame, thread state cleanup)
-0x0070E181	10	CGdiObject_Release	named	deletes the GDI object at +0x50
-0x0070E18B	45	CGdiHolder_Dtor_EH	named	SEH destructor (vtable 0x7470BC): deletes the GDI object at +4
-0x0070E1B8	35	AfxPostQuitMessage	named	forwards to the thread's post-quit hook or PostQuitMessage
+0x0070DD4B	59	CWinApp::SetAppName	named	"MFC: CWinApp::SetRegistryKey(LPCTSTR): m_pszRegistryKey +0x7C = strdup(key), m_pszProfileName +0x90 = strdup(m_pszAppName +0x78); only from 0x70DD86 (dead chain). CORRECTION: was ""SetAppName"""
+0x0070DD86	51	CWinApp::SetAppNameFromResource	named	"MFC: CWinApp::SetRegistryKey(UINT nIDRegistryKey): AfxLoadString then SetRegistryKey(LPCTSTR); lib, unused. CORRECTION: was ""SetAppNameFromResource"" [dead: no caller or pointer]"
+0x0070DDB9	148	CWinApp::GetAppRegistryKey	named	"MFC: CWinApp::GetAppRegistryKey: RegOpenKeyEx(HKCU, ""software""), RegCreateKeyEx m_pszRegistryKey +0x7C, then m_pszProfileName +0x90 (KEY_WRITE | KEY_READ 0x2001F); returns the app key; dead chain (only from the dead profile functions)"
+0x0070DE4D	70	CWinApp::GetSectionKey	named	MFC: CWinApp::GetSectionKey(section): RegCreateKeyEx(section) under GetAppRegistryKey; dead chain (callers WriteProfile* / GetProfile*, all dead)
+0x0070DE93	108	CWinApp::GetProfileInt	named	MFC: CWinApp::GetProfileInt(section, entry, default): INI GetPrivateProfileInt or registry REG_DWORD; only from dead_70D79E (dead chain)
+0x0070DEFF	273	CWinApp::GetProfileString	named	MFC: CWinApp::GetProfileString(section, entry, default) -> CString: INI GetPrivateProfileString or registry REG_SZ; callers CRecentFileList::ReadList and GetProfileBinary, both dead -> dead chain
+0x0070E010	290	CWinApp::GetProfileBinary	named	MFC: CWinApp::GetProfileBinary(section, entry, &data, &n): INI hex-letter text (two letters per byte, 'A'-based) or registry REG_BINARY into a new buffer; lib, unused [dead: no caller or pointer]
+0x0070E132	79	CWinThread::~CWinThread	named	MFC: CWinThread::~CWinThread: vtable 0x7466E0, CloseHandle(m_hThread +0x28), clears the module thread state m_pCurrentWinThread when it is this, ~CCmdTarget (callee named CWnd::ForEachChildEH); CWinThread deleting dtor (AfxBeginThread threads: CSoftCursor, CSoundManager) and unwind funclets
+0x0070E181	10	CGdiObject_Release	named	"MFC: AUX_DATA::~AUX_DATA (fastcall afxData): AfxDeleteObject(&hbmMenuDot +0x50); reached by jmp from the atexit stub 0x70D14E. CORRECTION: was ""CGdiObject_Release, deletes the GDI object at +0x50"" (it is the afxData dtor)"
+0x0070E18B	45	CGdiHolder_Dtor_EH	named	MFC: dtor of the process state with vtable 0x7470BC: AfxDeleteObject(+4)
+0x0070E1B8	35	AfxPostQuitMessage	named	MFC: AfxPostQuitMessage(nExitCode): AfxGetThread() and its m_lpfnOleTermOrFreeLib (+0x54) called (TRUE, TRUE) when set; ::PostQuitMessage
 0x00711A3E	1	dead_711A3E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00711A8E	1	dead_711A8E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x007134BE	1	dead_7134BE	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
@@ -15728,9 +15728,7 @@ addr	size	name	status	purpose
 0x007244F6	1	dead_7244F6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0072455E	1	dead_72455E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x007248AE	1	dead_7248AE	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x0072614D	6	EHBlock_72614D	named	exception-handling block just after of FUN_0070E1B8 (0x0070E1B8)
 0x007264DE	1	dead_7264DE	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00727041	6	EHBlock_727041	named	exception-handling block just after of FUN_0070E1B8 (0x0070E1B8)
 0x007277CF	1	dead_7277CF	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00727E76	1	dead_727E76	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0072865E	1	dead_72865E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
@@ -15754,13 +15752,7 @@ addr	size	name	status	purpose
 0x0073418E	1	dead_73418E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00736BCE	1	dead_736BCE	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00736C1E	1	dead_736C1E	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00736F63	6	EHBlock_736F63	named	exception-handling block just after of FUN_0070E1B8 (0x0070E1B8)
-0x00737066	6	EHBlock_737066	named	exception-handling block just after of FUN_0070E1B8 (0x0070E1B8)
-0x00737073	8	SEH_handler_wrap	named	forwards to _except_handler3 (SEH handler stub for the entry)
 0x007370C6	1	dead_7370C6	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
-0x00737346	6	EHBlock_737346	named	exception-handling block just after of FUN_00737073 (0x00737073)
-0x00737477	1	__break	named	int3 instruction (padding / debugger break)
-0x00737953	1	__break_b	named	int3 instruction
 0x00739A5A	89	dead_739A5A	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x00739BAA	361	dead_739BAA	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)
 0x0073A092	89	dead_73A092	named	unregistered code with no call, jump or pointer anywhere in the image (gaps.py 2026-11-06)

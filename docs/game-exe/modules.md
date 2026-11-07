@@ -50,20 +50,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00409AE0 | 928 | Archive_Open | (archive, CMemStream*, loading, version): binds the archive to the stream (+0x58 = loading flag) |
-| 0x0040A000 | 919 | Archive_Close | (archive, CMemStream*): flushes / finishes the archive on the stream |
-| 0x00409640 | 651 | Archive_SerializeStream | (archive, tag, CMemStream*): under the tag: the stream contents written, or read into the stream (its size from the archive +0x54) |
-| 0x0040AF00 | 580 | DwordVector_Reserve_40AF00 | vector<uint>::reserve(n): allocate from pool or heap, copy, free old |
-| 0x00405EB0 | 560 | HashTable_Rehash2_405EB0 | hashtable resize path using prime table 0x73B914: realloc bucket vector, move chains, pool free of the old vector |
-| 0x00406300 | 560 | HashTable_Rehash2_406300 | same pattern as 0x405EB0 |
-| 0x0040AA80 | 560 | HashTable_Rehash2_40AA80 | same pattern as 0x405EB0 |
-| 0x00407740 | 515 | HashTable_ConstructBuckets_407740 | construct bucket vector of N dwords (pool allocated, zero-filled) |
-| 0x00407960 | 515 | HashTable_ConstructBuckets_407960 | construct bucket vector of N dwords |
-| 0x00407B80 | 515 | HashTable_ConstructBuckets_407B80 | construct bucket vector of N dwords |
-| 0x00407E00 | 515 | HashTable_ConstructBuckets_407E00 | construct bucket vector of N dwords |
-| 0x0040BE50 | 515 | HashTable_ConstructBuckets_40BE50 | construct bucket vector of N dwords |
-| 0x00409470 | 452 | Archive_SerializeStrTag | tag-based string field: write mode stores CString as tagged chunk, read mode finds the tag and assigns (34 callers) |
-| 0x00405950 | 398 | PoolAlloc | size-class allocator: <=0x80 bytes from free lists g_0x79B224 (refill via chunk allocator), else operator new (137 callers) |
+| 0x00409AE0 | 928 | Archive_Open | (archive, file stream, loading, version): frees the old section nodes (PoolFree_N24), clears the object stream +0 and the data stream +0x28 (vt+0x18), pushes a root section, +0x58 = loading; storing: +0x54 = version, done. Loading... |
+| 0x0040A000 | 919 | Archive_Close | (archive, file stream): storing: cuts the data stream +0x28 to the root, writes it to the file as chunk tag 1 (tag byte, length*2 in 1 or 4 bytes /1, bytes), clears it, resets the root; then for every object queued in list +0x70 (... |
+| 0x00409640 | 651 | Archive_SerializeStream | (archive, tag, CMemStream*): opens a section with that tag (storing: pushed after the parent's data, offset = parent offset + size + 5; loading: the n-th tag entry, nothing done when absent); inside it tag 1 = the stream length (4... |
+| 0x0040AF00 | 580 | DwordVector_Reserve_40AF00 | STLport vector<4-byte>::reserve(n): nothing when capacity >= n; else n dwords from node_alloc (inlined refill / chunk_alloc) or operator new, old contents copied (DwordVector_AllocFill_40B9F0 path when non-empty), old buffer freed... |
+| 0x00405EB0 | 560 | HashTable_InitBuckets_405EB0 | STLport hashtable::_M_initialize_buckets(n): n -> first prime >= n of __stl_prime_list 0x73B914 (inline lower_bound, 0xFFFFFFFB past the end), bucket vector +4..+0xC reserve (node_alloc / PoolAlloc_Refill / operator new, old buffe... |
+| 0x00406300 | 560 | HashTable_InitBuckets_406300 | STLport hashtable::_M_initialize_buckets(n), same code as 0x405EB0 (other callee copies); CBaseManager::CBaseManager. CORRECTION: was "rehash" |
+| 0x0040AA80 | 560 | HashTable_InitBuckets_40AA80 | STLport hashtable::_M_initialize_buckets(n), same code as 0x405EB0; FactoryMap_Ctor_408EA0 (n = 100). CORRECTION: was "Rehash2" |
+| 0x00407740 | 515 | HashTable_ConstructBuckets_407740 | STLport vector<void*>(n, alloc) storage ctor: n dwords from node_alloc (free list 0x79B224, inlined _S_refill / chunk_alloc) or operator new when > 0x80 bytes; begin = finish = buffer, end_of_storage = buffer + n; the caller (Resi... |
+| 0x00407960 | 515 | HashTable_ConstructBuckets_407960 | same code as 0x407740 (vector<void*> storage of n, no fill); HashTable_Resize_406D10 |
+| 0x00407B80 | 515 | HashTable_ConstructBuckets_407B80 | same code as 0x407740; HashTable_Resize_406EE0 |
+| 0x00407E00 | 515 | HashTable_ConstructBuckets_407E00 | same code as 0x407740; HashTable_Resize_4070B0 |
+| 0x0040BE50 | 515 | HashTable_ConstructBuckets_40BE50 | STLport vector<void*> storage of n (no fill), same code as 0x407740; HashTable_Resize_40BAC0 |
+| 0x00409470 | 452 | Archive_SerializeStdString | (archive, tag, std::string* {begin +0, end +4}): as Archive_SerializeCString for an STLport string: storing writes strlen + 1 bytes; loading assigns the entry's C string (or "" 0x79B298 when absent) by overwrite + StlString_EraseR... |
+| 0x00405950 | 398 | PoolAlloc | STLport __node_alloc::allocate(n) (fastcall): n > 0x80 -> operator new; else pop free list 0x79B224[(n-1)>>3]; empty -> _S_refill inlined (chunk 0x79B268..0x79B26C, heap size 0x79B264, 20 objects, grow by 2*20*n + heap/16, falls b... |
 
 ## 0x40C000 - 0x411000: CCamera (+ camera .cam files)
 
@@ -1591,7 +1591,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 ## 0x6E0000 - 0x73B000: MSVC runtime (CRT)
 
-1942 functions, group `crt`.
+1934 functions, group `crt`.
 
 | addr | size | name | purpose |
 |---|---|---|---|

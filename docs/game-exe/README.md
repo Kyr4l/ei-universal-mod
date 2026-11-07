@@ -376,7 +376,9 @@ Per page:
   joins the merchant's allowed list, combat music waits for the calm track).
 - net-transport.md: the delta codec bases are settled (A = creation state, B = last sent state); the master server's reply is
   untestable (no master exists).
-- script-vm.md / gs-functions.md: nothing open (no `CArchive` is ever made, so every MFC `Serialize` path is dead;
+- script-vm.md / gs-functions.md: nothing open (no `CArchive` is ever made, so every MFC `Serialize` path is dead; no `CWinApp`
+  either, so its virtuals (InitInstance 0x70D79A, Run 0x707A13, ExitInstance 0x70DBEB, ...) and the profile / registry helpers
+  0x70B43A..0x70E010 are dead; only CWinApp::DoMessageBox runs, called by AfxMessageBox with this = NULL [V, T7 lib05];
   `CreateFXSource` loops and `CreateFX` plays once; randomized sound sources never play without the um-engine patch).
 - data-sound.md: RaceModels `+0x158..` (Unk47..50) have no reader; the 60 particle emit / step callbacks are named but not described
   one by one. (Settled 2026-11-06: the sound descriptor fields, `Quest +0x10`.)
@@ -404,4 +406,4 @@ states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 23
 
 ## Coverage
 
-Coverage (15767 functions): named 15767.
+Coverage (15759 functions): named 15759.

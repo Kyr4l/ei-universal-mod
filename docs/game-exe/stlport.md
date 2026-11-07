@@ -1,12 +1,14 @@
 # STLport in game.exe (MSVC 6.0, STLport 4.x; RTTI names `.?AV...@stlport@@`) — layouts to recognise in phase 1
 
-game.exe links STLport statically (no MFC: the 15 'afx/mfc' string hits are STLport/CRT noise). Every container
+game.exe links STLport statically, and MFC 6 too (0x6E0000..0x70E000: CString, CArchive, CMemFile, CDC / CGdiObject wrappers,
+CWnd, CWinThread / AfxBeginThread, AfxMessageBox, the thread / module state code). No CWinApp is ever constructed (CWinApp::CWinApp
+0x70D654 has no caller) and no CArchive either (CArchive::CArchive 0x7086C0 is unused) [V, T7 lib05]. Every container
 below appears inline in classes, so its layout IS the class layout at that offset. Sizes are for x86-32.
 
 | STLport 4.x type | size | layout (offsets from the member) |
 |---|---|---|
 | `string` (basic_string<char>) | 12 | +0 `_M_start` (char*), +4 `_M_finish` (char*, points at the NUL), +8 `_M_end_of_storage` (char*). No short-string buffer in 4.x by default. Empty string: start==finish, 1 byte allocated. |
-| `vector<T>` | 12 | +0 `_M_start`, +4 `_M_finish`, +8 `_M_end_of_storage`. size = (finish-start)/sizeof(T). Growth: max(2*cap, n). |
+| `vector<T>` | 12 | +0 `_M_start`, +4 `_M_finish`, +8 `_M_end_of_storage`. size = (finish-start)/sizeof(T). Growth (`_M_insert_overflow`, e.g. 0x408060): new capacity = size + max(size, n) [V]. |
 | `list<T>` | 4 | +0 `_M_node` -> sentinel node. Node: +0 next, +4 prev, +8 data. Empty: node->next == node. |
 | `slist<T>` | 4 | +0 head node ptr (`_M_head._M_next`). |
 | `deque<T>` | 32 | +0 map (T**), +4 map_size, +8 start iterator {cur, first, last, node} (16), +24 finish iterator (16). (Total 40 with the iterators: check per use.) |
@@ -16,7 +18,11 @@ below appears inline in classes, so its layout IS the class layout at that offse
 | `allocator<T>` | 0/1 | empty; the node allocator is a static class (below). |
 
 **The node allocator (`__node_alloc`, used by every container for blocks <= 128 bytes):**
-- `_S_chunk_alloc(size, &nobjs)` = **0x406B70** (406 callers because `_S_refill` is inlined into every `allocate` instantiation).
+- `_S_chunk_alloc(size, &nobjs)` = **0x406B70** (408 raw callers: `_S_refill` is inlined into most `allocate` instantiations; the out-of-line `_S_refill` is
+  `PoolAlloc_Refill` 0x4060E0, the out-of-line `allocate` is `PoolAlloc` 0x405950) [V].
+- Fixed node pools seen inline: free list 0x79B228 = 16-byte nodes (hashtable / list<dword> nodes), 0x79B22C = 24-byte nodes (the
+  archive section list); `__stl_prime_list` 0x73B914 (28 primes, 0xFFFFFFFB past the end), used by `_M_next_size` 0x40AE00 and every
+  `resize` / `_M_initialize_buckets` [V].
 - Globals: `_S_free_list[16]` at **0x79B224** (lists for 8, 16, ..., 128 bytes), `_S_start_free` **0x79B268**, `_S_end_free` **0x79B26C**,
   `_S_heap_size` **0x79B264**. Blocks > 128 bytes go straight to `malloc` = **0x7005AF** (1966 callers) / `free` = **0x7005D8**.
 - Pattern of an inlined `allocate(n)`: `if (n > 128) malloc(n) else { list = &free_list[(n-1)>>3]; p = *list; if (p) *list = *p; else p = refill(n) }`.

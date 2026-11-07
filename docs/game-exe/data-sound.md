@@ -60,10 +60,12 @@ offsets are bytes, "tag" = the one-byte tag of the database archive, "chunk" = t
 
 ## 2. The tagged database archive (`DbArchive` 0x98, `_cpr` name; "Archive_*" functions at 0x409000)
 
-`DbArchive::ctor` 0x53A7B0 (was Archive_ctor) builds two CMemStream-like objects (+0 read, +0x28 write), the open-section stack `+0x50`
-(CList of 0x24 nodes `{+8 tag, +0xc offset, +0x10 size, +0x14 occurrence}`), `+0x54` version, `+0x58` loading flag. `Archive_Open`
-0x409AE0 (archive, CMemStream, loading = 1, version = 1) binds the stream; the loaders then call one `XVector_Serialize(archive, blockTag,
-vector)` per block and `Archive_Close` 0x40A000 [V].
+`DbArchive::ctor` 0x53A7B0 (was Archive_ctor) builds two CMemStream-like objects: `+0` the object table stream (class id, object id pairs: file chunk tag 0) and `+0x28`
+the tagged data stream used for both reading and writing (its buffer `+0x40` is the base of every entry). Then the open-section stack
+`+0x50` (STLport list sentinel, 0x18-byte nodes `{next, prev, +8 tag, +0xc offset, +0x10 size, +0x14 occurrence}`; the back node is
+the current section), `+0x54` version, `+0x58` loading flag, `+0x5C` the object id -> object hash of the object references, `+0x70` the
+queue of objects to write [V, T7 lib01]. `Archive_Open` 0x409AE0 (archive, CMemStream, loading = 1, version = 1) binds the stream; the
+loaders then call one `XVector_Serialize(archive, blockTag, vector)` per block and `Archive_Close` 0x40A000 [V].
 
 | primitive | behaviour [V] |
 |---|---|
@@ -74,7 +76,8 @@ vector)` per block and `Archive_Close` 0x40A000 [V].
 | `Archive_SerializeBytes` 0x4092B0 | loading: copies `size` bytes of the n-th child with that tag, **zero-fills when absent**; storing: writes them |
 | `Archive_SerializeCString` 0x4093A0 | the same for a CString (`len + 1` bytes written, i.e. with the terminator; "" when absent) |
 | `DbStream_SerializeCStringVector` 0x52DF40 | section `tag` with every string as a tag-1 child (`Archive_CountTag(1)` items on load) |
-| `Archive_Close` 0x40A000 | storing: flushes the deferred object list `+0x70`, then `SerializeBytes(2, &version, 4)`, then writes the whole tree as a tag-0 entry followed by the tag-2 entry -> the shipped `00 00 02 0C 02 08 01 00 00 00` trailer |
+| `Archive_Open` 0x409AE0 | loading: file chunk tag 0 -> the object stream, chunk tag 2 -> the data stream; every (class id, id) pair creates an object with the factory `g_0x79B284[class id]` (hash `+0x5C[id]`), the tag-1 sections of chunk 2 are their bodies; version from tag 2 when the argument is 1; then the main chunk tag 1 is loaded (`Archive_SkipToTag`) [T7 lib01] |
+| `Archive_Close` 0x40A000 | storing: writes the data stream as file chunk tag 1 (the main tree), then serializes every object queued in `+0x70` (class id from `g_0x79B270[vtable]` + object address into the object stream; a tag-1 section {tag 0 id, tag 1 object Serialize} into the cleared data stream), `SerializeBytes(2, &version, 4)`, then chunk tag 0 = object table and chunk tag 2 = object data + version -> for databases without objects the shipped `00 00 02 0C 02 08 01 00 00 00` trailer [T7 lib01] |
 
 Consequences for an editor: field order inside a record is free (the game searches by tag), fields may be omitted (zero), a wide
 length without the `|1` flag is **misread** by the game (it would take one length byte), and the trailer is `[0][2:{2:int 1}]`.
@@ -583,6 +586,11 @@ playlist until the track ends; `Stop` 0x6B4F70 [V].
 | `functions.tsv` `ParticleStep_200FRainStreams` 0x48F300 | "rain streams" step | the blood spurt step (alpha fade from `g_0x78A6B4`, drag, gravity = size x 0.05); renamed `ParticleStep_200FBloodSpurt` |
 | `functions.tsv` `ParticleEmit_Link` 0x48E070 | the link emitter | the protection / antimagic shell emitter (types 0x2015..0x2017, 0x201A); the link 0x2014 uses LAB_48D8D0; its trace string was copy-pasted |
 | this page (case folding) | "upper-cased" for the names folded by 0x700EFE | lower-cased: 0x700EFE (misnamed `CString::MakeUpper` until 2026-11-06) calls `_mbslwr` (LCMAP_LOWERCASE); the real MakeUpper 0x700EEC has no caller |
+| this page section 2 (T7 lib01) | `+0x50` is a CList of 0x24 nodes | STLport list, 0x18-byte nodes, the back node is the current section |
+| this page section 2 (T7 lib01) | `+0` read stream / `+0x28` write stream | `+0` object table, `+0x28` tagged data (both directions) |
+| this page section 2 / structs (T7 lib01) | `+0x5C` "tag name hash, unused" | the object id -> object hash of the object references |
+| this page `Archive_Close` (T7 lib01) | flushes `+0x70`, then writes the tree as tag 0 + tag 2 | main tree = chunk tag 1, then object table = chunk tag 0 and object data + version = chunk tag 2 |
+| `modules.md` 0x409640 (T7 lib01) | `Archive_SerializeStream` takes the stream size from `+0x54` | from its tag-1 child (tag 1 = length, tag 2 = bytes) |
 
 ## 11. Function index (address, name, one line)
 
