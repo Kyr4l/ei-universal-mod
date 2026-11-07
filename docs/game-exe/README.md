@@ -409,7 +409,9 @@ states: "lea ecx, [ebp-0x3c]; jmp CString::~CString") and 382 catch handlers, 18
 `not-functions.tsv` (addr, size, old name, what it is, batch) lists the blocks that earlier passes registered as functions but that the
 T7 reading round (2026-11-07) showed are not function starts: switch jump / index tables, alignment padding, addresses inside another
 instruction, and unreachable bytes after a no-return call. They were moved out of `functions.tsv` so every byte stays accounted for.
-The last pass (`gap-final` rows) added the tables and data that sat between functions.
+The last pass (`gap-final` rows) added the tables and data that sat between functions. No entry overlaps a function row: when a
+later size fix made a function cover an entry, the entry was dropped, and an entry that ran into the next function was cut to the
+bytes outside functions (its note says "trimmed").
 
 ## Coverage
 
