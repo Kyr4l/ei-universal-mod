@@ -47,6 +47,10 @@
 #include "../viewer/ui_objects.hpp"
 #include "navmesh_gen.hpp"
 #include "quest_file.hpp"
+#include "allods.hpp"
+#include "allod_range.hpp"
+#include "rating.hpp"
+#include "rating_store.hpp"
 #include "text_codec.hpp"
 #include "script_highlight.hpp"
 #include "script_ast.hpp"
@@ -135,7 +139,7 @@ struct EditStep {
     std::string label;                   // what it was, for the undo history
 };
 
-enum class SideTab { Files, Objects, Checks, Script, Quest, Diplomacy, Ids, Terrain, Count };
+enum class SideTab { Files, Objects, Checks, Script, Quest, Diplomacy, Ids, Terrain, Rating, Count };
 
 // The Objects tab's tree (like ei_maper's): kind > group (prototype or template) > objects.
 struct ObjectGroup { std::string label; std::vector<int> objects; };
@@ -143,6 +147,57 @@ struct ObjectCategory { mob::Kind kind; std::vector<ObjectGroup> groups; int cou
 
 // The Script tab's node view of one map: where it is panned and zoomed (ScriptNodes).
 namespace nodegraph { struct View { ImVec2 pan{0, 0}; float zoom = 1.0f; bool placed = false; }; }
+
+// The difficulty rating (rating.hpp): the database's units, the allods, the stored ratings, and the background work that
+// loads the database and rates quests. Drawn by map_rating.cpp (the Files tab's list, the Rating tab, the Allod Range window).
+struct RatingUi {
+    ~RatingUi() {
+        runCancel = true;
+        if (runThread.joinable()) runThread.join();
+        if (dbThread.joinable()) dbThread.join();
+    }
+    ratingstore::Store store;
+    bool storeLoaded = false;
+    // the database's Monsters sheet, loaded once (and again when the database file changes)
+    rating::Monsters monsters;
+    bool monstersReady = false;
+    std::string monstersStamp, monstersError;
+    std::thread dbThread;
+    std::atomic<bool> dbDone{true};
+    bool dbLoading = false;
+    rating::Monsters dbMonsters;
+    std::string dbStamp, dbError;
+    // the allods (config.ini [MPZone]) and their ranges
+    allods::Table allods;
+    bool allodsTried = false;
+    std::vector<allodrange::Range> ranges; // per allod, in the table's order
+    // each quest's state: 0 not rated, 1 rated, 2 changed since it was rated (checked every few seconds)
+    std::map<std::string, int> status;
+    std::map<std::string, std::string> stamps;
+    double statusAt = -100;
+    bool rangesDirty = true;
+    // a rating run: the quests are rated on a thread, one after the other
+    struct Done { std::string key; ratingstore::Entry entry; };
+    std::thread runThread;
+    std::atomic<int> runDone{0};
+    std::atomic<bool> runCancel{false}, runFinished{true};
+    int runTotal = 0;
+    bool running = false;
+    std::mutex runMutex;
+    std::vector<Done> runResults;
+    std::string runCurrent, runNote;
+    std::vector<std::string> pending; // quests to rate as soon as the database is loaded
+    // the screens
+    int filter = 0;                // 0 all, 1 not rated, 2 changed, 3 out of range
+    int allodFilter = -1;          // -1 all, -2 no allod, else the allod's index
+    int selectedAllod = -1;
+    bool allodWindow = false;
+    std::string message;
+    // the rating of the maps open in the editor
+    rating::Result live;
+    bool liveValid = false;
+    std::string liveKey;
+};
 
 struct App {
     explicit App(Library& shared) : lib(shared) {}
@@ -238,6 +293,8 @@ struct App {
     char terrainInput[1024] = "";
     char mobInput[1024] = "";
     std::string filesMessage;
+
+    RatingUi rating;
 
     // Checks
     checks::DatabaseNames database;
@@ -497,6 +554,16 @@ void OpenPaths(App& app, const std::vector<std::string>& paths);
 void RefreshScriptModel(App& app);
 void RunChecks(App& app);
 ImVec4 SeverityColor(char s);
+
+// map_rating.cpp: the difficulty rating
+void PollRating(App& app);                        // every frame: finished work, the quests' state
+void RatingTab(App& app);                         // the Rating side tab: the open maps' rating
+void AllodRangeWindow(App& app);                  // the window that edits an allod's range
+void RatingQuestFilters(App& app);                // the Files tab: filters, rate buttons, state line
+bool RatingShows(App& app, const quest::QuestSet& set);          // the filters let this quest through
+void RatingColumns(App& app, const quest::QuestSet& set);        // the list's Allod / Score / Range cells
+void RatingAllodList(App& app);                   // the Files tab: the allods and their ranges
+void RatingOpenQuestLine(App& app);               // the open quest's rating, one line with its range bar
 
 // map_sidebar.cpp
 void SelectObject(App& app, int file, int object, bool focus);

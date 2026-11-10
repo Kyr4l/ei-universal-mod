@@ -1132,6 +1132,7 @@ void Sidebar(App& app, float width, float height) {
         tab(SideTab::Diplomacy, "Diplomacy", DiplomacyTab);
         tab(SideTab::Ids, "IDs", IdsTab);
         tab(SideTab::Terrain, TerrainUnsaved(app) ? "Terrain*###terrain" : "Terrain###terrain", TerrainTab);
+        tab(SideTab::Rating, "Rating", RatingTab);
         ImGui::EndTabBar();
     }
     ImGui::EndChild();

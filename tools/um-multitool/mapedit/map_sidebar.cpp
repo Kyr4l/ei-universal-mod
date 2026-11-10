@@ -84,15 +84,21 @@ static void QuestList(App& app) {
     ImGui::InputTextWithHint("##questfilter", "filter, e.g. z8q", app.questFilter, sizeof(app.questFilter));
     ImGui::SameLine();
     if (ImGui::Button("Rescan##quests")) app.questsFor.clear();
+    RatingQuestFilters(app);
     const std::string filter = Lower(app.questFilter);
-    if (ImGui::BeginTable("##quests", 3, ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV, ImVec2(0, 150))) {
+    if (ImGui::BeginTable("##quests", 5, ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV, ImVec2(0, 190))) {
         ImGui::TableSetupColumn("Quest", ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn("Zone", ImGuiTableColumnFlags_WidthFixed, 110);
-        ImGui::TableSetupColumn("Region", ImGuiTableColumnFlags_WidthFixed, 110);
+        ImGui::TableSetupColumn("Zone", ImGuiTableColumnFlags_WidthFixed, 82);
+        ImGui::TableSetupColumn("Allod", ImGuiTableColumnFlags_WidthFixed, 78);
+        ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthFixed, 52);
+        ImGui::TableSetupColumn("Range", ImGuiTableColumnFlags_WidthFixed, 50);
+        ImGui::TableSetupScrollFreeze(0, 1);
+        ImGui::TableHeadersRow();
         for (size_t i = 0; i < app.quests.size(); ++i) {
             const quest::QuestSet& set = app.quests[i];
             const quest::Quest& q = set.shown;
             if (!filter.empty() && Lower(q.name + " " + q.terrain + " " + q.region).find(filter) == std::string::npos) continue;
+            if (!RatingShows(app, set)) continue;
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             ImGui::PushID(static_cast<int>(i));
@@ -111,11 +117,11 @@ static void QuestList(App& app) {
             ImGui::PopID();
             ImGui::TableNextColumn();
             ImGui::TextDisabled("%s", q.terrain.c_str());
-            ImGui::TableNextColumn();
-            ImGui::TextDisabled("%s%s", q.region.c_str(), q.sky == "cave" ? " (cave)" : "");
+            RatingColumns(app, set);
         }
         ImGui::EndTable();
     }
+    RatingAllodList(app);
 }
 
 // The area as numbers; when the user starts changing them, `before` goes on the undo stack.
@@ -139,6 +145,7 @@ static void QuestPanel(App& app) {
     ImGui::SeparatorText(("Quest " + q.name + (app.questDirty ? " (changed)" : "")).c_str());
     ImGui::TextDisabled("%s%s, terrain %s, base map %s, lighting %s", q.region.c_str(), q.sky == "cave" ? " cave" : "", q.terrain.c_str(),
                         q.baseMap.c_str(), q.LightingFile().c_str());
+    RatingOpenQuestLine(app);
     if (set.languagePack) {
         std::string langs;
         for (const std::string& l : set.labels) langs += (langs.empty() ? "" : ", ") + l;

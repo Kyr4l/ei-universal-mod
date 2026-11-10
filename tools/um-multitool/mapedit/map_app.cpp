@@ -227,6 +227,7 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err) {
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);
+    PollRating(app);
     if (app.checksDirty || app.checkedVersion != app.lib.version || app.checkedScripts != app.lib.scriptChecks ||
         app.checkedDatabase != app.lib.databaseChecks || app.checkedAtd != app.lib.atdScripts)
         RunChecks(app);
@@ -274,6 +275,7 @@ void DrawTab(Context* ctx) {
     NewTerrainDialog(app);
     CropDialog(app);
     FindWindow(app);
+    AllodRangeWindow(app);
     OffsetWindow(app);
     RandomizeWindow(app);
     SaveAsWindow(app);
