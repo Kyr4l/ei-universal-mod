@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // Dressing a map unit the way the game does: its prototype's monster record (units.udb) gives the race's
-// figure and skin, the hair, and the default equipment; the unit's own armor and weapon lists in the map
-// replace that equipment when it has any. Each item ("blueprint.material", items.idb) picks a numbered
+// figure and skin, the hair, and the equipment. The game gives a map unit its prototype's equipment
+// (Unit_GiveProtoEquipment, docs/game-exe/world-server.md); the armor and weapon lists stored in the map unit
+// (UNIT_ARMORS / UNIT_WEAPONS) are not used for dressing: a map can keep the lists of an older unit under a newer
+// prototype's name (z0jq1's "LMP Human Hadagan Archer 20" stores a tiger-hide brigand with an axe) and the game still
+// shows the prototype's Hadagan armor and crossbow. Each item ("blueprint.material", items.idb) picks a numbered
 // mesh variant of the figure (its TTI) and a redress texture
 // "<race mask><type code>_<TTI>.<material code>.<TTI2>" (redress.res).
 //
@@ -198,14 +201,9 @@ inline Dress Resolve(const Library& lib, const mob::Object& o) {
         d.selected["hr"] = std::string("hr.") + num;
     }
     d.summary = "dressed as " + m->name + (race ? " (" + race->name + ")" : "") + ", skin " + d.skin;
-    // The map's own lists win over the monster's defaults.
-    std::vector<std::string> weapons, armors;
-    for (const mob::ItemList& l : o.lists) {
-        if (l.type == mob::kUnitWeapons) for (const std::string& e : l.entries) weapons.push_back(mob::Utf8(e));
-        if (l.type == mob::kUnitArmors) for (const std::string& e : l.entries) armors.push_back(mob::Utf8(e));
-    }
-    if (weapons.empty()) for (const std::string& w : {m->weapon1, m->weapon2}) if (!w.empty()) weapons.push_back(w);
-    if (armors.empty()) armors = m->wears;
+    // The prototype's equipment (the map's own lists are not used, see the top of this file).
+    std::vector<std::string> weapons, armors = m->wears;
+    for (const std::string& w : {m->weapon1, m->weapon2}) if (!w.empty()) weapons.push_back(w);
     auto split = [](const std::string& full, std::string& blueprint, std::string& material) {
         const size_t dot = full.find_last_of('.');
         if (dot == std::string::npos) return false;

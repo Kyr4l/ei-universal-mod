@@ -89,7 +89,7 @@ int main() {
     CHECK(rating::Rate(in, db, params).units == 1);
     f.hasDiplomacy = false;
 
-    // a zone's base map holds the whole population: a quest meets only the units it names or that are near its walk
+    // a zone's base map counts like the quest's own, and the quest's script gives the walk
     mob::File base, quest;
     base.loaded = quest.loaded = true;
     base.objects = {Unit("Goblin", 10, 10, 11), Unit("Goblin", 200, 200, 12), Unit("Goblin", 250, 20, 13)};
@@ -102,8 +102,8 @@ int main() {
     q.remove = {true, 0, 0, 4, 4};
     r = rating::Rate(q, db, params);
     CHECK(r.objectives == 1);
-    CHECK(r.units == 2); // unit 12 (named) and unit 11 (beside the walk), not 13 (far from it)
-    q.baseCount = 0;     // rated alone: every unit counts
+    CHECK(r.units == 3); // the zone's base map counts like the quest's own
+    q.baseCount = 0;     // rated alone: every unit counts too
     CHECK(rating::Rate(q, db, params).units == 3);
 
     // scripted spawns raise the ambush factor

@@ -88,8 +88,8 @@ struct Pull {
 
 struct Input {
     std::vector<const mob::File*> files; // in load order: a zone's base map, then the quest's own map
-    // The first `baseCount` files are a zone's base maps: they hold the whole zone's population, of which a quest meets only the
-    // units its script names (QObjKill*, AddObject groups) and those near its walk. 0: every unit counts (a map rated alone).
+    // The first `baseCount` files are a zone's base maps: their units count like the quest's own, but their scripts are not read for
+    // the quest's goals (the walk, groups, spawns come from the quest's own maps). 0: all files are the quest's own (a map rated alone).
     size_t baseCount = 0;
     quest::Rect deploy, remove;          // the first exit's areas (not set: the route has no such end)
 };

@@ -382,11 +382,8 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     for (const Pt& q : route) r.route.push_back({q.x, q.y});
     r.routeLength = len;
 
-    // -- which units the quest meets: its own map's, the ones the script names, the ones near the walk
-    for (Enemy& e : enemies) {
-        e.relevant = e.file >= in.baseCount || (e.id >= 0 && referenced.count(e.id));
-        for (size_t i = 0; i < samples.size() && !e.relevant; ++i) e.relevant = Notices(e, samples[i], 10.0f);
-    }
+    // -- which units count: every enemy of the quest's own map and of the zone's base map (the quest runs on top of its zone)
+    for (Enemy& e : enemies) e.relevant = true;
 
     // -- pulls: units closer than the larger of their call-for-help radii; a pull counts when it holds a unit the quest meets
     std::vector<int> parent(enemies.size());
