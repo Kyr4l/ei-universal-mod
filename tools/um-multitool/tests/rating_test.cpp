@@ -106,6 +106,21 @@ int main() {
     q.baseCount = 0;     // rated alone: every unit counts too
     CHECK(rating::Rate(q, db, params).units == 3);
 
+    // a quest written with conditions and quest steps (no QObj* calls): the lever in the first block's condition and the boss named in the
+    // second's are the goals, in step order
+    base.objects.push_back(Unit("Goblin", 150, 150, 14));
+    mob::Object lever1; lever1.kind = mob::Kind::Lever; lever1.id = 21; lever1.hasId = true; lever1.position = {100, 100, 0};
+    mob::Object lever2 = lever1; lever2.id = 22; lever2.position = {30, 40, 0};
+    quest.objects = {lever1, lever2};
+    quest.script = "Script B ( if ( IsEqual( GetLeverState( GetObject( 22 ) ), 1 ) ) then ( KillScript() GSSetVarMax( 0, \"q.q.q.2\", 2 ) ) )\n"
+                   "Script A ( if ( IsEqual( GetLeverState( GetObject( 21 ) ), 1 ) ) then ( KillScript() GSSetVarMax( 0, \"q.q.q.1\", 2 ) ) )\n";
+    q.baseCount = 1;
+    r = rating::Rate(q, db, params);
+    CHECK(r.objectives == 2);                               // two quest steps
+    CHECK(r.route.size() == 4);                             // deploy, lever 1, lever 2, exit
+    CHECK(std::abs(r.route[1][0] - 100) < 0.01f && std::abs(r.route[2][0] - 30) < 0.01f); // step 1 first
+    CHECK(r.routeLength > 100);
+
     // scripted spawns raise the ambush factor
     quest.script = "WorldScript ( AddUnitToServer( \"a1\", \"Goblin\", \"\", 5, 5, 0 ) AddUnitToServer( \"a2\", \"Boss\", \"\", 5, 5, 0 ) )";
     q.baseCount = 1;

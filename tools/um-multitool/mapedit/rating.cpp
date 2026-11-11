@@ -31,6 +31,7 @@ double ClampD(double v, double lo, double hi) { return std::max(lo, std::min(hi,
 // ---- the mission script: the few calls the rating reads --------------------------------------------------------
 
 struct Call {
+    size_t at = 0;                  // where it starts in the script text
     std::string name;               // lower-case
     std::vector<std::string> args;  // quotes removed, trimmed
 };
@@ -58,6 +59,7 @@ std::vector<Call> Calls(const std::string& s, const std::set<std::string>& names
         if (!names.count(ident) || j >= s.size() || s[j] != '(') continue;
         Call call;
         call.name = ident;
+        call.at = start;
         int depth = 0;
         bool quote = false;
         std::string cur;
@@ -289,6 +291,7 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     // -- the script: areas (any map's), then what the quest's own script says: objectives, groups, spawns, the objects it binds
     const std::vector<Call> areaCalls = Calls(script, {"addroundtoarea", "addrecttoarea"});
     const std::vector<Call> calls = Calls(ownScript, {"qobjarea", "qobjkillunit", "qobjseeunit", "qobjseeobject", "qobjuse", "qobjkillgroup", "addobject", "addunittoserver"});
+    const std::vector<Call> stepCalls = Calls(ownScript, {"gssetvarmax", "gssetvar"});
     std::map<std::string, long> vars; // "Borka = GetObjectByID( "1000263" )": the objects the quest's script works with (levers, NPCs, bosses)
     {
         size_t pos = 0;
@@ -352,6 +355,49 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
             ++r.objectives;
         }
     }
+    // Quests written without QObj* calls (the older style, and most hand-made quests): a "Script" block waits for something and then
+    // sets the quest step "q.<quest>.<quest>.N" (GSSetVarMax / GSSetVar). What the block waits for (the GetObject ids in its condition:
+    // levers, units, bosses) is where the step happens; the steps give the order and the number of objectives.
+    std::set<int> steps;
+    {
+        const std::string lo = Low(ownScript);
+        std::vector<size_t> blocks; // where each Script / WorldScript starts
+        for (size_t at = 0; at < lo.size(); ++at) {
+            if (at != 0 && lo[at - 1] != '\n') continue;
+            if (lo.compare(at, 7, "script ") == 0 || lo.compare(at, 7, "script\n") == 0 || lo.compare(at, 11, "worldscript") == 0) blocks.push_back(at);
+        }
+        auto blockOf = [&](size_t pos) { int b = -1; for (size_t i = 0; i < blocks.size() && blocks[i] <= pos; ++i) b = static_cast<int>(i); return b; };
+        std::map<int, int> blockStep; // block -> the lowest quest step it sets
+        for (const Call& c : stepCalls) {
+            if (c.args.size() < 2 || c.args[1].compare(0, 2, "q.") != 0) continue;
+            const size_t dot = c.args[1].find_last_of('.');
+            if (dot == std::string::npos || dot + 1 >= c.args[1].size()) continue;
+            const int n = std::atoi(c.args[1].c_str() + dot + 1);
+            if (n <= 0) continue;
+            steps.insert(n);
+            const int b = blockOf(c.at);
+            if (b >= 0 && (!blockStep.count(b) || n < blockStep[b])) blockStep[b] = n;
+        }
+        std::map<int, std::vector<long>> byStep; // step -> the objects its block's condition names (1000: a block that sets no step)
+        for (size_t at = lo.find("getobject"); at != std::string::npos; at = lo.find("getobject", at + 1)) {
+            const int b = blockOf(at);
+            if (b < 0) continue; // the WorldScript binds objects to variables: handled below
+            const size_t thenAt = lo.find("then", blocks[static_cast<size_t>(b)]);
+            if (thenAt != std::string::npos && at > thenAt) continue; // after "then": what the block does, not what it waits for
+            const long id = ObjectId(ownScript.substr(at, 48));
+            if (id >= 0) byStep[blockStep.count(b) ? blockStep[b] : 1000].push_back(id);
+        }
+        for (const auto& st : byStep)
+            for (const long id : st.second) {
+                if (!looseIds.insert(id).second) continue;
+                referenced.insert(id);
+                auto it = byId.find(id);
+                if (it == byId.end()) continue;
+                bool near = false;
+                for (const Pt& w : route) near = near || std::hypot(w.x - it->second.x, w.y - it->second.y) < 12.0f;
+                if (!near) route.push_back(it->second); // in step order, before the unordered rest
+            }
+    }
     for (const auto& kv : vars) target(kv.second);
     for (const auto& g : groups) for (const long gid : g.second) target(gid);
     {
@@ -369,7 +415,7 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
             ++visited;
             todo.erase(todo.begin() + static_cast<long>(best));
         }
-        if (r.objectives == 0) r.objectives = visited; // an older quest: its goals are the objects its script works with
+        if (r.objectives == 0) r.objectives = steps.empty() ? visited : static_cast<int>(steps.size()); // an older quest: its steps, else the objects its script works with
     }
     if (in.remove.set) route.push_back({(in.remove.x1 + in.remove.x2) / 2, (in.remove.y1 + in.remove.y2) / 2});
     std::vector<Pt> samples;
