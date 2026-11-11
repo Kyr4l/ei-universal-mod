@@ -553,7 +553,7 @@ static const CompletionEntry kCompletions[] = {
     {"mpstats",  "--db --write --quiet -q -h --help"},
     {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --weapon-export-ref --weapon-import --weapon-project --edit --kind --number --out --races --reference --group --flip --roll --grip --keep-depth --no-ground --uv --uv-width --normals --no-fit --scale --shift --level --up-down --height-from-anchors --keep-prod-height --replace --pack-res --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
-    {"map",      "--check --navmesh --mpr --write --force --config --help --verbose --rate --allods --database --detail --units"},
+    {"map",      "--check --navmesh --mpr --write --force --config --help --verbose --rate --allods --database --detail --units --map-stats"},
     {"dll",      "--port --listen --stats --help --verbose"},
     {"gui",      "--db --compare --viewer --map --mp --ini --skin --naked --weapon --complection --zoom --look --config --clip --frame --yaw --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},

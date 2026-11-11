@@ -90,7 +90,7 @@ QuestFiles FilesOf(const Resolver& r, const quest::Quest& q) {
 std::string DbSig(const App& app) { return FileSig(app.lib.dbPath); }
 
 std::string StampOf(const App& app, const quest::Quest& q, const QuestFiles& f) {
-    return "v" + std::to_string(rating::kFormulaVersion) + "|db:" + DbSig(app) + "|q:" + FileSig(MapTxtPath(q)) + "|b:" + FileSig(f.base) + "|o:" + FileSig(f.own);
+    return "v" + std::to_string(rating::kFormulaVersion) + (app.rating.store.storedStats ? "s" : "d") + "|db:" + DbSig(app) + "|q:" + FileSig(MapTxtPath(q)) + "|b:" + FileSig(f.base) + "|o:" + FileSig(f.own);
 }
 
 void EnsureStore(App& app) {
@@ -148,9 +148,10 @@ struct Item {
     std::string stamp, allod;
 };
 
-void RunWorker(RatingUi* ui, std::vector<Item> items, rating::Monsters monsters) {
+void RunWorker(RatingUi* ui, std::vector<Item> items, rating::Monsters monsters, bool storedStats) {
     std::sort(items.begin(), items.end(), [](const Item& a, const Item& b) { return a.mobs < b.mobs; }); // a zone's quests together: its base map is read once
     rating::Params params;
+    params.storedStats = storedStats;
     std::unique_ptr<mob::File> base;
     std::string basePath;
     for (const Item& it : items) {
@@ -228,7 +229,7 @@ void StartRun(App& app, const std::vector<const quest::QuestSet*>& sets) {
     r.runDone = 0;
     r.runTotal = static_cast<int>(items.size());
     r.runCurrent.clear();
-    r.runThread = std::thread(RunWorker, &r, std::move(items), r.monsters);
+    r.runThread = std::thread(RunWorker, &r, std::move(items), r.monsters, r.store.storedStats);
 }
 
 const quest::QuestSet* FindSet(App& app, const std::string& key) {
@@ -599,7 +600,9 @@ void UpdateLive(App& app) {
         in.files.push_back(&m->file);
     }
     if (app.openQuest && in.baseCount == 0 && !in.files.empty() && ownName != Lower(in.files[0]->fileName)) in.baseCount = in.files.size(); // no own map: all base
-    r.live = rating::Rate(in, r.monsters);
+    rating::Params params;
+    params.storedStats = r.store.storedStats;
+    r.live = rating::Rate(in, r.monsters, params);
     r.liveValid = true;
 }
 
@@ -651,8 +654,19 @@ void RatingTab(App& app) {
         ImGui::ProgressBar(static_cast<float>(res.pts[static_cast<size_t>(f)] / rating::kMaxPoints[static_cast<size_t>(f)]), ImVec2(-1, 0),
                            (Thousands(res.pts[static_cast<size_t>(f)]) + " / " + Thousands(rating::kMaxPoints[static_cast<size_t>(f)])).c_str());
     }
+    {
+        std::string maps;
+        for (const auto& f : res.files) maps += (maps.empty() ? "" : ", ") + f.first + " (" + std::to_string(f.second) + ")";
+        ImGui::TextDisabled("Maps read, enemies met in each: %s", maps.c_str());
+    }
     ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d scripted spawn site%s, %d objective%s.", res.units, res.pulls.size(), res.fights,
                         res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.spawnSites, res.spawnSites == 1 ? "" : "s", res.objectives, res.objectives == 1 ? "" : "s");
+    {
+        bool stored = r.store.storedStats;
+        if (ImGui::Checkbox("Use the stats stored in the map", &stored)) { r.store.storedStats = stored; SaveStore(app); r.liveValid = false; r.statusAt = -100; }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off (default): every unit is rated with its prototype's row of the database, which is what you balance.\nOn: a unit with \"Stats imported\" off carries its own stats in the map (Objects tab > Stats), which may be older than the database.\nChanging this resets the stored ratings (they are calculated again).");
+    }
+    if (res.storedStats) ImGui::TextDisabled("%d unit%s counted with the stats stored in the map (Stats imported is off), not the database row.", res.storedStats, res.storedStats == 1 ? "" : "s");
     if (res.unknown) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%d unit%s without a Monsters row in the database (not counted).", res.unknown, res.unknown == 1 ? "" : "s");
     if (res.objectives == 0 && app.openQuest) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "No objectives found in the script (QObj* calls): the walk is only deploy to exit.");
     ImGui::TextDisabled("0 is an empty map; 10,000 is %.0f of this database's strongest unit (%s) in one aggro group. Only enemies and the script count, never potions or gear.",

@@ -569,9 +569,10 @@ void PrintCliHelp() {
         "        Every map of the folder that has a navmesh, with the terrain of its name (zone3xobr-lmp.mob ->\n"
         "        zone3xobr.mpr, beside it or in the Settings' map folders): says which are out of date; --write-all rebuilds those. Quest maps are skipped (their\n"
         "        objects are not counted: rebuild a zone with its quests by --navmesh when they add obstacles).\n"
-        "  um-multitool map --rate [<quest folder or .mq> ...] [--database <file>] [--allods <config.ini>] [--detail] [--units] [--config <file>]\n"
+        "  um-multitool map --rate [<quest folder or .mq> ...] [--database <file>] [--allods <config.ini>] [--detail] [--units] [--map-stats] [--config <file>]\n"
         "        Difficulty rating (0 - 10000) of the quests of the Settings' quest folders (or the ones named), with the allod\n"
-        "        of each (config.ini [MPZone]). --detail lists each quest's pulls, --units the database's strongest units.\n"
+        "        of each (config.ini [MPZone]). --detail lists each quest's pulls, --units the database's strongest units, --map-stats rates units with\n"
+        "        the stats stored in the map (Stats imported off) instead of their database rows.\n"
         "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <object id>]\n"
         "        Open the GUI's Map Editor on these files.\n");
 }

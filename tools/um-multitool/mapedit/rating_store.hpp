@@ -8,6 +8,7 @@
 // File (UserDir()/um-multitool-ratings.tsv), one record per line, fields separated by tabs:
 //   R  quest  score  p0 p1 p2 p3 p4  units  fights  spawns  objectives  route  exposure  allod  stamp  rated
 //   L  allod  min  max                       a locked allod range
+//   O  storedstats  0|1                      the option "use the stats stored in the map" (default 0: the database's rows)
 #pragma once
 
 #include <array>
@@ -39,10 +40,12 @@ inline std::string Key(std::string s) {
 struct Store {
     std::map<std::string, Entry> entries; // by Key(quest name)
     std::map<std::string, Lock> locks;    // by Key(allod name)
+    bool storedStats = false;             // O storedstats: units with "Stats imported" off are rated with the stats stored in the map (default: database rows)
 
     bool Load(const std::string& path) {
         entries.clear();
         locks.clear();
+        storedStats = false;
         std::ifstream in(path);
         if (!in) return false;
         std::string line;
@@ -52,6 +55,7 @@ struct Store {
             std::stringstream ss(line);
             std::string part;
             while (std::getline(ss, part, '\t')) f.push_back(part);
+            if (f.size() >= 3 && f[0] == "O" && f[1] == "storedstats") { storedStats = f[2] == "1"; continue; }
             if (f.size() >= 4 && f[0] == "L") { locks[Key(f[1])] = {std::atof(f[2].c_str()), std::atof(f[3].c_str())}; continue; }
             if (f.size() < 17 || f[0] != "R") continue;
             Entry e;
@@ -79,6 +83,7 @@ struct Store {
             std::snprintf(b, sizeof b, "\t%.1f\t%.4f", e.route, e.exposure); out << b;
             out << '\t' << e.allod << '\t' << e.stamp << '\t' << e.rated << '\n';
         }
+        out << "O\tstoredstats\t" << (storedStats ? 1 : 0) << '\n';
         for (const auto& kv : locks) out << "L\t" << kv.first << '\t' << kv.second.lo << '\t' << kv.second.hi << '\n';
         return static_cast<bool>(out);
     }

@@ -6,7 +6,8 @@
 // unit standing together). A different database therefore moves every score, which is why a rating is stored with the
 // database's date and the formula version (ratings_store.hpp).
 //
-//   Enemy power   the pulls' strength: a pull is units that wake each other (call-for-help radius, per unit), its power
+//   Enemy power   the pulls' strength, on a log scale of their total and of the strongest one (so a mid-game and a late quest
+//                 stay apart): a pull is units that wake each other (call-for-help radius, per unit), its power
 //                 sqrt(sum effective HP * sum damage per second); effective HP counts absorption, damage per second the
 //                 hit chance (To Hit against the player reference's Parry, the game's own HUD formula) and the attack rate.
 //   Density       how many units a pull holds on average.
@@ -30,11 +31,11 @@
 
 namespace rating {
 
-constexpr int kFormulaVersion = 1;
+constexpr int kFormulaVersion = 2;
 
 // Points each factor can give; they add up to 10000.
 enum Factor { Power, Density, Stealth, Duration, Ambush, kFactors };
-constexpr std::array<double, kFactors> kMaxPoints = {3200, 2100, 1800, 1400, 1500};
+constexpr std::array<double, kFactors> kMaxPoints = {5000, 1300, 1500, 1000, 1200};
 inline const char* FactorName(int f) {
     static const char* const n[] = {"Enemy Power", "Density", "Stealth", "Duration", "Ambushes"};
     return n[f];
@@ -53,6 +54,7 @@ struct Params {
     float refActions = 50.0f;      // attack rate reference (the same row's Tuning Actions)
     float rangedFrom = 4.0f;       // Attack Range from which a unit counts as ranged
     float anchorPullUnits = 8.0f;  // the anchor encounter: this many of the strongest unit in one pull
+    bool storedStats = false;      // true: a unit whose "Stats imported" is off is counted with the stats stored in the map; false: always with its database row
 };
 
 struct Monsters {
@@ -99,10 +101,13 @@ struct Result {
     std::array<double, kFactors> pts{};
     std::vector<Pull> pulls;
     int units = 0, unknown = 0;          // enemy units; of them without a database row
+    int storedStats = 0;                 // enemy units counted with the stats stored in the map ("Stats imported" off), not the database row
     int fights = 0;                      // pulls worth a fight
     float routeLength = 0, exposure = 0; // exposure: the share of the route inside a detection range, 0..1
     int spawnSites = 0, spawnUnits = 0;  // AddUnitToServer calls; of them with a database row
-    int objectives = 0;                  // QObj* calls found (the walk's waypoints)
+    std::vector<std::pair<std::string, int>> files; // each map read: its file name and how many of its enemies the quest meets
+    int objectives = 0;                  // goals found: QObj* calls, or for an older quest the objects its script works with
+    double sumNorm = 0, peakNorm = 0;    // the pulls' power as shares of the anchor group's: their sum, and the strongest one
     std::vector<std::array<float, 2>> route;
     std::vector<std::string> unknownNames;
 };

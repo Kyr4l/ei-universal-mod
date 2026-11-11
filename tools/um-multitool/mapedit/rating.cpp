@@ -7,6 +7,7 @@
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
 #include <map>
 #include <set>
 
@@ -82,6 +83,20 @@ double Num(const std::string& s) { return std::strtod(s.c_str(), nullptr); }
 
 struct Pt { float x = 0, y = 0; };
 
+// A unit whose "Stats imported" is off carries its own stats (UNIT_STATS, 172 bytes; the Map Editor's stats editor has the layout):
+// the game uses those, not its prototype's database row. Offsets: HP 0 / max HP 4 (int), Actions 20, Range 60, Attack 64, Defence 68,
+// damage min 76, damage range 80, Absorption 112 (int), Sight 116.
+bool MonsterFromStats(const std::vector<uint8_t>& s, const std::string& name, Monster& m) {
+    if (s.size() < 172) return false;
+    auto f = [&](size_t at) { float v; std::memcpy(&v, s.data() + at, 4); return v; };
+    auto i = [&](size_t at) { int32_t v; std::memcpy(&v, s.data() + at, 4); return static_cast<float>(v); };
+    m.name = name;
+    m.health = std::max(i(0), i(4));
+    m.actions = f(20); m.range = f(60); m.toHit = f(64); m.parry = f(68);
+    m.dmgMin = f(76); m.dmgSpread = f(80); m.absorb = i(112); m.sight = f(116);
+    return m.health > 0;
+}
+
 // ---- enemy units -----------------------------------------------------------------------------------------------
 
 struct Enemy {
@@ -91,6 +106,7 @@ struct Enemy {
     bool relevant = false; // a quest meets it: its own map's, named by the script, or near the walk
     UnitPower power;
     bool known = false;
+    bool stored = false; // counted with the map's stored stats
     float help = 7;
     // where the unit notices a walker: discs of `radius` around these points (one point: a post; several: a patrol path)
     std::vector<Pt> shape;
@@ -234,11 +250,11 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     std::vector<Enemy> enemies;
     std::map<std::string, Pt> byName;
     std::map<long, Pt> byId;
-    std::string script;
+    std::string script, ownScript; // every map's script; the quest's own maps' (all of them when no file is a base map)
     for (size_t fi = 0; fi < in.files.size(); ++fi) {
         const mob::File* f = in.files[fi];
         if (!f || !f->loaded) continue;
-        if (f->hasScript) script += f->script + "\n";
+        if (f->hasScript) { script += f->script + "\n"; if (fi >= in.baseCount) ownScript += f->script + "\n"; }
         for (const mob::Object& o : f->objects) {
             if (o.hasId) byId[static_cast<long>(o.id)] = {o.position.x, o.position.y};
             if (!o.name.empty()) byName[Low(o.name)] = {o.position.x, o.position.y};
@@ -251,7 +267,9 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
             e.file = fi;
             e.id = o.hasId ? static_cast<long>(o.id) : -1;
             e.name = o.prototype;
-            if (const Monster* m = db.Find(o.prototype)) { e.known = true; e.power = PowerOf(*m, db, p); }
+            Monster stored;
+            if (p.storedStats && !o.needImport && MonsterFromStats(o.stats, o.prototype, stored)) { e.known = true; e.stored = true; e.power = PowerOf(stored, db, p); }
+            else if (const Monster* m = db.Find(o.prototype)) { e.known = true; e.power = PowerOf(*m, db, p); }
             else e.power.sight = p.defaultSight;
             e.help = logic && logic->help > 0 ? logic->help : p.defaultHelp;
             e.radius = e.power.sight;
@@ -268,16 +286,16 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         }
     }
 
-    // -- the script: areas, groups, objectives, spawns
-    const std::vector<Call> calls = Calls(script, {"addroundtoarea", "addrecttoarea", "qobjarea", "qobjkillunit", "qobjseeunit", "qobjseeobject", "qobjuse",
-                                                    "qobjkillgroup", "addobject", "addunittoserver"});
-    std::map<std::string, long> vars; // "unit = GetObjectByID( "1000005" )"
+    // -- the script: areas (any map's), then what the quest's own script says: objectives, groups, spawns, the objects it binds
+    const std::vector<Call> areaCalls = Calls(script, {"addroundtoarea", "addrecttoarea"});
+    const std::vector<Call> calls = Calls(ownScript, {"qobjarea", "qobjkillunit", "qobjseeunit", "qobjseeobject", "qobjuse", "qobjkillgroup", "addobject", "addunittoserver"});
+    std::map<std::string, long> vars; // "Borka = GetObjectByID( "1000263" )": the objects the quest's script works with (levers, NPCs, bosses)
     {
         size_t pos = 0;
-        while (pos < script.size()) {
-            size_t end = script.find('\n', pos);
-            if (end == std::string::npos) end = script.size();
-            const std::string line = script.substr(pos, end - pos);
+        while (pos < ownScript.size()) {
+            size_t end = ownScript.find('\n', pos);
+            if (end == std::string::npos) end = ownScript.size();
+            const std::string line = ownScript.substr(pos, end - pos);
             pos = end + 1;
             const size_t eq = line.find('=');
             const long id = eq == std::string::npos ? -1 : ObjectId(line.substr(eq + 1));
@@ -298,16 +316,25 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         return false;
     };
     std::map<long, Pt> areas;
-    std::map<std::string, std::vector<long>> groups; // group name -> the object ids AddObject put in it
-    for (const Call& c : calls) {
+    for (const Call& c : areaCalls) {
         if (c.name == "addroundtoarea" && c.args.size() >= 3) areas.emplace(static_cast<long>(Num(c.args[0])), Pt{static_cast<float>(Num(c.args[1])), static_cast<float>(Num(c.args[2]))});
         else if (c.name == "addrecttoarea" && c.args.size() >= 5) areas.emplace(static_cast<long>(Num(c.args[0])), Pt{static_cast<float>((Num(c.args[1]) + Num(c.args[3])) / 2), static_cast<float>((Num(c.args[2]) + Num(c.args[4])) / 2)});
-        else if (c.name == "addobject" && c.args.size() >= 2) { const long id = idOf(c.args[1]); if (id >= 0) groups[Low(Trim(c.args[0]))].push_back(id); }
     }
+    std::map<std::string, std::vector<long>> groups; // group name -> the object ids AddObject put in it
+    for (const Call& c : calls)
+        if (c.name == "addobject" && c.args.size() >= 2) { const long id = idOf(c.args[1]); if (id >= 0) groups[Low(Trim(c.args[0]))].push_back(id); }
 
-    // -- the walk: deploy -> the objectives in order -> the exit
-    std::set<long> referenced; // units the objectives name
-    std::vector<Pt> route;
+    // -- the walk: deploy -> the QObj* objectives in order -> the other objects the script works with (nearest first) -> the exit.
+    // Older quests have no QObj* calls: their goals are levers, NPCs and groups the script binds, with the quest's steps in variables.
+    std::set<long> referenced; // units the quest names
+    std::vector<Pt> route, loose;
+    std::set<long> looseIds;
+    auto target = [&](long id) {
+        if (id < 0 || !looseIds.insert(id).second) return;
+        referenced.insert(id);
+        auto it = byId.find(id);
+        if (it != byId.end()) loose.push_back(it->second);
+    };
     if (in.deploy.set) route.push_back({(in.deploy.x1 + in.deploy.x2) / 2, (in.deploy.y1 + in.deploy.y2) / 2});
     for (const Call& c : calls) {
         Pt pt;
@@ -321,15 +348,28 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         } else if (c.name == "qobjkillgroup" && !c.args.empty()) {
             auto it = groups.find(Low(Trim(c.args[0])));
             if (it == groups.end()) continue;
-            Pt sum;
-            int n = 0;
-            for (const long gid : it->second) {
-                referenced.insert(gid);
-                auto b = byId.find(gid);
-                if (b != byId.end()) { sum.x += b->second.x; sum.y += b->second.y; ++n; }
-            }
-            if (n) { route.push_back({sum.x / n, sum.y / n}); ++r.objectives; }
+            for (const long gid : it->second) target(gid);
+            ++r.objectives;
         }
+    }
+    for (const auto& kv : vars) target(kv.second);
+    for (const auto& g : groups) for (const long gid : g.second) target(gid);
+    {
+        auto nearAny = [&](const std::vector<Pt>& v, Pt q) { for (const Pt& w : v) if (std::hypot(w.x - q.x, w.y - q.y) < 12.0f) return true; return false; };
+        int visited = 0;
+        std::vector<Pt> todo;
+        for (const Pt& q : loose) if (!nearAny(route, q) && !nearAny(todo, q)) todo.push_back(q);
+        Pt cur = route.empty() ? (todo.empty() ? Pt{} : todo[0]) : route.back();
+        while (!todo.empty()) {
+            size_t best = 0;
+            float bd = 1e9f;
+            for (size_t i = 0; i < todo.size(); ++i) { const float d = std::hypot(todo[i].x - cur.x, todo[i].y - cur.y); if (d < bd) { bd = d; best = i; } }
+            cur = todo[best];
+            route.push_back(cur);
+            ++visited;
+            todo.erase(todo.begin() + static_cast<long>(best));
+        }
+        if (r.objectives == 0) r.objectives = visited; // an older quest: its goals are the objects its script works with
     }
     if (in.remove.set) route.push_back({(in.remove.x1 + in.remove.x2) / 2, (in.remove.y1 + in.remove.y2) / 2});
     std::vector<Pt> samples;
@@ -360,7 +400,8 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     std::map<int, std::vector<size_t>> groupsOf;
     for (size_t i = 0; i < enemies.size(); ++i) groupsOf[find(static_cast<int>(i))].push_back(i);
     std::vector<const Enemy*> kept;
-    double powerSum = 0, n2 = 0, n1 = 0;
+    std::vector<int> perFile(in.files.size(), 0);
+    double n2 = 0, n1 = 0;
     for (const auto& g : groupsOf) {
         bool any = false;
         for (size_t i : g.second) any = any || enemies[i].relevant;
@@ -371,6 +412,8 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         for (size_t i : g.second) {
             const Enemy& e = enemies[i];
             kept.push_back(&e);
+            if (e.stored) ++r.storedStats;
+            ++perFile[e.file];
             pull.effHp += e.power.effHp; pull.dps += e.power.dps; pull.ranged += e.power.ranged ? 1 : 0;
             cx += e.pos.x; cy += e.pos.y; ++names[e.name.empty() ? "?" : e.name];
             if (!e.known) { ++r.unknown; r.unknownNames.push_back(e.name); }
@@ -381,14 +424,17 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         pull.power = std::sqrt(std::max(0.0f, pull.effHp) * std::max(0.0f, pull.dps)) * (1.0f + 0.25f * pull.ranged / pull.units);
         pull.norm = pull.power / anchorPull;
         for (const auto& nm : names) pull.names.push_back(std::to_string(nm.second) + "x " + nm.first);
-        if (pull.norm >= 0.015f) ++r.fights;
-        powerSum += std::pow(pull.norm, 1.15);
+        if (pull.norm >= 0.002f) ++r.fights;
+        r.sumNorm += pull.norm;
+        r.peakNorm = std::max<double>(r.peakNorm, pull.norm);
         n2 += static_cast<double>(pull.units) * pull.units;
         n1 += pull.units;
         r.units += pull.units;
         r.pulls.push_back(std::move(pull));
     }
     std::sort(r.pulls.begin(), r.pulls.end(), [](const Pull& a, const Pull& b) { return a.x < b.x; });
+
+    for (size_t i = 0; i < in.files.size(); ++i) if (in.files[i]) r.files.push_back({in.files[i]->fileName, perFile[i]});
 
     // -- how much of the walk is seen
     int seen = 0;
@@ -405,11 +451,14 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     }
 
     // -- the factors, in points
-    const double strength = ClampD(std::sqrt(powerSum * 1.6), 0, 1);
+    // Enemy power: the late quests are hundreds of times stronger than the early ones, so both the pulls' total and the
+    // strongest pull go through a log scale (0 at 2% / 0.3% of the anchor group's power, 1 at 10x / 1x of it).
+    auto logmap = [](double x, double lo, double hi) { return x <= lo ? 0.0 : ClampD(std::log10(x / lo) / std::log10(hi / lo), 0, 1); };
+    const double strength = 0.5 * logmap(r.sumNorm, 0.02, 10.0) + 0.5 * logmap(r.peakNorm, 0.003, 1.0);
     const double avgPull = n1 > 0 ? n2 / n1 : 1;
     const double density = ClampD((avgPull - 1.0) / (p.anchorPullUnits - 1.0), 0, 1);
-    const double stealth = ClampD(r.exposure * 2.4, 0, 1);
-    const double duration = ClampD(len / 450.0, 0, 1) * ClampD(r.fights / 3.0, 0, 1);
+    const double stealth = ClampD(r.exposure * 1.8, 0, 1);
+    const double duration = ClampD(len / 800.0, 0, 1) * ClampD(r.fights / 3.0, 0, 1);
     const double ambush = ClampD(0.2 * std::sqrt(static_cast<double>(r.spawnSites)) + 1.5 * spawnPower / anchorPull, 0, 1);
     const double f[kFactors] = {strength, density, stealth, duration, ambush};
     r.total = 0;

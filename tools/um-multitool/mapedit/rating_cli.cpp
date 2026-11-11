@@ -37,12 +37,14 @@ int RunRateCli(const std::vector<std::string>& args) {
     std::string configPath = config::Path(), databasePath, allodFile;
     std::vector<std::string> questArgs;
     bool detail = false, units = false;
+    rating::Params params;
     for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "--rate") continue;
         else if (args[i] == "--config" && i + 1 < args.size()) configPath = args[++i];
         else if (args[i] == "--database" && i + 1 < args.size()) databasePath = args[++i];
         else if (args[i] == "--allods" && i + 1 < args.size()) allodFile = args[++i];
         else if (args[i] == "--detail") detail = true;
+        else if (args[i] == "--map-stats") params.storedStats = true;
         else if (args[i] == "--units") units = true;
         else questArgs.push_back(args[i]);
     }
@@ -53,7 +55,6 @@ int RunRateCli(const std::vector<std::string>& args) {
     dbmodel::Book book;
     std::string err;
     if (!dbmodel::LoadBook(databasePath, book, err)) { std::fprintf(stderr, "%s: %s\n", databasePath.c_str(), err.c_str()); return 2; }
-    rating::Params params;
     rating::Monsters monsters;
     if (!rating::LoadMonsters(book, params, monsters, err)) { std::fprintf(stderr, "%s: %s\n", databasePath.c_str(), err.c_str()); return 2; }
     std::printf("database %s: %zu monsters, strongest %s (power %.0f), reference hero %s\n", databasePath.c_str(), monsters.byName.size(),
@@ -89,8 +90,8 @@ int RunRateCli(const std::vector<std::string>& args) {
         const int x = table.Find(a.terrain), y = table.Find(b.terrain);
         return x != y ? (x < 0 ? 99 : x) < (y < 0 ? 99 : y) : a.name < b.name;
     });
-    std::printf("%-12s %-10s %-10s %6s | %6s %6s %6s %6s %6s | %5s %5s %5s %6s %4s %5s %4s\n", "quest", "zone", "allod", "score", "power", "dens", "stlth", "durat", "ambsh",
-                "units", "pulls", "fight", "route", "exp%", "spawn", "obj");
+    std::printf("%-12s %-10s %-10s %6s | %6s %6s %6s %6s %6s | %5s %5s %5s %6s %4s %5s %4s %6s %6s\n", "quest", "zone", "allod", "score", "power", "dens", "stlth", "durat", "ambsh",
+                "units", "pulls", "fight", "route", "exp%", "spawn", "obj", "sumN", "peak");
     for (const quest::Quest& q : quests) {
         const std::string terrainPath = q.terrain.empty() ? std::string() : FindMapFile(cfg.mapLayers, q.terrain + ".mpr", q.path);
         (void)terrainPath;
@@ -105,10 +106,14 @@ int RunRateCli(const std::vector<std::string>& args) {
         const rating::Result r = rating::Rate(in, monsters, params);
         const std::string allod = table.NameOf(q.terrain);
         if (!r.ok) { std::printf("%-12s %-10s %-10s  not rated: %s\n", q.name.c_str(), q.terrain.c_str(), allod.empty() ? "-" : allod.c_str(), r.note.c_str()); continue; }
-        std::printf("%-12s %-10s %-10s %6.0f | %6.0f %6.0f %6.0f %6.0f %6.0f | %5d %5zu %5d %6.0f %3.0f%% %5d %4d%s\n", q.name.c_str(), q.terrain.c_str(),
+        std::printf("%-12s %-10s %-10s %6.0f | %6.0f %6.0f %6.0f %6.0f %6.0f | %5d %5zu %5d %6.0f %3.0f%% %5d %4d %6.3f %6.3f%s\n", q.name.c_str(), q.terrain.c_str(),
                     allod.empty() ? "-" : allod.c_str(), r.total, r.pts[0], r.pts[1], r.pts[2], r.pts[3], r.pts[4], r.units, r.pulls.size(), r.fights, r.routeLength,
-                    r.exposure * 100, r.spawnSites, r.objectives, r.unknown ? ("  (" + std::to_string(r.unknown) + " units without stats)").c_str() : "");
+                    r.exposure * 100, r.spawnSites, r.objectives, r.sumNorm, r.peakNorm, r.unknown ? ("  (" + std::to_string(r.unknown) + " units without stats)").c_str() : "");
         if (detail) {
+            std::printf("      stored stats used by %d of %d units\n", r.storedStats, r.units);
+            std::printf("      maps:");
+            for (const auto& f : r.files) std::printf(" %s (%d enemies)", f.first.c_str(), f.second);
+            std::printf("\n");
             for (const rating::Pull& p : r.pulls) {
                 std::printf("      pull at %.0f,%.0f  %d units  norm %.3f  ", p.x, p.y, p.units, p.norm);
                 for (const std::string& s : p.names) std::printf("%s ", s.c_str());
