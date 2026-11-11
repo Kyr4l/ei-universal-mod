@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.15.0";
+static const char* const kEngineVersion = "0.15.1";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -291,7 +291,7 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "SunShadows::Height",    "50",     "SunShadows: half of the casters' height range along the light (world units)" },
     { "SunShadows::Extra",     "0.3",    "SunShadows: 0..1, extra darkness inside shadows on top of the game's own sun / ambient ratio (0 = none, 0.3 reads clearly)" },
     { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
-    { "SunShadows::Guard",     "0.3",   "SunShadows: 0..0.6, at most this much of the screen's size is also drawn beyond an edge, on the sides the sun's shadows come from, so casters just off screen shadow too (0 = off; needs a restart)" },
+    { "SunShadows::Guard",     "0.3",   "SunShadows: 0..0.6, share of the screen also drawn beyond the edges the sun's shadows come from, so casters just off screen shadow too; zoomed in it grows with the shadows (0 = off; needs a restart)" },
     { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the guard band's problems, 2 also every change of its pads / the shadowed area and a frame count every 5 s (research)" },
     { "SunShadows::Debug",     "0",      "SunShadows: research views (1 shadow term only, 2 lit fraction / sun angle, 4 normals, 5 world position)" },
 };

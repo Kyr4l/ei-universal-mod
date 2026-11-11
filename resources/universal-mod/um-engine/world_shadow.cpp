@@ -276,12 +276,15 @@ bool BuildBig(const StackSet& o, int padL, int padT, int padR, int padB, StackSe
 
 // How far beyond each screen edge a caster can stand and still shadow the screen: the sun's shadows fall along the light's horizontal direction, about 14 units tall casters; the edge's
 // ground points shifted towards the sun (their feet and tops) are projected back to the screen.
-const double kCasterHeight = 9.0;   // the casters that matter at the screen's edge (trees, huts, rocks; the tallest are cut off)
+const double kCasterHeight = 12.0;  // the casters that matter at the screen's edge (trees, huts, rocks; the tallest are cut off)
 
 void ChoosePads(const StackSet& o, double fraction, int& padL, int& padT, int& padR, int& padB) {
     const double W = 2.0 * o.m[5][0][0], H = -2.0 * o.m[5][0][5];
     const double minPadX = std::ceil(0.04 * W / 8) * 8, minPadY = std::ceil(0.04 * H / 8) * 8;
-    const double maxPadX = std::ceil(fraction * W / 8) * 8, maxPadY = std::ceil(fraction * H / 8) * 8;
+    // Guard is the band's share of the screen when zoomed out; zoomed in, a shadow's length is a larger part of the (smaller) view, so the band may grow
+    // up to a whole screen per side: the GPU clips what lies outside, only the few extra objects cost (zoomed in, the game draws few anyway)
+    const double grow = fraction > 0.0 ? 1.0 : 0.0;
+    const double maxPadX = std::ceil(std::fmax(fraction, grow) * W / 8) * 8, maxPadY = std::ceil(std::fmax(fraction, grow) * H / 8) * 8;
     double need[4] = { minPadX, minPadY, minPadX, minPadY };   // left, top, right, bottom
     double view[16], m[16], inv[16], proj[16];
     const uintptr_t sun = Read<uintptr_t>(kSunPtr);
@@ -294,7 +297,7 @@ void ChoosePads(const StackSet& o, double fraction, int& padL, int& padT, int& p
             if (hl > 1e-6) {
                 dx /= hl; dy /= hl;
                 const double tanE = std::fabs(dz) / hl;
-                const double L = std::fmin(std::fmax(kCasterHeight / std::fmax(tanE, 0.25), 4.0), 24.0);   // shadow length of a caster of that height
+                const double L = std::fmin(std::fmax(kCasterHeight / std::fmax(tanE, 0.2), 4.0), 48.0);    // shadow length of a caster of that height
                 const double m10 = proj[10], m11 = proj[11], m14 = proj[14];
                 if (std::fabs(m14) > 1e-9) {
                     const double K = -m14 * m11, gz = Read<float>(kCamera + 0xE8);
@@ -584,7 +587,7 @@ bool Gather(Params& p) {
     const double ext = 0.5 * std::fmax(hi[0] - lo[0], hi[1] - lo[1]);
     const double half = ext * 1.08 + cfg.margin;
     const double mid[3] = { 0.5 * (lo[0] + hi[0]), 0.5 * (lo[1] + hi[1]), 0.5 * (lo[2] + hi[2]) };
-    const double dLow = lo[2] - 40.0, dHigh = hi[2] + 6.0;
+    const double dLow = lo[2] - std::fmax(40.0, cfg.height), dHigh = hi[2] + 6.0;   // upstream: SunShadows::Height (a tall caster under a low sun stands far up the light)
     const double midD = 0.5 * (dLow + dHigh), hD = 0.5 * (dHigh - dLow);
     for (int k = 0; k < 3; ++k) p.center[k] = static_cast<float>(Rv[k] * mid[0] + Uv[k] * mid[1] + D[k] * midD);
     {   // The radius keeps its value until the area needs more or is much smaller (steps of 8 units, 30 % slack): a radius that follows the camera changes the texel size and the shadows shimmer
