@@ -556,6 +556,8 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The item list on the right of the view (off: on the left)");
     if (ImGui::Checkbox("Map Editor: Sidebar right", &lib.mapSidebarRight)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The panel on the right of the view (off: on the left)");
+    if (ImGui::Checkbox("Wheel Switches Tabs", &lib.tabWheel)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("The mouse wheel over a row of tabs selects the previous / next tab");
     if (ImGui::Checkbox("Separate tool windows", &lib.windowsSeparate)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Tool windows (Comparison, Log, Find objects...) open in their own window, outside the main one.\nEach window's Pop out / Dock back button still moves it.");
 

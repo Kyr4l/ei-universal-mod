@@ -6,7 +6,7 @@
 // not shown and a rescan is suggested. Rewards and texts are not part of the stamp: they do not change the difficulty.
 //
 // File (UserDir()/um-multitool-ratings.tsv), one record per line, fields separated by tabs:
-//   R  quest  score  p0 p1 p2 p3 p4  units  fights  spawns  objectives  route  exposure  allod  stamp  rated
+//   R  quest  score  p0 p1 p2 p3 p4  units  fights  spawns  objectives  route  exposure  allod  stamp  rated  needDamage  needEndurance
 //   L  allod  min  max                       a locked allod range
 //   O  storedstats  0|1                      the option "use the stats stored in the map" (default 0: the database's rows)
 #pragma once
@@ -27,6 +27,7 @@ struct Entry {
     std::array<double, 5> pts{};
     int units = 0, fights = 0, spawns = 0, objectives = 0;
     float route = 0, exposure = 0;
+    float needDamage = 0, needEndurance = 0; // what the strongest fight asks of the hero (rating::NeedOf), 0 = not stored
     std::string allod, stamp, rated;
 };
 
@@ -64,6 +65,7 @@ struct Store {
             e.units = std::atoi(f[8].c_str()); e.fights = std::atoi(f[9].c_str()); e.spawns = std::atoi(f[10].c_str()); e.objectives = std::atoi(f[11].c_str());
             e.route = static_cast<float>(std::atof(f[12].c_str())); e.exposure = static_cast<float>(std::atof(f[13].c_str()));
             e.allod = f[14]; e.stamp = f[15]; e.rated = f[16];
+            if (f.size() >= 19) { e.needDamage = static_cast<float>(std::atof(f[17].c_str())); e.needEndurance = static_cast<float>(std::atof(f[18].c_str())); }
             entries[Key(f[1])] = e;
         }
         return true;
@@ -81,7 +83,8 @@ struct Store {
             for (double p : e.pts) { std::snprintf(b, sizeof b, "\t%.1f", p); out << b; }
             out << '\t' << e.units << '\t' << e.fights << '\t' << e.spawns << '\t' << e.objectives;
             std::snprintf(b, sizeof b, "\t%.1f\t%.4f", e.route, e.exposure); out << b;
-            out << '\t' << e.allod << '\t' << e.stamp << '\t' << e.rated << '\n';
+            out << '\t' << e.allod << '\t' << e.stamp << '\t' << e.rated;
+            std::snprintf(b, sizeof b, "\t%.2f\t%.1f", e.needDamage, e.needEndurance); out << b << '\n';
         }
         out << "O\tstoredstats\t" << (storedStats ? 1 : 0) << '\n';
         for (const auto& kv : locks) out << "L\t" << kv.first << '\t' << kv.second.lo << '\t' << kv.second.hi << '\n';

@@ -202,6 +202,8 @@ void RunWorker(RatingUi* ui, std::vector<Item> items, rating::Monsters monsters,
             d.entry.units = r.units; d.entry.fights = r.fights; d.entry.spawns = r.spawnSites; d.entry.objectives = r.objectives;
             d.entry.route = r.routeLength; d.entry.exposure = r.exposure;
             d.entry.allod = it.allod; d.entry.stamp = it.stamp; d.entry.rated = Today();
+            const rating::HeroNeed need = rating::NeedOf(r, monsters, params);
+            if (need.ok) { d.entry.needDamage = static_cast<float>(need.damage); d.entry.needEndurance = static_cast<float>(need.endurance); }
             std::lock_guard<std::mutex> lock(ui->runMutex);
             ui->runResults.push_back(std::move(d));
         }
@@ -273,14 +275,18 @@ void RefreshStatus(App& app) {
 void RefreshRanges(App& app) {
     RatingUi& r = app.rating;
     r.rangesDirty = false;
-    std::vector<std::vector<double>> scores(r.allods.allods.size());
+    std::vector<std::vector<double>> scores(r.allods.allods.size()), damages(scores.size()), endurances(scores.size());
     for (const quest::QuestSet& s : app.quests) {
         const std::string key = ratingstore::Key(s.shown.name);
         auto st = r.status.find(key);
         if (st == r.status.end() || st->second != 1) continue;
         const int a = r.allods.Find(s.shown.terrain);
         if (a >= 0) scores[static_cast<size_t>(a)].push_back(r.store.entries[key].score);
+        if (a >= 0 && r.store.entries[key].needDamage > 0) { damages[static_cast<size_t>(a)].push_back(r.store.entries[key].needDamage); endurances[static_cast<size_t>(a)].push_back(r.store.entries[key].needEndurance); }
     }
+    auto median = [](std::vector<double> v) { if (v.empty()) return 0.0; std::sort(v.begin(), v.end()); const size_t m = v.size() / 2; return v.size() % 2 ? v[m] : 0.5 * (v[m - 1] + v[m]); };
+    r.needs.assign(r.allods.allods.size(), RatingUi::Need());
+    for (size_t a = 0; a < r.needs.size(); ++a) r.needs[a] = {median(damages[a]), median(endurances[a]), static_cast<int>(damages[a].size())};
     std::vector<allodrange::Lock> locks(r.allods.allods.size());
     for (size_t a = 0; a < locks.size(); ++a) {
         auto it = r.store.locks.find(ratingstore::Key(r.allods.allods[a].name));
@@ -678,7 +684,7 @@ void RatingTab(App& app) {
     }
     ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d scripted spawn site%s, %d objective%s.", res.units, res.pulls.size(), res.fights,
                         res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.spawnSites, res.spawnSites == 1 ? "" : "s", res.objectives, res.objectives == 1 ? "" : "s");
-    HeroNeedLine(app, res);
+    HeroNeedLine(app, res, terrain);
     {
         bool stored = r.store.storedStats;
         if (ImGui::Checkbox("Use Stored Stats", &stored)) { r.store.storedStats = stored; SaveStore(app); r.liveValid = false; r.statusAt = -100; }
@@ -734,11 +740,18 @@ const rating::Result* LiveRating(App& app) {
     return r.live.ok ? &r.live : nullptr;
 }
 
-void HeroNeedLine(App& app, const rating::Result& res) {
-    const rating::HeroNeed need = rating::NeedOf(res, app.rating.monsters);
+void HeroNeedLine(App& app, const rating::Result& res, const std::string& terrain) {
+    RatingUi& r = app.rating;
+    const rating::HeroNeed need = rating::NeedOf(res, r.monsters);
     if (!need.ok) return;
-    ImGui::TextWrapped("Hero needed: the strongest fight (%d enemies near %.0f, %.0f) asks for about %.1fx the damage and %.1fx the endurance of the database's Human Hero, "
-                       "over %.0f seconds. An estimate: gear and party size move it.", need.units, need.x, need.y, need.damageRatio, need.enduranceRatio, need.seconds);
+    const int a = r.allods.Find(terrain);
+    const RatingUi::Need* typical = a >= 0 && static_cast<size_t>(a) < r.needs.size() && r.needs[static_cast<size_t>(a)].quests >= 3 ? &r.needs[static_cast<size_t>(a)] : nullptr;
+    ImGui::TextWrapped("Hero needed: the strongest fight (%d enemies near %.0f, %.0f) needs about %.0f damage per second and %.0f effective HP to win in %.0f seconds.",
+                       need.units, need.x, need.y, need.damage, need.endurance, need.seconds);
+    if (typical && typical->damage > 0 && typical->endurance > 0)
+        ImGui::TextWrapped("That is %.1fx the damage and %.1fx the endurance of a typical %s quest's strongest fight (the median of %d rated quests: what the allod's heroes, "
+                           "with its levels and gear, are expected to handle).", need.damage / typical->damage, need.endurance / typical->endurance, r.allods.allods[static_cast<size_t>(a)].name.c_str(), typical->quests);
+    else ImGui::TextDisabled("Rate at least 3 quests of this allod to compare it with what its heroes usually face.");
 }
 
 } // namespace mapedit

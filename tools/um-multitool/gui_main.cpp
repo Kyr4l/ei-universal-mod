@@ -1151,6 +1151,7 @@ int RunGui(const GuiOptions& options) {
         dbedit::Update();
         if (library.vsync != vsyncSet) { vsyncSet = library.vsync; glfwSwapInterval(vsyncSet ? 1 : 0); }
         ImGui::GetStyle().AntiAliasedLines = ImGui::GetStyle().AntiAliasedLinesUseTex = ImGui::GetStyle().AntiAliasedFill = library.uiAntialias;
+        io.ConfigTabBarWheel = library.tabWheel;
         applyTheme();
         double now = glfwGetTime();
         float dt = static_cast<float>(now - lastTime);

@@ -174,6 +174,8 @@ struct RatingUi {
     bool allodsTried = false;
     std::string allodsFor;         // the Settings path the allods were read with
     std::vector<allodrange::Range> ranges; // per allod, in the table's order
+    struct Need { double damage = 0, endurance = 0; int quests = 0; };
+    std::vector<Need> needs;               // per allod: the median of its rated quests' hero needs (what its heroes are expected to handle)
     // each quest's state: 0 not rated, 1 rated, 2 changed since it was rated (checked every few seconds)
     std::map<std::string, int> status;
     std::map<std::string, std::string> stamps;
@@ -569,7 +571,7 @@ void RatingColumns(App& app, const quest::QuestSet& set);        // the list's A
 void RatingAllodList(App& app);                   // the Files tab: the allods and their ranges
 void RatingOpenQuestLine(App& app);               // the open quest's rating, one line with its range bar
 const rating::Result* LiveRating(App& app);                                              // the open maps' rating as edited (null: no database yet or nothing to rate)
-void HeroNeedLine(App& app, const rating::Result& res);                                  // "Hero needed": what the strongest fight asks of the hero      // its score, range bar and factors
+void HeroNeedLine(App& app, const rating::Result& res, const std::string& terrain);                                  // "Hero needed": what the strongest fight asks of the hero      // its score, range bar and factors
 
 
 // map_sidebar.cpp

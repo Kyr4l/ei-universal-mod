@@ -1692,6 +1692,7 @@ ImGuiIO::ImGuiIO()
     ConfigInputTrickleEventQueue = true;
     ConfigInputTextCursorBlink = true;
     ConfigInputTextEnterKeepActive = false;
+    ConfigTabBarWheel = false;
     ConfigDragClickToInputText = false;
     ConfigColorEditFlags = ImGuiColorEditFlags_DefaultOptions_; // Current settings for ColorEdit/ColorPicker widgets. May be further edited by users, unless you also set ImGuiColorEditFlags_NoOptions.
     ConfigWindowsResizeFromEdges = true;

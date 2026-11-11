@@ -580,11 +580,9 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
 
 HeroNeed NeedOf(const Result& r, const Monsters& db, const Params& p, double seconds) {
     HeroNeed n;
-    if (!r.ok || r.pulls.empty() || !db.haveHero) return n;
+    if (!r.ok || r.pulls.empty() || seconds <= 0) return n;
     const Pull* top = &r.pulls[0];
     for (const Pull& pl : r.pulls) if (pl.power > top->power) top = &pl;
-    const UnitPower hero = PowerOf(db.hero, db, p);
-    if (hero.dps <= 0 || hero.effHp <= 0 || seconds <= 0) return n;
     n.ok = true;
     n.units = top->units;
     n.x = top->x;
@@ -592,8 +590,11 @@ HeroNeed NeedOf(const Result& r, const Monsters& db, const Params& p, double sec
     n.seconds = seconds;
     n.damage = top->effHp / seconds;
     n.endurance = top->dps * seconds;
-    n.damageRatio = n.damage / hero.dps;
-    n.enduranceRatio = n.endurance / hero.effHp;
+    if (db.haveHero) {
+        const UnitPower hero = PowerOf(db.hero, db, p);
+        if (hero.dps > 0) n.damageRatio = n.damage / hero.dps;
+        if (hero.effHp > 0) n.enduranceRatio = n.endurance / hero.effHp;
+    }
     return n;
 }
 

@@ -9968,6 +9968,30 @@ bool    ImGui::BeginTabBarEx(ImGuiTabBar* tab_bar, const ImRect& tab_bar_bb, ImG
     // Set cursor pos in a way which only be used in the off-chance the user erroneously submits item before BeginTabItem(): items will overlap
     window->DC.CursorPos = ImVec2(tab_bar->BarRect.Min.x, tab_bar->BarRect.Max.y + tab_bar->ItemSpacingY);
 
+    // um-multitool: the mouse wheel over a tab bar selects the previous / next tab (io.ConfigTabBarWheel; off by default)
+    if (g.IO.ConfigTabBarWheel && g.IO.MouseWheel != 0.0f && tab_bar->Tabs.Size > 1 && g.ActiveId == 0 && g.HoveredWindow == window &&
+        IsMouseHoveringRect(tab_bar->BarRect.Min, ImVec2(tab_bar->BarRect.Max.x, tab_bar->BarRect.Min.y + g.FontSize + g.Style.FramePadding.y * 2.0f)))
+    {
+        ImVector<int> order; // the tabs shown last frame, left to right
+        for (int i = 0; i < tab_bar->Tabs.Size; i++)
+            if (tab_bar->Tabs[i].LastFrameVisible >= g.FrameCount - 1 && !(tab_bar->Tabs[i].Flags & ImGuiTabItemFlags_Button))
+                order.push_back(i);
+        for (int a = 1; a < order.Size; a++)
+            for (int b = a; b > 0 && tab_bar->Tabs[order[b]].Offset < tab_bar->Tabs[order[b - 1]].Offset; b--)
+                ImSwap(order[b], order[b - 1]);
+        int cur = -1;
+        for (int k = 0; k < order.Size; k++)
+            if (tab_bar->Tabs[order[k]].ID == tab_bar->SelectedTabId)
+                cur = k;
+        if (cur >= 0 && order.Size > 1)
+        {
+            const int next = ImClamp(cur + (g.IO.MouseWheel > 0.0f ? -1 : 1), 0, order.Size - 1);
+            if (next != cur)
+                tab_bar->NextSelectedTabId = tab_bar->Tabs[order[next]].ID;
+        }
+        g.IO.MouseWheel = 0.0f;
+    }
+
     // Draw separator
     // (it would be misleading to draw this in EndTabBar() suggesting that it may be drawn over tabs, as tab bar are appendable)
     const ImU32 col = GetColorU32((flags & ImGuiTabBarFlags_IsFocused) ? ImGuiCol_TabSelected : ImGuiCol_TabDimmedSelected);

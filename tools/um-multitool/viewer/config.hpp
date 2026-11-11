@@ -155,6 +155,7 @@ struct Config {
     bool idleRedraw = true;                   // Performance: 25 frames per second while nothing happens
     bool vsync = true;                        // Performance: wait for the display (off: the cap alone paces)
     bool uiAntialias = true;                  // Performance: anti-aliased lines and shapes in the UI
+    bool tabWheel = false;                    // the mouse wheel over a row of tabs switches tabs
     bool showFps = false;                     // Performance: the frame rate in the window's corner
     bool windowsSeparate = false;             // General > Layout: tool windows open in their own OS window
     bool confirmItemStats = true;             // General > Saves: MP / Saves' Update item stats shows the changes first
@@ -236,6 +237,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "IDLE_REDRAW") cfg.idleRedraw = value == "true";
         else if (key == "VSYNC") cfg.vsync = value == "true";
         else if (key == "UI_ANTIALIAS") cfg.uiAntialias = value == "true";
+        else if (key == "TAB_WHEEL") cfg.tabWheel = value == "true";
         else if (key == "SHOW_FPS") cfg.showFps = value == "true";
         else if (key == "WINDOWS_SEPARATE") cfg.windowsSeparate = value == "true";
         else if (key == "CONFIRM_ITEM_STATS") cfg.confirmItemStats = value == "true";
@@ -417,6 +419,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "CONFIRM_ITEM_STATS=" << flag(cfg.confirmItemStats) << "\n";
     f << "; Anti-aliased lines and shapes in the UI (true/false; off: fewer vertices to draw)\n";
     f << "UI_ANTIALIAS=" << flag(cfg.uiAntialias) << "\n";
+    f << "; The mouse wheel over a row of tabs switches to the previous / next tab (true/false)\n";
+    f << "TAB_WHEEL=" << flag(cfg.tabWheel) << "\n";
     f << "; Map Editor: draw the objects within this many units of the camera's target (0: all of them)\n";
     f << "MAP_DRAW_DISTANCE=" << cfg.mapDrawDistance << "\n";
     f << "; Map Editor: no shadows, lighting, dressed or posed units (true/false)\n";

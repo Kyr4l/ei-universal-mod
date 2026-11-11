@@ -1106,15 +1106,18 @@ private:
         glLoadMatrixf(shadowView_.m);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+        // Only the terrain is pushed a little behind itself (no self-shadowing stripes: it is the only receiver). The figures are
+        // not: the push grows with the slope seen from the sun and with the texel size, so zoomed out it put whole trees and
+        // houses behind the ground they stand on and their shadows went missing.
         glEnable(GL_POLYGON_OFFSET_FILL);
-        glPolygonOffset(4.0f, 12.0f); // the surfaces a little behind themselves: no self-shadowing stripes
+        glPolygonOffset(4.0f, 12.0f);
         depthPass_ = true;
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
         if (options.terrain) DrawTerrainGeometry(false, false, false);
+        glDisable(GL_POLYGON_OFFSET_FILL);
         if (options.objects || options.units) DrawObjects(lib);
         depthPass_ = false;
-        glDisable(GL_POLYGON_OFFSET_FILL);
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         if (!shadowTex_ || shadowSize_ != size) {
             if (!shadowTex_) glGenTextures(1, &shadowTex_);

@@ -114,9 +114,10 @@ struct Result {
 
 Result Rate(const Input& in, const Monsters& db, const Params& p = Params());
 
-// What the strongest fight asks of the party's hero, against the database's Human Hero row (the character without upgrades;
-// shop gear raises both numbers): a fight of `seconds` needs the enemy's total effective HP dealt in that time (damage) and
-// the enemy's damage per second taken for that long (endurance). An estimate, like the score.
+// What the strongest fight asks of the party's hero: a fight of `seconds` needs the enemy's total effective HP dealt in that time
+// (damage per second) and the enemy's damage per second taken for that long (endurance, effective HP). The tool compares these with
+// the same numbers of the allod's other quests (their median): the heroes of an allod have that allod's levels and gear, which the
+// database's base Human Hero row does not. The ratios to that row are kept for when nothing else is known. An estimate, like the score.
 struct HeroNeed {
     bool ok = false;
     int units = 0;                       // enemies in that fight
