@@ -10,6 +10,10 @@
 //   - X / Delete deletes, M mutes (turns a command into a comment, again: back), Shift D duplicates, Shift A or a right click adds a node
 //   - double-click a literal in a node to type over it; right click on a row: wire a function in, or unwire
 //   - the middle button (or Alt + the left button) pans, the wheel zooms: the canvas keeps its own keys
+//   - G moves the selected nodes freely (a click places them, Esc / a right click puts them back), Alt G returns them to their laid-out
+//     place: only the picture changes, the script does not; the places are kept per map file in um-multitool-nodes.tsv beside the settings
+//   - drag from a function's output (its right dot) onto a value row of another node: the call moves there (its old place gets a plain
+//     value); drag a wired row's left dot away and let go on the empty canvas: disconnected
 // Every change is written as script text and committed as one undo step (the map editor's Ctrl+Z).
 #pragma once
 
@@ -63,7 +67,89 @@ struct State {
     char search[64] = "";
     int where = 0; // add: 0 after the selected node, 1 into its first branch (then / body), 2 into its second (else)
     std::string message;
+    // G: moving the selected nodes by hand
+    bool grabbing = false;
+    ImVec2 grabStart{0, 0};
+    std::map<std::string, ImVec2> grabBase; // their offsets when G was pressed (Esc puts these back)
+    // dragging a wire: from a function's output, or picked up at a row's input
+    bool wiringDrag = false, pickedUp = false;
+    ExprPath wireFrom;
+    ImVec2 wireAnchor{0, 0}; // the output socket, in canvas units
 };
+
+// ---- nodes moved by hand: offsets from the laid-out place, per map file -----------------------------------------------------
+
+inline std::map<std::string, std::map<std::string, ImVec2>>& AllOffsets() {
+    static std::map<std::string, std::map<std::string, ImVec2>> all;
+    static bool loaded = false;
+    if (!loaded) {
+        loaded = true;
+        std::ifstream in(config::UserDir() + "/um-multitool-nodes.tsv");
+        std::string line;
+        while (std::getline(in, line)) {
+            if (line.empty() || line[0] == '#') continue;
+            std::vector<std::string> f;
+            std::stringstream ss(line);
+            std::string part;
+            while (std::getline(ss, part, '\t')) f.push_back(part);
+            if (f.size() == 4) all[f[0]][f[1]] = ImVec2(static_cast<float>(std::atof(f[2].c_str())), static_cast<float>(std::atof(f[3].c_str())));
+        }
+    }
+    return all;
+}
+inline std::map<std::string, ImVec2>& OffsetsOf(const std::string& file) { return AllOffsets()[file]; }
+inline void SaveOffsets() {
+    std::ofstream out(config::UserDir() + "/um-multitool-nodes.tsv", std::ios::trunc);
+    out << "# um-multitool: script nodes moved by hand (Map Editor > Script > Nodes, G): map file, node, offset x, offset y\n";
+    for (const auto& file : AllOffsets())
+        for (const auto& kv : file.second)
+            if (kv.second.x != 0 || kv.second.y != 0) out << file.first << '\t' << kv.first << '\t' << kv.second.x << '\t' << kv.second.y << '\n';
+}
+inline std::string OffsetSig(const std::map<std::string, ImVec2>& off) {
+    std::ostringstream s;
+    for (const auto& kv : off) s << kv.first << ':' << kv.second.x << ',' << kv.second.y << ';';
+    return s.str();
+}
+// The laid-out graph with the moved nodes: their wires follow, their frames grow around them.
+inline void ApplyOffsets(Graph& g, const std::map<std::string, ImVec2>& off, const std::unordered_map<std::string, int>& byKey, float F, float headerH) {
+    std::vector<ImVec2> d(g.nodes.size(), ImVec2(0, 0));
+    bool any = false;
+    for (const auto& kv : off) {
+        auto it = byKey.find(kv.first);
+        if (it == byKey.end() || it->second < 0 || static_cast<size_t>(it->second) >= g.nodes.size()) continue;
+        d[static_cast<size_t>(it->second)] = kv.second;
+        any = any || kv.second.x != 0 || kv.second.y != 0;
+    }
+    if (!any) return;
+    for (size_t i = 0; i < g.nodes.size(); ++i) { g.nodes[i].pos.x += d[i].x; g.nodes[i].pos.y += d[i].y; }
+    for (Wire& w : g.wires) {
+        if (w.from >= 0 && static_cast<size_t>(w.from) < d.size()) { w.a.x += d[static_cast<size_t>(w.from)].x; w.a.y += d[static_cast<size_t>(w.from)].y; }
+        if (w.to >= 0 && static_cast<size_t>(w.to) < d.size()) { w.b.x += d[static_cast<size_t>(w.to)].x; w.b.y += d[static_cast<size_t>(w.to)].y; }
+    }
+    for (Frame& fr : g.frames)
+        for (const Node& n : g.nodes) {
+            if (n.scriptIdx != fr.scriptIdx || fr.scriptIdx < 0) continue;
+            fr.min.x = std::min(fr.min.x, n.pos.x - F);
+            fr.min.y = std::min(fr.min.y, n.pos.y - headerH - F);
+            fr.max.x = std::max(fr.max.x, n.pos.x + n.size.x + F);
+            fr.max.y = std::max(fr.max.y, n.pos.y + n.size.y + F);
+        }
+    g.min = ImVec2(1e9f, 1e9f);
+    g.max = ImVec2(-1e9f, -1e9f);
+    for (const Frame& fr : g.frames) {
+        g.min = ImVec2(std::min(g.min.x, fr.min.x), std::min(g.min.y, fr.min.y));
+        g.max = ImVec2(std::max(g.max.x, fr.max.x), std::max(g.max.y, fr.max.y));
+    }
+    if (g.frames.empty()) g.min = g.max = ImVec2(0, 0);
+    g.BuildIndex(F);
+}
+
+// Whether expression path `inner` lies inside `outer` (or is it).
+inline bool ExprWithin(const ExprPath& inner, const ExprPath& outer) {
+    if (StmtKey(inner.stmt) != StmtKey(outer.stmt) || inner.slot != outer.slot || inner.args.size() < outer.args.size()) return false;
+    for (size_t i = 0; i < outer.args.size(); ++i) if (inner.args[i] != outer.args[i]) return false;
+    return true;
+}
 
 struct Ctx {
     App& app;
@@ -76,6 +162,7 @@ struct Ctx {
     ImDrawList* dl;
     int hoverIndex;
     bool hovered;
+    std::map<std::string, ImVec2>& offsets; // this file's nodes moved by hand
 };
 
 // An operation on the parsed script: written back as text and committed as one undoable change.
@@ -362,7 +449,90 @@ inline void Run(State& ne, Ctx& c) {
     }
 
     const bool typing = io.WantTextInput;
+    // ---- G: the selected nodes follow the mouse until a click (or Enter) places them; Esc or a right click puts them back
+    if (ne.grabbing) {
+        const ImVec2 moved(cm.x - ne.grabStart.x, cm.y - ne.grabStart.y);
+        for (const auto& kv : ne.grabBase) c.offsets[kv.first] = ImVec2(kv.second.x + moved.x, kv.second.y + moved.y);
+        ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
+        const bool place = ImGui::IsMouseClicked(ImGuiMouseButton_Left) || ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+        const bool cancel = ImGui::IsMouseClicked(ImGuiMouseButton_Right) || ImGui::IsKeyPressed(ImGuiKey_Escape, false);
+        if (place || cancel) {
+            if (cancel) for (const auto& kv : ne.grabBase) c.offsets[kv.first] = kv.second;
+            ne.grabbing = false;
+            ne.grabBase.clear();
+            SaveOffsets();
+        }
+        return;
+    }
+    // the sockets near the mouse: a function's output (right of its header), a wired row's input (left of the row)
+    const float reach = std::max(4.0f, c.rowH * 0.6f);
+    auto outSocket = [&](const Node& n) { return ImVec2(n.pos.x + n.size.x, n.pos.y + c.headerH * 0.5f); };
+    auto nearSockets = [&](int& outNode, int& inNode, int& inRow) {
+        outNode = inNode = inRow = -1;
+        std::vector<int> nodes, wires;
+        c.g.Query(ImVec2(cm.x - reach * 2, cm.y - reach * 2), ImVec2(cm.x + reach * 2, cm.y + reach * 2), c.F, nodes, wires);
+        float best = reach * reach;
+        for (int ni : nodes) {
+            const Node& n = c.g.nodes[static_cast<size_t>(ni)];
+            if (n.isExpr && n.out) {
+                const ImVec2 s = outSocket(n);
+                const float d = (s.x - cm.x) * (s.x - cm.x) + (s.y - cm.y) * (s.y - cm.y);
+                if (d < best) { best = d; outNode = ni; inNode = -1; }
+            }
+            for (size_t r = 0; r < n.rows.size(); ++r) {
+                if (!n.rows[r].wired || n.rows[r].edit.stmt.steps.empty()) continue;
+                const ImVec2 s(n.pos.x, n.pos.y + c.headerH + c.rowH * (static_cast<float>(r) + 0.5f));
+                const float d = (s.x - cm.x) * (s.x - cm.x) + (s.y - cm.y) * (s.y - cm.y);
+                if (d < best) { best = d; inNode = ni; inRow = static_cast<int>(r); outNode = -1; }
+            }
+        }
+    };
     // ---- the mouse
+    int sockOut = -1, sockIn = -1, sockRow = -1;
+    if (c.hovered && !typing && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !io.KeyAlt) nearSockets(sockOut, sockIn, sockRow);
+    if (sockOut >= 0) { // a wire out of a function: dropped on a value row, the call goes there
+        const Node& n = c.g.nodes[static_cast<size_t>(sockOut)];
+        ne.wiringDrag = true;
+        ne.pickedUp = false;
+        ne.wireFrom = n.expr;
+        ne.wireAnchor = outSocket(n);
+    } else if (sockIn >= 0) { // a wire picked up at its end: dropped elsewhere it moves, on the empty canvas it is disconnected
+        const Row& row = c.g.nodes[static_cast<size_t>(sockIn)].rows[static_cast<size_t>(sockRow)];
+        auto src = c.byKey.find(ExprKey(row.edit));
+        if (src != c.byKey.end()) {
+            ne.wiringDrag = true;
+            ne.pickedUp = true;
+            ne.wireFrom = row.edit;
+            ne.wireAnchor = outSocket(c.g.nodes[static_cast<size_t>(src->second)]);
+        }
+    }
+    if (ne.wiringDrag) {
+        const ImVec2 a = ToScreen(c, ne.wireAnchor);
+        const float k = std::max(30.0f, std::fabs(m.x - a.x) * 0.5f);
+        dl->AddBezierCubic(a, ImVec2(a.x + k, a.y), ImVec2(m.x - k, m.y), m, IM_COL32(255, 255, 255, 220), 2.0f);
+        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
+            ne.wiringDrag = false;
+            const ExprPath from = ne.wireFrom;
+            const Node* target = c.hoverIndex >= 0 ? &c.g.nodes[static_cast<size_t>(c.hoverIndex)] : nullptr;
+            const int r = target ? RowAt(c, *target, cm.y) : -1;
+            const Row* row = target && r >= 0 && r < static_cast<int>(target->rows.size()) ? &target->rows[static_cast<size_t>(r)] : nullptr;
+            if (row && (row->editable || row->wired) && !row->edit.stmt.steps.empty()) {
+                const ExprPath to = row->edit;
+                if (ExprKey(to) == ExprKey(from)) {}
+                else if (ExprWithin(to, from)) ne.message = "A call cannot be wired into itself";
+                else if (Apply(c, [&](scriptast::Program& p) {
+                             const scriptast::Expr* e = scriptedit::GetExpr(p, from);
+                             if (!e) return false;
+                             const scriptast::Expr moved = *e;
+                             return scriptedit::SetExpr(p, from, DefaultFor(p, from)) && scriptedit::SetExpr(p, to, moved);
+                         })) ne.items.clear(); // the selected places now hold other nodes
+                else ne.message = "That value cannot take this call";
+            } else if (ne.pickedUp && c.hoverIndex < 0) {
+                if (Apply(c, [&](scriptast::Program& p) { return scriptedit::SetExpr(p, from, DefaultFor(p, from)); })) ne.items.clear();
+            }
+        }
+        return;
+    }
     if (c.hovered && !typing && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !io.KeyAlt) {
         if (c.hoverIndex >= 0 && !Key(c.g.nodes[static_cast<size_t>(c.hoverIndex)]).empty()) {
             const Node& n = c.g.nodes[static_cast<size_t>(c.hoverIndex)];
@@ -456,6 +626,17 @@ inline void Run(State& ne, Ctx& c) {
     auto pressed = [&](ImGuiKey k) { return keys && ImGui::IsKeyPressed(k, false); };
     bool del = pressed(ImGuiKey_X) || pressed(ImGuiKey_Delete), mute = pressed(ImGuiKey_M), dup = io.KeyShift && pressed(ImGuiKey_D), add = io.KeyShift && pressed(ImGuiKey_A);
     if (pressed(ImGuiKey_Escape)) ne.items.clear();
+    if (pressed(ImGuiKey_G) && !ne.items.empty()) {
+        if (io.KeyAlt) { // back to the laid-out place
+            for (const Sel& s : ne.items) c.offsets.erase(Key(s));
+            SaveOffsets();
+        } else {
+            ne.grabbing = true;
+            ne.grabStart = cm;
+            ne.grabBase.clear();
+            for (const Sel& s : ne.items) { const std::string k = Key(s); auto it = c.offsets.find(k); ne.grabBase[k] = it == c.offsets.end() ? ImVec2(0, 0) : it->second; }
+        }
+    }
     if (pressed(ImGuiKey_A) && !io.KeyShift) {
         if (io.KeyAlt) ne.items.clear();
         else for (const Node& n : c.g.nodes) if (n.isStmt && !IsSelected(ne, n)) ne.items.push_back(SelOf(n));
@@ -495,7 +676,10 @@ inline void Run(State& ne, Ctx& c) {
         std::vector<Sel> stmts;
         for (const Sel& s : ne.items) if (!s.expr) stmts.push_back(s);
         std::sort(stmts.begin(), stmts.end(), [](const Sel& a, const Sel& b) { return PathLess(b.s, a.s); });
-        if (Apply(c, [&](scriptast::Program& p) { bool any = false; for (const Sel& s : stmts) any = scriptedit::DuplicateStmt(p, s.s) || any; return any; })) ne.items.clear();
+        if (Apply(c, [&](scriptast::Program& p) { bool any = false; for (const Sel& s : stmts) any = scriptedit::DuplicateStmt(p, s.s) || any; return any; })) {
+            ne.items.clear();
+            if (stmts.size() == 1 && !stmts[0].s.steps.empty()) { Sel copy = stmts[0]; ++copy.s.steps.back().index; ne.items.push_back(copy); } // the copy (right after its original) is the selection, as in Blender
+        }
     };
     if (del && !ne.items.empty()) doDelete();
     if (mute && !ne.items.empty()) doMute();

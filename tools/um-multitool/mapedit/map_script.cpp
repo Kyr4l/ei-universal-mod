@@ -849,7 +849,9 @@ private:
         const int idx = Add(n);
         const Node& made = g_.nodes[static_cast<size_t>(idx)];
         const ImVec2 a = OutSocket(made), b = InSocket(g_.nodes[static_cast<size_t>(to)], row);
-        g_.wires.push_back({a, b, ImGui::GetColorU32(TypeColor(made.outType == '?' ? g_.nodes[static_cast<size_t>(to)].rows[row].type : made.outType)), false});
+        Wire vw{a, b, ImGui::GetColorU32(TypeColor(made.outType == '?' ? g_.nodes[static_cast<size_t>(to)].rows[row].type : made.outType)), false};
+        vw.from = idx; vw.to = to; // so a node moved by hand takes its wires along
+        g_.wires.push_back(vw);
         const float height = made.size.y, left = made.pos.x; // read before Feed: it adds nodes, and the vector may move (`made` would dangle: a crash on Windows)
         const float fed = Feed(e.args, idx, left - gapX, top, at);
         return std::max(height, fed);
@@ -982,9 +984,13 @@ private:
                     newColumn = false;
                 } else if (prev >= 0) {
                     const Node& p = g_.nodes[static_cast<size_t>(prev)];
-                    g_.wires.push_back({ImVec2(p.pos.x + F, p.pos.y + p.size.y), ImVec2(made.pos.x + F, made.pos.y), flow, true});
+                    Wire sw{ImVec2(p.pos.x + F, p.pos.y + p.size.y), ImVec2(made.pos.x + F, made.pos.y), flow, true};
+                    sw.from = prev; sw.to = idx;
+                    g_.wires.push_back(sw);
                 } else if (branchOf >= 0) {
-                    g_.wires.push_back({BranchSocket(g_.nodes[static_cast<size_t>(branchOf)], branch), FlowIn(made), flow, false});
+                    Wire bw{BranchSocket(g_.nodes[static_cast<size_t>(branchOf)], branch), FlowIn(made), flow, false};
+                    bw.from = branchOf; bw.to = idx;
+                    g_.wires.push_back(bw);
                 }
                 prev = idx;
                 branchOf = -1;
@@ -1031,7 +1037,7 @@ static void EditScriptAt(App& app, const mob::File& f, int line) {
 static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, size_t hash, const ScriptNames& names) {
     using namespace nodegraph;
     // The tree and its graph, built again when the text, the commands (EI ATD's) or the font size change.
-    struct Cache { const mob::File* file = nullptr; size_t hash = 0; bool atd = false; float font = 0; scriptast::Program prog; Graph g; float headerH = 0, rowH = 0, pad = 0; std::unordered_map<std::string, int> byKey; };
+    struct Cache { const mob::File* file = nullptr; size_t hash = 0; bool atd = false; float font = 0; scriptast::Program prog; Graph base, g; float headerH = 0, rowH = 0, pad = 0; std::unordered_map<std::string, int> byKey; std::string offSig; };
     static Cache c;
     if (c.file != &f || c.hash != hash || c.atd != scriptcmds::AtdActive() || c.font != ImGui::GetFontSize()) {
         c.file = &f;
@@ -1040,12 +1046,18 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         c.font = ImGui::GetFontSize();
         c.prog = scriptast::Parse(utf8);
         Builder b(c.prog, names);
-        c.g = b.Build();
+        c.base = b.Build();
+        c.offSig = "\x01"; // laid out again: the moved nodes are applied again below
         c.headerH = b.headerH;
         c.rowH = b.rowH;
         c.pad = b.pad;
         c.byKey.clear(); // the nodes that can be edited, by their place in the script tree
-        for (size_t i = 0; i < c.g.nodes.size(); ++i) { const std::string k = nodeedit::Key(c.g.nodes[i]); if (!k.empty()) c.byKey[k] = static_cast<int>(i); }
+        for (size_t i = 0; i < c.base.nodes.size(); ++i) { const std::string k = nodeedit::Key(c.base.nodes[i]); if (!k.empty()) c.byKey[k] = static_cast<int>(i); }
+    }
+    { // the nodes moved by hand (G): the laid-out graph with their offsets
+        std::map<std::string, ImVec2>& off = nodeedit::OffsetsOf(f.path);
+        const std::string sig = nodeedit::OffsetSig(off);
+        if (sig != c.offSig) { c.offSig = sig; c.g = c.base; nodeedit::ApplyOffsets(c.g, off, c.byKey, c.font, c.headerH); }
     }
     static nodeedit::State ne;
     if (ne.file != f.path) { ne = nodeedit::State(); ne.file = f.path; }
@@ -1101,7 +1113,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
 
     if (editing) {
         ImGui::PushTextWrapPos(0);
-        ImGui::TextDisabled("Shift A: add. X: delete. M: mute. Shift D: duplicate. Drag a node onto another to move it. Double-click a value to type. Right click: menu. Middle button: pan.");
+        ImGui::TextDisabled("Shift A: add. X: delete. M: mute. Shift D: duplicate. G: move freely (Alt G: back). Drag a node onto another to reorder. Drag from a dot to rewire. Double-click a value to type. Right click: menu. Middle button: pan.");
         ImGui::PopTextWrapPos();
         if (!ne.message.empty()) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%s", ne.message.c_str());
     }
@@ -1274,7 +1286,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
     }
     if (hover) dl->AddRect(S(hover->pos), S(ImVec2(hover->pos.x + hover->size.x, hover->pos.y + hover->size.y)), IM_COL32(255, 255, 255, 220), corner, 0, 1.5f);
     if (editing) {
-        nodeedit::Ctx ctx{app, f, c.prog, g, c.byKey, origin, view.pan, z, F, c.headerH, c.rowH, dl, hoverIndex, hovered};
+        nodeedit::Ctx ctx{app, f, c.prog, g, c.byKey, origin, view.pan, z, F, c.headerH, c.rowH, dl, hoverIndex, hovered, nodeedit::OffsetsOf(f.path)};
         nodeedit::Run(ne, ctx);
     }
     dl->Flags = dlFlags;

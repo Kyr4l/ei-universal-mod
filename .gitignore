@@ -37,6 +37,8 @@ _cpr
 # um-multitool 3D Viewer settings (local machine-specific)
 tools/um-multitool/um-multitool-viewer.cfg
 tools/um-multitool/um-multitool.cfg
+tools/um-multitool/um-multitool-ratings.tsv
+tools/um-multitool/um-multitool-nodes.tsv
 tools/um-multitool/um-multitool-res.o
 tools/um-multitool/um-multitool-res32.o
 tools/um-bot/um-bot-res.o

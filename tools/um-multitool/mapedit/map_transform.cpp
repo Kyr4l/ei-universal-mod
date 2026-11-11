@@ -290,7 +290,7 @@ void Keys(App& app) {
     if (app.xf.mode != Transform::None || transformStarted) return; // the camera stays still while transforming
 
     // Movement ignores modifiers (Shift is the default "faster"), but not with Ctrl held: Ctrl+... are actions.
-    if (mods & config::kModCtrl) return;
+    if ((mods & config::kModCtrl) || nodeKeys) return; // over the node editor the letters are its keys
     float forward = (down[config::kKeyForward] ? 1.0f : 0.0f) - (down[config::kKeyBack] ? 1.0f : 0.0f);
     float right = (down[config::kKeyRight] ? 1.0f : 0.0f) - (down[config::kKeyLeft] ? 1.0f : 0.0f);
     float up = (down[config::kKeyUp] ? 1.0f : 0.0f) - (down[config::kKeyDown] ? 1.0f : 0.0f);
