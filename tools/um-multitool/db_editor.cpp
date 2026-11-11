@@ -1133,6 +1133,73 @@ void Update() {
     if (g.loaded && g.checkedOn != ChecksOn()) Recheck(false); // Settings > Checks changed
 }
 
+// The selected weapon or armour as the game builds it with each material of its type (game.exe CItemConstructor::ApplyProto 0x6A5D60,
+// docs/game-exe/items.md 3): price = P.Price + Components x M.Price, weight = P x M, mana and slots = P + M, durability = P x M,
+// damage = P x M.Damage, armour absorption k = P.main[k] x M.Absorb[k] x P.MainAbsorb (and the additional set the same way).
+void FinalItemPanel(float height) {
+    const sheetio::Sheet& sh = g.book[static_cast<size_t>(g.sheet)];
+    const bool weapon = sh.name == "Weapons";
+    const sheetio::Sheet* mats = nullptr;
+    for (const sheetio::Sheet& x : g.book) if (x.name == "Materials") mats = &x;
+    auto col = [](const sheetio::Sheet& t, const char* title) {
+        for (int c = 1; c <= t.maxCol; ++c) { auto h = t.cells.find({2, c}); if (h != t.cells.end() && h->second.text == title) return c; }
+        return 0;
+    };
+    auto text = [](const sheetio::Sheet& t, int row, int c) { if (!c) return std::string(); auto it = t.cells.find({row, c}); return it == t.cells.end() ? std::string() : it->second.text; };
+    auto num = [&](const sheetio::Sheet& t, int row, int c) { return c ? std::strtod(text(t, row, c).c_str(), nullptr) : 0.0; };
+    ImGui::BeginChild("##finalitem", ImVec2(-1, height), ImGuiChildFlags_Borders);
+    const int r = g.selRow;
+    if (!mats || r < kFirstRow || text(sh, r, col(sh, "Name")).empty()) { ImGui::TextDisabled("Select a %s row to see it made of each material of its type.", weapon ? "weapon" : "armour"); ImGui::EndChild(); return; }
+    const std::string name = text(sh, r, col(sh, "Name")), type = text(sh, r, col(sh, "M.Type"));
+    ImGui::Text("%s", name.c_str());
+    ImGui::SameLine();
+    ImGui::TextDisabled("material type %s; as game.exe builds it (CItemConstructor::ApplyProto)", type.c_str());
+    if (Lower(type) == "none") { ImGui::TextColored(kErrorColor, "Material type 'none': the game cannot build it (and crashes when a shop generates it, bugs.md 22)."); ImGui::EndChild(); return; }
+    const double pPrice = num(sh, r, col(sh, "Price")), pWeight = num(sh, r, col(sh, "Weight")), pMana = num(sh, r, col(sh, "Mana")), pSlots = num(sh, r, col(sh, "Slots")),
+                 pDur = num(sh, r, col(sh, "Durability")), pComp = num(sh, r, col(sh, "Components")), pMin = num(sh, r, col(sh, "D.Min")), pMax = num(sh, r, col(sh, "D.Max")),
+                 pMainF = num(sh, r, col(sh, "M. Absorb.")), pAddF = num(sh, r, col(sh, "A. Absorb."));
+    static const char* const kinds[] = {"Piercing", "Slashing", "Bludg.", "Termal", "Chemic", "Electric", "General"};
+    const int mName = col(*mats, "Name"), mType = col(*mats, "Type");
+    const int cols = weapon ? 7 : 6 + 7; // armours: main + additional absorption in each type's column
+    if (ImGui::BeginTable("##final", cols, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX | ImGuiTableFlags_SizingFixedFit, ImVec2(-1, -1))) {
+        ImGui::TableSetupScrollFreeze(1, 1);
+        for (const char* h : {"Material", "Price", "Weight", "Durability", "Mana", "Slots"}) ImGui::TableSetupColumn(h);
+        if (weapon) ImGui::TableSetupColumn("Damage");
+        else for (const char* k : kinds) ImGui::TableSetupColumn((std::string("Abs. ") + k).c_str());
+        ImGui::TableHeadersRow();
+        int shown = 0;
+        for (int mr = kFirstRow; mr <= mats->maxRow; ++mr) {
+            const std::string mn = text(*mats, mr, mName);
+            if (mn.empty() || Lower(text(*mats, mr, mType)) != Lower(type)) continue;
+            ++shown;
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn(); ImGui::TextUnformatted(mn.c_str());
+            ImGui::TableNextColumn(); ImGui::Text("%.0f", pPrice + pComp * num(*mats, mr, col(*mats, "Price")));
+            ImGui::TableNextColumn(); ImGui::Text("%.2f", pWeight * num(*mats, mr, col(*mats, "Weight")));
+            ImGui::TableNextColumn(); ImGui::Text("%.0f", pDur * num(*mats, mr, col(*mats, "Durability")));
+            ImGui::TableNextColumn(); ImGui::Text("%.0f", pMana + num(*mats, mr, col(*mats, "Mana")));
+            ImGui::TableNextColumn(); ImGui::Text("%.0f", pSlots + num(*mats, mr, col(*mats, "Slots")));
+            if (weapon) {
+                const double dm = num(*mats, mr, col(*mats, "Damage"));
+                ImGui::TableNextColumn(); ImGui::Text("%.1f - %.1f", pMin * dm, (pMin + pMax) * dm);
+            } else {
+                static const char* const mainCols[] = {"M. Piercing", "M. Slashing", "M. Bludg.", "M. Termal", "M. Chemic", "M. Electric", "M. General"};
+                static const char* const addCols[] = {"A. Piercing", "A. Slashing", "A. Bludg.", "A. Termal", "A. Chemic", "A. Electric", "A. General"};
+                static const char* const matCols[] = {"A.Piercing", "A.Slashing", "A.Bludg.", "A.Termal", "A.Chemic", "A.Electric", "A.General"};
+                for (int k = 0; k < 7; ++k) {
+                    const double ma = num(*mats, mr, col(*mats, matCols[k]));
+                    const double mainV = num(sh, r, col(sh, mainCols[k])) * ma * pMainF, addV = num(sh, r, col(sh, addCols[k])) * ma * pAddF;
+                    ImGui::TableNextColumn();
+                    if (addV != 0) ImGui::Text("%.1f + %.1f", mainV, addV); else ImGui::Text("%.1f", mainV);
+                }
+            }
+        }
+        ImGui::EndTable();
+        if (!shown) ImGui::TextDisabled("No material of type '%s' in the Materials sheet.", type.c_str());
+    }
+    ImGui::EndChild();
+}
+
 void DrawTab() {
     const float fieldWidth = std::max(200.0f, ImGui::GetContentRegionAvail().x - 110 - 260);
     if (PathField("dbopen", "Database:", g.path, sizeof(g.path), false, "Database", "*.res;*.xlsx;*.ods", fieldWidth)) RequestOpen(g.path);
@@ -1209,7 +1276,13 @@ void DrawTab() {
     if (g.sheet >= 0 && g.sheet < static_cast<int>(g.book.size()))
         SheetTable(top - ImGui::GetFrameHeightWithSpacing());
     ImGui::EndGroup();
-    IssueList(issuesHeight);
+    const bool items = g.sheet >= 0 && g.sheet < static_cast<int>(g.book.size()) && (g.book[static_cast<size_t>(g.sheet)].name == "Weapons" || g.book[static_cast<size_t>(g.sheet)].name == "Armors");
+    if (items && ImGui::BeginTabBar("##dbbottom")) {
+        const float inner = issuesHeight - ImGui::GetFrameHeightWithSpacing();
+        if (ImGui::BeginTabItem("Issues")) { IssueList(inner); ImGui::EndTabItem(); }
+        if (ImGui::BeginTabItem("Final Item")) { FinalItemPanel(inner); ImGui::EndTabItem(); }
+        ImGui::EndTabBar();
+    } else IssueList(issuesHeight);
 }
 
 } // namespace dbedit
