@@ -571,6 +571,16 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
         }
         issue(Issue::Error, row, col, p.message, std::move(fixes));
     };
+    // game.exe bug 22 (docs/game-exe/bugs.md): a weapon or armour whose material type is "none" crashes the game when a shop restocks
+    // it (ShopStock::GenerateItems: FinishItem returns no item and the next line writes through it).
+    if (sh.name == "Weapons" || sh.name == "Armors") {
+        int typeCol = 0;
+        for (int c = 1; c <= sh.maxCol && !typeCol; ++c) { auto h = sh.cells.find({2, c}); if (h != sh.cells.end() && h->second.text == "M.Type") typeCol = c; }
+        if (typeCol)
+            for (const auto& [rc, cell] : sh.cells)
+                if (rc.first >= 4 && rc.second == typeCol && !cell.isNumber && Lower(cell.text) == "none")
+                    issue(Issue::Error, rc.first, typeCol, "a " + std::string(sh.name == "Weapons" ? "weapon" : "armour") + " with material type 'none': game.exe crashes when a shop generates it (bugs.md 22)");
+    }
     // Markers the compiler does not know: their columns are ignored.
     for (const auto& [col, key] : info.markerOf) {
         const FieldDef* d = fieldDef(key.first);

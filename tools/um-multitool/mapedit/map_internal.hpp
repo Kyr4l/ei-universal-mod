@@ -422,7 +422,7 @@ struct App {
     bool nodeEditHover = false;              // the node view's canvas is under the mouse in edit mode: its keys (X, M, Shift A / D...) are the nodes', not the map's
     int nodeFlashLine = 0;
     double nodeFlashUntil = 0;
-    bool checkedScripts = true, checkedDatabase = true, checkedAtd = false; // Settings > Checks when the checks last ran (a change runs them again)
+    bool checkedScripts = true, checkedDatabase = true, checkedAtd = false, checkedEngine = true; // Settings > Checks when the checks last ran (a change runs them again)
     bool focusScriptWindow = false;
 
     // Save active MOB as...

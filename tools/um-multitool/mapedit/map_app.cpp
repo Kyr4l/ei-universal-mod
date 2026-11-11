@@ -229,7 +229,7 @@ void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);
     PollRating(app);
-    if (app.checksDirty || app.checkedVersion != app.lib.version || app.checkedScripts != app.lib.scriptChecks ||
+    if (app.checksDirty || app.checkedVersion != app.lib.version || app.checkedScripts != app.lib.scriptChecks || app.checkedEngine != app.lib.engineScriptChecks ||
         app.checkedDatabase != app.lib.databaseChecks || app.checkedAtd != app.lib.atdScripts)
         RunChecks(app);
     RefreshScriptModel(app);
@@ -742,6 +742,7 @@ int RunCli(int argc, char** argv) {
     in.database = &db;
     in.scriptChecks = lib.scriptChecks;
     in.databaseChecks = lib.databaseChecks;
+    in.engineScriptChecks = lib.engineScriptChecks;
     if (!lib.scriptChecks) std::printf("note: script checks are off (Settings > Checks)\n");
     if (!lib.databaseChecks) std::printf("note: database checks are off (Settings > Checks)\n");
     else if (db.Empty()) std::printf("note: no items database set in the GUI's Settings tab: item, spell and prototype names are not checked\n");

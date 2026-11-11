@@ -575,6 +575,22 @@ void Label(const char* text) {
     ImGui::TableNextColumn();
 }
 
+// A field game.exe never reads (docs/game-exe): its label greyed, the reason in a tooltip (Settings > Checks > Mark Ignored Fields).
+static bool g_ignored = false;
+static void IgnoredLabel(App& app, const char* text, bool ignored, const char* why) {
+    g_ignored = ignored && app.lib.markIgnored;
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    ImGui::AlignTextToFramePadding();
+    if (g_ignored) {
+        ImGui::TextDisabled("%s", text);
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Not read by the game: %s", why);
+        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.55f);
+    } else ImGui::TextUnformatted(text);
+    ImGui::TableNextColumn();
+}
+static void IgnoredEnd() { if (g_ignored) ImGui::PopStyleVar(); g_ignored = false; }
+
 // ---- unit stats (UNIT_STATS, ei_maper's SUnitStat) ----------------------------------------------------
 
 struct StatField { const char* group; const char* name; int offset; char type; const char* tip; }; // type: i int, f float, b byte
@@ -787,12 +803,13 @@ static void LogicEditor(App& app, const mob::Object& o, int objectIndex) {
             const float cur[1] = {g.help};
             if (EditFloats("##help", 1, cur, v4, "%.1f")) { g.help = v4[0]; changed = true; }
         }
-        Label("Wait (s)");
+        IgnoredLabel(app, "Wait (s)", true, "the unit logic's Wait is copied and saved but no behaviour reads it (unit-ai.md 3.6, BuildFromLogicSlot)");
         {
             const float cur[1] = {g.wait < 0 ? -1.0f : g.wait / 15.0f};
             if (EditFloats("##wait", 1, cur, v4, "%.2f")) { g.wait = v4[0] < 0 ? -1.0f : v4[0] * 15.0f; changed = true; }
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Stored as 15 per second; -1: none");
         }
+        IgnoredEnd();
         Label("Alarm condition");
         changed |= EditByte("##alarmcond", g.alarmCondition, g.alarmCondition);
         Label("Alarm count");
@@ -1179,8 +1196,9 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
             if (EditU32("##srange", static_cast<uint32_t>(o.range), u)) CommitField(app, objectIndex, mob::kSoundRange, mob::U32Payload(u));
         }
         if (figure) {
-            Label("Comments");
+            IgnoredLabel(app, "Comments", true, "an editor note: the .mob loader stores it (CObjectDesc +0x40) and nothing reads it");
             if (EditText("##comments", mob::Utf8(o.comments), text)) CommitText(app, objectIndex, mob::kObjComments, text);
+            IgnoredEnd();
             Label("Quest info");
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("ei_maper's \"Quest\": the quest (e.g. z3xq1) or quest objective this object belongs to;\n"
@@ -1204,7 +1222,10 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
     if (o.kind == mob::Kind::Unit) {
         for (const mob::ItemList& l : o.lists) {
             ImGui::PushID(static_cast<int>(l.type));
-            ImGui::SeparatorText((std::string(l.label) + "s").c_str());
+            // armors, weapons and spells only count with Map Stats & Gear on (MobUnitStats_ApplyTo 0x477B00); quick and quest items always
+            const bool unused = app.lib.markIgnored && !mob::UsesMapStats(o) && (l.type == mob::kUnitArmors || l.type == mob::kUnitWeapons || l.type == mob::kUnitSpells);
+            ImGui::SeparatorText((std::string(l.label) + "s" + (unused ? "  (not used: Map Stats & Gear is off)" : "")).c_str());
+            if (unused) ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.55f);
             std::vector<std::string> entries = l.entries;
             bool changed = false;
             int removeAt = -1;
@@ -1228,6 +1249,7 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
             if (ImGui::SmallButton("Add")) { entries.push_back(l.type == mob::kUnitSpells ? "spell" : "item"); changed = true; }
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Adds an entry to type over (template.material for weapons and armors)");
             if (changed) CommitField(app, objectIndex, l.type, mob::StringArrayPayload(l.type, entries), false);
+            if (unused) ImGui::PopStyleVar();
             ImGui::PopID();
         }
         LogicEditor(app, o, objectIndex);

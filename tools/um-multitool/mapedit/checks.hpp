@@ -25,6 +25,7 @@
 #pragma once
 
 #include "db_model.hpp"
+#include "engine_checks.hpp"
 
 #include <algorithm>
 #include <cstring>
@@ -300,6 +301,7 @@ struct Inputs {
     // is checked against the database - for games with their own commands or databases.
     bool scriptChecks = true;
     bool databaseChecks = true;
+    bool engineScriptChecks = true; // game.exe's own script engine: commands that do nothing, its compiler's bugs (engine_checks.hpp)
 };
 
 struct Summary { int errors = 0, warnings = 0, infos = 0; };
@@ -450,6 +452,8 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
             const bool haveBase = fi > 0 || base;
             report = CheckMobScript(f.script, haveBase ? &visible.declarations : nullptr, baseMissing);
             for (const MobScriptIssue& issue : report.issues) add(issue.severity, fi, -1, issue.line, "Script", issue.message);
+            if (in.engineScriptChecks)
+                for (const enginecheck::Issue& issue : enginecheck::Check(f.script)) add(issue.severity, fi, -1, issue.line, "Script", "game.exe: " + issue.message);
             if (report.suppressed > 0) add('W', fi, -1, 0, "Script", std::to_string(report.suppressed) + " more script finding(s) not shown");
             calledBy[static_cast<size_t>(fi)] = report.called;
             hasScriptFile[static_cast<size_t>(fi)] = true;

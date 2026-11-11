@@ -162,6 +162,8 @@ struct Config {
     float mapDrawDistance = 0.0f;             // Performance: the Map Editor draws objects within this many units of the camera's target (0: all)
     bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
     bool scriptChecks = true;                 // Checks: the maps' scripts checked (off: games with their own commands)
+    bool engineScriptChecks = true;           // Checks: what game.exe's script engine does (commands that do nothing, compiler bugs)
+    bool markIgnored = true;                  // Map Editor: fields game.exe never reads are greyed with a note
     bool databaseChecks = true;               // Checks: the database's own checks and the maps' names against it
     bool atdScripts = false;                  // Checks: EI ATD's script commands over the original's (mapedit/atd_script_functions.hpp)
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
@@ -244,6 +246,8 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_DRAW_DISTANCE") cfg.mapDrawDistance = static_cast<float>(std::atof(value.c_str()));
         else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
         else if (key == "SCRIPT_CHECKS") cfg.scriptChecks = value != "false";
+        else if (key == "ENGINE_SCRIPT_CHECKS") cfg.engineScriptChecks = value != "false";
+        else if (key == "MARK_IGNORED") cfg.markIgnored = value != "false";
         else if (key == "DATABASE_CHECKS") cfg.databaseChecks = value != "false";
         else if (key == "ATD_SCRIPTS") cfg.atdScripts = value == "true";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
@@ -429,6 +433,10 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; The maps' scripts are checked: syntax, commands, arguments, the objects they name (true/false;\n";
     f << "; false for a game with its own commands, see also script_commands.txt beside the program)\n";
     f << "SCRIPT_CHECKS=" << flag(cfg.scriptChecks) << "\n";
+    f << "; Checks from game.exe's script engine (commands that do nothing there, its compiler's bugs); (true/false)\n";
+    f << "ENGINE_SCRIPT_CHECKS=" << flag(cfg.engineScriptChecks) << "\n";
+    f << "; Map Editor: grey the fields game.exe never reads, with a note; (true/false)\n";
+    f << "MARK_IGNORED=" << flag(cfg.markIgnored) << "\n";
     f << "; The database is checked, and the maps' item, spell and prototype names against it (true/false)\n";
     f << "DATABASE_CHECKS=" << flag(cfg.databaseChecks) << "\n";
     f << "; The scripts are EI ATD's: its script commands (with SpellAddon's) replace the original game's (true/false)\n";

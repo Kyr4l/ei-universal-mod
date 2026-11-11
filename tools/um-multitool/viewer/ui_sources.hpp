@@ -581,6 +581,10 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
         ImGui::SetTooltip("Map Editor: the maps' scripts are checked (syntax, commands and their arguments, variables, scripts never called,\n"
                           "the objects they name). Off: none of it is reported. A game whose commands differ can also list them\n"
                           "in script_commands.txt beside um-multitool and keep the checks.");
+    if (ImGui::Checkbox("Engine Script Checks", &lib.engineScriptChecks)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Warnings from game.exe's own script engine (docs/game-exe): commands that do nothing there, its compiler's bugs");
+    if (ImGui::Checkbox("Mark Ignored Fields", &lib.markIgnored)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Map Editor: fields game.exe never reads (or ignores for that object) are greyed, with the reason in their tooltip");
     if (ImGui::Checkbox("EI ATD script commands", &lib.atdScripts)) { scriptcmds::Apply(lib.atdScripts); lib.SaveConfig(); }
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("The scripts are EI ATD's: its script commands (with SpellAddon's) replace the original game's in the checks,\n"

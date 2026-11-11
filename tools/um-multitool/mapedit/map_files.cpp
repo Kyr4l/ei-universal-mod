@@ -526,6 +526,7 @@ void RunChecks(App& app) {
     in.scriptChecks = app.checkedScripts = app.lib.scriptChecks;
     in.databaseChecks = app.checkedDatabase = app.lib.databaseChecks;
     app.checkedAtd = app.lib.atdScripts;
+    in.engineScriptChecks = app.checkedEngine = app.lib.engineScriptChecks;
     const checks::Summary before = app.summary;
     app.findings = checks::Run(in, &app.summary);
     if (app.summary.errors > before.errors) app.newErrors = app.summary.errors - before.errors;
