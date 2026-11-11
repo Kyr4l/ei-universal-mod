@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // Remembers the GUI's settings between sessions in um-multitool.cfg beside the executable (in an
-// AppImage: ~/.config/um-multitool, see UserDir): the
+// AppImage or a Flatpak: the config folder, see UserDir): the
 // sources (figure/texture/text layers, database) shared by the 3D Viewer and the Map Editor, the
 // viewer's rotations and GIF settings, and the map editor's files. "KEY=value" lines, layer keys
 // repeated in load order (later = higher priority). Older versions wrote um-multitool-viewer.cfg,
@@ -49,16 +49,27 @@ inline bool InAppImage() {
     const char* a = std::getenv("APPIMAGE");
     return a && *a;
 }
+// True inside a Flatpak sandbox: flatpak sets FLATPAK_ID and mounts /.flatpak-info; /app is read-only.
+inline bool InFlatpak() {
+#ifdef _WIN32
+    return false;
+#else
+    const char* id = std::getenv("FLATPAK_ID");
+    return (id && *id) || access("/.flatpak-info", F_OK) == 0;
+#endif
+}
+// Packaged (AppImage or Flatpak): nothing can be written beside the executable.
+inline bool InPackage() { return InAppImage() || InFlatpak(); }
 inline std::string HomeDir() {
     const char* h = std::getenv("HOME");
     return h && *h ? h : ".";
 }
 
 // Where um-multitool's own files go (um-multitool.cfg, um-multitool.log, script_commands.txt): beside the
-// executable, like always, except in an AppImage: $XDG_CONFIG_HOME/um-multitool (~/.config/um-multitool),
-// created on first use.
+// executable, like always, except in an AppImage or a Flatpak: $XDG_CONFIG_HOME/um-multitool
+// (~/.config/um-multitool; flatpak points XDG_CONFIG_HOME at ~/.var/app/<id>/config), created on first use.
 inline std::string UserDir() {
-    if (!InAppImage()) return ExeDir();
+    if (!InPackage()) return ExeDir();
     const char* xdg = std::getenv("XDG_CONFIG_HOME");
     const std::string dir = (xdg && *xdg ? std::string(xdg) : HomeDir() + "/.config") + "/um-multitool";
     std::error_code ec;
@@ -66,8 +77,8 @@ inline std::string UserDir() {
     return dir;
 }
 
-// Where exports go when no folder was chosen yet: beside the executable, or the home folder in an AppImage.
-inline std::string DefaultSaveDir() { return InAppImage() ? HomeDir() : ExeDir(); }
+// Where exports go when no folder was chosen yet: beside the executable, or the home folder when packaged.
+inline std::string DefaultSaveDir() { return InPackage() ? HomeDir() : ExeDir(); }
 
 inline std::string Path() { return UserDir() + "/um-multitool.cfg"; }
 inline std::string LegacyPath() { return UserDir() + "/um-multitool-viewer.cfg"; }

@@ -10,6 +10,7 @@
 
 #include "imgui.h"
 #include "imgui_internal.h" // NavMovedHere: the nav state
+#include "portal.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -66,6 +67,9 @@ inline bool PickFile(std::string& out) {
     if (GetOpenFileNameA(&ofn)) { out = buf; return true; }
     return false;
 #else
+#ifdef UM_PORTAL
+    if (const int r = portal::Pick(portal::Kind::Open, out); r >= 0) return r == 1;
+#endif
     if (HasCommand("zenity")) return RunPicker("zenity --file-selection 2>/dev/null", out);
     if (HasCommand("kdialog")) return RunPicker("kdialog --getopenfilename 2>/dev/null", out);
     return false;
@@ -100,6 +104,9 @@ inline bool PickSaveFile(const std::string& suggested, std::string& out, const c
     }
     return false;
 #else
+#ifdef UM_PORTAL
+    if (const int r = portal::Pick(portal::Kind::Save, out, suggested, extension); r >= 0) return r == 1;
+#endif
     std::string quoted = "'";
     for (char c : suggested) quoted += (c == '\'') ? std::string("'\\''") : std::string(1, c);
     quoted += "'";
@@ -126,6 +133,9 @@ inline bool PickFolder(std::string& out) {
     if (ok) { out = path; return true; }
     return false;
 #else
+#ifdef UM_PORTAL
+    if (const int r = portal::Pick(portal::Kind::Folder, out); r >= 0) return r == 1;
+#endif
     if (HasCommand("zenity")) return RunPicker("zenity --file-selection --directory 2>/dev/null", out);
     if (HasCommand("kdialog")) return RunPicker("kdialog --getexistingdirectory 2>/dev/null", out);
     return false;

@@ -25,6 +25,12 @@
 #else
 #define SPLASH_SECTION ".section .rodata\n"
 #endif
+// The pointer table needs relocations in a PIE: .data.rel.ro (read-only once relocated), not .rodata (DT_TEXTREL).
+#if defined(_WIN32)
+#define SPLASH_TABLE_SECTION ""
+#else
+#define SPLASH_TABLE_SECTION ".section .data.rel.ro,\"aw\"\n"
+#endif
 #if __SIZEOF_POINTER__ == 8
 #define SPLASH_PTR ".quad"
 #else
@@ -38,6 +44,7 @@
 __asm__(SPLASH_SECTION
         ".balign 16\n"
         "um_splash_png:\n.incbin \"assets/splash.png\"\num_splash_png_end:\n"
+        SPLASH_TABLE_SECTION
         ".balign 8\n"
         ".globl " SPLASH_TABLE "\n"
         SPLASH_TABLE ":\n" SPLASH_PTR " um_splash_png, um_splash_png_end\n"

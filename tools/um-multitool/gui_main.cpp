@@ -56,6 +56,7 @@
 #include "mp_editor.hpp"
 #include "inireg_editor.hpp"
 #include "viewer/dds_texture.hpp"
+#include "viewer/portal.hpp"
 
 #include <string>
 #include <vector>
@@ -210,6 +211,9 @@ static bool NativePickFile(bool saveDialog, const char* filterName, const char* 
 #else
     (void)filterName;
     (void)filterExt;
+#ifdef UM_PORTAL
+    if (const int r = portal::Pick(saveDialog ? portal::Kind::Save : portal::Kind::Open, outPath); r >= 0) return r == 1;
+#endif
     if (HasCommand("zenity")) {
         return RunPickerCommand(saveDialog ? "zenity --file-selection --save --confirm-overwrite 2>/dev/null"
                                             : "zenity --file-selection 2>/dev/null", outPath);
@@ -238,6 +242,9 @@ static bool NativePickFolder(std::string& outPath) {
     if (ok) { outPath = path; return true; }
     return false;
 #else
+#ifdef UM_PORTAL
+    if (const int r = portal::Pick(portal::Kind::Folder, outPath); r >= 0) return r == 1;
+#endif
     if (HasCommand("zenity")) {
         return RunPickerCommand("zenity --file-selection --directory 2>/dev/null", outPath);
     }

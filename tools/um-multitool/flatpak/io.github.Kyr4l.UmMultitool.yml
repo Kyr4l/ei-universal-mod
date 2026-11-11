@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Kyr4l
+# Flatpak manifest of um-multitool (make flatpak / build-flatpak.sh). The app is the same Linux binary as the
+# standalone one, built in the Freedesktop SDK with GLFW 3.4 (X11 + Wayland) as a module.
+#
+# Sandbox (finish-args), each one needed by a feature:
+#   wayland / fallback-x11, dri, ipc   the GUI (GLFW, OpenGL)
+#   (no talk-name)                     file dialogs use the xdg-desktop-portal (viewer/portal.hpp), always allowed
+#   pulseaudio                         the 3D Viewer's and the DLL Connector's sounds (miniaudio)
+#   network                            the UM DLL Connector talks to um.dll on 127.0.0.1 (DLL_SERVER_PORT)
+#   filesystem=home                    the game, the mod and its sources (.res, .mob, .mpr, .xlsx...) are opened by
+#                                      path, read and written; a game on another drive needs
+#                                      `flatpak override --user --filesystem=/that/drive io.github.Kyr4l.UmMultitool`
+# The settings, the log and the ratings go to the app's own config folder (~/.var/app/<id>/config/um-multitool).
+app-id: io.github.Kyr4l.UmMultitool
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: um-multitool
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=home
+modules:
+  - name: glfw
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_SHARED_LIBS=ON
+      - -DGLFW_BUILD_EXAMPLES=OFF
+      - -DGLFW_BUILD_TESTS=OFF
+      - -DGLFW_BUILD_DOCS=OFF
+      - -DGLFW_BUILD_WAYLAND=ON
+      - -DGLFW_BUILD_X11=ON
+    sources:
+      - type: archive
+        url: https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.zip
+        sha256: b5ec004b2712fd08e8861dc271428f048775200a2df719ccf575143ba749a3e9
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+  - name: um-multitool
+    buildsystem: simple
+    build-commands:
+      - make -j"$FLATPAK_BUILDER_N_JOBS" linux PORTAL=1 UMDLL_DIR=um-dll
+      - install -Dm755 um-multitool /app/bin/um-multitool
+      - install -Dm644 lang/ru.txt /app/bin/lang/ru.txt
+      - install -Dm644 assets/logo-256.png /app/bin/assets/logo-256.png
+      - mkdir -p /app/bin/materials && for f in materials/*.tsv; do [ -e "$f" ] && install -Dm644 "$f" /app/bin/materials/; done; true
+      - install -Dm644 assets/logo-256.png /app/share/icons/hicolor/256x256/apps/io.github.Kyr4l.UmMultitool.png
+      - install -Dm644 flatpak/io.github.Kyr4l.UmMultitool.desktop /app/share/applications/io.github.Kyr4l.UmMultitool.desktop
+      - install -Dm644 flatpak/io.github.Kyr4l.UmMultitool.metainfo.xml /app/share/metainfo/io.github.Kyr4l.UmMultitool.metainfo.xml
+    sources:
+      - type: dir
+        path: ..
+        skip:
+          - build
+          - um-multitool
+          - um-multitool.exe
+          - um-multitool-xp32.exe
+          - um-multitool-x86_64.AppImage
+          - um-multitool-x86_64.flatpak
+          - um-multitool.cfg
+          - um-multitool.log
+          - um-multitool-ratings.tsv
+          - um-multitool-nodes.tsv
+          - vendor/appimagetool
+          - vendor/appimage-runtime-x86_64
+          - vendor/glfw-mingw
+          - vendor/glfw-mingw-xp32
+          - vendor/glfw-src-xp
+          - vendor/glfw-src-xp33
+          - um-multitool-res.o
+          - um-multitool-res32.o
+          - imgui.ini
+          - .flatpak-builder
+      # um.dll's mission script checker, shared with the Map Editor (UMDLL_DIR in the Makefile)
+      - type: file
+        path: ../../../resources/universal-mod/um-dll/mob_script_check.hpp
+        dest: um-dll
+      - type: file
+        path: ../../../resources/universal-mod/um-dll/mob_script_functions.hpp
+        dest: um-dll

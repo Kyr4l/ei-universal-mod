@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<component type="desktop-application">
+  <id>io.github.Kyr4l.UmMultitool</id>
+  <name>Universal Mod Multitool</name>
+  <summary>Evil Islands modding toolkit: converters, 3D viewer and map editor</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.kyr4l">
+    <name>Kyr4l</name>
+  </developer>
+  <description>
+    <p>
+      The Universal Mod's toolkit for Evil Islands (Cursed Lands): converts the game's textures, configs and archives,
+      edits and compares the gameplay database, shows units, items and figures in a 3D viewer, and edits maps and quests
+      with checks that follow the game's own rules, a difficulty rating and a node editor for mission scripts.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.Kyr4l.UmMultitool.desktop</launchable>
+  <url type="homepage">https://github.com/Kyr4l/ei-universal-mod</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.20.9" date="2026-11-11"/>
+  </releases>
+</component>

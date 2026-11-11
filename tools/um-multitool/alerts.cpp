@@ -28,6 +28,12 @@
 #else
 #define SFX_SECTION ".section .rodata\n"
 #endif
+// The pointer table needs relocations in a PIE: .data.rel.ro (read-only once relocated), not .rodata (DT_TEXTREL).
+#if defined(_WIN32)
+#define SFX_TABLE_SECTION ""
+#else
+#define SFX_TABLE_SECTION ".section .data.rel.ro,\"aw\"\n"
+#endif
 // Pointer-sized entries, and the C name of the table (32-bit Windows prefixes C symbols with '_').
 #if __SIZEOF_POINTER__ == 8
 #define SFX_PTR ".quad"
@@ -44,6 +50,7 @@ __asm__(SFX_SECTION
         "um_sfx_error:\n.incbin \"sfx/ab-ap-dc.mp3\"\num_sfx_error_end:\n"
         ".balign 16\n"
         "um_sfx_warning:\n.incbin \"sfx/ab-athr.mp3\"\num_sfx_warning_end:\n"
+        SFX_TABLE_SECTION
         ".balign 8\n"
         ".globl " SFX_TABLE "\n"
         SFX_TABLE ":\n" SFX_PTR " um_sfx_error, um_sfx_error_end, um_sfx_warning, um_sfx_warning_end\n"

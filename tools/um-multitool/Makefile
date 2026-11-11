@@ -10,6 +10,10 @@
 #   make appimage - um-multitool-x86_64.AppImage: one portable file for Linux desktops (GLFW and the C++
 #                 runtime bundled; build-appimage.sh fetches appimagetool once into vendor/). Part of
 #                 `make all` once appimagetool is there.
+#   make flatpak - um-multitool-x86_64.flatpak: the Flatpak bundle (build-flatpak.sh, manifest in flatpak/; needs
+#                 flatpak-builder or the org.flatpak.Builder app and the org.freedesktop Sdk 25.08). Part of
+#                 `make all` when a flatpak-builder is there. Its build is `make linux PORTAL=1`: the file
+#                 dialogs go through the xdg-desktop-portal (libdbus) instead of zenity / kdialog.
 # Builds run on all cores; objects go to build/<variant>/.
 #
 # GUI toolkit: Dear ImGui (vendored as source in vendor/imgui) on GLFW with the
@@ -34,6 +38,10 @@ COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I$(UMDLL_DIR) -isystem
 
 LINUX_FLAGS = $(COMMON_FLAGS) $(shell pkg-config --cflags glfw3)
 LINUX_LIBS = $(shell pkg-config --libs glfw3) -lGL -ldl -lm
+ifeq ($(PORTAL),1)
+LINUX_FLAGS += -DUM_PORTAL $(shell pkg-config --cflags dbus-1)
+LINUX_LIBS += $(shell pkg-config --libs dbus-1)
+endif
 
 # Console subsystem on purpose (no -mwindows): command-line use then behaves normally in cmd and
 # PowerShell, and a double-click only briefly shows the console window before the GUI replaces it.
@@ -59,11 +67,18 @@ ifneq ($(wildcard $(APPIMAGETOOL)),)
 APPIMAGE_BIN = appimage
 endif
 
-all: linux $(WIN_BINS) $(APPIMAGE_BIN)
+FLATPAK = $(TARGET)-x86_64.flatpak
+FLATPAK_BIN =
+ifneq ($(shell command -v flatpak-builder 2>/dev/null; flatpak info org.flatpak.Builder >/dev/null 2>&1 && echo app),)
+FLATPAK_BIN = flatpak
+endif
+
+all: linux $(WIN_BINS) $(APPIMAGE_BIN) $(FLATPAK_BIN)
 
 linux: $(TARGET)
 win: $(TARGET).exe
 appimage: $(APPIMAGE)
+flatpak: $(FLATPAK)
 
 # One object list per variant, and the rule to build them.
 LINUX_OBJS = $(SRCS:%.cpp=build/linux/%.o)
@@ -104,6 +119,10 @@ build/appimage/$(TARGET): $(LINUX_OBJS) build/appimage/glibc_compat.o
 $(APPIMAGE): build/appimage/$(TARGET) build-appimage.sh um-multitool.desktop assets/logo-256.png lang/ru.txt $(wildcard materials/*.tsv)
 	./build-appimage.sh $< $@
 
+# The Flatpak bundle: built from the sources in the Freedesktop SDK (flatpak-builder state in build/flatpak/).
+$(FLATPAK): $(SRCS) $(HDRS) Makefile build-flatpak.sh $(wildcard flatpak/*.yml flatpak/*.desktop flatpak/*.xml) assets/logo-256.png $(wildcard materials/*.tsv)
+	./build-flatpak.sh $@
+
 # Requires vendor/glfw-mingw to exist first: run vendor/build-glfw-mingw.sh
 # The .exe's icon (assets/um-multitool.ico), compiled into a resource object.
 WIN_RES = um-multitool-res.o
@@ -133,6 +152,6 @@ $(TARGET)-xp32.exe: $(XP32_OBJS) um-multitool-res32.o
 -include $(LINUX_OBJS:.o=.d) $(WIN_OBJS:.o=.d) $(XP32_OBJS:.o=.d)
 
 clean:
-	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(APPIMAGE) $(WIN_RES) um-multitool-res32.o
+	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(APPIMAGE) $(FLATPAK) $(WIN_RES) um-multitool-res32.o
 
-.PHONY: all linux win xp appimage clean
+.PHONY: all linux win xp appimage flatpak clean
