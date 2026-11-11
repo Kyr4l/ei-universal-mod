@@ -1167,26 +1167,29 @@ void ApplyLighting(App& app) {
     const lighting::Table* t = ChosenLighting(app);
     l = SceneLight{};
     if (!app.lib.lightingOn || !t) return;
-    float h = MapHour(app);
+    // As game.exe's CWorldClient::UpdateDayLight (docs/game-exe/terrain-lighting.md 4.4): a cave (lightscave*.ini) uses the hour-0
+    // colours and a fixed direction; outdoors the sun goes round with the hour and never sets below 30 degrees.
+    const bool cave = Lower(std::filesystem::path(t->path).filename().string()).find("cave") != std::string::npos;
+    const float h = cave ? 0.0f : std::fmod(MapHour(app) + 24.0f, 24.0f);
     lighting::Color sun = lighting::Table::At(t->sun, h), amb = lighting::Table::At(t->ambient, h), sky = lighting::Table::At(t->sky, h);
+    if (amb.r == 0 && amb.g == 0 && amb.b == 0) { amb.r = sun.r * 0.8f; amb.g = sun.g * 0.8f; amb.b = sun.b * 0.8f; } // the game's rule for an empty entry
     l.on = true;
-    // The file's colours scaled like a light and an ambient term; the fixed-function sum stays near white at noon.
-    const float sunScale = 0.8f, ambScale = 0.55f;
-    l.sun[0] = sun.r * sunScale; l.sun[1] = sun.g * sunScale; l.sun[2] = sun.b * sunScale;
-    l.ambient[0] = amb.r * ambScale; l.ambient[1] = amb.g * ambScale; l.ambient[2] = amb.b * ambScale;
+    // The game lights a vertex with max(ambient, sun x N.L): the ambient is a floor, not an addend. Fixed-function GL adds the two, so
+    // the light gets (sun - ambient): the same at full light and in full shade, close in between.
+    l.ambient[0] = amb.r; l.ambient[1] = amb.g; l.ambient[2] = amb.b;
+    l.sun[0] = std::max(0.0f, sun.r - amb.r); l.sun[1] = std::max(0.0f, sun.g - amb.g); l.sun[2] = std::max(0.0f, sun.b - amb.b);
     l.sky[0] = sky.r; l.sky[1] = sky.g; l.sky[2] = sky.b;
-    // Where the sun is at that hour: rising in the east at 6, over the south at noon (70 degrees up),
-    // setting in the west at 18. At night it stays low (the light files' night colours are dim) and casts
-    // no shadows.
-    const float day = std::fmod(h + 24.0f, 24.0f);
-    const float across = std::min(std::max((day - 6.0f) / 12.0f, 0.0f), 1.0f); // 0 sunrise .. 1 sunset
     const float pi = 3.14159265f;
-    const float elevation = std::max(std::sin(pi * across) * 70.0f, 8.0f) * pi / 180.0f;
-    const float azimuth = pi * across;
-    l.sunDir[0] = std::cos(azimuth) * std::cos(elevation);
-    l.sunDir[1] = -std::sin(azimuth) * std::cos(elevation);
-    l.sunDir[2] = std::sin(elevation);
-    l.sunUp = day > 6.3f && day < 17.7f;
+    float dx, dy, dz; // the direction the light travels (the game's D)
+    if (cave) { dx = 0.5f; dy = 0.5f; dz = -0.7071f; }
+    else {
+        const float az = h / 12.0f * pi;
+        const float elevDeg = h >= 4.0f && h <= 20.0f ? 60.0f - 3.75f * std::fabs(h - 12.0f) : h < 4.0f ? 30.0f + 45.0f * (4.0f - h) / 4.0f : 30.0f + 45.0f * (h - 20.0f) / 4.0f;
+        const float e = elevDeg * pi / 180.0f;
+        dx = std::cos(az) * std::cos(e); dy = std::sin(az) * std::cos(e); dz = -std::sin(e);
+    }
+    l.sunDir[0] = -dx; l.sunDir[1] = -dy; l.sunDir[2] = -dz; // towards the sun
+    l.sunUp = true; // the game's sun never sets: shadows at every hour (dim at night with the night colours)
 }
 
 // Clears the patrol points of the selected units' logic in use (ei_maper's "Reset logic paths"). One undo step.

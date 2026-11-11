@@ -1174,8 +1174,9 @@ private:
         glEnable(GL_POLYGON_OFFSET_FILL);
         glPolygonOffset(-1.0f, -1.0f);
         // Darker under a brighter sun; the ambient light keeps shadows from going black.
-        const float sun = (light.sun[0] + light.sun[1] + light.sun[2]) / 3.0f;
-        const float k = std::min(0.6f, std::max(0.15f, sun * 0.6f));
+        // In shade only the ambient floor is left (the game's max(ambient, sun x N.L)): the shadow takes the sun's share of the light.
+        const float sun = (light.sun[0] + light.sun[1] + light.sun[2]) / 3.0f, amb = (light.ambient[0] + light.ambient[1] + light.ambient[2]) / 3.0f;
+        const float k = std::min(0.75f, std::max(0.1f, sun / std::max(0.05f, sun + amb)));
         glColor4f(k, k, k, 1.0f);
         DrawTerrainGeometry(false, true, true);
         glDisable(GL_POLYGON_OFFSET_FILL);
