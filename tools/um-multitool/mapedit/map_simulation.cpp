@@ -365,6 +365,9 @@ void Toolbar(App& app) {
                 if (ImGui::SmallButton("Rebuild")) BuildCompareNavmesh(app);
                 if (ImGui::IsItemHovered()) ImGui::SetTooltip("Build it again from the maps as they are now (after edits)");
             }
+            ImGui::Checkbox("Aggro Groups", &o.aggro);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("The rating's aggro groups: units that wake each other (the call-for-help radius), as circles on the ground, greener weaker and redder stronger.\nNeeds the database (Settings); follows the maps as edited.");
             ImGui::Checkbox("Script areas", &o.scriptAreas);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("The areas the scripts declare (magenta), with their number and the quest objectives that use them. %zu loaded.\n"

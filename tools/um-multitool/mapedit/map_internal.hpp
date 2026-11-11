@@ -52,7 +52,6 @@
 #include "allod_range.hpp"
 #include "rating.hpp"
 #include "rating_store.hpp"
-#include "quest_builder.hpp"
 #include "text_codec.hpp"
 #include "script_highlight.hpp"
 #include "script_ast.hpp"
@@ -173,6 +172,7 @@ struct RatingUi {
     // the allods (config.ini [MPZone]) and their ranges
     allods::Table allods;
     bool allodsTried = false;
+    std::string allodsFor;         // the Settings path the allods were read with
     std::vector<allodrange::Range> ranges; // per allod, in the table's order
     // each quest's state: 0 not rated, 1 rated, 2 changed since it was rated (checked every few seconds)
     std::map<std::string, int> status;
@@ -298,7 +298,6 @@ struct App {
     std::string filesMessage;
 
     RatingUi rating;
-    BuilderUi builder;
 
     // Checks
     checks::DatabaseNames database;
@@ -569,11 +568,9 @@ bool RatingShows(App& app, const quest::QuestSet& set);          // the filters 
 void RatingColumns(App& app, const quest::QuestSet& set);        // the list's Allod / Score / Range cells
 void RatingAllodList(App& app);                   // the Files tab: the allods and their ranges
 void RatingOpenQuestLine(App& app);               // the open quest's rating, one line with its range bar
-bool DraftRating(App& app, const rating::Input& in, rating::Result& out, std::string& wait); // the Quest Builder: a draft's rating (false: the database is not ready, `wait` says why)
-void DraftRatingPanel(App& app, const rating::Result& res, const std::string& terrain);      // its score, range bar and factors
+const rating::Result* LiveRating(App& app);                                              // the open maps' rating as edited (null: no database yet or nothing to rate)
+void HeroNeedLine(App& app, const rating::Result& res);                                  // "Hero needed": what the strongest fight asks of the hero      // its score, range bar and factors
 
-// quest_builder.cpp
-void QuestBuilderTab(App& app);                   // the Quest Builder main tab
 
 // map_sidebar.cpp
 void SelectObject(App& app, int file, int object, bool focus);

@@ -249,7 +249,7 @@ inline void AddMenu(Ctx& c, State& ne) {
     if (!ImGui::BeginPopup("##nodeadd")) { ne.wiring = false; return; }
     if (ne.searchFocus) { ImGui::SetKeyboardFocusHere(); ne.searchFocus = false; }
     ImGui::SetNextItemWidth(-1);
-    ImGui::InputTextWithHint("##nodesearch", ne.wiring ? "Search a function..." : "Search...", ne.search, sizeof(ne.search));
+    ImGui::InputTextWithHint("##nodesearch", ne.wiring ? "Search..." : "Search...", ne.search, sizeof(ne.search));
     std::string q = ne.search;
     for (char& ch : q) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
     const i18n::Verbatim verbatim;
@@ -331,7 +331,7 @@ inline void AddMenu(Ctx& c, State& ne) {
             }
         }
         if (open) ImGui::EndMenu();
-        if (ImGui::BeginMenu("Scripts of this map")) {
+        if (ImGui::BeginMenu("Scripts")) {
             for (const scriptast::Script& s : c.prog.scripts)
                 if (!s.world) {
                     ImGui::PushID(&s);
@@ -508,7 +508,7 @@ inline void Run(State& ne, Ctx& c) {
         const Node* node = ne.ctxNode >= 0 && ne.ctxNode < static_cast<int>(c.g.nodes.size()) ? &c.g.nodes[static_cast<size_t>(ne.ctxNode)] : nullptr;
         const Row* row = node && ne.ctxRow >= 0 && ne.ctxRow < static_cast<int>(node->rows.size()) ? &node->rows[static_cast<size_t>(ne.ctxRow)] : nullptr;
         if (row && (row->editable || row->wired) && !row->edit.stmt.steps.empty()) {
-            if (row->editable && ImGui::MenuItem("Edit value...")) {
+            if (row->editable && ImGui::MenuItem("Edit Value...")) {
                 scriptast::Program tmp = c.prog;
                 if (const scriptast::Expr* e = scriptedit::GetExpr(tmp, row->edit)) {
                     std::snprintf(ne.buf, sizeof ne.buf, "%s", scriptedit::WriteExpr(*e).c_str());
@@ -518,8 +518,8 @@ inline void Run(State& ne, Ctx& c) {
                     ne.editOpen = true;
                 }
             }
-            if (ImGui::MenuItem("Wire a function...")) { ne.wiring = true; ne.wireRow = row->edit; ne.addOpen = true; }
-            if (row->wired && ImGui::MenuItem("Unwire (type a value)")) {
+            if (ImGui::MenuItem("Connect Function...")) { ne.wiring = true; ne.wireRow = row->edit; ne.addOpen = true; }
+            if (row->wired && ImGui::MenuItem("Disconnect")) {
                 const ExprPath path = row->edit;
                 Apply(c, [&](scriptast::Program& p) { return scriptedit::SetExpr(p, path, DefaultFor(p, path)); });
             }
@@ -528,7 +528,7 @@ inline void Run(State& ne, Ctx& c) {
         if (ImGui::MenuItem("Add...", "Shift A")) { ne.wiring = false; ne.addOpen = true; }
         ImGui::BeginDisabled(ne.items.empty());
         if (ImGui::MenuItem("Duplicate", "Shift D")) doDuplicate();
-        if (ImGui::MenuItem("Mute / unmute", "M")) doMute();
+        if (ImGui::MenuItem("Mute", "M")) doMute();
         if (ImGui::MenuItem("Delete", "X")) doDelete();
         ImGui::EndDisabled();
         ImGui::EndPopup();

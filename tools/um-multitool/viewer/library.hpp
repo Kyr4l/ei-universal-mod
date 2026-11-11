@@ -47,6 +47,8 @@ struct Library {
     std::vector<std::string> mapMobs;
     std::array<config::KeyBind, config::kMapKeyCount> mapKeys = config::DefaultMapKeys(); // key positions, see config.hpp
     bool viewerSidebarRight = false, mapSidebarRight = false;
+    float viewerSidebarWidth = 460.0f, mapSidebarWidth = 470.0f; // the panels' widths, as last dragged
+    std::vector<std::string> imguiIni;     // ImGui's window / table settings (imgui.ini), one line each
     bool logicSelectedOnly = true;
     bool logicAlways = false;
     std::vector<std::string> lightingFiles; // lights*.ini files, or folders holding them
@@ -54,6 +56,7 @@ struct Library {
     bool lightingOn = false;
     std::vector<std::string> questFolders; // .mq files / unpacked quests, or folders of them
     std::vector<std::string> questPacks;   // language packs: the same quests in other languages
+    std::string allodConfig;               // the mod's config.ini / config.reg (or folder) with [MPZone]; empty: found beside the other settings' paths
     std::vector<std::pair<std::string, std::string>> textPacks; // text language packs: (language, path), config.hpp
     std::string textReference;                                  // the Texts editor's reference language
     int textPacksVersion = 0;                                   // bumped when textPacks change
@@ -153,6 +156,9 @@ struct Library {
         mapKeys = cfg.mapKeys;
         viewerSidebarRight = cfg.viewerSidebarRight;
         mapSidebarRight = cfg.mapSidebarRight;
+        viewerSidebarWidth = cfg.viewerSidebarWidth;
+        mapSidebarWidth = cfg.mapSidebarWidth;
+        imguiIni = cfg.imguiIni;
         logicSelectedOnly = cfg.logicSelectedOnly;
         logicAlways = cfg.logicAlways;
         lightingFiles = cfg.lightingFiles;
@@ -160,6 +166,7 @@ struct Library {
         lightingOn = cfg.lightingOn;
         questFolders = cfg.questFolders;
         questPacks = cfg.questPacks;
+        allodConfig = cfg.allodConfig;
         textPacks = cfg.textPacks;
         textReference = cfg.textReference;
         mapQuest = cfg.mapQuest;
@@ -197,6 +204,9 @@ struct Library {
         cfg.mapKeys = mapKeys;
         cfg.viewerSidebarRight = viewerSidebarRight;
         cfg.mapSidebarRight = mapSidebarRight;
+        cfg.viewerSidebarWidth = viewerSidebarWidth;
+        cfg.mapSidebarWidth = mapSidebarWidth;
+        cfg.imguiIni = imguiIni;
         cfg.logicSelectedOnly = logicSelectedOnly;
         cfg.logicAlways = logicAlways;
         cfg.lightingFiles = lightingFiles;
@@ -204,6 +214,7 @@ struct Library {
         cfg.lightingOn = lightingOn;
         cfg.questFolders = questFolders;
         cfg.questPacks = questPacks;
+        cfg.allodConfig = allodConfig;
         cfg.textPacks = textPacks;
         cfg.textReference = textReference;
         cfg.mapQuest = mapQuest;

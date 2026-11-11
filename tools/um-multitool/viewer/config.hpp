@@ -173,11 +173,14 @@ struct Config {
     std::vector<std::string> mapMobs;         // and its .mob files, in load order
     std::array<KeyBind, kMapKeyCount> mapKeys = DefaultMapKeys();
     bool viewerSidebarRight = false, mapSidebarRight = false; // the list panel on the right of the view
+    float viewerSidebarWidth = 460.0f, mapSidebarWidth = 470.0f; // their widths, as last dragged
+    std::vector<std::string> imguiIni;         // ImGui's own settings (window sizes and places, table columns), what imgui.ini held: one line each
     bool logicSelectedOnly = true;            // logic mode: only the selected unit's logic
     bool logicAlways = false;                 // the selected units' logic shows outside logic mode too
     std::vector<std::string> lightingFiles;   // lights*.ini files or folders holding them
     std::string lightingChoice;               // the one the Map Editor uses
     std::vector<std::string> questFolders;    // folders of .mq files / unpacked quests (or single ones)
+    std::string allodConfig;                  // the mod's config.ini or config.reg (or its folder): the allods ([MPZone]); empty: looked for beside the database, maps and quests
     std::vector<std::string> questPacks;      // language packs: folders holding the same quests in other languages
     // Text language packs: (language, path) - a folder of text files or a texts*.res; one language can
     // have several (texts and textslmp). The Texts editor compares them with the reference language.
@@ -267,6 +270,9 @@ inline Config Load(const std::string& path = Path()) {
         }
         else if (key == "VIEWER_SIDEBAR_RIGHT") cfg.viewerSidebarRight = value == "true";
         else if (key == "MAP_SIDEBAR_RIGHT") cfg.mapSidebarRight = value == "true";
+        else if (key == "VIEWER_SIDEBAR_WIDTH") cfg.viewerSidebarWidth = static_cast<float>(std::atof(value.c_str()));
+        else if (key == "MAP_SIDEBAR_WIDTH") cfg.mapSidebarWidth = static_cast<float>(std::atof(value.c_str()));
+        else if (key == "IMGUI") cfg.imguiIni.push_back(value);
         else if (key == "MAP_LOGIC_SELECTED_ONLY") cfg.logicSelectedOnly = value == "true";
         else if (key == "MAP_LOGIC_ALWAYS") cfg.logicAlways = value == "true";
         else if (key == "LIGHTING_LAYER") cfg.lightingFiles.push_back(value);
@@ -274,6 +280,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_LIGHTING") cfg.lightingOn = value == "true";
         else if (key == "QUEST_LAYER") cfg.questFolders.push_back(value);
         else if (key == "QUEST_PACK") cfg.questPacks.push_back(value);
+        else if (key == "CONFIG_INI") cfg.allodConfig = value;
         else if (key == "TEXT_PACK" && value.find('=') != std::string::npos)
             cfg.textPacks.push_back({value.substr(0, value.find('=')), value.substr(value.find('=') + 1)});
         else if (key == "TEXT_REFERENCE") cfg.textReference = value;
@@ -429,6 +436,7 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; Quest language packs: folders holding the same quests in different languages; changes that\n"
          "; do not depend on the language go to all of them.\n";
     list("QUEST_PACK", cfg.questPacks);
+    if (!cfg.allodConfig.empty()) f << "CONFIG_INI=" << cfg.allodConfig << "\n";
     for (const auto& [language, path] : cfg.textPacks) f << "TEXT_PACK=" << language << "=" << path << "\n";
     if (!cfg.textReference.empty()) f << "TEXT_REFERENCE=" << cfg.textReference << "\n";
     f << "; Lighting: the game's config/lights*.ini files, or folders holding them.\n";
@@ -458,6 +466,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "VIEWER_SIDEBAR_RIGHT=" << flag(cfg.viewerSidebarRight) << "\n";
     f << "; The Map Editor's panel on the right of the view; (true/false)\n";
     f << "MAP_SIDEBAR_RIGHT=" << flag(cfg.mapSidebarRight) << "\n";
+    f << "; The panels' widths in pixels, as last dragged.\n";
+    f << "VIEWER_SIDEBAR_WIDTH=" << cfg.viewerSidebarWidth << "\nMAP_SIDEBAR_WIDTH=" << cfg.mapSidebarWidth << "\n";
 
     section("3D Viewer");
     f << "; Each item tab's rotation, a quaternion w,x,y,z (only rotated tabs are written).\n";
@@ -512,6 +522,10 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "SFX_ENABLED=" << flag(cfg.sfxEnabled) << "\nSFX_VOLUME=" << cfg.sfxVolume << "\nALERT_POPUPS=" << flag(cfg.alertPopups)
       << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\nMAP_REGEN_NAVMESH=" << flag(cfg.mapRegenNavmesh) << "\nMP_FOLDER=" << cfg.mpFolder << "\n";
     for (const auto& [db, res] : cfg.dbCompileTo) f << "DB_COMPILE_TO=" << db << "|" << res << "\n";
+
+    section("Window layout");
+    f << "; ImGui's own settings (what imgui.ini held): the tool windows' sizes and places, table columns. Written by the program.\n";
+    list("IMGUI", cfg.imguiIni);
 
     section("Map Editor keys");
     f << "; key,modifiers: the key is a key POSITION (GLFW key code, named after the US layout: the key at the\n"

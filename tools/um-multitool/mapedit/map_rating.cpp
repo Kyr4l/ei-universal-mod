@@ -103,9 +103,26 @@ void SaveStore(App& app) { app.rating.store.Save(RatingsPath()); }
 
 void EnsureAllods(App& app) {
     RatingUi& r = app.rating;
-    if (r.allodsTried) return;
+    if (r.allodsTried && r.allodsFor == app.lib.allodConfig) return;
     r.allodsTried = true;
-    std::vector<std::string> hints{app.lib.dbPath};
+    r.allodsFor = app.lib.allodConfig;
+    r.allods = allods::Table();
+    r.rangesDirty = true;
+    std::error_code ec;
+    if (!app.lib.allodConfig.empty() && std::filesystem::is_regular_file(app.lib.allodConfig, ec)) { // a file named in Settings: read as it is
+        std::vector<uint8_t> bytes;
+        std::string text, err;
+        if (allods::ReadFile(app.lib.allodConfig, bytes)) {
+            const std::string ext = Lower(std::filesystem::path(app.lib.allodConfig).extension().string());
+            if (ext == ".reg" ? IniRegRegToText(bytes, text, err) : (text.assign(bytes.begin(), bytes.end()), true)) {
+                allods::Table t = allods::ParseMpZone(text);
+                if (!t.Empty()) { t.source = app.lib.allodConfig; r.allods = std::move(t); return; }
+            }
+        }
+    }
+    std::vector<std::string> hints;
+    if (!app.lib.allodConfig.empty()) hints.push_back(app.lib.allodConfig); // the Settings field first
+    hints.push_back(app.lib.dbPath);
     for (const auto& l : app.lib.maps.layers) hints.push_back(l.path);
     for (const std::string& q : app.lib.questFolders) hints.push_back(q);
     for (const std::string& q : app.lib.questPacks) hints.push_back(q);
@@ -358,7 +375,7 @@ void PollRating(App& app) {
 
 void RatingQuestFilters(App& app) {
     RatingUi& r = app.rating;
-    static const char* const shows[] = {"All", "Not rated", "Changed", "Out of range"};
+    static const char* const shows[] = {"All", "Not Rated", "Changed", "Out of Range"};
     ImGui::AlignTextToFramePadding();
     ImGui::TextDisabled("Show");
     ImGui::SameLine();
@@ -371,11 +388,11 @@ void RatingQuestFilters(App& app) {
     ImGui::TextDisabled("Allod");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(-1);
-    std::string current = r.allodFilter == -1 ? "All" : r.allodFilter == -2 ? "No allod" : r.allodFilter >= 0 && static_cast<size_t>(r.allodFilter) < r.allods.allods.size() ? r.allods.allods[static_cast<size_t>(r.allodFilter)].name : "All";
+    std::string current = r.allodFilter == -1 ? "All" : r.allodFilter == -2 ? "No Allod" : r.allodFilter >= 0 && static_cast<size_t>(r.allodFilter) < r.allods.allods.size() ? r.allods.allods[static_cast<size_t>(r.allodFilter)].name : "All";
     if (ImGui::BeginCombo("##ratingallod", current.c_str())) {
         if (ImGui::Selectable("All", r.allodFilter == -1)) r.allodFilter = -1;
         for (size_t a = 0; a < r.allods.allods.size(); ++a) if (ImGui::Selectable(r.allods.allods[a].name.c_str(), r.allodFilter == static_cast<int>(a))) r.allodFilter = static_cast<int>(a);
-        if (ImGui::Selectable("No allod", r.allodFilter == -2)) r.allodFilter = -2;
+        if (ImGui::Selectable("No Allod", r.allodFilter == -2)) r.allodFilter = -2;
         ImGui::EndCombo();
     }
     int changed = 0;
@@ -391,7 +408,7 @@ void RatingQuestFilters(App& app) {
     } else {
         if (changed) {
             ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%d quest%s changed since rated, scores reset: %s%s", changed, changed == 1 ? "" : "s", names.c_str(), changed > 4 ? ", ..." : "");
-            if (ImGui::SmallButton("Rescan changed")) {
+            if (ImGui::SmallButton("Rescan Changed")) {
                 std::vector<const quest::QuestSet*> sets;
                 for (const quest::QuestSet& s : app.quests) { auto it = r.status.find(ratingstore::Key(s.shown.name)); if (it != r.status.end() && it->second == 2) sets.push_back(&s); }
                 StartRun(app, sets);
@@ -402,9 +419,9 @@ void RatingQuestFilters(App& app) {
         ImGui::AlignTextToFramePadding();
         ImGui::TextDisabled("Rate");
         ImGui::SameLine();
-        if (ImGui::Button("Open quest")) { if (app.openQuest) { std::vector<const quest::QuestSet*> sets; if (const quest::QuestSet* s = FindSet(app, ratingstore::Key(app.openQuest->shown.name))) sets.push_back(s); StartRun(app, sets); } else r.message = "Open a quest first"; }
+        if (ImGui::Button("Open Quest")) { if (app.openQuest) { std::vector<const quest::QuestSet*> sets; if (const quest::QuestSet* s = FindSet(app, ratingstore::Key(app.openQuest->shown.name))) sets.push_back(s); StartRun(app, sets); } else r.message = "Open a quest first"; }
         ImGui::SameLine();
-        if (ImGui::Button("Not rated")) {
+        if (ImGui::Button("Not Rated")) {
             std::vector<const quest::QuestSet*> sets;
             for (const quest::QuestSet& s : app.quests) { auto it = r.status.find(ratingstore::Key(s.shown.name)); if (it == r.status.end() || it->second != 1) sets.push_back(&s); }
             StartRun(app, sets);
@@ -661,9 +678,10 @@ void RatingTab(App& app) {
     }
     ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d scripted spawn site%s, %d objective%s.", res.units, res.pulls.size(), res.fights,
                         res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.spawnSites, res.spawnSites == 1 ? "" : "s", res.objectives, res.objectives == 1 ? "" : "s");
+    HeroNeedLine(app, res);
     {
         bool stored = r.store.storedStats;
-        if (ImGui::Checkbox("Use the stats stored in the map", &stored)) { r.store.storedStats = stored; SaveStore(app); r.liveValid = false; r.statusAt = -100; }
+        if (ImGui::Checkbox("Use Stored Stats", &stored)) { r.store.storedStats = stored; SaveStore(app); r.liveValid = false; r.statusAt = -100; }
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off (default): every unit is rated with its prototype's row of the database, which is what you balance.\nOn: a unit with \"Stats imported\" off carries its own stats in the map (Objects tab > Stats), which may be older than the database.\nChanging this resets the stored ratings (they are calculated again).");
     }
     if (res.storedStats) ImGui::TextDisabled("%d unit%s counted with the stats stored in the map (Stats imported is off), not the database row.", res.storedStats, res.storedStats == 1 ? "" : "s");
@@ -671,7 +689,7 @@ void RatingTab(App& app) {
     if (res.objectives == 0 && app.openQuest) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "No objectives found in the script (QObj* calls): the walk is only deploy to exit.");
     ImGui::TextDisabled("0 is an empty map; 10,000 is %.0f of this database's strongest unit (%s) in one aggro group. Only enemies and the script count, never potions or gear.",
                         r.monsters.anchorUnit > 0 ? 8.0f : 0.0f, r.monsters.anchorName.c_str());
-    if (ImGui::CollapsingHeader("Aggro groups")) {
+    if (ImGui::CollapsingHeader("Aggro Groups")) {
         if (ImGui::BeginTable("##pulls", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_BordersInnerV, ImVec2(0, 160))) {
             ImGui::TableSetupColumn("Where", ImGuiTableColumnFlags_WidthFixed, 80);
             ImGui::TableSetupColumn("Power", ImGuiTableColumnFlags_WidthFixed, 50);
@@ -699,7 +717,7 @@ void RatingTab(App& app) {
         ImGui::TextDisabled("Click a group to go there. Power is the share of the anchor group's.");
     }
     ImGui::Spacing();
-    if (ImGui::Button("Rate and save")) {
+    if (ImGui::Button("Rate and Save")) {
         if (app.openQuest) { std::vector<const quest::QuestSet*> sets; if (const quest::QuestSet* s = FindSet(app, ratingstore::Key(app.openQuest->shown.name))) sets.push_back(s); StartRun(app, sets); }
         else r.message = "Open a quest to store its rating";
     }
@@ -707,52 +725,20 @@ void RatingTab(App& app) {
     if (!r.message.empty()) ImGui::TextDisabled("%s", r.message.c_str());
 }
 
-// ---- the Quest Builder: a draft's rating ---------------------------------------------------------------------------------
+// ---- shared with the 3D view: the open maps' rating, and what the strongest fight asks of the hero -------------------------
 
-bool DraftRating(App& app, const rating::Input& in, rating::Result& out, std::string& wait) {
+const rating::Result* LiveRating(App& app) {
     RatingUi& r = app.rating;
-    EnsureStore(app);
-    EnsureAllods(app);
-    if (!MonstersReady(app)) {
-        wait = r.dbLoading ? "Loading the database..." : !r.monstersError.empty() ? r.monstersError : "No database: set it in Settings.";
-        return false;
-    }
-    rating::Params params;
-    params.storedStats = r.store.storedStats;
-    out = rating::Rate(in, r.monsters, params);
-    return true;
+    if (app.mobs.empty() || !MonstersReady(app)) return nullptr;
+    UpdateLive(app);
+    return r.live.ok ? &r.live : nullptr;
 }
 
-void DraftRatingPanel(App& app, const rating::Result& res, const std::string& terrain) {
-    RatingUi& r = app.rating;
-    if (!res.ok) { ImGui::TextDisabled("%s", res.note.c_str()); return; }
-    const allodrange::Range* range = RangeOfZone(app, terrain);
-    const std::string allod = r.allods.NameOf(terrain);
-    ImGui::PushStyleColor(ImGuiCol_Text, TierColor(res.total));
-    ImGui::SetWindowFontScale(1.6f);
-    ImGui::TextUnformatted(Thousands(res.total).c_str());
-    ImGui::SetWindowFontScale(1.0f);
-    ImGui::SameLine();
-    ImGui::TextUnformatted(rating::TierName(res.total));
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
-    ImGui::TextDisabled("level %d-%d", rating::PartyLevelLow(res.total), rating::PartyLevelLow(res.total) + 2);
-    if (range) {
-        RangeBar(res.total, range);
-        ImGui::TextDisabled("%s range %s", allod.c_str(), RangeText(*range).c_str());
-        ImGui::SameLine();
-        VerdictText(res.total, range);
-    } else ImGui::TextDisabled("No range: the zone is not in config.ini [MPZone].");
-    for (int f = 0; f < rating::kFactors; ++f) {
-        ImGui::AlignTextToFramePadding();
-        ImGui::TextDisabled("%-12s", rating::FactorName(f));
-        ImGui::SameLine(110);
-        ImGui::ProgressBar(static_cast<float>(res.pts[static_cast<size_t>(f)] / rating::kMaxPoints[static_cast<size_t>(f)]), ImVec2(-1, 0),
-                           (Thousands(res.pts[static_cast<size_t>(f)]) + " / " + Thousands(rating::kMaxPoints[static_cast<size_t>(f)])).c_str());
-    }
-    ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d objective%s.", res.units, res.pulls.size(), res.fights,
-                        res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.objectives, res.objectives == 1 ? "" : "s");
-    if (res.unknown) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%d unit%s without a Monsters row in the database (not counted).", res.unknown, res.unknown == 1 ? "" : "s");
+void HeroNeedLine(App& app, const rating::Result& res) {
+    const rating::HeroNeed need = rating::NeedOf(res, app.rating.monsters);
+    if (!need.ok) return;
+    ImGui::TextWrapped("Hero needed: the strongest fight (%d enemies near %.0f, %.0f) asks for about %.1fx the damage and %.1fx the endurance of the database's Human Hero, "
+                       "over %.0f seconds. An estimate: gear and party size move it.", need.units, need.x, need.y, need.damageRatio, need.enduranceRatio, need.seconds);
 }
 
 } // namespace mapedit

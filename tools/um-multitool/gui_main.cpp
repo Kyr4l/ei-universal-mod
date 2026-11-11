@@ -960,7 +960,8 @@ int RunGui(const GuiOptions& options) {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     // No imgui.ini: ImGui would write it into the current directory (wherever um-multitool is started
-    // from); the windows are fixed and the settings live in um-multitool.cfg beside the executable.
+    // from). Its settings (the tool windows' sizes and places, table columns) go into um-multitool.cfg
+    // instead (IMGUI lines): read once the settings are, written when ImGui says they changed.
     io.IniFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     // Number fields: a click (without dragging) on a drag field types the value; sliders: a double-click
@@ -983,6 +984,11 @@ int RunGui(const GuiOptions& options) {
     library.onLoadProgress = [](const std::string& what, float f) { splash::Step(what, 0.1f + f * 0.55f); };
     if (!options.configFile.empty()) library.configPath = options.configFile;
     library.LoadConfig();
+    if (!library.imguiIni.empty()) {
+        std::string ini;
+        for (const std::string& l : library.imguiIni) { if (!l.empty() && l[0] == '[' && !ini.empty()) ini += "\n"; ini += l + "\n"; }
+        ImGui::LoadIniSettingsFromMemory(ini.c_str(), ini.size());
+    }
     { // tool windows that can leave the main window (popout.hpp)
         popout::Setup ps;
         ps.mainWindow = window;
@@ -1066,7 +1072,7 @@ int RunGui(const GuiOptions& options) {
     splash::End();
     glfwShowWindow(window);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
-    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kBuilder, kNone }; // kBuilder is not remembered for the next start
+    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
     int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer : options.openTexture ? kTex
                      : (library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kNone);
@@ -1190,7 +1196,6 @@ int RunGui(const GuiOptions& options) {
         if (ImGui::BeginTabBar("##maintabs")) {
             if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
             if (g_requestMainTab >= 0) { requestedTab = g_requestMainTab; g_requestMainTab = -1; }
-            if (mapedit::TakeBuilderMapRequest(mapCtx)) requestedTab = kMap; // the wizard opened its quest in the Map Editor
             auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
             if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
                 DrawFileProcessingTab(tabs, std::size(tabs));
@@ -1207,11 +1212,6 @@ int RunGui(const GuiOptions& options) {
                 mapedit::DrawTab(mapCtx);
                 shown3d = true;
                 shownTab = kMap;
-                ImGui::EndTabItem();
-            }
-            if (ImGui::BeginTabItem("Quest Builder", nullptr, flags(kBuilder))) {
-                mapedit::DrawBuilderTab(mapCtx);
-                shownTab = kBuilder;
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Texture Editor", nullptr, flags(kTex))) {
@@ -1232,7 +1232,7 @@ int RunGui(const GuiOptions& options) {
             requestedTab = kNone;
             ImGui::EndTabBar();
         }
-        if (shownTab != kNone && shownTab != kBuilder && shownTab != library.guiTab) { // remembered for the next start
+        if (shownTab != kNone && shownTab != library.guiTab) { // remembered for the next start
             library.guiTab = shownTab;
             library.SaveConfig();
         }
@@ -1302,6 +1302,19 @@ int RunGui(const GuiOptions& options) {
         }
 
         ImGui::Render();
+        if (io.WantSaveIniSettings) { // a window was moved or resized, a table column changed: into um-multitool.cfg
+            io.WantSaveIniSettings = false;
+            size_t n = 0;
+            const char* text = ImGui::SaveIniSettingsToMemory(&n);
+            std::vector<std::string> lines;
+            std::string cur;
+            for (size_t i = 0; i < n; ++i) {
+                if (text[i] == '\n') { if (!cur.empty()) lines.push_back(cur); cur.clear(); }
+                else if (text[i] != '\r') cur += text[i];
+            }
+            if (!cur.empty()) lines.push_back(cur);
+            if (lines != library.imguiIni) { library.imguiIni = lines; library.SaveConfig(); }
+        }
         glViewport(0, 0, fbW, fbH);
         const ImVec4 bg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
         glClearColor(bg.x, bg.y, bg.z, 1.0f);

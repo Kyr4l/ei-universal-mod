@@ -539,6 +539,23 @@ void Overlays(App& app, ImVec2 min, ImVec2 size) {
             label({cx, cy, 0}, 0.5f, IM_COL32(245, 120, 245, 255), text);
         }
     }
+    // The rating's aggro groups: where units wake each other; greener the weaker, redder the stronger.
+    if (app.scene.options.aggro) {
+        if (const rating::Result* res = LiveRating(app)) {
+            for (const rating::Pull& p : res->pulls) {
+                const float heat = std::clamp(static_cast<float>(p.norm) * 6.0f, 0.0f, 1.0f);
+                const ImU32 col = IM_COL32(static_cast<int>(90 + 165 * heat), static_cast<int>(170 - 110 * heat), 70, 230);
+                for (int i = 0; i < 40; ++i) {
+                    const float a0 = 6.2831853f * i / 40, a1 = 6.2831853f * (i + 1) / 40;
+                    const float x0 = p.x + p.radius * std::cos(a0), y0 = p.y + p.radius * std::sin(a0), x1 = p.x + p.radius * std::cos(a1), y1 = p.y + p.radius * std::sin(a1);
+                    float ax, ay, bx, by;
+                    if (app.scene.Project({x0, y0, app.scene.Ground(x0, y0) + 0.3f}, ax, ay) && app.scene.Project({x1, y1, app.scene.Ground(x1, y1) + 0.3f}, bx, by))
+                        draw->AddLine(ImVec2(min.x + ax * size.x, min.y + ay * size.y), ImVec2(min.x + bx * size.x, min.y + by * size.y), col, 2.0f);
+                }
+                label({p.x, p.y, 0}, 1.0f, IM_COL32(255, 235, 210, 255), std::to_string(p.units) + " units, " + std::to_string(static_cast<int>(p.norm * 100 + 0.5)) + "%");
+            }
+        }
+    }
     // A look point's wait, beside its eye (drawn in the scene).
     auto eye = [&](const mob::Vec3& p, float wait) { label(p, 0.0f, IM_COL32(150, 195, 255, 255), ui::Num(wait / 15.0f, 1) + " s"); };
     if (app.scene.logicMode || app.scene.logicAlways) {

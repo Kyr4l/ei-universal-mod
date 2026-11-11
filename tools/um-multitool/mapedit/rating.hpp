@@ -31,7 +31,7 @@
 
 namespace rating {
 
-constexpr int kFormulaVersion = 2;
+constexpr int kFormulaVersion = 3;
 
 // Points each factor can give; they add up to 10000.
 enum Factor { Power, Density, Stealth, Duration, Ambush, kFactors };
@@ -113,6 +113,19 @@ struct Result {
 };
 
 Result Rate(const Input& in, const Monsters& db, const Params& p = Params());
+
+// What the strongest fight asks of the party's hero, against the database's Human Hero row (the character without upgrades;
+// shop gear raises both numbers): a fight of `seconds` needs the enemy's total effective HP dealt in that time (damage) and
+// the enemy's damage per second taken for that long (endurance). An estimate, like the score.
+struct HeroNeed {
+    bool ok = false;
+    int units = 0;                       // enemies in that fight
+    double x = 0, y = 0;                 // where it is
+    double damage = 0, endurance = 0;    // needed per second / in total
+    double damageRatio = 0, enduranceRatio = 0; // as multiples of the reference hero's
+    double seconds = 0;
+};
+HeroNeed NeedOf(const Result& r, const Monsters& db, const Params& p = Params(), double seconds = 20);
 
 // The tiers shown next to a score.
 const char* TierName(double score);

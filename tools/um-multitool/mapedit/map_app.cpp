@@ -25,6 +25,7 @@ Context* Create(Library& lib) {
     // As last time: the side tab, and the time of day if one was chosen.
     if (lib.mapSideTab >= 0 && lib.mapSideTab < static_cast<int>(SideTab::Count)) app.requestTab = static_cast<SideTab>(lib.mapSideTab);
     if (lib.mapHour >= 0.0f) { app.hour = lib.mapHour; app.hourSet = true; }
+    if (lib.mapSidebarWidth > 0.0f) app.sidebarWidth = lib.mapSidebarWidth;
     // Walkability and the patrol simulation: the game's tile map, for the shown navmesh layer.
     app.scene.walkBuilder = [&app](MapScene::WalkGrid& w) {
         if (app.terrain.sectorsX <= 0) return;
@@ -224,14 +225,6 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err) {
     return true;
 }
 
-void DrawBuilderTab(Context* ctx) { QuestBuilderTab(ctx->app); }
-
-bool TakeBuilderMapRequest(Context* ctx) {
-    const bool want = ctx->app.builder.wantMapEditor;
-    ctx->app.builder.wantMapEditor = false;
-    return want;
-}
-
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);
@@ -274,6 +267,7 @@ void DrawTab(Context* ctx) {
     if (!app.sidebarShown) { viewWidth = 0; view(); } // N: the view alone
     else if (split.panelRight) { view(); split.Bar(); Sidebar(app, panelWidth, split.height); }
     else { Sidebar(app, panelWidth, split.height); split.Bar(); view(); }
+    if (split.released) { app.lib.mapSidebarWidth = app.sidebarWidth; app.lib.SaveConfig(); } // remembered for the next start
     app.viewportMin = min;
     app.viewportMax = ImVec2(min.x + size.x, min.y + size.y);
     app.drawnThisFrame = true;

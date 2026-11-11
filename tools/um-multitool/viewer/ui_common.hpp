@@ -173,6 +173,7 @@ struct SplitLayout {
     float* width;
     bool panelRight;
     float height = 0, total = 0;
+    bool released = false; // the bar was let go this frame: the width is worth saving
 
     // Returns the widths to give BeginChild: the panel's and the view's (0 = the rest).
     void Begin(float& panelWidth, float& viewWidth) {
@@ -190,6 +191,7 @@ struct SplitLayout {
         const bool active = ImGui::IsItemActive();
         if (ImGui::IsItemHovered() || active) ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
         if (active) *width += (panelRight ? -1.0f : 1.0f) * ImGui::GetIO().MouseDelta.x;
+        released = ImGui::IsItemDeactivated();
         ImVec2 a = ImGui::GetItemRectMin(), b = ImGui::GetItemRectMax();
         ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(a.x + 2, a.y), ImVec2(b.x - 2, b.y),
                                                   ImGui::GetColorU32(active ? ImGuiCol_SeparatorActive : ImGuiCol_Separator));

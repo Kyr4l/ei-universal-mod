@@ -633,6 +633,7 @@ static void CameraInput(App& app, ImVec2 size) {
 Context* Create(Library& lib) {
     Context* ctx = new Context(lib);
     if (lib.viewerTab >= 0 && lib.viewerTab <= kUnitsTab + 1) ctx->app.requestTab = lib.viewerTab; // as last time
+    if (lib.viewerSidebarWidth > 0.0f) ctx->app.sidebarWidth = lib.viewerSidebarWidth;
     return ctx;
 }
 
@@ -715,6 +716,7 @@ void DrawTab(Context* ctx) {
     };
     if (split.panelRight) { view(); split.Bar(); Sidebar(app, panelWidth, split.height); }
     else { Sidebar(app, panelWidth, split.height); split.Bar(); view(); }
+    if (split.released) { app.lib.viewerSidebarWidth = app.sidebarWidth; app.lib.SaveConfig(); } // remembered for the next start
     app.viewportMin = min;
     app.viewportMax = ImVec2(min.x + size.x, min.y + size.y);
     app.drawnThisFrame = true;

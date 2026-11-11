@@ -30,6 +30,7 @@ struct SourcesState {
     char lightingPath[1024] = "";
     char questPath[1024] = "";
     char questPackPath[1024] = "";
+    char allodConfigPath[1024] = "";
     char textPackLanguage[32] = "";
     char textPackPath[1024] = "";
     int capturingKey = -1; // the map key being rebound (waiting for a key press)
@@ -395,6 +396,13 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
                  "(none)"))
         lib.SaveConfig();
 
+    ImGui::SeparatorText("Allods");
+    Hint("the mod's config.ini or config.reg (or the folder holding it): its [MPZone] section names the allods and their zones (the Map Editor's difficulty ratings). Empty: looked for beside the database, the maps and the quests.");
+    if (st.allodConfigPath[0] == '\0' && !lib.allodConfig.empty()) std::snprintf(st.allodConfigPath, sizeof st.allodConfigPath, "%s", lib.allodConfig.c_str());
+    ImGui::SetNextItemWidth(-ImGui::CalcTextSize("Browse...").x - ImGui::GetStyle().FramePadding.x * 2 - ImGui::GetStyle().ItemSpacing.x);
+    if (ImGui::InputText("##allodconfig", st.allodConfigPath, sizeof st.allodConfigPath, ImGuiInputTextFlags_EnterReturnsTrue) ) { lib.allodConfig = st.allodConfigPath; lib.SaveConfig(); }
+    ImGui::SameLine();
+    if (ImGui::Button("Browse...##allodconfig")) { std::string picked; if (PickFile(picked)) { std::snprintf(st.allodConfigPath, sizeof st.allodConfigPath, "%s", picked.c_str()); lib.allodConfig = picked; lib.SaveConfig(); } }
     ImGui::SeparatorText("Lighting");
     Hint("the game's config/lights*.ini (sun, ambient and sky colours per hour), or folders holding them: the Map Editor's lighting.");
     Hint("Top first: a lights*.ini found higher up replaces one of the same name below (a mod's over the game's).");

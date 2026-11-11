@@ -65,6 +65,7 @@ struct MapViewOptions {
     bool walkability = false; // the computed walkability grid the patrol simulation uses
     bool navCompare = false;  // where the map's graph and the one this editor builds disagree
     bool scriptAreas = true;  // the areas the scripts declare (AddRoundToArea / AddRectToArea)
+    bool aggro = false;       // the rating's aggro groups: circles where units wake each other, redder the stronger
     bool textured = true, wireframe = false;
     float background[3] = {0.42f, 0.55f, 0.68f};
 };

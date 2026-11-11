@@ -8,7 +8,9 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <functional>
 #include <map>
+#include <queue>
 #include <set>
 
 namespace rating {
@@ -84,6 +86,64 @@ std::vector<Call> Calls(const std::string& s, const std::set<std::string>& names
 double Num(const std::string& s) { return std::strtod(s.c_str(), nullptr); }
 
 struct Pt { float x = 0, y = 0; };
+
+// A path along the map's walkability graph (AI_GRAPH, human heroes use layer 3) from a to b: the way the party really walks, round
+// cliffs and water, not the straight line. Empty when the map has no graph or no path joins them (the caller walks straight then).
+std::vector<Pt> GraphPath(const mob::File& g, Pt a, Pt b) {
+    constexpr int kLayer = 3;
+    std::vector<Pt> out;
+    if (!g.aiGraphAt || g.aiW <= 0 || g.aiH <= 0) return out;
+    const int W = g.aiW, H = g.aiH;
+    auto snap = [&](Pt p, int& nx, int& ny) { // the nearest walkable node within 4 nodes
+        const int cx = static_cast<int>(p.x / 4.0f), cy = static_cast<int>(p.y / 4.0f);
+        float best = 1e9f;
+        bool found = false;
+        for (int dy = -4; dy <= 4; ++dy)
+            for (int dx = -4; dx <= 4; ++dx) {
+                const int x = cx + dx, y = cy + dy;
+                if (x < 0 || y < 0 || x >= W || y >= H || !mob::AiWalkable(g, kLayer, x, y)) continue;
+                const float d = static_cast<float>(dx * dx + dy * dy);
+                if (d < best) { best = d; nx = x; ny = y; found = true; }
+            }
+        return found;
+    };
+    int sx = 0, sy = 0, tx = 0, ty = 0;
+    if (!snap(a, sx, sy) || !snap(b, tx, ty)) return out;
+    const size_t n = static_cast<size_t>(W) * H;
+    std::vector<float> cost(n, 1e30f);
+    std::vector<int> from(n, -1);
+    std::vector<char> closed(n, 0);
+    using Item = std::pair<float, int>;
+    std::priority_queue<Item, std::vector<Item>, std::greater<Item>> open;
+    auto index = [&](int x, int y) { return y * W + x; };
+    auto heuristic = [&](int x, int y) { return 56.0f * std::hypot(static_cast<float>(x - tx), static_cast<float>(y - ty)); }; // a step costs 64+ per node: this never overestimates
+    cost[static_cast<size_t>(index(sx, sy))] = 0;
+    open.push({heuristic(sx, sy), index(sx, sy)});
+    bool reached = false;
+    while (!open.empty()) {
+        const int cur = open.top().second;
+        open.pop();
+        if (closed[static_cast<size_t>(cur)]) continue;
+        closed[static_cast<size_t>(cur)] = 1;
+        const int x = cur % W, y = cur / W;
+        if (x == tx && y == ty) { reached = true; break; }
+        for (int d = 0; d < 8; ++d) {
+            const uint16_t c = mob::AiCost(g, kLayer, x, y, d);
+            if (c == 0xFFFF) continue;
+            const int nx = x + mob::kAiDx[d], ny = y + mob::kAiDy[d];
+            if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+            const int ni = index(nx, ny);
+            const float nc = cost[static_cast<size_t>(cur)] + static_cast<float>(c);
+            if (nc < cost[static_cast<size_t>(ni)]) { cost[static_cast<size_t>(ni)] = nc; from[static_cast<size_t>(ni)] = cur; open.push({nc + heuristic(nx, ny), ni}); }
+        }
+    }
+    if (!reached) return out;
+    for (int cur = index(tx, ty); cur >= 0; cur = from[static_cast<size_t>(cur)]) out.push_back({static_cast<float>(cur % W) * 4.0f + 2.0f, static_cast<float>(cur / W) * 4.0f + 2.0f});
+    std::reverse(out.begin(), out.end());
+    out.insert(out.begin(), a);
+    out.push_back(b);
+    return out;
+}
 
 // A unit whose "Stats imported" is off carries its own stats (UNIT_STATS, 172 bytes; the Map Editor's stats editor has the layout):
 // the game uses those, not its prototype's database row. Offsets: HP 0 / max HP 4 (int), Actions 20, Range 60, Attack 64, Defence 68,
@@ -420,10 +480,16 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     if (in.remove.set) route.push_back({(in.remove.x1 + in.remove.x2) / 2, (in.remove.y1 + in.remove.y2) / 2});
     std::vector<Pt> samples;
     float len = 0;
+    const mob::File* graph = nullptr; // the first map with a walkability graph (a zone's base map)
+    for (const mob::File* f : in.files) if (f && f->loaded && f->aiGraphAt) { graph = f; break; }
     for (size_t i = 0; i + 1 < route.size(); ++i) {
-        const float dx = route[i + 1].x - route[i].x, dy = route[i + 1].y - route[i].y, d = std::sqrt(dx * dx + dy * dy);
-        for (float t = 0; t < d; t += 2.0f) samples.push_back({route[i].x + dx * t / d, route[i].y + dy * t / d});
-        len += d;
+        std::vector<Pt> leg = graph ? GraphPath(*graph, route[i], route[i + 1]) : std::vector<Pt>();
+        if (leg.empty()) leg = {route[i], route[i + 1]}; // no graph or no way through: straight
+        for (size_t k = 0; k + 1 < leg.size(); ++k) {
+            const float dx = leg[k + 1].x - leg[k].x, dy = leg[k + 1].y - leg[k].y, d = std::sqrt(dx * dx + dy * dy);
+            for (float t = 0; t < d; t += 2.0f) samples.push_back({leg[k].x + dx * t / d, leg[k].y + dy * t / d});
+            len += d;
+        }
     }
     for (const Pt& q : route) r.route.push_back({q.x, q.y});
     r.routeLength = len;
@@ -510,6 +576,25 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     r.ok = true;
     if (r.units == 0) r.note = "no enemy units found";
     return r;
+}
+
+HeroNeed NeedOf(const Result& r, const Monsters& db, const Params& p, double seconds) {
+    HeroNeed n;
+    if (!r.ok || r.pulls.empty() || !db.haveHero) return n;
+    const Pull* top = &r.pulls[0];
+    for (const Pull& pl : r.pulls) if (pl.power > top->power) top = &pl;
+    const UnitPower hero = PowerOf(db.hero, db, p);
+    if (hero.dps <= 0 || hero.effHp <= 0 || seconds <= 0) return n;
+    n.ok = true;
+    n.units = top->units;
+    n.x = top->x;
+    n.y = top->y;
+    n.seconds = seconds;
+    n.damage = top->effHp / seconds;
+    n.endurance = top->dps * seconds;
+    n.damageRatio = n.damage / hero.dps;
+    n.enduranceRatio = n.endurance / hero.effHp;
+    return n;
 }
 
 } // namespace rating
