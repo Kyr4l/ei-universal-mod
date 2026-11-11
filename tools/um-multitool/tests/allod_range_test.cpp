@@ -20,10 +20,10 @@ int main() {
     CHECK(!r[0].estimated && !r[3].estimated && r[4].estimated);
     CHECK(r[4].lo >= r[3].lo && r[4].hi <= 10000);   // beyond the last allod: one step up, capped
     double d = 0;
-    CHECK(Judge(5420, r[0], &d) == Verdict::TooHard && d > 1800);
-    CHECK(Judge(4380, r[3], &d) == Verdict::TooEasy && d > 1700);
+    CHECK(Judge(5420, r[0], &d) == Verdict::Above && d > 1800);
+    CHECK(Judge(4380, r[3], &d) == Verdict::Below && d > 1700);
     CHECK(Judge(1180, r[0]) == Verdict::InRange);    // 20 points outside: within the tolerance
-    CHECK(Judge(3100, r[1]) == Verdict::InRange && Judge(3000, r[1]) == Verdict::TooEasy);
+    CHECK(Judge(3100, r[1]) == Verdict::InRange && Judge(3000, r[1]) == Verdict::Below);
 
     // a locked range wins over the estimate
     std::vector<Lock> locks(5);

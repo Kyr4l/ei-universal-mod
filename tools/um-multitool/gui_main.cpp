@@ -1066,7 +1066,7 @@ int RunGui(const GuiOptions& options) {
     splash::End();
     glfwShowWindow(window);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
-    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
+    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kBuilder, kNone }; // kBuilder is not remembered for the next start
     // The tab asked for on the command line, else the one open when the GUI was last closed.
     int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer : options.openTexture ? kTex
                      : (library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kNone);
@@ -1190,6 +1190,7 @@ int RunGui(const GuiOptions& options) {
         if (ImGui::BeginTabBar("##maintabs")) {
             if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
             if (g_requestMainTab >= 0) { requestedTab = g_requestMainTab; g_requestMainTab = -1; }
+            if (mapedit::TakeBuilderMapRequest(mapCtx)) requestedTab = kMap; // the wizard opened its quest in the Map Editor
             auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
             if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
                 DrawFileProcessingTab(tabs, std::size(tabs));
@@ -1206,6 +1207,11 @@ int RunGui(const GuiOptions& options) {
                 mapedit::DrawTab(mapCtx);
                 shown3d = true;
                 shownTab = kMap;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Quest Builder", nullptr, flags(kBuilder))) {
+                mapedit::DrawBuilderTab(mapCtx);
+                shownTab = kBuilder;
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Texture Editor", nullptr, flags(kTex))) {
@@ -1226,7 +1232,7 @@ int RunGui(const GuiOptions& options) {
             requestedTab = kNone;
             ImGui::EndTabBar();
         }
-        if (shownTab != kNone && shownTab != library.guiTab) { // remembered for the next start
+        if (shownTab != kNone && shownTab != kBuilder && shownTab != library.guiTab) { // remembered for the next start
             library.guiTab = shownTab;
             library.SaveConfig();
         }

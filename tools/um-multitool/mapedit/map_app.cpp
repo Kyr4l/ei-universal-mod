@@ -224,6 +224,14 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err) {
     return true;
 }
 
+void DrawBuilderTab(Context* ctx) { QuestBuilderTab(ctx->app); }
+
+bool TakeBuilderMapRequest(Context* ctx) {
+    const bool want = ctx->app.builder.wantMapEditor;
+    ctx->app.builder.wantMapEditor = false;
+    return want;
+}
+
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);

@@ -303,9 +303,9 @@ void VerdictText(double score, const allodrange::Range* range) {
     if (!range) { ImGui::TextDisabled("no range"); return; }
     double d = 0;
     switch (allodrange::Judge(score, *range, &d)) {
-    case allodrange::Verdict::TooHard: ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.48f, 1), "Too Hard +%s", Thousands(d).c_str()); break;
-    case allodrange::Verdict::TooEasy: ImGui::TextColored(ImVec4(0.55f, 0.75f, 1.0f, 1), "Too Easy -%s", Thousands(d).c_str()); break;
-    default: ImGui::TextColored(ImVec4(0.56f, 0.88f, 0.61f, 1), "In Range"); break;
+    case allodrange::Verdict::Above: ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.48f, 1), "+%s above the range", Thousands(d).c_str()); break;
+    case allodrange::Verdict::Below: ImGui::TextColored(ImVec4(0.55f, 0.75f, 1.0f, 1), "-%s below the range", Thousands(d).c_str()); break;
+    default: ImGui::TextColored(ImVec4(0.56f, 0.88f, 0.61f, 1), "Within the range"); break;
     }
 }
 
@@ -460,9 +460,9 @@ void RatingColumns(App& app, const quest::QuestSet& set) {
             double d = 0;
             const double score = r.store.entries[key].score;
             switch (allodrange::Judge(score, *range, &d)) {
-            case allodrange::Verdict::TooHard: ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.48f, 1), "+%s", Thousands(d).c_str()); break;
-            case allodrange::Verdict::TooEasy: ImGui::TextColored(ImVec4(0.55f, 0.75f, 1.0f, 1), "-%s", Thousands(d).c_str()); break;
-            default: ImGui::TextColored(ImVec4(0.56f, 0.88f, 0.61f, 1), "ok"); break;
+            case allodrange::Verdict::Above: ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.48f, 1), "+%s", Thousands(d).c_str()); break;
+            case allodrange::Verdict::Below: ImGui::TextColored(ImVec4(0.55f, 0.75f, 1.0f, 1), "-%s", Thousands(d).c_str()); break;
+            default: ImGui::TextColored(ImVec4(0.56f, 0.88f, 0.61f, 1), "in"); break;
             }
         }
     }
@@ -705,6 +705,54 @@ void RatingTab(App& app) {
     }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Stores the rating of the quest's files on disk (the list's Score column). Unsaved edits are not in it.");
     if (!r.message.empty()) ImGui::TextDisabled("%s", r.message.c_str());
+}
+
+// ---- the Quest Builder: a draft's rating ---------------------------------------------------------------------------------
+
+bool DraftRating(App& app, const rating::Input& in, rating::Result& out, std::string& wait) {
+    RatingUi& r = app.rating;
+    EnsureStore(app);
+    EnsureAllods(app);
+    if (!MonstersReady(app)) {
+        wait = r.dbLoading ? "Loading the database..." : !r.monstersError.empty() ? r.monstersError : "No database: set it in Settings.";
+        return false;
+    }
+    rating::Params params;
+    params.storedStats = r.store.storedStats;
+    out = rating::Rate(in, r.monsters, params);
+    return true;
+}
+
+void DraftRatingPanel(App& app, const rating::Result& res, const std::string& terrain) {
+    RatingUi& r = app.rating;
+    if (!res.ok) { ImGui::TextDisabled("%s", res.note.c_str()); return; }
+    const allodrange::Range* range = RangeOfZone(app, terrain);
+    const std::string allod = r.allods.NameOf(terrain);
+    ImGui::PushStyleColor(ImGuiCol_Text, TierColor(res.total));
+    ImGui::SetWindowFontScale(1.6f);
+    ImGui::TextUnformatted(Thousands(res.total).c_str());
+    ImGui::SetWindowFontScale(1.0f);
+    ImGui::SameLine();
+    ImGui::TextUnformatted(rating::TierName(res.total));
+    ImGui::PopStyleColor();
+    ImGui::SameLine();
+    ImGui::TextDisabled("level %d-%d", rating::PartyLevelLow(res.total), rating::PartyLevelLow(res.total) + 2);
+    if (range) {
+        RangeBar(res.total, range);
+        ImGui::TextDisabled("%s range %s", allod.c_str(), RangeText(*range).c_str());
+        ImGui::SameLine();
+        VerdictText(res.total, range);
+    } else ImGui::TextDisabled("No range: the zone is not in config.ini [MPZone].");
+    for (int f = 0; f < rating::kFactors; ++f) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextDisabled("%-12s", rating::FactorName(f));
+        ImGui::SameLine(110);
+        ImGui::ProgressBar(static_cast<float>(res.pts[static_cast<size_t>(f)] / rating::kMaxPoints[static_cast<size_t>(f)]), ImVec2(-1, 0),
+                           (Thousands(res.pts[static_cast<size_t>(f)]) + " / " + Thousands(rating::kMaxPoints[static_cast<size_t>(f)])).c_str());
+    }
+    ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d objective%s.", res.units, res.pulls.size(), res.fights,
+                        res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.objectives, res.objectives == 1 ? "" : "s");
+    if (res.unknown) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%d unit%s without a Monsters row in the database (not counted).", res.unknown, res.unknown == 1 ? "" : "s");
 }
 
 } // namespace mapedit

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // The difficulty range each allod is expected to have, estimated from its own rated quests, so a quest that sticks out
-// (too hard or too easy for its allod) is easy to spot.
+// (above or below its allod's range) is easy to spot. The rating is an estimate: the range only says how far a quest is from what the allod's other quests score, not that it plays too hard or too easy.
 //   - 4 or more rated quests: the median, plus or minus max(900, 1.2 x the median absolute deviation x 1.4826); the deviation
 //     is robust, so one extreme quest does not stretch the range.
 //   - fewer: estimated from the allods next to it (between the neighbours' medians, or one step beyond the last), +-1400.
@@ -73,11 +73,11 @@ inline std::vector<Range> Compute(const std::vector<std::vector<double>>& scores
     return out;
 }
 
-enum class Verdict { InRange, TooHard, TooEasy };
+enum class Verdict { InRange, Above, Below };
 inline Verdict Judge(double score, const Range& r, double* distance = nullptr) {
     if (distance) *distance = 0;
-    if (score > r.hi + 150) { if (distance) *distance = score - r.hi; return Verdict::TooHard; }
-    if (score < r.lo - 150) { if (distance) *distance = r.lo - score; return Verdict::TooEasy; }
+    if (score > r.hi + 150) { if (distance) *distance = score - r.hi; return Verdict::Above; }
+    if (score < r.lo - 150) { if (distance) *distance = r.lo - score; return Verdict::Below; }
     return Verdict::InRange;
 }
 

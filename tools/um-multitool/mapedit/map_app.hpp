@@ -29,6 +29,9 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err);
 
 // Inside the ImGui frame, in the Map Editor tab's content region.
 void DrawTab(Context* ctx);
+// The Quest Builder tab (a wizard that writes a quest; pure ImGui, no 3D view). TakeBuilderMapRequest: true once after the wizard opened its quest in the Map Editor.
+void DrawBuilderTab(Context* ctx);
+bool TakeBuilderMapRequest(Context* ctx);
 // After ImGui::Render: the 3D view into the region DrawTab reserved (nothing when it was not drawn).
 // resting: the main loop is at its resting rate (no input for a while): the view is drawn again only when
 // something changed, else the last frame is shown again.
