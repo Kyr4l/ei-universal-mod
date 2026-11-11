@@ -75,6 +75,8 @@ struct State {
     bool wiringDrag = false, pickedUp = false;
     ExprPath wireFrom;
     ImVec2 wireAnchor{0, 0}; // the output socket, in canvas units
+    // a function picked in the add menu: it follows the mouse until it is dropped on a value row
+    std::string placing;
 };
 
 // ---- nodes moved by hand: offsets from the laid-out place, per map file -----------------------------------------------------
@@ -365,13 +367,16 @@ inline void AddMenu(Ctx& c, State& ne) {
         std::sort(items.begin(), items.end(), [](const Item& a, const Item& b) { return mobscript::LowerCase(a.name) < mobscript::LowerCase(b.name); });
     }
     auto wanted = [&](const Item& it) { return ne.wiring ? it.returns != 'v' : it.returns == 'v'; };
+    // a function (it has a value) added from the add menu: it is placed by a click on the value it feeds
+    auto place = [&](const std::string& name) { ne.placing = name; ne.message = "Click a value of a node to put " + name + " there (Esc: cancel)"; ImGui::CloseCurrentPopup(); };
+    auto pick = [&](const Item& it) { if (ne.wiring) wireFunction(it.name); else if (it.returns == 'v') addCommand(it.name); else place(it.name); };
     if (!q.empty()) {
         int shown = 0;
         for (const Item& it : items) {
-            if (!wanted(it) || mobscript::LowerCase(it.name).find(q) == std::string::npos) continue;
+            if ((ne.wiring && !wanted(it)) || mobscript::LowerCase(it.name).find(q) == std::string::npos) continue; // adding: commands and functions
             if (shown++ >= 40) { ImGui::TextDisabled("... keep typing"); break; }
             ImGui::PushID(shown);
-            if (ImGui::Selectable(it.name.c_str())) { if (ne.wiring) wireFunction(it.name); else addCommand(it.name); }
+            if (ImGui::Selectable((it.name + (!ne.wiring && it.returns != 'v' ? "  (value)" : "")).c_str())) pick(it);
             ImGui::PopID();
         }
         for (const scriptast::Script& s : c.prog.scripts) {
@@ -413,11 +418,31 @@ inline void AddMenu(Ctx& c, State& ne) {
             }
             if (open) {
                 ImGui::PushID(&it);
-                if (ImGui::MenuItem(it.name.c_str())) { if (ne.wiring) wireFunction(it.name); else addCommand(it.name); }
+                if (ImGui::MenuItem(it.name.c_str())) pick(it);
                 ImGui::PopID();
             }
         }
         if (open) ImGui::EndMenu();
+        if (!ne.wiring && ImGui::BeginMenu("Functions")) { // the ones with a value: placed on the value row they feed
+            char fl = 0;
+            bool fopen = false;
+            for (const Item& it : items) {
+                if (it.returns == 'v') continue;
+                const char l = static_cast<char>(std::toupper(static_cast<unsigned char>(it.name[0])));
+                if (l != fl) {
+                    if (fopen) ImGui::EndMenu();
+                    fl = l;
+                    fopen = ImGui::BeginMenu((std::string("Functions ") + l).c_str());
+                }
+                if (fopen) {
+                    ImGui::PushID(&it);
+                    if (ImGui::MenuItem(it.name.c_str())) pick(it);
+                    ImGui::PopID();
+                }
+            }
+            if (fopen) ImGui::EndMenu();
+            ImGui::EndMenu();
+        }
         if (ImGui::BeginMenu("Scripts")) {
             for (const scriptast::Script& s : c.prog.scripts)
                 if (!s.world) {
@@ -461,6 +486,25 @@ inline void Run(State& ne, Ctx& c) {
             ne.grabbing = false;
             ne.grabBase.clear();
             SaveOffsets();
+        }
+        return;
+    }
+    // ---- a function from the add menu, following the mouse: a click on a value row puts it there
+    if (!ne.placing.empty()) {
+        const ImVec2 ts = ImGui::CalcTextSize(ne.placing.c_str());
+        dl->AddRectFilled(ImVec2(m.x + 12, m.y + 4), ImVec2(m.x + 20 + ts.x, m.y + 8 + ts.y), IM_COL32(60, 90, 160, 230), 3.0f);
+        dl->AddText(ImVec2(m.x + 16, m.y + 6), IM_COL32(255, 255, 255, 255), ne.placing.c_str());
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) { ne.placing.clear(); ne.message.clear(); return; }
+        if (c.hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            const Node* target = c.hoverIndex >= 0 ? &c.g.nodes[static_cast<size_t>(c.hoverIndex)] : nullptr;
+            const int r = target ? RowAt(c, *target, cm.y) : -1;
+            const Row* row = target && r >= 0 && r < static_cast<int>(target->rows.size()) ? &target->rows[static_cast<size_t>(r)] : nullptr;
+            if (row && (row->editable || row->wired) && !row->edit.stmt.steps.empty()) {
+                const ExprPath to = row->edit;
+                const std::string name = ne.placing;
+                if (Apply(c, [&](scriptast::Program& p) { return scriptedit::SetExpr(p, to, scriptedit::NewCallExpr(name)); })) { ne.items.clear(); ne.message.clear(); }
+                ne.placing.clear();
+            } else ne.message = "Click a value row of a node (a number, a text, a name or a wired value)";
         }
         return;
     }

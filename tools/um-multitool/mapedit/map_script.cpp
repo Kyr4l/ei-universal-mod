@@ -1178,7 +1178,9 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
     g.Query(ImVec2((0 - view.pan.x) / z, (0 - view.pan.y) / z), ImVec2((size.x - view.pan.x) / z, (size.y - view.pan.y) / z), F, inNodes, inWires);
     // Zoomed out, the detail goes: the text of the rows (below ~8 px), the rounded corners and the curves (every
     // curve is dozens of segments, each a few vertices), the lines' anti-aliasing: tens of thousands of vertices.
-    const bool rowText = fs >= 8.0f, simple = z < 0.3f;
+    const bool rowText = fs >= 6.0f, simple = z < 0.3f;
+    // Zoomed out the titles keep a readable size (clipped to their node / frame): the graph stays legible from afar.
+    const float titleFs = std::max(fs, F * 0.72f), frameFs = std::max(fs * 1.15f, F * 0.9f);
     const ImDrawListFlags dlFlags = dl->Flags;
     if (simple) dl->Flags &= ~ImDrawListFlags_AntiAliasedLines;
     // frames
@@ -1187,10 +1189,14 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         if (!visible(a, b)) continue;
         dl->AddRectFilled(a, b, IM_COL32(60, 60, 70, 90), 4 * z);
         dl->AddRect(a, b, IM_COL32(90, 90, 105, 160), 4 * z);
+        if (b.x - a.x > 30.0f) {
+            dl->PushClipRect(a, b, true);
+            dl->AddText(font, frameFs, ImVec2(a.x + std::max(3.0f, F * 0.6f * z), a.y + std::max(2.0f, F * 0.4f * z)), IM_COL32(220, 200, 230, 255), fr.name.c_str());
+            dl->PopClipRect();
+        }
         if (text) {
-            dl->AddText(font, fs * 1.15f, ImVec2(a.x + F * 0.6f * z, a.y + F * 0.4f * z), IM_COL32(220, 200, 230, 255), fr.name.c_str());
             if (!fr.subtitle.empty()) {
-                const float tw = font->CalcTextSizeA(fs * 1.15f, FLT_MAX, 0, fr.name.c_str()).x;
+                const float tw = font->CalcTextSizeA(frameFs, FLT_MAX, 0, fr.name.c_str()).x;
                 dl->AddText(font, fs, ImVec2(a.x + F * 0.6f * z + tw + F * z, a.y + F * 0.55f * z), IM_COL32(150, 150, 160, 255), fr.subtitle.c_str());
             }
         }
@@ -1257,9 +1263,12 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
             const float d = r * 1.2f;
             dl->AddQuadFilled(ImVec2(p.x - d, p.y), ImVec2(p.x, p.y - d), ImVec2(p.x + d, p.y), ImVec2(p.x, p.y + d), IM_COL32(240, 160, 70, 255));
         }
-        if (!text) continue;
-        dl->AddText(font, fs, ImVec2(a.x + c.pad * z, a.y + (hh - fs) * 0.5f), IM_COL32(235, 235, 235, 255), n.title.c_str());
-        if (!rowText) continue;
+        if (b.x - a.x >= 24.0f) { // the title, at least readable (clipped to the node)
+            dl->PushClipRect(a, b, true);
+            dl->AddText(font, titleFs, ImVec2(a.x + std::max(2.0f, c.pad * z), a.y + std::max(0.0f, (hh - titleFs) * 0.5f)), IM_COL32(235, 235, 235, 255), n.title.c_str());
+            dl->PopClipRect();
+        }
+        if (!text || !rowText) continue;
         for (size_t i = 0; i < n.rows.size(); ++i) {
             const Row& row = n.rows[i];
             const float cy = a.y + hh + c.rowH * z * (static_cast<float>(i) + 0.5f);
