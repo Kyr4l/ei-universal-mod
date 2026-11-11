@@ -177,6 +177,8 @@ The active map's diplomacy table (`DIPLOMATION`), like ei_maper's: 32 player gro
 
 The files of the open quest as text: `map.txt`, `quest.ini`, briefings, the quest text. A packed quest holds `quest.reg`, the game's binary registry, instead of `quest.ini`; it is shown as INI text and saved back as `.reg` (the conversion reproduces every `quest.reg` of the game and the mod byte for byte). With language packs, a picker chooses whose copy to show. **Save to every language** writes the file to all packs; it is on by default for `map.txt` and `quest.ini`/`.reg`, and off for briefings and texts. Texts keep their encoding (UTF-8, CP1251 or CP949, detected and changeable), and their line endings.
 
+A briefing (`briefing <topic>`) gets two tabs under its text, read the way game.exe's dialog screen reads it (`DialogScreen::ParseDialogScript`, docs/game-exe/ui-screens.md 3): **Preview**, the phrases as the game shows them (golden speaker, beige text, grey with `#nolips`), with each phrase's camera shot and voice file number; **Findings**: no `#show` naming a unit of the map folders besides the hero (the game then does not open the briefing at all), a `#show` name that is neither a unit nor an NPC portrait with an index, `#camera` shots outside 1-12 or with a partial set of numbers, a `#phrase` speaker never shown, a phrase without text, `#show`'s third word (never read), unknown directives.
+
 ## Minimap
 
 **Tools → Minimap...** exports the loaded terrain seen from straight above, like the game's `<zone>map` textures that ZoneView makes:

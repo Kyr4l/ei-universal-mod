@@ -3,6 +3,7 @@
 // Map Editor: Quest tab, the navmesh job, saving changes, the unload dialog.
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
+#include "briefing.hpp"
 
 namespace mapedit {
 
@@ -309,6 +310,53 @@ void UnloadDialog(App& app) {
     ImGui::EndPopup();
 }
 
+// The names of every unit in the map folders (lower-case): a briefing's speakers live in the zone the quest is given in (a town),
+// not in the quest's own maps. Read once, when a briefing is first shown.
+static const std::set<std::string>& AllUnitNames(App& app) {
+    static std::set<std::string> names;
+    static bool done = false;
+    if (done) return names;
+    done = true;
+    for (const Library::MapFile& f : app.lib.ListMapFiles()) {
+        if (f.terrain) continue;
+        mob::File m;
+        if (!mob::Load(f.path, m)) continue;
+        for (const mob::Object& o : m.objects) if (o.kind == mob::Kind::Unit && !o.name.empty()) names.insert(Lower(mob::Utf8(o.name)));
+    }
+    return names;
+}
+
+// Under a briefing's text: the talk as the game shows it, and what the game would do wrong (briefing.hpp, ui-screens.md 3).
+static void BriefingPanel(App& app) {
+    const briefing::Parsed b = briefing::Parse(app.mqText, AllUnitNames(app));
+    if (ImGui::BeginTabBar("##briefing")) {
+        if (ImGui::BeginTabItem("Preview")) {
+            ImGui::BeginChild("##bprev", ImVec2(-1, -1), ImGuiChildFlags_Borders);
+            if (!b.title.empty()) ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1), "%s", b.title.c_str());
+            for (const briefing::Phrase& ph : b.phrases) {
+                ImGui::TextColored(ImVec4(1.0f, 0.70f, 0.19f, 1), "%s:", ph.speaker.c_str());
+                ImGui::SameLine();
+                ImGui::TextDisabled("(%s%s%s)", ph.camera.c_str(), ph.voice > 0 ? (", voice " + std::to_string(ph.voice)).c_str() : "", ph.nolips ? ", no lips" : "");
+                ImGui::PushStyleColor(ImGuiCol_Text, ph.nolips ? ImVec4(0.66f, 0.66f, 0.66f, 1) : ImVec4(0.89f, 0.84f, 0.65f, 1));
+                ImGui::TextWrapped(" %s", ph.text.c_str());
+                ImGui::PopStyleColor();
+            }
+            ImGui::EndChild();
+            ImGui::EndTabItem();
+        }
+        const std::string label = "Findings (" + std::to_string(b.issues.size()) + ")###bfind";
+        if (ImGui::BeginTabItem(label.c_str())) {
+            ImGui::BeginChild("##bfind", ImVec2(-1, -1), ImGuiChildFlags_Borders);
+            if (b.issues.empty()) ImGui::TextDisabled("Nothing: the game reads this briefing as written.");
+            for (const briefing::Issue& i : b.issues)
+                ImGui::TextColored(SeverityColor(i.severity), "line %d: %s", i.line, i.message.c_str());
+            ImGui::EndChild();
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+    }
+}
+
 void QuestTab(App& app) {
     if (!app.openQuest) {
         ImGui::TextWrapped("Open a quest in the Files tab (quests come from Settings > Quests) to see and edit its files here.");
@@ -383,9 +431,12 @@ void QuestTab(App& app) {
     if (ImGui::Button("Revert##mq")) app.mqLoadedFor.clear();
     ImGui::EndDisabled();
     if (!app.mqMessage.empty()) { ImGui::SameLine(); ImGui::TextWrapped("%s", app.mqMessage.c_str()); }
-    if (ImGui::InputTextMultiline("##mqtext", app.mqText.data(), app.mqText.capacity() + 1, ImVec2(-1, -1),
+    const bool isBriefing = quest::Lower(std::filesystem::path(app.mqEntry).filename().string()).rfind("briefing", 0) == 0;
+    const float editH = isBriefing ? std::max(120.0f, ImGui::GetContentRegionAvail().y * 0.55f) : -1.0f;
+    if (ImGui::InputTextMultiline("##mqtext", app.mqText.data(), app.mqText.capacity() + 1, ImVec2(-1, editH),
                                   ImGuiInputTextFlags_CallbackResize | ImGuiInputTextFlags_AllowTabInput, ResizeStringCallback, &app.mqText))
         app.mqTextDirty = true;
+    if (isBriefing) BriefingPanel(app);
 }
 
 
