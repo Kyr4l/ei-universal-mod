@@ -27,7 +27,9 @@ The score is the sum of five factors (the Rating tab shows each as points of its
 | --- | --- | --- |
 | Enemy Power | 5000 | the aggro groups' strength (on a log scale of their total and of the strongest one, so early and late quests stay apart): units that wake each other (each unit's call-for-help radius), power = square root of (effective HP x damage per second). Effective HP counts absorption, damage per second the hit chance (the unit's To Hit against the Human Hero's Parry, the game's own formula) and the attack rate. |
 | Density | 1300 | how many units an aggro group holds on average (8 = the maximum). |
-| Stealth | 1500 | how much of the walk (deploy area, the script's objectives in order, the exit) lies inside a unit's detection: its sight, a guard's radius, a patrol's path. |
+
+From the game.exe reverse (docs/game-exe): an aggro group joins only units whose sides are friends (the map's diplomacy table: `Brain::CallForHelp` calls friends only), and a unit's damage per second and staying power use the game's own hit roll (`ComputeHitChance`: the to-hit random spread, the weapon weights) against a hero of the unit's own level, both ways.
+| Stealth | 1500 | how much of the walk (deploy area, the script's objectives in order, the exit) lies inside a unit's detection: its sight times the hero's visibility, or its life sense times the hero's life signature (game.exe's vision, unit-ai.md 4.1), a guard's radius, a patrol's path. |
 | Duration | 1000 | the walk's length, only counted when it has real fights. |
 | Ambushes | 1200 | units the script spawns (`AddUnitToServer`) and how strong they are. |
 

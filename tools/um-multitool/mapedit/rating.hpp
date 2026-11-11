@@ -31,7 +31,7 @@
 
 namespace rating {
 
-constexpr int kFormulaVersion = 4;
+constexpr int kFormulaVersion = 5;
 
 // Points each factor can give; they add up to 10000.
 enum Factor { Power, Density, Stealth, Duration, Ambush, kFactors };
@@ -44,7 +44,14 @@ inline const char* FactorName(int f) {
 struct Monster {
     std::string name;
     float health = 0, absorb = 0, toHit = 0, parry = 0, dmgMin = 0, dmgSpread = 0, range = 0, actions = 0, move = 0, sight = 0;
+    float hitRandom = 0, weight = 0;          // Tuning To hit Random (the roll's spread), Tuning Weapon Weight (combat.md 4.1-4.2)
+    float peripheral = 0, senseLife = 0;      // Skills Peripheral, Senses SenseLife: ranges of the other two ways to notice (unit-ai.md 4.1)
+    float visibility = 0, lifeSign = 0;       // Detections Sight, Detections SenseLife: how far others see / sense this unit, as factors
 };
+
+// The chance that `a` hits `d` in melee, as game.exe rolls it (ComputeHitChance 0x555BD0, ResolveHitChance 0x553DF0): roll uniform over
+// -(S+1), -(S+1)+2 ... S-1 with S = a's to-hit random; a hit when roll + a.toHit + a.weight / (d.weight * 20) >= d.parry.
+float HitChance(const Monster& a, const Monster& d);
 
 struct Params {
     float defaultHelp = 7.0f;      // call-for-help radius when a unit stores none (the game's AiInfo default)

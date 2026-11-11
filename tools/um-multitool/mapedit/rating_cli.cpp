@@ -64,6 +64,16 @@ int RunRateCli(const std::vector<std::string>& args) {
         for (const auto& kv : monsters.byName) v.push_back({rating::PowerOf(kv.second, monsters, params).power, kv.second.name});
         std::sort(v.rbegin(), v.rend());
         for (size_t i = 0; i < std::min<size_t>(12, v.size()); ++i) std::printf("  %8.1f  %s\n", v[i].first, v[i].second.c_str());
+        if (monsters.haveHero) {
+            const rating::Monster& h = monsters.hero;
+            std::printf("  reference hero %s: HP %.0f, to hit %.0f (random %.0f), parry %.0f, weight %.1f, sight %.1f, visibility %.2f, life sign %.2f\n",
+                        h.name.c_str(), h.health, h.toHit, h.hitRandom, h.parry, h.weight, h.sight, h.visibility, h.lifeSign);
+            for (size_t i = 0; i < std::min<size_t>(5, v.size()); ++i) {
+                const rating::Monster* m = monsters.Find(v[i].second);
+                if (m) std::printf("    %s: vs the base hero row: hits %.0f%%, hit %.0f%%; sight %.1f, peripheral %.1f, sense life %.1f\n", m->name.c_str(),
+                                   rating::HitChance(*m, h) * 100, rating::HitChance(h, *m) * 100, m->sight, m->peripheral, m->senseLife);
+            }
+        }
     }
 
     allods::Table table;

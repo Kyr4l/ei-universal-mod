@@ -170,6 +170,7 @@ struct Enemy {
     bool known = false;
     bool stored = false; // counted with the map's stored stats
     float help = 7;
+    int side = 0;        // its player (diplomacy group): only friends answer a call for help
     // where the unit notices a walker: discs of `radius` around these points (one point: a post; several: a patrol path)
     std::vector<Pt> shape;
     bool closed = false;
@@ -219,12 +220,32 @@ const Monster* Monsters::Find(const std::string& prototype) const {
     return it == byName.end() ? nullptr : &it->second;
 }
 
+float HitChance(const Monster& a, const Monster& d) {
+    const int s = a.hitRandom > 0 ? static_cast<int>(std::lround(a.hitRandom)) : 0;
+    const float w = d.weight > 0 ? a.weight / (d.weight * 20.0f) : 0.0f;
+    const float need = d.parry - a.toHit - w; // the roll must reach this
+    if (s <= 0) return need <= 0 ? 1.0f : 0.0f;
+    int hits = 0;
+    for (int k = 0; k <= s; ++k) if (static_cast<float>(-(s + 1) + 2 * k) >= need) ++hits;
+    return static_cast<float>(hits) / static_cast<float>(s + 1);
+}
+
 UnitPower PowerOf(const Monster& m, const Monsters& db, const Params& p) {
     UnitPower u;
     const float refParry = db.haveHero ? db.hero.parry : p.refParry;
     const float refActions = db.haveHero && db.hero.actions > 0 ? db.hero.actions : p.refActions;
-    u.effHp = m.health * (1.0f + m.absorb / p.absorbScale);
-    const float pHit = Clamp((m.toHit + 5.0f - refParry) / 10.0f, 0.05f, 1.0f); // the game's own HUD chance (combat.md 4.2)
+    // game.exe's hit roll (combat.md 4.2), both ways, against a hero of the unit's own level: the database's Human Hero row with the
+    // unit's own attack / defence skill in place of its base ones (the base row is a level-1 character: against it every late unit
+    // would hit always and be hit never). So the unit's attack against its defence, its spread and weight against the hero's, decide.
+    float pHit = Clamp((m.toHit + 5.0f - refParry) / 10.0f, 0.05f, 1.0f), pHurt = 1.0f; // without a hero row: the HUD formula
+    if (db.haveHero) {
+        Monster peer = db.hero;
+        peer.parry = m.parry;
+        peer.toHit = m.toHit;
+        pHit = Clamp(HitChance(m, peer), 0.05f, 1.0f);
+        pHurt = Clamp(HitChance(peer, m), 0.05f, 1.0f);
+    }
+    u.effHp = m.health * (1.0f + m.absorb / p.absorbScale) / pHurt; // a unit that is hard to hit lasts longer
     const float rate = m.actions > 0 && refActions > 0 ? Clamp(m.actions / refActions, 0.3f, 3.0f) : 1.0f;
     const float dmg = m.dmgMin + m.dmgSpread * 0.5f; // the roll is min + rand(0..spread)
     u.dps = dmg * pHit * rate;
@@ -250,7 +271,8 @@ bool LoadMonsters(const dbmodel::Book& book, const Params& p, Monsters& out, std
     const int cName = find({"Name"}), cHp = find({"Stats Health"}), cAbs = find({"Stats Absorbtion", "Stats Absorption"}),
               cAct = find({"Tuning Actions"}), cMove = find({"Tuning Move"}), cRange = find({"Attack Range"}),
               cHit = find({"Stats To Hit"}), cParry = find({"Stats Parry"}), cMin = find({"Stats Danage Nub", "Stats Damage Min"}),
-              cMax = find({"Stats Damage Max"}), cSight = find({"Senses Sight"});
+              cMax = find({"Stats Damage Max"}), cSight = find({"Senses Sight"}), cRand = find({"Tuning To hit Random"}), cWeight = find({"Tuning Weapon Weight"}),
+              cPeri = find({"Skills Peripheral"}), cLife = find({"Senses SenseLife"}), cVis = find({"Detections Sight"}), cSign = find({"Detections SenseLife"});
     if (!cName || !cHp || !cMin || !cMax) { err = "the Monsters sheet lacks its Name / Health / Damage columns"; return false; }
     auto num = [&](int row, int c) {
         if (!c) return 0.0f;
@@ -266,6 +288,8 @@ bool LoadMonsters(const dbmodel::Book& book, const Params& p, Monsters& out, std
         m.health = num(row, cHp); m.absorb = num(row, cAbs); m.actions = num(row, cAct); m.move = num(row, cMove);
         m.range = num(row, cRange); m.toHit = num(row, cHit); m.parry = num(row, cParry);
         m.dmgMin = num(row, cMin); m.dmgSpread = num(row, cMax); m.sight = num(row, cSight);
+        m.hitRandom = num(row, cRand); m.weight = num(row, cWeight); m.peripheral = num(row, cPeri); m.senseLife = num(row, cLife);
+        m.visibility = num(row, cVis); m.lifeSign = num(row, cSign);
         if (m.health <= 0) continue;
         out.byName[Low(m.name)] = m;
     }
@@ -309,6 +333,10 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
         return dip->diplomacy[static_cast<size_t>(player) * 32] == 2 || dip->diplomacy[static_cast<size_t>(player)] == 2;
     };
 
+    auto friends = [&](int a, int b) { // the same side, or friends in the diplomacy table (0); without a table every hostile side helps
+        if (a == b || !dip || a < 0 || b < 0 || a >= 32 || b >= 32) return true;
+        return dip->diplomacy[static_cast<size_t>(a) * 32 + static_cast<size_t>(b)] == 0;
+    };
     std::vector<Enemy> enemies;
     std::map<std::string, Pt> byName;
     std::map<long, Pt> byId;
@@ -334,6 +362,15 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
             else if (const Monster* m = db.Find(o.prototype)) { e.known = true; e.power = PowerOf(*m, db, p); }
             else e.power.sight = p.defaultSight;
             e.help = logic && logic->help > 0 ? logic->help : p.defaultHelp;
+            e.side = o.player;
+            // how far it notices the hero (unit-ai.md 4.1): sight x the hero's visibility, or life sense x the hero's life signature,
+            // whichever reaches farther (the view cone and the peripheral half plane are not modelled: a unit's facing changes)
+            {
+                const Monster* m = db.Find(o.prototype);
+                const float vis = db.haveHero && db.hero.visibility > 0 ? db.hero.visibility : 1.0f;
+                const float sign = db.haveHero && db.hero.lifeSign > 0 ? db.hero.lifeSign : 0.0f;
+                e.power.sight = std::max(e.power.sight * vis, m && m->senseLife > 0 ? m->senseLife * sign : 0.0f);
+            }
             e.radius = e.power.sight;
             e.shape = {e.pos};
             if (logic) {
@@ -503,6 +540,8 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
     auto find = [&](int i) { while (parent[static_cast<size_t>(i)] != i) { parent[static_cast<size_t>(i)] = parent[static_cast<size_t>(parent[static_cast<size_t>(i)])]; i = parent[static_cast<size_t>(i)]; } return i; };
     for (size_t a = 0; a < enemies.size(); ++a)
         for (size_t b = a + 1; b < enemies.size(); ++b) {
+            // Brain::CallForHelp (unit-ai.md 5.2): only units whose side is a friend of the caller's answer; the fight then spreads from them
+            if (!friends(enemies[a].side, enemies[b].side)) continue;
             const float dx = enemies[a].pos.x - enemies[b].pos.x, dy = enemies[a].pos.y - enemies[b].pos.y, link = std::max(enemies[a].help, enemies[b].help);
             if (dx * dx + dy * dy <= link * link) parent[static_cast<size_t>(find(static_cast<int>(a)))] = find(static_cast<int>(b));
         }
