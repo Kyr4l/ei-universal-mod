@@ -233,6 +233,8 @@ void Keys(App& app) {
         down[k] = allowed && b.key > 0 && glfwGetKey(window, b.key) == GLFW_PRESS && (k < config::kFirstActionKey || mods == b.mods);
     }
     auto pressed = [&](int k) { return down[k] && !app.keyWasDown[k]; };
+    const bool nodeKeys = app.nodeEditHover; // over the node editor's canvas the keys that delete, add, duplicate or select belong to the nodes
+    app.nodeEditHover = false;
     if (pressed(config::kKeyLogicMode)) {
         app.scene.logicMode = !app.scene.logicMode;
         if (app.scene.logicMode) app.scene.FilterSelection([](const mob::Object& o) { return o.kind == mob::Kind::Unit; }); // only units stay selected
@@ -270,17 +272,17 @@ void Keys(App& app) {
         if (app.materialBrush && !app.brushWater) ToTilesTab(app);
     }
     if (app.xf.mode == Transform::None && app.tileBrush && app.viewHovered && pressed(config::kKeyTurnTile)) TurnTileAtMouse(app, 1);
-    if (pressed(config::kKeySelectAll) && app.xf.mode == Transform::None) { SelectAll(app); app.requestTab = SideTab::Objects; }
+    if (pressed(config::kKeySelectAll) && app.xf.mode == Transform::None && !nodeKeys) { SelectAll(app); app.requestTab = SideTab::Objects; }
     if (app.xf.mode == Transform::None) {
-        if (pressed(config::kKeyDelete)) {
+        if (pressed(config::kKeyDelete) && !nodeKeys) {
             if (!app.scene.logicPoints.empty()) DeleteLogicPoints(app); // the selected points, not their unit or trap
             else DeleteSelection(app);
         }
         if (pressed(config::kKeyCopy)) CopySelection(app);
         if (pressed(config::kKeyPaste)) Paste(app, ImGui::GetIO().KeyShift);
-        if (pressed(config::kKeyDuplicate)) Duplicate(app);
+        if (pressed(config::kKeyDuplicate) && !nodeKeys) Duplicate(app);
         if (pressed(config::kKeyResetPaths)) ResetLogicPaths(app);
-        if (pressed(config::kKeyNewObject)) { app.newOpen = true; app.newMessage.clear(); }
+        if (pressed(config::kKeyNewObject) && !nodeKeys) { app.newOpen = true; app.newMessage.clear(); }
     }
     if (pressed(config::kKeyUndo) && app.xf.mode == Transform::None) UndoRedo(app, false);
     if (pressed(config::kKeyRedo) && app.xf.mode == Transform::None) UndoRedo(app, true);

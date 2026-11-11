@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <functional>
 #include <fstream>
 #include <cstdio>
 #include <map>
@@ -54,6 +55,7 @@
 #include "text_codec.hpp"
 #include "script_highlight.hpp"
 #include "script_ast.hpp"
+#include "script_edit.hpp"
 #include "../dllconnect/quests.hpp"
 #include "../subtools.hpp"
 #include "../log.hpp"
@@ -414,6 +416,7 @@ struct App {
     bool scriptVisual = false;
     std::map<std::string, nodegraph::View> nodeViews;
     std::string nodeGoto;
+    bool nodeEditHover = false;              // the node view's canvas is under the mouse in edit mode: its keys (X, M, Shift A / D...) are the nodes', not the map's
     int nodeFlashLine = 0;
     double nodeFlashUntil = 0;
     bool checkedScripts = true, checkedDatabase = true, checkedAtd = false; // Settings > Checks when the checks last ran (a change runs them again)

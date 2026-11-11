@@ -331,12 +331,15 @@ inline bool Unmute(Program& p, const StmtPath& path) {
     s->line = line;
     return true;
 }
-inline bool IsMuted(Program& p, const StmtPath& path) {
-    Stmt* s = GetStmt(p, path);
-    if (!s || s->kind != Stmt::Comment) return false;
-    const Program q = scriptast::Parse("WorldScript\n(\n" + s->target + "\n)\n");
+inline bool IsMutedText(const std::string& commentText) {
+    if (commentText.find('(') == std::string::npos && commentText.find('=') == std::string::npos) return false; // cheap: most comments are words
+    const Program q = scriptast::Parse("WorldScript\n(\n" + commentText + "\n)\n");
     return !q.errorLine && q.scripts.size() == 1 && q.scripts[0].body.size() == 1 &&
            (q.scripts[0].body[0].kind == Stmt::Call || q.scripts[0].body[0].kind == Stmt::Assign);
+}
+inline bool IsMuted(Program& p, const StmtPath& path) {
+    Stmt* s = GetStmt(p, path);
+    return s && s->kind == Stmt::Comment && IsMutedText(s->target);
 }
 
 // Moves a statement into a block at `index` (the index counts the chain as it is before the move). False when the target is inside
