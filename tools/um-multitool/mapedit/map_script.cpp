@@ -1071,7 +1071,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
     if (ImGui::SmallButton("100%")) { view.zoom = 1.0f; }
     ImGui::SameLine();
     ImGui::BeginDisabled(c.prog.errorLine != 0);
-    ImGui::Checkbox("Edit", &ne.on);
+    ImGui::Checkbox("Edit nodes", &ne.on);
     ImGui::EndDisabled();
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         ImGui::SetTooltip("Edit the script as nodes, like Blender's node editor. A change rewrites the script in the editor's layout (comments between statements are kept)\nand is one undo step. Off: the nodes are only shown (any button drags the view).");

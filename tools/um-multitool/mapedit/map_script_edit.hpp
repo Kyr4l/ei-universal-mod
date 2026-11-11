@@ -283,11 +283,15 @@ inline void AddMenu(Ctx& c, State& ne) {
         for (const Item& it : items) {
             if (!wanted(it) || mobscript::LowerCase(it.name).find(q) == std::string::npos) continue;
             if (shown++ >= 40) { ImGui::TextDisabled("... keep typing"); break; }
+            ImGui::PushID(shown);
             if (ImGui::Selectable(it.name.c_str())) { if (ne.wiring) wireFunction(it.name); else addCommand(it.name); }
+            ImGui::PopID();
         }
         for (const scriptast::Script& s : c.prog.scripts) {
             if (s.world || mobscript::LowerCase(s.name).find(q) == std::string::npos) continue;
+            ImGui::PushID(&s);
             if (ImGui::Selectable((s.name + "  (script)").c_str())) { if (ne.wiring) wireScript(s.name); else addScriptCall(s.name); }
+            ImGui::PopID();
         }
         if (shown == 0) ImGui::TextDisabled("Nothing matches");
     } else {
@@ -320,12 +324,20 @@ inline void AddMenu(Ctx& c, State& ne) {
                 letter = l;
                 open = ImGui::BeginMenu((std::string(ne.wiring ? "Functions " : "Commands ") + l).c_str());
             }
-            if (open && ImGui::MenuItem(it.name.c_str())) { if (ne.wiring) wireFunction(it.name); else addCommand(it.name); }
+            if (open) {
+                ImGui::PushID(&it);
+                if (ImGui::MenuItem(it.name.c_str())) { if (ne.wiring) wireFunction(it.name); else addCommand(it.name); }
+                ImGui::PopID();
+            }
         }
         if (open) ImGui::EndMenu();
         if (ImGui::BeginMenu("Scripts of this map")) {
             for (const scriptast::Script& s : c.prog.scripts)
-                if (!s.world && ImGui::MenuItem(s.name.c_str())) { if (ne.wiring) wireScript(s.name); else addScriptCall(s.name); }
+                if (!s.world) {
+                    ImGui::PushID(&s);
+                    if (ImGui::MenuItem(s.name.c_str())) { if (ne.wiring) wireScript(s.name); else addScriptCall(s.name); }
+                    ImGui::PopID();
+                }
             ImGui::EndMenu();
         }
     }
