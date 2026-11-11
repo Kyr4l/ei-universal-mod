@@ -145,8 +145,8 @@ std::vector<Pt> GraphPath(const mob::File& g, Pt a, Pt b) {
     return out;
 }
 
-// A unit whose "Stats imported" is off carries its own stats (UNIT_STATS, 172 bytes; the Map Editor's stats editor has the layout):
-// the game uses those, not its prototype's database row. Offsets: HP 0 / max HP 4 (int), Actions 20, Range 60, Attack 64, Defence 68,
+// A unit whose UNIT_NEED_IMPORT is set ("Map Stats & Gear", mob::UsesMapStats) is played with the stats stored in the map (UNIT_STATS, 172
+// bytes; the Map Editor's stats editor has the layout), not its prototype's database row. Offsets: HP 0 / max HP 4 (int), Actions 20, Range 60, Attack 64, Defence 68,
 // damage min 76, damage range 80, Absorption 112 (int), Sight 116.
 bool MonsterFromStats(const std::vector<uint8_t>& s, const std::string& name, Monster& m) {
     if (s.size() < 172) return false;
@@ -330,7 +330,7 @@ Result Rate(const Input& in, const Monsters& db, const Params& p) {
             e.id = o.hasId ? static_cast<long>(o.id) : -1;
             e.name = o.prototype;
             Monster stored;
-            if (p.storedStats && !o.needImport && MonsterFromStats(o.stats, o.prototype, stored)) { e.known = true; e.stored = true; e.power = PowerOf(stored, db, p); }
+            if (mob::UsesMapStats(o) && MonsterFromStats(o.stats, o.prototype, stored)) { e.known = true; e.stored = true; e.power = PowerOf(stored, db, p); } // as the game does
             else if (const Monster* m = db.Find(o.prototype)) { e.known = true; e.power = PowerOf(*m, db, p); }
             else e.power.sight = p.defaultSight;
             e.help = logic && logic->help > 0 ? logic->help : p.defaultHelp;

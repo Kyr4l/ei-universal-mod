@@ -352,10 +352,10 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
                     if (!known) add('E', fi, oi, 0, "Items", Label(o) + " has a " + list.label + " '" + mob::Utf8(e) + "' that the database does not have");
                 }
             }
-            // Only when the unit takes its stats from the prototype (UNIT_NEED_IMPORT): most units carry their
-            // own, and thousands of units in the shipped maps name prototypes no database has.
-            if (db && o.kind == mob::Kind::Unit && o.needImport && !o.prototype.empty() && !db->Has(Lower(o.prototype)))
-                add('W', fi, oi, 0, "Items", Label(o) + " imports its stats from the unit prototype '" + mob::Utf8(o.prototype) +
+            // Only when the unit takes its stats and gear from its prototype (Map Stats & Gear off, mob::UsesMapStats): with it on
+            // the game plays the map's stored stats and lists (thousands of units in the shipped maps name prototypes no database has).
+            if (db && o.kind == mob::Kind::Unit && !mob::UsesMapStats(o) && !o.prototype.empty() && !db->Has(Lower(o.prototype)))
+                add('W', fi, oi, 0, "Items", Label(o) + " takes its stats and gear from the unit prototype '" + mob::Utf8(o.prototype) +
                                                   "', which the database does not have");
             if (db && o.kind == mob::Kind::MagicTrap && !o.spell.empty() && !KnownSpell(o.spell, *db))
                 add('E', fi, oi, 0, "Items", Label(o) + " casts '" + mob::Utf8(o.spell) + "', which is not a spell in the database");

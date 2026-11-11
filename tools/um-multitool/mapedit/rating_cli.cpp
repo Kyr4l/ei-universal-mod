@@ -44,7 +44,7 @@ int RunRateCli(const std::vector<std::string>& args) {
         else if (args[i] == "--database" && i + 1 < args.size()) databasePath = args[++i];
         else if (args[i] == "--allods" && i + 1 < args.size()) allodFile = args[++i];
         else if (args[i] == "--detail") detail = true;
-        else if (args[i] == "--map-stats") params.storedStats = true;
+        else if (args[i] == "--map-stats") {} // old option: the rating now follows each unit's Map Stats & Gear flag, as the game
         else if (args[i] == "--units") units = true;
         else questArgs.push_back(args[i]);
     }

@@ -318,7 +318,7 @@ are ignored, missing ones keep the ctor defaults listed below.
 | 0xBBBB0007 UNIT_SPELLS | `+0x2e4` | |
 | 0xBBBB0008 UNIT_WEAPONS | `+0x2f8` | |
 | 0xBBBB0009 UNIT_ARMORS | `+0x30c` | |
-| 0xBBBB000A UNIT_NEED_IMPORT | `+0x320` byte -> int | |
+| 0xBBBB000A UNIT_NEED_IMPORT | `+0x320` byte -> int | read by `MobUnitStats_ApplyTo` 0x477B00 [V, 2026-11-11]: set and the stats block not empty (int +4, floats +16 / +20) -> `CUnit::DropAllItems`, the stored UNIT_STATS copied in, then the map's spells, quick items, quest items, UNIT_ARMORS (+0x30c) and UNIT_WEAPONS (+0x2f8) given; not set -> the prototype's stats and equipment (`Unit_ApplyPrototype`, `Unit_GiveProtoEquipment`) stay, only the quick and quest items are added. um-multitool calls it "Map Stats & Gear" |
 | 0xBBBC0000 UNIT_LOGIC | `+0x90 + n*0x4c`, n = `+0x8c`++ | up to 5 `MobLogicSlot`s, read by `MobLogicSlot_OnChunk` 0x46CBC0 with `+0x28 = 0`, `+0x48 = 4` (-> 0 when no 000E chunk) |
 | anything else | `CObjectDesc::OnChunk` | |
 

@@ -306,7 +306,7 @@ public:
                 for (const std::string& p : o.bodyParts) str(id, p);
                 flt(id, o.complection.x); flt(id, o.complection.y); flt(id, o.complection.z);
                 if (o.kind == mob::Kind::Unit) {
-                    str(id, o.prototype); str(id, o.parentTemplate);
+                    str(id, o.prototype); str(id, o.parentTemplate); mix(id, mob::UsesMapStats(o) ? 2 : 1);
                     for (const mob::ItemList& l : o.lists) { mix(id, static_cast<uint64_t>(l.type)); for (const std::string& e : l.entries) str(id, e); }
                 }
                 flt(pose, o.position.x); flt(pose, o.position.y); flt(pose, o.position.z);
@@ -1238,7 +1238,7 @@ private:
         std::string key = checksLower(o.templ) + "|" + checksLower(o.primTexture) + comp;
         for (const std::string& p : o.bodyParts) key += checksLower(p) + ",";
         if (o.kind == mob::Kind::Unit && checksLower(o.primTexture) == "default0") { // dressed: by what it wears
-            key += "|" + o.prototype + "|" + o.parentTemplate;
+            key += "|" + o.prototype + "|" + o.parentTemplate + (mob::UsesMapStats(o) ? "|map" : "|proto"); // the game's gear source
             for (const mob::ItemList& l : o.lists)
                 if (l.type == mob::kUnitWeapons || l.type == mob::kUnitArmors) for (const std::string& e : l.entries) key += "|" + e;
         }

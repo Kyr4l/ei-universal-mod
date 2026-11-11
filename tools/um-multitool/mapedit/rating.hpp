@@ -31,7 +31,7 @@
 
 namespace rating {
 
-constexpr int kFormulaVersion = 3;
+constexpr int kFormulaVersion = 4;
 
 // Points each factor can give; they add up to 10000.
 enum Factor { Power, Density, Stealth, Duration, Ambush, kFactors };
@@ -54,7 +54,6 @@ struct Params {
     float refActions = 50.0f;      // attack rate reference (the same row's Tuning Actions)
     float rangedFrom = 4.0f;       // Attack Range from which a unit counts as ranged
     float anchorPullUnits = 8.0f;  // the anchor encounter: this many of the strongest unit in one pull
-    bool storedStats = false;      // true: a unit whose "Stats imported" is off is counted with the stats stored in the map; false: always with its database row
 };
 
 struct Monsters {
@@ -101,7 +100,7 @@ struct Result {
     std::array<double, kFactors> pts{};
     std::vector<Pull> pulls;
     int units = 0, unknown = 0;          // enemy units; of them without a database row
-    int storedStats = 0;                 // enemy units counted with the stats stored in the map ("Stats imported" off), not the database row
+    int storedStats = 0;                 // enemy units counted with the stats stored in the map (Map Stats & Gear on, as the game plays them), not the database row
     int fights = 0;                      // pulls worth a fight
     float routeLength = 0, exposure = 0; // exposure: the share of the route inside a detection range, 0..1
     int spawnSites = 0, spawnUnits = 0;  // AddUnitToServer calls; of them with a database row

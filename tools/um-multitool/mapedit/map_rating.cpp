@@ -90,7 +90,7 @@ QuestFiles FilesOf(const Resolver& r, const quest::Quest& q) {
 std::string DbSig(const App& app) { return FileSig(app.lib.dbPath); }
 
 std::string StampOf(const App& app, const quest::Quest& q, const QuestFiles& f) {
-    return "v" + std::to_string(rating::kFormulaVersion) + (app.rating.store.storedStats ? "s" : "d") + "|db:" + DbSig(app) + "|q:" + FileSig(MapTxtPath(q)) + "|b:" + FileSig(f.base) + "|o:" + FileSig(f.own);
+    return "v" + std::to_string(rating::kFormulaVersion) + "g" + "|db:" + DbSig(app) + "|q:" + FileSig(MapTxtPath(q)) + "|b:" + FileSig(f.base) + "|o:" + FileSig(f.own);
 }
 
 void EnsureStore(App& app) {
@@ -165,10 +165,9 @@ struct Item {
     std::string stamp, allod;
 };
 
-void RunWorker(RatingUi* ui, std::vector<Item> items, rating::Monsters monsters, bool storedStats) {
+void RunWorker(RatingUi* ui, std::vector<Item> items, rating::Monsters monsters) {
     std::sort(items.begin(), items.end(), [](const Item& a, const Item& b) { return a.mobs < b.mobs; }); // a zone's quests together: its base map is read once
     rating::Params params;
-    params.storedStats = storedStats;
     std::unique_ptr<mob::File> base;
     std::string basePath;
     for (const Item& it : items) {
@@ -248,7 +247,7 @@ void StartRun(App& app, const std::vector<const quest::QuestSet*>& sets) {
     r.runDone = 0;
     r.runTotal = static_cast<int>(items.size());
     r.runCurrent.clear();
-    r.runThread = std::thread(RunWorker, &r, std::move(items), r.monsters, r.store.storedStats);
+    r.runThread = std::thread(RunWorker, &r, std::move(items), r.monsters);
 }
 
 const quest::QuestSet* FindSet(App& app, const std::string& key) {
@@ -624,7 +623,6 @@ void UpdateLive(App& app) {
     }
     if (app.openQuest && in.baseCount == 0 && !in.files.empty() && ownName != Lower(in.files[0]->fileName)) in.baseCount = in.files.size(); // no own map: all base
     rating::Params params;
-    params.storedStats = r.store.storedStats;
     r.live = rating::Rate(in, r.monsters, params);
     r.liveValid = true;
 }
@@ -685,12 +683,7 @@ void RatingTab(App& app) {
     ImGui::TextDisabled("%d enemies in %zu aggro groups, %d real fights, walk %.0f units (%d%% seen), %d scripted spawn site%s, %d objective%s.", res.units, res.pulls.size(), res.fights,
                         res.routeLength, static_cast<int>(res.exposure * 100 + 0.5f), res.spawnSites, res.spawnSites == 1 ? "" : "s", res.objectives, res.objectives == 1 ? "" : "s");
     HeroNeedLine(app, res, terrain);
-    {
-        bool stored = r.store.storedStats;
-        if (ImGui::Checkbox("Use Stored Stats", &stored)) { r.store.storedStats = stored; SaveStore(app); r.liveValid = false; r.statusAt = -100; }
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off (default): every unit is rated with its prototype's row of the database, which is what you balance.\nOn: a unit with \"Stats imported\" off carries its own stats in the map (Objects tab > Stats), which may be older than the database.\nChanging this resets the stored ratings (they are calculated again).");
-    }
-    if (res.storedStats) ImGui::TextDisabled("%d unit%s counted with the stats stored in the map (Stats imported is off), not the database row.", res.storedStats, res.storedStats == 1 ? "" : "s");
+    if (res.storedStats) ImGui::TextDisabled("%d unit%s counted with the stats stored in the map (Map Stats & Gear on: the game plays them so), not the database row.", res.storedStats, res.storedStats == 1 ? "" : "s");
     if (res.unknown) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "%d unit%s without a Monsters row in the database (not counted).", res.unknown, res.unknown == 1 ? "" : "s");
     if (res.objectives == 0 && app.openQuest) ImGui::TextColored(ImVec4(0.94f, 0.69f, 0.31f, 1), "No objectives found in the script (QObj* calls): the walk is only deploy to exit.");
     ImGui::TextDisabled("0 is an empty map; 10,000 is %.0f of this database's strongest unit (%s) in one aggro group. Only enemies and the script count, never potions or gear.",

@@ -630,7 +630,8 @@ static void CommitStat(App& app, int shown, const StatField& sf, const uint8_t* 
 static void StatsEditor(App& app, const mob::Object& o, int objectIndex) {
     if (o.stats.size() < 172) return;
     if (!ImGui::CollapsingHeader("Stats")) return;
-    if (o.needImport) ImGui::TextWrapped("\"Stats imported\" is on: the game takes this unit's stats from its prototype, not these.");
+    if (!mob::UsesMapStats(o)) ImGui::TextWrapped(o.needImport ? "Map Stats & Gear is on but these stats are empty: the game uses the prototype's (the database row)."
+                                                               : "Map Stats & Gear is off: the game uses the prototype's stats and equipment (the database row), not these.");
     const char* group = nullptr;
     bool open = false;
     for (const StatField& sf : kStatFields) {
@@ -1147,10 +1148,10 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
         if (o.kind == mob::Kind::Unit) {
             Label("Prototype");
             if (EditTextSuggest("##proto", mob::Utf8(o.prototype), text, Names(app.lib).prototypes)) CommitText(app, objectIndex, mob::kUnitPrototype, text);
-            Label("Stats imported");
+            Label("Map Stats & Gear");
             bool imported = o.needImport;
             if (ImGui::Checkbox("##needimport", &imported)) CommitField(app, objectIndex, mob::kUnitNeedImport, std::vector<uint8_t>{static_cast<uint8_t>(imported)});
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: the game takes the stats from the prototype (the Stats below are ignored)");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("UNIT_NEED_IMPORT. On: the game drops the prototype's equipment and uses this unit's own Stats, armors and weapons\n(and spells) stored in the map. Off: the prototype's stats and equipment from the database; only the map's quick and quest items are added.\n(game.exe MobUnitStats_ApplyTo 0x477B00; stats left empty count as off)");
         }
         if (o.kind == mob::Kind::MagicTrap) {
             Label("Spell");

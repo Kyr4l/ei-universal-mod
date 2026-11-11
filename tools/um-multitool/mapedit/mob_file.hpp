@@ -179,7 +179,7 @@ struct Object {
     bool hasId = false;
     std::string name, templ, primTexture, secTexture, parentTemplate, comments, questInfo;
     std::string prototype;     // units
-    bool needImport = false;   // units: stats come from the prototype
+    bool needImport = false;   // units: UNIT_NEED_IMPORT, "Map Stats & Gear": the game uses the map's stats and equipment lists (UsesMapStats)
     std::vector<uint8_t> stats; // units: UNIT_STATS as stored (172 bytes)
     std::string spell;         // magic traps
     std::vector<Vec3> trapAreas;   // magic traps: activation areas (x, y, z = radius)
@@ -238,6 +238,21 @@ struct File {
 
 inline uint32_t U32(const uint8_t* p) { uint32_t v; std::memcpy(&v, p, 4); return v; }
 inline float F32(const uint8_t* p) { float v; std::memcpy(&v, p, 4); return v; }
+
+// Whether the game takes this unit's stats and equipment from the map rather than from its prototype (units.udb), as
+// MobUnitStats_ApplyTo (0x477B00) decides for every map unit: UNIT_NEED_IMPORT set and the stored stats not empty (the
+// int at +4 or the floats at +16 / +20 not zero). Then the game drops the prototype's items (CUnit::DropAllItems), copies
+// UNIT_STATS and gives the map's spells, quick and quest items, UNIT_ARMORS and UNIT_WEAPONS. Otherwise the prototype's
+// stats and equipment stay and only the map's quick and quest items are added.
+inline bool UsesMapStats(const Object& o) {
+    if (o.kind != Kind::Unit || !o.needImport || o.stats.size() < 24) return false;
+    int32_t i1;
+    float f4, f5;
+    std::memcpy(&i1, o.stats.data() + 4, 4);
+    std::memcpy(&f4, o.stats.data() + 16, 4);
+    std::memcpy(&f5, o.stats.data() + 20, 4);
+    return !(i1 == 0 && f4 == 0.0f && f5 == 0.0f);
+}
 
 inline std::string Text(const uint8_t* p, size_t n) {
     std::string s(reinterpret_cast<const char*>(p), n);

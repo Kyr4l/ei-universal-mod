@@ -41,7 +41,7 @@ inline std::string Key(std::string s) {
 struct Store {
     std::map<std::string, Entry> entries; // by Key(quest name)
     std::map<std::string, Lock> locks;    // by Key(allod name)
-    bool storedStats = false;             // O storedstats: units with "Stats imported" off are rated with the stats stored in the map (default: database rows)
+    bool storedStats = false;             // O storedstats: an old option, read and kept but no longer used (the rating follows each unit's Map Stats & Gear flag)
 
     bool Load(const std::string& path) {
         entries.clear();
